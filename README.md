@@ -1,5 +1,5 @@
 # WorldOfTanks-Decompiled
-Unpacked and decompiled files of **WorldOfTanks**
+Unpacked and decompiled files of **WorldOfTanks**. Each client has its own branch. In the master-branch is the latest release version of the client. The branches of test clients are not released to master-branch.
 
 ### Consist
 * Python **pyc**-files since client version **0.9.2**
