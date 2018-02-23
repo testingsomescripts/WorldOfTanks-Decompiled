@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<protocol name="app_type" version="3.0">
+    <app_type>hd</app_type>
+    <switch_to_type>hd</switch_to_type>
+</protocol>
