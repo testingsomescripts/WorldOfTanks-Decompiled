@@ -7,11 +7,6 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class INGAME_GUI(object):
-    PLAYERS_PANEL_STATE_NONE = '#ingame_gui:players_panel/state/none'
-    PLAYERS_PANEL_STATE_SHORT = '#ingame_gui:players_panel/state/short'
-    PLAYERS_PANEL_STATE_MEDIUM = '#ingame_gui:players_panel/state/medium'
-    PLAYERS_PANEL_STATE_MEDIUM2 = '#ingame_gui:players_panel/state/medium2'
-    PLAYERS_PANEL_STATE_LARGE = '#ingame_gui:players_panel/state/large'
     DEVICES_ENGINE = '#ingame_gui:devices/engine'
     DEVICES_AMMO_BAY = '#ingame_gui:devices/ammo_bay'
     DEVICES_FUEL_TANK = '#ingame_gui:devices/fuel_tank'
@@ -78,7 +73,6 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_REPLAYCONTROLSHELP1 = '#ingame_gui:player_messages/replayControlsHelp1'
     PLAYER_MESSAGES_REPLAYCONTROLSHELP2 = '#ingame_gui:player_messages/replayControlsHelp2'
     PLAYER_MESSAGES_REPLAYCONTROLSHELP3 = '#ingame_gui:player_messages/replayControlsHelp3'
-    PLAYER_MESSAGES_HORN_IS_BLOCKED = '#ingame_gui:player_messages/horn_is_blocked'
     PLAYER_MESSAGES_LOADER_INTUITION_WAS_USED = '#ingame_gui:player_messages/loader_intuition_was_used'
     CHAT_SHORTCUTS_TURN_BACK = '#ingame_gui:chat_shortcuts/turn_back'
     CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_shortcuts/support_me_with_fire'
@@ -241,6 +235,21 @@ class INGAME_GUI(object):
     PLAYERS_PANEL_UNKNOWN_FRAGS = '#ingame_gui:players_panel/unknown_frags'
     PLAYERS_PANEL_UNKNOWN_VEHICLESTATE = '#ingame_gui:players_panel/unknown_vehicleState'
     PLAYERS_PANEL_UNKNOWN_CLAN = '#ingame_gui:players_panel/unknown_clan'
+    EPIC_PLAYERS_PANEL_STATE_HIDDEN_HEADER = '#ingame_gui:epic_players_panel/state/hidden/header'
+    EPIC_PLAYERS_PANEL_STATE_HIDDEN_BODY = '#ingame_gui:epic_players_panel/state/hidden/body'
+    EPIC_PLAYERS_PANEL_STATE_HIDDEN_NOTE = '#ingame_gui:epic_players_panel/state/hidden/note'
+    EPIC_PLAYERS_PANEL_STATE_SHORT_HEADER = '#ingame_gui:epic_players_panel/state/short/header'
+    EPIC_PLAYERS_PANEL_STATE_SHORT_BODY = '#ingame_gui:epic_players_panel/state/short/body'
+    EPIC_PLAYERS_PANEL_STATE_SHORT_NOTE = '#ingame_gui:epic_players_panel/state/short/note'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_PLAYER_HEADER = '#ingame_gui:epic_players_panel/state/medium_player/header'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_PLAYER_BODY = '#ingame_gui:epic_players_panel/state/medium_player/body'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_PLAYER_NOTE = '#ingame_gui:epic_players_panel/state/medium_player/note'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_TANK_HEADER = '#ingame_gui:epic_players_panel/state/medium_tank/header'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_TANK_BODY = '#ingame_gui:epic_players_panel/state/medium_tank/body'
+    EPIC_PLAYERS_PANEL_STATE_MEDIUM_TANK_NOTE = '#ingame_gui:epic_players_panel/state/medium_tank/note'
+    EPIC_PLAYERS_PANEL_STATE_TOGGLE_HEADER = '#ingame_gui:epic_players_panel/state/toggle/header'
+    EPIC_PLAYERS_PANEL_STATE_TOGGLE_BODY = '#ingame_gui:epic_players_panel/state/toggle/body'
+    EPIC_PLAYERS_PANEL_STATE_TOGGLE_NOTE = '#ingame_gui:epic_players_panel/state/toggle/note'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_ENEMY_SELF'
     VEHICLE_MESSAGES_DEVICE_CRITICAL_AT_WORLD_COLLISION_ALLY_SELF = '#ingame_gui:vehicle_messages/DEVICE_CRITICAL_AT_WORLD_COLLISION_ALLY_SELF'
@@ -430,10 +439,10 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_RAMMING_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_RAMMING_ENEMY_ENEMY'
-    POTAPOVQUESTS_TIP_MAINHEADER = '#ingame_gui:potapovQuests/tip/mainHeader'
-    POTAPOVQUESTS_TIP_ADDITIONALHEADER = '#ingame_gui:potapovQuests/tip/additionalHeader'
-    POTAPOVQUESTS_TIP_NOQUESTS_VEHICLETYPE = '#ingame_gui:potapovQuests/tip/noQuests/vehicleType'
-    POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE = '#ingame_gui:potapovQuests/tip/noQuests/battleType'
+    PERSONALMISSIONS_TIP_MAINHEADER = '#ingame_gui:personalMissions/tip/mainHeader'
+    PERSONALMISSIONS_TIP_ADDITIONALHEADER = '#ingame_gui:personalMissions/tip/additionalHeader'
+    PERSONALMISSIONS_TIP_NOQUESTS_VEHICLETYPE = '#ingame_gui:personalMissions/tip/noQuests/vehicleType'
+    PERSONALMISSIONS_TIP_NOQUESTS_BATTLETYPE = '#ingame_gui:personalMissions/tip/noQuests/battleType'
     FORTCONSUMABLES_TIMER_POSTFIX = '#ingame_gui:fortConsumables/timer/postfix'
     FLAGS_TIMER = '#ingame_gui:flags/timer'
     COUNTRIBBONS_MULTISEPARATOR = '#ingame_gui:countRibbons/multiSeparator'
@@ -445,6 +454,9 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_DEFENCE = '#ingame_gui:efficiencyRibbons/defence'
     EFFICIENCYRIBBONS_KILL = '#ingame_gui:efficiencyRibbons/kill'
     EFFICIENCYRIBBONS_SPOTTED = '#ingame_gui:efficiencyRibbons/spotted'
+    EFFICIENCYRIBBONS_HEALED = '#ingame_gui:efficiencyRibbons/healed'
+    EFFICIENCYRIBBONS_HEALTHPACKPICKUP = '#ingame_gui:efficiencyRibbons/healthpackPickup'
+    EFFICIENCYRIBBONS_HEALTHPACKWASTED = '#ingame_gui:efficiencyRibbons/healthpackWasted'
     EFFICIENCYRIBBONS_ASSISTTRACK = '#ingame_gui:efficiencyRibbons/assistTrack'
     EFFICIENCYRIBBONS_ASSISTSPOT = '#ingame_gui:efficiencyRibbons/assistSpot'
     EFFICIENCYRIBBONS_CRITS = '#ingame_gui:efficiencyRibbons/crits'
@@ -514,6 +526,34 @@ class INGAME_GUI(object):
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
     STUN_INDICATOR = '#ingame_gui:stun/indicator'
     STUN_SECONDS = '#ingame_gui:stun/seconds'
+    HALLOWEEN_EYE_MAINLABEL = '#ingame_gui:halloween_eye/mainLabel'
+    HALLOWEEN_EYE_SECONDARYLABEL = '#ingame_gui:halloween_eye/secondaryLabel'
+    HALLOWEEN_PVE_GOAL_HINT_KILLLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/KillLeviathanTitle'
+    HALLOWEEN_PVE_GOAL_HINT_KILLLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/KillLeviathanMsg'
+    HALLOWEEN_PVE_GOAL_HINT_ENRAGEDLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/EnragedLeviathanTitle'
+    HALLOWEEN_PVE_GOAL_HINT_ENGRAGEDLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/EngragedLeviathanMsg'
+    HALLOWEEN_PVE_GOAL_HINT_HALFWAYLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/HalfwayLeviathanTitle'
+    HALLOWEEN_PVE_GOAL_HINT_HALFWAYLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/HalfwayLeviathanMsg'
+    HALLOWEEN_PVE_GOAL_HINT_LEVIATHANCLOSETITLE = '#ingame_gui:halloween_pve_goal_hint/LeviathanCloseTitle'
+    HALLOWEEN_PVE_GOAL_HINT_LEVIATHANCLOSEMSG = '#ingame_gui:halloween_pve_goal_hint/LeviathanCloseMsg'
+    HALLOWEEN_PVE_GOAL_HINT_ENTERSCAPTURETITLE = '#ingame_gui:halloween_pve_goal_hint/EntersCaptureTitle'
+    HALLOWEEN_PVE_GOAL_HINT_ENTERSCAPTUREMSG = '#ingame_gui:halloween_pve_goal_hint/EntersCaptureMsg'
+    HALLOWEEN_LOBBY_BATTLETYPE_PVE_TITLE = '#ingame_gui:halloween_lobby/BattleType_PvE_Title'
+    HALLOWEEN_LOBBY_BATTLETYPE_PVE_MESSAGE = '#ingame_gui:halloween_lobby/BattleType_PvE_Message'
+    HALLOWEEN_LOBBY_BATTLETYPE_PVP_TITLE = '#ingame_gui:halloween_lobby/BattleType_PvP_Title'
+    HALLOWEEN_LOBBY_BATTLETYPE_PVP_MESSAGE = '#ingame_gui:halloween_lobby/BattleType_PvP_Message'
+    HALLOWEEN_PVE_GATE_CAPTURE_LEVIATHANCAPTUREMSG = '#ingame_gui:halloween_pve_gate_capture/LeviathanCaptureMsg'
+    HALLOWEEN_PVE_VICTORY_PANEL_TITLE = '#ingame_gui:halloween_pve_victory_panel/title'
+    HALLOWEEN_PVE_VICTORY_PANEL_ICONMESSAGE = '#ingame_gui:halloween_pve_victory_panel/iconMessage'
+    HALLOWEEN_PVE_VICTORY_PANEL_COMMENTARY = '#ingame_gui:halloween_pve_victory_panel/commentary'
+    HALLOWEEN_PVE_DEFEAT_PANEL_TITLE = '#ingame_gui:halloween_pve_defeat_panel/title'
+    HALLOWEEN_PVE_DEFEAT_PANEL_ICONMESSAGE = '#ingame_gui:halloween_pve_defeat_panel/iconMessage'
+    HALLOWEEN_PVE_DEFEAT_PANEL_COMMENTARY = '#ingame_gui:halloween_pve_defeat_panel/commentary'
+    HALLOWEEN_MINION_DEATH_PANEL_TITLE = '#ingame_gui:halloween_minion_death_panel/title'
+    HALLOWEEN_MINION_DEATH_PANEL_HINT = '#ingame_gui:halloween_minion_death_panel/hint'
+    HALLOWEEN_MINION_DEATH_PANEL_PREPOSITION = '#ingame_gui:halloween_minion_death_panel/preposition'
+    HALLOWEEN_MINION_DEATH_PANEL_COUNTLABEL = '#ingame_gui:halloween_minion_death_panel/countLabel'
+    HALLOWEEN_BRIEFING_BANNER = '#ingame_gui:halloween/briefing_banner'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -560,6 +600,9 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_DEFENCE,
      EFFICIENCYRIBBONS_KILL,
      EFFICIENCYRIBBONS_SPOTTED,
+     EFFICIENCYRIBBONS_HEALED,
+     EFFICIENCYRIBBONS_HEALTHPACKPICKUP,
+     EFFICIENCYRIBBONS_HEALTHPACKWASTED,
      EFFICIENCYRIBBONS_ASSISTTRACK,
      EFFICIENCYRIBBONS_ASSISTSPOT,
      EFFICIENCYRIBBONS_CRITS,

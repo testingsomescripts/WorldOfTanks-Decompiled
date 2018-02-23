@@ -147,7 +147,7 @@ class _CurrentVehicle(_CachedVehicle):
             isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
             isCustomizationChanged = 'igrCustomizationLayout' in vehsDiff and self.__vehInvID in vehsDiff['igrCustomizationLayout']
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
-            isVehicleChanged = len(filter(lambda hive: self.__vehInvID in hive or (self.__vehInvID, '_r') in hive, vehsDiff.itervalues())) > 0
+            isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
                 self.refreshModel()
             if isVehicleChanged or isRepaired:
@@ -273,7 +273,7 @@ class _CurrentVehicle(_CachedVehicle):
                     return 1
                 return -1 if not x.isOnlyForEventBattles and y.isOnlyForEventBattles else cmp(x, y)
 
-            if len(invVehs):
+            if invVehs:
                 vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
             else:
                 vehInvID = 0
@@ -339,7 +339,7 @@ class _CurrentVehicle(_CachedVehicle):
             for rId, roster in rosters.iteritems():
                 if BigWorld.player().id in roster:
                     vehCompDescr = roster[BigWorld.player().id].get('vehCompDescr', '')
-                    if len(vehCompDescr):
+                    if vehCompDescr:
                         vehDescr = vehicles.VehicleDescr(vehCompDescr)
                         vehicle = self.itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
                         if vehicle is not None:
@@ -375,10 +375,7 @@ class _RegularPreviewAppearance(PreviewAppearance):
 class HeroTankPreviewAppearance(PreviewAppearance):
 
     def refreshVehicle(self, item):
-        if item is None:
-            from ClientSelectableCameraObject import ClientSelectableCameraObject
-            ClientSelectableCameraObject.switchCamera()
-        return
+        pass
 
 
 class _CurrentPreviewVehicle(_CachedVehicle):
@@ -438,8 +435,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def isModified(self):
         if self.isPresent():
             for module in _MODULES_NAMES:
-                currentModule = getattr(self.item.descriptor, module)['compactDescr']
-                defaultModule = getattr(self.__defaultItem.descriptor, module)['compactDescr']
+                currentModule = getattr(self.item.descriptor, module).compactDescr
+                defaultModule = getattr(self.__defaultItem.descriptor, module).compactDescr
                 if currentModule != defaultModule:
                     return True
 

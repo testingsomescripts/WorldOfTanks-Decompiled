@@ -39,8 +39,13 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __update(self):
         vehicle = g_currentVehicle.item
-        dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle))}
+        dataForUpdate = None
+        if not vehicle.isCrewLocked:
+            dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle))}
+        else:
+            dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle))}
         self.as_updateS(dataForUpdate)
+        return
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew
@@ -134,7 +139,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     @decorators.process('crewReturning')
     def __processReturnCrew(self):
         result = yield TankmanReturn(g_currentVehicle.item).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):

@@ -103,6 +103,10 @@
     <fireKey>	KEY_LEFTMOUSE	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_CM_SHOOT>
+  <CMD_SHOOT_SECONDARY>
+    <fireKey>	KEY_Q	</fireKey>
+    <satelliteKeys></satelliteKeys>
+  </CMD_SHOOT_SECONDARY>
   <CMD_CM_FREE_CAMERA>
     <fireKey>	KEY_RIGHTMOUSE	</fireKey>
     <satelliteKeys></satelliteKeys>
@@ -203,10 +207,6 @@
     <fireKey>	KEY_H	</fireKey>
     <satelliteKeys></satelliteKeys>
   </CMD_VOICECHAT_ENABLE>
-  <CMD_USE_HORN>
-    <fireKey>	KEY_NONE	</fireKey>
-    <satelliteKeys></satelliteKeys>
-  </CMD_USE_HORN>
   <CMD_TOGGLE_GUI>
     <fireKey>	KEY_V	</fireKey>
     <satelliteKeys></satelliteKeys>

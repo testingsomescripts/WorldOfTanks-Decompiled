@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/miniclient/lobby/hangar/aspects.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
-from helpers import aop
+from helpers import aop, dependency
 from helpers.i18n import makeString as _ms
 from CurrentVehicle import g_currentVehicle
 from gui.shared.formatters import icons
@@ -10,11 +10,14 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from skeletons.gui.game_control import IBootcampController
 
 class ShowMiniclientInfo(aop.Aspect):
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def atReturn(self, cd):
-        cd.self.as_showMiniClientInfoS(_ms('#miniclient:hangar/warn_message'), _ms('#miniclient:hangar/continue_download'))
+        if not self.bootcampController.isInBootcamp():
+            cd.self.as_showMiniClientInfoS(_ms('#miniclient:hangar/warn_message'), _ms('#miniclient:hangar/continue_download'))
 
 
 class DisableTankServiceButtons(aop.Aspect):
@@ -32,7 +35,6 @@ class DisableTankServiceButtons(aop.Aspect):
               False,
               tooltip), cd.kwargs)
         else:
-            return
             return
 
 
@@ -55,7 +57,6 @@ class MaintenanceButtonFlickering(aop.Aspect):
             return (original_args, cd.kwargs)
         else:
             return
-            return
 
 
 class DeviceButtonsFlickering(aop.Aspect):
@@ -76,7 +77,6 @@ class DeviceButtonsFlickering(aop.Aspect):
             return (original_args, cd.kwargs)
         else:
             return
-            return
 
 
 class TankModelHangarVisibility(aop.Aspect):
@@ -90,7 +90,6 @@ class TankModelHangarVisibility(aop.Aspect):
             cd.avoid()
             return False
         else:
-            return None
             return None
 
 
@@ -106,7 +105,6 @@ class TankHangarStatus(aop.Aspect):
             return (Vehicle.VEHICLE_STATE.NOT_PRESENT, _ms(self.__config.get('sandbox_platform_message', '#miniclient:hangar/unavailable')), Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
         else:
             return None
-            return None
 
 
 class EnableCrew(aop.Aspect):
@@ -120,7 +118,6 @@ class EnableCrew(aop.Aspect):
             cd.change()
             return ([True], {})
         else:
-            return None
             return None
 
 

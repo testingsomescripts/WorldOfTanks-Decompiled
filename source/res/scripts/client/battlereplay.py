@@ -186,46 +186,45 @@ class BattleReplay():
     def record(self, fileName=None):
         if self.isPlaying:
             return False
-        else:
-            if self.isRecording:
-                if not self.stop():
-                    LOG_ERROR('Failed to start recording new replay - cannot stop previous record')
-                    return False
-            useAutoFilename = False
-            if fileName is None:
-                useAutoFilename = True
-            try:
-                if not os.path.isdir(self.__replayDir):
-                    os.makedirs(self.__replayDir)
-            except:
-                LOG_ERROR('Failed to create directory for replay files')
+        if self.isRecording:
+            if not self.stop():
+                LOG_ERROR('Failed to start recording new replay - cannot stop previous record')
                 return False
-
-            success = False
-            for i in xrange(100):
-                try:
-                    if useAutoFilename:
-                        fileName = os.path.join(self.__replayDir, AUTO_RECORD_TEMP_FILENAME + ('' if i == 0 else str(i)) + REPLAY_FILE_EXTENSION)
-                    f = open(fileName, 'wb')
-                    f.close()
-                    os.remove(fileName)
-                    success = True
-                    break
-                except:
-                    if useAutoFilename:
-                        continue
-                    else:
-                        break
-
-            if not success:
-                LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
-                return False
-            g_replayEvents.onRecording()
-            if self.__replayCtrl.startRecording(fileName):
-                self.__fileName = fileName
-                return True
+        useAutoFilename = False
+        if fileName is None:
+            useAutoFilename = True
+        try:
+            if not os.path.isdir(self.__replayDir):
+                os.makedirs(self.__replayDir)
+        except:
+            LOG_ERROR('Failed to create directory for replay files')
             return False
-            return
+
+        success = False
+        for i in xrange(100):
+            try:
+                if useAutoFilename:
+                    fileName = os.path.join(self.__replayDir, AUTO_RECORD_TEMP_FILENAME + ('' if i == 0 else str(i)) + REPLAY_FILE_EXTENSION)
+                f = open(fileName, 'wb')
+                f.close()
+                os.remove(fileName)
+                success = True
+                break
+            except:
+                if useAutoFilename:
+                    continue
+                else:
+                    break
+
+        if not success:
+            LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
+            return False
+        g_replayEvents.onRecording()
+        if self.__replayCtrl.startRecording(fileName):
+            self.__fileName = fileName
+            return True
+        else:
+            return False
 
     def play(self, fileName=None):
         if self.isRecording:
@@ -246,11 +245,11 @@ class BattleReplay():
                 pass
 
         if fileName is None:
-            if len(self.__playList) == 0:
+            if not self.__playList:
                 return False
             fileName = self.__playList[0]
             self.__playList.pop(0)
-            self.__quitAfterStop = len(self.__playList) == 0
+            self.__quitAfterStop = not self.__playList
         self.__fileName = fileName
         if self.__replayCtrl.startPlayback(fileName):
             self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
@@ -260,7 +259,6 @@ class BattleReplay():
         else:
             self.__fileName = None
             return False
-            return
 
     def stop(self, rewindToTime=None, delete=False, isDestroyed=False):
         if not self.isPlaying and not self.isRecording:
@@ -382,10 +380,10 @@ class BattleReplay():
          CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
          CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE,
          CommandMapping.CMD_RADIAL_MENU_SHOW,
+         CommandMapping.CMD_SHOOT_SECONDARY,
          CommandMapping.CMD_RELOAD_PARTIAL_CLIP), key) and isDown and not isCursorVisible:
             suppressCommand = True
-        elif cmdMap.isFiredList((CommandMapping.CMD_USE_HORN,
-         CommandMapping.CMD_STOP_UNTIL_FIRE,
+        elif cmdMap.isFiredList((CommandMapping.CMD_STOP_UNTIL_FIRE,
          CommandMapping.CMD_INCREMENT_CRUISE_MODE,
          CommandMapping.CMD_DECREMENT_CRUISE_MODE,
          CommandMapping.CMD_MOVE_FORWARD,
@@ -421,37 +419,54 @@ class BattleReplay():
     def getGunRotatorTargetPoint(self):
         return self.__replayCtrl.gunRotatorTargetPoint
 
-    def setConsumablesPosition(self, pos, dir=Math.Vector3(1, 1, 1)):
-        self.__replayCtrl.gunMarkerPosition = pos
-        self.__replayCtrl.gunMarkerDirection = dir
-
-    def setGunMarkerParams(self, diameter, pos, dir):
-        controlMode = self.getControlMode()
-        if controlMode != 'mapcase':
-            self.__replayCtrl.gunMarkerDiameter = diameter
+    def setConsumablesPosition(self, turretIndex, pos, dir=Math.Vector3(1, 1, 1)):
+        if turretIndex == 0:
             self.__replayCtrl.gunMarkerPosition = pos
             self.__replayCtrl.gunMarkerDirection = dir
+        else:
+            self.__replayCtrl.secondaryGunMarkerPosition = pos
+            self.__replayCtrl.secondaryGunMarkerDirection = dir
 
-    def getGunMarkerParams(self, defaultPos, defaultDir):
-        diameter = self.__replayCtrl.gunMarkerDiameter
-        dir = self.__replayCtrl.gunMarkerDirection
-        pos = self.__replayCtrl.gunMarkerPosition
+    def setGunMarkerParams(self, diameter, pos, dir, turretIndex):
+        controlMode = self.getControlMode()
+        if controlMode != 'mapcase':
+            if turretIndex == 0:
+                self.__replayCtrl.gunMarkerDiameter = diameter
+                self.__replayCtrl.gunMarkerPosition = pos
+                self.__replayCtrl.gunMarkerDirection = dir
+            else:
+                self.__replayCtrl.secondaryGunMarkerDiameter = diameter
+                self.__replayCtrl.secondaryGunMarkerPosition = pos
+                self.__replayCtrl.secondaryGunMarkerDirection = dir
+
+    def getGunMarkerParams(self, defaultPos, defaultDir, turretIndex):
+        if turretIndex == 0:
+            diameter = self.__replayCtrl.gunMarkerDiameter
+            dir = self.__replayCtrl.gunMarkerDirection
+            pos = self.__replayCtrl.gunMarkerPosition
+        else:
+            diameter = self.__replayCtrl.secondaryGunMarkerDiameter
+            dir = self.__replayCtrl.secondaryGunMarkerDirection
+            pos = self.__replayCtrl.secondaryGunMarkerPosition
         if dir == Math.Vector3(0, 0, 0):
             pos = defaultPos
             dir = defaultDir
         return (diameter, pos, dir)
 
-    def getGunMarkerPos(self):
-        return self.__replayCtrl.gunMarkerPosition
+    def getGunMarkerPos(self, turretIndex):
+        return self.__replayCtrl.gunMarkerPosition if turretIndex == 0 else self.__replayCtrl.secondaryGunMarkerPosition
 
     def getEquipmentId(self):
         return self.__equipmentId
 
-    def setArcadeGunMarkerSize(self, size):
-        self.__replayCtrl.setArcadeGunMarkerSize(size)
+    def setArcadeGunMarkerSize(self, size, turretIndex):
+        if turretIndex == 0:
+            self.__replayCtrl.setArcadeGunMarkerSize(size)
+        else:
+            self.__replayCtrl.setSecondaryArcadeGunMarkerSize(size)
 
-    def getArcadeGunMarkerSize(self):
-        return self.__replayCtrl.getArcadeGunMarkerSize()
+    def getArcadeGunMarkerSize(self, turretIndex):
+        return self.__replayCtrl.getArcadeGunMarkerSize() if turretIndex == 0 else self.__replayCtrl.getSecondaryArcadeGunMarkerSize()
 
     def setSPGGunMarkerParams(self, dispersionAngle, size):
         self.__replayCtrl.setSPGGunMarkerParams((dispersionAngle, size))
@@ -465,23 +480,32 @@ class BattleReplay():
     def getAimClipPosition(self):
         return self.__replayCtrl.getAimClipPosition()
 
-    def setTurretYaw(self, value):
-        self.__replayCtrl.turretYaw = value
+    def setTurretYaw(self, value, turretIndex):
+        if turretIndex == 0:
+            self.__replayCtrl.turretYaw = value
+        else:
+            self.__replayCtrl.secondaryTurretYaw = value
 
-    def getTurretYaw(self):
-        return self.__replayCtrl.turretYaw
+    def getTurretYaw(self, turretIndex):
+        return self.__replayCtrl.turretYaw if turretIndex == 0 else self.__replayCtrl.secondaryTurretYaw
 
-    def setGunPitch(self, value):
-        self.__replayCtrl.gunPitch = value
+    def setGunPitch(self, value, turretIndex):
+        if turretIndex == 0:
+            self.__replayCtrl.gunPitch = value
+        else:
+            self.__replayCtrl.secondaryGunPitch = value
 
-    def getGunPitch(self):
-        return self.__replayCtrl.gunPitch
+    def getGunPitch(self, turretIndex):
+        return self.__replayCtrl.gunPitch if turretIndex == 0 else self.__replayCtrl.secondaryGunPitch
 
-    def getGunReloadAmountLeft(self):
-        return self.__replayCtrl.getGunReloadAmountLeft()
+    def getGunReloadAmountLeft(self, turretIndex):
+        return self.__replayCtrl.getGunReloadAmountLeft() if turretIndex == 0 else self.__replayCtrl.getSecondaryGunReloadAmountLeft()
 
-    def setGunReloadTime(self, startTime, duration):
-        self.__replayCtrl.setGunReloadTime(startTime, duration)
+    def setGunReloadTime(self, turretIndex, startTime, duration):
+        if turretIndex == 0:
+            self.__replayCtrl.setGunReloadTime(startTime, duration)
+        else:
+            self.__replayCtrl.setSecondaryGunReloadTime(startTime, duration)
 
     def resetArenaPeriod(self):
         if not self.isRecording:
@@ -528,13 +552,15 @@ class BattleReplay():
             if newSpeed != self.__replayCtrl.playbackSpeed:
                 if newSpeed == 0:
                     if player.gunRotator is not None:
-                        self.__gunWasLockedBeforePause = player.gunRotator._VehicleGunRotator__isLocked
-                        player.gunRotator.lock(True)
+                        turretIndex = 0
+                        self.__gunWasLockedBeforePause = player.gunRotator.isLocked(turretIndex)
+                        player.gunRotator.lock(True, turretIndex)
                     self.__showInfoMessage('replayPaused')
                     isPaused = True
                 else:
                     if player.gunRotator is not None:
-                        player.gunRotator.lock(self.__gunWasLockedBeforePause)
+                        turretIndex = 0
+                        player.gunRotator.lock(self.__gunWasLockedBeforePause, turretIndex)
                     newSpeedStr = self.__playbackSpeedModifiersStr[self.__playbackSpeedIdx]
                     self.__showInfoMessage('replaySpeedChange', {'speed': newSpeedStr})
                     isPaused = False
@@ -600,9 +626,10 @@ class BattleReplay():
                  'regionCode': constants.AUTH_REALM,
                  'serverSettings': self.__serverSettings,
                  'hasMods': self.__replayCtrl.hasMods}
-                if self.isRecording and BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
+                if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
                     from bootcamp.Bootcamp import g_bootcamp
                     arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
+                    arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
@@ -681,7 +708,8 @@ class BattleReplay():
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
             preferredPos = self.getGunRotatorTargetPoint()
             if controlMode == 'mapcase':
-                _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
+                turretIndex = 0
+                _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0), turretIndex)
             player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId)
             return
 
@@ -822,7 +850,7 @@ class BattleReplay():
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList', 'crystalReplay'):
                         personal[field] = None
 
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
@@ -897,14 +925,10 @@ class BattleReplay():
     def setSetting(self, key, value):
         self.__settings.write(key, base64.b64encode(pickle.dumps(value)))
         diff = {key: value}
-        LOG_DEBUG('Applying REPLAY settings: ', diff)
         self.settingsCore.onSettingsChanged(diff)
 
     def isFinished(self):
-        if self.isPlaying or g_replayCtrl.isTimeWarpInProgress:
-            return self.__isFinished
-        else:
-            return False
+        return self.__isFinished if self.isPlaying or g_replayCtrl.isTimeWarpInProgress else False
 
     def isFinishedNoPlayCheck(self):
         return self.__isFinished
@@ -1009,7 +1033,7 @@ def _JSON_Encode(obj):
             newDict[key] = _JSON_Encode(value)
 
         return newDict
-    if isinstance(obj, list) or isinstance(obj, tuple) or isinstance(obj, set):
+    if isinstance(obj, (list, tuple, set)):
         newList = []
         for value in obj:
             newList.append(_JSON_Encode(value))
@@ -1019,11 +1043,7 @@ def _JSON_Encode(obj):
 
 
 def isPlaying():
-    if g_replayCtrl is not None:
-        return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress
-    else:
-        return False
-        return
+    return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress if g_replayCtrl is not None else False
 
 
 def isLoading():

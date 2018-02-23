@@ -8,7 +8,7 @@ import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Money
+from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
@@ -21,7 +21,7 @@ DEFAULT_MAX_TANKMEN_BUFFER_LENGTH = 100
 def getTankmenRestoreInfo(tankman, itemsCache=None):
     config = itemsCache.items.shop.tankmenRestoreConfig
     dismissalLength = time_utils.getTimeDeltaTilNow(tankman.dismissedAt)
-    price = config.cost if dismissalLength >= config.freeDuration else Money()
+    price = config.cost if dismissalLength >= config.freeDuration else MONEY_UNDEFINED
     return (price, config.billableDuration - dismissalLength)
 
 
@@ -138,7 +138,7 @@ class RestoreController(IRestoreController, Notifiable):
                     period = delta
                 notificationList.append((vehicle.intCD, delta % period or period))
 
-        if len(notificationList) > 0:
+        if notificationList:
             _, nextRestoreNotification = min(notificationList, key=itemgetter(1))
             for vehCD, timeDelta in notificationList:
                 if timeDelta == nextRestoreNotification:
@@ -168,11 +168,9 @@ class RestoreController(IRestoreController, Notifiable):
         self.onTankmenBufferUpdated()
 
     def __getClosestTankmanUpdateTime(self):
-        if len(self.__tankmenList) > 0:
+        if self.__tankmenList:
             timeOfClosestDeletion = self.__tankmenList[-1].dismissedAt + self.__tankmanLiveTime
             return time_utils.getTimeDeltaFromNow(timeOfClosestDeletion) + 1
-        else:
-            return 0
 
     def __checkLimitedRestoreNotification(self):
         criteria = REQ_CRITERIA.CUSTOM(lambda item: item.hasLimitedRestore())
@@ -182,7 +180,7 @@ class RestoreController(IRestoreController, Notifiable):
             showMessage = True
         else:
             showMessage = time_utils.getTimeDeltaTilNow(lastRestoreNotification) >= time_utils.ONE_DAY
-        if len(vehicles) and showMessage and not self.__checkForNotify:
+        if vehicles and showMessage and not self.__checkForNotify:
             AccountSettings.setSettings(LAST_RESTORE_NOTIFICATION, time.time())
             SystemMessages.pushI18nMessage('#system_messages:restoreController/hasLimitedRestoreVehicles', type=SystemMessages.SM_TYPE.Warning)
         self.__checkForNotify = True

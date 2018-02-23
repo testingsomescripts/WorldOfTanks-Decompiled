@@ -25,6 +25,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.clan_lock_controller import ClanLockController as _ClanLocks
     from gui.game_control.events_notifications import EventsNotificationsController as _EventNotifications
     from gui.game_control.fallout_controller import FalloutController as _Fallout
+    from gui.game_control.event_battles_controller import EventBattlesController as _EventBattles
     from gui.game_control.prmp_controller import EncyclopediaController as _Exncyclopedia
     from gui.game_control.relogin_controller import ReloginController as _Relogin
     from gui.game_control.restore_contoller import RestoreController as _Restore
@@ -35,6 +36,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.trade_in import TradeInController as _TradeIn
     from gui.game_control.quests_controller import QuestsController as _Quests
     from gui.game_control.ranked_battles_controller import RankedBattlesController as _Ranked
+    from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from skeletons.gui import game_control as _interface
     tracker = GameStateTracker()
@@ -65,6 +67,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IAwardController, _Awards())
     _config(_interface.IBoostersController, _Boosters())
     _config(_interface.IFalloutController, _Fallout())
+    _config(_interface.IEventBattlesController, _EventBattles())
     _config(_interface.IScreenCastController, _ScreenCast())
     _config(_interface.IClanLockController, _ClanLocks())
     _config(_interface.IVehicleComparisonBasket, _VehComparison())
@@ -73,6 +76,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IQuestsController, _Quests())
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
+    _config(_interface.IEpicModeController, _Epic())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

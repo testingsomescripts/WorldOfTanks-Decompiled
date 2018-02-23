@@ -9,7 +9,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
+from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS, isSubtitleParameter, PARAMS_GROUPS_MULTITURRET_FOR_VEHICLEINFO
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -72,6 +72,7 @@ SIMPLIFIED_SCHEME = (text_styles.critical, text_styles.warning, text_styles.stat
 BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.bonusAppliedText)
 SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
+VEHICLE_PARAMS_MULTITURRET = tuple(chain(*[ PARAMS_GROUPS_MULTITURRET_FOR_VEHICLEINFO[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicleChassis: ('maxLoad', 'rotationSpeed', 'weight'),
  ITEM_TYPES.vehicleEngine: ('enginePower', 'fireStartingChance', 'weight'),
@@ -117,6 +118,8 @@ def formatModuleParamName(paramName):
 def formatVehicleParamName(paramName, showMeasureUnit=True):
     if isRelativeParameter(paramName):
         return text_styles.middleTitle(MENU.tank_params(paramName))
+    elif isSubtitleParameter(paramName):
+        return text_styles.tankParamsSubtitle(MENU.tank_params(paramName))
     else:
         builder = text_styles.builder()
         builder.addStyledText(text_styles.main, MENU.tank_params(paramName))
@@ -143,6 +146,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'damage': _niceRangeFormat,
  'piercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
+ 'reloadTime_Secondary': _niceRangeFormat,
  'reloadTimeSecs': _niceFormat,
  'gunRotationSpeed': _niceFormat,
  'turretRotationSpeed': _niceFormat,
@@ -151,13 +155,19 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'pitchLimits': _niceListFormat,
  'clipFireRate': _niceListFormat,
  'aimingTime': _niceRangeFormat,
+ 'aimingTime_Secondary': _niceRangeFormat,
  'shotDispersionAngle': _niceFormat,
+ 'shotDispersionAngle_Secondary': _niceFormat,
  'avgDamagePerMinute': _niceFormat,
+ 'avgDamagePerMinute_Secondary': _niceFormat,
  'relativeArmor': _integralFormat,
  'avgDamage': _niceFormat,
+ 'avgDamage_Secondary': _niceFormat,
  'maxHealth': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
+ 'turretArmor_Primary': _listFormat,
+ 'turretArmor_Secondary': _listFormat,
  'relativeMobility': _integralFormat,
  'vehicleWeight': _niceListFormat,
  'weight': _niceRangeFormat,
@@ -186,6 +196,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'shellReloadingTime': _niceRangeFormat,
  'reloadMagazineTime': _niceRangeFormat,
  'avgPiercingPower': _listFormat,
+ 'avgPiercingPower_Secondary': _listFormat,
  'avgDamageList': _listFormat,
  'dispertionRadius': _niceRangeFormat,
  'invisibilityStillFactor': _niceListFormat,
@@ -221,7 +232,7 @@ def _getDeltaSettings():
 
 
 DELTA_PARAMS_SETTING = _getDeltaSettings()
-_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight', 'invisibilityStillFactor', 'invisibilityMovingFactor')
+_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'reloadTime_Secondary', 'dispertionRadius', 'aimingTime', 'aimingTime_Secondary', 'weight')
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
@@ -247,8 +258,7 @@ def simlifiedDeltaParameter(parameter, isSituational=False):
         scheme = SITUATIONAL_SCHEME if isSituational else SIMPLIFIED_SCHEME
         deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, scheme)
         return '(%s) %s' % (deltaStr, mainFormatter(paramStr))
-    else:
-        return mainFormatter(paramStr)
+    return mainFormatter(paramStr)
 
 
 def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True):
@@ -270,23 +280,18 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
 
     if paramValue is None:
         return
-    else:
-        if isinstance(paramValue, (tuple, list)):
-            if parameterState is None:
-                parameterState = [None] * len(paramValue)
-            if doSmartRound and len(set(paramValue)) == 1:
-                if paramValue[0] > 0:
-                    return applyFormat(paramValue[0], parameterState[0])
-                return
-            else:
-                separator = settings['separator']
-                paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
-                return separator.join(paramsList)
-        else:
-            if paramValue != 0:
-                return applyFormat(paramValue, parameterState)
+    elif isinstance(paramValue, (tuple, list)):
+        if parameterState is None:
+            parameterState = [None] * len(paramValue)
+        if doSmartRound and len(set(paramValue)) == 1:
+            if paramValue[0] > 0:
+                return applyFormat(paramValue[0], parameterState[0])
             return
-        return
+        separator = settings['separator']
+        paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
+        return separator.join(paramsList)
+    else:
+        return applyFormat(paramValue, parameterState) if paramValue != 0 else None
 
 
 def formatParameterDelta(pInfo, deltaScheme=BASE_SCHEME, formatSettings=DELTA_PARAMS_SETTING):
@@ -301,11 +306,13 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     if vehicles.isVehicleDescr(descriptor):
         compactDescr = descriptor.type.compactDescr
     else:
-        compactDescr = descriptor['compactDescr']
+        compactDescr = descriptor.compactDescr
     itemTypeIdx = getTypeOfCompactDescr(compactDescr)
     if itemTypeIdx == ITEM_TYPES.equipment:
-        eqDescr = vehicles.getDictDescr(compactDescr)
+        eqDescr = vehicles.getItemByCompactDescr(compactDescr)
         paramsList = ITEMS_PARAMS_LIST[itemTypeIdx].get(type(eqDescr), [])
+    elif itemTypeIdx == ITEM_TYPES.vehicle and descriptor.isMultiTurret:
+        paramsList = VEHICLE_PARAMS_MULTITURRET
     else:
         paramsList = ITEMS_PARAMS_LIST[itemTypeIdx]
     params = []
@@ -316,7 +323,7 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if paramValue:
             fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
-                params.append((paramName, formatParameter(paramName, paramValue)))
+                params.append((paramName, fmtValue))
 
     return params
 
@@ -324,9 +331,9 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
 _ICON_LIB_PATH = '../maps/icons/vehParams/tooltips'
 
 def getBonusIcon(bonusId):
-    if bonusId.find('Rammer') >= 0:
+    if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer':
         iconStr = 'rammer'
-    elif bonusId.find('enhanced') >= 0 and bonusId != 'enhancedAimDrives':
+    elif bonusId.find('enhanced') >= 0 and bonusId not in ('enhancedAimDrives', 'enhancedAimDrivesBattleBooster'):
         iconStr = 'enhancedSuspension'
     else:
         iconStr = bonusId.split('_class')[0]
@@ -342,10 +349,7 @@ def packSituationalIcon(text, icon):
 
 
 def getGroupPenaltyIcon(param, comparator):
-    if hasGroupPenalties(param.name, comparator):
-        return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE
-    else:
-        return ''
+    return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE if hasGroupPenalties(param.name, comparator) else ''
 
 
 def getAllParametersTitles():
@@ -370,7 +374,4 @@ def getAllParametersTitles():
 def _cutDigits(value):
     if value > 99:
         return round(value)
-    elif value > 9:
-        return round(value, 1)
-    else:
-        return round(value, 2)
+    return round(value, 1) if value > 9 else round(value, 2)

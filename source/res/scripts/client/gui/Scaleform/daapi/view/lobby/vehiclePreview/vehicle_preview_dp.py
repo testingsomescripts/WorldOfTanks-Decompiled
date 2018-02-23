@@ -1,22 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview/vehicle_preview_dp.py
-from items import tankmen
-from items.sabaton_crew import generateTankmenForSpecialEvent
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import Tankman
 from gui.shared.gui_items.items_actions import factory
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils.functions import makeTooltip
-from helpers.i18n import makeString as _ms
-VEH_PREVIEW_SPECIAL_PANEL_ID = 'VehPreviewSpecialCrew'
-VEH_PREVIEW_INFO_PANEL_ID = 'VehPreviewInfoPanelUI'
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
-SABATON_BTN_LINK = 'OrangeBuyBtnUI'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
 TAB_DATA_MAP = {FACT_SHEET_TAB_ID: (VEHPREVIEW_CONSTANTS.FACT_SHEET_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_FACTSHEET_NAME),
  CREW_INFO_TAB_ID: (VEHPREVIEW_CONSTANTS.CREW_INFO_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME)}
@@ -52,14 +43,10 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
         """Fill panel with formed crew or with crew roles
         :return:
         """
-        return {'crewPanel': self.__packTabButtonsData(),
-         'crewPanelLink': VEH_PREVIEW_INFO_PANEL_ID}
+        return {'crewPanel': self.__packTabButtonsData()}
 
     def getBuyType(self, vehicle):
-        if vehicle.isUnlocked:
-            return factory.BUY_VEHICLE
-        else:
-            return factory.UNLOCK_ITEM
+        return factory.BUY_VEHICLE if vehicle.isUnlocked else factory.UNLOCK_ITEM
 
     def getBuyButtonState(self, data=None):
         return {'enabled': data.enabled,
@@ -107,61 +94,3 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
              'linkage': linkage})
 
         return data
-
-
-class SabatonVehPreviewDataProvider(IVehPreviewDataProvider):
-
-    def getCrewInfo(self):
-        return {'crewPanel': {'title': text_styles.highTitle(VEHICLE_PREVIEW.SPECIALCREW_SABATON_NAME),
-                       'description': '{0} {1}'.format(text_styles.main(VEHICLE_PREVIEW.SPECIALCREW_SABATON_DESCRIPTION), text_styles.neutral(VEHICLE_PREVIEW.SPECIALCREW_SABATON_PERK)),
-                       'headerImage': '../maps/icons/tankmen/skills/big/sabaton_brotherhood.png',
-                       'crewListData': self.__packSpecialCrewInfoData()},
-         'crewPanelLink': VEH_PREVIEW_SPECIAL_PANEL_ID}
-
-    def getBuyType(self, _):
-        pass
-
-    def getBuyButtonState(self, data=None):
-        return {'link': SABATON_BTN_LINK,
-         'enabled': True,
-         'label': VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY}
-
-    def getBottomPanelData(self, item):
-        buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_SABATON_BUYLABEL)
-        isBuyingAvailable = True
-        modulesLabel = VEHICLE_PREVIEW.MODULESPANEL_TITLE
-        return {'buyingLabel': buyingLabel,
-         'modulesLabel': text_styles.middleTitle(modulesLabel),
-         'isBuyingAvailable': isBuyingAvailable,
-         'isCanTrade': item.canTradeIn,
-         'vehicleId': item.intCD}
-
-    def getPriceInfo(self, data=None):
-        return {'showAction': False,
-         'actionTooltipType': None}
-
-    def buyAction(self, actionType, vehicleCD, skipConfirm):
-        from gui.shared import g_eventBus, events
-        g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SABATON_SHOP))
-
-    def __packSpecialCrewInfoData(self):
-        """Gather and fill info about vehicle crew for sabaton event
-        """
-        tmanDescrList = generateTankmenForSpecialEvent()
-        crewData = []
-        for tmanDescr in tmanDescrList:
-            t = tankmen.TankmanDescr(tmanDescr)
-            header = _ms(TOOLTIPS.sabatonHeader(t.role))
-            body = _ms(TOOLTIPS.sabatonBody(t.role))
-            tooltip = makeTooltip(header or None, body or None)
-            crewData.append({'name': text_styles.highlightText('{} {}'.format(Tankman.getFirstUserName(t.nationID, t.firstNameID), Tankman.getLastUserName(t.nationID, t.lastNameID))),
-             'roleIcon': Tankman.getRoleBigIconPath(t.role),
-             'icon': Tankman.getSmallIconPath(t.nationID, t.iconID),
-             'rankIcon': Tankman.getRankSmallIconPath(t.nationID, t.rankID),
-             'tooltip': tooltip,
-             'tankmenPercent': _formatRoleLevelValue(t.roleLevel),
-             'roles': [{'icon': Tankman.getRoleSmallIconPath(t.role)}],
-             'skills': [{'icon': '../maps/icons/tankmen/skills/small/sabaton_brotherhood.png',
-                         'active': True}]})
-
-        return crewData

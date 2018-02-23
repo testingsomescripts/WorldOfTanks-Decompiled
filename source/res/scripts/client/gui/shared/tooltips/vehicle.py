@@ -3,7 +3,7 @@
 import collections
 import constants
 from BigWorld import wg_getIntegralFormat as _int
-from debug_utils import LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
@@ -13,7 +13,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
-from gui.shared.gui_items import GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
@@ -33,6 +33,7 @@ from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
+_BATTLE_BOOSTER = 'battleBooster'
 _ARTEFACT_TYPES = (_EQUIPMENT, _OPTION_DEVICE)
 _SKILL_BONUS_TYPE = 'skill'
 _ROLE_BONUS_TYPE = 'role'
@@ -82,21 +83,21 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         textGap = -2
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding))
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-        if len(telecomBlock) > 0:
+        if telecomBlock:
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        if len(priceBlock) > 0:
+        if priceBlock:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if len(simplifiedStatsBlock) > 0:
+        if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
-            if len(commonStatsBlock) > 0:
+            if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
         footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if len(footnoteBlock):
+        if footnoteBlock:
             items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
         if vehicle.isRotationGroupLocked:
             statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
@@ -109,7 +110,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
             statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
-            if len(statusBlock) > 0:
+            if statusBlock:
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
             else:
                 self._setContentMargin(bottom=bottomPadding)
@@ -157,9 +158,6 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
 
 class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
 
-    def __init__(self, context):
-        super(VehicleSimpleParametersTooltipData, self).__init__(context)
-
     def _packBlocks(self, paramName):
         blocks = super(VehicleSimpleParametersTooltipData, self)._packBlocks(paramName)
         title = text_styles.highTitle(MENU.tank_params(paramName))
@@ -167,7 +165,7 @@ class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
         desc = text_styles.main(_ms(TOOLTIPS.tank_params_desc(paramName)))
         comparator = self.context.getComparator()
         icon = param_formatter.getGroupPenaltyIcon(comparator.getExtendedData(paramName), comparator)
-        valueLeftPadding = -3 if len(icon) > 0 else 6
+        valueLeftPadding = -3 if icon else 6
         blocks.append(formatters.packTitleDescParameterWithIconBlockData(title, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=value)), icon=icon, desc=desc, valueAtRight=True, iconPadding=formatters.packPadding(left=0, top=6), valuePadding=formatters.packPadding(left=valueLeftPadding, top=4)))
         return blocks
 
@@ -210,6 +208,8 @@ def _packBonusName(bnsType, bnsId, enabled=True, inactive=False):
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_tankmanlevel(bnsId))))
     elif bnsType == _EXTRA_BONUS_TYPE:
         itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_ROLE_TEMPLATE, name=_ms(TOOLTIPS.vehicleparams_bonus_extra(bnsId))))
+    elif bnsType == _BATTLE_BOOSTER:
+        itemStr = textStyle(_ms(TOOLTIPS.VEHICLEPARAMS_BONUS_BATTLEBOOSTER_TEMPLATE, name=_ms('#artefacts:{boosterId}/name'.format(boosterId=bnsId))))
     if inactive:
         itemStr += _ms(TOOLTIPS.VEHICLEPARAMS_BONUS_POSSIBLE_ISINACTIVE)
         icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_RED, 16, 16, 0, 2)
@@ -244,7 +244,7 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         return blocks
 
     def _packListBlock(self, blocks, listBlock, title):
-        if len(listBlock) > 0:
+        if listBlock:
             titlePadding = formatters.packPadding(bottom=15)
             listPadding = formatters.packPadding(left=90)
             blockPadding = formatters.packPadding(left=5, top=15, bottom=5)
@@ -362,19 +362,20 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
         if tradeInVehicleCD < 0:
             return {}
         tradeInVehicle = self.context.buildItem(tradeInVehicleCD)
+        itemPrice = tradeInVehicle.buyPrices.itemPrice
         bodyParts = []
-        if tradeInVehicle.buyPrice != tradeInVehicle.defaultPrice:
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(tradeInVehicle.defaultPrice, currType=Currency.GOLD)))
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(tradeInVehicle.buyPrice, currType=Currency.GOLD)))
+        if tradeInVehicle.buyPrices.itemPrice.isActionPrice():
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(itemPrice.defPrice, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
         else:
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(tradeInVehicle.buyPrice, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
         if tradeOffVehicleCD < 0:
             tradeOffVehicleName = i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NOVEHICLE)
-            resultPrice = tradeInVehicle.buyPrice
+            resultPrice = itemPrice.price
         else:
             tradeOffVehicle = self.context.buildItem(tradeOffVehicleCD)
             tradeOffVehicleName = tradeOffVehicle.userName
-            resultPrice = tradeInVehicle.buyPrice - tradeOffVehicle.tradeOffPrice
+            resultPrice = itemPrice.price - tradeOffVehicle.tradeOffPrice
         bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_TOCHANGE, vehicleName=text_styles.playerOnline(tradeOffVehicleName)))
         return {'header': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_HEADER, vehicleName=tradeInVehicle.userName),
          'body': '\n'.join(bodyParts),
@@ -395,9 +396,6 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(HeaderBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
 
     def construct(self):
         block = []
@@ -427,10 +425,7 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         return
 
     def construct(self):
-        if self.vehicle.isTelecom:
-            return [formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN))]
-        else:
-            return []
+        return [formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN))] if self.vehicle.isTelecom else []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
@@ -500,9 +495,10 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                         timeKey, formattedTime = getTimeLeftInfo(self.vehicle.restoreInfo.getRestoreTimeLeft(), None)
                         block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main('#tooltips:vehicle/restoreLeft/%s' % timeKey), value=text_styles.main(formattedTime), icon=ICON_TEXT_FRAMES.ALERT if timeKey == 'hours' else ICON_TEXT_FRAMES.EMPTY, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
                 elif not (self.vehicle.isDisabledForBuy or self.vehicle.isPremiumIGR or self.vehicle.isTelecom):
-                    price = self.vehicle.buyPrice
-                    actionPrc = self.vehicle.actionPrc
-                    defaultPrice = self.vehicle.defaultPrice
+                    itemPrice = self.vehicle.buyPrices.itemPrice
+                    price = itemPrice.price
+                    actionPrc = itemPrice.getActionPrc()
+                    defaultPrice = itemPrice.defPrice
                     currency = price.getCurrency()
                     buyPriceText = price.get(currency)
                     oldPrice = defaultPrice.get(currency)
@@ -511,23 +507,21 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                         neededValue = None
                     block.append(makePriceBlock(buyPriceText, CURRENCY_SETTINGS.getBuySetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
             if sellPrice and not self.vehicle.isTelecom:
-                sellPrice = self.vehicle.sellPrice
-                if sellPrice.isSet(Currency.GOLD):
-                    sellPriceText = text_styles.gold(_int(sellPrice.gold))
-                    sellPriceIcon = ICON_TEXT_FRAMES.GOLD
-                else:
-                    sellPriceText = text_styles.credits(_int(sellPrice.credits))
-                    sellPriceIcon = ICON_TEXT_FRAMES.CREDITS
+                sellPrice = self.vehicle.sellPrices.itemPrice.price
+                sellCurrency = sellPrice.getCurrency(byWeight=True)
+                currencyTextFormatter = getattr(text_styles, sellCurrency, text_styles.credits)
+                sellPriceText = currencyTextFormatter(_int(sellPrice.get(sellCurrency, 0)))
+                sellPriceIcon = sellCurrency
                 block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_SELL_PRICE), value=sellPriceText, icon=sellPriceIcon, valueWidth=self._valueWidth, padding=paddings))
             if minRentPrice and not self.vehicle.isPremiumIGR:
                 minRentPricePackage = self.vehicle.getRentPackage()
                 if minRentPricePackage:
-                    minRentPriceValue = Money(*minRentPricePackage['rentPrice'])
-                    minDefaultRentPriceValue = Money(*minRentPricePackage['defaultRentPrice'])
+                    minRentPriceValue = minRentPricePackage['rentPrice']
+                    minDefaultRentPriceValue = minRentPricePackage['defaultRentPrice']
                     actionPrc = self.vehicle.getRentPackageActionPrc(minRentPricePackage['days'])
                     currency = minRentPriceValue.getCurrency()
-                    price = minRentPriceValue.get(currency)
-                    oldPrice = minDefaultRentPriceValue.get(currency)
+                    price = minRentPriceValue.getSignValue(currency)
+                    oldPrice = minDefaultRentPriceValue.getSignValue(currency)
                     neededValue = _getNeedValue(minRentPriceValue, currency)
                     block.append(makePriceBlock(price, CURRENCY_SETTINGS.getRentSetting(currency), neededValue, oldPrice, actionPrc, valueWidth=self._valueWidth))
                     if not self.vehicle.isRented or self.vehicle.rentalIsOver:
@@ -576,16 +570,13 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     if fmtValue is not None:
                         block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1)))
 
-        if len(block) > 0:
+        if block:
             title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
         return block
 
 
 class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(SimplifiedStatsBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
 
     def construct(self):
         block = []
@@ -601,15 +592,12 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                         buffIconSrc = param_formatter.getGroupPenaltyIcon(paramInfo, comparator)
                     block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
-        if len(block) > 0:
+        if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
         return block
 
 
 class FootnoteBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(FootnoteBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
 
     def construct(self):
         if self.configuration.params and not self.configuration.simplifiedOnly:
@@ -725,7 +713,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     headerFormatter = text_styles.statInfo
                 header = headerFormatter(result['header'])
                 text = result['text']
-                if text is not None and len(text) > 0:
+                if text:
                     block.append(formatters.packTextBlockData(text=header))
                     block.append(formatters.packTextBlockData(text=text_styles.standard(text)))
                 else:
@@ -751,7 +739,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             mayObtain, reason = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             if not mayObtain:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-                if GUI_ITEM_PURCHASE_CODE.isMoneyError(reason):
+                if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
                     tooltip = _makeModuleFitTooltipError(reason)
                 else:
                     tooltip = TOOLTIPS.MODULEFITS_OPERATION_ERROR
@@ -778,9 +766,9 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 msg = 'inHangar'
             elif not mayObtain:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
-                if reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_GOLD:
+                if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_GOLD:
                     msg = 'notEnoughGold'
-                elif reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_CREDITS:
+                elif reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS:
                     msg = 'notEnoughCredits'
                 else:
                     msg = 'operationError'
@@ -831,5 +819,5 @@ def _formatValueChange(paramName, value):
 def _getNeedValue(price, currency):
     itemsCache = dependency.instance(IItemsCache)
     money = itemsCache.items.stats.money
-    neededValue = price.get(currency) - money.get(currency)
+    neededValue = price.getSignValue(currency) - money.getSignValue(currency)
     return neededValue if neededValue > 0 else None

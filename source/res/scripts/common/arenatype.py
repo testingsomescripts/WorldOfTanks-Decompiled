@@ -1,18 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
-from collections import namedtuple
+from collections import defaultdict
 import ResMgr
-from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
+from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES
+from constants import IS_CELLAPP, IS_BASEAPP
 from items.vehicles import CAMOUFLAGE_KINDS
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from GasAttackSettings import GasAttackSettings
+from items import _xml
+from BossModeSettings import BossModeSettings
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
 elif IS_WEB:
     from web_stubs import *
+if IS_CELLAPP or IS_BASEAPP:
+    from server_constants import ARENA_ESTIMATED_LOAD_DEFAULT
 g_cache = {}
+g_geometryCache = {}
 g_geometryNamesToIDs = {}
 g_gameplayNames = set()
 g_gameplaysMask = 0
@@ -80,15 +86,26 @@ class ArenaType(object):
             raise Exception("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
 
     def __getattr__(self, name):
-        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg[name]
+        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg.get(name, None)
+
+
+class GeometryType(object):
+
+    def __init__(self, cfg):
+        self.__cfg = cfg
+
+    def __getattr__(self, name):
+        return self.__cfg[name]
 
 
 def __buildCache(geometryID, geometryName, defaultXml):
+    global g_geometryCache
     sectionName = ARENA_TYPE_XML_PATH + geometryName + '.xml'
     section = ResMgr.openSection(sectionName)
     if section is None:
         raise Exception("Can't open '%s'" % sectionName)
     geometryCfg = __readGeometryCfg(geometryID, geometryName, section, defaultXml)
+    g_geometryCache[geometryID] = GeometryType(geometryCfg)
     for gameplayCfg in __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
         arenaType = ArenaType(geometryCfg, gameplayCfg)
         g_cache[arenaType.id] = arenaType
@@ -106,6 +123,8 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg['boundingBox'] = __readBoundingBox(section)
         cfg['weatherPresets'] = __readWeatherPresets(section)
         cfg['vehicleCamouflageKind'] = __readVehicleCamouflageKind(section)
+        if IS_CELLAPP or IS_BASEAPP:
+            cfg['estimatedLoad'] = __readFloat('estimatedLoad', section, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
         if IS_CLIENT or IS_WEB:
             cfg['name'] = i18n.makeString(__readString('name', section, defaultXml))
         if IS_CLIENT:
@@ -160,6 +179,10 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise Exception('national battles are disabled')
+        if __hasKey('bossModes', section, defaultXml):
+            cfg['bossModes'] = __readBossModes(section['bossModes'])
+        else:
+            cfg['bossModes'] = None
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -201,23 +224,27 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
+    if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
+        cfg['numPlayerGroups'] = __readInt('numPlayerGroups', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
+        cfg['playerGroupLimit'] = __readInt('playerGroupLimit', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('crystalRewardFactor', section, defaultXml):
+        cfg['crystalRewardFactor'] = __readFloat('crystalRewardFactor', section, defaultXml, 1.0)
     if IS_CLIENT or IS_WEB:
         if raiseIfMissing or __hasKey('description', section, defaultXml):
             cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
         if raiseIfMissing or __hasKey('minimap', section, defaultXml):
             cfg['minimap'] = __readString('minimap', section, defaultXml)
-        if raiseIfMissing or __hasKey('wwmusic', section, defaultXml):
-            cfg['music'] = __readString('wwmusic', section, defaultXml)
-        if raiseIfMissing or __hasKey('wwloadingMusic', section, defaultXml):
-            cfg['loadingMusic'] = __readString('wwloadingMusic', section, defaultXml)
         if raiseIfMissing or __hasKey('wwambientSound', section, defaultXml):
             cfg['ambientSound'] = __readString('wwambientSound', section, defaultXml)
-        if __hasKey('wwbattleVictoryMusic', section, defaultXml):
-            cfg['battleVictoryMusic'] = __readString('wwbattleVictoryMusic', section, defaultXml)
-        if __hasKey('wwbattleLoseMusic', section, defaultXml):
-            cfg['battleLoseMusic'] = __readString('wwbattleLoseMusic', section, defaultXml)
-        if __hasKey('wwbattleDrawMusic', section, defaultXml):
-            cfg['battleDrawMusic'] = __readString('wwbattleDrawMusic', section, defaultXml)
+        musicSetup = None
+        if raiseIfMissing or __hasKey('wwmusicSetup', section, defaultXml):
+            musicSetup = __readWWmusicSection(section, defaultXml)
+        if musicSetup is not None:
+            cfg['wwmusicSetup'] = musicSetup
+        wwmusicDroneSetup = 'wwmusicDroneSetup'
+        if raiseIfMissing or __hasKey(wwmusicDroneSetup, section, defaultXml):
+            cfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml)
         if raiseIfMissing or __hasKey('wwbattleCountdownTimerSound', section, defaultXml):
             cfg['battleCountdownTimerSound'] = __readString('wwbattleCountdownTimerSound', section, defaultXml)
         if raiseIfMissing or section.has_key('mapActivities'):
@@ -243,6 +270,66 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         if raiseIfMissing or __hasKey('waypoints', section, defaultXml):
             cfg['waypoints'] = __readString('waypoints', section, defaultXml)
     return cfg
+
+
+def __readWWmusicSection(section, defaultXml):
+    wwmusic = None
+    if __hasKey('wwmusicSetup', section, defaultXml):
+        wwmusic = dict()
+        dataSection = section if section.has_key('wwmusicSetup') else defaultXml
+        for name, value in _xml.getChildren(defaultXml, dataSection, 'wwmusicSetup'):
+            wwmusic[name] = value.asString
+
+    return wwmusic
+
+
+def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
+    """
+    Parses wwmusicDroneSetup section from current xml.
+    Example:
+        <wwmusicDroneSetup>
+            <timeRemained>
+                <value> 20 </value>
+                <arena_type_label> ARENA_GUI_TYPE_LABEL.LABELS.* </arena_type_label>
+                <gameplay_name> ARENA_GAMEPLAY_NAMES.* </gameplay_name>
+            </timeRemained>
+            ...
+        </wwmusicDroneSetup>
+    :param wwmusicDroneSetup: the name of tag 'wwmusicDroneSetup'
+    :param section: current arena xml
+    :param defaultXml: /arena_defs/_default_.xml
+    :return: dict: {settingName: {(ARENA_GUI_TYPE_LABEL.LABELS.*, ARENA_GAMEPLAY_NAMES.*): value, ...}...}
+    """
+    dataSection = section if section.has_key(wwmusicDroneSetup) else defaultXml
+    outcome = defaultdict(dict)
+    droneChildren = sorted(_xml.getChildren(defaultXml, dataSection, wwmusicDroneSetup), key=lambda item: len(item[1].items()))
+    valueTag = 'value'
+    for settingName, settingChildren in droneChildren:
+        if settingChildren.has_key(valueTag):
+            settingValue = settingChildren.readInt(valueTag)
+            if settingChildren.has_key('arena_type_label'):
+                if settingChildren.has_key('gameplay_name'):
+                    gameplayType = settingChildren.readString('gameplay_name')
+                    arenaTypeLabel = settingChildren.readString('arena_type_label')
+                    outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
+                else:
+                    arenaTypeLabel = settingChildren.readString('arena_type_label')
+                    for gameplayType in ARENA_GAMEPLAY_NAMES:
+                        outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
+
+            elif settingChildren.has_key('gameplay_name'):
+                gameplayType = settingChildren.readString('gameplay_name')
+                for arenaTypeLabel in ARENA_GUI_TYPE_LABEL.LABELS.itervalues():
+                    outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
+
+            else:
+                for arenaTypeLabel in ARENA_GUI_TYPE_LABEL.LABELS.itervalues():
+                    for gameplayType in ARENA_GAMEPLAY_NAMES:
+                        outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
+
+        raise Exception('"{}" section missed the key "{}"!'.format(settingName, valueTag))
+
+    return dict(outcome)
 
 
 def __hasKey(key, xml, defaultXml):
@@ -553,3 +640,79 @@ def __readGasAttackSettings(section):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
+
+
+def __readBossModes(section):
+    settings = BossModeSettings(section.readString('botName'))
+    if section.has_key('team'):
+        settings.setTeamNum(section.readInt('team'))
+    if section.has_key('mineRadius'):
+        settings.setMineRadius(section.readFloat('mineRadius'))
+    if section.has_key('mineDamage'):
+        settings.setMineDamage(section.readInt('mineDamage'))
+    if section.has_key('mineDuration'):
+        settings.setMineDuration(section.readFloat('mineDuration'))
+    if section.has_key('mineActivationDelay'):
+        settings.setMineActivationDelay(section.readFloat('mineActivationDelay'))
+    if section.has_key('mineModelActivationDelay'):
+        settings.setMineModelActivationDelay(section.readFloat('mineModelActivationDelay'))
+    if section.has_key('mineEffects'):
+        settings.setMineEffects(section['mineEffects'])
+    if section.has_key('healthPowerupRadius'):
+        settings.setHealthPowerupRadius(section.readFloat('healthPowerupRadius'))
+    if section.has_key('healthPowerupDuration'):
+        settings.setHealthPowerupDuration(section.readFloat('healthPowerupDuration'))
+    if section.has_key('healthPowerupHealAmount'):
+        settings.setHealthPowerupHealAmount(section.readInt('healthPowerupHealAmount'))
+    if section.has_key('healthPowerupEffects'):
+        settings.setHealthPowerupEffects(section['healthPowerupEffects'])
+    for name, value in section.items():
+        if name == 'phase':
+            events = []
+            for phaseKey, phaseValue in value.items():
+                if phaseKey == 'health':
+                    health = phaseValue.readFloat('')
+                if phaseKey == 'event':
+                    event = {'name': phaseValue.readString('')}
+                    for eventKey, eventValue in phaseValue.items():
+                        event[eventKey] = eventValue.readFloat('')
+
+                    events.append(event)
+
+            settings.addPhase(health, events)
+        if name == 'minionEvent':
+            minionEvents = []
+            for phaseKey, phaseValue in value.items():
+                if phaseKey == 'health':
+                    health = phaseValue.readFloat('')
+                if phaseKey == 'event':
+                    event = {'name': phaseValue.readString('')}
+                    for eventKey, eventValue in phaseValue.items():
+                        event[eventKey] = eventValue.readFloat('')
+
+                    minionEvents.append(event)
+
+            settings.addMinionEvent(health, minionEvents)
+        if name == 'mineModels':
+            for key, modelData in value.items():
+                for tagKey, model in modelData.items():
+                    modelName = model.readString('')
+                    actionName = model.readString('action')
+                    settings.addMineModels(key, modelName, actionName)
+
+        if name == 'healthPowerupModels':
+            for key, modelData in value.items():
+                for tagKey, model in modelData.items():
+                    modelName = model.readString('')
+                    actionName = model.readString('action')
+                    settings.addHealthPowerupModels(key, modelName, actionName)
+
+        if name == 'pathProgressData':
+            for key, segment in value.items():
+                segmentName = segment.readString('')
+                startingProgressFraction = segment.readFloat('startingProgressFraction')
+                endingProgressFraction = segment.readFloat('endingProgressFraction')
+                segmentLength = segment.readFloat('segmentLength')
+                settings.addPathProgressSegment(segmentName, startingProgressFraction, endingProgressFraction, segmentLength)
+
+    return settings

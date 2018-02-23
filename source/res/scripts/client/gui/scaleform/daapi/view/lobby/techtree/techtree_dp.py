@@ -211,7 +211,7 @@ class _TechTreeDataProvider(object):
             if IS_DEVELOPMENT:
                 if nodeCD not in nextLevel:
                     _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
-                    pName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+                    pName = vehicles.g_list.getList(nationID)[vTypeID].name
                     LOG_ERROR('{0:>s} does not have relation with {1:>s}'.format(pName, uName))
                 else:
                     nextLevel.remove(nodeCD)
@@ -234,12 +234,12 @@ class _TechTreeDataProvider(object):
             result[outPin]['outLiteral'] = outPin
             result[outPin]['inPins'].append(lineInfo)
 
-        if IS_DEVELOPMENT and len(nextLevel):
+        if IS_DEVELOPMENT and nextLevel:
             _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
-            pName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+            pName = vehicles.g_list.getList(nationID)[vTypeID].name
             for itemCD in nextLevel:
                 _, nationID, vTypeID = vehicles.parseIntCompactDescr(itemCD)
-                uName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+                uName = vehicles.g_list.getList(nationID)[vTypeID].name
                 LOG_ERROR('Relation between {0:>s} and {1:>s} are not defined'.format(pName, uName))
 
         return result.values()
@@ -425,10 +425,10 @@ class _TechTreeDataProvider(object):
         recommended = None
         if xps is not None:
             filtered = filter(lambda item: item[0].xpCost <= item[1] + freeXP, mapping)
-        if len(filtered):
+        if filtered:
             recommended = getMinFreeXPSpent(filtered)
         if recommended is None:
-            if len(filtered):
+            if filtered:
                 mapping = filtered
             recommended = getMinFreeXPSpent(mapping)
         return recommended
@@ -455,7 +455,7 @@ class _TechTreeDataProvider(object):
 
     def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
         filtered = filter(lambda item: item in self.__topItems, itemCDs)
-        if not len(filtered) or not len(unlocked):
+        if not filtered or not unlocked:
             return {}
         available = defaultdict(list)
         parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))

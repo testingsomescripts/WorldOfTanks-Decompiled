@@ -46,7 +46,7 @@ class BattleFeedbackAdaptor(IBattleController):
     Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
     response on player actions.
     """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleMarkerUpdateDistance', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -62,6 +62,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onPostmortemSummaryReceived = Event.Event()
         self.onVehicleMarkerAdded = Event.Event()
         self.onVehicleMarkerRemoved = Event.Event()
+        self.onVehicleMarkerUpdateDistance = Event.Event()
         self.onVehicleFeedbackReceived = Event.Event()
         self.onMinimapVehicleAdded = Event.Event()
         self.onMinimapVehicleRemoved = Event.Event()
@@ -255,11 +256,7 @@ class BattleFeedbackAdaptor(IBattleController):
         :param code: DEVELOPMENT_INFO.*.
         :return: last received information or None.
         """
-        if code in self.__devInfo:
-            return self.__devInfo[code]
-        else:
-            return None
-            return None
+        return self.__devInfo[code] if code in self.__devInfo else None
 
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:

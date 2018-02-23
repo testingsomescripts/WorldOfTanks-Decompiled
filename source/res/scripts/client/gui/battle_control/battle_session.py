@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
+import operator
+import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import async
 from debug_utils import LOG_DEBUG
@@ -110,7 +112,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def setPlayerVehicle(self, vID, vDesc):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
-            ctrl.setGunSettings(vDesc.gun)
+            ctrl.setGunSettings(map(operator.attrgetter('gun'), vDesc.turrets))
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
@@ -133,13 +135,13 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
-            ctrl.setGunSettings(extraData.gunSettings)
+            ctrl.setGunSettings((extraData.gunSettings,))
             for intCD, quantity, quantityInClip in extraData.orderedAmmo:
                 ctrl.setShells(intCD, quantity, quantityInClip)
 
             ctrl.setCurrentShellCD(extraData.currentShellCD)
             ctrl.setNextShellCD(extraData.nextShellCD)
-            ctrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
+            ctrl.setGunReloadTime(0, extraData.reloadTimeLeft, extraData.reloadBaseTime)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
@@ -170,11 +172,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         :param controller: object that implements IArenaController.
         :return: True if controller is added to arena listeners, otherwise - False.
         """
-        if self.__arenaListeners is not None:
-            return self.__arenaListeners.addController(controller)
-        else:
-            return False
-            return
+        return self.__arenaListeners.addController(controller) if self.__arenaListeners is not None else False
 
     def removeArenaCtrl(self, controller):
         """Removes arena controller.
@@ -194,7 +192,6 @@ class BattleSessionProvider(IBattleSessionProvider):
             return True
         else:
             return False
-            return
 
     def registerViewComponents(self, *data):
         """Sets view component data to find that components in routines
@@ -357,6 +354,23 @@ class BattleSessionProvider(IBattleSessionProvider):
                 ctrl.clear(leave=False)
         return
 
+    def setVehicleHealth(self, isPlayerVehicle, vehicleID, newHealth, attackerID, attackReasonID):
+        """New vehicle health value is changed, notifies GUI about it.
+        :param isPlayerVehicle: (bool) determine is player vehicle
+        :param vehicleID: (int) vehicle id
+        :param newHealth: (int) vehicle health
+        :param attackerID: (int) vehicle which dealt damage
+        :param attackReasonID: (str) ATTACK_REASON.*
+        """
+        if not isPlayerVehicle:
+            ctrl = self.__sharedRepo.feedback
+            if ctrl is not None:
+                ctrl.setVehicleNewHealth(vehicleID, newHealth, attackerID, attackReasonID)
+        ctrl = self.__dynamicRepo.battleField
+        if ctrl is not None:
+            ctrl.setVehicleHealth(vehicleID, newHealth)
+        return
+
     def repairPointAction(self, repairPointIndex, action, nextActionTime):
         ctrl = self.__dynamicRepo.repair
         if ctrl is not None:
@@ -383,6 +397,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.startVehicleVisual(vProxy, isImmediate)
+        ctrl = self.__dynamicRepo.battleField
+        if ctrl is not None:
+            ctrl.setVehicleVisible(vProxy.id, vProxy.health)
         return
 
     def stopVehicleVisual(self, vehicleID, isPlayerVehicle):
@@ -401,9 +418,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         """It's listener of event _PlayerEvents.onBattleResultsReceived.
         :param isActiveVehicle: bool.
         """
-        if isActiveVehicle:
+        if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
             LOG_DEBUG('Try to exit from arena', arenaUniqueID)
             if arenaUniqueID:
                 self.__ctx.lastArenaUniqueID = arenaUniqueID
-            avatar_getter.leaveArena()
+            BattleSessionProvider.exit()

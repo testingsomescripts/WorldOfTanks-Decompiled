@@ -3,13 +3,14 @@
 from gui.Scaleform.daapi.view.meta.IconPriceDialogMeta import IconPriceDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from helpers import i18n
+from gui.shared.formatters import getItemPricesVO
 
 class IconPriceDialog(IconPriceDialogMeta):
 
-    def __init__(self, meta, handler):
-        super(IconPriceDialog, self).__init__(meta, handler)
-
     def _populate(self):
         super(IconPriceDialog, self)._populate()
-        self.as_setPriceLabelS(i18n.makeString(DIALOGS.REMOVECONFIRMATIONNOTREMOVABLEGOLD_MESSAGEPRICE))
-        self.as_setMessagePriceS(self._meta.getMessagePrice(), 'gold', self._meta.getAction())
+        self.as_setPriceLabelS(i18n.makeString(DIALOGS.REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGEPRICE))
+        itemPrice = self._meta.getMessagePrice()
+        pricesVO = getItemPricesVO(itemPrice)
+        self.as_setMessagePriceS({'itemPrices': pricesVO,
+         'actionPrice': self._meta.getAction()})

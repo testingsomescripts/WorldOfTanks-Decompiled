@@ -169,6 +169,10 @@ class INotifyController(IGameController):
     pass
 
 
+class IEpicModeController(IGameController):
+    pass
+
+
 class IExternalLinksController(IGameController):
 
     def open(self, url):
@@ -393,6 +397,45 @@ class IFalloutController(IGameController):
         raise NotImplementedError
 
 
+class IEventBattlesController(IGameController):
+    onSettingsChanged = None
+    onVehicleChanged = None
+    onSquadStatusChanged = None
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isSelected(self):
+        raise NotImplementedError
+
+    def setEnabled(self, isEnabled):
+        raise NotImplementedError
+
+    def getBattleType(self):
+        raise NotImplementedError
+
+    def setBattleType(self, battleType):
+        raise NotImplementedError
+
+    def getSelectedVehicle(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def carouselSelectionButtonTooltip(self):
+        raise NotImplementedError
+
+    def canChangeBattleType(self):
+        raise NotImplementedError
+
+    def isSuitableVeh(self, vehicle):
+        raise NotImplementedError
+
+
 class IScreenCastController(IGameController):
     pass
 
@@ -582,15 +625,6 @@ class IRankedBattlesController(IGameController):
     def setLastRank(self, vehicle=None):
         raise NotImplementedError
 
-    def getAvailableBadges(self):
-        raise NotImplementedError
-
-    def getReceivedBadges(self):
-        raise NotImplementedError
-
-    def selectBadge(self, badgeID):
-        raise NotImplementedError
-
     @async
     @process
     def getLeagueData(self, callback):
@@ -661,16 +695,46 @@ class IRankedBattlesController(IGameController):
         raise NotImplementedError
 
     def openWebLeaguePage(self, ctx=None):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getPrevRanks(self, accRank, vehRank, rankChange):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getCycleRewards(self, cycleID):
         """
         returns reward for max rank achieved in current season for given cycle ID
         """
-        raise NotImplemented
+        raise NotImplementedError
+
+    def getRanksChanges(self, isLoser=False):
+        """
+        returns ranks changes depends on team match result (win or lose)
+        """
+        pass
+
+    def getRanksTops(self, isLoser=False, earned=False, notRecieved=False, lost=False):
+        """
+        returns ranks changes top values depends on team match result (win or lose)
+        """
+        pass
+
+    def getMinXp(self):
+        """
+        returns minXP value
+        """
+        pass
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        """
+        :return: dict, contains prime times in day based on periphery id
+        (peripheries are keys, primes are values)
+        :param groupIdentical: grouping peripheries with identical prime times in one key (exmp. 'RU1, RU2' etc.)
+        :param selectedTime: returns prime times for this day
+        """
+        pass
+
+    def getAllAwardsForCycle(self, cycleID):
+        raise NotImplementedError
 
 
 class IBootcampController(IGameController):
@@ -710,4 +774,23 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
     def getLessonNum(self):
+        raise NotImplementedError
+
+    @property
+    def nation(self):
+        raise NotImplementedError
+
+    def getDefaultLobbySettings(self):
+        raise NotImplementedError
+
+    def getLobbySettings(self):
+        raise NotImplementedError
+
+    def setLobbySettings(self, value):
+        raise NotImplementedError
+
+    def updateLobbySettingsVisibility(self, element, value):
+        raise NotImplementedError
+
+    def getDisabledSettings(self):
         raise NotImplementedError

@@ -19,17 +19,11 @@ from skeletons.gui.shared import IItemsCache
 class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
-    def __init__(self, ctx=None):
-        super(VehicleCompareCartPopover, self).__init__(ctx)
-
     def remove(self, vehId):
         self.comparisonBasket.removeVehicleByIdx(int(vehId))
 
     def removeAll(self):
         self.comparisonBasket.removeAllVehicles()
-
-    def _onRegisterFlashComponent(self, viewPy, alias):
-        super(VehicleCompareCartPopover, self)._onRegisterFlashComponent(viewPy, alias)
 
     def onWindowClose(self):
         self.destroy()
@@ -125,7 +119,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         self.comparisonBasket.onChange -= self.__basketChanged
         self.comparisonBasket.onSwitchChange -= self.__basketChanged
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1

@@ -9,13 +9,13 @@ from debug_utils import LOG_WARNING
 class DIALOGS(object):
     GATHERINGXPFORM_SORTBY_VEHICLE = '#dialogs:gatheringXPForm/sortBy/vehicle'
     GATHERINGXPFORM_SORTBY_XP = '#dialogs:gatheringXPForm/sortBy/xp'
-    GRAPHICSPRESETNOTINSTALLED = '#dialogs:graphicsPresetNotInstalled'
     GATHERINGXPFORM_SORTBY_SELECTION = '#dialogs:gatheringXPForm/sortBy/selection'
     TRADEINPOPOVER_SORTING_NATION = '#dialogs:tradeInPopover/sorting/nation'
     TRADEINPOPOVER_SORTING_VEHTYPE = '#dialogs:tradeInPopover/sorting/vehType'
     TRADEINPOPOVER_SORTING_VEHLVL = '#dialogs:tradeInPopover/sorting/vehLvl'
     TRADEINPOPOVER_SORTING_VEHNAME = '#dialogs:tradeInPopover/sorting/vehName'
     TRADEINPOPOVER_SORTING_SAVING = '#dialogs:tradeInPopover/sorting/saving'
+    HOF_EXCLUDERATING = '#dialogs:hof/excludeRating'
     INTERVIEWQUIT_TITLE = '#dialogs:interviewQuit/title'
     INTERVIEWQUIT_MESSAGE = '#dialogs:interviewQuit/message'
     INTERVIEWQUIT_SUBMIT = '#dialogs:interviewQuit/submit'
@@ -108,19 +108,23 @@ class DIALOGS(object):
     CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE = '#dialogs:changeConfirmationNotRemovable/messageCombine'
     CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:changeConfirmationNotRemovable/submit'
     CHANGECONFIRMATIONNOTREMOVABLE_CANCEL = '#dialogs:changeConfirmationNotRemovable/cancel'
-    INSTALLCONFIRMATIONNOTREMOVABLE_TITLE = '#dialogs:installConfirmationNotRemovable/title'
-    INSTALLCONFIRMATIONNOTREMOVABLE_MESSAGE = '#dialogs:installConfirmationNotRemovable/message'
-    INSTALLCONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:installConfirmationNotRemovable/submit'
-    INSTALLCONFIRMATIONNOTREMOVABLE_CANCEL = '#dialogs:installConfirmationNotRemovable/cancel'
+    INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_TITLE = '#dialogs:installConfirmationNotRemovable_gold/title'
+    INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_MESSAGE = '#dialogs:installConfirmationNotRemovable_gold/message'
+    INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_SUBMIT = '#dialogs:installConfirmationNotRemovable_gold/submit'
+    INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_CANCEL = '#dialogs:installConfirmationNotRemovable_gold/cancel'
+    INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_TITLE = '#dialogs:installConfirmationNotRemovable_crystal/title'
+    INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_MESSAGE = '#dialogs:installConfirmationNotRemovable_crystal/message'
+    INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_SUBMIT = '#dialogs:installConfirmationNotRemovable_crystal/submit'
+    INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_CANCEL = '#dialogs:installConfirmationNotRemovable_crystal/cancel'
     REMOVECONFIRMATIONNOTREMOVABLE_TITLE = '#dialogs:removeConfirmationNotRemovable/title'
     REMOVECONFIRMATIONNOTREMOVABLE_MESSAGE = '#dialogs:removeConfirmationNotRemovable/message'
     REMOVECONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:removeConfirmationNotRemovable/submit'
     REMOVECONFIRMATIONNOTREMOVABLE_CANCEL = '#dialogs:removeConfirmationNotRemovable/cancel'
-    REMOVECONFIRMATIONNOTREMOVABLEGOLD_TITLE = '#dialogs:removeConfirmationNotRemovableGold/title'
-    REMOVECONFIRMATIONNOTREMOVABLEGOLD_MESSAGE = '#dialogs:removeConfirmationNotRemovableGold/message'
-    REMOVECONFIRMATIONNOTREMOVABLEGOLD_MESSAGEPRICE = '#dialogs:removeConfirmationNotRemovableGold/messagePrice'
-    REMOVECONFIRMATIONNOTREMOVABLEGOLD_SUBMIT = '#dialogs:removeConfirmationNotRemovableGold/submit'
-    REMOVECONFIRMATIONNOTREMOVABLEGOLD_CANCEL = '#dialogs:removeConfirmationNotRemovableGold/cancel'
+    REMOVECONFIRMATIONNOTREMOVABLEMONEY_TITLE = '#dialogs:removeConfirmationNotRemovableMoney/title'
+    REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGE = '#dialogs:removeConfirmationNotRemovableMoney/message'
+    REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGEPRICE = '#dialogs:removeConfirmationNotRemovableMoney/messagePrice'
+    REMOVECONFIRMATIONNOTREMOVABLEMONEY_SUBMIT = '#dialogs:removeConfirmationNotRemovableMoney/submit'
+    REMOVECONFIRMATIONNOTREMOVABLEMONEY_CANCEL = '#dialogs:removeConfirmationNotRemovableMoney/cancel'
     SELLCONFIRMATION_TITLE = '#dialogs:sellConfirmation/title'
     SELLCONFIRMATION_MESSAGECOMBINE = '#dialogs:sellConfirmation/messageCombine'
     SELLCONFIRMATION_MESSAGE = '#dialogs:sellConfirmation/message'
@@ -524,6 +528,7 @@ class DIALOGS(object):
     VEHICLESELLDIALOG_OPTIONALDEVICE = '#dialogs:vehicleSellDialog/optionalDevice'
     VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE = '#dialogs:vehicleSellDialog/complexOptionalDevice'
     VEHICLESELLDIALOG_EQUIPMENT = '#dialogs:vehicleSellDialog/equipment'
+    VEHICLESELLDIALOG_BATTLEBOSTER = '#dialogs:vehicleSellDialog/battleBoster'
     VEHICLESELLDIALOG_AMMO_LABEL = '#dialogs:vehicleSellDialog/ammo/label'
     VEHICLESELLDIALOG_COMMONRESULT = '#dialogs:vehicleSellDialog/commonResult'
     VEHICLESELLDIALOG_INVENTORY = '#dialogs:vehicleSellDialog/inventory'
@@ -580,10 +585,6 @@ class DIALOGS(object):
     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_MESSAGE = '#dialogs:customization/inscriptionRightDismount/message'
     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_SUBMIT = '#dialogs:customization/inscriptionRightDismount/submit'
     CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_CANCEL = '#dialogs:customization/inscriptionRightDismount/cancel'
-    CUSTOMIZATION_HORNDROP_TITLE = '#dialogs:customization/hornDrop/title'
-    CUSTOMIZATION_HORNDROP_MESSAGE = '#dialogs:customization/hornDrop/message'
-    CUSTOMIZATION_HORNDROP_SUBMIT = '#dialogs:customization/hornDrop/submit'
-    CUSTOMIZATION_HORNDROP_CANCEL = '#dialogs:customization/hornDrop/cancel'
     CUSTOMIZATION_SELECTNEWITEMS_TITLE = '#dialogs:customization/selectNewItems/title'
     CUSTOMIZATION_SELECTNEWITEMS_MESSAGE = '#dialogs:customization/selectNewItems/message'
     CUSTOMIZATION_SELECTNEWITEMS_CANCEL = '#dialogs:customization/selectNewItems/cancel'
@@ -862,6 +863,9 @@ class DIALOGS(object):
     FORTDISABLED_TITLE = '#dialogs:fortDisabled/title'
     FORTDISABLED_MESSAGE = '#dialogs:fortDisabled/message'
     FORTDISABLED_CANCEL = '#dialogs:fortDisabled/cancel'
+    ELENDISABLED_TITLE = '#dialogs:elenDisabled/title'
+    ELENDISABLED_MESSAGE = '#dialogs:elenDisabled/message'
+    ELENDISABLED_CANCEL = '#dialogs:elenDisabled/cancel'
     CLAN_DATA_NOT_AVAILABLE_TITLE = '#dialogs:clan_data_not_available/title'
     CLAN_DATA_NOT_AVAILABLE_MESSAGE = '#dialogs:clan_data_not_available/message'
     CLAN_DATA_NOT_AVAILABLE_CANCEL = '#dialogs:clan_data_not_available/cancel'
@@ -917,6 +921,27 @@ class DIALOGS(object):
     BOOTCAMPCENTERUNAVAILABLE_TITLE = '#dialogs:bootcampCenterUnavailable/title'
     BOOTCAMPCENTERUNAVAILABLE_MESSAGE = '#dialogs:bootcampCenterUnavailable/message'
     BOOTCAMPCENTERUNAVAILABLE_CANCEL = '#dialogs:bootcampCenterUnavailable/cancel'
+    HOF_EXCLUDERATING_TITLE = '#dialogs:hof/excludeRating/title'
+    HOF_EXCLUDERATING_MESSAGE = '#dialogs:hof/excludeRating/message'
+    HOF_EXCLUDERATING_SUBMIT = '#dialogs:hof/excludeRating/submit'
+    HOF_EXCLUDERATING_CANCEL = '#dialogs:hof/excludeRating/cancel'
+    HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
+    HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
+    HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
+    LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
+    LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
+    LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
+    LEAVEEVENT_CANCEL = '#dialogs:leaveEvent/cancel'
+    LEAVESTARTEDEVENT_TITLE = '#dialogs:leaveStartedEvent/title'
+    LEAVESTARTEDEVENT_MESSAGE = '#dialogs:leaveStartedEvent/message'
+    LEAVESTARTEDEVENT_SUBMIT = '#dialogs:leaveStartedEvent/submit'
+    LEAVESTARTEDEVENT_CANCEL = '#dialogs:leaveStartedEvent/cancel'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_TITLE = '#dialogs:halloween/supply_drop/claim/failed/title'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_MESSAGE = '#dialogs:halloween/supply_drop/claim/failed/message'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_CANCEL = '#dialogs:halloween/supply_drop/claim/failed/cancel'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_TITLE = '#dialogs:halloween/supply_drop/claim/platoon/title'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_MESSAGE = '#dialogs:halloween/supply_drop/claim/platoon/message'
+    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_CANCEL = '#dialogs:halloween/supply_drop/claim/platoon/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1020,19 +1045,23 @@ class DIALOGS(object):
      CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE,
      CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT,
      CHANGECONFIRMATIONNOTREMOVABLE_CANCEL,
-     INSTALLCONFIRMATIONNOTREMOVABLE_TITLE,
-     INSTALLCONFIRMATIONNOTREMOVABLE_MESSAGE,
-     INSTALLCONFIRMATIONNOTREMOVABLE_SUBMIT,
-     INSTALLCONFIRMATIONNOTREMOVABLE_CANCEL,
+     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_TITLE,
+     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_MESSAGE,
+     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_SUBMIT,
+     INSTALLCONFIRMATIONNOTREMOVABLE_GOLD_CANCEL,
+     INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_TITLE,
+     INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_MESSAGE,
+     INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_SUBMIT,
+     INSTALLCONFIRMATIONNOTREMOVABLE_CRYSTAL_CANCEL,
      REMOVECONFIRMATIONNOTREMOVABLE_TITLE,
      REMOVECONFIRMATIONNOTREMOVABLE_MESSAGE,
      REMOVECONFIRMATIONNOTREMOVABLE_SUBMIT,
      REMOVECONFIRMATIONNOTREMOVABLE_CANCEL,
-     REMOVECONFIRMATIONNOTREMOVABLEGOLD_TITLE,
-     REMOVECONFIRMATIONNOTREMOVABLEGOLD_MESSAGE,
-     REMOVECONFIRMATIONNOTREMOVABLEGOLD_MESSAGEPRICE,
-     REMOVECONFIRMATIONNOTREMOVABLEGOLD_SUBMIT,
-     REMOVECONFIRMATIONNOTREMOVABLEGOLD_CANCEL,
+     REMOVECONFIRMATIONNOTREMOVABLEMONEY_TITLE,
+     REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGE,
+     REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGEPRICE,
+     REMOVECONFIRMATIONNOTREMOVABLEMONEY_SUBMIT,
+     REMOVECONFIRMATIONNOTREMOVABLEMONEY_CANCEL,
      SELLCONFIRMATION_TITLE,
      SELLCONFIRMATION_MESSAGECOMBINE,
      SELLCONFIRMATION_MESSAGE,
@@ -1436,6 +1465,7 @@ class DIALOGS(object):
      VEHICLESELLDIALOG_OPTIONALDEVICE,
      VEHICLESELLDIALOG_COMPLEXOPTIONALDEVICE,
      VEHICLESELLDIALOG_EQUIPMENT,
+     VEHICLESELLDIALOG_BATTLEBOSTER,
      VEHICLESELLDIALOG_AMMO_LABEL,
      VEHICLESELLDIALOG_COMMONRESULT,
      VEHICLESELLDIALOG_INVENTORY,
@@ -1492,10 +1522,6 @@ class DIALOGS(object):
      CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_MESSAGE,
      CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_SUBMIT,
      CUSTOMIZATION_INSCRIPTIONRIGHTDISMOUNT_CANCEL,
-     CUSTOMIZATION_HORNDROP_TITLE,
-     CUSTOMIZATION_HORNDROP_MESSAGE,
-     CUSTOMIZATION_HORNDROP_SUBMIT,
-     CUSTOMIZATION_HORNDROP_CANCEL,
      CUSTOMIZATION_SELECTNEWITEMS_TITLE,
      CUSTOMIZATION_SELECTNEWITEMS_MESSAGE,
      CUSTOMIZATION_SELECTNEWITEMS_CANCEL,
@@ -1774,6 +1800,9 @@ class DIALOGS(object):
      FORTDISABLED_TITLE,
      FORTDISABLED_MESSAGE,
      FORTDISABLED_CANCEL,
+     ELENDISABLED_TITLE,
+     ELENDISABLED_MESSAGE,
+     ELENDISABLED_CANCEL,
      CLAN_DATA_NOT_AVAILABLE_TITLE,
      CLAN_DATA_NOT_AVAILABLE_MESSAGE,
      CLAN_DATA_NOT_AVAILABLE_CANCEL,
@@ -1828,7 +1857,28 @@ class DIALOGS(object):
      BOOTCAMP_RETRY_CANCEL,
      BOOTCAMPCENTERUNAVAILABLE_TITLE,
      BOOTCAMPCENTERUNAVAILABLE_MESSAGE,
-     BOOTCAMPCENTERUNAVAILABLE_CANCEL)
+     BOOTCAMPCENTERUNAVAILABLE_CANCEL,
+     HOF_EXCLUDERATING_TITLE,
+     HOF_EXCLUDERATING_MESSAGE,
+     HOF_EXCLUDERATING_SUBMIT,
+     HOF_EXCLUDERATING_CANCEL,
+     HOFDISABLED_TITLE,
+     HOFDISABLED_MESSAGE,
+     HOFDISABLED_CANCEL,
+     LEAVEEVENT_TITLE,
+     LEAVEEVENT_MESSAGE,
+     LEAVEEVENT_SUBMIT,
+     LEAVEEVENT_CANCEL,
+     LEAVESTARTEDEVENT_TITLE,
+     LEAVESTARTEDEVENT_MESSAGE,
+     LEAVESTARTEDEVENT_SUBMIT,
+     LEAVESTARTEDEVENT_CANCEL,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_TITLE,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_MESSAGE,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_CANCEL,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_TITLE,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_MESSAGE,
+     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

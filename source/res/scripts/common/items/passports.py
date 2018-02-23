@@ -80,7 +80,8 @@ def acceptOn(key, value):
     """
 
     def wrapper(seqId, group, passport):
-        return value in (group[key] if hasattr(group[key], '__contains__') else (group[key],))
+        original = getattr(group, key)
+        return value in (original if hasattr(original, '__contains__') else (original,))
 
     return wrapper
 

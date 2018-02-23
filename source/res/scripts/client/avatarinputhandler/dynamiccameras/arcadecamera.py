@@ -388,8 +388,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def setYawPitch(self, yaw, pitch):
         self.__aimingSystem.yaw = yaw
         self.__aimingSystem.pitch = pitch
-        matrix = Math.Matrix()
-        matrix.setRotateYPR((self.__aimingSystem.yaw, self.__aimingSystem.pitch, 0))
 
     def calcYawPitchDelta(self, dx, dy):
         return (dx * self.__curSense * (-1 if self.__cfg['horzInvert'] else 1), dy * self.__curSense * (-1 if self.__cfg['vertInvert'] else 1))
@@ -400,35 +398,38 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         return (self.__aimingSystem.yaw, self.__aimingSystem.pitch, 0)
 
     def __update(self, dx, dy, dz, rotateMode=True, zoomMode=True, isCallback=False):
-        prevPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
-        distChanged = False
-        if zoomMode and dz != 0:
-            prevDist = self.__aimingSystem.distanceFromFocus
-            distDelta = dz * float(self.__curScrollSense)
-            distMinMax = self.__cfg['distRange']
-            newDist = mathUtils.clamp(distMinMax.min, distMinMax.max, prevDist - distDelta)
-            floatEps = 0.001
-            if abs(newDist - prevDist) > floatEps:
-                self.__aimingSystem.distanceFromFocus = newDist
-                self.__userCfg['startDist'] = newDist
-                self.__inputInertia.glideFov(self.__calcRelativeDist())
-                self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
-                distChanged = True
-            if not self.__updatedByKeyboard:
-                if abs(newDist - prevDist) < floatEps and mathUtils.almostZero(newDist - distMinMax.min):
-                    if self.__onChangeControlMode is not None:
-                        self.__onChangeControlMode()
-                        return
-        if rotateMode:
-            self.__updateAngles(dx, dy)
-        if ENABLE_INPUT_ROTATION_INERTIA and not distChanged:
-            self.__aimingSystem.update(0.0)
-        if ENABLE_INPUT_ROTATION_INERTIA or distChanged:
-            worldDeltaPos = prevPos - self.__aimingSystem.matrix.translation
-            matInv = Matrix(self.__aimingSystem.matrix)
-            matInv.invert()
-            self.__inputInertia.glide(matInv.applyVector(worldDeltaPos))
-        return
+        if not self.__aimingSystem:
+            return
+        else:
+            prevPos = self.__inputInertia.calcWorldPos(self.__aimingSystem.matrix)
+            distChanged = False
+            if zoomMode and dz != 0:
+                prevDist = self.__aimingSystem.distanceFromFocus
+                distDelta = dz * float(self.__curScrollSense)
+                distMinMax = self.__cfg['distRange']
+                newDist = mathUtils.clamp(distMinMax.min, distMinMax.max, prevDist - distDelta)
+                floatEps = 0.001
+                if abs(newDist - prevDist) > floatEps:
+                    self.__aimingSystem.distanceFromFocus = newDist
+                    self.__userCfg['startDist'] = newDist
+                    self.__inputInertia.glideFov(self.__calcRelativeDist())
+                    self.__aimingSystem.aimMatrix = self.__calcAimMatrix()
+                    distChanged = True
+                if not self.__updatedByKeyboard:
+                    if abs(newDist - prevDist) < floatEps and mathUtils.almostZero(newDist - distMinMax.min):
+                        if self.__onChangeControlMode is not None:
+                            self.__onChangeControlMode()
+                            return
+            if rotateMode:
+                self.__updateAngles(dx, dy)
+            if ENABLE_INPUT_ROTATION_INERTIA and not distChanged:
+                self.__aimingSystem.update(0.0)
+            if ENABLE_INPUT_ROTATION_INERTIA or distChanged:
+                worldDeltaPos = prevPos - self.__aimingSystem.matrix.translation
+                matInv = Matrix(self.__aimingSystem.matrix)
+                matInv.invert()
+                self.__inputInertia.glide(matInv.applyVector(worldDeltaPos))
+            return
 
     def __cameraUpdate(self):
         if not (self.__autoUpdateDxDyDz.x == 0.0 and self.__autoUpdateDxDyDz.y == 0.0 and self.__autoUpdateDxDyDz.z == 0.0):
@@ -650,11 +651,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         ucfg['startDist'] = readFloat(ds, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
         if ucfg['startDist'] < bcfg['minStartDist']:
             ucfg['startDist'] = bcfg['optimalStartDist']
-        if constants.IS_BOOTCAMP_ENABLED:
-            from bootcamp.Bootcamp import g_bootcamp
-            from bootcamp import START_DISTANCE
-            if g_bootcamp.isRunning():
-                ucfg['startDist'] = START_DISTANCE
         ucfg['startAngle'] = readFloat(ds, 'startAngle', 5, 180, 60)
         ucfg['startAngle'] = math.radians(ucfg['startAngle']) - math.pi * 0.5
         ucfg['fovMultMinMaxDist'] = MinMax(readFloat(ds, 'fovMultMinDist', 0.1, 100, bcfg['fovMultMinMaxDist'].min), readFloat(ds, 'fovMultMaxDist', 0.1, 100, bcfg['fovMultMinMaxDist'].max))

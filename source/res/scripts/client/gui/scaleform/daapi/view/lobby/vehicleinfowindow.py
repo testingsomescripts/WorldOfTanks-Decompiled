@@ -33,12 +33,13 @@ class VehicleInfoWindow(VehicleInfoMeta):
         else:
             params = vehicle.getParams()
             tankmenParams = list()
+            skillsConfig = tankmen.getSkillsConfig()
             for slotIdx, tankman in vehicle.crew:
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
                 tankmanLabel = ''
                 if tankman is not None:
                     tankmanLabel = '%s %s (%d%%)' % (tankman.rankUserName, tankman.lastUserName, tankman.roleLevel)
-                tankmenParams.append({'tankmanType': i18n.convert(tankmen.getSkillsConfig()[role].get('userString', '')),
+                tankmenParams.append({'tankmanType': i18n.convert(skillsConfig.getSkill(role).userString),
                  'value': tankmanLabel})
 
             paramsList = formatters.getFormattedParamsList(vehicle.descriptor, params['parameters'], excludeRelative=True)
@@ -48,6 +49,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
              'vehicleLevel': vehicle.level,
              'vehicleNation': vehicle.nationID,
              'vehicleElite': vehicle.isElite,
+             'vehicleEvent': True if 'event_battles' in vehicle.tags else False,
              'vehicleType': vehicle.type,
              'propsData': [ {'name': n,
                            'value': v} for n, v in paramsList ],

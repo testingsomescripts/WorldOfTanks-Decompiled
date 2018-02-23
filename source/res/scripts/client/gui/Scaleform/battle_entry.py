@@ -34,17 +34,17 @@ class TopWindowContainer(PopUpContainer):
         super(TopWindowContainer, self).clear()
         return
 
-    def add(self, pyView):
-        result = super(TopWindowContainer, self).add(pyView)
+    def addView(self, pyView):
+        result = super(TopWindowContainer, self).addView(pyView)
         if result and self.__app is not None:
             self.__app.enterGuiControlMode(pyView.uniqueName)
         return result
 
-    def remove(self, pyView):
-        super(TopWindowContainer, self).remove(pyView)
+    def removeView(self, pyView):
+        result = super(TopWindowContainer, self).removeView(pyView)
         if self.__app is not None:
             self.__app.leaveGuiControlMode(pyView.uniqueName)
-        return
+        return result
 
 
 class BattleEntry(SFApplication):
@@ -71,11 +71,7 @@ class BattleEntry(SFApplication):
         return
 
     def handleKey(self, isDown, key, mods):
-        if self.__input is not None:
-            return self.__input.handleKey(isDown, key, mods)
-        else:
-            return False
-            return
+        return self.__input.handleKey(isDown, key, mods) if self.__input is not None else False
 
     def enterGuiControlMode(self, consumerID, cursorVisible=True, enableAiming=True):
         if self.__input is not None:
@@ -88,11 +84,7 @@ class BattleEntry(SFApplication):
         return
 
     def hasGuiControlModeConsumers(self, *consumersIDs):
-        if self.__input is not None:
-            return self.__input.hasGuiControlModeConsumers(*consumersIDs)
-        else:
-            return False
-            return
+        return self.__input.hasGuiControlModeConsumers(*consumersIDs) if self.__input is not None else False
 
     def registerGuiKeyHandler(self, handler):
         if self.__input is not None:
@@ -135,6 +127,9 @@ class BattleEntry(SFApplication):
 
     def _createTutorialManager(self):
         return TutorialManager(None, False, {})
+
+    def _createBootcampManager(self):
+        return None
 
     def _createPopoverManager(self):
         return PopoverManager(EVENT_BUS_SCOPE.BATTLE)

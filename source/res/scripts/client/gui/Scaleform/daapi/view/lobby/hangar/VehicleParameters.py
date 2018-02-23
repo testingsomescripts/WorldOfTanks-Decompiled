@@ -11,6 +11,7 @@ from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, ge
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from gui.shared.items_parameters.comparator import PARAM_STATE
+from items import vehicles
 
 class VehicleParameters(VehicleParametersMeta):
 
@@ -18,6 +19,14 @@ class VehicleParameters(VehicleParametersMeta):
         super(VehicleParameters, self).__init__()
         self._vehParamsDP = None
         self._alreadyShowed = False
+        vehIntCD = None
+        if self._getVehicleCache().item is not None:
+            vehIntCD = self._getVehicleCache().item.intCD
+        if vehIntCD is not None:
+            type = vehicles.getVehicleType(vehIntCD)
+            self._isMultiTurret = type.isMultiTurret
+        else:
+            self._isMultiTurret = False
         self._expandedGroups = {'relativePower': AccountSettings.getSettings('relativePower'),
          'relativeArmor': AccountSettings.getSettings('relativeArmor'),
          'relativeMobility': AccountSettings.getSettings('relativeMobility'),
@@ -26,7 +35,7 @@ class VehicleParameters(VehicleParametersMeta):
         return
 
     def onParamClick(self, paramID):
-        isOpened = not self._expandedGroups[paramID]
+        isOpened = paramID not in self._expandedGroups or not self._expandedGroups[paramID]
         AccountSettings.setSettings(paramID, isOpened)
         self._expandedGroups[paramID] = isOpened
         self._setDPUseAnimAndRebuild(False)
@@ -65,9 +74,6 @@ class VehicleParameters(VehicleParametersMeta):
 
 
 class VehiclePreviewParameters(VehicleParameters):
-
-    def __init__(self):
-        super(VehiclePreviewParameters, self).__init__()
 
     def _createDataProvider(self):
         return VehPreviewParamsDataProvider()
@@ -109,17 +115,14 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         delta = 0
         state, diff = param.state
         if state == PARAM_STATE.WORSE:
-            delta = abs(diff)
+            delta = -abs(diff)
         data.update({'isEnabled': True,
          'tooltip': self._tooltipType,
          'indicatorVO': SimplifiedBarVO(value=param.value, delta=delta, markerValue=stockParams[param.name], useAnim=self.useAnim)})
         return data
 
     def _getAdvancedParamTooltip(self, param):
-        if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP:
-            return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType]
-        else:
-            return self._tooltipType
+        return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType] if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP else self._tooltipType
 
     def _makeAdvancedParamVO(self, param):
         if param.value:
@@ -143,8 +146,25 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
          'buffIconSrc': formatters.getGroupPenaltyIcon(param, comparator)})
         return data
 
+    def _makeSubtitleVO(self, param):
+        if param.value:
+            data = super(_VehParamsGenerator, self)._makeSubtitleVO(param)
+            data.update({'titleText': formatters.formatVehicleParamName(param.name, False),
+             'valueText': '',
+             'iconSource': '',
+             'isEnabled': False,
+             'tooltip': self._getAdvancedParamTooltip(param)})
+            return data
+        else:
+            return None
+
     def _makeSeparator(self):
         return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SEPARATOR,
+         'isEnabled': False,
+         'tooltip': ''}
+
+    def _makeSpacer(self):
+        return {'state': HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SPACER,
          'isEnabled': False,
          'tooltip': ''}
 
@@ -197,7 +217,7 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def setUseAnim(self, useAnim):
         self._paramsGenerator.useAnim = useAnim

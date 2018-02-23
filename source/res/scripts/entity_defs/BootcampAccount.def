@@ -22,10 +22,11 @@
       <Exposed></Exposed>
     </changeBootcampLessonBonus>
     <requestBootcampQuit>
+      <Arg>	UINT32	</Arg>
       <Exposed></Exposed>
     </requestBootcampQuit>
     <onBootcampEnqueued>
-      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
       <Arg>	UINT64	</Arg>
     </onBootcampEnqueued>
     <setParent>

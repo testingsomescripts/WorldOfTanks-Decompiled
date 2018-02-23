@@ -62,6 +62,10 @@ class Servers(object):
     def selectedServerIdx(self):
         return self._selectedServerIdx
 
+    @property
+    def selectedServer(self):
+        return self._serverList[self._selectedServerIdx] if self._selectedServerIdx < len(self._serverList) else None
+
     def __onServerUpdate(self, _=None):
         self.updateServerList()
         self.onServersStatusChanged(self._serverList)

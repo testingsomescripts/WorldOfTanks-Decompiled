@@ -551,12 +551,7 @@
   <emblems>
     <default>	swedish_flag	</default>
     <lodDist>	MEDIUM	</lodDist>
-    <alpha>	0.88	</alpha>
+    <alpha>	1	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </S23_Strv_81_sabaton.xml>

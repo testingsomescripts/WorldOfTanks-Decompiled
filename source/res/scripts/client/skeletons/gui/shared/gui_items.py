@@ -22,7 +22,7 @@ class IGuiItemsFactory(object):
     def createEquipment(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
         raise NotImplementedError
 
-    def createOptionalDevice(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
+    def createOptionalDevice(self, intCompactDescr, proxy=None):
         raise NotImplementedError
 
     def createVehicleGun(self, intCompactDescr, proxy=None, descriptor=None):
@@ -56,4 +56,7 @@ class IGuiItemsFactory(object):
         raise NotImplementedError
 
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None, rankedCurrentSeason=None):
+        raise NotImplementedError
+
+    def createBadge(self, descriptor, proxy=None):
         raise NotImplementedError

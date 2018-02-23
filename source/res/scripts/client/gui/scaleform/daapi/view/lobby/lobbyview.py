@@ -9,6 +9,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
 from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -41,6 +42,11 @@ class _LobbySubViewsCtrl(object):
      VIEW_ALIAS.LOBBY_CUSTOMIZATION,
      VIEW_ALIAS.VEHICLE_PREVIEW,
      VIEW_ALIAS.VEHICLE_COMPARE,
+     VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS,
+     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS,
+     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS,
+     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_AWARD_CONGRATULATION_VIEW_ALIAS,
+     PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS,
      VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR,
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.LOBBY_TECHTREE,
@@ -48,8 +54,8 @@ class _LobbySubViewsCtrl(object):
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
-     VIEW_ALIAS.BOOTCAMP_LOBBY_RESEARCH,
-     VIEW_ALIAS.BOOTCAMP_LOBBY_TECHTREE)
+     VIEW_ALIAS.LEVIATHAN_PREVIEW,
+     VIEW_ALIAS.HALLOWEEN_BATTLE_SELECTOR)
 
     def __init__(self):
         super(_LobbySubViewsCtrl, self).__init__()
@@ -84,7 +90,7 @@ class _LobbySubViewsCtrl(object):
                 self.__invalidateWaitingStatus()
         return
 
-    def __onViewLoaded(self, view):
+    def __onViewLoaded(self, view, *args, **kwargs):
         if view is not None and view.settings is not None:
             alias = view.settings.alias
             if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:

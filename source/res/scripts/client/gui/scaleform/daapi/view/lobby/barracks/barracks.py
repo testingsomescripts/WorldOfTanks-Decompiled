@@ -22,7 +22,7 @@ from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
-from gui.shared.money import ZERO_MONEY, Currency
+from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
@@ -46,7 +46,7 @@ def _packTankmanData(tankman, itemsCache=None):
         vehicleID = vehicle.invID
         slot = tankman.vehicleSlotIdx
         isLocked, msg = _getTankmanLockMessage(vehicle)
-        actionBtnEnabled = not isLocked
+        actionBtnEnabled = not isLocked and not vehicle.isCrewLocked
         isInCurrentTank = g_currentVehicle.isPresent() and tankmanVehicle.invID == g_currentVehicle.invID
         isInSelfVehicle = vehicle.shortUserName == tankmanVehicle.shortUserName
         isInSelfVehicleType = vehicle.type == tankmanVehicle.type
@@ -90,12 +90,9 @@ def _packTankmanData(tankman, itemsCache=None):
 def _getTankmanLockMessage(invVehicle):
     if invVehicle.lock == LOCK_REASON.ON_ARENA:
         return (True, i18n.makeString('#menu:tankmen/lockReason/inbattle'))
-    elif invVehicle.repairCost > 0:
+    if invVehicle.repairCost > 0:
         return (True, i18n.makeString('#menu:tankmen/lockReason/broken'))
-    elif invVehicle.invID == g_currentVehicle.invID and (g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle()):
-        return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle'))
-    else:
-        return (False, '')
+    return (True, i18n.makeString('#menu:tankmen/lockReason/prebattle')) if invVehicle.invID == g_currentVehicle.invID and g_currentVehicle.isInPrebattle() or g_currentVehicle.isInBattle() else (False, '')
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -109,7 +106,7 @@ def _packBuyBerthsSlot(itemsCache=None):
         action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
     enoughGold = berthPrice.gold <= gold
     return {'buy': True,
-     'price': BigWorld.wg_getGoldFormat(berthPrice.gold),
+     'price': BigWorld.wg_getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
      'enoughGold': enoughGold,
      'actionPriceData': action,
      'count': berthCount}
@@ -118,7 +115,7 @@ def _packBuyBerthsSlot(itemsCache=None):
 def _makeRecoveryPeriodText(restoreInfo):
     price, timeLeft = restoreInfo
     timeStr = formatRecoveryLeftValue(timeLeft)
-    if price == ZERO_MONEY:
+    if not price.isDefined():
         textStyle = text_styles.main
     elif price.getCurrency() == Currency.GOLD:
         textStyle = text_styles.gold
@@ -157,7 +154,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         items = self.itemsCache.items
         berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
         result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def setTankmenFilter(self):
@@ -189,7 +186,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
                 result = yield TankmanUnload(tmanVehile, tankman.vehicleSlotIdx).request()
             else:
                 result = yield TankmanDismiss(tankman).request()
-            if len(result.userMsg):
+            if result.userMsg:
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             return
 
@@ -326,7 +323,7 @@ class Barracks(BarracksMeta, LobbySubView, IGlobalListener):
         noInfoData = None
         hasNoInfoData = len(tankmenList) == 0
         if hasNoInfoData:
-            if len(tankmen) == 0:
+            if not tankmen:
                 tankmenRestoreConfig = self.itemsCache.items.shop.tankmenRestoreConfig
                 freeDays = tankmenRestoreConfig.freeDuration / time_utils.ONE_DAY
                 billableDays = tankmenRestoreConfig.billableDuration / time_utils.ONE_DAY - freeDays

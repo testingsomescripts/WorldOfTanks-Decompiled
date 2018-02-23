@@ -80,7 +80,6 @@ def createReusableInfo(results):
     else:
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of file battle_results_shared.py are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
-        return
 
 
 class _ReusableInfo(object):
@@ -146,7 +145,7 @@ class _ReusableInfo(object):
     @property
     def canUpgradeToPremium(self):
         """Can player buy premium by given battle result?"""
-        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType == ARENA_BONUS_TYPE.REGULAR and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
+        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM) and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
 
     @property
     def canResourceBeFaded(self):

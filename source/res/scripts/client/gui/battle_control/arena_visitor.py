@@ -7,6 +7,7 @@ import constants
 import arena_bonus_type_caps
 import win_points
 from gui import GUI_SETTINGS
+from skeletons.gui.battle_session import IClientArenaVisitor
 _GUI_TYPE = constants.ARENA_GUI_TYPE
 _GUI_TYPE_LABEL = constants.ARENA_GUI_TYPE_LABEL
 _BONUS_TYPE = constants.ARENA_BONUS_TYPE
@@ -77,6 +78,7 @@ class _ClientArenaSkeleton(object):
     guiType = _GUI_TYPE.UNKNOWN
     bonusType = _BONUS_TYPE.UNKNOWN
     arenaType = None
+    componentSystem = None
     period = _PERIOD.IDLE
     periodEndTime = 0
     periodLength = 0
@@ -86,6 +88,7 @@ class _ClientArenaSkeleton(object):
     statistics = {}
     extraData = {}
     viewPoints = []
+    hasFogOfWarHiddenVehicles = False
 
 
 class _ArenaTypeSkeleton(object):
@@ -173,10 +176,7 @@ class _ArenaTypeVisitor(IArenaVisitor):
 
     def getFlagSpawnPosition(self, flagID):
         flags = self.getFlagSpawnPoints()
-        if flagID in flags:
-            return flags[flagID]['position']
-        else:
-            return (0.0, 0.0, 0.0)
+        return flags[flagID]['position'] if flagID in flags else (0.0, 0.0, 0.0)
 
     def getWinPointsCosts(self, isSolo=False, forVehicle=True):
         costKill, costFlags, costDamage = 0, set(), set()
@@ -313,10 +313,13 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         self._guiType = _GUI_TYPE.UNKNOWN
 
     def isRandomBattle(self):
-        return self._guiType == _GUI_TYPE.RANDOM
+        return self._guiType in (_GUI_TYPE.EPIC_RANDOM, _GUI_TYPE.RANDOM)
 
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
+
+    def isEventBattlesTwo(self):
+        return self._guiType == _GUI_TYPE.EVENT_BATTLES_2
 
     def isFalloutBattle(self):
         return self._guiType in _GUI_TYPE.FALLOUT_RANGE
@@ -337,7 +340,10 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         return self._guiType == _GUI_TYPE.RATED_SANDBOX
 
     def isTrainingBattle(self):
-        return self._guiType == _GUI_TYPE.TRAINING
+        return self._guiType in (_GUI_TYPE.TRAINING, _GUI_TYPE.EPIC_RANDOM_TRAINING)
+
+    def isEpicRandomBattle(self):
+        return self._guiType in (_GUI_TYPE.EPIC_RANDOM, _GUI_TYPE.EPIC_RANDOM_TRAINING)
 
     def isTutorialBattle(self):
         return self._guiType == _GUI_TYPE.TUTORIAL
@@ -352,10 +358,7 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
     def getLabel(self):
-        if self._guiType in _GUI_TYPE_LABEL.LABELS:
-            return _GUI_TYPE_LABEL.LABELS[self._guiType]
-        else:
-            return ''
+        return _GUI_TYPE_LABEL.LABELS[self._guiType] if self._guiType in _GUI_TYPE_LABEL.LABELS else ''
 
 
 class _ArenaBonusTypeVisitor(IArenaVisitor):
@@ -391,6 +394,12 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def canTakeSquadXP(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP)
+
+    def hasHealthBar(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.TEAM_HEALTH_BAR)
+
+    def hasGameEndMessage(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.VICTORY_DEFEAT_MESSAGE)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -444,7 +453,7 @@ class _ArenaVehiclesVisitor(IArenaVisitor):
         return extras
 
 
-class _ClientArenaVisitor(object):
+class _ClientArenaVisitor(IClientArenaVisitor):
     __slots__ = ('__weakref__', '_arena', '_canSubscribe', '_gui', '_bonus', '_type', '_extra', '_vehicles')
 
     def __init__(self, arena, canSubscribe):
@@ -504,6 +513,10 @@ class _ClientArenaVisitor(object):
     def vehicles(self):
         return self._vehicles
 
+    @catch_attribute_exception(default=_ClientArenaSkeleton.componentSystem)
+    def getComponentSystem(self):
+        return self._arena.componentSystem
+
     def isArenaNotStarted(self):
         return self.getArenaPeriod() in (_PERIOD.IDLE, _PERIOD.WAITING, _PERIOD.PREBATTLE)
 
@@ -528,11 +541,17 @@ class _ClientArenaVisitor(object):
     def hasGasAttack(self):
         return self._bonus.hasGasAttack()
 
+    def hasHealthBar(self):
+        return self._bonus.hasHealthBar()
+
+    def hasGameEndMessage(self):
+        return self._bonus.hasGameEndMessage()
+
+    def hasPlayerGroups(self):
+        return self._arena.arenaType.numPlayerGroups > 0
+
     def isSoloTeam(self, team):
-        if self._gui.isFalloutMultiTeam():
-            return self._type.isSoloTeam(team)
-        else:
-            return False
+        return self._type.isSoloTeam(team) if self._gui.isFalloutMultiTeam() else False
 
     def getArenaIconKey(self):
         arenaIcon = self._type.getGeometryName()
@@ -542,14 +561,7 @@ class _ClientArenaVisitor(object):
         return iconKey % self.getArenaIconKey()
 
     def getGasAttackSettings(self):
-        if self.hasGasAttack():
-            return self._type.getGasAttackSettings()
-        else:
-            return None
-            return None
-
-    def showTimerStateMessage(self):
-        return not self._gui.isBootcampBattle()
+        return self._type.getGasAttackSettings() if self.hasGasAttack() else None
 
     def getTeamSpawnPoints(self, team):
         other = team - 1
@@ -562,16 +574,12 @@ class _ClientArenaVisitor(object):
         return spawnPoints
 
     def getTeamSpawnPointsIterator(self, team):
-        for team, points in enumerate(self.getTeamSpawnPoints(team), 1):
+        for teamNum, points in enumerate(self.getTeamSpawnPoints(team), 1):
             for number, point in enumerate(points, 1):
-                yield (team, (point[0], 0, point[1]), number)
+                yield (teamNum, (point[0], 0, point[1]), number)
 
     def getArenaSubscription(self):
-        if self._canSubscribe:
-            return self._arena
-        else:
-            return None
-            return None
+        return self._arena if self._canSubscribe else None
 
     def isBattleEndWarningEnabled(self):
         return GUI_SETTINGS.battleEndWarningEnabled and not self._gui.isTutorialBattle()
@@ -631,3 +639,7 @@ class _ClientArenaVisitor(object):
     @catch_attribute_exception(default=_ClientArenaSkeleton.viewPoints)
     def getArenaViewPoints(self):
         return self._arena.viewPoints
+
+    @catch_attribute_exception(default=_ClientArenaSkeleton.hasFogOfWarHiddenVehicles)
+    def hasArenaFogOfWarHiddenVehicles(self):
+        return self._arena.hasFogOfWarHiddenVehicles
