@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/genConsts/CONTACTS_ALIASES.py
-
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 
 class CONTACTS_ALIASES(object):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    """
     FIND_CONTACT_VIEW_ALIAS = 'SearchContactView'
     FIND_CONTACT_VIEW_LINKAGE = 'SearchContactViewUI'
     GROUP_RENAME_VIEW_ALIAS = 'GroupRenameView'
@@ -35,13 +33,11 @@ class CONTACTS_ALIASES(object):
     CLAN_GROUP_RESERVED_ID = 103
     REFERRALS_GROUP_RESERVED_ID = 104
     REFERRERS_GROUP_RESERVED_ID = 105
-    CLUB_GROUP_RESERVED_ID = 106
     CAN_MOVE_TO_FRIENDS_GROUPS_IDS = [101,
      102,
      103,
      104,
-     105,
-     106]
+     105]
     GROUP_IS_RESIZABLE = 1
     GROUP_IS_DROP_ALLOWED = 2
     GROUP_CAN_BE_MANAGED = 4

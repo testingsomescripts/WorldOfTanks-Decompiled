@@ -108,9 +108,6 @@ class DIALOGS(object):
     CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE = '#dialogs:changeConfirmationNotRemovable/messageCombine'
     CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:changeConfirmationNotRemovable/submit'
     CHANGECONFIRMATIONNOTREMOVABLE_CANCEL = '#dialogs:changeConfirmationNotRemovable/cancel'
-    RALLY_COMPANYTIMEFINISHED_TITLE = '#dialogs:rally/companyTimeFinished/title'
-    RALLY_COMPANYTIMEFINISHED_MESSAGE = '#dialogs:rally/companyTimeFinished/message'
-    RALLY_COMPANYTIMEFINISHED_CANCEL = '#dialogs:rally/companyTimeFinished/cancel'
     INSTALLCONFIRMATIONNOTREMOVABLE_TITLE = '#dialogs:installConfirmationNotRemovable/title'
     INSTALLCONFIRMATIONNOTREMOVABLE_MESSAGE = '#dialogs:installConfirmationNotRemovable/message'
     INSTALLCONFIRMATIONNOTREMOVABLE_SUBMIT = '#dialogs:installConfirmationNotRemovable/submit'
@@ -163,6 +160,10 @@ class DIALOGS(object):
     LOWAMMO_MESSAGE = '#dialogs:lowAmmo/message'
     LOWAMMO_SUBMIT = '#dialogs:lowAmmo/submit'
     LOWAMMO_CANCEL = '#dialogs:lowAmmo/cancel'
+    LOWAMMOAUTOLOAD_TITLE = '#dialogs:lowAmmoAutoLoad/title'
+    LOWAMMOAUTOLOAD_MESSAGE = '#dialogs:lowAmmoAutoLoad/message'
+    LOWAMMOAUTOLOAD_SUBMIT = '#dialogs:lowAmmoAutoLoad/submit'
+    LOWAMMOAUTOLOAD_CANCEL = '#dialogs:lowAmmoAutoLoad/cancel'
     SANDBOX_TITLE = '#dialogs:sandBox/title'
     SANDBOX_MESSAGE = '#dialogs:sandBox/message'
     SANDBOX_SUBMIT = '#dialogs:sandBox/submit'
@@ -224,6 +225,7 @@ class DIALOGS(object):
     RECRUITWINDOW_NATIONDROPDOWN_USA = '#dialogs:recruitWindow/nationDropdown/usa'
     RECRUITWINDOW_NATIONDROPDOWN_CZECH = '#dialogs:recruitWindow/nationDropdown/czech'
     RECRUITWINDOW_NATIONDROPDOWN_SWEDEN = '#dialogs:recruitWindow/nationDropdown/sweden'
+    RECRUITWINDOW_NATIONDROPDOWN_POLAND = '#dialogs:recruitWindow/nationDropdown/poland'
     RECRUITWINDOW_SPECIALIZATION = '#dialogs:recruitWindow/specialization'
     RECRUITWINDOW_VEHICLECLASS = '#dialogs:recruitWindow/vehicleClass'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL = '#dialogs:recruitWindow/vehicleClassDropdown/all'
@@ -281,7 +283,7 @@ class DIALOGS(object):
     TRADEINPOPOVER_SORTING_VEHLVL_BODY = '#dialogs:tradeInPopover/sorting/vehLvl/body'
     TRADEINPOPOVER_SORTING_VEHNAME_HEADER = '#dialogs:tradeInPopover/sorting/vehName/header'
     TRADEINPOPOVER_SORTING_VEHNAME_BODY = '#dialogs:tradeInPopover/sorting/vehName/body'
-    TRADEINPOPOVER_SORTING_SAVING = '#dialogs:tradeInPopover/sorting/saving'
+    TRADEINPOPOVER_SORTING_SAVING_FORMATTED = '#dialogs:tradeInPopover/sorting/saving/formatted'
     TRADEINPOPOVER_SORTING_SAVING_HEADER = '#dialogs:tradeInPopover/sorting/saving/header'
     TRADEINPOPOVER_SORTING_SAVING_BODY = '#dialogs:tradeInPopover/sorting/saving/body'
     RESTOREVEHICLEDIALOG_TITLE = '#dialogs:restoreVehicleDialog/title'
@@ -360,16 +362,6 @@ class DIALOGS(object):
     SQUADPREMIUMNEEDED_TITLE = '#dialogs:squadPremiumNeeded/title'
     SQUADPREMIUMNEEDED_MESSAGE = '#dialogs:squadPremiumNeeded/message'
     SQUADPREMIUMNEEDED_CANCEL = '#dialogs:squadPremiumNeeded/cancel'
-    TEAMPREMIUMNEEDED_TITLE = '#dialogs:teamPremiumNeeded/title'
-    TEAMPREMIUMNEEDED_MESSAGE = '#dialogs:teamPremiumNeeded/message'
-    TEAMPREMIUMNEEDED_CANCEL = '#dialogs:teamPremiumNeeded/cancel'
-    TEAMHAVENOTREADYPLAYERS_TITLE = '#dialogs:teamHaveNotReadyPlayers/title'
-    TEAMHAVENOTREADYPLAYERS_MESSAGE = '#dialogs:teamHaveNotReadyPlayers/message'
-    TEAMHAVENOTREADYPLAYERS_SUBMIT = '#dialogs:teamHaveNotReadyPlayers/submit'
-    TEAMHAVENOTREADYPLAYERS_CANCEL = '#dialogs:teamHaveNotReadyPlayers/cancel'
-    TEAMDOESNOTHAVECOMMANDER_TITLE = '#dialogs:teamDoesNotHaveCommander/title'
-    TEAMDOESNOTHAVECOMMANDER_MESSAGE = '#dialogs:teamDoesNotHaveCommander/message'
-    TEAMDOESNOTHAVECOMMANDER_CANCEL = '#dialogs:teamDoesNotHaveCommander/cancel'
     SQUADHAVENOTREADYPLAYERS_TITLE = '#dialogs:squadHaveNotReadyPlayers/title'
     SQUADHAVENOTREADYPLAYERS_MESSAGE = '#dialogs:squadHaveNotReadyPlayers/message'
     SQUADHAVENOTREADYPLAYERS_SUBMIT = '#dialogs:squadHaveNotReadyPlayers/submit'
@@ -413,10 +405,6 @@ class DIALOGS(object):
     LEFTSQUADANDACCEPTINVITE_MESSAGE = '#dialogs:leftSquadAndAcceptInvite/message'
     LEFTSQUADANDACCEPTINVITE_SUBMIT = '#dialogs:leftSquadAndAcceptInvite/submit'
     LEFTSQUADANDACCEPTINVITE_CANCEL = '#dialogs:leftSquadAndAcceptInvite/cancel'
-    LEFTTEAMANDACCEPTINVITE_TITLE = '#dialogs:leftTeamAndAcceptInvite/title'
-    LEFTTEAMANDACCEPTINVITE_MESSAGE = '#dialogs:leftTeamAndAcceptInvite/message'
-    LEFTTEAMANDACCEPTINVITE_SUBMIT = '#dialogs:leftTeamAndAcceptInvite/submit'
-    LEFTTEAMANDACCEPTINVITE_CANCEL = '#dialogs:leftTeamAndAcceptInvite/cancel'
     GATHERINGXPFORM_TITLE = '#dialogs:gatheringXPForm/title'
     GATHERINGXPFORM_BEFOREOPERATION = '#dialogs:gatheringXPForm/beforeOperation'
     GATHERINGXPFORM_CURRENTAMOUNT = '#dialogs:gatheringXPForm/currentAmount'
@@ -620,6 +608,10 @@ class DIALOGS(object):
     VEHICLESELL_UNIQUE_MESSAGE = '#dialogs:vehicleSell/unique/message'
     VEHICLESELL_UNIQUE_SUBMIT = '#dialogs:vehicleSell/unique/submit'
     VEHICLESELL_UNIQUE_CANCEL = '#dialogs:vehicleSell/unique/cancel'
+    VEHICLESELL_UNIQUE_CREWLOCKED_TITLE = '#dialogs:vehicleSell/unique/crewLocked/title'
+    VEHICLESELL_UNIQUE_CREWLOCKED_MESSAGE = '#dialogs:vehicleSell/unique/crewLocked/message'
+    VEHICLESELL_UNIQUE_CREWLOCKED_SUBMIT = '#dialogs:vehicleSell/unique/crewLocked/submit'
+    VEHICLESELL_UNIQUE_CREWLOCKED_CANCEL = '#dialogs:vehicleSell/unique/crewLocked/cancel'
     VEHICLESELL_RESTORECOOLDOWN_TITLE = '#dialogs:vehicleSell/restoreCooldown/title'
     VEHICLESELL_RESTORECOOLDOWN_MESSAGE = '#dialogs:vehicleSell/restoreCooldown/message'
     VEHICLESELL_RESTORECOOLDOWN_SUBMIT = '#dialogs:vehicleSell/restoreCooldown/submit'
@@ -638,6 +630,7 @@ class DIALOGS(object):
     REPLAYNOTIFICATION_CANCEL = '#dialogs:replayNotification/cancel'
     REPLAYSTOPPED_TITLE = '#dialogs:replayStopped/title'
     REPLAYSTOPPED_MESSAGE = '#dialogs:replayStopped/message'
+    REPLAYSTOPPED_SUBMIT = '#dialogs:replayStopped/submit'
     REPLAYSTOPPED_CANCEL = '#dialogs:replayStopped/cancel'
     PUNISHMENTWINDOW_TITLE = '#dialogs:punishmentWindow/title'
     PUNISHMENTWINDOW_MSGTITLE_WARNING = '#dialogs:punishmentWindow/msgTitle/warning'
@@ -688,6 +681,10 @@ class DIALOGS(object):
     TANKMANRETRAINING_UNKNOWNVEHICLE_MESSAGE = '#dialogs:tankmanRetraining/unknownVehicle/message'
     TANKMANRETRAINING_UNKNOWNVEHICLE_SUBMIT = '#dialogs:tankmanRetraining/unknownVehicle/submit'
     TANKMANRETRAINING_UNKNOWNVEHICLE_CANCEL = '#dialogs:tankmanRetraining/unknownVehicle/cancel'
+    TANKMANRETRAINING_UNDISTRIBUTEDEXP_TITLE = '#dialogs:tankmanRetraining/undistributedExp/title'
+    TANKMANRETRAINING_UNDISTRIBUTEDEXP_MESSAGE = '#dialogs:tankmanRetraining/undistributedExp/message'
+    TANKMANRETRAINING_UNDISTRIBUTEDEXP_SUBMIT = '#dialogs:tankmanRetraining/undistributedExp/submit'
+    TANKMANRETRAINING_UNDISTRIBUTEDEXP_CANCEL = '#dialogs:tankmanRetraining/undistributedExp/cancel'
     TANKMANCHAGEROLE_UNKNOWNVEHICLE_TITLE = '#dialogs:tankmanChageRole/unknownVehicle/title'
     TANKMANCHAGEROLE_UNKNOWNVEHICLE_MESSAGE = '#dialogs:tankmanChageRole/unknownVehicle/message'
     TANKMANCHAGEROLE_UNKNOWNVEHICLE_SUBMIT = '#dialogs:tankmanChageRole/unknownVehicle/submit'
@@ -767,10 +764,6 @@ class DIALOGS(object):
     CHANGEROAMINGPERIPHERY_MESSAGE = '#dialogs:changeRoamingPeriphery/message'
     CHANGEROAMINGPERIPHERY_SUBMIT = '#dialogs:changeRoamingPeriphery/submit'
     CHANGEROAMINGPERIPHERY_CANCEL = '#dialogs:changeRoamingPeriphery/cancel'
-    CLUBINVITE_TITLE = '#dialogs:clubInvite/title'
-    CLUBINVITE_MESSAGE = '#dialogs:clubInvite/message'
-    CLUBINVITE_SUBMIT = '#dialogs:clubInvite/submit'
-    CLUBINVITE_CANCEL = '#dialogs:clubInvite/cancel'
     FREEXPINFO_TITLE = '#dialogs:freeXPInfo/title'
     FREEXPINFO_MESSAGE = '#dialogs:freeXPInfo/message'
     FREEXPINFO_SUBMITBTNLBL = '#dialogs:freeXPInfo/submitBtnLbl'
@@ -784,18 +777,12 @@ class DIALOGS(object):
     FORTIFICATIONFIXEDPLAYERS_MESSAGE = '#dialogs:fortificationFixedPlayers/message'
     FORTIFICATIONFIXEDPLAYERS_SUBMIT = '#dialogs:fortificationFixedPlayers/submit'
     FORTIFICATIONFIXEDPLAYERS_CANCEL = '#dialogs:fortificationFixedPlayers/cancel'
-    FORTIFICATIONCLOSEDIRECTION_TITLE = '#dialogs:fortificationCloseDirection/title'
-    FORTIFICATIONCLOSEDIRECTION_MESSAGE = '#dialogs:fortificationCloseDirection/message'
     FORTIFICATIONCLOSEDIRECTION_SUBMIT = '#dialogs:fortificationCloseDirection/submit'
     FORTIFICATIONCLOSEDIRECTION_CANCEL = '#dialogs:fortificationCloseDirection/cancel'
     REPORTBUG_TITLE = '#dialogs:reportBug/title'
     REPORTBUG_MESSAGE = '#dialogs:reportBug/message'
     REPORTBUG_SUBMIT = '#dialogs:reportBug/submit'
     REPORTBUG_CANCEL = '#dialogs:reportBug/cancel'
-    FORTMODERNIZATIONABSOLUTEDIVISION_TITLE = '#dialogs:fortModernizationAbsoluteDivision/title'
-    FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE = '#dialogs:fortModernizationAbsoluteDivision/message'
-    FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT = '#dialogs:fortModernizationAbsoluteDivision/submit'
-    FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL = '#dialogs:fortModernizationAbsoluteDivision/cancel'
     FORTTURNEDOFF_CANCEL = '#dialogs:fortTurnedOff/cancel'
     FORTTURNEDOFF_TITLE = '#dialogs:fortTurnedOff/title'
     FORTTURNEDOFF_MESSAGE = '#dialogs:fortTurnedOff/message'
@@ -824,14 +811,6 @@ class DIALOGS(object):
     CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/exchangeCredits/goldNotEnoughText'
     CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/restoreExchangeCredits/goldNotEnoughText'
     CONFIRMEXCHANGEDIALOG_EXCHANGEXP_GOLDNOTENOUGHTEXT = '#dialogs:confirmExchangeDialog/exchangeXp/goldNotEnoughText'
-    CLUBS_APP_SEND_TITLE = '#dialogs:clubs/app/send/title'
-    CLUBS_APP_SEND_MESSAGE = '#dialogs:clubs/app/send/message'
-    CLUBS_APP_SEND_SUBMIT = '#dialogs:clubs/app/send/submit'
-    CLUBS_APP_SEND_CANCEL = '#dialogs:clubs/app/send/cancel'
-    CLUBS_APP_CREATE_TITLE = '#dialogs:clubs/app/create/title'
-    CLUBS_APP_CREATE_MESSAGE = '#dialogs:clubs/app/create/message'
-    CLUBS_APP_CREATE_SUBMIT = '#dialogs:clubs/app/create/submit'
-    CLUBS_APP_CREATE_CANCEL = '#dialogs:clubs/app/create/cancel'
     QUESTSCONFIRMDIALOG_TITLE = '#dialogs:questsConfirmDialog/title'
     QUESTSCONFIRMDIALOG_MESSAGE = '#dialogs:questsConfirmDialog/message'
     QUESTSCONFIRMDIALOG_SUBMIT = '#dialogs:questsConfirmDialog/submit'
@@ -909,6 +888,35 @@ class DIALOGS(object):
     VEHCONF_EXITDIALOG_MESSAGE = '#dialogs:vehConf/exitDialog/message'
     VEHCONF_EXITDIALOG_SUBMIT = '#dialogs:vehConf/exitDialog/submit'
     VEHCONF_EXITDIALOG_CANCEL = '#dialogs:vehConf/exitDialog/cancel'
+    CONFIRMBATTLEBOOSTERINSTALL_TITLE = '#dialogs:confirmBattleBoosterInstall/title'
+    CONFIRMBATTLEBOOSTERINSTALL_MESSAGE = '#dialogs:confirmBattleBoosterInstall/message'
+    CONFIRMBATTLEBOOSTERINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterInstall/submit'
+    CONFIRMBATTLEBOOSTERINSTALL_CANCEL = '#dialogs:confirmBattleBoosterInstall/cancel'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_TITLE = '#dialogs:confirmBattleBoosterInstallNotSuitable/title'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_MESSAGE = '#dialogs:confirmBattleBoosterInstallNotSuitable/message'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_SUBMIT = '#dialogs:confirmBattleBoosterInstallNotSuitable/submit'
+    CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_CANCEL = '#dialogs:confirmBattleBoosterInstallNotSuitable/cancel'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE = '#dialogs:confirmBattleBoosterBuyAndInstall/title'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT = '#dialogs:confirmBattleBoosterBuyAndInstall/submit'
+    CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL = '#dialogs:confirmBattleBoosterBuyAndInstall/cancel'
+    BOOTCAMP_SKIP_TITLE = '#dialogs:bootcamp/skip/title'
+    BOOTCAMP_SKIP_LABEL = '#dialogs:bootcamp/skip/label'
+    BOOTCAMP_SKIP_MESSAGE = '#dialogs:bootcamp/skip/message'
+    BOOTCAMP_SKIP_SUBMIT = '#dialogs:bootcamp/skip/submit'
+    BOOTCAMP_SKIP_CANCEL = '#dialogs:bootcamp/skip/cancel'
+    BOOTCAMP_START_TITLE = '#dialogs:bootcamp/start/title'
+    BOOTCAMP_START_LABEL = '#dialogs:bootcamp/start/label'
+    BOOTCAMP_START_MESSAGE = '#dialogs:bootcamp/start/message'
+    BOOTCAMP_START_SUBMIT = '#dialogs:bootcamp/start/submit'
+    BOOTCAMP_START_CANCEL = '#dialogs:bootcamp/start/cancel'
+    BOOTCAMP_RETRY_TITLE = '#dialogs:bootcamp/retry/title'
+    BOOTCAMP_RETRY_LABEL = '#dialogs:bootcamp/retry/label'
+    BOOTCAMP_RETRY_MESSAGE = '#dialogs:bootcamp/retry/message'
+    BOOTCAMP_RETRY_SUBMIT = '#dialogs:bootcamp/retry/submit'
+    BOOTCAMP_RETRY_CANCEL = '#dialogs:bootcamp/retry/cancel'
+    BOOTCAMPCENTERUNAVAILABLE_TITLE = '#dialogs:bootcampCenterUnavailable/title'
+    BOOTCAMPCENTERUNAVAILABLE_MESSAGE = '#dialogs:bootcampCenterUnavailable/message'
+    BOOTCAMPCENTERUNAVAILABLE_CANCEL = '#dialogs:bootcampCenterUnavailable/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1012,9 +1020,6 @@ class DIALOGS(object):
      CHANGECONFIRMATIONNOTREMOVABLE_MESSAGECOMBINE,
      CHANGECONFIRMATIONNOTREMOVABLE_SUBMIT,
      CHANGECONFIRMATIONNOTREMOVABLE_CANCEL,
-     RALLY_COMPANYTIMEFINISHED_TITLE,
-     RALLY_COMPANYTIMEFINISHED_MESSAGE,
-     RALLY_COMPANYTIMEFINISHED_CANCEL,
      INSTALLCONFIRMATIONNOTREMOVABLE_TITLE,
      INSTALLCONFIRMATIONNOTREMOVABLE_MESSAGE,
      INSTALLCONFIRMATIONNOTREMOVABLE_SUBMIT,
@@ -1067,6 +1072,10 @@ class DIALOGS(object):
      LOWAMMO_MESSAGE,
      LOWAMMO_SUBMIT,
      LOWAMMO_CANCEL,
+     LOWAMMOAUTOLOAD_TITLE,
+     LOWAMMOAUTOLOAD_MESSAGE,
+     LOWAMMOAUTOLOAD_SUBMIT,
+     LOWAMMOAUTOLOAD_CANCEL,
      SANDBOX_TITLE,
      SANDBOX_MESSAGE,
      SANDBOX_SUBMIT,
@@ -1128,6 +1137,7 @@ class DIALOGS(object):
      RECRUITWINDOW_NATIONDROPDOWN_USA,
      RECRUITWINDOW_NATIONDROPDOWN_CZECH,
      RECRUITWINDOW_NATIONDROPDOWN_SWEDEN,
+     RECRUITWINDOW_NATIONDROPDOWN_POLAND,
      RECRUITWINDOW_SPECIALIZATION,
      RECRUITWINDOW_VEHICLECLASS,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
@@ -1185,7 +1195,7 @@ class DIALOGS(object):
      TRADEINPOPOVER_SORTING_VEHLVL_BODY,
      TRADEINPOPOVER_SORTING_VEHNAME_HEADER,
      TRADEINPOPOVER_SORTING_VEHNAME_BODY,
-     TRADEINPOPOVER_SORTING_SAVING,
+     TRADEINPOPOVER_SORTING_SAVING_FORMATTED,
      TRADEINPOPOVER_SORTING_SAVING_HEADER,
      TRADEINPOPOVER_SORTING_SAVING_BODY,
      RESTOREVEHICLEDIALOG_TITLE,
@@ -1264,16 +1274,6 @@ class DIALOGS(object):
      SQUADPREMIUMNEEDED_TITLE,
      SQUADPREMIUMNEEDED_MESSAGE,
      SQUADPREMIUMNEEDED_CANCEL,
-     TEAMPREMIUMNEEDED_TITLE,
-     TEAMPREMIUMNEEDED_MESSAGE,
-     TEAMPREMIUMNEEDED_CANCEL,
-     TEAMHAVENOTREADYPLAYERS_TITLE,
-     TEAMHAVENOTREADYPLAYERS_MESSAGE,
-     TEAMHAVENOTREADYPLAYERS_SUBMIT,
-     TEAMHAVENOTREADYPLAYERS_CANCEL,
-     TEAMDOESNOTHAVECOMMANDER_TITLE,
-     TEAMDOESNOTHAVECOMMANDER_MESSAGE,
-     TEAMDOESNOTHAVECOMMANDER_CANCEL,
      SQUADHAVENOTREADYPLAYERS_TITLE,
      SQUADHAVENOTREADYPLAYERS_MESSAGE,
      SQUADHAVENOTREADYPLAYERS_SUBMIT,
@@ -1317,10 +1317,6 @@ class DIALOGS(object):
      LEFTSQUADANDACCEPTINVITE_MESSAGE,
      LEFTSQUADANDACCEPTINVITE_SUBMIT,
      LEFTSQUADANDACCEPTINVITE_CANCEL,
-     LEFTTEAMANDACCEPTINVITE_TITLE,
-     LEFTTEAMANDACCEPTINVITE_MESSAGE,
-     LEFTTEAMANDACCEPTINVITE_SUBMIT,
-     LEFTTEAMANDACCEPTINVITE_CANCEL,
      GATHERINGXPFORM_TITLE,
      GATHERINGXPFORM_BEFOREOPERATION,
      GATHERINGXPFORM_CURRENTAMOUNT,
@@ -1524,6 +1520,10 @@ class DIALOGS(object):
      VEHICLESELL_UNIQUE_MESSAGE,
      VEHICLESELL_UNIQUE_SUBMIT,
      VEHICLESELL_UNIQUE_CANCEL,
+     VEHICLESELL_UNIQUE_CREWLOCKED_TITLE,
+     VEHICLESELL_UNIQUE_CREWLOCKED_MESSAGE,
+     VEHICLESELL_UNIQUE_CREWLOCKED_SUBMIT,
+     VEHICLESELL_UNIQUE_CREWLOCKED_CANCEL,
      VEHICLESELL_RESTORECOOLDOWN_TITLE,
      VEHICLESELL_RESTORECOOLDOWN_MESSAGE,
      VEHICLESELL_RESTORECOOLDOWN_SUBMIT,
@@ -1542,6 +1542,7 @@ class DIALOGS(object):
      REPLAYNOTIFICATION_CANCEL,
      REPLAYSTOPPED_TITLE,
      REPLAYSTOPPED_MESSAGE,
+     REPLAYSTOPPED_SUBMIT,
      REPLAYSTOPPED_CANCEL,
      PUNISHMENTWINDOW_TITLE,
      PUNISHMENTWINDOW_MSGTITLE_WARNING,
@@ -1592,6 +1593,10 @@ class DIALOGS(object):
      TANKMANRETRAINING_UNKNOWNVEHICLE_MESSAGE,
      TANKMANRETRAINING_UNKNOWNVEHICLE_SUBMIT,
      TANKMANRETRAINING_UNKNOWNVEHICLE_CANCEL,
+     TANKMANRETRAINING_UNDISTRIBUTEDEXP_TITLE,
+     TANKMANRETRAINING_UNDISTRIBUTEDEXP_MESSAGE,
+     TANKMANRETRAINING_UNDISTRIBUTEDEXP_SUBMIT,
+     TANKMANRETRAINING_UNDISTRIBUTEDEXP_CANCEL,
      TANKMANCHAGEROLE_UNKNOWNVEHICLE_TITLE,
      TANKMANCHAGEROLE_UNKNOWNVEHICLE_MESSAGE,
      TANKMANCHAGEROLE_UNKNOWNVEHICLE_SUBMIT,
@@ -1671,10 +1676,6 @@ class DIALOGS(object):
      CHANGEROAMINGPERIPHERY_MESSAGE,
      CHANGEROAMINGPERIPHERY_SUBMIT,
      CHANGEROAMINGPERIPHERY_CANCEL,
-     CLUBINVITE_TITLE,
-     CLUBINVITE_MESSAGE,
-     CLUBINVITE_SUBMIT,
-     CLUBINVITE_CANCEL,
      FREEXPINFO_TITLE,
      FREEXPINFO_MESSAGE,
      FREEXPINFO_SUBMITBTNLBL,
@@ -1688,18 +1689,12 @@ class DIALOGS(object):
      FORTIFICATIONFIXEDPLAYERS_MESSAGE,
      FORTIFICATIONFIXEDPLAYERS_SUBMIT,
      FORTIFICATIONFIXEDPLAYERS_CANCEL,
-     FORTIFICATIONCLOSEDIRECTION_TITLE,
-     FORTIFICATIONCLOSEDIRECTION_MESSAGE,
      FORTIFICATIONCLOSEDIRECTION_SUBMIT,
      FORTIFICATIONCLOSEDIRECTION_CANCEL,
      REPORTBUG_TITLE,
      REPORTBUG_MESSAGE,
      REPORTBUG_SUBMIT,
      REPORTBUG_CANCEL,
-     FORTMODERNIZATIONABSOLUTEDIVISION_TITLE,
-     FORTMODERNIZATIONABSOLUTEDIVISION_MESSAGE,
-     FORTMODERNIZATIONABSOLUTEDIVISION_SUBMIT,
-     FORTMODERNIZATIONABSOLUTEDIVISION_CANCEL,
      FORTTURNEDOFF_CANCEL,
      FORTTURNEDOFF_TITLE,
      FORTTURNEDOFF_MESSAGE,
@@ -1728,14 +1723,6 @@ class DIALOGS(object):
      CONFIRMEXCHANGEDIALOG_EXCHANGECREDITS_GOLDNOTENOUGHTEXT,
      CONFIRMEXCHANGEDIALOG_RESTOREEXCHANGECREDITS_GOLDNOTENOUGHTEXT,
      CONFIRMEXCHANGEDIALOG_EXCHANGEXP_GOLDNOTENOUGHTEXT,
-     CLUBS_APP_SEND_TITLE,
-     CLUBS_APP_SEND_MESSAGE,
-     CLUBS_APP_SEND_SUBMIT,
-     CLUBS_APP_SEND_CANCEL,
-     CLUBS_APP_CREATE_TITLE,
-     CLUBS_APP_CREATE_MESSAGE,
-     CLUBS_APP_CREATE_SUBMIT,
-     CLUBS_APP_CREATE_CANCEL,
      QUESTSCONFIRMDIALOG_TITLE,
      QUESTSCONFIRMDIALOG_MESSAGE,
      QUESTSCONFIRMDIALOG_SUBMIT,
@@ -1812,7 +1799,36 @@ class DIALOGS(object):
      VEHCONF_EXITDIALOG_TITLE,
      VEHCONF_EXITDIALOG_MESSAGE,
      VEHCONF_EXITDIALOG_SUBMIT,
-     VEHCONF_EXITDIALOG_CANCEL)
+     VEHCONF_EXITDIALOG_CANCEL,
+     CONFIRMBATTLEBOOSTERINSTALL_TITLE,
+     CONFIRMBATTLEBOOSTERINSTALL_MESSAGE,
+     CONFIRMBATTLEBOOSTERINSTALL_SUBMIT,
+     CONFIRMBATTLEBOOSTERINSTALL_CANCEL,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_TITLE,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_MESSAGE,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_SUBMIT,
+     CONFIRMBATTLEBOOSTERINSTALLNOTSUITABLE_CANCEL,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_TITLE,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_SUBMIT,
+     CONFIRMBATTLEBOOSTERBUYANDINSTALL_CANCEL,
+     BOOTCAMP_SKIP_TITLE,
+     BOOTCAMP_SKIP_LABEL,
+     BOOTCAMP_SKIP_MESSAGE,
+     BOOTCAMP_SKIP_SUBMIT,
+     BOOTCAMP_SKIP_CANCEL,
+     BOOTCAMP_START_TITLE,
+     BOOTCAMP_START_LABEL,
+     BOOTCAMP_START_MESSAGE,
+     BOOTCAMP_START_SUBMIT,
+     BOOTCAMP_START_CANCEL,
+     BOOTCAMP_RETRY_TITLE,
+     BOOTCAMP_RETRY_LABEL,
+     BOOTCAMP_RETRY_MESSAGE,
+     BOOTCAMP_RETRY_SUBMIT,
+     BOOTCAMP_RETRY_CANCEL,
+     BOOTCAMPCENTERUNAVAILABLE_TITLE,
+     BOOTCAMPCENTERUNAVAILABLE_MESSAGE,
+     BOOTCAMPCENTERUNAVAILABLE_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

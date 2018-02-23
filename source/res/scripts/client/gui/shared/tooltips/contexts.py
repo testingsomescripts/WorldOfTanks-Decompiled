@@ -5,25 +5,25 @@ import gui
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from collections import namedtuple
-from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
+from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.goodies.goodies_cache import g_goodiesCache
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from helpers import dependency
 from shared_utils import findFirst
-from gui.shared import g_itemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import TankmanSkill
+from gui.shared.gui_items.Tankman import getTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.fortifications.FortOrder import FortOrder
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString
 from items import vehicles
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IRankedBattlesController
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -123,12 +123,13 @@ class ToolTipContext(object):
 
 
 class ShopContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(ShopContext, self).__init__(TOOLTIP_COMPONENT.SHOP, fieldsToExclude)
 
     def buildItem(self, intCD):
-        return g_itemsCache.items.getItemByCD(int(intCD))
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatusConfiguration(self, item):
         value = super(ShopContext, self).getStatusConfiguration(item)
@@ -153,17 +154,22 @@ class ShopContext(ToolTipContext):
 class AwardContext(ShopContext):
     """ Context for award carousel's items.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(AwardContext, self).__init__(fieldsToExclude)
         self._tmanRoleLevel = None
         self._rentExpiryTime = None
+        self._rentBattlesLeft = None
+        self._rentWinsLeft = None
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
-        return g_itemsCache.items.getItemByCD(int(intCD))
+        self._rentBattlesLeft = rentBattles
+        self._rentWinsLeft = rentWins
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
         value = super(AwardContext, self).getStatsConfiguration(item)
@@ -188,16 +194,31 @@ class AwardContext(ShopContext):
 
     def getParams(self):
         return {'tmanRoleLevel': self._tmanRoleLevel,
-         'rentExpiryTime': self._rentExpiryTime}
+         'rentExpiryTime': self._rentExpiryTime,
+         'rentBattlesLeft': self._rentBattlesLeft,
+         'rentWinsLeft': self._rentWinsLeft}
+
+
+class RankedRankContext(ToolTipContext):
+    """ Rank class for tooltip context
+    """
+    rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, fieldsToExclude=None):
+        super(RankedRankContext, self).__init__(TOOLTIP_COMPONENT.RANK, fieldsToExclude)
+
+    def buildItem(self, rankID):
+        return self.rankedController.getRank(int(rankID), g_currentVehicle.item)
 
 
 class InventoryContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(TOOLTIP_COMPONENT.INVENTORY, fieldsToExclude)
 
     def buildItem(self, intCD):
-        return g_itemsCache.items.getItemByCD(int(intCD))
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
         value = super(InventoryContext, self).getStatsConfiguration(item)
@@ -231,8 +252,8 @@ class CarouselContext(InventoryContext):
         value.rentals = True
         return value
 
-    def buildItem(self, invID):
-        return g_itemsCache.items.getVehicle(int(invID))
+    def buildItem(self, intCD):
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
 
 class PotapovQuestsChainContext(ToolTipContext):
@@ -254,7 +275,7 @@ class PotapovQuestsTileContext(ToolTipContext):
         super(PotapovQuestsTileContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return events_helpers.getPotapovQuestsCache().getTiles().get(tileID)
+        return old_events_helpers.getPotapovQuestsCache().getTiles().get(tileID)
 
 
 class QuestContext(ToolTipContext):
@@ -313,6 +334,7 @@ class CmpParamContext(HangarParamContext):
 
 
 class HangarContext(ToolTipContext):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(HangarContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
@@ -328,7 +350,7 @@ class HangarContext(ToolTipContext):
         self._slotIdx = int(slotIdx)
         self._vehicle = self.getVehicle()
         self._historicalBattleID = historicalBattleID
-        return g_itemsCache.items.getItemByCD(int(intCD))
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatusConfiguration(self, item):
         value = super(HangarContext, self).getStatusConfiguration(item)
@@ -344,6 +366,8 @@ class HangarContext(ToolTipContext):
         value.unlockPrice = not item.isUnlocked
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             value.buyPrice = not item.isInInventory
+        elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            value.buyPrice = True
         else:
             value.buyPrice = not item.isInstalled(self._vehicle, self._slotIdx)
         value.xp = True
@@ -375,7 +399,7 @@ class VehCmpConfigurationContext(HangarContext):
 class TankmanHangarContext(HangarContext):
 
     def buildItem(self, invID):
-        return g_itemsCache.items.getTankman(int(invID))
+        return self.itemsCache.items.getTankman(int(invID))
 
 
 class TechTreeContext(ShopContext):
@@ -387,9 +411,9 @@ class TechTreeContext(ShopContext):
         return
 
     def buildItem(self, node, parentCD):
-        self._vehicle = g_itemsCache.items.getItemByCD(int(parentCD))
+        self._vehicle = self.itemsCache.items.getItemByCD(int(parentCD))
         self._node = node
-        return g_itemsCache.items.getItemByCD(int(node.id))
+        return self.itemsCache.items.getItemByCD(int(node.id))
 
     def getStatusConfiguration(self, item):
         value = super(TechTreeContext, self).getStatusConfiguration(item)
@@ -419,7 +443,7 @@ class VehCmpModulesContext(TechTreeContext):
     def buildItem(self, node, parentCD):
         self._vehicle = _getCmpVehicle()
         self._node = node
-        return g_itemsCache.items.getItemByCD(int(node.id))
+        return self.itemsCache.items.getItemByCD(int(node.id))
 
     def getStatusConfiguration(self, item):
         value = super(TechTreeContext, self).getStatusConfiguration(item)
@@ -455,15 +479,16 @@ class TechMainContext(HangarContext):
 class PersonalCaseContext(ToolTipContext):
     """ Personal case class for tool tip context
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, fieldsToExclude=None):
         super(PersonalCaseContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_CASE, fieldsToExclude)
 
     def buildItem(self, skillID, tankmanID):
-        tankman = g_itemsCache.items.getTankman(int(tankmanID))
+        tankman = self.itemsCache.items.getTankman(int(tankmanID))
         skill = findFirst(lambda x: x.name == skillID, tankman.skills)
         if skill is None:
-            skill = TankmanSkill(skillID)
+            skill = getTankmanSkill(skillID, tankman=tankman)
         return skill
 
 
@@ -473,7 +498,7 @@ class NewSkillContext(PersonalCaseContext):
     SKILL_MOCK = namedtuple('SkillMock', ('header', 'userName', 'shortDescription', 'description', 'count', 'level'))
 
     def buildItem(self, tankmanID):
-        tankman = g_itemsCache.items.getTankman(int(tankmanID))
+        tankman = self.itemsCache.items.getTankman(int(tankmanID))
         skillsCount, lastSkillLevel = (0, 0)
         if tankman is not None:
             skillsCount, lastSkillLevel = tankman.newSkillCount
@@ -631,20 +656,13 @@ class ContactContext(ToolTipContext):
         super(ContactContext, self).__init__(TOOLTIP_COMPONENT.CONTACT, fieldsToExclude)
 
 
-class FortOrderContext(FortificationContext):
-    """ Fortification class for tool tip context
-    """
-
-    def buildItem(self, fortOrderTypeID, level):
-        return FortOrder(int(fortOrderTypeID), level=int(level))
-
-
 class BattleConsumableContext(FortificationContext):
     """ Context for all battle consumables.
     """
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def buildItem(self, intCD):
-        return g_itemsCache.items.getItemByCD(int(intCD))
+        return self.itemsCache.items.getItemByCD(int(intCD))
 
 
 class HangarTutorialContext(ToolTipContext):
@@ -653,12 +671,6 @@ class HangarTutorialContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
         super(HangarTutorialContext, self).__init__(TOOLTIP_COMPONENT.HANGAR_TUTORIAL, fieldsToExclude)
-
-
-class FortSortieLimitContext(FortificationContext):
-    """ Fortifications sorties limit class for tool tip context
-    """
-    pass
 
 
 class FortPopoverDefResProgressContext(FortificationContext):
@@ -684,6 +696,7 @@ class TechCustomizationContext(ToolTipContext):
 class BoosterContext(ToolTipContext):
     """ Booster class for tooltip context
     """
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, fieldsToExclude=None):
         super(BoosterContext, self).__init__(TOOLTIP_COMPONENT.BOOSTER, fieldsToExclude)
@@ -692,7 +705,7 @@ class BoosterContext(ToolTipContext):
         return BoosterStatsConfiguration()
 
     def buildItem(self, boosterID):
-        return g_goodiesCache.getBooster(boosterID)
+        return self.goodiesCache.getBooster(boosterID)
 
 
 class ShopBoosterContext(BoosterContext):

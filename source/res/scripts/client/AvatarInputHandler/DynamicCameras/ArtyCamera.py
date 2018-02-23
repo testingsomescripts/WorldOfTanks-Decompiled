@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArtyCamera.py
-import BigWorld
-import BattleReplay
-import Settings
 from math import pi, copysign, atan2, sqrt
-from Math import slerp, Vector2, Vector3, Matrix, MatrixProduct
+import BattleReplay
+import BigWorld
+import Settings
 from AvatarInputHandler import mathUtils, aih_global_binding, cameras
-from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason
-from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
 from AvatarInputHandler.AimingSystems.ArtyAimingSystem import ArtyAimingSystem
-from constants import AVATAR_SUBFILTERS
+from AvatarInputHandler.AimingSystems.ArtyAimingSystemRemote import ArtyAimingSystemRemote
+from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig
+from AvatarInputHandler.cameras import ICamera, readFloat, readVec2, ImpulseReason
+from Math import slerp, Vector2, Vector3, Matrix, MatrixProduct
+from ProjectileMover import collideDynamicAndStatic
+from debug_utils import LOG_WARNING
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from debug_utils import LOG_WARNING
-from ProjectileMover import collideDynamicAndStatic
 from skeletons.account_helpers.settings_core import ISettingsCore
 
 class Hysteresis(object):
@@ -82,8 +82,8 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__onChangeControlMode = None
         self.__camDist = 0.0
         self.__desiredCamDist = 0.0
-        self.__aimingSystem = ArtyAimingSystem()
-        self.__prevTime = BigWorld.time()
+        self.__aimingSystem = None
+        self.__prevTime = 0.0
         self.__dxdydz = Vector3(0.0, 0.0, 0.0)
         self.__autoUpdatePosition = False
         self.__needReset = 0
@@ -92,11 +92,12 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__rotation = 0.0
         self.__positionHysteresis = None
         self.__timeHysteresis = None
-        self.__isRemoteCamera = False
         return
 
     def create(self, onChangeControlMode=None):
         self.__onChangeControlMode = onChangeControlMode
+        aimingSystemClass = ArtyAimingSystemRemote if BigWorld.player().isObserver() else ArtyAimingSystem
+        self.__aimingSystem = aimingSystemClass()
         self.__camDist = self.__cfg['camDist']
         self.__desiredCamDist = self.__camDist
         self.__positionHysteresis = PositionHysteresis(self.__cfg['hPositionThresholdSq'])
@@ -120,25 +121,26 @@ class ArtyCamera(ICamera, CallbackDelayer):
             self.__aimingSystem = None
         return
 
-    def enable(self, targetPos, saveDist, isRemoteCamera=False):
+    def enable(self, targetPos, saveDist):
         self.__prevTime = 0.0
         self.__aimingSystem.enable(targetPos)
         self.__positionHysteresis.update(Vector3(0.0, 0.0, 0.0))
-        self.__timeHysteresis.update(BigWorld.time())
+        self.__timeHysteresis.update(BigWorld.timeExact())
         camTarget = MatrixProduct()
         self.__cam.target = camTarget
         self.__cam.source = self.__sourceMatrix
         self.__cam.wg_applyParams()
-        self.__isRemoteCamera = isRemoteCamera
         BigWorld.camera(self.__cam)
         BigWorld.player().positionControl.moveTo(self.__aimingSystem.hitPoint)
         BigWorld.player().positionControl.followCamera(False)
         self.__rotation = 0.0
         self.__cameraUpdate()
         self.delayCallback(0.0, self.__cameraUpdate)
+        self.__needReset = 1
 
     def disable(self):
-        self.__aimingSystem.disable()
+        if self.__aimingSystem is not None:
+            self.__aimingSystem.disable()
         self.stopCallback(self.__cameraUpdate)
         BigWorld.camera(None)
         self.__positionOscillator.reset()
@@ -252,6 +254,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         distRange = self.__cfg['distRange']
         self.__desiredCamDist -= self.__dxdydz.z * self.__curSense
         self.__desiredCamDist = mathUtils.clamp(distRange[0], distRange[1], self.__desiredCamDist)
+        self.__desiredCamDist = self.__aimingSystem.overrideCamDist(self.__desiredCamDist)
         self.__cfg['camDist'] = self.__camDist
         return self.__desiredCamDist
 
@@ -260,7 +263,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Vector3(0, -shotDescr['gravity'], 0), self.__aimOffset)
 
     def __updateTime(self):
-        curTime = BigWorld.time()
+        curTime = BigWorld.timeExact()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime
         return deltaTime
@@ -298,14 +301,15 @@ class ArtyCamera(ICamera, CallbackDelayer):
             collisionDistance = (aimPoint - collision[0]).length
             if sign * (collisionDistance - distance) < distRange[0]:
                 distance = collisionDistance - sign * distRange[0]
-        srcPoint = aimPoint - direction.scale(distance)
-        endPoint = aimPoint
-        collision = collideDynamicAndStatic(srcPoint, endPoint, (BigWorld.player().playerVehicleID,))
-        if collision:
-            self.__aimingSystem.aimPoint = collision[0]
-            if collision[1]:
-                self.__positionHysteresis.update(aimPoint)
-                self.__timeHysteresis.update(self.__prevTime)
+        if mathUtils.almostZero(self.__rotation):
+            srcPoint = aimPoint - direction.scale(distance)
+            endPoint = aimPoint
+            collision = collideDynamicAndStatic(srcPoint, endPoint, (BigWorld.player().playerVehicleID,))
+            if collision:
+                self.__aimingSystem.aimPoint = collision[0]
+                if collision[1]:
+                    self.__positionHysteresis.update(aimPoint)
+                    self.__timeHysteresis.update(self.__prevTime)
         return distance
 
     def __calculateIdealState(self, deltaTime):
@@ -345,21 +349,6 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__aimOffset = self.__calculateAimOffset(aimPoint)
         self.__updateTrajectoryDrawer()
         translation, rotation = self.__calculateIdealState(deltaTime)
-        player = BigWorld.player()
-        if self.__isRemoteCamera:
-            cameraShotPoint = player.remoteCameraArty.shotPoint
-            translation = player.remoteCameraArty.translation
-            rotation = player.remoteCameraArty.rotation
-            getVector3 = getattr(player.filter, 'getVector3', None)
-            if getVector3 is not None:
-                time = BigWorld.serverTime()
-                cameraShotPoint = getVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_SHOT_POINT, time)
-                translation = getVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_TRANSLATION, time)
-                rotation = getVector3(AVATAR_SUBFILTERS.CAMERA_ARTY_ROTATION, time)
-            self.__aimingSystem.updateTargetPos(cameraShotPoint)
-        vehicle = player.getVehicleAttached()
-        if not player.isObserver() and vehicle is not None:
-            vehicle.setArtyCameraDataForObservers(aimPoint, translation, rotation)
         self.__interpolateStates(deltaTime, translation, mathUtils.createRotationMatrix(rotation))
         self.__camDist = aimPoint - self.__targetMatrix.translation
         self.__camDist = self.__camDist.length
@@ -368,9 +357,9 @@ class ArtyCamera(ICamera, CallbackDelayer):
         self.__cam.pivotPosition = Vector3(0, 0, 0)
         BigWorld.player().positionControl.moveTo(aimPoint)
         self.__updateOscillator(deltaTime)
+        self.__aimingSystem.update(deltaTime)
         if not self.__autoUpdatePosition:
             self.__dxdydz = Vector3(0, 0, 0)
-        return 0.0
 
     def __updateOscillator(self, deltaTime):
         if ArtyCamera.isCameraDynamic():
@@ -396,7 +385,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
         bcfg['interpolationSpeed'] = readFloat(dataSec, 'interpolationSpeed', 0.0, 10.0, 5.0)
         bcfg['highPitchThreshold'] = readFloat(dataSec, 'highPitchThreshold', 0.1, 10.0, 3.0)
         bcfg['hTimeThreshold'] = readFloat(dataSec, 'hysteresis/timeThreshold', 0.0, 10.0, 0.5)
-        bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThresholdSq', 0.0, 50.0, 7.0)
+        bcfg['hPositionThreshold'] = readFloat(dataSec, 'hysteresis/positionThreshold', 0.0, 100.0, 7.0)
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['artyMode/camera']

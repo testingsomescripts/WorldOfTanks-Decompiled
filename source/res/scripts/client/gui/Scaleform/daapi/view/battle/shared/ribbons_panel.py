@@ -41,7 +41,8 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.RECEIVED_BURN,
                                  _BET.RECEIVED_RAM,
                                  _BET.RECEIVED_WORLD_COLLISION),
- BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,)}
+ BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
+ BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.STUN,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
@@ -94,6 +95,19 @@ def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
 
 
+def _receivedRamRibbonFormatter(ribbon, arenaDP, updater):
+    """
+    Proxy to show caused BATTLE_EFFICIENCY_TYPES.ARMOR.
+    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
+    :param updater: Reference to view update method.
+    """
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
+        vehicleName = ''
+        vehicleClassTag = ''
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
+
+
 def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
     """
     Proxy to show BATTLE_EFFICIENCY_TYPES.ARMOR or BATTLE_EFFICIENCY_TYPES.DAMAGE ribbon.
@@ -101,6 +115,18 @@ def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
     :param updater: Reference to view update method.
     """
     vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
+
+
+def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
+    """
+    Proxy to show BATTLE_EFFICIENCY_TYPES.ARMOR or BATTLE_EFFICIENCY_TYPES.DAMAGE ribbon.
+    :param ribbon: An instance of _SingleVehicleDamageRibbon derived class.
+    :param updater: Reference to view update method.
+    """
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
+        vehicleName = ''
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
@@ -129,8 +155,8 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.ASSIST_SPOT: _singleVehRibbonFormatter,
  _BET.DESTRUCTION: _killRibbonFormatter,
  _BET.RECEIVED_DAMAGE: _singleVehRibbonFormatter,
- _BET.RECEIVED_CRITS: _criticalHitRibbonFormatter,
- _BET.RECEIVED_RAM: _singleVehRibbonFormatter,
+ _BET.RECEIVED_CRITS: _receivedCriticalHitRibbonFormatter,
+ _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
  _BET.STUN: _singleVehRibbonFormatter}
@@ -194,6 +220,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         super(BattleRibbonsPanel, self)._dispose()
         return
 
+    def _shouldShowRibbon(self, ribbon):
+        return self.__checkUserPreferences(ribbon)
+
     def __playSound(self, eventName):
         if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
             return
@@ -220,7 +249,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__invalidateRibbon(ribbon, self._updateRibbon)
 
     def __invalidateRibbon(self, ribbon, method):
-        if self.__checkUserPreferences(ribbon):
+        if self._shouldShowRibbon(ribbon):
             if ribbon.getType() in _RIBBONS_FMTS:
                 updater = _RIBBONS_FMTS[ribbon.getType()]
                 updater(ribbon, self.__arenaDP, method)

@@ -1,34 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/battle_selector_items.py
-import BigWorld
 from adisp import process
 from gui.prb_control.entities.base.ctx import PrbAction
 from account_helpers import isDemonstrator
 from constants import PREBATTLE_TYPE, QUEUE_TYPE, ACCOUNT_ATTR
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui import GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.formatters.windows import SwitchPeripheryCompanyCtx
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.formatters import text_styles
-from gui.shared.formatters import time_formatters
-from gui.shared.fortifications import isSortieEnabled
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
-from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.game_control import IFalloutController, IRankedBattlesController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
+from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
 class _SelectorItem(object):
     __slots__ = ('_label', '_data', '_order', '_isSelected', '_isNew', '_isDisabled', '_isLocked', '_isVisible', '_selectorType')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_SelectorItem, self).__init__()
@@ -176,73 +173,6 @@ class _CommandItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
 
 
-class _CompanyItem(_SelectorItem):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def isRandomBattle(self):
-        return True
-
-    def isInSquad(self, state):
-        return False
-
-    def getFormattedLabel(self):
-        battleTypeName = super(_CompanyItem, self).getFormattedLabel()
-        availabilityStr = self.__getAvailabilityStr()
-        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
-
-    def select(self):
-        battle = self.eventsCache.getCompanyBattles()
-        if battle.isRunning():
-            if battle.needToChangePeriphery():
-                g_eventDispatcher.showSwitchPeripheryWindow(ctx=SwitchPeripheryCompanyCtx())
-            else:
-                super(_CompanyItem, self).select()
-
-    def _update(self, state):
-        self._isSelected = state.isInLegacy(PREBATTLE_TYPE.COMPANY)
-        battle = self.eventsCache.getCompanyBattles()
-        self._isDisabled = not (battle.isRunning() and battle.isValid())
-
-    @staticmethod
-    def _getDateTimeString(timeValue):
-        return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(timeValue), BigWorld.wg_getShortTimeFormat(timeValue))
-
-    def __getAvailabilityStr(self):
-        battle = self.eventsCache.getCompanyBattles()
-        if not battle.isValid():
-            return
-        else:
-            startTimeLeft = battle.getCreationTimeLeft()
-            finishTimeLeft = battle.getDestroyingTimeLeft()
-            if startTimeLeft is not None and startTimeLeft > 0:
-                if startTimeLeft < time_utils.ONE_DAY:
-                    return text_styles.alert(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLESINCESOON, time=text_styles.stats(time_formatters.getTimeDurationStr(startTimeLeft, True))))
-                else:
-                    return text_styles.stats(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLESINCE, datetime=self._getDateTimeString(battle.startTime)))
-            elif finishTimeLeft is not None and finishTimeLeft > 0:
-                if finishTimeLeft < time_utils.ONE_DAY:
-                    return text_styles.success(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLEUNTILSOON, time=text_styles.stats(time_formatters.getTimeDurationStr(finishTimeLeft, True))))
-                else:
-                    return text_styles.success(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_AVAILABLEUNTIL, datetime=self._getDateTimeString(battle.finishTime)))
-            return
-
-
-class _FortItem(_SelectorItem):
-
-    def isRandomBattle(self):
-        return True
-
-    def isInSquad(self, state):
-        return False
-
-    def _update(self, state):
-        self._isSelected = state.isInUnit(PREBATTLE_TYPE.SORTIE) or state.isInUnit(PREBATTLE_TYPE.FORT_BATTLE) or state.isInUnit(PREBATTLE_TYPE.FORT_COMMON)
-        if g_lobbyContext.getServerSettings().isFortsEnabled() or self._isSelected:
-            self._isDisabled = not isSortieEnabled() or state.hasLockedState
-        else:
-            self._isDisabled = True
-
-
 class _StrongholdsItem(_SelectorItem):
 
     def isRandomBattle(self):
@@ -315,14 +245,14 @@ class _SandboxItem(_SelectorItem):
     def _update(self, state):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(queueType=QUEUE_TYPE.SANDBOX)
-        self._isVisible = g_lobbyContext.getServerSettings().isSandboxEnabled()
+        self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
 
 
 class _BattleSelectorItems(object):
 
     def __init__(self, items):
         super(_BattleSelectorItems, self).__init__()
-        self.__items = dict(map(lambda item: (item._data, item), items))
+        self.__items = {item._data:item for item in items}
         self.__isDemonstrator = False
         self.__isDemoButtonEnabled = False
 
@@ -402,28 +332,84 @@ class _EventSquadItem(_SelectorItem):
         return vo
 
 
+class _RankedItem(_SelectorItem):
+    rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, label, data, order, selectorType=None, isVisible=True):
+        super(_RankedItem, self).__init__(label, data, order, selectorType, isVisible)
+        self.__ladderURL = getRankedBattlesUrl()
+        self.__hasPastSeason = False
+
+    def isRandomBattle(self):
+        return True
+
+    def getVO(self):
+        vo = super(_RankedItem, self).getVO()
+        if self.rankedController.isAvailable():
+            vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_FALLOUTSELECTORRENDERERBGEVENT
+        return vo
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_RankedItem, self).getFormattedLabel()
+        availabilityStr = self.__getAvailabilityStr()
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+
+    def select(self):
+        if self.rankedController.isAvailable():
+            super(_RankedItem, self).select()
+        elif self.__hasPastSeason:
+            self.rankedController.openWebLeaguePage()
+        selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        self._isSelected = state.isInPreQueue(QUEUE_TYPE.RANKED)
+        self.__hasPastSeason = self.rankedController.getPreviousSeason() is not None and self.__ladderURL is not None
+        self._isDisabled = state.hasLockedState or not self.rankedController.isAvailable() and not self.__hasPastSeason
+        self._isVisible = self.rankedController.isEnabled()
+        return
+
+    def __getAvailabilityStr(self):
+        if self._isVisible and self.rankedController.hasAnySeason():
+            if self.rankedController.isFrozen():
+                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_FROZEN))
+            currentSeason = self.rankedController.getCurrentSeason()
+            if currentSeason is not None:
+                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON, season=currentSeason.getUserName() or currentSeason.getNumber(), cycle=currentSeason.getCycleOrdinalNumber()))
+            nextSeason = self.rankedController.getNextSeason()
+            if nextSeason is not None:
+                message = MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_UNTIL
+                time = time_utils.getDateTimeFormat(nextSeason.getStartDate())
+                return text_styles.main(i18n.makeString(message, time=time))
+            return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_ENDED))
+        else:
+            return
+
+
 _g_items = None
 _g_squadItems = None
 _DEFAULT_PAN = PREBATTLE_ACTION_NAME.RANDOM
 _DEFAULT_SQUAD_PAN = PREBATTLE_ACTION_NAME.SQUAD
 
-def _createItems():
-    isInRoaming = g_lobbyContext.getServerSettings().roaming.isInRoaming()
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, lobbyContext=ILobbyContext)
+def _createItems(eventsCache=None, lobbyContext=None):
+    settings = lobbyContext.getServerSettings()
+    if lobbyContext is not None:
+        isInRoaming = settings.roaming.isInRoaming()
+    else:
+        isInRoaming = False
     items = []
     _addRandomBattleType(items)
+    _addRankedBattleType(items, settings)
     _addCommandBattleType(items)
     _addStrongholdsBattleType(items, isInRoaming)
     _addTrainingBattleType(items)
     if GUI_SETTINGS.specPrebatlesVisible:
         _addSpecialBattleType(items)
-    _addCompanyBattleType(items)
-    settings = g_lobbyContext.getServerSettings()
-    if settings.isTutorialEnabled():
+    if settings is not None and settings.isTutorialEnabled():
         _addTutorialBattleType(items, isInRoaming)
-    eventsCache = dependency.instance(IEventsCache)
-    if eventsCache.isFalloutEnabled():
+    if eventsCache is not None and eventsCache.isFalloutEnabled():
         _addFalloutBattleType(items)
-    if settings.isSandboxEnabled() and not isInRoaming:
+    if settings is not None and settings.isSandboxEnabled() and not isInRoaming:
         _addSandboxType(items)
     return _BattleSelectorItems(items)
 
@@ -439,12 +425,14 @@ def _addRandomBattleType(items):
     items.append(_RandomQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_STANDART, PREBATTLE_ACTION_NAME.RANDOM, 0))
 
 
+def _addRankedBattleType(items, settings):
+    visible = settings is not None and settings.rankedBattles.isEnabled
+    items.append(_RankedItem(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED, PREBATTLE_ACTION_NAME.RANKED, 1, SELECTOR_BATTLE_TYPES.RANKED, isVisible=visible))
+    return
+
+
 def _addCommandBattleType(items):
-    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.E_SPORT, 2, SELECTOR_BATTLE_TYPES.UNIT))
-
-
-def _addSortieBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _FortItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_FORT, PREBATTLE_ACTION_NAME.FORT, 4, SELECTOR_BATTLE_TYPES.SORTIE))
+    items.append(_CommandItem(MENU.HEADERBUTTONS_BATTLE_TYPES_UNIT, PREBATTLE_ACTION_NAME.E_SPORT, 3, SELECTOR_BATTLE_TYPES.UNIT))
 
 
 def _addStrongholdsBattleType(items, isInRoaming):
@@ -452,23 +440,19 @@ def _addStrongholdsBattleType(items, isInRoaming):
 
 
 def _addTrainingBattleType(items):
-    items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAININGS_LIST, 6))
+    items.append(_TrainingItem(MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, PREBATTLE_ACTION_NAME.TRAININGS_LIST, 7))
 
 
 def _addSpecialBattleType(items):
-    items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 5))
-
-
-def _addCompanyBattleType(items):
-    items.append(_CompanyItem(MENU.HEADERBUTTONS_BATTLE_TYPES_COMPANY, PREBATTLE_ACTION_NAME.COMPANIES_LIST, 3))
+    items.append(_SpecBattleItem(MENU.HEADERBUTTONS_BATTLE_TYPES_SPEC, PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST, 6))
 
 
 def _addTutorialBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 7))
+    items.append((_DisabledSelectorItem if isInRoaming else _BattleTutorialItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETUTORIAL, PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL, 8))
 
 
 def _addFalloutBattleType(items):
-    items.append(_FalloutItem(MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 1))
+    items.append(_FalloutItem(MENU.HEADERBUTTONS_BATTLE_TYPES_FALLOUT, PREBATTLE_ACTION_NAME.FALLOUT, 2))
 
 
 def _addSandboxType(items):

@@ -8,7 +8,7 @@ import BigWorld
 import CommandMapping
 import Settings
 import Event
-from constants import FORT_BUILDING_TYPE as _FBT
+from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -17,9 +17,13 @@ KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
 CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
+CAROUSEL_FILTER_CLIENT_1 = 'CAROUSEL_FILTER_CLIENT_1'
+SELECTOR_FILTER_1 = 'SELECTOR_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
-SEARCH_NAME_VEHICLE = 'searchNameVehicle'
+RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
+RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
+RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -41,22 +45,29 @@ NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
-LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
-SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
+MISSIONS_PAGE = 'missions_page'
+DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
+DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
+SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
+SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
-               'shop_current': (-1, STORE_CONSTANTS.VEHICLE),
+               'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
+               'scroll_to_item': None,
                'shop_vehicle': {'obtainingType': STORE_CONSTANTS.VEHICLE,
-                                'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
+                                'selectedTypes': DEFAULT_VEHICLE_TYPES_FILTER,
+                                'selectedLevels': DEFAULT_LEVELS_FILTERS,
                                 'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
                'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE,
-                                       'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
+                                       'selectedTypes': DEFAULT_VEHICLE_TYPES_FILTER,
+                                       'selectedLevels': DEFAULT_LEVELS_FILTERS},
                'shop_tradeInVehicle': {'obtainingType': STORE_CONSTANTS.TRADE_IN_VEHICLE,
-                                       'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
+                                       'selectedTypes': DEFAULT_VEHICLE_TYPES_FILTER,
+                                       'selectedLevels': DEFAULT_LEVELS_FILTERS},
                'shop_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
                                'vehicleCD': -1,
                                'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME, STORE_CONSTANTS.IN_HANGAR_EXTRA_NAME],
@@ -77,8 +88,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_equipment': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
                                   'vehicleCD': -1,
                                   'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
-               'inventory_current': (-1, STORE_CONSTANTS.VEHICLE),
-               'inventory_vehicle': {'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
+               'inventory_current': (-1, STORE_CONSTANTS.VEHICLE, False),
+               'inventory_vehicle': {'selectedTypes': DEFAULT_VEHICLE_TYPES_FILTER,
+                                     'selectedLevels': DEFAULT_LEVELS_FILTERS,
                                      'extra': [STORE_CONSTANTS.BROCKEN_EXTRA_NAME, STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
                'inventory_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
                                     'vehicleCD': -1,
@@ -100,6 +112,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'inventory_equipment': {'fitsType': STORE_CONSTANTS.CURRENT_VEHICLE_ARTEFACT_FIT,
                                        'vehicleCD': -1,
                                        'extra': [STORE_CONSTANTS.ON_VEHICLE_EXTRA_NAME]},
+               MISSIONS_PAGE: {'hideDone': False,
+                               'hideUnavailable': False},
                CAROUSEL_FILTER_1: {'ussr': False,
                                    'germany': False,
                                    'usa': False,
@@ -109,6 +123,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'japan': False,
                                    'czech': False,
                                    'sweden': False,
+                                   'poland': False,
                                    'lightTank': False,
                                    'mediumTank': False,
                                    'heavyTank': False,
@@ -131,6 +146,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'event': True,
                                    'favorite': False,
                                    'bonus': False},
+               CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               RANKED_CAROUSEL_FILTER_1: {'ussr': False,
+                                          'germany': False,
+                                          'usa': False,
+                                          'china': False,
+                                          'france': False,
+                                          'uk': False,
+                                          'japan': False,
+                                          'czech': False,
+                                          'sweden': False,
+                                          'poland': False,
+                                          'lightTank': False,
+                                          'mediumTank': False,
+                                          'heavyTank': False,
+                                          'SPG': False,
+                                          'AT-SPG': False,
+                                          'level_1': False,
+                                          'level_2': False,
+                                          'level_3': False,
+                                          'level_4': False,
+                                          'level_5': False,
+                                          'level_6': False,
+                                          'level_7': False,
+                                          'level_8': False,
+                                          'level_9': False,
+                                          'level_10': True},
+               RANKED_CAROUSEL_FILTER_2: {'premium': False,
+                                          'elite': False,
+                                          'igr': False,
+                                          'rented': True,
+                                          'event': True,
+                                          'gameMode': False,
+                                          'favorite': False,
+                                          'bonus': False},
+               RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
                                            'germany': False,
                                            'usa': False,
@@ -140,6 +190,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'japan': False,
                                            'czech': False,
                                            'sweden': False,
+                                           'poland': False,
                                            'lightTank': False,
                                            'mediumTank': False,
                                            'heavyTank': False,
@@ -163,14 +214,16 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'gameMode': False,
                                            'favorite': False,
                                            'bonus': False},
-               SEARCH_NAME_VEHICLE: '',
+               SELECTOR_FILTER_1: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
                                  'location': 3,
                                  'nationID': None},
                ORDERS_FILTER: {'isSelected': False},
-               GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False},
+               GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False,
+                                    'isRankedWelcomeViewShowed': False,
+                                    'isRankedWelcomeViewStarted': False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
@@ -204,8 +257,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'victoryAward': -1,
                         'battlesCountAward': -1,
                         'pveBattlesCountAward': -1},
-               LAST_CLUB_OPENED_FOR_APPS: 0,
-               SHOW_INVITE_COMMAND_BTN_ANIMATION: True,
                PROFILE_TECHNIQUE: {'selectedColumn': 4,
                                    'selectedColumnSorting': 'descending',
                                    'isInHangarSelected': False},
@@ -214,35 +265,23 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
-                'fortSettings': {'clanDBID': 0,
-                                 'battleConsumesIntroShown': False,
-                                 'visitedBuildings': {_FBT.MILITARY_BASE,
-                                                      _FBT.FINANCIAL_DEPT,
-                                                      _FBT.TANKODROME,
-                                                      _FBT.TRAINING_DEPT,
-                                                      _FBT.MILITARY_ACADEMY,
-                                                      _FBT.TRANSPORT_DEPT,
-                                                      _FBT.INTENDANT_SERVICE,
-                                                      _FBT.TROPHY_BRIGADE,
-                                                      _FBT.OFFICE,
-                                                      _FBT.MILITARY_SHOP}},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
                 'cursor': False,
-                'arcade': {'mixing': {'alpha': 90,
-                                      'type': 0},
-                           'gunTag': {'alpha': 90,
-                                      'type': 0},
-                           'centralTag': {'alpha': 90,
-                                          'type': 0},
-                           'net': {'alpha': 90,
+                'arcade': {'mixing': {'alpha': 100,
+                                      'type': 3},
+                           'gunTag': {'alpha': 100,
+                                      'type': 9},
+                           'centralTag': {'alpha': 100,
+                                          'type': 8},
+                           'net': {'alpha': 100,
                                    'type': 0},
-                           'reloader': {'alpha': 90,
+                           'reloader': {'alpha': 100,
                                         'type': 0},
-                           'condition': {'alpha': 90,
+                           'condition': {'alpha': 100,
                                          'type': 0},
-                           'cassette': {'alpha': 90,
+                           'cassette': {'alpha': 100,
                                         'type': 0},
                            'reloaderTimer': {'alpha': 100,
                                              'type': 0},
@@ -316,7 +355,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'useServerAim': False,
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
-                'minimapSize': 0,
+                'minimapSize': 1,
                 'minimapRespawnSize': 0,
                 'minimapViewRange': True,
                 'minimapMaxViewRange': True,
@@ -369,11 +408,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
-                NEW_SETTINGS_COUNTER: {'FeedbackSettings0': True,
-                                       'FeedbackSettings1': True,
-                                       'FeedbackSettings2': True,
-                                       'GameSettings': True},
-                TRAJECTORY_VIEW_HINT_COUNTER: 10}}
+                NEW_SETTINGS_COUNTER: {'FeedbackSettings': {'feedbackDamageLog': {'damageLogAssistStun': True},
+                                                            'feedbackBattleEvents': {'battleEventsEnemyAssistStun': True}}},
+                TRAJECTORY_VIEW_HINT_COUNTER: 10,
+                SHOW_OPT_DEVICE_HINT: True,
+                SHOW_CRYSTAL_HEADER_BAND: True}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -391,7 +430,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 28
+    version = 32
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -707,6 +746,12 @@ class AccountSettings(object):
                                 settingsSection.write('players_panel', _pack(panelSettings))
 
             if currVersion < 28:
+                for key, section in _filterAccountSection(ads):
+                    filters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    filters.deleteSection('lastClubOpenedForApps')
+                    filters.deleteSection('showInviteCommandBtnAnimation')
+
+            if currVersion < 29:
                 getSection = AccountSettings.__readSection
                 cmSection = getSection(Settings.g_instance.userPrefs, Settings.KEY_COMMAND_MAPPING)
                 cmdItems = cmSection.items()[:]
@@ -724,6 +769,27 @@ class AccountSettings(object):
                         keyForCmdVoice = 'KEY_H' if isKeyHDefault else 'KEY_NONE'
                         getSection(cmSection, 'CMD_VOICECHAT_ENABLE').writeString('fireKey', keyForCmdVoice)
                     CommandMapping.g_instance.restoreUserConfig()
+            if currVersion < 29:
+                for key, section in _filterAccountSection(ads):
+                    filtersSection = AccountSettings.__readSection(section, KEY_FILTERS)
+                    if 'searchNameVehicle' in filtersSection.keys():
+                        searchName = _unpack(filtersSection['searchNameVehicle'].asString)
+                        filtersSection.write(CAROUSEL_FILTER_CLIENT_1, _pack({'searchNameVehicle': searchName}))
+                        filtersSection.deleteSection('searchNameVehicle')
+
+            if currVersion < 30:
+                for key, section in _filterAccountSection(ads):
+                    accFilters = AccountSettings.__readSection(section, KEY_FILTERS)
+                    for filterName, filterPickle in accFilters.items():
+                        if filterName in ('shop_vehicle', 'inventory_vehicle', 'shop_current', 'inventory_current', 'shop_tradeInVehicle', 'shop_restoreVehicle'):
+                            defaults = DEFAULT_VALUES[KEY_FILTERS][filterName]
+                            accFilters.write(filterName, base64.b64encode(pickle.dumps(defaults)))
+
+            if currVersion < 32:
+                for _, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    accSettings.deleteSection(NEW_SETTINGS_COUNTER)
+
             ads.writeInt('version', AccountSettings.version)
         return
 

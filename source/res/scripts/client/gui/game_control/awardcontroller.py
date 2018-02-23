@@ -6,7 +6,6 @@ from abc import ABCMeta, abstractmethod
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import potapov_quests
-from FortifiedRegionBase import FORT_ATTACK_RESULT
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
@@ -18,15 +17,15 @@ from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
-from gui.goodies import g_goodiesCache
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.prb_control.storages import prequeue_storage_getter
+from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events
-from gui.shared import g_itemsCache, EVENT_BUS_SCOPE, g_eventBus, events
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -40,8 +39,11 @@ from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
 from potapov_quests import PQ_BRANCH
-from skeletons.gui.game_control import IRefSystemController, IAwardController
+from shared_utils import findFirst
+from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
+from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -53,7 +55,6 @@ class AwardController(IAwardController, IGlobalListener):
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
          RefSystemQuestsWindowHandler(self),
-         FortResultsWindowHandler(self),
          PotapovQuestsBonusHandler(self),
          PotapovWindowAfterBattleHandler(self),
          TokenQuestsWindowHandler(self),
@@ -66,7 +67,8 @@ class AwardController(IAwardController, IGlobalListener):
          PotapovQuestsAutoWindowHandler(self),
          GoldFishHandler(self),
          FalloutVehiclesBuyHandler(self),
-         TelecomHandler(self)]
+         TelecomHandler(self),
+         RankedQuestsHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -128,6 +130,7 @@ class AwardController(IAwardController, IGlobalListener):
 
 class AwardHandler(object):
     __metaclass__ = ABCMeta
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, awardCtrl):
         self._awardCtrl = weakref.proxy(awardCtrl)
@@ -225,19 +228,6 @@ class RefSystemQuestsWindowHandler(ServiceChannelHandler):
                 self._awardCtrl.refSystem.showVehicleAwardWindow(Vehicle(typeCompDescr=abs(vehTypeCompDescr)), completedQuestIDs)
 
         self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
-
-
-class FortResultsWindowHandler(ServiceChannelHandler):
-
-    def __init__(self, awardCtrl):
-        super(FortResultsWindowHandler, self).__init__(SYS_MESSAGE_TYPE.fortBattleEnd.index(), awardCtrl)
-
-    def _showAward(self, ctx):
-        battleResult = ctx[1].data
-        if battleResult and battleResult['isWinner'] == 0:
-            if battleResult['attackResult'] == FORT_ATTACK_RESULT.TECHNICAL_DRAW:
-                battleResult['isWinner'] = -1
-        g_eventBus.handleEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_BATTLE_RESULTS_WINDOW_ALIAS, ctx={'data': battleResult}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class PotapovQuestsBonusHandler(ServiceChannelHandler):
@@ -354,6 +344,7 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, awardCtrl):
         super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
@@ -362,7 +353,7 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
         data = ctx[1].data
         goodies = data.get('goodies', {})
         for boosterID in goodies:
-            booster = g_goodiesCache.getBooster(boosterID)
+            booster = self.goodiesCache.getBooster(boosterID)
             if booster is not None and booster.enabled:
                 shared_events.showBoosterAward(booster)
 
@@ -370,6 +361,7 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
+    goodiesCache = dependency.descriptor(IGoodiesCache)
 
     def __init__(self, awardCtrl):
         super(BoosterAfterBattleAwardHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
@@ -377,7 +369,7 @@ class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         goodies = ctx[1].data.get('goodies', {})
         for boosterID in goodies:
-            booster = g_goodiesCache.getBooster(boosterID)
+            booster = self.goodiesCache.getBooster(boosterID)
             if booster is not None and booster.enabled:
                 shared_events.showBoosterAward(booster)
 
@@ -422,7 +414,10 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
         
         :param quest: instance of event_items.Quest (or derived)
         """
-        return quest.getType() in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.PERSONAL_QUEST)
+        return quest.getType() in (EVENT_TYPE.BATTLE_QUEST,
+         EVENT_TYPE.TOKEN_QUEST,
+         EVENT_TYPE.PERSONAL_QUEST,
+         EVENT_TYPE.RANKED_QUEST)
 
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
@@ -505,6 +500,7 @@ class RefSysStatusWindowHandler(ServiceChannelHandler):
 
 
 class SpecialAchievement(AwardHandler):
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, key, awardCtrl, awardCountToMessage):
         super(SpecialAchievement, self).__init__(awardCtrl)
@@ -521,7 +517,7 @@ class SpecialAchievement(AwardHandler):
         raise NotImplementedError
 
     def _needToShowAward(self, ctx=None):
-        return self._awardCtrl.canShow() is False or self._getAchievementToShow() is not None
+        return (not self._awardCtrl.canShow() or self._getAchievementToShow() is not None) and not self.bootcampController.isInBootcamp()
 
     def _getAchievementToShow(self):
         achievementCount = self.getAchievementCount()
@@ -567,7 +563,7 @@ class VehiclesResearchHandler(SpecialAchievement):
         g_clientUpdateManager.removeObjectCallbacks(self)
 
     def getAchievementCount(self):
-        return len(g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR))
+        return len(self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.LEVELS([1]) | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR))
 
     def onUnlocksChanged(self, unlocks):
         isChanged = False
@@ -589,10 +585,10 @@ class FalloutVehiclesBuyHandler(AwardHandler):
         hasVehicleLvl8 = False
         hasVehicleLvl10 = False
         if not self.falloutStorage.hasVehicleLvl8():
-            if g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))):
+            if self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))):
                 hasVehicleLvl8 = True
         if not self.falloutStorage.hasVehicleLvl10():
-            if g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
+            if self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
                 hasVehicleLvl10 = True
         if hasVehicleLvl8 or hasVehicleLvl10:
             self.falloutStorage.setHasVehicleLvls(hasVehicleLvl8, hasVehicleLvl10)
@@ -614,12 +610,12 @@ class FalloutVehiclesBuyHandler(AwardHandler):
     def _showAward(self, ctx=None):
         if self._shouldBeShown():
             if not self.falloutStorage.hasVehicleLvl8():
-                for vehicle in g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))).itervalues():
+                for vehicle in self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))).itervalues():
                     self.falloutStorage.setHasVehicleLvl8()
                     shared_events.showFalloutAward((vehicle.level,))
                     break
 
-            if not self.falloutStorage.hasVehicleLvl10() and g_itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
+            if not self.falloutStorage.hasVehicleLvl10() and self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
                 self.falloutStorage.setHasVehicleLvl10()
                 shared_events.showFalloutAward((10,), True)
 
@@ -651,7 +647,7 @@ class VictoryHandler(SpecialAchievement):
         g_playerEvents.onBattleResultsReceived -= self.handle
 
     def getAchievementCount(self):
-        return g_itemsCache.items.getAccountDossier().getTotalStats().getWinsCount()
+        return self.itemsCache.items.getAccountDossier().getTotalStats().getWinsCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showVictoryAward(achievementCount, messageNumber)
@@ -682,7 +678,7 @@ class BattlesCountHandler(SpecialAchievement):
         g_playerEvents.onBattleResultsReceived -= self.handle
 
     def getAchievementCount(self):
-        return g_itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+        return self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showBattleAward(achievementCount, messageNumber)
@@ -697,7 +693,7 @@ class PveBattlesCountHandler(BattlesCountHandler):
         super(PveBattlesCountHandler, self).__init__(awardCtrl, 'pveBattlesCountAward')
 
     def getAchievementCount(self):
-        return g_itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
+        return self.itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showPveBattleAward(achievementCount, messageNumber)
@@ -744,3 +740,82 @@ class TelecomHandler(ServiceChannelHandler):
             shared_events.showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood)
         else:
             LOG_ERROR("Can't show telecom award window!")
+
+
+class MultiTypeServiceChannelHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl, handledTypes):
+        super(MultiTypeServiceChannelHandler, self).__init__(None, awardCtrl)
+        self.__types = handledTypes
+        return
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__types and message.data is not None
+
+    def _showAward(self, ctx):
+        pass
+
+
+class RankedQuestsHandler(MultiTypeServiceChannelHandler):
+    rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, awardCtrl):
+        super(RankedQuestsHandler, self).__init__(awardCtrl, (SYS_MESSAGE_TYPE.rankedQuests.index(), SYS_MESSAGE_TYPE.tokenQuests.index()))
+        self.__pending = []
+        self.__locked = False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        data = message.data.copy()
+        for questID in filter(ranked_helpers.isRankedQuestID, data.pop('completedQuestIDs', [])):
+            if message.type == SYS_MESSAGE_TYPE.rankedQuests.index():
+                quest = self.eventsCache.getRankedQuests().get(questID)
+                if quest:
+                    if quest.isProcessedAtCycleEnd():
+                        self.__processOrHold(self.__showCycleAward, (quest, data))
+                    elif quest.isBooby():
+                        self.__processOrHold(self.__showBoobyAwardWindow, (quest,))
+            if message.type == SYS_MESSAGE_TYPE.tokenQuests.index():
+                quest = self.eventsCache.getHiddenQuests().get(questID)
+                if quest:
+                    self.__processOrHold(self.__showSeasonAward, (quest, data))
+
+    def __processOrHold(self, method, args):
+        if self.__locked:
+            self.__pending.append((method, args))
+        else:
+            self.__locked = True
+            method(*args)
+
+    def __unlock(self):
+        self.__locked = False
+        if self.__pending:
+            self.__processOrHold(*self.__pending.pop(0))
+
+    def __showCycleAward(self, quest, data):
+        season = self.rankedController.getSeason(quest.getSeasonID())
+        if season is not None:
+            g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, ctx={'quest': quest,
+             'awards': data,
+             'closeClb': self.__unlock,
+             'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            self.__unlock()
+        return
+
+    def __showSeasonAward(self, quest, data):
+        seasonID, _, _ = ranked_helpers.getRankedDataFromTokenQuestID(quest.getID())
+        season = self.rankedController.getSeason(seasonID)
+        if season is not None:
+            g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,
+             'awards': data,
+             'closeClb': self.__unlock,
+             'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            self.__unlock()
+        return
+
+    def __showBoobyAwardWindow(self, quest):
+        quests_events.showRankedBoobyAward(quest)
+        self.__unlock()

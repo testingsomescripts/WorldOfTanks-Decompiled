@@ -5,15 +5,15 @@ from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE, QUEUE_TYPE
 from constants import QUEUE_TYPE_NAMES
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.locale.INVITES import INVITES as I18N_INVITES
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prb_control.formatters import getBattleSessionStartTimeString
 from gui.prb_control import prbDispatcherProperty, prbAutoInvitesProperty, prbInvitesProperty
 from gui.prb_control.settings import PRB_INVITE_STATE
-from gui.shared.fortifications import formatters as fort_fmt
+from helpers import dependency
 from helpers import i18n, html
 from messenger.ext import passCensor
+from skeletons.gui.lobby_context import ILobbyContext
 
 def getPrbName(prbType, lowercase=False):
     try:
@@ -49,14 +49,18 @@ def getPrbInviteStateName(state):
     return stateName
 
 
-def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlreadyJoined=False):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlreadyJoined=False, lobbyContext=None):
     key, kwargs = None, {}
-    isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
+    if lobbyContext is not None:
+        isAnotherPeriphery = lobbyContext.isAnotherPeriphery(peripheryID)
+    else:
+        isAnotherPeriphery = False
     if isInviteActive:
         if isAlreadyJoined:
             key = I18N_INVITES.invites_prebattle_alreadyjoined(getPrbName(prbType))
         elif isAnotherPeriphery:
-            host = g_lobbyContext.getPeripheryName(peripheryID)
+            host = lobbyContext.getPeripheryName(peripheryID)
             if host:
                 key = I18N_INVITES.invites_prebattle_acceptnotallowed('otherPeriphery')
                 kwargs = {'host': host}
@@ -69,9 +73,13 @@ def getAcceptNotAllowedText(prbType, peripheryID, isInviteActive=True, isAlready
     return text
 
 
-def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=None):
     key, kwargs = None, {}
-    isAnotherPeriphery = g_lobbyContext.isAnotherPeriphery(peripheryID)
+    if lobbyContext is not None:
+        isAnotherPeriphery = lobbyContext.isAnotherPeriphery(peripheryID)
+    else:
+        isAnotherPeriphery = False
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
             entityName = getPrbName(funcState.entityTypeID)
@@ -85,12 +93,12 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID):
                 return ''
         if isAnotherPeriphery:
             key = I18N_INVITES.invites_note_change_and_leave(entityName)
-            kwargs = {'host': g_lobbyContext.getPeripheryName(peripheryID) or ''}
+            kwargs = {'host': lobbyContext.getPeripheryName(peripheryID) or ''}
         else:
             key = I18N_INVITES.invites_note_leave(entityName)
     elif isAnotherPeriphery:
         key = I18N_INVITES.INVITES_NOTE_SERVER_CHANGE
-        kwargs = {'host': g_lobbyContext.getPeripheryName(peripheryID) or ''}
+        kwargs = {'host': lobbyContext.getPeripheryName(peripheryID) or ''}
     if key:
         text = i18n.makeString(key, **kwargs)
     else:
@@ -179,24 +187,6 @@ class PrbExternalBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
         return '' if not comment else makeHtmlString('html_templates:lobby/prebattle', 'inviteComment', {'comment': html.escape(comment)})
 
 
-class PrbFortBattleInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
-
-    def getTitle(self, invite):
-        extraData = invite.getExtraData()
-        regularInviteTitle = super(PrbFortBattleInviteHtmlTextFormatter, self).getTitle(invite)
-        if 'enemyClanAbbrev' in extraData:
-            enemyClanAbbrev = '[%s]' % extraData['enemyClanAbbrev']
-        else:
-            enemyClanAbbrev = ''
-        return makeHtmlString('html_templates:lobby/prebattle', 'inviteFortTitle', ctx={'inviteRegularTitle': regularInviteTitle,
-         'dir': fort_fmt.getDirectionString(extraData['direction']),
-         'clanAbbrev': enemyClanAbbrev,
-         'time': fort_fmt.getDefencePeriodString(extraData['attackTime'])}, sourceKey='defence' if extraData.get('isDefence') else 'offence')
-
-    def getIconName(self, invite):
-        return 'fortBattleDefenceInviteIcon' if invite.getExtraData('isDefence') else 'fortBattleOffenceInviteIcon'
-
-
 class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
     def getTitle(self, invite):
@@ -215,8 +205,6 @@ class FalloutInviteHtmlTextFormatter(PrbInviteHtmlTextFormatter):
 
 
 def getPrbInviteHtmlFormatter(invite):
-    if invite.type == PREBATTLE_TYPE.FORT_BATTLE:
-        return PrbFortBattleInviteHtmlTextFormatter()
     if invite.type == PREBATTLE_TYPE.EXTERNAL:
         return PrbExternalBattleInviteHtmlTextFormatter()
     return FalloutInviteHtmlTextFormatter() if invite.type == PREBATTLE_TYPE.FALLOUT else PrbInviteHtmlTextFormatter()

@@ -9,14 +9,15 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.FreeXPInfoDialogMeta import FreeXPInfoMeta
 from gui.SystemMessages import SM_TYPE
-from gui.shared import g_itemsCache
 from helpers import dependency
 from helpers.aop import Aspect, Pointcut, Weaver
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWalletController
+from skeletons.gui.shared import IItemsCache
 
 class WalletController(IWalletController):
+    itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
 
     class STATUS(CONST_CONTAINER):
@@ -49,7 +50,11 @@ class WalletController(IWalletController):
         self.__useFreeXP = bool(wallet[1])
         if self.__useFreeXP:
             self.__checkFreeXPConditions()
-        self.__processStatus(self.STATUS.AVAILABLE if g_itemsCache.items.stats.mayConsumeWalletResources else self.STATUS.SYNCING, True)
+        if self.itemsCache.items.stats.mayConsumeWalletResources:
+            status = self.STATUS.AVAILABLE
+        else:
+            status = self.STATUS.SYNCING
+        self.__processStatus(status, True)
 
     def onAvatarBecomePlayer(self):
         self.__clearWeaver()
@@ -65,7 +70,8 @@ class WalletController(IWalletController):
     def componentsStatuses(self):
         return {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
          'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE,
-         'credits': self.__currentStatus if constants.IS_SINGAPORE else self.STATUS.AVAILABLE}
+         'credits': self.__currentStatus if constants.IS_SINGAPORE else self.STATUS.AVAILABLE,
+         'crystal': self.STATUS.AVAILABLE}
 
     @property
     def isSyncing(self):

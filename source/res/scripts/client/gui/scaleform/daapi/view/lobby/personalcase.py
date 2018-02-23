@@ -13,8 +13,8 @@ from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.shared import EVENT_BUS_SCOPE, events, g_itemsCache
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -24,13 +24,17 @@ from gui.shared.gui_items.serializers import packTankman, packVehicle
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils import decorators, isVehicleObserver, roundByModulo
-from gui.shared.utils.functions import getViewName
+from gui.shared.utils import decorators, roundByModulo
+from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
+from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
+from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
@@ -57,9 +61,9 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         isVehicleChanged = 'unlocks' in stats or isVehsLockExist or GUI_ITEM_TYPE.VEHICLE in inventory
         isFreeXpChanged = 'freeXP' in stats
         if isVehicleChanged:
-            tankman = g_itemsCache.items.getTankman(self.tmanInvID)
+            tankman = self.itemsCache.items.getTankman(self.tmanInvID)
             if tankman.isInTank:
-                vehicle = g_itemsCache.items.getVehicle(tankman.vehicleInvID)
+                vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
                 if vehicle.isLocked:
                     return self.destroy()
                 vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
@@ -119,7 +123,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('updating')
     def dismissTankman(self, tmanInvID):
-        tankman = g_itemsCache.items.getTankman(int(tmanInvID))
+        tankman = self.itemsCache.items.getTankman(int(tmanInvID))
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
         if len(result.userMsg):
@@ -127,8 +131,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('retraining')
     def retrainingTankman(self, inventoryID, innationID, tankmanCostTypeIdx):
-        tankman = g_itemsCache.items.getTankman(int(inventoryID))
-        vehicleToRecpec = g_itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, tankman.nationID, int(innationID))
+        tankman = self.itemsCache.items.getTankman(int(inventoryID))
+        vehicleToRecpec = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, tankman.nationID, int(innationID))
         proc = TankmanRetraining(tankman, vehicleToRecpec, tankmanCostTypeIdx)
         result = yield proc.request()
         if len(result.userMsg):
@@ -136,8 +140,8 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('unloading')
     def unloadTankman(self, tmanInvID, currentVehicleID):
-        tankman = g_itemsCache.items.getTankman(int(tmanInvID))
-        tmanVehicle = g_itemsCache.items.getVehicle(int(tankman.vehicleInvID))
+        tankman = self.itemsCache.items.getTankman(int(tmanInvID))
+        tmanVehicle = self.itemsCache.items.getVehicle(int(tankman.vehicleInvID))
         if tmanVehicle is None:
             LOG_ERROR("Target tankman's vehicle is not found in inventory", tankman, tankman.vehicleInvID)
             return
@@ -157,14 +161,14 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         firstNameID = checkFlashInt(firstNameID)
         lastNameID = checkFlashInt(lastNameID)
         iconID = checkFlashInt(iconID)
-        tankman = g_itemsCache.items.getTankman(int(invengoryID))
+        tankman = self.itemsCache.items.getTankman(int(invengoryID))
         result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('studying')
     def addTankmanSkill(self, invengoryID, skillName):
-        tankman = g_itemsCache.items.getTankman(int(invengoryID))
+        tankman = self.itemsCache.items.getTankman(int(invengoryID))
         processor = TankmanAddSkill(tankman, skillName)
         result = yield processor.request()
         if len(result.userMsg):
@@ -179,14 +183,14 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
     def _populate(self):
         super(PersonalCase, self)._populate()
         g_clientUpdateManager.addCallbacks({'': self.onClientChanged})
-        g_itemsCache.onSyncCompleted += self._refreshData
+        self.itemsCache.onSyncCompleted += self._refreshData
         self.startGlobalListening()
         self.setupContextHints(TUTORIAL.PERSONAL_CASE)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         self.stopGlobalListening()
-        g_itemsCache.onSyncCompleted -= self._refreshData
+        self.itemsCache.onSyncCompleted -= self._refreshData
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__updatePrbState, scope=EVENT_BUS_SCOPE.LOBBY)
         super(PersonalCase, self)._dispose()
@@ -222,7 +226,17 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             self.destroy()
 
 
+STATS_TAB_INDEX = 0
+TRAINING_TAB_INDEX = 1
+SKILLS_TAB_INDEX = 2
+DOCS_TAB_INDEX = 3
+PERSONAL_CASE_STATS = 'crewTankmanStats'
+PERSONAL_CASE_RETRAINING = 'CrewTankmanRetraining'
+PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
+PERSONAL_CASE_DOCS = 'PersonalCaseDocs'
+
 class PersonalCaseDataProvider(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tmanInvID):
         """
@@ -232,7 +246,7 @@ class PersonalCaseDataProvider(object):
 
     @async
     def getCommonData(self, callback):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         rate = items.shop.freeXPToTManXPRate
         if rate:
@@ -245,6 +259,13 @@ class PersonalCaseDataProvider(object):
         if tankman.isInTank:
             currentVehicle = items.getItemByCD(tankman.vehicleDescr.type.compactDescr)
         isLocked, reason = self.__getTankmanLockMessage(currentVehicle)
+        td = tankman.descriptor
+        changeRoleEnabled = tankmen.tankmenGroupCanChangeRole(td.nationID, td.gid, td.isPremium)
+        if changeRoleEnabled:
+            tooltipChangeRole = ''
+        else:
+            tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGEFORBID_HEADER, TOOLTIPS.CREW_ROLECHANGEFORBID_TEXT)
+        showDocumentTab = not td.getRestrictions().isPassportReplacementForbidden()
         bonuses = tankman.realRoleLevel[1]
         modifiers = []
         if bonuses[0]:
@@ -265,8 +286,29 @@ class PersonalCaseDataProvider(object):
          'isOpsLocked': isLocked or g_currentVehicle.isLocked(),
          'lockMessage': reason,
          'modifiers': modifiers,
-         'enoughFreeXPForTeaching': enoughFreeXPForTeaching})
+         'enoughFreeXPForTeaching': enoughFreeXPForTeaching,
+         'tabsData': self.getTabsButtons(showDocumentTab),
+         'tooltipDismiss': TOOLTIPS.BARRACKS_TANKMEN_DISMISS,
+         'tooltipUnload': TOOLTIPS.BARRACKS_TANKMEN_UNLOAD,
+         'dismissEnabled': True,
+         'unloadEnabled': True,
+         'changeRoleEnabled': changeRoleEnabled,
+         'tooltipChangeRole': tooltipChangeRole})
         return
+
+    def getTabsButtons(self, showDocumentTab):
+        tabs = [{'index': STATS_TAB_INDEX,
+          'info': MENU.TANKMANPERSONALCASE_TABBATTLEINFO,
+          'linkage': PERSONAL_CASE_STATS}, {'index': TRAINING_TAB_INDEX,
+          'info': MENU.TANKMANPERSONALCASE_TABTRAINING,
+          'linkage': PERSONAL_CASE_RETRAINING}, {'index': SKILLS_TAB_INDEX,
+          'info': MENU.TANKMANPERSONALCASE_TABSKILLS,
+          'linkage': PERSONAL_CASE_SKILLS}]
+        if showDocumentTab:
+            tabs.append({'index': DOCS_TAB_INDEX,
+             'info': MENU.TANKMANPERSONALCASE_TABDOCS,
+             'linkage': PERSONAL_CASE_DOCS})
+        return tabs
 
     @async
     def getDossierData(self, callback):
@@ -274,7 +316,7 @@ class PersonalCaseDataProvider(object):
         Returns dict of dossier data: information stats blocks and
         achievements list.
         """
-        tmanDossier = g_itemsCache.items.getTankmanDossier(self.tmanInvID)
+        tmanDossier = self.itemsCache.items.getTankmanDossier(self.tmanInvID)
         if tmanDossier is None:
             callback(None)
             return
@@ -288,7 +330,7 @@ class PersonalCaseDataProvider(object):
                     packedAchieves[sectionIdx].append(self.__packAchievement(achievement, pickledDossierCompDescr))
 
             callback({'achievements': packedAchieves,
-             'stats': tmanDossier.getStats(g_itemsCache.items.getTankman(self.tmanInvID)),
+             'stats': tmanDossier.getStats(self.itemsCache.items.getTankman(self.tmanInvID)),
              'firstMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_FIRSTINFO),
              'secondMsg': self.__makeStandardText(MENU.CONTEXTMENU_PERSONALCASE_STATS_SECONDINFO)})
             return
@@ -298,7 +340,7 @@ class PersonalCaseDataProvider(object):
 
     @async
     def getRetrainingData(self, callback):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
         criteria = REQ_CRITERIA.NATIONS([tankman.nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
@@ -329,12 +371,12 @@ class PersonalCaseDataProvider(object):
 
     @async
     def getSkillsData(self, callback):
-        tankman = g_itemsCache.items.getTankman(self.tmanInvID)
+        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         callback(tankman.getSkillsToLearn())
 
     @async
     def getDocumentsData(self, callback):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         config = tankmen.getNationConfig(tankman.nationID)
         if tankman.descriptor.isFemale:

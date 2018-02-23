@@ -4,19 +4,16 @@ import AccountCommands
 import cPickle
 import zlib
 import items
-import nations
-import constants
-import BigWorld
-from functools import partial
 from math import ceil
 from itertools import izip
+from debug_utils import LOG_DEBUG, LOG_ERROR
 from items import vehicles, tankmen
 from AccountCommands import BUY_VEHICLE_FLAG
 from account_shared import AmmoIterator
+from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from persistent_caches import SimpleCache
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
-from debug_utils import *
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -122,6 +119,10 @@ class Shop(object):
             sellPrice = (int(ceil(sellPriceFactor * buyPrice[0])), int(ceil(sellPriceFactor * buyPrice[1])))
         else:
             sellPrice = (int(ceil(sellPriceFactor * (buyPrice[0] + buyPrice[1] * exchangeRate))), 0)
+        crystalPrice = buyPrice.get('crystal')
+        if crystalPrice:
+            crystalExchangeRate = self.__cache['crystalExchangeRate']
+            sellPrice = (sellPrice[0] + int(ceil(sellPriceFactor * crystalExchangeRate * crystalPrice)), sellPrice[1])
         return sellPrice
 
     def getPrice(self, typeCompDescr, callback):
@@ -167,19 +168,13 @@ class Shop(object):
         self.__getValue('slotsPrices', callback)
 
     def getNextSlotPrice(self, slots, slotsPrices):
-        addSlotNumber = slots - slotsPrices[0]
-        if addSlotNumber < 0:
-            return 0
-        return slotsPrices[1][addSlotNumber] if addSlotNumber < len(slotsPrices[1]) else slotsPrices[1][-1]
+        return getNextSlotPrice(slots, slotsPrices)
 
     def getBerthsPrices(self, callback):
         self.__getValue('berthsPrices', callback)
 
     def getNextBerthPackPrice(self, berths, berthsPrices):
-        addPackNumber = (berths - berthsPrices[0]) / berthsPrices[1]
-        if addPackNumber < 0:
-            return 0
-        return berthsPrices[2][addPackNumber] if addPackNumber < len(berthsPrices[2]) else berthsPrices[2][-1]
+        return getNextBerthPackPrice(berths, berthsPrices)
 
     def getExchangeRate(self, callback):
         self.__getValue('exchangeRate', callback)

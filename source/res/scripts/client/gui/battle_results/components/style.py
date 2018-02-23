@@ -5,6 +5,8 @@ import BigWorld
 from constants import IGR_TYPE
 from gui import makeHtmlString
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform import settings
 from gui.battle_results.components import base
 from gui.shared.formatters import text_styles
 from helpers import i18n
@@ -40,6 +42,11 @@ def markValueAsError(value):
 
 def markValueAsEmpty(value):
     return makeHtmlString('html_templates:lobby/battle_results', 'empty_stat_value', {'value': value})
+
+
+def makeMarksOfMasteryText(marksOfMastery, totalVehicles):
+    return makeHtmlString('html_templates:lobby/profileStatistics', 'marksOfMasteryText', {'marksOfMastery': marksOfMastery,
+     'totalVehicles': totalVehicles})
 
 
 def getIntegralFormatIfNoEmpty(value):
@@ -175,17 +182,6 @@ def makeFreeXpLabel(value, canBeFaded=False):
     return makeHtmlString('html_templates:lobby/battle_results', template, {'value': BigWorld.wg_getIntegralFormat(int(value))})
 
 
-def makeResourceLabel(value, canBeFaded=False):
-    formatted = BigWorld.wg_getIntegralFormat(int(value))
-    if formatted < 0:
-        formatted = markValueAsError(formatted)
-    if canBeFaded and not value:
-        template = 'resource_small_inactive_label'
-    else:
-        template = 'resource_small_label'
-    return makeHtmlString('html_templates:lobby/battle_results', template, {'value': formatted})
-
-
 def makePercentLabel(value):
     formatted = BigWorld.wg_getGoldFormat(int(value))
     template = 'percent'
@@ -235,12 +231,31 @@ def makeTimeStatsVO(field, value):
      'value': value}
 
 
-def makeTotalFortResourcesItem(totalFortResource):
-    return makeHtmlString('html_templates:lobby/battle_results', 'teamResourceTotal', {'resourceValue': totalFortResource})
+def makeRankIcon(rank):
+    if not rank:
+        return ''
+    else:
+        icon = RES_ICONS.getRankIcon('24x24', rank)
+        if icon is not None:
+            return icon
+        return RES_ICONS.getRankIcon('24x24', 0)
+        return
 
 
-def makeTotalInfluencePointsItem(totalInfluencePoints):
-    return makeHtmlString('html_templates:lobby/battle_results', 'teamInfluenceTotal', {'resourceValue': totalInfluencePoints})
+def makeBadgeIcon(badge):
+    return settings.getBadgeIconPath(settings.BADGES_ICONS.X24, badge)
+
+
+def makeRankedResultsTitle(title):
+    return text_styles.promoTitle(title)
+
+
+def makeRankedPointValue(pointsValue):
+    return makeHtmlString('html_templates:lobby/battle_results', 'xp_small_label', {'value': text_styles.playerOnline(pointsValue)})
+
+
+def makeRankedNickNameValue(name):
+    return text_styles.playerOnline(name)
 
 
 class GroupMiddleLabelBlock(base.DirectStatsItem):

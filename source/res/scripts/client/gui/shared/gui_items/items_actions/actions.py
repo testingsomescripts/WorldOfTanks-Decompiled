@@ -9,15 +9,17 @@ from gui.shared.utils import decorators
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor
-from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
+from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout, VehicleLayoutProcessor, VehicleBattleBoosterLayoutProcessor, BuyAndInstallBattleBoosterProcessor
+from gui.shared.gui_items.vehicle_layout import ShellVehicleLayout, EquipmentVehicleLayout
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta, RestoreExchangeCreditsMeta
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.shared import IItemsCache
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -46,15 +48,18 @@ def showShopMsg(msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     showMessage(scopeMsg, msg, item, msgType=msgType, **kwargs)
 
 
-def getGunCD(item, vehicle):
-    if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getGunCD(item, vehicle, itemsCache=None):
+    if item.itemTypeID == GUI_ITEM_TYPE.TURRET and itemsCache is not None:
         if not item.mayInstall(vehicle, gunCD=0)[0]:
             for gun in item.descriptor['guns']:
-                gunItem = g_itemsCache.items.getItemByCD(gun['compactDescr'])
+                gunItem = itemsCache.items.getItemByCD(gun['compactDescr'])
                 if gunItem.isInInventory:
                     mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
                     if mayInstall[0]:
                         return gun['compactDescr']
+
+    return 0
 
 
 def processMsg(result):
@@ -67,25 +72,40 @@ def processMsg(result):
 
 class IGUIItemAction(object):
 
+    def __init(self):
+        self.__skipConfirm = False
+
+    @property
+    def skipConfirm(self):
+        return self.__skipConfirm
+
+    @skipConfirm.setter
+    def skipConfirm(self, value):
+        self.__skipConfirm = value
+
     def doAction(self):
         pass
 
 
-class BuyAction(IGUIItemAction):
+class CachedItemAction(IGUIItemAction):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+
+class BuyAction(CachedItemAction):
     tradeIn = dependency.descriptor(ITradeInController)
 
     def _mayObtainForMoney(self, item):
-        money = g_itemsCache.items.stats.money
+        money = self.itemsCache.items.stats.money
         canBuy, _ = item.mayObtainForMoney(money)
         return canBuy
 
     def _mayObtainWithMoneyExchange(self, item):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         money = items.stats.money
         return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
 
 
-class SellItemAction(IGUIItemAction):
+class SellItemAction(CachedItemAction):
 
     def __init__(self, itemTypeCD):
         super(SellItemAction, self).__init__()
@@ -93,7 +113,7 @@ class SellItemAction(IGUIItemAction):
 
     @process
     def doAction(self):
-        item = g_itemsCache.items.getItemByCD(self.__itemTypeCD)
+        item = self.itemsCache.items.getItemByCD(self.__itemTypeCD)
         if item.isInInventory:
             yield DialogsInterface.showDialog(LocalSellModuleMeta(self.__itemTypeCD))
         else:
@@ -110,7 +130,7 @@ class ModuleBuyAction(BuyAction):
 
     @process
     def doAction(self):
-        item = g_itemsCache.items.getItemByCD(self.__intCD)
+        item = self.itemsCache.items.getItemByCD(self.__intCD)
         if not self._mayObtainForMoney(item):
             if self._mayObtainWithMoneyExchange(item):
                 isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__intCD))
@@ -119,7 +139,7 @@ class ModuleBuyAction(BuyAction):
             else:
                 showShopMsg('common_rent_or_buy_error', item)
         if self._mayObtainForMoney(item):
-            yield DialogsInterface.showDialog(BuyModuleMeta(self.__intCD, g_itemsCache.items.stats.money))
+            yield DialogsInterface.showDialog(BuyModuleMeta(self.__intCD, self.itemsCache.items.stats.money))
         else:
             yield lambda callback=None: callback
         return
@@ -134,7 +154,7 @@ class VehicleBuyAction(BuyAction):
 
     @process
     def doAction(self):
-        item = g_itemsCache.items.getItemByCD(self.__vehCD)
+        item = self.itemsCache.items.getItemByCD(self.__vehCD)
         if item.itemTypeID is not GUI_ITEM_TYPE.VEHICLE:
             LOG_ERROR('Value of int-type descriptor is not refer to vehicle', self.__vehCD)
             return
@@ -142,7 +162,7 @@ class VehicleBuyAction(BuyAction):
             if item.isInInventory and not item.isRented:
                 showInventoryMsg('already_exists', item, msgType=SystemMessages.SM_TYPE.Warning)
             else:
-                price = getGUIPrice(item, g_itemsCache.items.stats.money, g_itemsCache.items.shop.exchangeRate)
+                price = getGUIPrice(item, self.itemsCache.items.stats.money, self.itemsCache.items.shop.exchangeRate)
                 if price is None:
                     showShopMsg('not_found', item)
                     return
@@ -163,17 +183,17 @@ class VehicleBuyAction(BuyAction):
             return
 
     def _mayObtainForMoney(self, item):
-        money = self.tradeIn.addTradeInPriceIfNeeded(item, g_itemsCache.items.stats.money)
+        money = self.tradeIn.addTradeInPriceIfNeeded(item, self.itemsCache.items.stats.money)
         canBuy, _ = item.mayObtainForMoney(money)
         return canBuy
 
     def _mayObtainWithMoneyExchange(self, item):
-        items = g_itemsCache.items
+        items = self.itemsCache.items
         money = self.tradeIn.addTradeInPriceIfNeeded(item, items.stats.money)
         return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
 
 
-class UnlockItemAction(IGUIItemAction):
+class UnlockItemAction(CachedItemAction):
 
     def __init__(self, unlockCD, vehCD, unlockIdx, xpCost):
         super(UnlockItemAction, self).__init__()
@@ -194,26 +214,26 @@ class UnlockItemAction(IGUIItemAction):
     def _unlockItem(self):
         costCtx = self._getCostCtx(self.__vehCD, self.__xpCost)
         unlockCtx = unlock.UnlockItemCtx(self.__unlockCD, self.__vehCD, self.__unlockIdx, self.__xpCost)
-        plugins = [unlock.UnlockItemConfirmator(unlockCtx, costCtx), unlock.UnlockItemValidator(unlockCtx)]
+        plugins = [unlock.UnlockItemConfirmator(unlockCtx, costCtx, isEnabled=not self.skipConfirm), unlock.UnlockItemValidator(unlockCtx)]
         self._doUnlockItem(unlockCtx, costCtx, plugins)
 
     def _isUnlocked(self):
-        item = g_itemsCache.items.getItemByCD(self.__unlockCD)
+        item = self.itemsCache.items.getItemByCD(self.__unlockCD)
         return item.isUnlocked
 
     def _isEnoughXpToUnlock(self):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
         return unlockStats.getVehTotalXP(self.__vehCD) >= self.__xpCost
 
     def _getCostCtx(self, vehCD, xpCost):
-        stats = g_itemsCache.items.stats
+        stats = self.itemsCache.items.stats
         return unlock.makeCostCtx(UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP).getVehXP(vehCD), xpCost)
 
     @decorators.process('research')
     def _doUnlockItem(self, unlockCtx, costCtx, plugins):
         result = yield unlock.UnlockItemProcessor(unlockCtx.vehCD, unlockCtx.unlockIdx, plugins=plugins).request()
-        item = g_itemsCache.items.getItemByCD(unlockCtx.unlockCD)
+        item = self.itemsCache.items.getItemByCD(unlockCtx.unlockCD)
         if result.success:
             costCtx['xpCost'] = BigWorld.wg_getIntegralFormat(costCtx['xpCost'])
             costCtx['freeXP'] = BigWorld.wg_getIntegralFormat(costCtx['freeXP'])
@@ -238,17 +258,17 @@ class InstallItemAction(BuyAction):
     def installItem(self, itemCD, rootCD, state):
         itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
         assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
-        vehicle = g_itemsCache.items.getItemByCD(rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(rootCD)
         assert vehicle.isInInventory, 'Vehicle must be in inventory'
-        item = g_itemsCache.items.getItemByCD(itemCD)
+        item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         RequestState.sent(state)
         if item.isInInventory:
             Waiting.show('applyModule')
-            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs).request()
+            result = yield getInstallerProcessor(vehicle, item, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
+                vehicle = self.itemsCache.items.getItemByCD(vehicle.intCD)
                 yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('applyModule')
         RequestState.received(state)
@@ -267,9 +287,9 @@ class BuyAndInstallItemAction(InstallItemAction):
     def buyAndInstallItem(self, itemCD, rootCD, state):
         itemTypeID, nationID, itemID = vehicles.parseIntCompactDescr(itemCD)
         assert itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
-        vehicle = g_itemsCache.items.getItemByCD(rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(rootCD)
         assert vehicle.isInInventory, 'Vehicle must be in inventory'
-        item = g_itemsCache.items.getItemByCD(itemCD)
+        item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         if not self._mayObtainForMoney(item) and self._mayObtainWithMoneyExchange(item):
             isOk, args = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
@@ -277,13 +297,13 @@ class BuyAndInstallItemAction(InstallItemAction):
                 return
         if self._mayObtainForMoney(item):
             Waiting.show('buyAndInstall')
-            vehicle = g_itemsCache.items.getItemByCD(rootCD)
+            vehicle = self.itemsCache.items.getItemByCD(rootCD)
             gunCD = getGunCD(item, vehicle)
-            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs).request()
+            result = yield BuyAndInstallItemProcessor(vehicle, item, 0, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
             processMsg(result)
             if result.success and item.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                item = g_itemsCache.items.getItemByCD(itemCD)
-                vehicle = g_itemsCache.items.getItemByCD(rootCD)
+                item = self.itemsCache.items.getItemByCD(itemCD)
+                vehicle = self.itemsCache.items.getItemByCD(rootCD)
                 if item.isInstalled(vehicle):
                     yield tryToLoadDefaultShellsLayout(vehicle)
             Waiting.hide('buyAndInstall')
@@ -304,22 +324,22 @@ class SetVehicleModuleAction(BuyAction):
 
     @process
     def doAction(self):
-        vehicle = g_itemsCache.items.getVehicle(self.__vehInvID)
+        vehicle = self.itemsCache.items.getVehicle(self.__vehInvID)
         if vehicle is None:
             return
         else:
             isUseGold = self.__isRemove and self.__oldItemCD is not None
             LOG_DEBUG('isUseGold, self.__isRemove, self.__oldItemCD', isUseGold, self.__isRemove, self.__oldItemCD)
-            newComponentItem = g_itemsCache.items.getItemByCD(int(self.__newItemCD))
+            newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
             if newComponentItem is None:
                 return
             oldComponentItem = None
             if self.__oldItemCD:
-                oldComponentItem = g_itemsCache.items.getItemByCD(int(self.__oldItemCD))
+                oldComponentItem = self.itemsCache.items.getItemByCD(int(self.__oldItemCD))
             if not self.__isRemove:
-                if oldComponentItem and oldComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                if oldComponentItem and oldComponentItem.itemTypeID in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.BATTLE_BOOSTER):
                     Waiting.show('installEquipment')
-                    result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True).request()
+                    result = yield getInstallerProcessor(vehicle, oldComponentItem, self.__slotIdx, False, True, skipConfirm=self.skipConfirm).request()
                     processMsg(result)
                     Waiting.hide('installEquipment')
                     if not result.success:
@@ -332,13 +352,13 @@ class SetVehicleModuleAction(BuyAction):
                         return
                 if self._mayObtainForMoney(newComponentItem):
                     Waiting.show('buyAndInstall')
-                    vehicle = g_itemsCache.items.getVehicle(self.__vehInvID)
+                    vehicle = self.itemsCache.items.getVehicle(self.__vehInvID)
                     gunCD = getGunCD(newComponentItem, vehicle)
-                    result = yield BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs).request()
+                    result = yield BuyAndInstallItemProcessor(vehicle, newComponentItem, self.__slotIdx, gunCD, conflictedEqs=conflictedEqs, skipConfirm=self.skipConfirm).request()
                     processMsg(result)
                     if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                        newComponentItem = g_itemsCache.items.getItemByCD(int(self.__newItemCD))
-                        vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
+                        newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
+                        vehicle = self.itemsCache.items.getItemByCD(vehicle.intCD)
                         if newComponentItem.isInstalled(vehicle):
                             yield tryToLoadDefaultShellsLayout(vehicle)
                     Waiting.hide('buyAndInstall')
@@ -347,12 +367,71 @@ class SetVehicleModuleAction(BuyAction):
             else:
                 Waiting.show('applyModule')
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs).request()
+                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs, self.skipConfirm).request()
                 processMsg(result)
                 if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
-                    newComponentItem = g_itemsCache.items.getItemByCD(int(self.__newItemCD))
-                    vehicle = g_itemsCache.items.getItemByCD(vehicle.intCD)
+                    newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
+                    vehicle = self.itemsCache.items.getItemByCD(vehicle.intCD)
                     if newComponentItem.isInstalled(vehicle):
                         yield tryToLoadDefaultShellsLayout(vehicle)
                 Waiting.hide('applyModule')
             return
+
+
+class SetVehicleLayoutAction(IGUIItemAction):
+    """
+    This action is used when you want to install/de-install item in vehicle layout.
+    in other words: make a layout changes for Shells/Equipment/BattleBooster
+    """
+
+    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None):
+        super(SetVehicleLayoutAction, self).__init__()
+        self._vehicle = vehicle
+        self._shellsLayout = shellsLayout
+        self._eqsLayout = eqsLayout
+        self._battleBooster = battleBooster
+
+    @decorators.process('techMaintenance')
+    def doAction(self):
+        if self._battleBooster is not None:
+            boosterLayout = (self._battleBooster.intCD, 1) if self._battleBooster else (0, 0)
+            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
+            result = yield VehicleBattleBoosterLayoutProcessor(self._vehicle, self._battleBooster, eqsLayout, self.skipConfirm).request()
+        else:
+            shellsLayout = ShellVehicleLayout(self._vehicle, self._shellsLayout)
+            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout)
+            result = yield VehicleLayoutProcessor(self._vehicle, shellsLayout, eqsLayout, self.skipConfirm).request()
+        self._showResult(result)
+        return
+
+    @staticmethod
+    def _showResult(result):
+        if result and result.auxData:
+            for m in result.auxData:
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+
+        if result and len(result.userMsg):
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
+    """
+    This actions buys and installs an item in the vehicle layout
+    IMPORTANT: this action supports only BattleBooster item at the moment
+               but it can be extended to do the action with any type of item
+    """
+
+    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, battleBooster=None, count=1):
+        super(BuyAndInstallItemVehicleLayout, self).__init__(vehicle, shellsLayout, eqsLayout, battleBooster)
+        self._count = count
+
+    @decorators.process('buyItem')
+    def doAction(self):
+        if self._battleBooster is not None:
+            boosterLayout = (self._battleBooster.intCD, 1)
+            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
+            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, eqsLayout, self._count, self.skipConfirm).request()
+            self._showResult(result)
+        else:
+            LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')
+        return

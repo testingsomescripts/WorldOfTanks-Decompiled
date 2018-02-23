@@ -6,13 +6,13 @@ from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import BattleLoadingTipSetting
 from helpers import dependency
 from helpers import tips
-from gui.LobbyContext import g_lobbyContext
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import SMALL_MAP_IMAGE_SF_PATH
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.BaseBattleLoadingMeta import BaseBattleLoadingMeta
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
 __bBattleLoadingShowed = False
 
 def isBattleLoadingShowed():
@@ -35,6 +35,7 @@ DEFAULT_BATTLES_COUNT = 100
 class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(BattleLoading, self).__init__()
@@ -58,7 +59,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def invalidateArenaInfo(self):
         arenaDP = self._battleCtx.getArenaDP()
         self._setTipsInfo()
-        self.__addPlayerData(arenaDP)
 
     def arenaLoadCompleted(self):
         if not BattleReplay.isPlaying():
@@ -90,8 +90,8 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         arenaDP = self._battleCtx.getArenaDP()
         battlesCount = DEFAULT_BATTLES_COUNT
         if not isBattleLoadingShowed():
-            if g_lobbyContext.getBattlesCount() is not None:
-                battlesCount = g_lobbyContext.getBattlesCount()
+            if self.lobbyContext.getBattlesCount() is not None:
+                battlesCount = self.lobbyContext.getBattlesCount()
             classTag, vLvl, nation = arenaDP.getVehicleInfo().getTypeInfo()
             criteria = tips.getTipsCriteria(self._arenaVisitor)
             criteria.setBattleCount(battlesCount)
@@ -108,10 +108,6 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def _addArenaTypeData(self):
         self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())
         BigWorld.wg_setGUIBackground(self._battleCtx.getArenaScreenIcon())
-
-    def __addPlayerData(self, arenaDP):
-        vInfoVO = arenaDP.getVehicleInfo()
-        self.as_setPlayerDataS(vInfoVO.vehicleID, vInfoVO.getSquadID())
 
     def __makeVisualTipVO(self, arenaDP, tip=None):
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.BATTLE_LOADING_INFO)
@@ -132,15 +128,15 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         """
         result = {}
         if settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
-            result.update({'leftTeamTitleLeft': -412,
+            result.update({'leftTeamTitleLeft': -410,
              'rightTeamTitleLeft': 204,
              'tipTitleTop': 536,
              'tipBodyTop': 562,
              'showTableBackground': True,
              'showTipsBackground': False})
         else:
-            result.update({'leftTeamTitleLeft': -472,
-             'rightTeamTitleLeft': 268,
+            result.update({'leftTeamTitleLeft': -475,
+             'rightTeamTitleLeft': 270,
              'tipTitleTop': 366,
              'tipBodyTop': 397,
              'showTableBackground': False,

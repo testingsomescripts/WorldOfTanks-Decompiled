@@ -35,12 +35,12 @@ class CustomEffectManager(Component):
         self.__prevWaterHeight = None
         self.__gearUP = False
         self.__trailParticleNodes = None
-        self.__engineState.setGearUpCallback(self.__gearUp)
         args = {}
         args['chassis'] = {}
         args['chassis']['model'] = appearance.compoundModel
         args['hull'] = {}
         args['hull']['model'] = appearance.compoundModel
+        args['engineTags'] = appearance.typeDescriptor.engine['tags']
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
         for desc in appearance.typeDescriptor.hull['customEffects']:
             if desc is not None:
@@ -67,7 +67,6 @@ class CustomEffectManager(Component):
             effectSelector.destroy()
 
         PixieCache.decref()
-        self.__engineState.delGearUpCallback()
         self.__trailParticleNodes = None
         self.__selectors = None
         self.__engineState = None
@@ -110,7 +109,7 @@ class CustomEffectManager(Component):
     def getTrackCenterNode(self, trackIdx):
         return self.__trailParticleNodes[trackIdx]
 
-    def __gearUp(self):
+    def onGearUp(self):
         self.__gearUP = True
 
     def update(self):

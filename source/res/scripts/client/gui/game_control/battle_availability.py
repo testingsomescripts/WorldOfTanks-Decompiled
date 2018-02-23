@@ -3,9 +3,7 @@
 import Event
 from debug_utils import LOG_DEBUG
 from helpers import time_utils
-from ConnectionManager import connectionManager
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.LobbyContext import g_lobbyContext
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 
 def isHourInForbiddenList(hours, currUtcTimeHour=None):
@@ -156,38 +154,3 @@ class BattleAvailabilityController(Notifiable):
         self._calcStatus()
         self.startNotification()
         self.onStatusChanged()
-
-
-class SortiesCurfewController(BattleAvailabilityController):
-
-    def start(self):
-        super(SortiesCurfewController, self).start()
-        LOG_DEBUG('Sorties controller started')
-
-    def stop(self):
-        super(SortiesCurfewController, self).stop()
-        LOG_DEBUG('Sorties controller has been successfully stopped')
-
-    def getForbiddenHours(self):
-        servSettings = g_lobbyContext.getServerSettings()
-        return servSettings.getForbiddenSortieHours() if servSettings else []
-
-    def isServerAvailable(self):
-        servSettings = g_lobbyContext.getServerSettings()
-        return False if servSettings and connectionManager.peripheryID in servSettings.getForbiddenSortiePeripheryIDs() else True
-
-    def _onChanged(self, diff=None):
-        if diff and ('forbiddenSortieHours' in diff or 'forbiddenSortiePeripheryIDs' in diff):
-            self._update(diff.get('forbiddenSortieHours'))
-            LOG_DEBUG('Sorties settings changed:', diff)
-
-    def _getTimeStamp(self):
-        return time_utils.getCurrentLocalServerTimestamp()
-
-    def _calcStatus(self, hours=None):
-        super(SortiesCurfewController, self)._calcStatus(hours)
-        LOG_DEBUG('Sortie availability:', 'At current hour:', self._battlesAvailable, 'At current periphery:', self._currServerAvailable)
-
-    def __repr__(self):
-        currentPeriod, periods = self._getPeriodsInfo()
-        return 'SortiesCurfewController (Sorties availability: At current hour: {0}, ' + 'At current periphery: {1}. Next update after: {2} sec. All periods: {3}'.format(str(self._battlesAvailable), str(self._currServerAvailable), str(currentPeriod), str(periods))

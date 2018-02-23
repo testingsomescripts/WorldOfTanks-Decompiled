@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/ServiceChannelManager.py
 from collections import deque
+import BigWorld
 from chat_shared import CHAT_ACTIONS
 from constants import IS_DEVELOPMENT
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from ids_generators import SequenceIDGenerator
 from messenger.formatters import collections_by_type
 from messenger.m_constants import MESSENGER_SCOPE, SCH_MSGS_MAX_LENGTH
@@ -37,15 +38,19 @@ class ServiceChannelManager(ChatActionsListener):
         BigWorld.player().requestLastSysMessages()
 
     def onReceiveSysMessage(self, chatAction):
+        if self.isBootcampRunning():
+            return
         message = ServiceChannelMessage.fromChatAction(chatAction)
         self.__addServerMessage(message)
 
     def onReceivePersonalSysMessage(self, chatAction):
+        if self.isBootcampRunning():
+            return
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
-    def pushClientSysMessage(self, message, msgType, isAlert=False, priority=None):
-        return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(), priority])
+    def pushClientSysMessage(self, message, msgType, isAlert=False, priority=None, messageData=None):
+        return self.__addClientMessage(message, SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE, isAlert=isAlert, auxData=[msgType.name(), priority, messageData])
 
     def pushClientMessage(self, message, msgType, isAlert=False, auxData=None):
         return self.__addClientMessage(message, msgType, isAlert=isAlert, auxData=auxData)
@@ -73,6 +78,8 @@ class ServiceChannelManager(ChatActionsListener):
 
     def handleUnreadMessages(self):
         if not self.__unreadMessagesCount:
+            return
+        if self.isBootcampRunning():
             return
         unread = list(self.__messages)[-self.__unreadMessagesCount:]
         serviceChannel = g_messengerEvents.serviceChannel
@@ -136,3 +143,10 @@ class ServiceChannelManager(ChatActionsListener):
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found:', msgType, message)
         return clientID
+
+    def isBootcampRunning(self):
+        from bootcamp.Bootcamp import g_bootcamp
+        if g_bootcamp.isRunning():
+            self.clear()
+            return True
+        return False

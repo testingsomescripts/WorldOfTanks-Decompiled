@@ -19,10 +19,8 @@ from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifie
 from helpers import dependency
 from helpers import i18n, time_utils
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
-from shared_utils import findFirst
 from gui.shared.events import OpenLinkEvent
 from gui.shared.formatters import icons, text_styles
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from messenger.m_constants import USER_TAG
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
@@ -231,7 +229,12 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
                         totalProgress = (currentCompletedStep + 1) * oneStepWeight
                     xpForNextStep = nextStepXP - currentCompletedStepXP
                     xpFromPrevStep = currentXP - currentCompletedStepXP
-                    stepProgress = float(xpFromPrevStep) / xpForNextStep if xpFromPrevStep else 0.0
+                    if xpForNextStep <= 0:
+                        stepProgress = 1.0
+                    elif xpFromPrevStep <= 0:
+                        stepProgress = 0.0
+                    else:
+                        stepProgress = float(xpFromPrevStep) / xpForNextStep
                     totalStepProgress = stepProgress * oneStepWeight
                     progress = totalProgress + totalStepProgress
             else:
@@ -262,7 +265,7 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, IGlobalListener, No
         """
         yield self.prbDispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.SQUAD, accountsToInvite=(referralID,)))
 
-    def __showInviteMessage(cls, user):
+    def __showInviteMessage(self, user):
         showSentInviteMessage(user)
 
     def __onUserStatusUpdated(self, *args):

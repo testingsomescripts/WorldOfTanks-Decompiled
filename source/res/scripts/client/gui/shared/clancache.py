@@ -7,14 +7,13 @@ from account_helpers import getAccountDatabaseID
 from adisp import async, process
 from constants import CLAN_MEMBER_FLAGS
 from debug_utils import LOG_ERROR
+from helpers import dependency
 from helpers import html
 from gui.clans.formatters import getClanRoleString
-from gui.shared.fortifications.fort_provider import ClientFortProvider
-from gui.shared.stronghold.stronghold_provider import ClientStrongholdProvider
 from gui.shared.utils import code2str
 from messenger.ext import passCensor
-from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
+from skeletons.gui.shared import IItemsCache
 
 class ClanInfo(namedtuple('ClanInfo', ['clanName',
  'clanAbbrev',
@@ -36,10 +35,11 @@ class ClanInfo(namedtuple('ClanInfo', ['clanName',
 
 
 class _ClanCache(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         self.__waitForSync = False
-        self.__fortProvider = None
+        self.__strongholdProvider = None
         self.__clanMembersLen = None
         self.__clanMotto = ''
         self.__clanDescription = ''
@@ -48,24 +48,24 @@ class _ClanCache(object):
         return
 
     def init(self):
-        self.__fortProvider = ClientFortProvider()
+        from gui.shared.stronghold.stronghold_provider import ClientStrongholdProvider
         self.__strongholdProvider = ClientStrongholdProvider()
 
     def fini(self):
         self.onSyncStarted.clear()
         self.onSyncCompleted.clear()
         self.clear()
+        self.__strongholdProvider = None
+        return
 
     def onAccountShowGUI(self):
-        self.__startFortProvider()
         self.__startStrongholdProvider()
 
     def onAvatarBecomePlayer(self):
-        self.__stopFortProvider()
         self.__stopStrongholdProvider()
 
     def onDisconnected(self):
-        self.__stopFortProvider()
+        self.__stopStrongholdProvider()
 
     @property
     def waitForSync(self):
@@ -76,8 +76,8 @@ class _ClanCache(object):
         self.__invalidateData(diff, callback)
 
     def clear(self):
-        self.__fortProvider = None
-        self.__strongholdProvider = None
+        if self.__strongholdProvider is not None:
+            self.__strongholdProvider.stop()
         return
 
     @storage_getter('users')
@@ -85,13 +85,8 @@ class _ClanCache(object):
         return None
 
     @property
-    def fortProvider(self):
-        return self.__fortProvider
-
-    @property
     def clanDBID(self):
-        from gui.shared import g_itemsCache
-        return g_itemsCache.items.stats.clanDBID
+        return self.itemsCache.items.stats.clanDBID
 
     @property
     def isInClan(self):
@@ -109,8 +104,7 @@ class _ClanCache(object):
 
     @property
     def clanInfo(self):
-        from gui.shared import g_itemsCache
-        info = g_itemsCache.items.stats.clanInfo
+        info = self.itemsCache.items.stats.clanInfo
         return info if info and len(info) > 1 else (None, None, -1, 0, 0)
 
     @property
@@ -208,25 +202,10 @@ class _ClanCache(object):
             self.__invalidateData()
 
     def __invalidateData(self, diff=None, callback=lambda *args: None):
-        if diff is not None:
-            if 'stats' in diff and 'clanInfo' in diff['stats']:
-                self.__fortProvider.resetState()
         callback(True)
-        return
-
-    def __startFortProvider(self):
-        self.__clanMembersLen = len(self.clanMembers)
-        g_messengerEvents.users.onClanMembersListChanged += self.__me_onClanMembersListChanged
-        self.__fortProvider.start(self)
 
     def __startStrongholdProvider(self):
         self.__strongholdProvider.start()
-
-    def __stopFortProvider(self):
-        self.__clanMembersLen = None
-        g_messengerEvents.users.onClanMembersListChanged -= self.__me_onClanMembersListChanged
-        self.__fortProvider.stop()
-        return
 
     def __stopStrongholdProvider(self):
         self.__strongholdProvider.stop()
@@ -235,8 +214,6 @@ class _ClanCache(object):
         clanMembersLen = len(self.clanMembers)
         if self.__clanMembersLen is not None and clanMembersLen != self.__clanMembersLen:
             self.__clanMembersLen = clanMembersLen
-            self.__fortProvider.resetState()
-        self.__fortProvider.notify('onClanMembersListChanged')
         return
 
 

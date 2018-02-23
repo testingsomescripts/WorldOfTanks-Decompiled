@@ -8,8 +8,9 @@ from items import vehicles, tankmen, getTypeOfCompactDescr
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
+from skeletons.gui.shared.utils.requesters import IInventoryRequester
 
-class InventoryRequester(AbstractSyncDataRequester):
+class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     VEH_DATA = namedtuple('VEH_DATA', ','.join(['compDescr',
      'descriptor',
      'invID',
@@ -118,6 +119,9 @@ class InventoryRequester(AbstractSyncDataRequester):
         @return: layout or empty dict
         """
         return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
+
+    def getFreeSlots(self, vehiclesSlots):
+        return vehiclesSlots - len(self.__getVehiclesData())
 
     @async
     def _requestCache(self, callback=None):

@@ -3,9 +3,10 @@
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
-from constants import QUEUE_TYPE, PREBATTLE_TYPE
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import DEFAULT_QUEUE
+from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -17,8 +18,10 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, P
 from gui.prb_control.entities.sandbox.pre_queue.ctx import SandboxQueueCtx
 from gui.prb_control.entities.sandbox.pre_queue.vehicles_watcher import SandboxVehiclesWatcher
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
+from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
+from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 
 class SandboxSubscriber(PreQueueSubscriber):
     """
@@ -55,6 +58,7 @@ class SandboxEntity(PreQueueEntity):
     """
     Sandbox entity
     """
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(SandboxEntity, self).__init__(FUNCTIONAL_FLAG.SANDBOX, QUEUE_TYPE.SANDBOX, SandboxSubscriber())
@@ -72,21 +76,21 @@ class SandboxEntity(PreQueueEntity):
         self.storage.release()
         self.__watcher = SandboxVehiclesWatcher()
         self.__watcher.start()
-        g_lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         return super(SandboxEntity, self).init(ctx)
 
     def fini(self, ctx=None, woEvents=False):
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        g_lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         return super(SandboxEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def isInQueue(self):
         return prb_getters.isInSandboxQueue()
 
     def leave(self, ctx, callback=None):
-        if not ctx.hasFlags(FUNCTIONAL_FLAG.TUTORIAL):
+        if not ctx.hasFlags(FUNCTIONAL_FLAG.TUTORIAL) and not ctx.hasFlags(FUNCTIONAL_FLAG.SANDBOX):
             self.storage.suspend()
         super(SandboxEntity, self).leave(ctx, callback)
 
@@ -95,12 +99,10 @@ class SandboxEntity(PreQueueEntity):
         super(SandboxEntity, self).queue(ctx, callback=callback)
 
     def doSelectAction(self, action):
-        if action.actionName == PREBATTLE_ACTION_NAME.SANDBOX:
-            SelectResult(True)
-        return super(SandboxEntity, self).doSelectAction(action)
+        return SelectResult(True) if action.actionName == PREBATTLE_ACTION_NAME.SANDBOX else super(SandboxEntity, self).doSelectAction(action)
 
     def getConfirmDialogMeta(self, ctx):
-        if not self.hasLockedState() and ctx.getCtrlType() == CTRL_ENTITY_TYPE.UNIT and ctx.getEntityType() in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.EVENT):
+        if not self.hasLockedState() and not ctx.hasFlags(FUNCTIONAL_FLAG.TUTORIAL) and AccountSettings.getSettings(DEFAULT_QUEUE) == QUEUE_TYPE.SANDBOX:
             meta = rally_dialog_meta.createLeavePreQueueMeta(ctx, self._queueType, self.canSwitch(ctx))
         else:
             meta = super(SandboxEntity, self).getConfirmDialogMeta(ctx)
@@ -135,7 +137,7 @@ class SandboxEntity(PreQueueEntity):
         Args:
             diff: settings diff
         """
-        if not g_lobbyContext.getServerSettings().isSandboxEnabled():
+        if not self.lobbyContext.getServerSettings().isSandboxEnabled():
 
             def __leave(_=True):
                 g_prbCtrlEvents.onPreQueueLeft()

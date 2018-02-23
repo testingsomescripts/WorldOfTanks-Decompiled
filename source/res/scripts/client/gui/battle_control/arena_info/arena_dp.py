@@ -5,7 +5,6 @@ import operator
 from constants import TEAMS_IN_ARENA
 from debug_utils import LOG_NOTE, LOG_WARNING, LOG_DEBUG
 from shared_utils import first
-from gui.LobbyContext import g_lobbyContext
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info import arena_descrs
 from gui.battle_control.arena_info import arena_vos
@@ -14,7 +13,9 @@ from gui.battle_control.arena_info import squad_finder
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
+from helpers import dependency
 from skeletons.gui.battle_session import IArenaDataProvider
+from skeletons.gui.lobby_context import ILobbyContext
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
 
@@ -23,6 +24,7 @@ class ArenaDataProvider(IArenaDataProvider):
     their statistics.
     """
     __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__playersVIDs', '__weakref__', '__teamsOnArena', '__squadFinder', '__description', '__invitationStatuses')
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
         super(ArenaDataProvider, self).__init__()
@@ -443,27 +445,3 @@ class ArenaDataProvider(IArenaDataProvider):
             assert self.__playerVehicleID, "Player's vehicle ID not be None"
             if self.__playerVehicleID in self.__vInfoVOs:
                 self.__description.setPersonalData(self.__vInfoVOs[self.__playerVehicleID])
-            self.__updateSPGInSquadRestriction()
-
-    def __updateSPGInSquadRestriction(self):
-        """
-        This method reads 'isSPGForbiddenInSquads' from serverSettings and update status for each VO.
-        IMPORTANT:
-        Self vehicle class can be determined from Arena only by calling:
-        self.__vInfoVOs[self.__playerVehicleID].isSPG()
-        From Avatar this info will not be available at this moment.
-        """
-        serverSettings = g_lobbyContext.getServerSettings()
-        isSPGForbiddenInSquads = serverSettings is not None and serverSettings.isSPGForbiddenInSquads()
-        if isSPGForbiddenInSquads:
-            if self.__playerVehicleID in self.__vInfoVOs:
-                vInfo = self.__vInfoVOs[self.__playerVehicleID]
-                isPlayerSPG = vInfo.isSPG()
-            else:
-                LOG_WARNING('PlayerVehicleID not in arenaVOs, can not determine self vehicle class.')
-                isPlayerSPG = False
-            for vo in self.__vInfoVOs.itervalues():
-                if self.isAllyTeam(vo.team) and (isPlayerSPG or vo.isSPG()):
-                    vo.updateInvitationStatus(forbidInBattleSPGInvitations=True)
-
-        return

@@ -5,6 +5,7 @@ from debug_utils import LOG_ERROR
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator, BaseActionsValidator
 from gui.prb_control.entities.base.actions_validator import IActionsValidator
 from gui.prb_control.entities.base.permissions import IPrbPermissions
+from gui.prb_control.entities.base.scheduler import BaseScheduler
 from gui.prb_control.items import SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import IListenersCollection
@@ -98,12 +99,6 @@ class BasePrbEntryPoint(PrbFunctionalFlags):
         """
         pass
 
-    def canSelect(self):
-        """
-        Can this entry point select
-        """
-        return True
-
     def setAccountsToInvite(self, accountsToInvite):
         """
         Sets accounts to invite if it is supported.
@@ -126,6 +121,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def __init__(self, entityFlags, modeFlags):
         super(BasePrbEntity, self).__init__(entityFlags=entityFlags, modeFlags=modeFlags)
         self._actionsValidator = self._createActionsValidator()
+        self._scheduler = self._createScheduler()
         self._isActive = False
 
     def init(self, **kwargs):
@@ -134,6 +130,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         Returns:
             functional flags of initialization
         """
+        self._scheduler.init()
         self._isActive = True
         return FUNCTIONAL_FLAG.UNDEFINED
 
@@ -143,8 +140,17 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         Returns:
             functional flags of finalization
         """
+        self._scheduler.fini()
         self._isActive = False
         return FUNCTIONAL_FLAG.UNDEFINED
+
+    def invalidate(self):
+        """
+        Hangar was reloaded, but the entity and state of PRB hasn't changed.
+        Example: user clicks on Shop, Research or other tab - after that returns in Hangar.
+        Override in child to catch this event.
+        """
+        pass
 
     def restore(self):
         """
@@ -258,7 +264,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
 
     def getID(self):
         """
-        Gets prebattle ID/unit index. The 0 means prebattle/unit is not defined.
+        Gets prebattle ID/unit manager ID. The 0 means prebattle/unit is not defined.
         """
         pass
 
@@ -343,6 +349,12 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         Creates actions validator object.
         """
         return BaseActionsValidator(self)
+
+    def _createScheduler(self):
+        """
+        Creates scheduler object.
+        """
+        return BaseScheduler(self)
 
 
 class NotSupportedEntryPoint(BasePrbEntryPoint):

@@ -7,15 +7,13 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
-from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.battle_results import RequestResultsContext
 from gui.clans import contexts as clan_ctxs
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.prb_control.prb_getters import getBattleID
-from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events, event_dispatcher
-from gui.shared.fortifications import fort_helpers, events_dispatcher as fort_events
+from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.utils import decorators
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
@@ -124,7 +122,7 @@ class _ShowClanAppsHandler(_ActionHandler):
 
     def handleAction(self, model, entityID, action):
         super(_ShowClanAppsHandler, self).handleAction(model, entityID, action)
-        return event_dispatcher.showClanInvitesWindow()
+        return shared_events.showClanInvitesWindow()
 
 
 class _ShowClanInvitesHandler(_ActionHandler):
@@ -199,9 +197,9 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
         accID = self._getAccountID(model, entityID)
 
         def onDossierReceived(databaseID, userName):
-            event_dispatcher.showProfileWindow(databaseID, userName)
+            shared_events.showProfileWindow(databaseID, userName)
 
-        event_dispatcher.requestProfile(accID, model.getNotification(self.getNotType(), entityID).getUserName(), successCallback=onDossierReceived)
+        shared_events.requestProfile(accID, model.getNotification(self.getNotType(), entityID).getUserName(), successCallback=onDossierReceived)
         return None
 
 
@@ -416,44 +414,6 @@ class DeclinePrbInviteHandler(_ActionHandler):
             LOG_ERROR('Invite is invalid', entityID)
 
 
-class AcceptPrbFortInviteHandler(_ActionHandler):
-
-    @prbDispatcherProperty
-    def prbDispatcher(self):
-        pass
-
-    @prbInvitesProperty
-    def prbInvites(self):
-        pass
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(self):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        super(AcceptPrbFortInviteHandler, self).handleAction(model, entityID, action)
-        notification = model.collection.getItem(NOTIFICATION_TYPE.MESSAGE, entityID)
-        if not notification:
-            LOG_ERROR('Notification not found', NOTIFICATION_TYPE.MESSAGE, entityID)
-            return
-        else:
-            customData = notification.getSavedData()
-            battleID = customData.get('battleID')
-            peripheryID = customData.get('peripheryID')
-            if battleID is not None and peripheryID is not None:
-                if battleID == getBattleID():
-                    fort_events.showFortBattleRoomWindow()
-                else:
-                    fort_helpers.tryToConnectFortBattle(battleID, peripheryID)
-            else:
-                LOG_ERROR('Invalid fort battle data', battleID, peripheryID)
-            return
-
-
 class ApproveFriendshipHandler(_ActionHandler):
 
     @proto_getter(PROTO_TYPE.XMPP)
@@ -525,7 +485,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
- AcceptPrbFortInviteHandler,
  AcceptPrbInviteHandler,
  DeclinePrbInviteHandler,
  ApproveFriendshipHandler,

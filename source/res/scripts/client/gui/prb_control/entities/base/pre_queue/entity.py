@@ -122,6 +122,8 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
     def fini(self, ctx=None, woEvents=False):
         self.clear()
         self._subscriber.unsubscribe(self)
+        if self._requestCtx.isProcessing:
+            self._requestCtx.stopProcessing(True)
         self._requestCtx.clear()
         return super(PreQueueEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
@@ -276,7 +278,7 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
         self._requestCtx.stopProcessing(True)
         self._invokeListeners('onKickedFromQueue', self._queueType, *args)
         self._exitFromQueueUI()
-        SystemMessages.pushMessage(messages.getKickReasonMessage('timeout'), type=SystemMessages.SM_TYPE.Warning)
+        SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
 
     def onKickedFromArena(self, *args):
         """

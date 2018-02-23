@@ -342,6 +342,12 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isTutorialBattle(self):
         return self._guiType == _GUI_TYPE.TUTORIAL
 
+    def isRankedBattle(self):
+        return self._guiType == _GUI_TYPE.RANKED
+
+    def isBootcampBattle(self):
+        return self._guiType == _GUI_TYPE.BOOTCAMP
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
@@ -541,6 +547,9 @@ class _ClientArenaVisitor(object):
         else:
             return None
             return None
+
+    def showTimerStateMessage(self):
+        return not self._gui.isBootcampBattle()
 
     def getTeamSpawnPoints(self, team):
         other = team - 1

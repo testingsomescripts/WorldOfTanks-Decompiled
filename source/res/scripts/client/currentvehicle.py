@@ -14,13 +14,13 @@ from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui import g_tankActiveCamouflage
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared import g_itemsCache
 from gui.shared.formatters import icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from skeletons.gui.game_control import IIGRController, IRentalsController, IFalloutController
+from skeletons.gui.shared import IItemsCache
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
@@ -33,6 +33,7 @@ def _getHangarSpace():
 
 
 class _CachedVehicle(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         self._eManager = EventManager()
@@ -191,7 +192,7 @@ class _CurrentVehicle(_CachedVehicle):
 
     @property
     def item(self):
-        return g_itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
+        return self.itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
 
     def isBroken(self):
         return self.isPresent() and self.item.isBroken
@@ -241,6 +242,9 @@ class _CurrentVehicle(_CachedVehicle):
     def isEvent(self):
         return self.isPresent() and self.item.isEvent
 
+    def isObserver(self):
+        return self.isPresent() and self.item.isObserver
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 
@@ -260,9 +264,9 @@ class _CurrentVehicle(_CachedVehicle):
         return self.isPresent() and self.item.isFalloutOnly()
 
     def selectVehicle(self, vehInvID=0):
-        vehicle = g_itemsCache.items.getVehicle(vehInvID)
+        vehicle = self.itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
-            invVehs = g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY)
+            invVehs = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY)
 
             def notEvent(x, y):
                 if x.isOnlyForEventBattles and not y.isOnlyForEventBattles:
@@ -280,7 +284,7 @@ class _CurrentVehicle(_CachedVehicle):
         self._selectVehicle(0)
 
     def getDossier(self):
-        return g_itemsCache.items.getVehicleDossier(self.item.intCD)
+        return self.itemsCache.items.getVehicleDossier(self.item.intCD)
 
     def getHangarMessage(self):
         if not self.isPresent():
@@ -295,7 +299,7 @@ class _CurrentVehicle(_CachedVehicle):
                 message = i18n.makeString('#menu:tankCarousel/vehicleStates/inPremiumIgrOnly', icon=icon)
             return (state, message, stateLvl)
         if self.falloutCtrl and self.falloutCtrl.isSelected() and (not self.item.isFalloutAvailable or self.item.getCustomState() == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE):
-            message = i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % Vehicle.VEHICLE_STATE.NOT_SUITABLE)
+            message = i18n.makeString(MENU.tankcarousel_vehiclestates(Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE))
             return (state, message, Vehicle.VEHICLE_STATE_LEVEL.WARNING)
         message = '#menu:currentVehicleStatus/' + state
         return (state, message, stateLvl)
@@ -337,7 +341,7 @@ class _CurrentVehicle(_CachedVehicle):
                     vehCompDescr = roster[BigWorld.player().id].get('vehCompDescr', '')
                     if len(vehCompDescr):
                         vehDescr = vehicles.VehicleDescr(vehCompDescr)
-                        vehicle = g_itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
+                        vehicle = self.itemsCache.items.getItemByCD(vehDescr.type.compactDescr)
                         if vehicle is not None:
                             return vehicle.invID
 
@@ -353,6 +357,30 @@ class _CurrentVehicle(_CachedVehicle):
 
 g_currentVehicle = _CurrentVehicle()
 
+class PreviewAppearance(object):
+
+    def refreshVehicle(self, item):
+        return NotImplementedError
+
+
+class _RegularPreviewAppearance(PreviewAppearance):
+
+    def refreshVehicle(self, item):
+        if item:
+            _getHangarSpace().updatePreviewVehicle(item)
+        else:
+            g_currentVehicle.refreshModel()
+
+
+class HeroTankPreviewAppearance(PreviewAppearance):
+
+    def refreshVehicle(self, item):
+        if item is None:
+            from ClientSelectableCameraObject import ClientSelectableCameraObject
+            ClientSelectableCameraObject.switchCamera()
+        return
+
+
 class _CurrentPreviewVehicle(_CachedVehicle):
 
     def __init__(self):
@@ -362,20 +390,29 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.onComponentInstalled = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
+        self.__vehAppearance = _RegularPreviewAppearance()
         return
 
     def destroy(self):
         super(_CurrentPreviewVehicle, self).destroy()
         self.__item = None
         self.__defaultItem = None
+        self.__vehAppearance = None
         return
 
-    def selectVehicle(self, vehicleCD):
-        self._selectVehicle(vehicleCD)
+    def init(self):
+        super(_CurrentPreviewVehicle, self).init()
+        self.resetAppearance()
+
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD)
 
     def selectNoVehicle(self):
         self._selectVehicle(None)
         return
+
+    def resetAppearance(self, appearance=None):
+        self.__vehAppearance = appearance or _RegularPreviewAppearance()
 
     @property
     def item(self):
@@ -388,18 +425,12 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     @property
     def invID(self):
         if self.isPresent():
-            vehicle = g_itemsCache.items.getItemByCD(self.item.intCD)
+            vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             return vehicle.invID
-
-    def refreshModel(self):
-        if self.isPresent():
-            self.hangarSpace.updatePreviewVehicle(self.item)
-        else:
-            g_currentVehicle.refreshModel()
 
     def onInventoryUpdate(self, invDiff):
         if self.isPresent():
-            vehicle = g_itemsCache.items.getItemByCD(self.item.intCD)
+            vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             if vehicle.isInInventory:
                 self.selectNoVehicle()
                 self.onVehicleInventoryChanged()
@@ -416,7 +447,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     @process
     def installComponent(self, newId):
-        newComponentItem = g_itemsCache.items.getItemByCD(newId)
+        newComponentItem = self.itemsCache.items.getItemByCD(newId)
         Waiting.show('applyModule')
         conflictedEqs = newComponentItem.getConflictedEquipments(self.item)
         result = yield getPreviewInstallerProcessor(self.item, newComponentItem, conflictedEqs).request()
@@ -424,7 +455,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         processMsg(result)
         Waiting.hide('applyModule')
         if result.success:
-            self.refreshModel()
+            self.__vehAppearance.refreshVehicle(self.item)
             self.onComponentInstalled()
 
     def hasModulesToSelect(self):
@@ -434,15 +465,21 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None):
         if self.isPresent() and self.item.intCD == vehicleCD:
             return
-        Waiting.show('updateCurrentVehicle', isSingle=True)
-        self.onChangeStarted()
-        self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
-        self.__item = self.__getPreviewVehicle(vehicleCD)
-        self.refreshModel()
-        self._setChangeCallback()
+        else:
+            Waiting.show('updateCurrentVehicle', isSingle=True)
+            self.onChangeStarted()
+            self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
+            if vehicleStrCD is not None:
+                self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
+            else:
+                self.__item = self.__getPreviewVehicle(vehicleCD)
+            if self.__vehAppearance:
+                self.__vehAppearance.refreshVehicle(self.__item)
+            self._setChangeCallback()
+            return
 
     def _onUpdateUnlocks(self, unlocks):
         if self.isPresent() and self.item.intCD in list(unlocks):
@@ -451,11 +488,21 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def __getPreviewVehicle(self, vehicleCD):
         if vehicleCD is not None:
-            vehicle = g_itemsCache.items.getStockVehicle(vehicleCD, useInventory=True)
+            vehicle = self.itemsCache.items.getStockVehicle(vehicleCD, useInventory=True)
             if vehicle:
                 vehicle.crew = vehicle.getPerfectCrew()
                 return vehicle
         return
+
+    def __makePreviewVehicleFromStrCD(self, vehicleStrCD):
+        vehicle = Vehicle(strCompactDescr=vehicleStrCD, proxy=self.itemsCache.items)
+        for slotID, device in enumerate(vehicle.optDevices):
+            if device is not None:
+                vehicle.descriptor.removeOptionalDevice(slotID)
+                vehicle.optDevices[slotID] = None
+
+        vehicle.crew = vehicle.getPerfectCrew()
+        return vehicle
 
 
 g_currentPreviewVehicle = _CurrentPreviewVehicle()

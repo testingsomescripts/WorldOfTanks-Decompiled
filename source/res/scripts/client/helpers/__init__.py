@@ -8,7 +8,10 @@ import i18n
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION
 VERSION_FILE_PATH = '../version.xml'
-gEffectsDisabled = lambda : False
+
+def gEffectsDisabled():
+    return False
+
 
 def isPlayerAccount():
     return hasattr(BigWorld.player(), 'databaseID')
@@ -129,7 +132,7 @@ def isShowStartupVideo():
 
 
 def isIntroVideoSettingChanged(userPrefs=None):
-    userPrefs = userPrefs or Settings.g_instance.userPrefs
+    userPrefs = userPrefs if userPrefs is not None else Settings.g_instance.userPrefs
     import account_shared
     mainVersion = account_shared.getClientMainVersion()
     lastVideoVersion = userPrefs.readString(Settings.INTRO_VIDEO_VERSION, '')
@@ -138,9 +141,10 @@ def isIntroVideoSettingChanged(userPrefs=None):
 
 def writeIntroVideoSetting():
     userPrefs = Settings.g_instance.userPrefs
-    if userPrefs:
+    if userPrefs is not None:
         import account_shared
         userPrefs.writeString(Settings.INTRO_VIDEO_VERSION, account_shared.getClientMainVersion())
+    return
 
 
 def newFakeModel():
@@ -176,3 +180,14 @@ def strcmp(word1, word2):
 
 def setHangarVisibility(isVisible):
     BigWorld.worldDrawEnabled(isVisible)
+
+
+def getHelperServicesConfig(manager):
+    """ Configures services for package gui.
+    :param manager: helpers.dependency.DependencyManager.
+    """
+    from helpers.statistics import StatisticsCollector
+    from skeletons.helpers.statistics import IStatisticsCollector
+    collector = StatisticsCollector()
+    collector.init()
+    manager.addInstance(IStatisticsCollector, collector, finalizer='fini')

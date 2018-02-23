@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/control_modes.py
 import weakref
 from collections import namedtuple
+import BigWorld
 import BattleReplay
 import CommandMapping
 import GUI
@@ -21,7 +22,7 @@ from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic, getCollidableEntities
 from TriggersManager import TRIGGER_TYPE
 from constants import AIMING_MODE
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from helpers import dependency
 from post_processing import g_postProcessing
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -130,7 +131,12 @@ class _GunControlMode(IControlMode):
         self._cam = None
         self._aimingMode = 0
         self._canShot = False
+        self._currentMode = mode
         return
+
+    @property
+    def currentMode(self):
+        return self._currentMode
 
     def prerequisites(self):
         return []
@@ -476,7 +482,7 @@ class ArcadeControlMode(_GunControlMode):
     def enable(self, **args):
         super(ArcadeControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(0)
-        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', 0.0), gunPitch=args.get('gunPitch', 0.0), isRemoteCamera=args.get('isRemoteCamera', False))
+        self._cam.enable(args.get('preferredPos'), args.get('closesDist', False), turretYaw=args.get('turretYaw', 0.0), gunPitch=args.get('gunPitch', 0.0))
         g_postProcessing.enable('arcade')
         player = BigWorld.player()
         if player.isObserver():
@@ -633,10 +639,14 @@ class _TrajectoryControlMode(_GunControlMode):
     def enable(self, **args):
         super(_TrajectoryControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(2)
-        self._cam.enable(args['preferredPos'], args['saveDist'], args.get('isRemoteCamera', False))
+        self._cam.enable(args['preferredPos'], args['saveDist'])
         self.__trajectoryDrawer.visible = self._aih.isGuiVisible
         BigWorld.player().autoAim(None)
-        self.__updateTrajectoryDrawer()
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying and replayCtrl.isControllingCamera:
+            self.__trajectoryDrawerClbk = BigWorld.callback(0.0, self.__updateTrajectoryDrawer)
+        else:
+            self.__updateTrajectoryDrawer()
         g_postProcessing.enable(CTRL_MODE_NAME.STRATEGIC)
         self.__curVehicleID = args.get('curVehicleID')
         if self.__curVehicleID is None:
@@ -743,11 +753,7 @@ class _TrajectoryControlMode(_GunControlMode):
             return False
 
     def __updateTrajectoryDrawer(self):
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying:
-            self.__trajectoryDrawerClbk = BigWorld.callback(0.1, self.__updateTrajectoryDrawer)
-        else:
-            self.__trajectoryDrawerClbk = BigWorld.callback(self.__updateInterval, self.__updateTrajectoryDrawer)
+        self.__trajectoryDrawerClbk = BigWorld.callback(self.__updateInterval, self.__updateTrajectoryDrawer)
         try:
             R = self.camera.aimingSystem.getDesiredShotPoint()
             if R is None:
@@ -856,14 +862,17 @@ class SniperControlMode(_GunControlMode):
     def enable(self, **args):
         super(SniperControlMode, self).enable(**args)
         SoundGroups.g_instance.changePlayMode(1)
-        self._cam.enable(args['preferredPos'], args['saveZoom'], args.get('isRemoteCamera', False))
+        self._cam.enable(args['preferredPos'], args['saveZoom'])
         self.__binoculars.enabled = True
         self.__binoculars.setEnableLensEffects(SniperControlMode._LENS_EFFECTS_ENABLED)
         BigWorld.wg_setLowDetailedMode(True)
         BigWorld.wg_enableTreeHiding(True)
         BigWorld.wg_setTreeHidingRadius(15.0, 10.0)
         BigWorld.wg_havokSetSniperMode(True)
-        TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.onSniperModeChanged(True)
         g_postProcessing.enable('sniper')
         desc = BigWorld.player().getVehicleDescriptor()
         isHorizontalStabilizerAllowed = desc.gun['turretYawLimits'] is None
@@ -880,10 +889,13 @@ class SniperControlMode(_GunControlMode):
         BigWorld.wg_enableTreeHiding(False)
         g_postProcessing.disable()
         BigWorld.wg_setLowDetailedMode(False)
-        if TriggersManager.g_manager is not None:
-            TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            if TriggersManager.g_manager is not None:
+                TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.SNIPER_MODE)
         if self._aih.siegeModeControl is not None:
             self._aih.siegeModeControl.onSiegeStateChanged -= self.__siegeModeStateChanged
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.onSniperModeChanged(False)
         return
 
     def setObservedVehicle(self, vehicleID):
@@ -895,7 +907,8 @@ class SniperControlMode(_GunControlMode):
             from items.vehicles import g_cache
             self.__setupBinoculars(g_cache.optionalDevices()[5] in vehicleDescr.optionalDevices)
             isHorizontalStabilizerAllowed = vehicleDescr.gun['turretYawLimits'] is None
-            self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
+            if self._cam.aimingSystem is not None:
+                self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
             return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):

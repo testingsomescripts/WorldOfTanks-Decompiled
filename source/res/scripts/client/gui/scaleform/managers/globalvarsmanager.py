@@ -2,16 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/managers/GlobalVarsManager.py
 import constants
 from gui import GUI_SETTINGS
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
-from gui.shared import g_itemsCache
 from helpers import getClientOverride, dependency
 from skeletons.gui.game_control import IWalletController, ITradeInController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
+from bootcamp.Bootcamp import g_bootcamp
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
+    itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
     tradeIn = dependency.descriptor(ITradeInController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(GlobalVarsManager, self).__init__()
@@ -34,7 +37,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isTutorialRunning(self, tutorialID):
         try:
             from tutorial.loader import isTutorialRunning
-        except ImportError:
+        except:
 
             def isTutorialRunning(_):
                 return False
@@ -42,19 +45,16 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return isTutorialRunning(tutorialID)
 
     def isFreeXpToTankman(self):
-        return g_itemsCache.items.shop.freeXPToTManXPRate > 0
+        return self.itemsCache.items.shop.freeXPToTManXPRate > 0
 
     def getLocaleOverride(self):
         return getClientOverride()
 
     def isRoamingEnabled(self):
-        return g_lobbyContext.getServerSettings().roaming.isEnabled()
+        return self.lobbyContext.getServerSettings().roaming.isEnabled()
 
     def isInRoaming(self):
-        return g_lobbyContext.getServerSettings().roaming.isInRoaming()
-
-    def isFortificationAvailable(self):
-        return g_lobbyContext.getServerSettings().isFortsEnabled()
+        return self.lobbyContext.getServerSettings().roaming.isInRoaming()
 
     def isWalletAvailable(self):
         if self.wallet:
@@ -72,7 +72,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return constants.IS_RENTALS_ENABLED
 
     def isPotapovQuestEnabled(self):
-        return g_lobbyContext.getServerSettings().isPotapovQuestEnabled()
+        return self.lobbyContext.getServerSettings().isPotapovQuestEnabled()
 
     def isLoginLoadedAtFirstTime(self):
         if GlobalVarsManager._isLoginLoadInfoRequested:
@@ -82,7 +82,10 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
             return True
 
     def isVehicleRestoreEnabled(self):
-        return g_lobbyContext.getServerSettings().isVehicleRestoreEnabled()
+        return self.lobbyContext.getServerSettings().isVehicleRestoreEnabled()
 
     def isTradeInEnabled(self):
         return self.tradeIn.isEnabled()
+
+    def isBootcampFinished(self):
+        return g_bootcamp.isFinished()

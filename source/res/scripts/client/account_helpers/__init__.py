@@ -4,7 +4,7 @@ import datetime
 import BigWorld
 from constants import ACCOUNT_ATTR
 from account_helpers.AccountSettings import AccountSettings, GOLD_FISH_LAST_SHOW_TIME
-from shared_utils.account_helpers import BattleResultsCache, ClientClubs
+from shared_utils.account_helpers import BattleResultsCache
 from shared_utils.account_helpers import ClientInvitations
 from helpers.time_utils import getCurrentTimestamp
 
@@ -63,4 +63,4 @@ def getAccountHelpersConfig(manager):
     :param manager: helpers.dependency.DependencyManager.
     """
     from account_helpers import settings_core
-    manager.install(settings_core.getSettingsCoreConfig)
+    manager.addConfig(settings_core.getSettingsCoreConfig)
