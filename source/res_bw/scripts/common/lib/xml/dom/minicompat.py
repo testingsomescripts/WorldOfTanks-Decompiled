@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/minicompat.py
 """Python version compatibility support for minidom."""
 __all__ = ['NodeList',
@@ -16,8 +17,7 @@ class NodeList(list):
     __slots__ = ()
 
     def item(self, index):
-        if 0 <= index < len(self):
-            return self[index]
+        return self[index] if 0 <= index < len(self) else None
 
     def _get_length(self):
         return len(self)
@@ -51,7 +51,7 @@ class EmptyNodeList(tuple):
         return None
 
     def _get_length(self):
-        return 0
+        pass
 
     def _set_length(self, value):
         raise xml.dom.NoModificationAllowedErr("attempt to modify read-only attribute 'length'")
@@ -62,9 +62,9 @@ class EmptyNodeList(tuple):
 def defproperty(klass, name, doc):
     get = getattr(klass, '_get_' + name).im_func
 
-    def set(self, value, name = name):
+    def set(self, value, name=name):
         raise xml.dom.NoModificationAllowedErr('attempt to modify read-only attribute ' + repr(name))
 
-    raise not hasattr(klass, '_set_' + name) or AssertionError('expected not to find _set_' + name)
+    assert not hasattr(klass, '_set_' + name), 'expected not to find _set_' + name
     prop = property(get, set, doc=doc)
     setattr(klass, name, prop)

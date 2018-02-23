@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/_number_new.py
 __revision__ = '$Id$'
 __all__ = ['ceil_shift',
@@ -66,7 +66,7 @@ def exact_log2(num):
     return i
 
 
-def exact_div(p, d, allow_divzero = False):
+def exact_div(p, d, allow_divzero=False):
     """Find and return an integer n such that p == n * d
     
     If no such integer exists, this function raises ValueError.

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/expatbuilder.py
 """Facility to use the Expat parser to load a minidom instance
 from a string or file.
@@ -31,7 +32,7 @@ _typeinfo_map = {'CDATA': minidom.TypeInfo(None, 'cdata'),
 class ElementInfo(object):
     __slots__ = ('_attr_info', '_model', 'tagName')
 
-    def __init__(self, tagName, model = None):
+    def __init__(self, tagName, model=None):
         self.tagName = tagName
         self._attr_info = []
         self._model = model
@@ -85,11 +86,11 @@ def _intern(builder, s):
 
 
 def _parse_ns_name(builder, name):
-    if not ' ' in name:
-        raise AssertionError
-        parts = name.split(' ')
-        intern = builder._intern_setdefault
-        uri, localname, prefix = len(parts) == 3 and parts
+    assert ' ' in name
+    parts = name.split(' ')
+    intern = builder._intern_setdefault
+    if len(parts) == 3:
+        uri, localname, prefix = parts
         prefix = intern(prefix, prefix)
         qname = '%s:%s' % (prefix, localname)
         qname = intern(qname, qname)
@@ -108,7 +109,7 @@ class ExpatBuilder():
     """Document builder that uses Expat to build a ParsedXML.DOM document
     instance."""
 
-    def __init__(self, options = None):
+    def __init__(self, options=None):
         if options is None:
             options = xmlbuilder.Options()
         self._options = options
@@ -315,7 +316,7 @@ class ExpatBuilder():
         self._cdata_continue = False
 
     def external_entity_ref_handler(self, context, base, systemId, publicId):
-        return 1
+        pass
 
     def first_element_handler(self, name, attributes):
         if self._filter is None and not self._elem_info:
@@ -390,7 +391,7 @@ class ExpatBuilder():
         if info is None:
             self._elem_info[name] = ElementInfo(name, model)
         else:
-            raise info._model is None or AssertionError
+            assert info._model is None
             info._model = model
         return
 
@@ -542,7 +543,7 @@ class FragmentBuilder(ExpatBuilder):
     fragment.
     """
 
-    def __init__(self, context, options = None):
+    def __init__(self, context, options=None):
         if context.nodeType == DOCUMENT_NODE:
             self.originalDocument = context
             self.context = context
@@ -604,8 +605,7 @@ class FragmentBuilder(ExpatBuilder):
                 s = '%s<!NOTATION %s' % (s, notation.nodeName)
                 if notation.publicId:
                     s = '%s PUBLIC "%s"\n             "%s">' % (s, notation.publicId, notation.systemId)
-                else:
-                    s = '%s SYSTEM "%s">' % (s, notation.systemId)
+                s = '%s SYSTEM "%s">' % (s, notation.systemId)
 
             for i in range(doctype.entities.length):
                 entity = doctype.entities.item(i)
@@ -625,7 +625,7 @@ class FragmentBuilder(ExpatBuilder):
         return s
 
     def _getNSattrs(self):
-        return ''
+        pass
 
     def external_entity_ref_handler(self, context, base, systemId, publicId):
         if systemId == _FRAGMENT_BUILDER_INTERNAL_SYSTEM_ID:
@@ -722,12 +722,12 @@ class Namespaces():
 
     def end_element_handler(self, name):
         curNode = self.curNode
-        uri, localname, prefix, qname = ' ' in name and _parse_ns_name(self, name)
-        if not (curNode.namespaceURI == uri and curNode.localName == localname and curNode.prefix == prefix):
-            raise AssertionError('element stack messed up! (namespace)')
+        if ' ' in name:
+            uri, localname, prefix, qname = _parse_ns_name(self, name)
+            assert curNode.namespaceURI == uri and curNode.localName == localname and curNode.prefix == prefix, 'element stack messed up! (namespace)'
         else:
-            raise curNode.nodeName == name or AssertionError('element stack messed up - bad nodeName')
-            raise curNode.namespaceURI == EMPTY_NAMESPACE or AssertionError('element stack messed up - bad namespaceURI')
+            assert curNode.nodeName == name, 'element stack messed up - bad nodeName'
+            assert curNode.namespaceURI == EMPTY_NAMESPACE, 'element stack messed up - bad namespaceURI'
         self.curNode = curNode.parentNode
         self._finish_end_element(curNode)
 
@@ -765,8 +765,7 @@ class FragmentBuilderNS(Namespaces, FragmentBuilder):
                         declname = 'xmlns'
                     if attrs:
                         attrs = "%s\n    %s='%s'" % (attrs, declname, uri)
-                    else:
-                        attrs = " %s='%s'" % (declname, uri)
+                    attrs = " %s='%s'" % (declname, uri)
 
             context = context.parentNode
 
@@ -820,7 +819,7 @@ class InternalSubsetExtractor(ExpatBuilder):
         raise ParseEscape()
 
 
-def parse(file, namespaces = True):
+def parse(file, namespaces=True):
     """Parse a document, returning the resulting Document node.
     
     'file' may be either a file name or an open file object.
@@ -841,7 +840,7 @@ def parse(file, namespaces = True):
     return result
 
 
-def parseString(string, namespaces = True):
+def parseString(string, namespaces=True):
     """Parse a document from a string, returning the resulting
     Document node.
     """
@@ -852,7 +851,7 @@ def parseString(string, namespaces = True):
     return builder.parseString(string)
 
 
-def parseFragment(file, context, namespaces = True):
+def parseFragment(file, context, namespaces=True):
     """Parse a fragment of a document, given the context from which it
     was originally extracted.  context should be the parent of the
     node(s) which are in the fragment.
@@ -875,7 +874,7 @@ def parseFragment(file, context, namespaces = True):
     return result
 
 
-def parseFragmentString(string, context, namespaces = True):
+def parseFragmentString(string, context, namespaces=True):
     """Parse a fragment of a document from a string, given the context
     from which it was originally extracted.  context should be the
     parent of the node(s) which are in the fragment.

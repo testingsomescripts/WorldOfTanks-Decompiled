@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/mock_tk.py
 """Classes that replace tkinter gui objects used by an object being tested.
 
@@ -9,7 +9,7 @@ required in spite of what the doc strings say.
 class Var(object):
     """Use for String/Int/BooleanVar: incomplete"""
 
-    def __init__(self, master = None, value = None, name = None):
+    def __init__(self, master=None, value=None, name=None):
         self.master = master
         self.value = value
         self.name = name
@@ -94,7 +94,7 @@ class Text(object):
         for instance, 0-width characters or character + accent.
        """
 
-    def __init__(self, master = None, cnf = {}, **kw):
+    def __init__(self, master=None, cnf={}, **kw):
         """Initialize mock, non-gui, text-only Text widget.
         
         At present, all args are ignored. Almost all affect visual behavior.
@@ -106,7 +106,7 @@ class Text(object):
         """Return string version of index decoded according to current text."""
         return '%s.%s' % self._decode(index, endflag=1)
 
-    def _decode(self, index, endflag = 0):
+    def _decode(self, index, endflag=0):
         """Return a (line, char) tuple of int indexes into self.data.
         
                 This implements .index without converting the result back to a string.
@@ -181,7 +181,7 @@ class Text(object):
         self.data[line + 1:line + 1] = chars[1:]
         self.data[line + len(chars) - 1] += after
 
-    def get(self, index1, index2 = None):
+    def get(self, index1, index2=None):
         """Return slice from index1 to index2 (default is 'index1+1')."""
         startline, startchar = self._decode(index1)
         if index2 is None:
@@ -199,7 +199,7 @@ class Text(object):
             return ''.join(lines)
             return
 
-    def delete(self, index1, index2 = None):
+    def delete(self, index1, index2=None):
         """Delete slice from index1 to index2 (default is 'index1+1').
         
                Adjust default index2 ('index+1) for line ends.
@@ -251,7 +251,7 @@ class Text(object):
         """Delete all marks in markNames."""
         pass
 
-    def tag_remove(self, tagName, index1, index2 = None):
+    def tag_remove(self, tagName, index1, index2=None):
         """Remove tag tagName from all characters between index1 and index2."""
         pass
 
@@ -267,6 +267,6 @@ class Text(object):
         """Scroll screen to make the character at INDEX is visible."""
         pass
 
-    def bind(sequence = None, func = None, add = None):
+    def bind(sequence=None, func=None, add=None):
         """Bind to this widget at event sequence a call to function func."""
         pass

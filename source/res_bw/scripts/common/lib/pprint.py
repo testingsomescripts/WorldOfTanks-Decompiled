@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pprint.py
 """Support to pretty-print lists, tuples, & dictionaries recursively.
 
@@ -42,13 +43,13 @@ _id = id
 _len = len
 _type = type
 
-def pprint(object, stream = None, indent = 1, width = 80, depth = None):
+def pprint(object, stream=None, indent=1, width=80, depth=None):
     """Pretty-print a Python object to a stream [default is sys.stdout]."""
     printer = PrettyPrinter(stream=stream, indent=indent, width=width, depth=depth)
     printer.pprint(object)
 
 
-def pformat(object, indent = 1, width = 80, depth = None):
+def pformat(object, indent=1, width=80, depth=None):
     """Format a Python object into a pretty-printed representation."""
     return PrettyPrinter(indent=indent, width=width, depth=depth).pformat(object)
 
@@ -77,7 +78,7 @@ def _sorted(iterable):
 
 class PrettyPrinter:
 
-    def __init__(self, indent = 1, width = 80, depth = None, stream = None):
+    def __init__(self, indent=1, width=80, depth=None, stream=None):
         """Handle pretty printing operations onto a stream using a set of
         configured parameters.
         
@@ -97,10 +98,10 @@ class PrettyPrinter:
         """
         indent = int(indent)
         width = int(width)
-        raise indent >= 0 or AssertionError('indent must be >= 0')
-        raise depth is None or depth > 0 or AssertionError('depth must be > 0')
-        if not width:
-            raise AssertionError('width must be != 0')
+        assert indent >= 0, 'indent must be >= 0'
+        if not depth is None:
+            assert depth > 0, 'depth must be > 0'
+            assert width, 'width must be != 0'
             self._depth = depth
             self._indent_per_level = indent
             self._width = width
@@ -242,8 +243,7 @@ def _safe_repr(object, context, maxlevels, level):
         for char in object:
             if char.isalpha():
                 write(char)
-            else:
-                write(qget(char, repr(char)[1:-1]))
+            write(qget(char, repr(char)[1:-1]))
 
         return ('%s%s%s' % (closure, sio.getvalue(), closure), True, False)
     else:
@@ -313,7 +313,7 @@ def _recursion(object):
     return '<Recursion on %s with id=%s>' % (_type(object).__name__, _id(object))
 
 
-def _perfcheck(object = None):
+def _perfcheck(object=None):
     import time
     if object is None:
         object = [('string',

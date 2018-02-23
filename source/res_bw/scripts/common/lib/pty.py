@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pty.py
 """Pseudo terminal utilities."""
 from select import select
@@ -131,7 +132,7 @@ def _read(fd):
     return os.read(fd, 1024)
 
 
-def _copy(master_fd, master_read = _read, stdin_read = _read):
+def _copy(master_fd, master_read=_read, stdin_read=_read):
     """Parent copy loop.
     Copies
             pty master -> standard output   (master_read)
@@ -153,7 +154,7 @@ def _copy(master_fd, master_read = _read, stdin_read = _read):
                 _writen(master_fd, data)
 
 
-def spawn(argv, master_read = _read, stdin_read = _read):
+def spawn(argv, master_read=_read, stdin_read=_read):
     """Create a spawned process."""
     if type(argv) == type(''):
         argv = (argv,)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/pgen.py
 from . import grammar, token, tokenize
 
@@ -8,7 +8,7 @@ class PgenGrammar(grammar.Grammar):
 
 class ParserGenerator(object):
 
-    def __init__(self, filename, stream = None):
+    def __init__(self, filename, stream=None):
         close_stream = None
         if stream is None:
             stream = open(filename)
@@ -125,9 +125,8 @@ class ParserGenerator(object):
                     fset = self.first[label]
                 totalset.update(fset)
                 overlapcheck[label] = fset
-            else:
-                totalset[label] = 1
-                overlapcheck[label] = {label: 1}
+            totalset[label] = 1
+            overlapcheck[label] = {label: 1}
 
         inverse = {}
         for label, itsfirst in overlapcheck.iteritems():
@@ -217,8 +216,7 @@ class ParserGenerator(object):
                     todo.append(next)
                 if label is None:
                     print '    -> %d' % j
-                else:
-                    print '    %s -> %d' % (label, j)
+                print '    %s -> %d' % (label, j)
 
         return
 
@@ -263,8 +261,8 @@ class ParserGenerator(object):
 
     def parse_alt(self):
         a, b = self.parse_item()
-        while self.value in ('(', '[') or self.type in (token.NAME, token.STRING):
-            c, d = self.parse_item()
+        while 1:
+            c, d = (self.value in ('(', '[') or self.type in (token.NAME, token.STRING)) and self.parse_item()
             b.addarc(c)
             b = d
 
@@ -302,7 +300,7 @@ class ParserGenerator(object):
             return (a, z)
         self.raise_error('expected (...) or NAME or STRING, got %s/%s', self.type, self.value)
 
-    def expect(self, type, value = None):
+    def expect(self, type, value=None):
         if self.type != type or value is not None and self.value != value:
             self.raise_error('expected %s/%s, got %s/%s', type, value, self.type, self.value)
         value = self.value
@@ -334,7 +332,7 @@ class NFAState(object):
     def __init__(self):
         self.arcs = []
 
-    def addarc(self, next, label = None):
+    def addarc(self, next, label=None):
         assert label is None or isinstance(label, str)
         assert isinstance(next, NFAState)
         self.arcs.append((label, next))
@@ -377,6 +375,6 @@ class DFAState(object):
     __hash__ = None
 
 
-def generate_grammar(filename = 'Grammar.txt'):
+def generate_grammar(filename='Grammar.txt'):
     p = ParserGenerator(filename)
     return p.make_grammar()

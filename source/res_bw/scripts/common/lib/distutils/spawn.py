@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/spawn.py
 """distutils.spawn
 
@@ -14,7 +14,7 @@ from distutils.errors import DistutilsPlatformError, DistutilsExecError
 from distutils.debug import DEBUG
 from distutils import log
 
-def spawn(cmd, search_path = 1, verbose = 0, dry_run = 0):
+def spawn(cmd, search_path=1, verbose=0, dry_run=0):
     """Run another program, specified as a command list 'cmd', in a new process.
     
     'cmd' is just the argument list for the new process, ie.
@@ -54,7 +54,7 @@ def _nt_quote_args(args):
     return args
 
 
-def _spawn_nt(cmd, search_path = 1, verbose = 0, dry_run = 0):
+def _spawn_nt(cmd, search_path=1, verbose=0, dry_run=0):
     executable = cmd[0]
     cmd = _nt_quote_args(cmd)
     if search_path:
@@ -74,7 +74,7 @@ def _spawn_nt(cmd, search_path = 1, verbose = 0, dry_run = 0):
             raise DistutilsExecError, 'command %r failed with exit status %d' % (cmd, rc)
 
 
-def _spawn_os2(cmd, search_path = 1, verbose = 0, dry_run = 0):
+def _spawn_os2(cmd, search_path=1, verbose=0, dry_run=0):
     executable = cmd[0]
     if search_path:
         executable = find_executable(executable) or executable
@@ -99,7 +99,7 @@ if sys.platform == 'darwin':
     _cfg_target = None
     _cfg_target_split = None
 
-def _spawn_posix(cmd, search_path = 1, verbose = 0, dry_run = 0):
+def _spawn_posix(cmd, search_path=1, verbose=0, dry_run=0):
     global _cfg_target
     global _cfg_target_split
     log.info(' '.join(cmd))
@@ -154,24 +154,23 @@ def _spawn_posix(cmd, search_path = 1, verbose = 0, dry_run = 0):
                     if not DEBUG:
                         cmd = executable
                     raise DistutilsExecError, 'command %r terminated by signal %d' % (cmd, os.WTERMSIG(status))
-                elif os.WIFEXITED(status):
+                if os.WIFEXITED(status):
                     exit_status = os.WEXITSTATUS(status)
                     if exit_status == 0:
                         return
                     if not DEBUG:
                         cmd = executable
                     raise DistutilsExecError, 'command %r failed with exit status %d' % (cmd, exit_status)
-                elif os.WIFSTOPPED(status):
+                if os.WIFSTOPPED(status):
                     continue
-                else:
-                    if not DEBUG:
-                        cmd = executable
-                    raise DistutilsExecError, 'unknown error executing %r: termination status %d' % (cmd, status)
+                if not DEBUG:
+                    cmd = executable
+                raise DistutilsExecError, 'unknown error executing %r: termination status %d' % (cmd, status)
 
         return
 
 
-def find_executable(executable, path = None):
+def find_executable(executable, path=None):
     """Tries to find 'executable' in the directories listed in 'path'.
     
     A string listing directories separated by 'os.pathsep'; defaults to

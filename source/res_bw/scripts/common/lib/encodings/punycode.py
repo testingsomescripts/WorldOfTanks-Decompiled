@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/punycode.py
 """ Codec for the Punicode encoding, as specified in RFC 3492
 
@@ -13,8 +13,7 @@ def segregate(str):
     for c in str:
         if ord(c) < 128:
             base.append(c)
-        else:
-            extended[c] = 1
+        extended[c] = 1
 
     extended = extended.keys()
     extended.sort()
@@ -77,9 +76,7 @@ def T(j, bias):
     res = 36 * (j + 1) - bias
     if res < 1:
         return 1
-    if res > 26:
-        return 26
-    return res
+    return 26 if res > 26 else res
 
 
 digits = 'abcdefghijklmnopqrstuvwxyz0123456789'
@@ -130,9 +127,7 @@ def punycode_encode(text):
     base = base.encode('ascii')
     deltas = insertion_unsort(text, extended)
     extended = generate_integers(len(base), deltas)
-    if base:
-        return base + '-' + extended
-    return extended
+    return base + '-' + extended if base else extended
 
 
 def decode_generalized_number(extended, extpos, bias, errors):
@@ -206,11 +201,11 @@ def punycode_decode(text, errors):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         res = punycode_encode(input)
         return (res, len(input))
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         if errors not in ('strict', 'replace', 'ignore'):
             raise UnicodeError, 'Unsupported error handling ' + errors
         res = punycode_decode(input, errors)
@@ -219,13 +214,13 @@ class Codec(codecs.Codec):
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return punycode_encode(input)
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         if self.errors not in ('strict', 'replace', 'ignore'):
             raise UnicodeError, 'Unsupported error handling ' + self.errors
         return punycode_decode(input, self.errors)

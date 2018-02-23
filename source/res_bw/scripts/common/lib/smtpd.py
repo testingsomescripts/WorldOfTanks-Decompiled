@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/smtpd.py
 """An RFC 2821 smtp proxy.
 
@@ -63,7 +64,7 @@ NEWLINE = '\n'
 EMPTYSTRING = ''
 COMMASPACE = ', '
 
-def usage(code, msg = ''):
+def usage(code, msg=''):
     print >> sys.stderr, __doc__ % globals()
     if msg:
         print >> sys.stderr, msg
@@ -136,8 +137,7 @@ class SMTPChannel(asynchat.async_chat):
             for text in line.split('\r\n'):
                 if text and text[0] == '.':
                     data.append(text[1:])
-                else:
-                    data.append(text)
+                data.append(text)
 
             self.__data = NEWLINE.join(data)
             status = self.__server.process_message(self.__peer, self.__mailfrom, self.__rcpttos, self.__data)
@@ -387,13 +387,13 @@ class MailmanProxy(PureProxy):
                 mlists[listname] = mlist
             if command == '':
                 msg.Enqueue(mlist, tolist=1)
-            elif command == 'admin':
+            if command == 'admin':
                 msg.Enqueue(mlist, toadmin=1)
-            elif command == 'owner':
+            if command == 'owner':
                 msg.Enqueue(mlist, toowner=1)
-            elif command == 'request':
+            if command == 'request':
                 msg.Enqueue(mlist, torequest=1)
-            elif command in ('join', 'leave'):
+            if command in ('join', 'leave'):
                 if command == 'join':
                     msg['Subject'] = 'subscribe'
                 else:
@@ -421,14 +421,14 @@ def parseargs():
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             usage(0)
-        elif opt in ('-V', '--version'):
+        if opt in ('-V', '--version'):
             print >> sys.stderr, __version__
             sys.exit(0)
-        elif opt in ('-n', '--nosetuid'):
+        if opt in ('-n', '--nosetuid'):
             options.setuid = 0
-        elif opt in ('-c', '--class'):
+        if opt in ('-c', '--class'):
             options.classname = arg
-        elif opt in ('-d', '--debug'):
+        if opt in ('-d', '--debug'):
             DEBUGSTREAM = sys.stderr
 
     if len(args) < 1:

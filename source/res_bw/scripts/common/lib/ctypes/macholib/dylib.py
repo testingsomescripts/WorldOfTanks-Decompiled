@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/dylib.py
 """
 Generic dylib path manipulation
@@ -28,15 +28,12 @@ def dylib_info(filename):
     if not present.
     """
     is_dylib = DYLIB_RE.match(filename)
-    if not is_dylib:
-        return None
-    else:
-        return is_dylib.groupdict()
+    return None if not is_dylib else is_dylib.groupdict()
 
 
 def test_dylib_info():
 
-    def d(location = None, name = None, shortname = None, version = None, suffix = None):
+    def d(location=None, name=None, shortname=None, version=None, suffix=None):
         return dict(location=location, name=name, shortname=shortname, version=version, suffix=suffix)
 
     assert dylib_info('completely/invalid') is None

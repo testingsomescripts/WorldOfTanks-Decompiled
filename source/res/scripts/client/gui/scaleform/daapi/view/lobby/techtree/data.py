@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
 import operator
 from AccountCommands import LOCK_REASON
@@ -23,7 +23,7 @@ class _ItemsData(object):
         if dumper is not None and isinstance(dumper, _BaseDumper):
             self._dumper = dumper
         else:
-            raise Exception, 'Dumper is invalid.'
+            raise Exception('Dumper is invalid.')
         self._nodes = []
         self._nodesIdx = {}
         self._items = g_itemsCache.items
@@ -69,7 +69,7 @@ class _ItemsData(object):
     def __del__(self):
         LOG_DEBUG('Data deleted:', self)
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         while len(self._nodes):
             self._nodes.pop().clear()
 
@@ -87,7 +87,7 @@ class _ItemsData(object):
         return self._items.getItemByCD(itemCD)
 
     def getRootItem(self):
-        raise NotImplementedError, 'Must be overridden in subclass'
+        raise NotImplementedError('Must be overridden in subclass')
 
     def getInventoryVehicles(self):
         nodeCDs = map(lambda node: node['id'], self._getNodesToInvalidate())
@@ -188,15 +188,12 @@ class _ItemsData(object):
 
     def _getNodesWereInBattle(self):
         accDossier = self._items.getAccountDossier(None)
-        if accDossier:
-            return set(accDossier.getTotalStats().getVehicles().keys())
-        else:
-            return set()
+        return set(accDossier.getTotalStats().getVehicles().keys()) if accDossier else set()
 
     def _getNodesToInvalidate(self):
         return self._nodes
 
-    def _addStateFlag(self, nodes, stateFlag, exclude = None):
+    def _addStateFlag(self, nodes, stateFlag, exclude=None):
         result = []
         for node in nodes:
             nodeCD = node['id']
@@ -227,10 +224,8 @@ class _ItemsData(object):
     def _canBuy(self, nodeCD):
         item = self.getItem(nodeCD)
         canBuy, reason = item.mayPurchase(self._stats.money)
-        if not canBuy and reason == 'credit_error':
-            return item.mayPurchaseWithExchange(self._stats.money, self._items.shop.exchangeRate)
-        else:
-            return canBuy
+        result = canBuy or reason == 'credit_error' and item.mayPurchaseWithExchange(self._stats.money, self._items.shop.exchangeRate)
+        return result
 
     def _canRentOrBuy(self, nodeCD):
         item = self.getItem(nodeCD)
@@ -238,11 +233,7 @@ class _ItemsData(object):
         canBuy, buyReason = item.mayPurchase(money)
         canRentOrBuy, rentReason = item.mayRentOrBuy(money)
         canBuyWithExchange = item.mayPurchaseWithExchange(money, g_itemsCache.items.shop.exchangeRate)
-        if not canRentOrBuy:
-            if not canBuy and buyReason == 'credit_error':
-                return canBuyWithExchange
-            return canBuy
-        return canRentOrBuy
+        return canRentOrBuy or canBuy or canBuyWithExchange and buyReason == 'credit_error'
 
     def _canSell(self, nodeCD):
         raise NotImplementedError
@@ -291,7 +282,7 @@ class ResearchItemsData(_ItemsData):
         self._installed = []
         self._enableInstallItems = False
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         while len(self._topLevel):
             self._topLevel.pop().clear()
 
@@ -327,7 +318,7 @@ class ResearchItemsData(_ItemsData):
         return self._rootCD in unlocks
 
     def getRootStatusString(self):
-        status = ''
+        status = None
         item = self.getRootItem()
         if item.isInInventory:
             lockReason = item.lock
@@ -444,7 +435,7 @@ class ResearchItemsData(_ItemsData):
             canSell = False
         return canSell
 
-    def _getNodeData(self, nodeCD, rootItem, guiItem, unlockStats, unlockProps, path, level = -1, topLevel = False):
+    def _getNodeData(self, nodeCD, rootItem, guiItem, unlockStats, unlockProps, path, level=-1, topLevel=False):
         itemTypeID = guiItem.itemTypeID
         available = False
         xp = 0
@@ -487,6 +478,8 @@ class ResearchItemsData(_ItemsData):
                 state = self._checkMoneyForRentOrBuy(state, nodeCD)
             if self._isVehicleCanBeChanged():
                 state |= NODE_STATE.VEHICLE_CAN_BE_CHANGED
+            if guiItem.isDisabledForBuy:
+                state |= NODE_STATE.PURCHASE_DISABLED
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
         else:
             renderer = 'item'
@@ -576,11 +569,11 @@ class NationTreeData(_ItemsData):
         super(NationTreeData, self).__init__(dumper)
         self._scrollIndex = -1
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         self._scrollIndex = -1
         super(NationTreeData, self).clear(full)
 
-    def load(self, nationID, override = None):
+    def load(self, nationID, override=None):
         self.clear()
         vehicleList = sorted(vehicles.g_list.getList(nationID).values(), key=lambda item: item['level'])
         g_techTreeDP.setOverride(override)
@@ -605,10 +598,7 @@ class NationTreeData(_ItemsData):
         return
 
     def getRootItem(self):
-        if len(self._nodes):
-            return self._nodes[0]
-        else:
-            return None
+        return self._nodes[0] if len(self._nodes) else None
 
     def invalidateUnlocks(self, unlocks):
         next2Unlock = []

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_strptime.py
 """Strptime-related classes and functions.
 
@@ -172,7 +173,7 @@ class LocaleTime(object):
 class TimeRE(dict):
     """Handle conversion from format directives to regexes."""
 
-    def __init__(self, locale_time = None):
+    def __init__(self, locale_time=None):
         """Create keys/values.
         
         Order of execution is important for dependency reasons.
@@ -272,7 +273,7 @@ def _calc_julian_from_U_or_W(year, week_of_year, day_of_week, week_starts_Mon):
         return 1 + days_to_week + day_of_week
 
 
-def _strptime(data_string, format = '%a %b %d %H:%M:%S %Y'):
+def _strptime(data_string, format='%a %b %d %H:%M:%S %Y'):
     """Return a time struct based on the input string and the format string."""
     global _TimeRE_cache
     global _regex_cache
@@ -317,19 +318,19 @@ def _strptime(data_string, format = '%a %b %d %H:%M:%S %Y'):
                 year += 2000
             else:
                 year += 1900
-        elif group_key == 'Y':
+        if group_key == 'Y':
             year = int(found_dict['Y'])
-        elif group_key == 'm':
+        if group_key == 'm':
             month = int(found_dict['m'])
-        elif group_key == 'B':
+        if group_key == 'B':
             month = locale_time.f_month.index(found_dict['B'].lower())
-        elif group_key == 'b':
+        if group_key == 'b':
             month = locale_time.a_month.index(found_dict['b'].lower())
-        elif group_key == 'd':
+        if group_key == 'd':
             day = int(found_dict['d'])
-        elif group_key == 'H':
+        if group_key == 'H':
             hour = int(found_dict['H'])
-        elif group_key == 'I':
+        if group_key == 'I':
             hour = int(found_dict['I'])
             ampm = found_dict.get('p', '').lower()
             if ampm in ('', locale_time.am_pm[0]):
@@ -338,33 +339,33 @@ def _strptime(data_string, format = '%a %b %d %H:%M:%S %Y'):
             elif ampm == locale_time.am_pm[1]:
                 if hour != 12:
                     hour += 12
-        elif group_key == 'M':
+        if group_key == 'M':
             minute = int(found_dict['M'])
-        elif group_key == 'S':
+        if group_key == 'S':
             second = int(found_dict['S'])
-        elif group_key == 'f':
+        if group_key == 'f':
             s = found_dict['f']
             s += '0' * (6 - len(s))
             fraction = int(s)
-        elif group_key == 'A':
+        if group_key == 'A':
             weekday = locale_time.f_weekday.index(found_dict['A'].lower())
-        elif group_key == 'a':
+        if group_key == 'a':
             weekday = locale_time.a_weekday.index(found_dict['a'].lower())
-        elif group_key == 'w':
+        if group_key == 'w':
             weekday = int(found_dict['w'])
             if weekday == 0:
                 weekday = 6
             else:
                 weekday -= 1
-        elif group_key == 'j':
+        if group_key == 'j':
             julian = int(found_dict['j'])
-        elif group_key in ('U', 'W'):
+        if group_key in ('U', 'W'):
             week_of_year = int(found_dict[group_key])
             if group_key == 'U':
                 week_of_year_start = 6
             else:
                 week_of_year_start = 0
-        elif group_key == 'Z':
+        if group_key == 'Z':
             found_zone = found_dict['Z'].lower()
             for value, tz_values in enumerate(locale_time.timezone):
                 if found_zone in tz_values:
@@ -405,5 +406,5 @@ def _strptime(data_string, format = '%a %b %d %H:%M:%S %Y'):
       tz)), fraction)
 
 
-def _strptime_time(data_string, format = '%a %b %d %H:%M:%S %Y'):
+def _strptime_time(data_string, format='%a %b %d %H:%M:%S %Y'):
     return _strptime(data_string, format)[0]

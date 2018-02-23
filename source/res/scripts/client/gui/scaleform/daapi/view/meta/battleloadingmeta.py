@@ -1,53 +1,44 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/BattleLoadingMeta.py
 from gui.Scaleform.framework.entities.View import View
 
 class BattleLoadingMeta(View):
 
     def as_setProgressS(self, val):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setProgress(val)
+        return self.flashObject.as_setProgress(val) if self._isDAAPIInited() else None
 
     def as_setTipS(self, val):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTip(val)
+        return self.flashObject.as_setTip(val) if self._isDAAPIInited() else None
 
     def as_setTipTitleS(self, title):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setTipTitle(title)
+        return self.flashObject.as_setTipTitle(title) if self._isDAAPIInited() else None
 
     def as_setEventInfoPanelDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setEventInfoPanelData(data)
+        return self.flashObject.as_setEventInfoPanelData(data) if self._isDAAPIInited() else None
 
     def as_setArenaInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setArenaInfo(data)
+        return self.flashObject.as_setArenaInfo(data) if self._isDAAPIInited() else None
 
     def as_setMapIconS(self, source):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setMapIcon(source)
+        return self.flashObject.as_setMapIcon(source) if self._isDAAPIInited() else None
+
+    def as_setVisualTipInfoS(self, data):
+        return self.flashObject.as_setVisualTipInfo(data) if self._isDAAPIInited() else None
 
     def as_setPlayerDataS(self, playerVehicleID, prebattleID):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerData(playerVehicleID, prebattleID)
+        return self.flashObject.as_setPlayerData(playerVehicleID, prebattleID) if self._isDAAPIInited() else None
 
     def as_setVehiclesDataS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVehiclesData(data)
+        return self.flashObject.as_setVehiclesData(data) if self._isDAAPIInited() else None
 
     def as_addVehicleInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_addVehicleInfo(data)
+        return self.flashObject.as_addVehicleInfo(data) if self._isDAAPIInited() else None
 
     def as_updateVehicleInfoS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_updateVehicleInfo(data)
+        return self.flashObject.as_updateVehicleInfo(data) if self._isDAAPIInited() else None
 
     def as_setVehicleStatusS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setVehicleStatus(data)
+        return self.flashObject.as_setVehicleStatus(data) if self._isDAAPIInited() else None
 
     def as_setPlayerStatusS(self, data):
-        if self._isDAAPIInited():
-            return self.flashObject.as_setPlayerStatus(data)
+        return self.flashObject.as_setPlayerStatus(data) if self._isDAAPIInited() else None

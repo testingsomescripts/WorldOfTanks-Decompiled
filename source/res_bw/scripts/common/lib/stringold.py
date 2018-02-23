@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/stringold.py
 """Common string manipulations.
 
@@ -89,7 +90,7 @@ def rstrip(s):
     return s.rstrip()
 
 
-def split(s, sep = None, maxsplit = 0):
+def split(s, sep=None, maxsplit=0):
     """split(str [,sep [,maxsplit]]) -> list of strings
     
     Return a list of the words in the string s, using sep as the
@@ -105,7 +106,7 @@ def split(s, sep = None, maxsplit = 0):
 
 splitfields = split
 
-def join(words, sep = ' '):
+def join(words, sep=' '):
     """join(list [,sep]) -> string
     
     Return a string composed of the words in list, with
@@ -244,9 +245,7 @@ def ljust(s, width):
     
     """
     n = width - len(s)
-    if n <= 0:
-        return s
-    return s + ' ' * n
+    return s if n <= 0 else s + ' ' * n
 
 
 def rjust(s, width):
@@ -258,9 +257,7 @@ def rjust(s, width):
     
     """
     n = width - len(s)
-    if n <= 0:
-        return s
-    return ' ' * n + s
+    return s if n <= 0 else ' ' * n + s
 
 
 def center(s, width):
@@ -300,7 +297,7 @@ def zfill(x, width):
     return sign + '0' * (width - n) + s
 
 
-def expandtabs(s, tabsize = 8):
+def expandtabs(s, tabsize=8):
     """expandtabs(s [,tabsize]) -> string
     
     Return a copy of the string s with all tab characters replaced
@@ -320,7 +317,7 @@ def expandtabs(s, tabsize = 8):
     return res + line
 
 
-def translate(s, table, deletions = ''):
+def translate(s, table, deletions=''):
     """translate(s,table [,deletechars]) -> string
     
     Return a copy of the string s, where all characters occurring
@@ -342,7 +339,7 @@ def capitalize(s):
     return s.capitalize()
 
 
-def capwords(s, sep = None):
+def capwords(s, sep=None):
     """capwords(s, [sep]) -> string
     
     Split the argument into words using split, capitalize each
@@ -377,7 +374,7 @@ def maketrans(fromstr, tostr):
     return join(L, '')
 
 
-def replace(s, old, new, maxsplit = 0):
+def replace(s, old, new, maxsplit=0):
     """replace (str, old, new[, maxsplit]) -> string
     
     Return a copy of string str with all occurrences of substring

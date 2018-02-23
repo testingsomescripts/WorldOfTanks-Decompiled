@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sunau.py
 """Stuff to parse Sun and NeXT audio files.
 
@@ -226,9 +227,7 @@ class Au_read:
     def getnframes(self):
         if self._data_size == AUDIO_UNKNOWN_SIZE:
             return AUDIO_UNKNOWN_SIZE
-        if self._encoding in _simple_encodings:
-            return self._data_size // self._framesize
-        return 0
+        return self._data_size // self._framesize if self._encoding in _simple_encodings else 0
 
     def getcomptype(self):
         if self._encoding == AUDIO_FILE_ENCODING_MULAW_8:
@@ -491,7 +490,7 @@ class Au_write:
         return
 
 
-def open(f, mode = None):
+def open(f, mode=None):
     if mode is None:
         if hasattr(f, 'mode'):
             mode = f.mode

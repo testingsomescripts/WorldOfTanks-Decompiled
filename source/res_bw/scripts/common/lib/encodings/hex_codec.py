@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/hex_codec.py
 """ Python 'hex_codec' Codec - 2-digit hex content transfer encoding
 
@@ -10,7 +10,7 @@
 """
 import codecs, binascii
 
-def hex_encode(input, errors = 'strict'):
+def hex_encode(input, errors='strict'):
     """ Encodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -24,7 +24,7 @@ def hex_encode(input, errors = 'strict'):
     return (output, len(input))
 
 
-def hex_decode(input, errors = 'strict'):
+def hex_decode(input, errors='strict'):
     """ Decodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -44,23 +44,23 @@ def hex_decode(input, errors = 'strict'):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         return hex_encode(input, errors)
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         return hex_decode(input, errors)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         assert self.errors == 'strict'
         return binascii.b2a_hex(input)
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         assert self.errors == 'strict'
         return binascii.a2b_hex(input)
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/visitor.py
 from compiler import ast
 
@@ -93,7 +93,7 @@ class ExampleASTVisitor(ASTVisitor):
 
 _walker = ASTVisitor
 
-def walk(tree, visitor, walker = None, verbose = None):
+def walk(tree, visitor, walker=None, verbose=None):
     if walker is None:
         walker = _walker()
     if verbose is not None:

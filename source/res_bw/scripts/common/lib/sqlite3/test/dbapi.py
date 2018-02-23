@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sqlite3/test/dbapi.py
 import unittest
 import sys
@@ -203,11 +204,10 @@ class CursorTests(unittest.TestCase):
         class L(object):
 
             def __len__(self):
-                return 1
+                pass
 
             def __getitem__(self, x):
-                raise x == 0 or AssertionError
-                return 'foo'
+                assert x == 0
 
         self.cu.execute("insert into test(name) values ('foo')")
         self.cu.execute('select name from test where name=?', L())
@@ -227,7 +227,7 @@ class CursorTests(unittest.TestCase):
         class D(dict):
 
             def __missing__(self, key):
-                return 'foo'
+                pass
 
         self.cu.execute("insert into test(name) values ('foo')")
         self.cu.execute('select name from test where name=:name', D())
@@ -439,7 +439,6 @@ class CursorTests(unittest.TestCase):
 
 
 @unittest.skipUnless(threading, 'This test requires threading.')
-
 class ThreadTests(unittest.TestCase):
 
     def setUp(self):
@@ -757,7 +756,7 @@ class ClosedConTests(unittest.TestCase):
         con.close()
 
         def f(x):
-            return 17
+            pass
 
         try:
             con.create_function('foo', 1, f)
@@ -780,7 +779,7 @@ class ClosedConTests(unittest.TestCase):
                 pass
 
             def finalize(self):
-                return 17
+                pass
 
         try:
             con.create_aggregate('foo', 1, Agg)

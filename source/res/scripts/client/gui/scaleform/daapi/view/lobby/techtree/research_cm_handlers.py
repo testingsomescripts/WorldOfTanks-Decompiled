@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.managers.context_menu.AbstractContextMenuHandler import AbstractContextMenuHandler
@@ -11,7 +11,7 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 
 class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(ResearchItemContextMenuHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
          MODULE.UNLOCK: 'unlockModule',
          MODULE.BUY_AND_EQUIP: 'buyModule',
@@ -52,7 +52,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
         self._nodeState = None
         return
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         options = [self._makeItem(MODULE.INFO, MENU.contextmenu(MODULE.INFO)), self._makeSeparator(), self._makeItem(MODULE.UNLOCK, MENU.contextmenu(MODULE.UNLOCK), {'enabled': NODE_STATE.isAvailable2Unlock(self._nodeState)})]
         if NODE_STATE.isUnlocked(self._nodeState):
             if NODE_STATE.inInventory(self._nodeState) or NODE_STATE.isInstalled(self._nodeState):
@@ -76,7 +76,7 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
 
 class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(ResearchVehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.UNLOCK: 'unlockVehicle',
          VEHICLE.BUY: 'buyVehicle',
@@ -115,7 +115,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._nodeInvID = None
         return
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         vehicle = g_itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX),
          self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS, {'enabled': NODE_STATE.isWasInBattle(self._nodeState)}),

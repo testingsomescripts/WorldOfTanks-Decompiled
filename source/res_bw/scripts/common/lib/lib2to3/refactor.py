@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/refactor.py
 """Refactoring framework.
 
@@ -21,7 +21,7 @@ from . import pytree, pygram
 from . import btm_utils as bu
 from . import btm_matcher as bm
 
-def get_all_fix_names(fixer_pkg, remove_prefix = True):
+def get_all_fix_names(fixer_pkg, remove_prefix=True):
     """Return a sorted list of all available fix names in the given package."""
     pkg = __import__(fixer_pkg, [], [], ['*'])
     fixer_dir = os.path.dirname(pkg.__file__)
@@ -77,10 +77,9 @@ def _get_headnode_dict(fixer_list):
                 for node_type in heads:
                     head_nodes[node_type].append(fixer)
 
-        elif fixer._accept_type is not None:
+        if fixer._accept_type is not None:
             head_nodes[fixer._accept_type].append(fixer)
-        else:
-            every.append(fixer)
+        every.append(fixer)
 
     for node_type in chain(pygram.python_grammar.symbol2number.itervalues(), pygram.python_grammar.tokens):
         head_nodes[node_type].extend(every)
@@ -134,11 +133,11 @@ def _detect_future_features(source):
             tp, value = advance()
             if tp in ignore:
                 continue
-            elif tp == token.STRING:
+            if tp == token.STRING:
                 if have_docstring:
                     break
                 have_docstring = True
-            elif tp == token.NAME and value == u'from':
+            if tp == token.NAME and value == u'from':
                 tp, value = advance()
                 if tp != token.NAME or value != u'__future__':
                     break
@@ -155,8 +154,7 @@ def _detect_future_features(source):
                         break
                     tp, value = advance()
 
-            else:
-                break
+            break
 
     except StopIteration:
         pass
@@ -175,7 +173,7 @@ class RefactoringTool(object):
     CLASS_PREFIX = 'Fix'
     FILE_PREFIX = 'fix_'
 
-    def __init__(self, fixer_names, options = None, explicit = None):
+    def __init__(self, fixer_names, options=None, explicit=None):
         """Initializer.
         
         Args:
@@ -206,9 +204,9 @@ class RefactoringTool(object):
         for fixer in chain(self.post_order, self.pre_order):
             if fixer.BM_compatible:
                 self.BM.add_fixer(fixer)
-            elif fixer in self.pre_order:
+            if fixer in self.pre_order:
                 self.bmi_pre_order.append(fixer)
-            elif fixer in self.post_order:
+            if fixer in self.post_order:
                 self.bmi_post_order.append(fixer)
 
         self.bmi_pre_order_heads = _get_headnode_dict(self.bmi_pre_order)
@@ -244,10 +242,9 @@ class RefactoringTool(object):
             self.log_debug('Adding transformation: %s', fix_name)
             if fixer.order == 'pre':
                 pre_order_fixers.append(fixer)
-            elif fixer.order == 'post':
+            if fixer.order == 'post':
                 post_order_fixers.append(fixer)
-            else:
-                raise FixerError('Illegal fixer order: %r' % fixer.order)
+            raise FixerError('Illegal fixer order: %r' % fixer.order)
 
         key_func = operator.attrgetter('run_order')
         pre_order_fixers.sort(key=key_func)
@@ -274,15 +271,14 @@ class RefactoringTool(object):
         refactored file."""
         pass
 
-    def refactor(self, items, write = False, doctests_only = False):
+    def refactor(self, items, write=False, doctests_only=False):
         """Refactor a list of files and directories."""
         for dir_or_file in items:
             if os.path.isdir(dir_or_file):
                 self.refactor_dir(dir_or_file, write, doctests_only)
-            else:
-                self.refactor_file(dir_or_file, write, doctests_only)
+            self.refactor_file(dir_or_file, write, doctests_only)
 
-    def refactor_dir(self, dir_name, write = False, doctests_only = False):
+    def refactor_dir(self, dir_name, write=False, doctests_only=False):
         """Descends down a directory and refactor every Python file found.
         
         Python files are assumed to have a .py extension.
@@ -320,7 +316,7 @@ class RefactoringTool(object):
             return (_from_system_newlines(f.read()), encoding)
         return
 
-    def refactor_file(self, filename, write = False, doctests_only = False):
+    def refactor_file(self, filename, write=False, doctests_only=False):
         """Refactors a file."""
         input, encoding = self._read_python_source(filename)
         if input is None:
@@ -357,10 +353,12 @@ class RefactoringTool(object):
         if 'print_function' in features:
             self.driver.grammar = pygram.python_grammar_no_print_statement
         try:
-            tree = self.driver.parse_string(data)
-        except Exception as err:
-            self.log_error("Can't parse %s: %s: %s", name, err.__class__.__name__, err)
-            return
+            try:
+                tree = self.driver.parse_string(data)
+            except Exception as err:
+                self.log_error("Can't parse %s: %s: %s", name, err.__class__.__name__, err)
+                return
+
         finally:
             self.driver.grammar = self.grammar
 
@@ -369,7 +367,7 @@ class RefactoringTool(object):
         self.refactor_tree(tree, name)
         return tree
 
-    def refactor_stdin(self, doctests_only = False):
+    def refactor_stdin(self, doctests_only=False):
         input = sys.stdin.read()
         if doctests_only:
             self.log_debug('Refactoring doctests in stdin')
@@ -469,7 +467,7 @@ class RefactoringTool(object):
 
             return
 
-    def processed_file(self, new_text, filename, old_text = None, write = False, encoding = None):
+    def processed_file(self, new_text, filename, old_text=None, write=False, encoding=None):
         """
         Called when a file has been refactored and there may be changes.
         """
@@ -490,7 +488,7 @@ class RefactoringTool(object):
             self.log_debug('Not writing changes to %s', filename)
         return
 
-    def write_file(self, new_text, filename, old_text, encoding = None):
+    def write_file(self, new_text, filename, old_text, encoding=None):
         """Writes a string to a file.
         
         It first shows a unified diff between the old text and the new text, and
@@ -504,9 +502,11 @@ class RefactoringTool(object):
             return
 
         try:
-            f.write(_to_system_newlines(new_text))
-        except os.error as err:
-            self.log_error("Can't write %s: %s", filename, err)
+            try:
+                f.write(_to_system_newlines(new_text))
+            except os.error as err:
+                self.log_error("Can't write %s: %s", filename, err)
+
         finally:
             f.close()
 
@@ -542,14 +542,13 @@ class RefactoringTool(object):
                 block = [line]
                 i = line.find(self.PS1)
                 indent = line[:i]
-            elif indent is not None and (line.startswith(indent + self.PS2) or line == indent + self.PS2.rstrip() + u'\n'):
+            if indent is not None and (line.startswith(indent + self.PS2) or line == indent + self.PS2.rstrip() + u'\n'):
                 block.append(line)
-            else:
-                if block is not None:
-                    result.extend(self.refactor_doctest(block, block_lineno, indent, filename))
-                block = None
-                indent = None
-                result.append(line)
+            if block is not None:
+                result.extend(self.refactor_doctest(block, block_lineno, indent, filename))
+            block = None
+            indent = None
+            result.append(line)
 
         if block is not None:
             result.extend(self.refactor_doctest(block, block_lineno, indent, filename))
@@ -664,7 +663,7 @@ class MultiprocessRefactoringTool(RefactoringTool):
         self.output_lock = None
         return
 
-    def refactor(self, items, write = False, doctests_only = False, num_processes = 1):
+    def refactor(self, items, write=False, doctests_only=False, num_processes=1):
         if num_processes == 1:
             return super(MultiprocessRefactoringTool, self).refactor(items, write, doctests_only)
         else:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/bz2_codec.py
 """ Python 'bz2_codec' Codec - bz2 compression encoding
 
@@ -12,7 +12,7 @@
 import codecs
 import bz2
 
-def bz2_encode(input, errors = 'strict'):
+def bz2_encode(input, errors='strict'):
     """ Encodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -26,7 +26,7 @@ def bz2_encode(input, errors = 'strict'):
     return (output, len(input))
 
 
-def bz2_decode(input, errors = 'strict'):
+def bz2_decode(input, errors='strict'):
     """ Decodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -46,21 +46,21 @@ def bz2_decode(input, errors = 'strict'):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         return bz2_encode(input, errors)
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         return bz2_decode(input, errors)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         assert errors == 'strict'
         self.errors = errors
         self.compressobj = bz2.BZ2Compressor()
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         if final:
             c = self.compressobj.compress(input)
             return c + self.compressobj.flush()
@@ -73,12 +73,12 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         assert errors == 'strict'
         self.errors = errors
         self.decompressobj = bz2.BZ2Decompressor()
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         try:
             return self.decompressobj.decompress(input)
         except EOFError:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/__init__.py
 import os, sys, unittest, getopt, time
 use_resources = []
@@ -27,7 +27,7 @@ def is_resource_enabled(resource):
 
 _unavail = {}
 
-def requires(resource, msg = None):
+def requires(resource, msg=None):
     """Raise ResourceDenied if the specified resource is not available.
     
     If the caller's module is __main__ then automatically return True."""
@@ -57,7 +57,7 @@ def find_package_modules(package, mask):
                 yield '%s.%s' % (package.__name__, os.path.splitext(fnm)[0])
 
 
-def get_tests(package, mask, verbosity, exclude = ()):
+def get_tests(package, mask, verbosity, exclude=()):
     """Return a list of skipped test modules, and a list of test cases."""
     tests = []
     skipped = []
@@ -175,9 +175,9 @@ def main(*packages):
     for flag, value in opts:
         if flag == '-q':
             verbosity -= 1
-        elif flag == '-v':
+        if flag == '-v':
             verbosity += 1
-        elif flag == '-r':
+        if flag == '-r':
             try:
                 sys.gettotalrefcount
             except AttributeError:
@@ -185,9 +185,9 @@ def main(*packages):
                 return -1
 
             search_leaks = True
-        elif flag == '-u':
+        if flag == '-u':
             use_resources.extend(value.split(','))
-        elif flag == '-x':
+        if flag == '-x':
             exclude.extend(value.split(','))
 
     mask = 'test_*.py'

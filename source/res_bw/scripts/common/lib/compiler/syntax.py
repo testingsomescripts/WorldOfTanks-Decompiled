@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/syntax.py
 """Check for errs in the AST.
 
@@ -12,7 +12,7 @@ errors.
 """
 from compiler import ast, walk
 
-def check(tree, multi = None):
+def check(tree, multi=None):
     v = SyntaxErrorChecker(multi)
     walk(tree, v)
     return v.errors
@@ -21,7 +21,7 @@ def check(tree, multi = None):
 class SyntaxErrorChecker:
     """A visitor to find syntax errors in the AST."""
 
-    def __init__(self, multi = None):
+    def __init__(self, multi=None):
         """Create new visitor object.
         
         If optional argument multi is not None, then print messages

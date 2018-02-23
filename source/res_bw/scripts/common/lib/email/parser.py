@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/parser.py
 """A parser of RFC 2822 and MIME email messages."""
 __all__ = ['Parser', 'HeaderParser']
@@ -46,7 +46,7 @@ class Parser:
         if kws:
             raise TypeError('Unexpected keyword arguments')
 
-    def parse(self, fp, headersonly = False):
+    def parse(self, fp, headersonly=False):
         """Create a message structure from the data in a file.
         
         Reads all the data from the file and returns the root of the message
@@ -65,7 +65,7 @@ class Parser:
 
         return feedparser.close()
 
-    def parsestr(self, text, headersonly = False):
+    def parsestr(self, text, headersonly=False):
         """Create a message structure from a string.
         
         Returns the root of the message structure.  Optional headersonly is a
@@ -78,8 +78,8 @@ class Parser:
 
 class HeaderParser(Parser):
 
-    def parse(self, fp, headersonly = True):
+    def parse(self, fp, headersonly=True):
         return Parser.parse(self, fp, True)
 
-    def parsestr(self, text, headersonly = True):
+    def parsestr(self, text, headersonly=True):
         return Parser.parsestr(self, text, True)

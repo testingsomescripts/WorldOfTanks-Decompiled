@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/buildtools.py
 """tools for BuildApplet and BuildApplication"""
 import warnings
@@ -30,7 +31,7 @@ READ = 1
 WRITE = 2
 RESOURCE_FORK_NAME = Carbon.File.FSGetResourceForkName()
 
-def findtemplate(template = None):
+def findtemplate(template=None):
     """Locate the applet template along sys.path"""
     if MacOS.runtimemodel == 'macho':
         return None
@@ -52,7 +53,7 @@ def findtemplate(template = None):
         return file
 
 
-def process(template, filename, destname, copy_codefragment = 0, rsrcname = None, others = [], raw = 0, progress = 'default', destroot = ''):
+def process(template, filename, destname, copy_codefragment=0, rsrcname=None, others=[], raw=0, progress='default', destroot=''):
     if progress == 'default':
         if EasyDialogs is None:
             print 'Compiling %s' % (os.path.split(filename)[1],)
@@ -117,7 +118,7 @@ def update(template, filename, output):
     return
 
 
-def process_common(template, progress, code, rsrcname, destname, is_update, copy_codefragment, raw = 0, others = [], filename = None, destroot = ''):
+def process_common(template, progress, code, rsrcname, destname, is_update, copy_codefragment, raw=0, others=[], filename=None, destroot=''):
     if MacOS.runtimemodel == 'macho':
         return process_common_macho(template, progress, code, rsrcname, destname, is_update, raw, others, filename, destroot)
     else:
@@ -225,7 +226,7 @@ def process_common(template, progress, code, rsrcname, destname, is_update, copy
         return
 
 
-def process_common_macho(template, progress, code, rsrcname, destname, is_update, raw = 0, others = [], filename = None, destroot = ''):
+def process_common_macho(template, progress, code, rsrcname, destname, is_update, raw=0, others=[], filename=None, destroot=''):
     if filename is None:
         raise BuildError, 'Need source filename on MacOSX'
     if destname[-4:] != '.app':
@@ -264,8 +265,7 @@ def process_common_macho(template, progress, code, rsrcname, destname, is_update
     for o in others:
         if type(o) == str:
             builder.resources.append(o)
-        else:
-            builder.files.append(o)
+        builder.files.append(o)
 
     if plistname:
         import plistlib
@@ -282,7 +282,7 @@ def process_common_macho(template, progress, code, rsrcname, destname, is_update
     return
 
 
-def copyres(input, output, skiptypes, skipowner, progress = None):
+def copyres(input, output, skiptypes, skipowner, progress=None):
     ctor = None
     alltypes = []
     Res.UseResFile(input)
@@ -331,7 +331,7 @@ def copyres(input, output, skiptypes, skipowner, progress = None):
     return (alltypes, ctor)
 
 
-def copyapptree(srctree, dsttree, exceptlist = [], progress = None):
+def copyapptree(srctree, dsttree, exceptlist=[], progress=None):
     names = []
     if os.path.exists(dsttree):
         shutil.rmtree(dsttree)
@@ -354,14 +354,13 @@ def copyapptree(srctree, dsttree, exceptlist = [], progress = None):
         dstpath = os.path.join(dsttree, this)
         if os.path.isdir(srcpath):
             os.mkdir(dstpath)
-        elif os.path.islink(srcpath):
+        if os.path.islink(srcpath):
             endpoint = os.readlink(srcpath)
             os.symlink(endpoint, dstpath)
-        else:
-            if progress:
-                progress.label('Copy ' + this)
-                progress.inc(0)
-            shutil.copy2(srcpath, dstpath)
+        if progress:
+            progress.label('Copy ' + this)
+            progress.inc(0)
+        shutil.copy2(srcpath, dstpath)
 
 
 def writepycfile(codeobject, cfile):

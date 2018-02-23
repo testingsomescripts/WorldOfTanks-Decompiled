@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/shelve.py
 """Manage shelves of pickled objects.
 
@@ -81,7 +82,7 @@ class _ClosedDict(UserDict.DictMixin):
     __getitem__ = __setitem__ = __delitem__ = keys = closed
 
     def __repr__(self):
-        return '<Closed Dictionary>'
+        pass
 
 
 class Shelf(UserDict.DictMixin):
@@ -91,7 +92,7 @@ class Shelf(UserDict.DictMixin):
     See the module's __doc__ string for an overview of the interface.
     """
 
-    def __init__(self, dict, protocol = None, writeback = False):
+    def __init__(self, dict, protocol=None, writeback=False):
         self.dict = dict
         if protocol is None:
             protocol = 0
@@ -112,10 +113,8 @@ class Shelf(UserDict.DictMixin):
     def __contains__(self, key):
         return key in self.dict
 
-    def get(self, key, default = None):
-        if key in self.dict:
-            return self[key]
-        return default
+    def get(self, key, default=None):
+        return self[key] if key in self.dict else default
 
     def __getitem__(self, key):
         try:
@@ -187,7 +186,7 @@ class BsdDbShelf(Shelf):
     See the module's __doc__ string for an overview of the interface.
     """
 
-    def __init__(self, dict, protocol = None, writeback = False):
+    def __init__(self, dict, protocol=None, writeback=False):
         Shelf.__init__(self, dict, protocol, writeback)
 
     def set_location(self, key):
@@ -223,12 +222,12 @@ class DbfilenameShelf(Shelf):
     See the module's __doc__ string for an overview of the interface.
     """
 
-    def __init__(self, filename, flag = 'c', protocol = None, writeback = False):
+    def __init__(self, filename, flag='c', protocol=None, writeback=False):
         import anydbm
         Shelf.__init__(self, anydbm.open(filename, flag), protocol, writeback)
 
 
-def open(filename, flag = 'c', protocol = None, writeback = False):
+def open(filename, flag='c', protocol=None, writeback=False):
     """Open a persistent dictionary for reading and writing.
     
     The filename parameter is the base filename for the underlying

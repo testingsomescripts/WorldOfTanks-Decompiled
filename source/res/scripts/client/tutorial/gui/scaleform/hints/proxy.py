@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/hints/proxy.py
 import Event
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
@@ -27,7 +27,7 @@ class HintsProxy(SfLobbyProxy):
         addListener(events.TutorialEvent.ON_COMPONENT_LOST, self.__onItemLost, scope=EVENT_BUS_SCOPE.GLOBAL)
         addListener(events.TutorialEvent.ON_TRIGGER_ACTIVATED, self.__onTriggerActivated, scope=EVENT_BUS_SCOPE.GLOBAL)
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         self.__eManager.clear()
         self.effects.stopAll()
         removeListener = g_eventBus.removeListener

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/SystemEvents/__init__.py
 """
 Package generated from /System/Library/CoreServices/System Events.app

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/chunk.py
 """Simple class to read IFF chunks.
 
@@ -52,7 +52,7 @@ default is 1, i.e. aligned.
 
 class Chunk:
 
-    def __init__(self, file, align = True, bigendian = True, inclheader = False):
+    def __init__(self, file, align=True, bigendian=True, inclheader=False):
         import struct
         self.closed = False
         self.align = align
@@ -97,7 +97,7 @@ class Chunk:
             raise ValueError, 'I/O operation on closed file'
         return False
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         """Seek to specified position into the chunk.
         Default position is 0 (start of chunk).
         If the file is not seekable, this will result in an error.
@@ -120,7 +120,7 @@ class Chunk:
             raise ValueError, 'I/O operation on closed file'
         return self.size_read
 
-    def read(self, size = -1):
+    def read(self, size=-1):
         """Read at most size bytes from the chunk.
         If size is omitted or negative, read until the end
         of the chunk.

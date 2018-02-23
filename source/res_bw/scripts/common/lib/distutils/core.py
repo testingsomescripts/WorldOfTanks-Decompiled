@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/core.py
 """distutils.core
 
@@ -117,7 +117,7 @@ def setup(**attrs):
     return dist
 
 
-def run_setup(script_name, script_args = None, stop_after = 'run'):
+def run_setup(script_name, script_args=None, stop_after='run'):
     """Run a setup script in a somewhat controlled environment, and
     return the Distribution instance that drives things.  This is useful
     if you need to find out the distribution meta-data (passed as

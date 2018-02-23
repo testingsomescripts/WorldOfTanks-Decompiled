@@ -1,10 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-riscos/riscosenviron.py
 """A more or less complete dictionary like interface for the RISC OS environment."""
 import riscos
 
 class _Environ:
 
-    def __init__(self, initial = None):
+    def __init__(self, initial=None):
         pass
 
     def __repr__(self):
@@ -56,7 +57,7 @@ class _Environ:
         for k, v in dict.items():
             riscos.putenv(k, v)
 
-    def get(self, key, failobj = None):
+    def get(self, key, failobj=None):
         value = riscos.getenv(key)
         if value != None:
             return value

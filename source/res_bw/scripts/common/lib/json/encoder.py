@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/encoder.py
 """Implementation of JSONEncoder
 """
@@ -98,7 +98,7 @@ class JSONEncoder(object):
     item_separator = ', '
     key_separator = ': '
 
-    def __init__(self, skipkeys = False, ensure_ascii = True, check_circular = True, allow_nan = True, sort_keys = False, indent = None, separators = None, encoding = 'utf-8', default = None):
+    def __init__(self, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, encoding='utf-8', default=None):
         r"""Constructor for JSONEncoder, with sensible defaults.
         
         If skipkeys is false, then it is a TypeError to attempt
@@ -202,7 +202,7 @@ class JSONEncoder(object):
             chunks = list(chunks)
         return ''.join(chunks)
 
-    def iterencode(self, o, _one_shot = False):
+    def iterencode(self, o, _one_shot=False):
         """Encode the given object and yield each string
         representation as available.
         
@@ -222,12 +222,12 @@ class JSONEncoder(object):
             _encoder = encode_basestring
         if self.encoding != 'utf-8':
 
-            def _encoder(o, _orig_encoder = _encoder, _encoding = self.encoding):
+            def _encoder(o, _orig_encoder=_encoder, _encoding=self.encoding):
                 if isinstance(o, str):
                     o = o.decode(_encoding)
                 return _orig_encoder(o)
 
-        def floatstr(o, allow_nan = self.allow_nan, _repr = FLOAT_REPR, _inf = INFINITY, _neginf = -INFINITY):
+        def floatstr(o, allow_nan=self.allow_nan, _repr=FLOAT_REPR, _inf=INFINITY, _neginf=-INFINITY):
             if o != o:
                 text = 'NaN'
             elif o == _inf:
@@ -247,7 +247,7 @@ class JSONEncoder(object):
         return _iterencode(o, 0)
 
 
-def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot, ValueError = ValueError, basestring = basestring, dict = dict, float = float, id = id, int = int, isinstance = isinstance, list = list, long = long, str = str, tuple = tuple):
+def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot, ValueError=ValueError, basestring=basestring, dict=dict, float=float, id=id, int=int, isinstance=isinstance, list=list, long=long, str=str, tuple=tuple):
 
     def _iterencode_list(lst, _current_indent_level):
         if not lst:
@@ -276,26 +276,25 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
                     buf = separator
                 if isinstance(value, basestring):
                     yield buf + _encoder(value)
-                elif value is None:
+                if value is None:
                     yield buf + 'null'
-                elif value is True:
+                if value is True:
                     yield buf + 'true'
-                elif value is False:
+                if value is False:
                     yield buf + 'false'
-                elif isinstance(value, (int, long)):
+                if isinstance(value, (int, long)):
                     yield buf + str(value)
-                elif isinstance(value, float):
+                if isinstance(value, float):
                     yield buf + _floatstr(value)
+                yield buf
+                if isinstance(value, (list, tuple)):
+                    chunks = _iterencode_list(value, _current_indent_level)
+                elif isinstance(value, dict):
+                    chunks = _iterencode_dict(value, _current_indent_level)
                 else:
-                    yield buf
-                    if isinstance(value, (list, tuple)):
-                        chunks = _iterencode_list(value, _current_indent_level)
-                    elif isinstance(value, dict):
-                        chunks = _iterencode_dict(value, _current_indent_level)
-                    else:
-                        chunks = _iterencode(value, _current_indent_level)
-                    for chunk in chunks:
-                        yield chunk
+                    chunks = _iterencode(value, _current_indent_level)
+                for chunk in chunks:
+                    yield chunk
 
             if newline_indent is not None:
                 _current_indent_level -= 1
@@ -354,25 +353,24 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr, _key_separ
                 yield _key_separator
                 if isinstance(value, basestring):
                     yield _encoder(value)
-                elif value is None:
+                if value is None:
                     yield 'null'
-                elif value is True:
+                if value is True:
                     yield 'true'
-                elif value is False:
+                if value is False:
                     yield 'false'
-                elif isinstance(value, (int, long)):
+                if isinstance(value, (int, long)):
                     yield str(value)
-                elif isinstance(value, float):
+                if isinstance(value, float):
                     yield _floatstr(value)
+                if isinstance(value, (list, tuple)):
+                    chunks = _iterencode_list(value, _current_indent_level)
+                elif isinstance(value, dict):
+                    chunks = _iterencode_dict(value, _current_indent_level)
                 else:
-                    if isinstance(value, (list, tuple)):
-                        chunks = _iterencode_list(value, _current_indent_level)
-                    elif isinstance(value, dict):
-                        chunks = _iterencode_dict(value, _current_indent_level)
-                    else:
-                        chunks = _iterencode(value, _current_indent_level)
-                    for chunk in chunks:
-                        yield chunk
+                    chunks = _iterencode(value, _current_indent_level)
+                for chunk in chunks:
+                    yield chunk
 
             if newline_indent is not None:
                 _current_indent_level -= 1

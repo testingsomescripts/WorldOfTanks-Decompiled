@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_scripts.py
 """distutils.command.build_scripts
 
@@ -82,20 +82,18 @@ class build_scripts(Command):
                     outf.close()
                 if f:
                     f.close()
-            else:
-                if f:
-                    f.close()
-                self.copy_file(script, outfile)
+            if f:
+                f.close()
+            self.copy_file(script, outfile)
 
         if os.name == 'posix':
             for file in outfiles:
                 if self.dry_run:
                     log.info('changing mode of %s', file)
-                else:
-                    oldmode = os.stat(file)[ST_MODE] & 4095
-                    newmode = (oldmode | 365) & 4095
-                    if newmode != oldmode:
-                        log.info('changing mode of %s from %o to %o', file, oldmode, newmode)
-                        os.chmod(file, newmode)
+                oldmode = os.stat(file)[ST_MODE] & 4095
+                newmode = (oldmode | 365) & 4095
+                if newmode != oldmode:
+                    log.info('changing mode of %s from %o to %o', file, oldmode, newmode)
+                    os.chmod(file, newmode)
 
         return

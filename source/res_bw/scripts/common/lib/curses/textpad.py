@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/textpad.py
 """Simple textbox editing widget with Emacs-like keybindings."""
 import curses
@@ -43,7 +43,7 @@ class Textbox:
     KEY_BACKSPACE = Ctrl-h
     """
 
-    def __init__(self, win, insert_mode = False):
+    def __init__(self, win, insert_mode=False):
         self.win = win
         self.insert_mode = insert_mode
         self.maxy, self.maxx = win.getmaxyx()
@@ -168,7 +168,7 @@ class Textbox:
 
         return result
 
-    def edit(self, validate = None):
+    def edit(self, validate=None):
         """Edit in the widget window and collect the results."""
         while 1:
             ch = self.win.getch()

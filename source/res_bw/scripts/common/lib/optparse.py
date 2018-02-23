@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/optparse.py
 """A powerful, extensible, and easy-to-use option parser.
 
@@ -207,7 +208,7 @@ class HelpFormatter():
 
     def dedent(self):
         self.current_indent -= self.indent_increment
-        raise self.current_indent >= 0 or AssertionError('Indent decreased below 0.')
+        assert self.current_indent >= 0, 'Indent decreased below 0.'
         self.level -= 1
 
     def format_usage(self, usage):
@@ -309,7 +310,7 @@ class IndentedHelpFormatter(HelpFormatter):
     """Format help with indented section bodies.
     """
 
-    def __init__(self, indent_increment = 2, max_help_position = 24, width = None, short_first = 1):
+    def __init__(self, indent_increment=2, max_help_position=24, width=None, short_first=1):
         HelpFormatter.__init__(self, indent_increment, max_help_position, width, short_first)
 
     def format_usage(self, usage):
@@ -323,7 +324,7 @@ class TitledHelpFormatter(HelpFormatter):
     """Format help with underlined section headers.
     """
 
-    def __init__(self, indent_increment = 0, max_help_position = 24, width = None, short_first = 0):
+    def __init__(self, indent_increment=0, max_help_position=24, width=None, short_first=0):
         HelpFormatter.__init__(self, indent_increment, max_help_position, width, short_first)
 
     def format_usage(self, usage):
@@ -439,24 +440,22 @@ class Option():
         for opt in opts:
             if len(opt) < 2:
                 raise OptionError('invalid option string %r: must be at least two characters long' % opt, self)
-            elif len(opt) == 2:
+            if len(opt) == 2:
                 if not (opt[0] == '-' and opt[1] != '-'):
                     raise OptionError('invalid short option string %r: must be of the form -x, (x any non-dash char)' % opt, self)
                 self._short_opts.append(opt)
-            else:
-                if not (opt[0:2] == '--' and opt[2] != '-'):
-                    raise OptionError('invalid long option string %r: must start with --, followed by non-dash' % opt, self)
-                self._long_opts.append(opt)
+            if not (opt[0:2] == '--' and opt[2] != '-'):
+                raise OptionError('invalid long option string %r: must start with --, followed by non-dash' % opt, self)
+            self._long_opts.append(opt)
 
     def _set_attrs(self, attrs):
         for attr in self.ATTRS:
             if attr in attrs:
                 setattr(self, attr, attrs[attr])
                 del attrs[attr]
-            elif attr == 'default':
+            if attr == 'default':
                 setattr(self, attr, NO_DEFAULT)
-            else:
-                setattr(self, attr, None)
+            setattr(self, attr, None)
 
         if attrs:
             attrs = attrs.keys()
@@ -608,7 +607,6 @@ class Option():
             parser.exit()
         else:
             raise ValueError('unknown action %r' % self.action)
-        return 1
 
 
 SUPPRESS_HELP = 'SUPPRESS' + 'HELP'
@@ -629,7 +627,7 @@ else:
 
 class Values():
 
-    def __init__(self, defaults = None):
+    def __init__(self, defaults=None):
         if defaults:
             for attr, val in defaults.items():
                 setattr(self, attr, val)
@@ -678,12 +676,12 @@ class Values():
         else:
             raise ValueError, 'invalid update mode: %r' % mode
 
-    def read_module(self, modname, mode = 'careful'):
+    def read_module(self, modname, mode='careful'):
         __import__(modname)
         mod = sys.modules[modname]
         self._update(vars(mod), mode)
 
-    def read_file(self, filename, mode = 'careful'):
+    def read_file(self, filename, mode='careful'):
         vars = {}
         execfile(filename, vars)
         self._update(vars, mode)
@@ -860,7 +858,7 @@ class OptionContainer():
 
 class OptionGroup(OptionContainer):
 
-    def __init__(self, parser, title, description = None):
+    def __init__(self, parser, title, description=None):
         self.parser = parser
         OptionContainer.__init__(self, parser.option_class, parser.conflict_handler, description)
         self.title = title
@@ -955,7 +953,7 @@ class OptionParser(OptionContainer):
     """
     standard_option_list = []
 
-    def __init__(self, usage = None, option_list = None, option_class = Option, version = None, conflict_handler = 'error', description = None, formatter = None, add_help_option = True, prog = None, epilog = None):
+    def __init__(self, usage=None, option_list=None, option_class=Option, version=None, conflict_handler='error', description=None, formatter=None, add_help_option=True, prog=None, epilog=None):
         OptionContainer.__init__(self, option_class, conflict_handler, description)
         self.set_usage(usage)
         self.prog = prog
@@ -997,7 +995,7 @@ class OptionParser(OptionContainer):
     def _add_version_option(self):
         self.add_option('--version', action='version', help=_("show program's version number and exit"))
 
-    def _populate_option_list(self, option_list, add_help = True):
+    def _populate_option_list(self, option_list, add_help=True):
         if self.standard_option_list:
             self.add_options(self.standard_option_list)
         if option_list:
@@ -1084,10 +1082,7 @@ class OptionParser(OptionContainer):
 
     def get_option_group(self, opt_str):
         option = self._short_opt.get(opt_str) or self._long_opt.get(opt_str)
-        if option and option.container is not self:
-            return option.container
-        else:
-            return None
+        return option.container if option and option.container is not self else None
 
     def _get_args(self, args):
         if args is None:
@@ -1096,7 +1091,7 @@ class OptionParser(OptionContainer):
             return args[:]
             return
 
-    def parse_args(self, args = None, values = None):
+    def parse_args(self, args=None, values=None):
         """
         parse_args(args : [string] = sys.argv[1:],
                    values : Values = None)
@@ -1154,13 +1149,12 @@ class OptionParser(OptionContainer):
                 return
             if arg[0:2] == '--':
                 self._process_long_opt(rargs, values)
-            elif arg[:1] == '-' and len(arg) > 1:
+            if arg[:1] == '-' and len(arg) > 1:
                 self._process_short_opts(rargs, values)
-            elif self.allow_interspersed_args:
+            if self.allow_interspersed_args:
                 largs.append(arg)
                 del rargs[0]
-            else:
-                return
+            return
 
     def _match_long_opt(self, opt):
         """_match_long_opt(opt : string) -> string
@@ -1247,7 +1241,7 @@ class OptionParser(OptionContainer):
     def get_description(self):
         return self.expand_prog_name(self.description)
 
-    def exit(self, status = 0, msg = None):
+    def exit(self, status=0, msg=None):
         if msg:
             sys.stderr.write(msg)
         sys.exit(status)
@@ -1268,7 +1262,7 @@ class OptionParser(OptionContainer):
         else:
             return ''
 
-    def print_usage(self, file = None):
+    def print_usage(self, file=None):
         """print_usage(file : file = stdout)
         
         Print the usage message for the current program (self.usage) to
@@ -1286,7 +1280,7 @@ class OptionParser(OptionContainer):
         else:
             return ''
 
-    def print_version(self, file = None):
+    def print_version(self, file=None):
         """print_version(file : file = stdout)
         
         Print the version message for this program (self.version) to
@@ -1297,7 +1291,7 @@ class OptionParser(OptionContainer):
         if self.version:
             print >> file, self.get_version()
 
-    def format_option_help(self, formatter = None):
+    def format_option_help(self, formatter=None):
         if formatter is None:
             formatter = self.formatter
         formatter.store_option_strings(self)
@@ -1317,7 +1311,7 @@ class OptionParser(OptionContainer):
     def format_epilog(self, formatter):
         return formatter.format_epilog(self.epilog)
 
-    def format_help(self, formatter = None):
+    def format_help(self, formatter=None):
         if formatter is None:
             formatter = self.formatter
         result = []
@@ -1335,7 +1329,7 @@ class OptionParser(OptionContainer):
             encoding = sys.getdefaultencoding()
         return encoding
 
-    def print_help(self, file = None):
+    def print_help(self, file=None):
         """print_help(file : file = stdout)
         
         Print an extended help message, listing all options and any

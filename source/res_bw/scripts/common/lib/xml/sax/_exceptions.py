@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/_exceptions.py
 """Different kinds of SAX Exceptions"""
 import sys
@@ -15,7 +16,7 @@ class SAXException(Exception):
     the exception; instead, you can simply read the information in
     it."""
 
-    def __init__(self, msg, exception = None):
+    def __init__(self, msg, exception=None):
         """Creates an exception. The message is required, but the exception
         is optional."""
         self._msg = msg

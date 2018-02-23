@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/resource_points.py
 import weakref
 import BigWorld
@@ -47,7 +47,7 @@ class _ResourceIndicator(object):
         self.__flashObject = None
         return
 
-    def __onSettingsChanged(self, diff = None):
+    def __onSettingsChanged(self, diff=None):
         self.flashObject.as_onSettingsChanged()
 
     @property
@@ -120,7 +120,7 @@ class _ResourcePointsPanel(object):
          'pointsCount': pointsCount,
          'timeLeftStr': timeLeftStr}
 
-    def __onSettingsChanged(self, diff = None):
+    def __onSettingsChanged(self, diff=None):
         if 'isColorBlind' in diff:
             self.flashObject.as_onSettingsChanged()
 

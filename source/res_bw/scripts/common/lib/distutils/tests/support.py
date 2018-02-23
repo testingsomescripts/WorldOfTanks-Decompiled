@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/support.py
 """Support code for distutils test cases."""
 import os
@@ -49,9 +49,7 @@ class LoggingSilencer(object):
     def get_logs(self, *levels):
 
         def _format(msg, args):
-            if len(args) == 0:
-                return msg
-            return msg % args
+            return msg if len(args) == 0 else msg % args
 
         return [ _format(msg, args) for level, msg, args in self.logs if level in levels ]
 
@@ -86,7 +84,7 @@ class TempdirManager(object):
         self.tempdirs.append(d)
         return d
 
-    def write_file(self, path, content = 'xxx'):
+    def write_file(self, path, content='xxx'):
         """Writes a file in the given path.
         
         
@@ -100,7 +98,7 @@ class TempdirManager(object):
         finally:
             f.close()
 
-    def create_dist(self, pkg_name = 'foo', **kw):
+    def create_dist(self, pkg_name='foo', **kw):
         """Will generate a test environment.
         
         This function creates:

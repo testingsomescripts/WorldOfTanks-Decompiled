@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ihooks.py
 """Import hook support.
 
@@ -74,7 +74,7 @@ FROZEN_MODULE = PY_FROZEN
 
 class _Verbose:
 
-    def __init__(self, verbose = VERBOSE):
+    def __init__(self, verbose=VERBOSE):
         self.verbose = verbose
 
     def get_verbose(self):
@@ -110,7 +110,7 @@ class BasicModuleLoader(_Verbose):
     
     """
 
-    def find_module(self, name, path = None):
+    def find_module(self, name, path=None):
         if path is None:
             path = [None] + self.default_path()
         for dir in path:
@@ -137,10 +137,8 @@ class BasicModuleLoader(_Verbose):
     def find_builtin_module(self, name):
         if imp.is_builtin(name):
             return (None, '', ('', '', BUILTIN_MODULE))
-        elif imp.is_frozen(name):
-            return (None, '', ('', '', FROZEN_MODULE))
         else:
-            return None
+            return (None, '', ('', '', FROZEN_MODULE)) if imp.is_frozen(name) else None
 
     def load_module(self, name, stuff):
         file, filename, info = stuff
@@ -182,16 +180,16 @@ class Hooks(_Verbose):
     def get_frozen_object(self, name):
         return imp.get_frozen_object(name)
 
-    def load_source(self, name, filename, file = None):
+    def load_source(self, name, filename, file=None):
         return imp.load_source(name, filename, file)
 
-    def load_compiled(self, name, filename, file = None):
+    def load_compiled(self, name, filename, file=None):
         return imp.load_compiled(name, filename, file)
 
-    def load_dynamic(self, name, filename, file = None):
+    def load_dynamic(self, name, filename, file=None):
         return imp.load_dynamic(name, filename, file)
 
-    def load_package(self, name, filename, file = None):
+    def load_package(self, name, filename, file=None):
         return imp.load_module(name, file, filename, ('', '', PKG_DIRECTORY))
 
     def add_module(self, name):
@@ -248,7 +246,7 @@ class ModuleLoader(BasicModuleLoader):
     
     """
 
-    def __init__(self, hooks = None, verbose = VERBOSE):
+    def __init__(self, hooks=None, verbose=VERBOSE):
         BasicModuleLoader.__init__(self, verbose)
         self.hooks = hooks or Hooks(verbose)
 
@@ -267,12 +265,10 @@ class ModuleLoader(BasicModuleLoader):
     def find_builtin_module(self, name):
         if self.hooks.is_builtin(name):
             return (None, '', ('', '', BUILTIN_MODULE))
-        elif self.hooks.is_frozen(name):
-            return (None, '', ('', '', FROZEN_MODULE))
         else:
-            return None
+            return (None, '', ('', '', FROZEN_MODULE)) if self.hooks.is_frozen(name) else None
 
-    def find_module_in_dir(self, name, dir, allow_packages = 1):
+    def find_module_in_dir(self, name, dir, allow_packages=1):
         if dir is None:
             return self.find_builtin_module(name)
         else:
@@ -376,7 +372,7 @@ class BasicModuleImporter(_Verbose):
     
     """
 
-    def __init__(self, loader = None, verbose = VERBOSE):
+    def __init__(self, loader=None, verbose=VERBOSE):
         _Verbose.__init__(self, verbose)
         self.loader = loader or ModuleLoader(None, verbose)
         self.modules = self.loader.modules_dict()
@@ -394,7 +390,7 @@ class BasicModuleImporter(_Verbose):
     def set_hooks(self, hooks):
         return self.loader.set_hooks(hooks)
 
-    def import_module(self, name, globals = {}, locals = {}, fromlist = []):
+    def import_module(self, name, globals={}, locals={}, fromlist=[]):
         name = str(name)
         if name in self.modules:
             return self.modules[name]
@@ -403,7 +399,7 @@ class BasicModuleImporter(_Verbose):
             raise ImportError, 'No module named %s' % name
         return self.loader.load_module(name, stuff)
 
-    def reload(self, module, path = None):
+    def reload(self, module, path=None):
         name = str(module.__name__)
         stuff = self.loader.find_module(name, path)
         if not stuff:
@@ -435,7 +431,7 @@ class BasicModuleImporter(_Verbose):
 class ModuleImporter(BasicModuleImporter):
     """A module importer that supports packages."""
 
-    def import_module(self, name, globals = None, locals = None, fromlist = None, level = -1):
+    def import_module(self, name, globals=None, locals=None, fromlist=None, level=-1):
         parent = self.determine_parent(globals, level)
         q, tail = self.find_head_package(parent, str(name))
         m = self.load_tail(q, tail)
@@ -445,7 +441,7 @@ class ModuleImporter(BasicModuleImporter):
             self.ensure_fromlist(m, fromlist)
         return m
 
-    def determine_parent(self, globals, level = -1):
+    def determine_parent(self, globals, level=-1):
         if not globals or not level:
             return
         else:
@@ -525,7 +521,7 @@ class ModuleImporter(BasicModuleImporter):
 
         return m
 
-    def ensure_fromlist(self, m, fromlist, recursive = 0):
+    def ensure_fromlist(self, m, fromlist, recursive=0):
         for sub in fromlist:
             if sub == '*':
                 if not recursive:
@@ -543,7 +539,7 @@ class ModuleImporter(BasicModuleImporter):
                 if not submod:
                     raise ImportError, "No module named '%s'" % subname
 
-    def import_it(self, partname, fqname, parent, force_load = 0):
+    def import_it(self, partname, fqname, parent, force_load=0):
         if not partname:
             return parent
         else:
@@ -582,7 +578,7 @@ class ModuleImporter(BasicModuleImporter):
 default_importer = None
 current_importer = None
 
-def install(importer = None):
+def install(importer=None):
     global current_importer
     current_importer = importer or default_importer or ModuleImporter()
     current_importer.install()

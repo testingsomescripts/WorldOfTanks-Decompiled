@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/utf_32.py
 """
 Python 'utf-32' Codec
@@ -6,18 +6,18 @@ Python 'utf-32' Codec
 import codecs, sys
 encode = codecs.utf_32_encode
 
-def decode(input, errors = 'strict'):
+def decode(input, errors='strict'):
     return codecs.utf_32_decode(input, errors, True)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         codecs.IncrementalEncoder.__init__(self, errors)
         self.encoder = None
         return
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         if self.encoder is None:
             result = codecs.utf_32_encode(input, self.errors)[0]
             if sys.byteorder == 'little':
@@ -34,10 +34,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
         return
 
     def getstate(self):
-        if self.encoder is None:
-            return 2
-        else:
-            return 0
+        return 2 if self.encoder is None else 0
 
     def setstate(self, state):
         if state:
@@ -51,7 +48,7 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 
 class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         codecs.BufferedIncrementalDecoder.__init__(self, errors)
         self.decoder = None
         return
@@ -96,7 +93,7 @@ class IncrementalDecoder(codecs.BufferedIncrementalDecoder):
 
 class StreamWriter(codecs.StreamWriter):
 
-    def __init__(self, stream, errors = 'strict'):
+    def __init__(self, stream, errors='strict'):
         self.encoder = None
         codecs.StreamWriter.__init__(self, stream, errors)
         return
@@ -106,7 +103,7 @@ class StreamWriter(codecs.StreamWriter):
         self.encoder = None
         return
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         if self.encoder is None:
             result = codecs.utf_32_encode(input, errors)
             if sys.byteorder == 'little':
@@ -128,7 +125,7 @@ class StreamReader(codecs.StreamReader):
         except AttributeError:
             pass
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         object, consumed, byteorder = codecs.utf_32_ex_decode(input, errors, 0, False)
         if byteorder == -1:
             self.decode = codecs.utf_32_le_decode

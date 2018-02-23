@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cmd.py
 """A generic class to build line-oriented command interpreters.
 
@@ -75,7 +75,7 @@ class Cmd:
     nohelp = '*** No help on %s'
     use_rawinput = 1
 
-    def __init__(self, completekey = 'tab', stdin = None, stdout = None):
+    def __init__(self, completekey='tab', stdin=None, stdout=None):
         """Instantiate a line-oriented interpreter framework.
         
         The optional argument 'completekey' is the readline name of a
@@ -99,7 +99,7 @@ class Cmd:
         self.completekey = completekey
         return
 
-    def cmdloop(self, intro = None):
+    def cmdloop(self, intro=None):
         """Repeatedly issue a prompt, accept input, parse an initial prefix
         off the received input, and dispatch to action methods, passing them
         the remainder of the line as argument.
@@ -234,8 +234,7 @@ class Cmd:
         command entered.
         
         """
-        if self.lastcmd:
-            return self.onecmd(self.lastcmd)
+        return self.onecmd(self.lastcmd) if self.lastcmd else None
 
     def default(self, line):
         """Called on an input line when the command prefix is not recognized.
@@ -356,7 +355,7 @@ class Cmd:
             self.columnize(cmds, maxcol - 1)
             self.stdout.write('\n')
 
-    def columnize(self, list, displaywidth = 80):
+    def columnize(self, list, displaywidth=80):
         """Display a list of strings as a compact set of columns.
         
         Each column is only as wide as necessary.

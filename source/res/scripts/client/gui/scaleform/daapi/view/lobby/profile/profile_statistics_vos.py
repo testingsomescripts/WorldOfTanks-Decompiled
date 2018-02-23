@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/profile_statistics_vos.py
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils as PUtils, FALLOUT_STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, STATISTICS_LAYOUT
@@ -22,7 +22,7 @@ def _packAvgXPLditItemData(avgExp):
     return PUtils.packLditItemData(BigWorld.wg_getIntegralFormat(avgExp), PROFILE.SECTION_STATISTICS_SCORES_AVGEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_AVGEXP, 'avgExp40x32.png')
 
 
-def _getDetailedStatisticsData(label, targetData, isCurrentUser, layout = STATISTICS_LAYOUT):
+def _getDetailedStatisticsData(label, targetData, isCurrentUser, layout=STATISTICS_LAYOUT):
     detailedStatisticsData = DSUtils.getStatistics(targetData, isCurrentUser, layout)
     result = []
     for val in detailedStatisticsData:
@@ -61,7 +61,7 @@ def _getBattleChartsStatistics(battlesStats, levelDisabledTooltip):
         tooltip = PROFILE.SECTION_STATISTICS_CHART_LEVEL_TOOLTIP
         if value is None:
             value = -1
-            if levelDisabledTooltip != None:
+            if levelDisabledTooltip is not None:
                 tooltip = levelDisabledTooltip
         lvlRes[level - 1] = {'xField': str(level),
          'icon': '../maps/icons/levels/tank_level_{0}.png'.format(level),
@@ -81,15 +81,13 @@ def _setChartDataPercentages(chartData):
         data['percentValue'] = int(100 * data['yField'] / yMax)
 
 
-def _getChartsData(targetData, levelDisabledTooltip = None):
+def _getChartsData(targetData, levelDisabledTooltip=None):
     return PUtils.getLabelViewTypeDataObject(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_CHARTS, _getBattleChartsStatistics(targetData.getBattlesStats(), levelDisabledTooltip), PUtils.VIEW_TYPE_CHARTS)
 
 
 def _getFortAvgLoot(targetData, totalLootValue):
     battlesCount = targetData.getBattlesCountVer2()
-    if battlesCount > 0:
-        return BigWorld.wg_getNiceNumberFormat(totalLootValue / battlesCount)
-    return PUtils.UNAVAILABLE_VALUE
+    return BigWorld.wg_getNiceNumberFormat(totalLootValue / battlesCount) if battlesCount > 0 else PUtils.UNAVAILABLE_VALUE
 
 
 class BaseDictStatisticsVO(dict):

@@ -1,11 +1,11 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/formatters.py
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils.functions import getArenaSubTypeName
 from helpers import i18n
 ICONS_MASK = '../maps/icons/map/%(prefix)s%(geometryName)s.png'
 
-def getMapIconPath(arenaType, prefix = ''):
+def getMapIconPath(arenaType, prefix=''):
     return ICONS_MASK % {'geometryName': arenaType.geometryName,
      'prefix': prefix}
 

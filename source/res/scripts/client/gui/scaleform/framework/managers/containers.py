@@ -1,6 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/containers.py
-import weakref, types
+import weakref
+import types
 from Event import Event
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import ScopeTemplates
@@ -12,25 +13,25 @@ from gui.Scaleform.framework.entities.abstract.ContainerManagerMeta import Conta
 class IViewContainer(object):
 
     def add(self, pyView):
-        raise NotImplementedError, 'IViewContainer.add must be implemented'
+        raise NotImplementedError('IViewContainer.add must be implemented')
 
     def remove(self, pyView):
-        raise NotImplementedError, 'IViewContainer.remove must be implemented'
+        raise NotImplementedError('IViewContainer.remove must be implemented')
 
     def clear(self):
-        raise NotImplementedError, 'IViewContainer.clear must be implemented'
+        raise NotImplementedError('IViewContainer.clear must be implemented')
 
     def destroy(self):
-        raise NotImplementedError, 'IViewContainer.destroy must be implemented'
+        raise NotImplementedError('IViewContainer.destroy must be implemented')
 
-    def getView(self, criteria = None):
-        raise NotImplementedError, 'IViewContainer.getView must be implemented'
+    def getView(self, criteria=None):
+        raise NotImplementedError('IViewContainer.getView must be implemented')
 
     def getViewCount(self, **kwargs):
-        raise NotImplementedError, 'IViewContainer.getViewCount must be implemented'
+        raise NotImplementedError('IViewContainer.getViewCount must be implemented')
 
     def canCancelPreviousLoading(self):
-        raise NotImplementedError, 'IViewContainer.canCancelPreviousLoading must be implemented'
+        raise NotImplementedError('IViewContainer.canCancelPreviousLoading must be implemented')
 
 
 class _DefaultContainer(IViewContainer):
@@ -87,7 +88,7 @@ class _DefaultContainer(IViewContainer):
         self.remove(pyView)
         return
 
-    def getView(self, criteria = None):
+    def getView(self, criteria=None):
         result = None
         if criteria is None or self.__view is None:
             result = self.__view
@@ -102,10 +103,7 @@ class _DefaultContainer(IViewContainer):
         return result
 
     def getViewCount(self):
-        if self.__view is not None:
-            return 1
-        else:
-            return 0
+        return 1 if self.__view is not None else 0
 
 
 class POP_UP_CRITERIA(object):
@@ -115,12 +113,12 @@ class POP_UP_CRITERIA(object):
 
 class ExternalCriteria(object):
 
-    def __init__(self, criteria = None):
+    def __init__(self, criteria=None):
         super(ExternalCriteria, self).__init__()
         self._criteria = criteria
 
     def find(self, name, obj):
-        raise NotImplemented, 'ExternalCriteria.find must be implemented'
+        raise NotImplemented('ExternalCriteria.find must be implemented')
 
 
 class _PopUpContainer(IViewContainer):
@@ -168,10 +166,10 @@ class _PopUpContainer(IViewContainer):
         self.__manager = None
         return
 
-    def getView(self, criteria = None):
+    def getView(self, criteria=None):
         popUp = None
         if criteria is not None:
-            if type(criteria) is types.DictionaryType:
+            if isinstance(criteria, types.DictionaryType):
                 popUp = self.__findByDictCriteria(criteria)
             elif isinstance(criteria, ExternalCriteria):
                 popUp = self.__findByExCriteria(criteria)
@@ -179,7 +177,7 @@ class _PopUpContainer(IViewContainer):
                 LOG_ERROR('Criteria is invalid', criteria)
         return popUp
 
-    def getViewCount(self, isModal = None):
+    def getViewCount(self, isModal=None):
         if isModal is None:
             result = len(self.__popUps)
         else:
@@ -223,7 +221,6 @@ class _PopUpContainer(IViewContainer):
 
 
 class ContainerManager(ContainerManagerMeta):
-    onViewAddedToContainer = Event()
     __DESTROY_ORDER = (ViewTypes.DEFAULT,
      ViewTypes.LOBBY_SUB,
      ViewTypes.WINDOW,
@@ -236,6 +233,7 @@ class ContainerManager(ContainerManagerMeta):
 
     def __init__(self, loader):
         super(ContainerManager, self).__init__()
+        self.onViewAddedToContainer = Event()
         proxy = weakref.proxy(self)
         self.__containers = {ViewTypes.DEFAULT: _DefaultContainer(proxy),
          ViewTypes.CURSOR: _DefaultContainer(proxy),
@@ -250,7 +248,7 @@ class ContainerManager(ContainerManagerMeta):
         self.__scopeController = GlobalScopeController()
         self.__scopeController.create()
 
-    def load(self, alias, name = None, *args, **kwargs):
+    def load(self, alias, name=None, *args, **kwargs):
         if name is None:
             name = alias
         isViewExists = self.as_getViewS(name)
@@ -283,7 +281,7 @@ class ContainerManager(ContainerManagerMeta):
             return False
             return
 
-    def addContainer(self, containerType, name, container = None):
+    def addContainer(self, containerType, name, container=None):
         result = True
         if containerType not in self.__containers:
             if container is None:
@@ -313,10 +311,7 @@ class ContainerManager(ContainerManagerMeta):
         return result
 
     def getContainer(self, viewType):
-        if viewType in self.__containers:
-            return self.__containers[viewType]
-        else:
-            return None
+        return self.__containers[viewType] if viewType in self.__containers else None
 
     def isModalViewsIsExists(self):
         if self.getContainer(ViewTypes.TOP_WINDOW).getViewCount(isModal=True) > 0:
@@ -326,7 +321,7 @@ class ContainerManager(ContainerManagerMeta):
         else:
             return self.getContainer(ViewTypes.WINDOW).getViewCount(isModal=True) > 0
 
-    def getView(self, viewType, criteria = None):
+    def getView(self, viewType, criteria=None):
         view = None
         container = self.getContainer(viewType)
         if container is not None:
@@ -335,7 +330,7 @@ class ContainerManager(ContainerManagerMeta):
             raise Exception('Container for %s view is None!' % viewType)
         return view
 
-    def isViewAvailable(self, viewType, criteria = None):
+    def isViewAvailable(self, viewType, criteria=None):
         container = self.getContainer(viewType)
         if container is not None:
             return container.getView(criteria=criteria) is not None

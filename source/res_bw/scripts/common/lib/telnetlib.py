@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/telnetlib.py
 r"""TELNET client class.
 
@@ -166,7 +167,7 @@ class Telnet():
     
     """
 
-    def __init__(self, host = None, port = 0, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+    def __init__(self, host=None, port=0, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         """Constructor.
         
         When called without arguments, create an unconnected instance.
@@ -191,7 +192,7 @@ class Telnet():
             self.open(host, port, timeout)
         return
 
-    def open(self, host, port = 0, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+    def open(self, host, port=0, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         """Connect to a host.
         
         The optional second argument is the port number, which
@@ -262,7 +263,7 @@ class Telnet():
         self.msg('send %r', buffer)
         self.sock.sendall(buffer)
 
-    def read_until(self, match, timeout = None):
+    def read_until(self, match, timeout=None):
         """Read until a given string is encountered or until timeout.
         
         When no match is found, return whatever is available instead,
@@ -324,7 +325,7 @@ class Telnet():
         else:
             return self.read_very_lazy()
 
-    def _read_until_with_select(self, match, timeout = None):
+    def _read_until_with_select(self, match, timeout=None):
         """Read until a given string is encountered or until timeout.
         
         The timeout is implemented using select.select().
@@ -480,7 +481,7 @@ class Telnet():
                         continue
                     else:
                         self.iacseq += c
-                elif len(self.iacseq) == 1:
+                if len(self.iacseq) == 1:
                     if c in (DO,
                      DONT,
                      WILL,
@@ -502,7 +503,7 @@ class Telnet():
                             self.option_callback(self.sock, c, NOOPT)
                         else:
                             self.msg('IAC %d not recognized' % ord(c))
-                elif len(self.iacseq) == 2:
+                if len(self.iacseq) == 2:
                     cmd = self.iacseq[1]
                     self.iacseq = ''
                     opt = c
@@ -607,10 +608,9 @@ class Telnet():
 
             if data:
                 sys.stdout.write(data)
-            else:
-                sys.stdout.flush()
+            sys.stdout.flush()
 
-    def expect(self, list, timeout = None):
+    def expect(self, list, timeout=None):
         """Read until one from a list of a regular expressions matches.
         
         The first argument is a list of regular expressions, either
@@ -637,7 +637,7 @@ class Telnet():
         else:
             return self._expect_with_select(list, timeout)
 
-    def _expect_with_poll(self, expect_list, timeout = None):
+    def _expect_with_poll(self, expect_list, timeout=None):
         """Read until one from a list of a regular expressions matches.
         
         This method uses select.poll() to implement the timeout.
@@ -707,7 +707,7 @@ class Telnet():
                 raise EOFError
             return (-1, None, text)
 
-    def _expect_with_select(self, list, timeout = None):
+    def _expect_with_select(self, list, timeout=None):
         """Read until one from a list of a regular expressions matches.
         
         The timeout is implemented using select.select().

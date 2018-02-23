@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Util/number.py
 __revision__ = '$Id$'
 from Crypto.pct_warnings import GetRandomNumber_DeprecationWarning, PowmInsecureWarning
@@ -27,13 +27,13 @@ def size(N):
     return bits
 
 
-def getRandomNumber(N, randfunc = None):
+def getRandomNumber(N, randfunc=None):
     """Deprecated.  Use getRandomInteger or getRandomNBitInteger instead."""
     warnings.warn('Crypto.Util.number.getRandomNumber has confusing semantics' + 'and has been deprecated.  Use getRandomInteger or getRandomNBitInteger instead.', GetRandomNumber_DeprecationWarning)
     return getRandomNBitInteger(N, randfunc)
 
 
-def getRandomInteger(N, randfunc = None):
+def getRandomInteger(N, randfunc=None):
     """getRandomInteger(N:int, randfunc:callable):long
     Return a random number with at most N bits.
     
@@ -54,7 +54,7 @@ def getRandomInteger(N, randfunc = None):
     return value
 
 
-def getRandomRange(a, b, randfunc = None):
+def getRandomRange(a, b, randfunc=None):
     """getRandomRange(a:int, b:int, randfunc:callable):long
     Return a random number n so that a <= n < b.
     
@@ -72,7 +72,7 @@ def getRandomRange(a, b, randfunc = None):
     return a + value
 
 
-def getRandomNBitInteger(N, randfunc = None):
+def getRandomNBitInteger(N, randfunc=None):
     """getRandomInteger(N:int, randfunc:callable):long
     Return a random number with exactly N-bits, i.e. a random number
     between 2**(N-1) and (2**N)-1.
@@ -117,7 +117,7 @@ def inverse(u, v):
     return u1
 
 
-def getPrime(N, randfunc = None):
+def getPrime(N, randfunc=None):
     """getPrime(N:int, randfunc:callable):long
     Return a random N-bit prime number.
     
@@ -133,7 +133,7 @@ def getPrime(N, randfunc = None):
     return number
 
 
-def _rabinMillerTest(n, rounds, randfunc = None):
+def _rabinMillerTest(n, rounds, randfunc=None):
     """_rabinMillerTest(n:long, rounds:int, randfunc:callable):int
     Tests if n is prime.
     Returns 0 when n is definitly composite.
@@ -177,7 +177,7 @@ def _rabinMillerTest(n, rounds, randfunc = None):
             return 0
 
 
-def getStrongPrime(N, e = 0, false_positive_prob = 1e-06, randfunc = None):
+def getStrongPrime(N, e=0, false_positive_prob=1e-06, randfunc=None):
     """getStrongPrime(N:int, e:int, false_positive_prob:float, randfunc:callable):long
     Return a random strong N-bit prime number.
     In this context p is a strong prime if p-1 and p+1 have at
@@ -259,7 +259,7 @@ def getStrongPrime(N, e = 0, false_positive_prob = 1e-06, randfunc = None):
         return X
 
 
-def isPrime(N, false_positive_prob = 1e-06, randfunc = None):
+def isPrime(N, false_positive_prob=1e-06, randfunc=None):
     """isPrime(N:long, false_positive_prob:float, randfunc:callable):bool
     Return true if N is prime.
     
@@ -288,7 +288,7 @@ def isPrime(N, false_positive_prob = 1e-06, randfunc = None):
 
 import struct
 
-def long_to_bytes(n, blocksize = 0):
+def long_to_bytes(n, blocksize=0):
     """long_to_bytes(n:long, blocksize:int) : string
     Convert a long integer to a byte string.
     
@@ -337,7 +337,7 @@ def bytes_to_long(s):
 
 import warnings
 
-def long2str(n, blocksize = 0):
+def long2str(n, blocksize=0):
     warnings.warn('long2str() has been replaced by long_to_bytes()')
     return long_to_bytes(n, blocksize)
 

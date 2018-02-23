@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Crew.py
 from CurrentVehicle import g_currentVehicle
 from gui import SystemMessages
@@ -80,7 +80,7 @@ class Crew(CrewMeta):
                      'active': skill.isEnable and skill.isActive})
 
                 newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
-                if newSkillsCount > 0:
+                if newSkillsCount > 0 and not vehicle.isOnlyForEventBattles:
                     skillsList.append({'buy': True,
                      'tankmanID': tankman.invID,
                      'level': lastNewSkillLvl})

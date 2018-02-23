@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimetools.py
 """Various tools used by MIME-reading or MIME-writing programs."""
 import os
@@ -21,7 +22,7 @@ class Message(rfc822.Message):
     """A derived class of rfc822.Message that knows about MIME headers and
     contains some hooks for decoding encoded and multipart messages."""
 
-    def __init__(self, fp, seekable = 1):
+    def __init__(self, fp, seekable=1):
         rfc822.Message.__init__(self, fp, seekable)
         self.encodingheader = self.getheader('content-transfer-encoding')
         self.typeheader = self.getheader('content-type')
@@ -85,10 +86,7 @@ class Message(rfc822.Message):
         return result
 
     def getencoding(self):
-        if self.encodingheader is None:
-            return '7bit'
-        else:
-            return self.encodingheader.lower()
+        return '7bit' if self.encodingheader is None else self.encodingheader.lower()
 
     def gettype(self):
         return self.type

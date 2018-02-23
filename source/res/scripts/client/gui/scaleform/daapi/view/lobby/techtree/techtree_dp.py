@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
 from collections import defaultdict
 from constants import IS_DEVELOPMENT
@@ -54,7 +54,7 @@ class _TechTreeDataProvider(object):
         self.__nextLevels = defaultdict(dict)
         self.__unlockPrices = defaultdict(dict)
 
-    def __readShared(self, clearCache = False):
+    def __readShared(self, clearCache=False):
         if clearCache:
             ResMgr.purge(TREE_SHARED_REL_FILE_PATH)
         shared = {'settings': {},
@@ -239,7 +239,7 @@ class _TechTreeDataProvider(object):
 
         return result.values()
 
-    def __readNation(self, shared, nation, clearCache = False):
+    def __readNation(self, shared, nation, clearCache=False):
         xmlPath = NATION_TREE_REL_FILE_PATH % nation
         if clearCache:
             ResMgr.purge(xmlPath)
@@ -305,7 +305,7 @@ class _TechTreeDataProvider(object):
                 if hasRoot and row > 1 and column is 1:
                     raise _ConfigError(xmlCtx, 'In first column must be one node - root node, {0:>s} '.format(uName))
                 elif row > rows or column > columns:
-                    raise _ConfigError, (xmlCtx, 'Invalid row or column index: {0:>s}, {1:d}, {2:d}'.format(uName, row, column))
+                    raise _ConfigError(xmlCtx, 'Invalid row or column index: {0:>s}, {1:d}, {2:d}'.format(uName, row, column))
                 lines = self.__readNodeLines(nodeCD, nation, xmlCtx, nodeSection, shared)
                 displayInfo[nodeCD] = {'row': row,
                  'column': column,
@@ -356,26 +356,28 @@ class _TechTreeDataProvider(object):
 
         return coordinates
 
-    def load(self, isReload = False):
+    def load(self, isReload=False):
         if self.__loaded and not isReload:
             return False
         LOG_DEBUG('Tech tree data is being loaded')
         self._clear()
         try:
-            shared = self.__readShared(clearCache=isReload)
-            for nation in self.__availableNations:
-                info = self.__readNation(shared, nation, clearCache=isReload)
-                self.__displayInfo.update(info)
+            try:
+                shared = self.__readShared(clearCache=isReload)
+                for nation in self.__availableNations:
+                    info = self.__readNation(shared, nation, clearCache=isReload)
+                    self.__displayInfo.update(info)
 
-        except _ConfigError as error:
-            LOG_ERROR(error)
+            except _ConfigError as error:
+                LOG_ERROR(error)
+
         finally:
             self.__makeAbsoluteCoordinates()
             self.__loaded = True
 
         return True
 
-    def setOverride(self, override = ''):
+    def setOverride(self, override=''):
         if self.__override != override:
             self.__override = override
             self.__loaded = False
@@ -400,7 +402,7 @@ class _TechTreeDataProvider(object):
     def getNextLevel(self, vTypeCD):
         return self.__nextLevels[vTypeCD].keys()
 
-    def _findNext2Unlock(self, compare, xps = None, freeXP = 0):
+    def _findNext2Unlock(self, compare, xps=None, freeXP=0):
         xpGetter = xps.get
 
         def makeItem(item):
@@ -426,7 +428,7 @@ class _TechTreeDataProvider(object):
             recommended = getMinFreeXPSpent(mapping)
         return recommended
 
-    def isNext2Unlock(self, vTypeCD, unlocked = set(), xps = None, freeXP = 0):
+    def isNext2Unlock(self, vTypeCD, unlocked=set(), xps=None, freeXP=0):
         topLevel = self.getTopLevel(vTypeCD)
         available = False
         topIDs = set()
@@ -439,14 +441,14 @@ class _TechTreeDataProvider(object):
                 topIDs.add(parentCD)
                 compare.append(UnlockProps(parentCD, idx, xpCost, topIDs))
                 available = True
-            elif not result.xpCost or result.xpCost > xpCost:
+            if not result.xpCost or result.xpCost > xpCost:
                 result = UnlockProps(parentCD, idx, xpCost, set())
 
         if available:
             result = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
         return (available, result)
 
-    def getNext2UnlockByItems(self, itemCDs, unlocked = set(), xps = None, freeXP = 0):
+    def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
         filtered = filter(lambda item: item in self.__topItems, itemCDs)
         if not len(filtered) or not len(unlocked):
             return {}

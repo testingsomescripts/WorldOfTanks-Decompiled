@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/string.py
 """A collection of string operations (most are no longer used).
 
@@ -35,7 +36,7 @@ l = map(chr, xrange(256))
 _idmap = str('').join(l)
 del l
 
-def capwords(s, sep = None):
+def capwords(s, sep=None):
     """capwords(s [,sep]) -> string
     
     Split the argument into words using split, capitalize each
@@ -219,7 +220,7 @@ def swapcase(s):
     return s.swapcase()
 
 
-def strip(s, chars = None):
+def strip(s, chars=None):
     """strip(s [,chars]) -> string
     
     Return a copy of the string s with leading and trailing
@@ -231,7 +232,7 @@ def strip(s, chars = None):
     return s.strip(chars)
 
 
-def lstrip(s, chars = None):
+def lstrip(s, chars=None):
     """lstrip(s [,chars]) -> string
     
     Return a copy of the string s with leading whitespace removed.
@@ -241,7 +242,7 @@ def lstrip(s, chars = None):
     return s.lstrip(chars)
 
 
-def rstrip(s, chars = None):
+def rstrip(s, chars=None):
     """rstrip(s [,chars]) -> string
     
     Return a copy of the string s with trailing whitespace removed.
@@ -251,7 +252,7 @@ def rstrip(s, chars = None):
     return s.rstrip(chars)
 
 
-def split(s, sep = None, maxsplit = -1):
+def split(s, sep=None, maxsplit=-1):
     """split(s [,sep [,maxsplit]]) -> list of strings
     
     Return a list of the words in the string s, using sep as the
@@ -267,7 +268,7 @@ def split(s, sep = None, maxsplit = -1):
 
 splitfields = split
 
-def rsplit(s, sep = None, maxsplit = -1):
+def rsplit(s, sep=None, maxsplit=-1):
     """rsplit(s [,sep [,maxsplit]]) -> list of strings
     
     Return a list of the words in the string s, using sep as the
@@ -279,7 +280,7 @@ def rsplit(s, sep = None, maxsplit = -1):
     return s.rsplit(sep, maxsplit)
 
 
-def join(words, sep = ' '):
+def join(words, sep=' '):
     """join(list [,sep]) -> string
     
     Return a string composed of the words in list, with
@@ -362,7 +363,7 @@ def atof(s):
     return _float(s)
 
 
-def atoi(s, base = 10):
+def atoi(s, base=10):
     """atoi(s [,base]) -> int
     
     Return the integer represented by the string s in the given
@@ -376,7 +377,7 @@ def atoi(s, base = 10):
     return _int(s, base)
 
 
-def atol(s, base = 10):
+def atol(s, base=10):
     """atol(s [,base]) -> long
     
     Return the long integer represented by the string s in the
@@ -436,7 +437,7 @@ def zfill(x, width):
     return x.zfill(width)
 
 
-def expandtabs(s, tabsize = 8):
+def expandtabs(s, tabsize=8):
     """expandtabs(s [,tabsize]) -> string
     
     Return a copy of the string s with all tab characters replaced
@@ -447,7 +448,7 @@ def expandtabs(s, tabsize = 8):
     return s.expandtabs(tabsize)
 
 
-def translate(s, table, deletions = ''):
+def translate(s, table, deletions=''):
     """translate(s,table [,deletions]) -> string
     
     Return a copy of the string s, where all characters occurring
@@ -474,7 +475,7 @@ def capitalize(s):
     return s.capitalize()
 
 
-def replace(s, old, new, maxreplace = -1):
+def replace(s, old, new, maxreplace=-1):
     """replace (str, old, new[, maxreplace]) -> string
     
     Return a copy of string str with all occurrences of substring
@@ -550,7 +551,6 @@ class Formatter(object):
         for is_attr, i in rest:
             if is_attr:
                 obj = getattr(obj, i)
-            else:
-                obj = obj[i]
+            obj = obj[i]
 
         return (obj, first)

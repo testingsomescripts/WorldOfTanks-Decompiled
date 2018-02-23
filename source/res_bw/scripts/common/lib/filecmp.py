@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/filecmp.py
 """Utilities for comparing files and directories.
 
@@ -17,7 +17,7 @@ __all__ = ['cmp', 'dircmp', 'cmpfiles']
 _cache = {}
 BUFSIZE = 8192
 
-def cmp(f1, f2, shallow = 1):
+def cmp(f1, f2, shallow=1):
     """Compare two files.
     
     Arguments:
@@ -109,7 +109,7 @@ class dircmp:
      subdirs: a dictionary of dircmp objects, keyed by names in common_dirs.
      """
 
-    def __init__(self, a, b, ignore = None, hide = None):
+    def __init__(self, a, b, ignore=None, hide=None):
         self.left = a
         self.right = b
         if hide is None:
@@ -164,8 +164,7 @@ class dircmp:
                     self.common_files.append(x)
                 else:
                     self.common_funny.append(x)
-            else:
-                self.common_funny.append(x)
+            self.common_funny.append(x)
 
     def phase3(self):
         xx = cmpfiles(self.left, self.right, self.common_files)
@@ -228,7 +227,7 @@ class dircmp:
         return getattr(self, attr)
 
 
-def cmpfiles(a, b, common, shallow = 1):
+def cmpfiles(a, b, common, shallow=1):
     """Compare common files in two directories.
     
     a, b -- directory names
@@ -250,7 +249,7 @@ def cmpfiles(a, b, common, shallow = 1):
     return res
 
 
-def _cmp(a, b, sh, abs = abs, cmp = cmp):
+def _cmp(a, b, sh, abs=abs, cmp=cmp):
     try:
         return not abs(cmp(a, b, sh))
     except (os.error, IOError):

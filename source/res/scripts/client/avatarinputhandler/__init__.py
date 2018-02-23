@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/__init__.py
 import functools
 import math
@@ -12,8 +12,7 @@ from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSyst
 from Event import Event
 from debug_utils import *
 from gui import g_guiResetters
-from gui.Scaleform.CursorDelegator import g_cursorDelegator
-from gui.app_loader import g_appLoader
+from gui.app_loader import g_appLoader, settings
 from post_processing.post_effect_controllers import g_postProcessingEvents
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS
@@ -123,7 +122,7 @@ class AvatarInputHandler(CallbackDelayer):
     _DYNAMIC_CAMERAS_ENABLED_KEY = 'global/dynamicCameraEnabled'
 
     @staticmethod
-    def enableDynamicCamera(enable, useHorizontalStabilizer = True):
+    def enableDynamicCamera(enable, useHorizontalStabilizer=True):
         for dynamicCameraClass in _DYNAMIC_CAMERAS:
             dynamicCameraClass.enableDynamicCamera(enable)
 
@@ -186,33 +185,29 @@ class AvatarInputHandler(CallbackDelayer):
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or cursorDetached:
             return False
-        if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
-            if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
-                self.__alwaysShowAim = not self.__alwaysShowAim
-                getAim = getattr(self.__curCtrl, 'getAim')
-                if getAim is not None:
-                    aim = getAim()
-                    if aim is not None:
-                        aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
-                return True
-            if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
-                battle = g_appLoader.getDefBattleApp()
-                if battle:
-                    markersManager = battle.markersManager
-                    markersManager.active(not markersManager.isActive)
-                return True
-            if key == Keys.KEY_F5 and constants.IS_DEVELOPMENT:
-                self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
-                return True
-        if self.__curCtrl.handleKeyEvent(isDown, key, mods, event):
-            return True
         else:
-            return BigWorld.player().handleKey(isDown, key, mods)
+            if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
+                if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
+                    self.__alwaysShowAim = not self.__alwaysShowAim
+                    getAim = getattr(self.__curCtrl, 'getAim')
+                    if getAim is not None:
+                        aim = getAim()
+                        if aim is not None:
+                            aim.setVisible(self.__alwaysShowAim or BigWorld.player().isGuiVisible)
+                    return True
+                if self.__showMarkersKey is not None and key == self.__showMarkersKey and not BigWorld.player().isGuiVisible:
+                    battle = g_appLoader.getDefBattleApp()
+                    if battle:
+                        markersManager = battle.markersManager
+                        markersManager.active(not markersManager.isActive)
+                    return True
+                if key == Keys.KEY_F5 and constants.IS_DEVELOPMENT:
+                    self.__vertScreenshotCamera.enable(not self.__vertScreenshotCamera.isEnabled)
+                    return True
+            return True if self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else BigWorld.player().handleKey(isDown, key, mods)
 
     def handleMouseEvent(self, dx, dy, dz):
-        if not self.__isStarted or self.__detachCount < 0:
-            return False
-        return self.__curCtrl.handleMouseEvent(dx, dy, dz)
+        return False if not self.__isStarted or self.__detachCount < 0 else self.__curCtrl.handleMouseEvent(dx, dy, dz)
 
     def detachCursor(self, isDetached, enableAiming):
         if not self.__isStarted:
@@ -221,17 +216,15 @@ class AvatarInputHandler(CallbackDelayer):
         assert self.__detachCount <= 0
         if self.__detachCount == -1 and isDetached:
             self.__targeting.enable(False)
-            g_cursorDelegator.activateCursor()
+            g_appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
             if enableAiming:
                 self.setAimingMode(False, AIMING_MODE.USER_DISABLED)
         elif not self.__detachCount:
             self.__targeting.enable(True)
-            g_cursorDelegator.detachCursor()
+            g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
 
     def updateShootingStatus(self, canShoot):
-        if self.__detachCount < 0:
-            return
-        return self.__curCtrl.updateShootingStatus(canShoot)
+        return None if self.__detachCount < 0 else self.__curCtrl.updateShootingStatus(canShoot)
 
     def getDesiredShotPoint(self):
         if self.__detachCount < 0:
@@ -327,7 +320,7 @@ class AvatarInputHandler(CallbackDelayer):
             control.create()
 
         self.__addBattleCtrlListeners()
-        g_cursorDelegator.detachCursor()
+        g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
         if not self.__curCtrl.isManualBind():
             BigWorld.player().positionControl.bindToVehicle(True)
         self.__curCtrl.enable(ctrlState=control_modes.dumpStateEmpty())
@@ -465,7 +458,7 @@ class AvatarInputHandler(CallbackDelayer):
     def onMinimapClicked(self, worldPos):
         self.__curCtrl.onMinimapClicked(worldPos)
 
-    def setReloading(self, duration, startTime = None, baseTime = None):
+    def setReloading(self, duration, startTime=None, baseTime=None):
         self.onSetReloading(duration, startTime, baseTime)
 
     def setReloadingInPercent(self, percent):
@@ -630,9 +623,8 @@ class AvatarInputHandler(CallbackDelayer):
                         classType = getattr(module, desc[0], None)
                         if classType is None:
                             pass
-                        else:
-                            self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
-                            break
+                        self.__ctrls[name] = classType(section[desc[1]] if desc[1] else None, self)
+                        break
 
         return
 

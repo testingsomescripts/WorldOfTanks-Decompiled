@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/abc.py
 """Abstract Base Classes (ABCs) according to PEP 3119."""
 import types
@@ -103,7 +103,7 @@ class ABCMeta(type):
         cls._abc_registry.add(subclass)
         ABCMeta._abc_invalidation_counter += 1
 
-    def _dump_registry(cls, file = None):
+    def _dump_registry(cls, file=None):
         """Debug helper to print the ABC registry."""
         print >> file, 'Class: %s.%s' % (cls.__module__, cls.__name__)
         print >> file, 'Inv.counter: %s' % ABCMeta._abc_invalidation_counter

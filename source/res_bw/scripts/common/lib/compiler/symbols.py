@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/symbols.py
 """Module symbol-table generator"""
 from compiler import ast
@@ -10,7 +10,7 @@ MANGLE_LEN = 256
 
 class Scope:
 
-    def __init__(self, name, module, klass = None):
+    def __init__(self, name, module, klass=None):
         self.name = name
         self.module = module
         self.defs = {}
@@ -35,10 +35,7 @@ class Scope:
         return '<%s: %s>' % (self.__class__.__name__, self.name)
 
     def mangle(self, name):
-        if self.klass is None:
-            return name
-        else:
-            return mangle(name, self.klass)
+        return name if self.klass is None else mangle(name, self.klass)
 
     def add_def(self, name):
         self.defs[self.mangle(name)] = 1
@@ -156,9 +153,9 @@ class Scope:
                     self.cells[name] = 1
                 elif sc != SC_CELL:
                     child_globals.append(name)
-            elif sc == SC_LOCAL:
+            if sc == SC_LOCAL:
                 self.cells[name] = 1
-            elif sc != SC_CELL:
+            if sc != SC_CELL:
                 child_globals.append(name)
 
         return child_globals
@@ -182,7 +179,7 @@ class GenExprScope(Scope):
     __super_init = Scope.__init__
     __counter = 1
 
-    def __init__(self, module, klass = None):
+    def __init__(self, module, klass=None):
         i = self.__counter
         self.__counter += 1
         self.__super_init('generator expression<%d>' % i, module, klass)
@@ -197,7 +194,7 @@ class LambdaScope(FunctionScope):
     __super_init = Scope.__init__
     __counter = 1
 
-    def __init__(self, module, klass = None):
+    def __init__(self, module, klass=None):
         i = self.__counter
         self.__counter += 1
         self.__super_init('lambda.%d' % i, module, klass)
@@ -261,7 +258,7 @@ class SymbolVisitor:
     def visitGenExprIf(self, node, scope):
         self.visit(node.test, scope)
 
-    def visitLambda(self, node, parent, assign = 0):
+    def visitLambda(self, node, parent, assign=0):
         assert not assign
         for n in node.defaults:
             self.visit(n, parent)
@@ -278,8 +275,7 @@ class SymbolVisitor:
         for name in args:
             if type(name) == types.TupleType:
                 self._do_args(scope, name)
-            else:
-                scope.add_param(name)
+            scope.add_param(name)
 
     def handle_free_vars(self, scope, parent):
         parent.add_child(scope)
@@ -304,7 +300,7 @@ class SymbolVisitor:
         self.handle_free_vars(scope, parent)
         return
 
-    def visitName(self, node, scope, assign = 0):
+    def visitName(self, node, scope, assign=0):
         if assign:
             scope.add_def(node.name)
         else:
@@ -352,18 +348,18 @@ class SymbolVisitor:
 
         self.visit(node.expr, scope)
 
-    def visitAssName(self, node, scope, assign = 1):
+    def visitAssName(self, node, scope, assign=1):
         scope.add_def(node.name)
 
-    def visitAssAttr(self, node, scope, assign = 0):
+    def visitAssAttr(self, node, scope, assign=0):
         self.visit(node.expr, scope, 0)
 
-    def visitSubscript(self, node, scope, assign = 0):
+    def visitSubscript(self, node, scope, assign=0):
         self.visit(node.expr, scope, 0)
         for n in node.subs:
             self.visit(n, scope, 0)
 
-    def visitSlice(self, node, scope, assign = 0):
+    def visitSlice(self, node, scope, assign=0):
         self.visit(node.expr, scope, 0)
         if node.lower:
             self.visit(node.lower, scope, 0)

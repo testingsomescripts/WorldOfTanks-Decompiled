@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/dbshelve.py
 """Manage shelves of pickled objects using bsddb database files for the
 storage.
@@ -36,7 +36,7 @@ else:
     import collections
     MutableMapping = collections.MutableMapping
 
-def open(filename, flags = db.DB_CREATE, mode = 432, filetype = db.DB_HASH, dbenv = None, dbname = None):
+def open(filename, flags=db.DB_CREATE, mode=432, filetype=db.DB_HASH, dbenv=None, dbname=None):
     """
     A simple factory function for compatibility with the standard
     shleve.py module.  It can be used like this, where key is a string
@@ -77,7 +77,7 @@ class DBShelf(MutableMapping):
     automatically pickles/unpickles data objects going to/from the DB.
     """
 
-    def __init__(self, dbenv = None):
+    def __init__(self, dbenv=None):
         self.db = db.DB(dbenv)
         self._closed = True
         if HIGHEST_PROTOCOL:
@@ -108,7 +108,7 @@ class DBShelf(MutableMapping):
     def __delitem__(self, key):
         del self.db[key]
 
-    def keys(self, txn = None):
+    def keys(self, txn=None):
         if txn is not None:
             return self.db.keys(txn)
         else:
@@ -135,7 +135,7 @@ class DBShelf(MutableMapping):
         else:
             return repr(dict(self.iteritems()))
 
-    def items(self, txn = None):
+    def items(self, txn=None):
         if txn is not None:
             items = self.db.items(txn)
         else:
@@ -146,25 +146,25 @@ class DBShelf(MutableMapping):
 
         return newitems
 
-    def values(self, txn = None):
+    def values(self, txn=None):
         if txn is not None:
             values = self.db.values(txn)
         else:
             values = self.db.values()
         return map(cPickle.loads, values)
 
-    def __append(self, value, txn = None):
+    def __append(self, value, txn=None):
         data = _dumps(value, self.protocol)
         return self.db.append(data, txn)
 
-    def append(self, value, txn = None):
+    def append(self, value, txn=None):
         if self.get_type() == db.DB_RECNO:
             return self.__append(value, txn=txn)
         raise DBShelveError, 'append() only supported when dbshelve opened with filetype=dbshelve.db.DB_RECNO'
 
-    def associate(self, secondaryDB, callback, flags = 0):
+    def associate(self, secondaryDB, callback, flags=0):
 
-        def _shelf_callback(priKey, priData, realCallback = callback):
+        def _shelf_callback(priKey, priData, realCallback=callback):
             if sys.version_info[0] < 3 or isinstance(priData, bytes):
                 data = cPickle.loads(priData)
             else:
@@ -180,21 +180,21 @@ class DBShelf(MutableMapping):
         except (EOFError, TypeError, cPickle.UnpicklingError):
             return data
 
-    def get_both(self, key, value, txn = None, flags = 0):
+    def get_both(self, key, value, txn=None, flags=0):
         data = _dumps(value, self.protocol)
         data = self.db.get(key, data, txn, flags)
         return cPickle.loads(data)
 
-    def cursor(self, txn = None, flags = 0):
+    def cursor(self, txn=None, flags=0):
         c = DBShelfCursor(self.db.cursor(txn, flags))
         c.protocol = self.protocol
         return c
 
-    def put(self, key, value, txn = None, flags = 0):
+    def put(self, key, value, txn=None, flags=0):
         data = _dumps(value, self.protocol)
         return self.db.put(key, data, txn, flags)
 
-    def join(self, cursorList, flags = 0):
+    def join(self, cursorList, flags=0):
         raise NotImplementedError
 
 
@@ -212,12 +212,12 @@ class DBShelfCursor:
         """Some methods we can just pass through to the cursor object.  (See below)"""
         return getattr(self.dbc, name)
 
-    def dup(self, flags = 0):
+    def dup(self, flags=0):
         c = DBShelfCursor(self.dbc.dup(flags))
         c.protocol = self.protocol
         return c
 
-    def put(self, key, value, flags = 0):
+    def put(self, key, value, flags=0):
         data = _dumps(value, self.protocol)
         return self.dbc.put(key, data, flags)
 
@@ -239,47 +239,47 @@ class DBShelfCursor:
         rec = self.dbc.get(key, flags)
         return self._extract(rec)
 
-    def current(self, flags = 0):
+    def current(self, flags=0):
         return self.get_1(flags | db.DB_CURRENT)
 
-    def first(self, flags = 0):
+    def first(self, flags=0):
         return self.get_1(flags | db.DB_FIRST)
 
-    def last(self, flags = 0):
+    def last(self, flags=0):
         return self.get_1(flags | db.DB_LAST)
 
-    def next(self, flags = 0):
+    def next(self, flags=0):
         return self.get_1(flags | db.DB_NEXT)
 
-    def prev(self, flags = 0):
+    def prev(self, flags=0):
         return self.get_1(flags | db.DB_PREV)
 
-    def consume(self, flags = 0):
+    def consume(self, flags=0):
         return self.get_1(flags | db.DB_CONSUME)
 
-    def next_dup(self, flags = 0):
+    def next_dup(self, flags=0):
         return self.get_1(flags | db.DB_NEXT_DUP)
 
-    def next_nodup(self, flags = 0):
+    def next_nodup(self, flags=0):
         return self.get_1(flags | db.DB_NEXT_NODUP)
 
-    def prev_nodup(self, flags = 0):
+    def prev_nodup(self, flags=0):
         return self.get_1(flags | db.DB_PREV_NODUP)
 
-    def get_both(self, key, value, flags = 0):
+    def get_both(self, key, value, flags=0):
         data = _dumps(value, self.protocol)
         rec = self.dbc.get_both(key, flags)
         return self._extract(rec)
 
-    def set(self, key, flags = 0):
+    def set(self, key, flags=0):
         rec = self.dbc.set(key, flags)
         return self._extract(rec)
 
-    def set_range(self, key, flags = 0):
+    def set_range(self, key, flags=0):
         rec = self.dbc.set_range(key, flags)
         return self._extract(rec)
 
-    def set_recno(self, recno, flags = 0):
+    def set_recno(self, recno, flags=0):
         rec = self.dbc.set_recno(recno, flags)
         return self._extract(rec)
 

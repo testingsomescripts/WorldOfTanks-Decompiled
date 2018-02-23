@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/msilib/__init__.py
 from _msi import *
 import os, string, re, sys
@@ -42,14 +43,14 @@ class Table:
                     tname = 'CHAR(%d)' % size
                 else:
                     tname = 'CHAR'
-            elif not (dtype == type_short and size == 2):
-                raise AssertionError
+            elif dtype == type_short:
+                assert size == 2
                 tname = 'SHORT'
-            elif not (dtype == type_long and size == 4):
-                raise AssertionError
+            elif dtype == type_long:
+                assert size == 4
                 tname = 'LONG'
-            elif not (dtype == type_binary and size == 0):
-                raise AssertionError
+            elif dtype == type_binary:
+                assert size == 0
                 tname = 'OBJECT'
             else:
                 tname = 'unknown'
@@ -79,7 +80,7 @@ class _Unspecified:
     pass
 
 
-def change_sequence(seq, action, seqno = _Unspecified, cond = _Unspecified):
+def change_sequence(seq, action, seqno=_Unspecified, cond=_Unspecified):
     """Change the sequence number of an action in a sequence list"""
     for i in range(len(seq)):
         if seq[i][0] == action:
@@ -98,19 +99,18 @@ def add_data(db, table, values):
     count = v.GetColumnInfo(MSICOLINFO_NAMES).GetFieldCount()
     r = CreateRecord(count)
     for value in values:
-        raise len(value) == count or AssertionError(value)
+        assert len(value) == count, value
         for i in range(count):
             field = value[i]
             if isinstance(field, (int, long)):
                 r.SetInteger(i + 1, field)
-            elif isinstance(field, basestring):
+            if isinstance(field, basestring):
                 r.SetString(i + 1, field)
-            elif field is None:
+            if field is None:
                 pass
-            elif isinstance(field, Binary):
+            if isinstance(field, Binary):
                 r.SetStream(i + 1, field.name)
-            else:
-                raise TypeError, 'Unsupported type %s' % field.__class__.__name__
+            raise TypeError, 'Unsupported type %s' % field.__class__.__name__
 
         try:
             v.Modify(MSIMODIFY_INSERT, r)
@@ -177,7 +177,7 @@ def make_id(str):
     str = ''.join([ (c if c in identifier_chars else '_') for c in str ])
     if str[0] in string.digits + '.':
         str = '_' + str
-    raise re.match('^[A-Za-z_][A-Za-z0-9_.]*$', str) or AssertionError('FILE' + str)
+    assert re.match('^[A-Za-z_][A-Za-z0-9_.]*$', str), 'FILE' + str
     return str
 
 
@@ -232,7 +232,7 @@ _directories = set()
 
 class Directory:
 
-    def __init__(self, db, cab, basedir, physical, _logical, default, componentflags = None):
+    def __init__(self, db, cab, basedir, physical, _logical, default, componentflags=None):
         """Create a new directory in the Directory table. There is a current component
         at each point in time for the directory, which is either explicitly created
         through start_component, or implicitly when files are added for the first
@@ -268,7 +268,7 @@ class Directory:
         add_data(db, 'Directory', [(logical, blogical, default)])
         return
 
-    def start_component(self, component = None, feature = None, flags = None, keyfile = None, uuid = None):
+    def start_component(self, component=None, feature=None, flags=None, keyfile=None, uuid=None):
         """Add an entry to the Component table, and make this component the current for this
         directory. If no component name is given, the directory name is used. If no feature
         is given, the current feature is used. If no flags are given, the directory's default
@@ -335,15 +335,15 @@ class Directory:
                 if file not in self.short_names:
                     break
                 pos += 1
-                if not pos < 10000:
-                    raise AssertionError
-                    prefix = pos in (10, 100, 1000) and prefix[:-1]
+                assert pos < 10000
+                if pos in (10, 100, 1000):
+                    prefix = prefix[:-1]
 
         self.short_names.add(file)
-        raise not re.search('[\\?|><:/*"+,;=\\[\\]]', file) or AssertionError
+        assert not re.search('[\\?|><:/*"+,;=\\[\\]]', file)
         return file
 
-    def add_file(self, file, src = None, version = None, language = None):
+    def add_file(self, file, src=None, version=None, language=None):
         """Add a file to the current component of the directory, starting a new one
         if there is no current component. By default, the file name in the source
         and the file table will be identical. If the src file is specified, it is
@@ -355,28 +355,28 @@ class Directory:
             src = file
             file = os.path.basename(file)
         absolute = os.path.join(self.absolute, src)
-        if not not re.search('[\\?|><:/*]"', file):
-            raise AssertionError
-            logical = file in self.keyfiles and self.keyfiles[file]
+        assert not re.search('[\\?|><:/*]"', file)
+        if file in self.keyfiles:
+            logical = self.keyfiles[file]
         else:
             logical = None
         sequence, logical = self.cab.append(absolute, file, logical)
-        if not logical not in self.ids:
-            raise AssertionError
-            self.ids.add(logical)
-            short = self.make_short(file)
-            full = '%s|%s' % (short, file)
-            filesize = os.stat(absolute).st_size
-            attributes = 512
-            add_data(self.db, 'File', [(logical,
-              self.component,
-              full,
-              filesize,
-              version,
-              language,
-              attributes,
-              sequence)])
-            file.endswith('.py') and add_data(self.db, 'RemoveFile', [(logical + 'c',
+        assert logical not in self.ids
+        self.ids.add(logical)
+        short = self.make_short(file)
+        full = '%s|%s' % (short, file)
+        filesize = os.stat(absolute).st_size
+        attributes = 512
+        add_data(self.db, 'File', [(logical,
+          self.component,
+          full,
+          filesize,
+          version,
+          language,
+          attributes,
+          sequence)])
+        if file.endswith('.py'):
+            add_data(self.db, 'RemoveFile', [(logical + 'c',
               self.component,
               '%sC|%sc' % (short, file),
               self.logical,
@@ -387,7 +387,7 @@ class Directory:
               2)])
         return logical
 
-    def glob(self, pattern, exclude = None):
+    def glob(self, pattern, exclude=None):
         """Add a list of files to the current component as specified in the
         glob pattern. Individual files can be excluded in the exclude list."""
         files = glob.glob1(self.absolute, pattern)
@@ -422,7 +422,7 @@ class Binary:
 
 class Feature:
 
-    def __init__(self, db, id, title, desc, display, level = 1, parent = None, directory = None, attributes = 0):
+    def __init__(self, db, id, title, desc, display, level=1, parent=None, directory=None, attributes=0):
         self.id = id
         if parent:
             parent = parent.id
@@ -446,7 +446,7 @@ class Control:
         self.dlg = dlg
         self.name = name
 
-    def event(self, event, argument, condition = '1', ordering = None):
+    def event(self, event, argument, condition='1', ordering=None):
         add_data(self.dlg.db, 'ControlEvent', [(self.dlg.name,
           self.name,
           event,
@@ -475,7 +475,7 @@ class RadioButtonGroup(Control):
         self.property = property
         self.index = 1
 
-    def add(self, name, x, y, w, h, text, value = None):
+    def add(self, name, x, y, w, h, text, value=None):
         if value is None:
             value = name
         add_data(self.dlg.db, 'RadioButton', [(self.property,

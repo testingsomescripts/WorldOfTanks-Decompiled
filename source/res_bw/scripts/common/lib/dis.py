@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dis.py
 """Disassembler of Python byte code into mnemonics."""
 import sys
@@ -18,7 +18,7 @@ _have_code = (types.MethodType,
  types.ClassType,
  type)
 
-def dis(x = None):
+def dis(x=None):
     """Disassemble classes, methods, functions, or code.
     
     With no argument, disassemble the last traceback.
@@ -56,7 +56,7 @@ def dis(x = None):
         return
 
 
-def distb(tb = None):
+def distb(tb=None):
     """Disassemble a traceback (default: last traceback)."""
     if tb is None:
         try:
@@ -71,7 +71,7 @@ def distb(tb = None):
     return
 
 
-def disassemble(co, lasti = -1):
+def disassemble(co, lasti=-1):
     """Disassemble a code object."""
     code = co.co_code
     labels = findlabels(code)
@@ -126,7 +126,7 @@ def disassemble(co, lasti = -1):
     return
 
 
-def disassemble_string(code, lasti = -1, varnames = None, names = None, constants = None):
+def disassemble_string(code, lasti=-1, varnames=None, names=None, constants=None):
     labels = findlabels(code)
     n = len(code)
     i = 0

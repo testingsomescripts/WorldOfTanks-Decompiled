@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
 import Event
@@ -26,10 +26,10 @@ class DIALOG_BUTTON_ID(object):
 class IDialogMeta(object):
 
     def getEventType(self):
-        raise NotImplementedError, 'Dialog event type must be specified'
+        raise NotImplementedError('Dialog event type must be specified')
 
     def getViewScopeType(self):
-        raise NotImplementedError, 'Dialog scope must be specified'
+        raise NotImplementedError('Dialog scope must be specified')
 
 
 class ISimpleDialogButtonsMeta(object):
@@ -81,7 +81,7 @@ class ConfirmDialogButtons(InfoDialogButtons):
 
 class I18nInfoDialogButtons(ISimpleDialogButtonsMeta):
 
-    def __init__(self, i18nKey = 'common'):
+    def __init__(self, i18nKey='common'):
         super(I18nInfoDialogButtons, self).__init__()
         self._i18nKey = i18nKey
 
@@ -93,7 +93,7 @@ class I18nInfoDialogButtons(ISimpleDialogButtonsMeta):
 
 class I18nConfirmDialogButtons(I18nInfoDialogButtons):
 
-    def __init__(self, i18nKey = 'common', focusedIndex = None):
+    def __init__(self, i18nKey='common', focusedIndex=None):
         super(I18nInfoDialogButtons, self).__init__()
         self._i18nKey = i18nKey
         self._focusedIndex = focusedIndex
@@ -109,7 +109,7 @@ class I18nConfirmDialogButtons(I18nInfoDialogButtons):
 
 class SimpleDialogMeta(ISimpleDialogMeta):
 
-    def __init__(self, title = None, message = None, buttons = None, timer = 0, scope = ScopeTemplates.DEFAULT_SCOPE):
+    def __init__(self, title=None, message=None, buttons=None, timer=0, scope=ScopeTemplates.DEFAULT_SCOPE):
         super(SimpleDialogMeta, self).__init__()
         self._title = title
         self._message = message
@@ -144,7 +144,7 @@ class SimpleDialogMeta(ISimpleDialogMeta):
 
 class I18nDialogMeta(SimpleDialogMeta):
 
-    def __init__(self, key, buttons, titleCtx = None, messageCtx = None, meta = None, scope = ScopeTemplates.DEFAULT_SCOPE):
+    def __init__(self, key, buttons, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.DEFAULT_SCOPE):
         super(I18nDialogMeta, self).__init__(scope=scope)
         self._key = key
         self._titleCtx = titleCtx if titleCtx is not None else {}
@@ -196,21 +196,21 @@ class I18nDialogMeta(SimpleDialogMeta):
 
 class I18nInfoDialogMeta(I18nDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, scope = ScopeTemplates.VIEW_SCOPE):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.VIEW_SCOPE):
         buttons = I18nInfoDialogButtons(key)
         super(I18nInfoDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
 
 
 class I18nConfirmDialogMeta(I18nDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None, scope = ScopeTemplates.VIEW_SCOPE):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, scope=ScopeTemplates.VIEW_SCOPE):
         buttons = I18nConfirmDialogButtons(key, focusedID)
         super(I18nConfirmDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
 
 
 class DismissTankmanDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, tankman = None, focusedID = None):
+    def __init__(self, key, tankman=None, focusedID=None):
         super(DismissTankmanDialogMeta, self).__init__(key, None, None, None, focusedID)
         self.__tankman = tankman
         return
@@ -224,7 +224,7 @@ class DismissTankmanDialogMeta(I18nConfirmDialogMeta):
 
 class IconDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(IconDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
 
     def getEventType(self):
@@ -241,7 +241,7 @@ class IconDialogMeta(I18nConfirmDialogMeta):
 
 class IconPriceDialogMeta(IconDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(IconPriceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._operationPrice = self.__calcMessagePrice()
         self._action = self.__calcAction()
@@ -274,7 +274,7 @@ class IconPriceDialogMeta(IconDialogMeta):
 
 class DestroyDeviceDialogMeta(IconDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(DestroyDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
 
     def getEventType(self):
@@ -284,7 +284,7 @@ class DestroyDeviceDialogMeta(IconDialogMeta):
 class DemountDeviceDialogMeta(IconPriceDialogMeta):
     DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self.onConfirmationStatusChnaged = Event.Event()
         self.__userGoldAmount = g_itemsCache.items.stats.gold
@@ -322,7 +322,7 @@ class DemountDeviceDialogMeta(IconPriceDialogMeta):
 
 class HtmlMessageDialogMeta(SimpleDialogMeta):
 
-    def __init__(self, path, key, ctx = None, scope = ScopeTemplates.VIEW_SCOPE, sourceKey = 'text'):
+    def __init__(self, path, key, ctx=None, scope=ScopeTemplates.VIEW_SCOPE, sourceKey='text'):
         super(HtmlMessageDialogMeta, self).__init__(scope=scope)
         self._path = path
         self._key = key
@@ -338,13 +338,13 @@ class HtmlMessageDialogMeta(SimpleDialogMeta):
 
 class HtmlMessageLocalDialogMeta(HtmlMessageDialogMeta):
 
-    def __init__(self, path, key, ctx = None):
+    def __init__(self, path, key, ctx=None):
         super(HtmlMessageLocalDialogMeta, self).__init__(path, key, ctx, ScopeTemplates.LOBBY_SUB_SCOPE)
 
 
 class DisconnectMeta(I18nInfoDialogMeta):
 
-    def __init__(self, reason = None, isBan = False, expiryTime = None):
+    def __init__(self, reason=None, isBan=False, expiryTime=None):
         super(DisconnectMeta, self).__init__('disconnected', scope=ScopeTemplates.GLOBAL_SCOPE)
         self.reason = reason
         self.isBan = isBan
@@ -375,14 +375,14 @@ class DisconnectMeta(I18nInfoDialogMeta):
 
 class TimerConfirmDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None, timer = 0):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, timer=0):
         super(TimerConfirmDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._timer = timer
 
 
 class I18PunishmentDialogMeta(I18nInfoDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, scope = ScopeTemplates.VIEW_SCOPE):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.VIEW_SCOPE):
         super(I18PunishmentDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, scope)
         self.__penaltyType = messageCtx.get('penaltyType')
 
@@ -401,7 +401,7 @@ class I18PunishmentDialogMeta(I18nInfoDialogMeta):
 
 class CheckBoxDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, titleCtx = None, messageCtx = None, meta = None, focusedID = None, scope = ScopeTemplates.VIEW_SCOPE, selected = False):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, scope=ScopeTemplates.VIEW_SCOPE, selected=False):
         self.__checkBoxSelected = selected
         super(CheckBoxDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID, scope)
 

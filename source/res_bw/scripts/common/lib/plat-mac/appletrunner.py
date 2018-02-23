@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/appletrunner.py
 from warnings import warnpy3k
 warnpy3k('In 3.x, the appletrunner module is removed.', stacklevel=2)

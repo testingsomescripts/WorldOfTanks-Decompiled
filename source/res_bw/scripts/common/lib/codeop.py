@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/codeop.py
 r"""Utilities to compile possibly incomplete Python source code.
 
@@ -100,7 +100,7 @@ def _compile(source, filename, symbol):
     return compile(source, filename, symbol, PyCF_DONT_IMPLY_DEDENT)
 
 
-def compile_command(source, filename = '<input>', symbol = 'single'):
+def compile_command(source, filename='<input>', symbol='single'):
     r"""Compile a command and determine whether it is incomplete.
     
     Arguments:
@@ -149,7 +149,7 @@ class CommandCompiler:
     def __init__(self):
         self.compiler = Compile()
 
-    def __call__(self, source, filename = '<input>', symbol = 'single'):
+    def __call__(self, source, filename='<input>', symbol='single'):
         r"""Compile a command and determine whether it is incomplete.
         
         Arguments:

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pickle.py
 """Create portable serialized representations of Python objects.
 
@@ -155,7 +156,7 @@ del x
 
 class Pickler():
 
-    def __init__(self, file, protocol = None):
+    def __init__(self, file, protocol=None):
         """This takes a file-like object for writing a pickle data stream.
         
         The optional protocol argument tells the pickler to use the
@@ -214,12 +215,12 @@ class Pickler():
         """Store an object in the memo."""
         if self.fast:
             return
-        raise id(obj) not in self.memo or AssertionError
+        assert id(obj) not in self.memo
         memo_len = len(self.memo)
         self.write(self.put(memo_len))
         self.memo[id(obj)] = (memo_len, obj)
 
-    def put(self, i, pack = struct.pack):
+    def put(self, i, pack=struct.pack):
         if self.bin:
             if i < 256:
                 return BINPUT + chr(i)
@@ -227,7 +228,7 @@ class Pickler():
                 return LONG_BINPUT + pack('<i', i)
         return PUT + repr(i) + '\n'
 
-    def get(self, i, pack = struct.pack):
+    def get(self, i, pack=struct.pack):
         if self.bin:
             if i < 256:
                 return BINGET + chr(i)
@@ -292,7 +293,7 @@ class Pickler():
         else:
             self.write(PERSID + str(pid) + '\n')
 
-    def save_reduce(self, func, args, state = None, listitems = None, dictitems = None, obj = None):
+    def save_reduce(self, func, args, state=None, listitems=None, dictitems=None, obj=None):
         if not isinstance(args, TupleType):
             raise PicklingError('args from reduce() should be a tuple')
         if not hasattr(func, '__call__'):
@@ -339,7 +340,7 @@ class Pickler():
 
     dispatch[bool] = save_bool
 
-    def save_int(self, obj, pack = struct.pack):
+    def save_int(self, obj, pack=struct.pack):
         if self.bin:
             if obj >= 0:
                 if obj <= 255:
@@ -356,7 +357,7 @@ class Pickler():
 
     dispatch[IntType] = save_int
 
-    def save_long(self, obj, pack = struct.pack):
+    def save_long(self, obj, pack=struct.pack):
         if self.proto >= 2:
             bytes = encode_long(obj)
             n = len(bytes)
@@ -369,7 +370,7 @@ class Pickler():
 
     dispatch[LongType] = save_long
 
-    def save_float(self, obj, pack = struct.pack):
+    def save_float(self, obj, pack=struct.pack):
         if self.bin:
             self.write(BINFLOAT + pack('>d', obj))
         else:
@@ -377,7 +378,7 @@ class Pickler():
 
     dispatch[FloatType] = save_float
 
-    def save_string(self, obj, pack = struct.pack):
+    def save_string(self, obj, pack=struct.pack):
         if self.bin:
             n = len(obj)
             if n < 256:
@@ -390,7 +391,7 @@ class Pickler():
 
     dispatch[StringType] = save_string
 
-    def save_unicode(self, obj, pack = struct.pack):
+    def save_unicode(self, obj, pack=struct.pack):
         if self.bin:
             encoding = obj.encode('utf-8')
             n = len(encoding)
@@ -404,7 +405,7 @@ class Pickler():
     dispatch[UnicodeType] = save_unicode
     if StringType is UnicodeType:
 
-        def save_string(self, obj, pack = struct.pack):
+        def save_string(self, obj, pack=struct.pack):
             unicode = obj.isunicode()
             if self.bin:
                 if unicode:
@@ -511,7 +512,7 @@ class Pickler():
                         save(x)
 
                     write(APPENDS)
-                elif n:
+                if n:
                     save(tmp[0])
                     write(APPEND)
 
@@ -559,7 +560,7 @@ class Pickler():
                         save(v)
 
                     write(SETITEMS)
-                elif n:
+                if n:
                     k, v = tmp[0]
                     save(k)
                     save(v)
@@ -604,7 +605,7 @@ class Pickler():
 
     dispatch[InstanceType] = save_inst
 
-    def save_global(self, obj, name = None, pack = struct.pack):
+    def save_global(self, obj, name=None, pack=struct.pack):
         write = self.write
         memo = self.memo
         if name is None:
@@ -622,10 +623,10 @@ class Pickler():
             if klass is not obj:
                 raise PicklingError("Can't pickle %r: it's not the same object as %s.%s" % (obj, module, name))
 
-        code = self.proto >= 2 and _extension_registry.get((module, name))
-        if code:
-            if not code > 0:
-                raise AssertionError
+        if self.proto >= 2:
+            code = _extension_registry.get((module, name))
+            if code:
+                assert code > 0
                 if code <= 255:
                     write(EXT1 + chr(code))
                 elif code <= 65535:
@@ -829,7 +830,7 @@ class Unpickler():
 
     dispatch[FLOAT] = load_float
 
-    def load_binfloat(self, unpack = struct.unpack):
+    def load_binfloat(self, unpack=struct.unpack):
         self.append(unpack('>d', self.read(8))[0])
 
     dispatch[BINFLOAT] = load_binfloat
@@ -1188,35 +1189,35 @@ def encode_long(x):
         return ''
     if x > 0:
         ashex = hex(x)
-        if not ashex.startswith('0x'):
-            raise AssertionError
-            njunkchars = 2 + ashex.endswith('L')
-            nibbles = len(ashex) - njunkchars
-            if nibbles & 1:
-                ashex = '0x0' + ashex[2:]
-            elif int(ashex[2], 16) >= 8:
-                ashex = '0x00' + ashex[2:]
-        else:
-            ashex = hex(-x)
-            if not ashex.startswith('0x'):
-                raise AssertionError
-                njunkchars = 2 + ashex.endswith('L')
-                nibbles = len(ashex) - njunkchars
-                nibbles & 1 and nibbles += 1
-            nbits = nibbles * 4
-            x += 1L << nbits
-            if not x > 0:
-                raise AssertionError
-                ashex = hex(x)
-                njunkchars = 2 + ashex.endswith('L')
-                newnibbles = len(ashex) - njunkchars
-                if newnibbles < nibbles:
-                    ashex = '0x' + '0' * (nibbles - newnibbles) + ashex[2:]
-                ashex = int(ashex[2], 16) < 8 and '0xff' + ashex[2:]
-        ashex = ashex.endswith('L') and ashex[2:-1]
+        assert ashex.startswith('0x')
+        njunkchars = 2 + ashex.endswith('L')
+        nibbles = len(ashex) - njunkchars
+        if nibbles & 1:
+            ashex = '0x0' + ashex[2:]
+        elif int(ashex[2], 16) >= 8:
+            ashex = '0x00' + ashex[2:]
+    else:
+        ashex = hex(-x)
+        assert ashex.startswith('0x')
+        njunkchars = 2 + ashex.endswith('L')
+        nibbles = len(ashex) - njunkchars
+        if nibbles & 1:
+            nibbles += 1
+        nbits = nibbles * 4
+        x += 1L << nbits
+        assert x > 0
+        ashex = hex(x)
+        njunkchars = 2 + ashex.endswith('L')
+        newnibbles = len(ashex) - njunkchars
+        if newnibbles < nibbles:
+            ashex = '0x' + '0' * (nibbles - newnibbles) + ashex[2:]
+        if int(ashex[2], 16) < 8:
+            ashex = '0xff' + ashex[2:]
+    if ashex.endswith('L'):
+        ashex = ashex[2:-1]
     else:
         ashex = ashex[2:]
-    raise len(ashex) & 1 == 0 or AssertionError((x, ashex))
+    assert len(ashex) & 1 == 0, (x, ashex)
     binary = _binascii.unhexlify(ashex)
     return binary[::-1]
 
@@ -1254,11 +1255,11 @@ try:
 except ImportError:
     from StringIO import StringIO
 
-def dump(obj, file, protocol = None):
+def dump(obj, file, protocol=None):
     Pickler(file, protocol).dump(obj)
 
 
-def dumps(obj, protocol = None):
+def dumps(obj, protocol=None):
     file = StringIO()
     Pickler(file, protocol).dump(obj)
     return file.getvalue()

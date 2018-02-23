@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compileall.py
 """Module/script to byte-compile all .py files to .pyc (or .pyo) files.
 
@@ -19,7 +19,7 @@ import struct
 import imp
 __all__ = ['compile_dir', 'compile_file', 'compile_path']
 
-def compile_dir(dir, maxlevels = 10, ddir = None, force = 0, rx = None, quiet = 0):
+def compile_dir(dir, maxlevels=10, ddir=None, force=0, rx=None, quiet=0):
     """Byte-compile all modules in the given directory tree.
     
     Arguments (only dir is required):
@@ -50,14 +50,14 @@ def compile_dir(dir, maxlevels = 10, ddir = None, force = 0, rx = None, quiet = 
         if not os.path.isdir(fullname):
             if not compile_file(fullname, ddir, force, rx, quiet):
                 success = 0
-        elif maxlevels > 0 and name != os.curdir and name != os.pardir and os.path.isdir(fullname) and not os.path.islink(fullname):
+        if maxlevels > 0 and name != os.curdir and name != os.pardir and os.path.isdir(fullname) and not os.path.islink(fullname):
             if not compile_dir(fullname, maxlevels - 1, dfile, force, rx, quiet):
                 success = 0
 
     return success
 
 
-def compile_file(fullname, ddir = None, force = 0, rx = None, quiet = 0):
+def compile_file(fullname, ddir=None, force=0, rx=None, quiet=0):
     """Byte-compile one file.
     
     Arguments (only fullname is required):
@@ -111,7 +111,7 @@ def compile_file(fullname, ddir = None, force = 0, rx = None, quiet = 0):
     return success
 
 
-def compile_path(skip_curdir = 1, maxlevels = 0, force = 0, quiet = 0):
+def compile_path(skip_curdir=1, maxlevels=0, force=0, quiet=0):
     """Byte-compile all module on sys.path.
     
     Arguments (all optional):
@@ -125,8 +125,7 @@ def compile_path(skip_curdir = 1, maxlevels = 0, force = 0, quiet = 0):
     for dir in sys.path:
         if (not dir or dir == os.curdir) and skip_curdir:
             print 'Skipping current directory'
-        else:
-            success = success and compile_dir(dir, maxlevels, None, force, quiet=quiet)
+        success = success and compile_dir(dir, maxlevels, None, force, quiet=quiet)
 
     return success
 
@@ -216,7 +215,7 @@ def main():
                     if os.path.isdir(arg):
                         if not compile_dir(arg, maxlevels, ddir, force, rx, quiet):
                             success = 0
-                    elif not compile_file(arg, ddir, force, rx, quiet):
+                    if not compile_file(arg, ddir, force, rx, quiet):
                         success = 0
 
         else:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/csv.py
 """
 csv.py - read/write/investigate CSV files
@@ -84,7 +84,7 @@ register_dialect('excel-tab', excel_tab)
 
 class DictReader:
 
-    def __init__(self, f, fieldnames = None, restkey = None, restval = None, dialect = 'excel', *args, **kwds):
+    def __init__(self, f, fieldnames=None, restkey=None, restval=None, dialect='excel', *args, **kwds):
         self._fieldnames = fieldnames
         self.restkey = restkey
         self.restval = restval
@@ -132,7 +132,7 @@ class DictReader:
 
 class DictWriter:
 
-    def __init__(self, f, fieldnames, restval = '', extrasaction = 'raise', dialect = 'excel', *args, **kwds):
+    def __init__(self, f, fieldnames, restval='', extrasaction='raise', dialect='excel', *args, **kwds):
         self.fieldnames = fieldnames
         self.restval = restval
         if extrasaction.lower() not in ('raise', 'ignore'):
@@ -180,7 +180,7 @@ class Sniffer:
          ' ',
          ':']
 
-    def sniff(self, sample, delimiters = None):
+    def sniff(self, sample, delimiters=None):
         """
         Returns a dialect (or None) corresponding to the sample
         """
@@ -249,9 +249,9 @@ class Sniffer:
                 if m[n]:
                     spaces += 1
 
-            quotechar = reduce(lambda a, b, quotes = quotes: quotes[a] > quotes[b] and a or b, quotes.keys())
+            quotechar = reduce(lambda a, b, quotes=quotes: quotes[a] > quotes[b] and a or b, quotes.keys())
             if delims:
-                delim = reduce(lambda a, b, delims = delims: delims[a] > delims[b] and a or b, delims.keys())
+                delim = reduce(lambda a, b, delims=delims: delims[a] > delims[b] and a or b, delims.keys())
                 skipinitialspace = delims[delim] == spaces
                 if delim == '\n':
                     delim = ''
@@ -312,8 +312,7 @@ class Sniffer:
                     modes[char] = reduce(lambda a, b: a[1] > b[1] and a or b, items)
                     items.remove(modes[char])
                     modes[char] = (modes[char][0], modes[char][1] - reduce(lambda a, b: (0, a[1] + b[1]), items)[1])
-                else:
-                    modes[char] = items[0]
+                modes[char] = items[0]
 
             modeList = modes.items()
             total = float(chunkLength * iteration)
@@ -393,12 +392,11 @@ class Sniffer:
                     hasHeader += 1
                 else:
                     hasHeader -= 1
+            try:
+                colType(header[col])
+            except (ValueError, TypeError):
+                hasHeader += 1
             else:
-                try:
-                    colType(header[col])
-                except (ValueError, TypeError):
-                    hasHeader += 1
-                else:
-                    hasHeader -= 1
+                hasHeader -= 1
 
         return hasHeader > 0

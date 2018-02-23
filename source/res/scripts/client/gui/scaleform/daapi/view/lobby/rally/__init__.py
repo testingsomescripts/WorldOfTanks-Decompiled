@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/__init__.py
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.Scaleform.managers.context_menu import ContextMenuManager
@@ -22,22 +22,15 @@ class NavigationStack(object):
 
     @classmethod
     def hasHistory(cls, key):
-        if key in cls.__stacks:
-            return len(cls.__stacks[key])
+        return len(cls.__stacks[key]) if key in cls.__stacks else 0
 
     @classmethod
     def current(cls, key):
-        if key in cls.__stacks and len(cls.__stacks[key]):
-            return cls.__stacks[key][-1]
-        else:
-            return None
+        return cls.__stacks[key][-1] if key in cls.__stacks and len(cls.__stacks[key]) else None
 
     @classmethod
     def prev(cls, key):
-        if key in cls.__stacks and len(cls.__stacks[key]) > 1:
-            return cls.__stacks[key][-2]
-        else:
-            return None
+        return cls.__stacks[key][-2] if key in cls.__stacks and len(cls.__stacks[key]) > 1 else None
 
     @classmethod
     def nav2Next(cls, key, flashAlias, pyAlias, itemID):
@@ -50,7 +43,4 @@ class NavigationStack(object):
 
     @classmethod
     def nav2Prev(cls, key):
-        if key in cls.__stacks and len(cls.__stacks[key]):
-            return cls.__stacks[key].pop()
-        else:
-            return None
+        return cls.__stacks[key].pop() if key in cls.__stacks and len(cls.__stacks[key]) else None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/imaplib.py
 """IMAP4 client.
 
@@ -137,7 +137,7 @@ class IMAP4():
 
     mustquote = re.compile("[^\\w!#$%&'*+,.:;<=>?^`|~-]")
 
-    def __init__(self, host = '', port = IMAP4_PORT):
+    def __init__(self, host='', port=IMAP4_PORT):
         self.debug = Debug
         self.state = 'LOGOUT'
         self.literal = None
@@ -182,7 +182,7 @@ class IMAP4():
             return getattr(self, attr.lower())
         raise AttributeError("Unknown IMAP4 command: '%s'" % attr)
 
-    def open(self, host = '', port = IMAP4_PORT):
+    def open(self, host='', port=IMAP4_PORT):
         """Setup connection to remote server on "host:port"
             (default: localhost:standard IMAP4 port).
         This connection will be used by the routines:
@@ -212,10 +212,12 @@ class IMAP4():
         """Close I/O established in "open"."""
         self.file.close()
         try:
-            self.sock.shutdown(socket.SHUT_RDWR)
-        except socket.error as e:
-            if e.errno != errno.ENOTCONN:
-                raise
+            try:
+                self.sock.shutdown(socket.SHUT_RDWR)
+            except socket.error as e:
+                if e.errno != errno.ENOTCONN:
+                    raise
+
         finally:
             self.sock.close()
 
@@ -416,7 +418,7 @@ class IMAP4():
         typ, quotaroot = self._untagged_response(typ, dat, 'QUOTAROOT')
         return (typ, [quotaroot, quota])
 
-    def list(self, directory = '""', pattern = '*'):
+    def list(self, directory='""', pattern='*'):
         """List mailbox names in directory matching pattern.
         
         (typ, [data]) = <instance>.list(directory='""', pattern='*')
@@ -467,11 +469,9 @@ class IMAP4():
             typ, dat = 'NO', ['%s: %s' % sys.exc_info()[:2]]
 
         self.shutdown()
-        if 'BYE' in self.untagged_responses:
-            return ('BYE', self.untagged_responses['BYE'])
-        return (typ, dat)
+        return ('BYE', self.untagged_responses['BYE']) if 'BYE' in self.untagged_responses else (typ, dat)
 
-    def lsub(self, directory = '""', pattern = '*'):
+    def lsub(self, directory='""', pattern='*'):
         """List 'subscribed' mailbox names in directory matching pattern.
         
         (typ, [data, ...]) = <instance>.lsub(directory='""', pattern='*')
@@ -551,7 +551,7 @@ class IMAP4():
             typ, dat = self._simple_command(name, *criteria)
         return self._untagged_response(typ, dat, name)
 
-    def select(self, mailbox = 'INBOX', readonly = False):
+    def select(self, mailbox='INBOX', readonly=False):
         """Select a mailbox.
         
         Flush all untagged responses.
@@ -867,10 +867,8 @@ class IMAP4():
             return arg
         elif len(arg) >= 2 and (arg[0], arg[-1]) in (('(', ')'), ('"', '"')):
             return arg
-        elif arg and self.mustquote.search(arg) is None:
-            return arg
         else:
-            return self._quote(arg)
+            return arg if arg and self.mustquote.search(arg) is None else self._quote(arg)
 
     def _quote(self, arg):
         arg = arg.replace('\\', '\\\\')
@@ -891,7 +889,7 @@ class IMAP4():
                 self._mesg('untagged_responses[%s] => %s' % (name, data))
             return (typ, data)
 
-    def _mesg(self, s, secs = None):
+    def _mesg(self, s, secs=None):
         if secs is None:
             secs = time.time()
         tm = time.strftime('%M:%S', time.localtime(secs))
@@ -947,12 +945,12 @@ else:
         for more documentation see the docstring of the parent class IMAP4.
         """
 
-        def __init__(self, host = '', port = IMAP4_SSL_PORT, keyfile = None, certfile = None):
+        def __init__(self, host='', port=IMAP4_SSL_PORT, keyfile=None, certfile=None):
             self.keyfile = keyfile
             self.certfile = certfile
             IMAP4.__init__(self, host, port)
 
-        def open(self, host = '', port = IMAP4_SSL_PORT):
+        def open(self, host='', port=IMAP4_SSL_PORT):
             """Setup connection to remote server on "host:port".
                 (default: localhost:standard IMAP4 SSL port).
             This connection will be used by the routines:
@@ -1018,7 +1016,7 @@ class IMAP4_stream(IMAP4):
         self.command = command
         IMAP4.__init__(self)
 
-    def open(self, host = None, port = None):
+    def open(self, host=None, port=None):
         """Setup a stream connection.
         This connection will be used by the routines:
             read, readline, send, shutdown.
@@ -1062,10 +1060,7 @@ class _Authenticator():
 
     def process(self, data):
         ret = self.mech(self.decode(data))
-        if ret is None:
-            return '*'
-        else:
-            return self.encode(ret)
+        return '*' if ret is None else self.encode(ret)
 
     def encode(self, inp):
         oup = ''
@@ -1083,9 +1078,7 @@ class _Authenticator():
         return oup
 
     def decode(self, inp):
-        if not inp:
-            return ''
-        return binascii.a2b_base64(inp)
+        return '' if not inp else binascii.a2b_base64(inp)
 
 
 Mon2num = {'Jan': 1,
@@ -1156,9 +1149,7 @@ def Int2AP(num):
 def ParseFlags(resp):
     """Convert IMAP4 flags response to python tuple."""
     mo = Flags.match(resp)
-    if not mo:
-        return ()
-    return tuple(mo.group('flags').split())
+    return () if not mo else tuple(mo.group('flags').split())
 
 
 def Time2Internaldate(date_time):

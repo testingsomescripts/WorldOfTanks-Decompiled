@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aetypes.py
 """aetypes - Python objects representing various AE types."""
 from warnings import warnpy3k
@@ -55,9 +56,7 @@ def IsEnum(x):
 
 
 def mkenum(enum):
-    if IsEnum(enum):
-        return enum
-    return Enum(enum)
+    return enum if IsEnum(enum) else Enum(enum)
 
 
 class InsertionLoc:
@@ -107,9 +106,7 @@ def IsBoolean(x):
 
 
 def mkboolean(bool):
-    if IsBoolean(bool):
-        return bool
-    return Boolean(bool)
+    return bool if IsBoolean(bool) else Boolean(bool)
 
 
 class Type:
@@ -133,9 +130,7 @@ def IsType(x):
 
 
 def mktype(type):
-    if IsType(type):
-        return type
-    return Type(type)
+    return type if IsType(type) else Type(type)
 
 
 class Keyword:
@@ -446,7 +441,7 @@ class ObjectSpecifier:
     is likely to be used by the application.
     """
 
-    def __init__(self, want, form, seld, fr = None):
+    def __init__(self, want, form, seld, fr=None):
         self.want = want
         self.form = form
         self.seld = seld
@@ -473,7 +468,7 @@ def IsObjectSpecifier(x):
 
 class Property(ObjectSpecifier):
 
-    def __init__(self, which, fr = None, want = 'prop'):
+    def __init__(self, which, fr=None, want='prop'):
         ObjectSpecifier.__init__(self, want, 'prop', mktype(which), fr)
 
     def __repr__(self):
@@ -491,7 +486,7 @@ class Property(ObjectSpecifier):
 
 class NProperty(ObjectSpecifier):
 
-    def __init__(self, fr = None):
+    def __init__(self, fr=None):
         self.want = 'prop'
         ObjectSpecifier.__init__(self, self.want, 'prop', mktype(self.which), fr)
 
@@ -512,7 +507,7 @@ class NProperty(ObjectSpecifier):
 
 class SelectableItem(ObjectSpecifier):
 
-    def __init__(self, want, seld, fr = None):
+    def __init__(self, want, seld, fr=None):
         t = type(seld)
         if t == StringType:
             form = 'name'
@@ -531,26 +526,25 @@ class ComponentItem(SelectableItem):
     _propdict = {}
     _elemdict = {}
 
-    def __init__(self, which, fr = None):
+    def __init__(self, which, fr=None):
         SelectableItem.__init__(self, self.want, which, fr)
 
     def __repr__(self):
-        if not self.fr:
-            return '%s(%r)' % (self.__class__.__name__, self.seld)
-        return '%s(%r, %r)' % (self.__class__.__name__, self.seld, self.fr)
+        return '%s(%r)' % (self.__class__.__name__, self.seld) if not self.fr else '%s(%r, %r)' % (self.__class__.__name__, self.seld, self.fr)
 
     def __str__(self):
         seld = self.seld
         if type(seld) == StringType:
             ss = repr(seld)
-        elif IsRange(seld):
-            start, stop = seld.start, seld.stop
-            if type(start) == InstanceType == type(stop) and start.__class__ == self.__class__ == stop.__class__:
-                ss = str(start.seld) + ' thru ' + str(stop.seld)
+        else:
+            start, stop = IsRange(seld) and seld.start, seld.stop
+            if type(start) == InstanceType == type(stop):
+                if start.__class__ == self.__class__ == stop.__class__:
+                    ss = str(start.seld) + ' thru ' + str(stop.seld)
+                else:
+                    ss = str(seld)
             else:
                 ss = str(seld)
-        else:
-            ss = str(seld)
         s = '%s %s' % (self.__class__.__name__, ss)
         if self.fr:
             s = s + ' of %s' % str(self.fr)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/asynchat.py
 r"""A class supporting chat-style (command/response) protocols.
 
@@ -32,7 +32,7 @@ class async_chat(asyncore.dispatcher):
     ac_in_buffer_size = 4096
     ac_out_buffer_size = 4096
 
-    def __init__(self, sock = None, map = None):
+    def __init__(self, sock=None, map=None):
         self.ac_in_buffer = ''
         self.incoming = []
         self.producer_fifo = deque()
@@ -73,7 +73,7 @@ class async_chat(asyncore.dispatcher):
             if not terminator:
                 self.collect_incoming_data(self.ac_in_buffer)
                 self.ac_in_buffer = ''
-            elif isinstance(terminator, int) or isinstance(terminator, long):
+            if isinstance(terminator, int) or isinstance(terminator, long):
                 n = terminator
                 if lb < n:
                     self.collect_incoming_data(self.ac_in_buffer)
@@ -84,24 +84,21 @@ class async_chat(asyncore.dispatcher):
                     self.ac_in_buffer = self.ac_in_buffer[n:]
                     self.terminator = 0
                     self.found_terminator()
-            else:
-                terminator_len = len(terminator)
-                index = self.ac_in_buffer.find(terminator)
-                if index != -1:
-                    if index > 0:
-                        self.collect_incoming_data(self.ac_in_buffer[:index])
-                    self.ac_in_buffer = self.ac_in_buffer[index + terminator_len:]
-                    self.found_terminator()
-                else:
-                    index = find_prefix_at_end(self.ac_in_buffer, terminator)
-                    if index:
-                        if index != lb:
-                            self.collect_incoming_data(self.ac_in_buffer[:-index])
-                            self.ac_in_buffer = self.ac_in_buffer[-index:]
-                        break
-                    else:
-                        self.collect_incoming_data(self.ac_in_buffer)
-                        self.ac_in_buffer = ''
+            terminator_len = len(terminator)
+            index = self.ac_in_buffer.find(terminator)
+            if index != -1:
+                if index > 0:
+                    self.collect_incoming_data(self.ac_in_buffer[:index])
+                self.ac_in_buffer = self.ac_in_buffer[index + terminator_len:]
+                self.found_terminator()
+            index = find_prefix_at_end(self.ac_in_buffer, terminator)
+            if index:
+                if index != lb:
+                    self.collect_incoming_data(self.ac_in_buffer[:-index])
+                    self.ac_in_buffer = self.ac_in_buffer[-index:]
+                break
+            self.collect_incoming_data(self.ac_in_buffer)
+            self.ac_in_buffer = ''
 
     def handle_write(self):
         self.initiate_send()
@@ -154,8 +151,7 @@ class async_chat(asyncore.dispatcher):
                 data = first.more()
                 if data:
                     self.producer_fifo.appendleft(data)
-                else:
-                    del self.producer_fifo[0]
+                del self.producer_fifo[0]
                 continue
 
             try:
@@ -181,7 +177,7 @@ class async_chat(asyncore.dispatcher):
 
 class simple_producer:
 
-    def __init__(self, data, buffer_size = 512):
+    def __init__(self, data, buffer_size=512):
         self.data = data
         self.buffer_size = buffer_size
 
@@ -198,7 +194,7 @@ class simple_producer:
 
 class fifo:
 
-    def __init__(self, list = None):
+    def __init__(self, list=None):
         if not list:
             self.list = deque()
         else:

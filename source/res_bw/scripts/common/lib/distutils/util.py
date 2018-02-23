@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/util.py
 """distutils.util
 
@@ -105,9 +105,7 @@ def convert_path(pathname):
     while '.' in paths:
         paths.remove('.')
 
-    if not paths:
-        return os.curdir
-    return os.path.join(*paths)
+    return os.curdir if not paths else os.path.join(*paths)
 
 
 def change_root(new_root, pathname):
@@ -167,7 +165,7 @@ def subst_vars(s, local_vars):
     """
     check_environ()
 
-    def _subst(match, local_vars = local_vars):
+    def _subst(match, local_vars=local_vars):
         var_name = match.group(1)
         if var_name in local_vars:
             return str(local_vars[var_name])
@@ -180,7 +178,7 @@ def subst_vars(s, local_vars):
         raise ValueError, "invalid variable '$%s'" % var
 
 
-def grok_environment_error(exc, prefix = 'error: '):
+def grok_environment_error(exc, prefix='error: '):
     return prefix + str(exc)
 
 
@@ -242,7 +240,7 @@ def split_quoted(s):
     return words
 
 
-def execute(func, args, msg = None, verbose = 0, dry_run = 0):
+def execute(func, args, msg=None, verbose=0, dry_run=0):
     """Perform some action that affects the outside world (eg.  by
     writing to the filesystem).  Such actions are special because they
     are disabled by the 'dry_run' flag.  This method takes care of all
@@ -276,7 +274,7 @@ def strtobool(val):
     raise ValueError, 'invalid truth value %r' % (val,)
 
 
-def byte_compile(py_files, optimize = 0, force = 0, prefix = None, base_dir = None, verbose = 1, dry_run = 0, direct = None):
+def byte_compile(py_files, optimize=0, force=0, prefix=None, base_dir=None, verbose=1, dry_run=0, direct=None):
     """Byte-compile a collection of Python source files to either .pyc
     or .pyo files in the same directory.  'py_files' is a list of files
     to compile; any files that don't end in ".py" are silently skipped.

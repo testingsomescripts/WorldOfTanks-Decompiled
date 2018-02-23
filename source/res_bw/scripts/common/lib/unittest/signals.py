@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/signals.py
 import signal
 import weakref
@@ -53,7 +54,7 @@ def installHandler():
     return
 
 
-def removeHandler(method = None):
+def removeHandler(method=None):
     if method is not None:
 
         @wraps(method)

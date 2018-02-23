@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dummy_thread.py
 """Drop-in replacement for the thread module.
 
@@ -29,7 +29,7 @@ class error(Exception):
         self.args = args
 
 
-def start_new_thread(function, args, kwargs = {}):
+def start_new_thread(function, args, kwargs={}):
     """Dummy implementation of thread.start_new_thread().
     
     Compatibility is maintained by making sure that ``args`` is a
@@ -82,7 +82,7 @@ def allocate_lock():
     return LockType()
 
 
-def stack_size(size = None):
+def stack_size(size=None):
     """Dummy implementation of thread.stack_size()."""
     if size is not None:
         raise error('setting thread stack size not supported')
@@ -103,7 +103,7 @@ class LockType(object):
     def __init__(self):
         self.locked_status = False
 
-    def acquire(self, waitflag = None):
+    def acquire(self, waitflag=None):
         """Dummy implementation of acquire().
         
         For blocking calls, self.locked_status is automatically set to

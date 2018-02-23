@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plistlib.py
 r"""plistlib.py -- a tool to generate and parse MacOSX .plist files.
 
@@ -111,7 +112,7 @@ def writePlistToString(rootObject):
     return f.getvalue()
 
 
-def readPlistFromResource(path, restype = 'plst', resid = 0):
+def readPlistFromResource(path, restype='plst', resid=0):
     """Read plst resource from the resource fork of path.
     """
     warnings.warnpy3k('In 3.x, readPlistFromResource is removed.', stacklevel=2)
@@ -126,7 +127,7 @@ def readPlistFromResource(path, restype = 'plst', resid = 0):
     return readPlistFromString(plistData)
 
 
-def writePlistToResource(rootObject, path, restype = 'plst', resid = 0):
+def writePlistToResource(rootObject, path, restype='plst', resid=0):
     """Write 'rootObject' as a plst resource to the resource fork of path.
     """
     warnings.warnpy3k('In 3.x, writePlistToResource is removed.', stacklevel=2)
@@ -150,7 +151,7 @@ def writePlistToResource(rootObject, path, restype = 'plst', resid = 0):
 
 class DumbXMLWriter:
 
-    def __init__(self, file, indentLevel = 0, indent = '\t'):
+    def __init__(self, file, indentLevel=0, indent='\t'):
         self.file = file
         self.stack = []
         self.indentLevel = indentLevel
@@ -162,12 +163,12 @@ class DumbXMLWriter:
         self.indentLevel += 1
 
     def endElement(self, element):
-        raise self.indentLevel > 0 or AssertionError
-        raise self.stack.pop() == element or AssertionError
+        assert self.indentLevel > 0
+        assert self.stack.pop() == element
         self.indentLevel -= 1
         self.writeln('</%s>' % element)
 
-    def simpleElement(self, element, value = None):
+    def simpleElement(self, element, value=None):
         if value is not None:
             value = _escapeAndEncode(value)
             self.writeln('<%s>%s</%s>' % (element, value, element))
@@ -224,7 +225,7 @@ PLISTHEADER = '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-
 
 class PlistWriter(DumbXMLWriter):
 
-    def __init__(self, file, indentLevel = 0, indent = '\t', writeHeader = 1):
+    def __init__(self, file, indentLevel=0, indent='\t', writeHeader=1):
         if writeHeader:
             file.write(PLISTHEADER)
         DumbXMLWriter.__init__(self, file, indentLevel, indent)
@@ -342,7 +343,7 @@ class Plist(_InternalDict):
         writePlist(self, pathOrFile)
 
 
-def _encodeBase64(s, maxlinelength = 76):
+def _encodeBase64(s, maxlinelength=76):
     maxbinsize = maxlinelength // 4 * 3
     pieces = []
     for i in range(0, len(s), maxbinsize):
@@ -363,7 +364,7 @@ class Data:
 
     fromBase64 = classmethod(fromBase64)
 
-    def asBase64(self, maxlinelength = 76):
+    def asBase64(self, maxlinelength=76):
         return _encodeBase64(self.data, maxlinelength)
 
     def __cmp__(self, other):

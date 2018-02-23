@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_data_provider.py
 import re
 import Event
@@ -15,14 +15,14 @@ from account_helpers.settings_core.SettingsCore import g_settingsCore
 class _Category(object):
     __slots__ = ('_converter', '_visible', '_avoid', '_forced')
 
-    def __init__(self, categoryID, forced = False):
+    def __init__(self, categoryID, forced=False):
         super(_Category, self).__init__()
         self._converter = _vo_converter.CategoryConverter(categoryID)
         self._visible = True
         self._avoid = False
         self._forced = forced
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         self._avoid = False
 
     def getID(self):
@@ -69,16 +69,16 @@ class _Category(object):
     def setOnlineMode(self, value):
         pass
 
-    def changeGroups(self, include = None, exclude = None):
+    def changeGroups(self, include=None, exclude=None):
         return False
 
     def showEmptyItem(self, value):
         pass
 
-    def getGroups(self, pattern = None):
+    def getGroups(self, pattern=None):
         raise NotImplementedError
 
-    def getData(self, pattern = None):
+    def getData(self, pattern=None):
         groups = self.getGroups(pattern)
         if groups or self._forced and pattern is None:
             data = self._converter.makeVO(groups)
@@ -110,7 +110,7 @@ class _FriendsCategory(_Category):
         self._groups = _vo_converter.FriendsGroupsConverter(self.__currentParent)
         self.__showEmptyItems = False
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         self._woGroup.clear(full)
         self._groups.clear(full)
         super(_FriendsCategory, self).clear(full)
@@ -147,7 +147,7 @@ class _FriendsCategory(_Category):
         self._groups.showEmptyItem(value)
         self._woGroup.showEmptyItem(value)
 
-    def changeGroups(self, include = None, exclude = None, isOpened = False):
+    def changeGroups(self, include=None, exclude=None, isOpened=False):
         if include:
             self._groups.setGroups(include, isOpened)
         if exclude:
@@ -181,7 +181,7 @@ class _FriendsCategory(_Category):
 
         return False
 
-    def getGroups(self, pattern = None):
+    def getGroups(self, pattern=None):
         data = self._groups.makeVO(pattern)
         hasWoContacts = self._woGroup.hasContacts()
         if pattern is None and not data and not hasWoContacts:
@@ -250,7 +250,7 @@ class _FormationCategory(_Category):
     def playerCtx(self):
         return None
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         self._clan.clear(full)
         self._club.clear(full)
         super(_FormationCategory, self).clear(full)
@@ -318,7 +318,7 @@ class _FormationCategory(_Category):
 
         return result
 
-    def getGroups(self, pattern = None):
+    def getGroups(self, pattern=None):
         data = []
         for converter in self._getIterator():
             if not converter.isEmpty():
@@ -345,7 +345,7 @@ class _OthersCategory(_Category):
         self._referrers = _vo_converter.ReferrersConverter(self._converter.makeBaseVO())
         self._referrals = _vo_converter.ReferralsConverter(self._converter.makeBaseVO())
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         for group in self._iterGroups():
             group.clear(full)
 
@@ -406,7 +406,7 @@ class _OthersCategory(_Category):
 
         return result
 
-    def getGroups(self, pattern = None):
+    def getGroups(self, pattern=None):
         data = []
         for group in self._iterGroups():
             if not group.isEmpty():
@@ -469,7 +469,7 @@ class _ContactsCategories(object):
         self._cache = []
         return
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         for category in self._categories:
             category.clear(full)
 
@@ -531,7 +531,7 @@ class _ContactsCategories(object):
             data = []
         return (result, data)
 
-    def getCriteria(self, full = False):
+    def getCriteria(self, full=False):
         tags = set()
         if full:
             categories = self._categories
@@ -583,7 +583,7 @@ class _ContactsCategories(object):
             data = []
         return (result, data)
 
-    def changeGroups(self, categoryID, include = None, exclude = None, isOpened = False):
+    def changeGroups(self, categoryID, include=None, exclude=None, isOpened=False):
         result = False
         for idx, category in enumerate(self._iterCategories()):
             if idx >= len(self._cache):
@@ -621,8 +621,7 @@ class _ContactsCategories(object):
             if self._pattern is not None:
                 if self._pattern.match(contact['criteria'][1]) is not None:
                     resultList.append(contact['data'])
-            else:
-                resultList.append(contact['data'])
+            resultList.append(contact['data'])
 
         return resultList
 

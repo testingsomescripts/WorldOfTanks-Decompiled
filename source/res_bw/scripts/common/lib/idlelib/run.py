@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/run.py
 import sys
 import io
@@ -21,7 +21,7 @@ import __main__
 LOCALHOST = '127.0.0.1'
 import warnings
 
-def idle_showwarning_subproc(message, category, filename, lineno, file = None, line = None):
+def idle_showwarning_subproc(message, category, filename, lineno, file=None, line=None):
     """Show Idle-format warning after replacing warnings.showwarning.
     
     The only difference is the formatter called.
@@ -56,7 +56,7 @@ exit_now = False
 quitting = False
 interruptable = False
 
-def main(del_exitfunc = False):
+def main(del_exitfunc=False):
     """Start the Python execution server in a subprocess
     
     In the Python subprocess, RPCServer is instantiated with handlerclass
@@ -352,7 +352,7 @@ class Executive(object):
     def get_the_completion_list(self, what, mode):
         return self.autocomplete.fetch_completions(what, mode)
 
-    def stackviewer(self, flist_oid = None):
+    def stackviewer(self, flist_oid=None):
         if self.usr_exc_info:
             typ, val, tb = self.usr_exc_info
         else:

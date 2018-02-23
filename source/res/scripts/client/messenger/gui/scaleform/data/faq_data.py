@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/faq_data.py
 from collections import namedtuple
 import re
@@ -31,7 +31,7 @@ class FAQList(object):
             result = self.__list[index]
         return result
 
-    def getIterator(self, offset = 0):
+    def getIterator(self, offset=0):
         for item in self.__list[offset:]:
             yield item
 

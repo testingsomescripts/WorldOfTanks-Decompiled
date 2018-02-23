@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/mime/image.py
 """Class representing image/* type MIME documents."""
 __all__ = ['MIMEImage']
@@ -9,7 +9,7 @@ from email.mime.nonmultipart import MIMENonMultipart
 class MIMEImage(MIMENonMultipart):
     """Class for generating image/* type MIME documents."""
 
-    def __init__(self, _imagedata, _subtype = None, _encoder = encoders.encode_base64, **_params):
+    def __init__(self, _imagedata, _subtype=None, _encoder=encoders.encode_base64, **_params):
         """Create an image/* type MIME document.
         
         _imagedata is a string containing the raw image data.  If this data

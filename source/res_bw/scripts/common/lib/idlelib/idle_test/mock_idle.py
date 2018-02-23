@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/mock_idle.py
 """Mock classes that imitate idlelib modules or classes.
 
@@ -10,7 +10,7 @@ class Editor(object):
     """Minimally imitate EditorWindow.EditorWindow class.
     """
 
-    def __init__(self, flist = None, filename = None, key = None, root = None):
+    def __init__(self, flist=None, filename=None, key=None, root=None):
         self.text = Text()
         self.undo = UndoDelegator()
 

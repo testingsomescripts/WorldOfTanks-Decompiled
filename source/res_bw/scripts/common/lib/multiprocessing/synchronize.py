@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/synchronize.py
 __all__ = ['Lock',
  'RLock',
@@ -57,7 +58,7 @@ class SemLock(object):
 
 class Semaphore(SemLock):
 
-    def __init__(self, value = 1):
+    def __init__(self, value=1):
         SemLock.__init__(self, SEMAPHORE, value, SEM_VALUE_MAX)
 
     def get_value(self):
@@ -74,7 +75,7 @@ class Semaphore(SemLock):
 
 class BoundedSemaphore(Semaphore):
 
-    def __init__(self, value = 1):
+    def __init__(self, value=1):
         SemLock.__init__(self, SEMAPHORE, value, value)
 
     def __repr__(self):
@@ -135,7 +136,7 @@ class RLock(SemLock):
 
 class Condition(object):
 
-    def __init__(self, lock = None):
+    def __init__(self, lock=None):
         self._lock = lock or RLock()
         self._sleeping_count = Semaphore(0)
         self._woken_count = Semaphore(0)
@@ -171,8 +172,8 @@ class Condition(object):
 
         return '<Condition(%s, %s)>' % (self._lock, num_waiters)
 
-    def wait(self, timeout = None):
-        raise self._lock._semlock._is_mine() or AssertionError('must acquire() condition before using wait()')
+    def wait(self, timeout=None):
+        assert self._lock._semlock._is_mine(), 'must acquire() condition before using wait()'
         self._sleeping_count.release()
         count = self._lock._semlock._count()
         for i in xrange(count):
@@ -186,23 +187,23 @@ class Condition(object):
                 self._lock.acquire()
 
     def notify(self):
-        if not self._lock._semlock._is_mine():
-            raise AssertionError('lock is not owned')
-            raise not self._wait_semaphore.acquire(False) or AssertionError
-            while self._woken_count.acquire(False):
-                res = self._sleeping_count.acquire(False)
-                raise res or AssertionError
+        assert self._lock._semlock._is_mine(), 'lock is not owned'
+        assert not self._wait_semaphore.acquire(False)
+        while self._woken_count.acquire(False):
+            res = self._sleeping_count.acquire(False)
+            assert res
 
-            self._sleeping_count.acquire(False) and self._wait_semaphore.release()
+        if self._sleeping_count.acquire(False):
+            self._wait_semaphore.release()
             self._woken_count.acquire()
             self._wait_semaphore.acquire(False)
 
     def notify_all(self):
-        raise self._lock._semlock._is_mine() or AssertionError('lock is not owned')
-        raise not self._wait_semaphore.acquire(False) or AssertionError
+        assert self._lock._semlock._is_mine(), 'lock is not owned'
+        assert not self._wait_semaphore.acquire(False)
         while self._woken_count.acquire(False):
             res = self._sleeping_count.acquire(False)
-            raise res or AssertionError
+            assert res
 
         sleepers = 0
         while self._sleeping_count.acquire(False):
@@ -249,7 +250,7 @@ class Event(object):
         finally:
             self._cond.release()
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         self._cond.acquire()
         try:
             if self._flag.acquire(False):

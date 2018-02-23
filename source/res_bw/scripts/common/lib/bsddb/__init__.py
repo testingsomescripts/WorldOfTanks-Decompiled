@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/__init__.py
 """Support for Berkeley DB 4.3 through 5.3 with a simple interface.
 
@@ -145,7 +145,7 @@ class _DBWithCursor(_iter_mixin):
                 self.saved_dbc_key = None
         return
 
-    def _closeCursors(self, save = 1):
+    def _closeCursors(self, save=1):
         if self.dbc:
             c = self.dbc
             self.dbc = None
@@ -179,9 +179,7 @@ class _DBWithCursor(_iter_mixin):
     if sys.version_info >= (2, 6):
 
         def __repr__(self):
-            if self.isOpen():
-                return repr(dict(_DeadlockWrap(self.db.items)))
-            return repr(dict())
+            return repr(dict(_DeadlockWrap(self.db.items))) if self.isOpen() else repr(dict())
 
     def __getitem__(self, key):
         self._checkOpen()
@@ -267,7 +265,7 @@ class _DBWithCursor(_iter_mixin):
         return _DeadlockWrap(self.db.sync)
 
 
-def hashopen(file, flag = 'c', mode = 438, pgsize = None, ffactor = None, nelem = None, cachesize = None, lorder = None, hflags = 0):
+def hashopen(file, flag='c', mode=438, pgsize=None, ffactor=None, nelem=None, cachesize=None, lorder=None, hflags=0):
     flags = _checkflag(flag, file)
     e = _openDBEnv(cachesize)
     d = db.DB(e)
@@ -284,7 +282,7 @@ def hashopen(file, flag = 'c', mode = 438, pgsize = None, ffactor = None, nelem 
     return _DBWithCursor(d)
 
 
-def btopen(file, flag = 'c', mode = 438, btflags = 0, cachesize = None, maxkeypage = None, minkeypage = None, pgsize = None, lorder = None):
+def btopen(file, flag='c', mode=438, btflags=0, cachesize=None, maxkeypage=None, minkeypage=None, pgsize=None, lorder=None):
     flags = _checkflag(flag, file)
     e = _openDBEnv(cachesize)
     d = db.DB(e)
@@ -301,7 +299,7 @@ def btopen(file, flag = 'c', mode = 438, btflags = 0, cachesize = None, maxkeypa
     return _DBWithCursor(d)
 
 
-def rnopen(file, flag = 'c', mode = 438, rnflags = 0, cachesize = None, pgsize = None, lorder = None, rlen = None, delim = None, source = None, pad = None):
+def rnopen(file, flag='c', mode=438, rnflags=0, cachesize=None, pgsize=None, lorder=None, rlen=None, delim=None, source=None, pad=None):
     flags = _checkflag(flag, file)
     e = _openDBEnv(cachesize)
     d = db.DB(e)

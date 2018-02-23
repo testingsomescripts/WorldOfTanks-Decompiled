@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/htmllib.py
 """HTML 2.0 parser.
 
@@ -27,7 +27,7 @@ class HTMLParser(sgmllib.SGMLParser):
     """
     from htmlentitydefs import entitydefs
 
-    def __init__(self, formatter, verbose = 0):
+    def __init__(self, formatter, verbose=0):
         """Creates an instance of the HTMLParser class.
         
         The formatter parameter is the formatter instance associated with
@@ -326,7 +326,7 @@ class HTMLParser(sgmllib.SGMLParser):
         self.formatter.push_margin('dd')
         self.list_stack.append(['dd', '', 0])
 
-    def ddpop(self, bl = 0):
+    def ddpop(self, bl=0):
         self.formatter.end_paragraph(bl)
         if self.list_stack:
             if self.list_stack[-1][0] == 'dd':
@@ -467,7 +467,7 @@ class HTMLParser(sgmllib.SGMLParser):
         pass
 
 
-def test(args = None):
+def test(args=None):
     import sys, formatter
     if not args:
         args = sys.argv[1:]

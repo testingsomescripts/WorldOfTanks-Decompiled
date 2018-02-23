@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/cfmfile.py
 """codefragments.py -- wrapper to modify code fragments."""
 __version__ = '0.8b3'
@@ -13,7 +14,7 @@ DEBUG = 0
 error = 'cfm.error'
 BUFSIZE = 524288
 
-def mergecfmfiles(srclist, dst, architecture = 'fat'):
+def mergecfmfiles(srclist, dst, architecture='fat'):
     """Merge all files in srclist into a new file dst.
     
     If architecture is given, only code fragments of that type will be used:
@@ -50,7 +51,7 @@ def mergecfmfiles(srclist, dst, architecture = 'fat'):
 
 class CfrgResource:
 
-    def __init__(self, path = None):
+    def __init__(self, path=None):
         self.version = 1
         self.fragments = []
         self.path = path
@@ -59,9 +60,11 @@ class CfrgResource:
             resref = Res.FSpOpenResFile(path, 1)
             Res.UseResFile(resref)
             try:
-                data = Res.Get1Resource('cfrg', 0).data
-            except Res.Error:
-                raise Res.Error, "no 'cfrg' resource found", sys.exc_traceback
+                try:
+                    data = Res.Get1Resource('cfrg', 0).data
+                except Res.Error:
+                    raise Res.Error, "no 'cfrg' resource found", sys.exc_traceback
+
             finally:
                 Res.CloseResFile(resref)
                 Res.UseResFile(currentresref)
@@ -93,7 +96,7 @@ class CfrgResource:
 
 class FragmentDescriptor:
 
-    def __init__(self, path, data = None):
+    def __init__(self, path, data=None):
         self.path = path
         if data is not None:
             self.parse(data)
@@ -146,8 +149,7 @@ class FragmentDescriptor:
             if l > BUFSIZE:
                 outfile.write(infile.read(BUFSIZE))
                 l = l - BUFSIZE
-            else:
-                outfile.write(infile.read(l))
-                l = 0
+            outfile.write(infile.read(l))
+            l = 0
 
         infile.close()

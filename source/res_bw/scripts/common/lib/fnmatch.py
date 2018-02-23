@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fnmatch.py
 """Filename matching with shell patterns.
 
@@ -95,9 +95,9 @@ def translate(pat):
         i = i + 1
         if c == '*':
             res = res + '.*'
-        elif c == '?':
+        if c == '?':
             res = res + '.'
-        elif c == '[':
+        if c == '[':
             j = i
             if j < n and pat[j] == '!':
                 j = j + 1
@@ -116,7 +116,6 @@ def translate(pat):
                 elif stuff[0] == '^':
                     stuff = '\\' + stuff
                 res = '%s[%s]' % (res, stuff)
-        else:
-            res = res + re.escape(c)
+        res = res + re.escape(c)
 
     return res + '\\Z(?ms)'

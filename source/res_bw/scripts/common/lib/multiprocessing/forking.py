@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/forking.py
 import os
 import sys
@@ -86,7 +87,7 @@ if sys.platform != 'win32':
                 os._exit(code)
             return
 
-        def poll(self, flag = os.WNOHANG):
+        def poll(self, flag=os.WNOHANG):
             if self.returncode is None:
                 while True:
                     try:
@@ -99,13 +100,14 @@ if sys.platform != 'win32':
                     break
 
                 if pid == self.pid:
-                    self.returncode = os.WIFSIGNALED(sts) and -os.WTERMSIG(sts)
-                elif not os.WIFEXITED(sts):
-                    raise AssertionError
-                    self.returncode = os.WEXITSTATUS(sts)
+                    if os.WIFSIGNALED(sts):
+                        self.returncode = -os.WTERMSIG(sts)
+                    else:
+                        assert os.WIFEXITED(sts)
+                        self.returncode = os.WEXITSTATUS(sts)
             return self.returncode
 
-        def wait(self, timeout = None):
+        def wait(self, timeout=None):
             if timeout is None:
                 return self.poll(0)
             else:
@@ -147,7 +149,7 @@ else:
     from .util import Finalize
     from pickle import load, HIGHEST_PROTOCOL
 
-    def dump(obj, file, protocol = None):
+    def dump(obj, file, protocol=None):
         ForkingPickler(file, protocol).dump(obj)
 
 
@@ -166,7 +168,7 @@ else:
         _python_exe = exe
 
 
-    def duplicate(handle, target_process = None, inheritable = False):
+    def duplicate(handle, target_process=None, inheritable=False):
         if target_process is None:
             target_process = _subprocess.GetCurrentProcess()
         return _subprocess.DuplicateHandle(_subprocess.GetCurrentProcess(), handle, target_process, 0, inheritable, _subprocess.DUPLICATE_SAME_ACCESS).Detach()
@@ -210,7 +212,7 @@ else:
         def duplicate_for_child(handle):
             return duplicate(handle, Popen._tls.process_handle)
 
-        def wait(self, timeout = None):
+        def wait(self, timeout=None):
             if self.returncode is None:
                 if timeout is None:
                     msecs = _subprocess.INFINITE
@@ -242,8 +244,8 @@ else:
         """
         Return whether commandline indicates we are forking
         """
-        if not (len(argv) >= 2 and argv[1] == '--multiprocessing-fork' and len(argv) == 3):
-            raise AssertionError
+        if len(argv) >= 2 and argv[1] == '--multiprocessing-fork':
+            assert len(argv) == 3
             return True
         else:
             return False
@@ -276,7 +278,7 @@ else:
         """
         Run code specified by data received over pipe
         """
-        raise is_forking(sys.argv) or AssertionError
+        assert is_forking(sys.argv)
         handle = int(sys.argv[-1])
         fd = msvcrt.open_osfhandle(handle, os.O_RDONLY)
         from_parent = os.fdopen(fd, 'rb')
@@ -343,17 +345,17 @@ def prepare(data):
     if 'main_path' in data:
         main_path = data['main_path']
         main_name = os.path.splitext(os.path.basename(main_path))[0]
-        main_name = main_name == '__init__' and os.path.basename(os.path.dirname(main_path))
-    if main_name != 'ipython':
-        import imp
-        if main_path is None:
-            dirs = None
-        elif os.path.basename(main_path).startswith('__init__.py'):
-            dirs = [os.path.dirname(os.path.dirname(main_path))]
-        else:
-            dirs = [os.path.dirname(main_path)]
-        if not main_name not in sys.modules:
-            raise AssertionError(main_name)
+        if main_name == '__init__':
+            main_name = os.path.basename(os.path.dirname(main_path))
+        if main_name != 'ipython':
+            import imp
+            if main_path is None:
+                dirs = None
+            elif os.path.basename(main_path).startswith('__init__.py'):
+                dirs = [os.path.dirname(os.path.dirname(main_path))]
+            else:
+                dirs = [os.path.dirname(main_path)]
+            assert main_name not in sys.modules, main_name
             file, path_name, etc = imp.find_module(main_name, dirs)
             try:
                 main_module = imp.load_module('__parents_main__', file, path_name, etc)

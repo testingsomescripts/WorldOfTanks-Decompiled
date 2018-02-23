@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/macostools.py
 """macostools - Various utility functions for MacOS.
 
@@ -20,7 +21,7 @@ Error = 'macostools.Error'
 BUFSIZ = 524288
 COPY_FLAGS = Files.kIsStationary | Files.kNameLocked | Files.kHasBundle | Files.kIsInvisible | Files.kIsAlias
 
-def mkalias(src, dst, relative = None):
+def mkalias(src, dst, relative=None):
     """Create a finder alias"""
     srcfsr = File.FSRef(src)
     dstdir, dstname = os.path.split(dst)
@@ -73,7 +74,7 @@ def touched_ae(dst):
     f.update(File.FSRef(pardir))
 
 
-def copy(src, dst, createpath = 0, copydates = 1, forcetype = None):
+def copy(src, dst, createpath=0, copydates=1, forcetype=None):
     """Copy a file, including finder info, resource fork, etc"""
     src = File.pathname(src)
     dst = File.pathname(dst)
@@ -114,7 +115,7 @@ def copy(src, dst, createpath = 0, copydates = 1, forcetype = None):
     return
 
 
-def copytree(src, dst, copydates = 1):
+def copytree(src, dst, copydates=1):
     """Copy a complete file tree to a new destination"""
     if os.path.isdir(src):
         mkdirs(dst)

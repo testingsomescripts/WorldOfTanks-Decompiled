@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/rally_dps.py
 import weakref
 import operator
@@ -115,8 +115,7 @@ class SortieCandidatesLegionariesDP(SortieCandidatesDP):
         for key, value in candidates.iteritems():
             if value.isLegionary():
                 legionaryPlayers[key] = value
-            else:
-                clanPlayers[key] = value
+            clanPlayers[key] = value
 
         self.__legionariesCount = len(legionaryPlayers)
         if clanPlayers:
@@ -149,8 +148,7 @@ class StaticFormationCandidatesDP(CandidatesDataProvider):
         for key, value in candidates.iteritems():
             if value.isLegionary():
                 legionaryPlayers[key] = value
-            else:
-                teamPlayers[key] = value
+            teamPlayers[key] = value
 
         if teamPlayers:
             self._buildData(teamPlayers)
@@ -177,7 +175,7 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
     def unitFunctional(self):
         return None
 
-    def getVO(self, unitIndex = None):
+    def getVO(self, unitIndex=None):
         return makeUnitShortVO(self.unitFunctional, unitIndex)
 
     def buildList(self, selectedID, result):
@@ -303,16 +301,10 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
             self.__userEntity = user
 
         def getGuiType(self):
-            if self.__userEntity is not None:
-                return self.__userEntity.getGuiType()
-            else:
-                return USER_GUI_TYPE.OTHER
+            return self.__userEntity.getGuiType() if self.__userEntity is not None else USER_GUI_TYPE.OTHER
 
         def getTags(self):
-            if self.__userEntity is not None:
-                return self.__userEntity.getTags()
-            else:
-                return []
+            return self.__userEntity.getTags() if self.__userEntity is not None else []
 
         def getID(self):
             return self.__userID
@@ -333,10 +325,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
             return self.__proxy.getUserClanAbbrev(self.__userID)
 
         def isOnline(self):
-            if self.__userEntity is not None:
-                return self.__userEntity.isOnline()
-            else:
-                return False
+            return self.__userEntity.isOnline() if self.__userEntity is not None else False
 
     def __init__(self):
         super(ClubsDataProvider, self).__init__()
@@ -352,7 +341,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
     def isUseCreatorName(self):
         return self._useCreatorName
 
-    def getVO(self, club = None, currentState = None, profile = None):
+    def getVO(self, club=None, currentState=None, profile=None):
         if club is None or currentState is None or profile is None:
             return
         else:
@@ -398,7 +387,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
              'joinBtnTooltip': buttonTooltip,
              'joinBtnDisabled': isButtonDisabled,
              'noAwardsText': CYBERSPORT.WINDOW_STATICRALLYINFO_NOAWARDS,
-             'achievements': AchievementsUtils.packAchievementList(clubTotalStats.getSignificantAchievements(), dossier.getDossierType(), dumpDossier(dossier), False, False),
+             'achievements': AchievementsUtils.packAchievementList(clubTotalStats.getTopAchievements(3), dossier.getDossierType(), dumpDossier(dossier), False, False),
              'rallyInfo': {'icon': None,
                            'name': text_styles.highTitle(club.getUserName()),
                            'profileBtnLabel': CYBERSPORT.RALLYINFO_PROFILEBTN_LABEL,
@@ -408,7 +397,7 @@ class ClubsDataProvider(BaseRallyListDataProvider, UsersInfoHelper):
                            'id': club.getClubDbID(),
                            'showLadder': False}}
 
-    def buildList(self, selectedID, result, syncUserInfo = True):
+    def buildList(self, selectedID, result, syncUserInfo=True):
         self.clear()
         userGetter = storage_getter('users')().getUser
         colorGetter = g_settings.getColorScheme('rosters').getColors

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/dummy/__init__.py
 __all__ = ['Process',
  'current_process',
@@ -27,7 +28,7 @@ from Queue import Queue
 
 class DummyProcess(threading.Thread):
 
-    def __init__(self, group = None, target = None, name = None, args = (), kwargs = {}):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
         threading.Thread.__init__(self, group, target, name, args, kwargs)
         self._pid = None
         self._children = weakref.WeakKeyDictionary()
@@ -36,10 +37,10 @@ class DummyProcess(threading.Thread):
         return
 
     def start(self):
-        if not self._parent is current_process():
-            raise AssertionError
-            self._start_called = True
-            self._parent._children[self] = hasattr(self._parent, '_children') and None
+        assert self._parent is current_process()
+        self._start_called = True
+        if hasattr(self._parent, '_children'):
+            self._parent._children[self] = None
         threading.Thread.start(self)
         return
 
@@ -92,13 +93,13 @@ class Namespace(object):
 dict = dict
 list = list
 
-def Array(typecode, sequence, lock = True):
+def Array(typecode, sequence, lock=True):
     return array.array(typecode, sequence)
 
 
 class Value(object):
 
-    def __init__(self, typecode, value, lock = True):
+    def __init__(self, typecode, value, lock=True):
         self._typecode = typecode
         self._value = value
 
@@ -122,7 +123,7 @@ def shutdown():
     pass
 
 
-def Pool(processes = None, initializer = None, initargs = ()):
+def Pool(processes=None, initializer=None, initargs=()):
     from multiprocessing.pool import ThreadPool
     return ThreadPool(processes, initializer, initargs)
 

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/robotparser.py
 """ robotparser.py
 
@@ -21,7 +22,7 @@ class RobotFileParser:
     
     """
 
-    def __init__(self, url = ''):
+    def __init__(self, url=''):
         self.entries = []
         self.default_entry = None
         self.disallow_all = False
@@ -142,9 +143,7 @@ class RobotFileParser:
             if entry.applies_to(useragent):
                 return entry.allowance(url)
 
-        if self.default_entry:
-            return self.default_entry.allowance(url)
-        return True
+        return self.default_entry.allowance(url) if self.default_entry else True
 
     def __str__(self):
         return ''.join([ str(entry) + '\n' for entry in self.entries ])

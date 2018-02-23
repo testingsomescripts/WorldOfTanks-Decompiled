@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/shlex.py
 """A lexical analyzer class for simple shell-like syntaxes."""
 import os.path
@@ -13,7 +14,7 @@ __all__ = ['shlex', 'split']
 class shlex:
     """A lexical analyzer class for simple shell-like syntaxes."""
 
-    def __init__(self, instream = None, infile = None, posix = False):
+    def __init__(self, instream=None, infile=None, posix=False):
         if isinstance(instream, basestring):
             instream = StringIO(instream)
         if instream is not None:
@@ -53,7 +54,7 @@ class shlex:
             print 'shlex: pushing token ' + repr(tok)
         self.pushback.appendleft(tok)
 
-    def push_source(self, newstream, newfile = None):
+    def push_source(self, newstream, newfile=None):
         """Push an input source onto the lexer's input source stack."""
         if isinstance(newstream, basestring):
             newstream = StringIO(newstream)
@@ -119,7 +120,7 @@ class shlex:
             if self.state is None:
                 self.token = ''
                 break
-            elif self.state == ' ':
+            if self.state == ' ':
                 if not nextchar:
                     self.state = None
                     break
@@ -152,7 +153,7 @@ class shlex:
                         break
                     else:
                         continue
-            elif self.state in self.quotes:
+            if self.state in self.quotes:
                 quoted = True
                 if not nextchar:
                     if self.debug >= 2:
@@ -170,7 +171,7 @@ class shlex:
                     self.state = nextchar
                 else:
                     self.token = self.token + nextchar
-            elif self.state in self.escape:
+            if self.state in self.escape:
                 if not nextchar:
                     if self.debug >= 2:
                         print 'shlex: I see EOF in escape state'
@@ -179,7 +180,7 @@ class shlex:
                     self.token = self.token + self.state
                 self.token = self.token + nextchar
                 self.state = escapedstate
-            elif self.state == 'a':
+            if self.state == 'a':
                 if not nextchar:
                     self.state = None
                     break
@@ -236,7 +237,7 @@ class shlex:
             newfile = os.path.join(os.path.dirname(self.infile), newfile)
         return (newfile, open(newfile, 'r'))
 
-    def error_leader(self, infile = None, lineno = None):
+    def error_leader(self, infile=None, lineno=None):
         """Emit a C-compiler-like, Emacs-friendly error-message leader."""
         if infile is None:
             infile = self.infile
@@ -254,7 +255,7 @@ class shlex:
         return token
 
 
-def split(s, comments = False, posix = True):
+def split(s, comments=False, posix=True):
     lex = shlex(s, posix=posix)
     lex.whitespace_split = True
     if not comments:
@@ -272,5 +273,4 @@ if __name__ == '__main__':
         tt = lexer.get_token()
         if tt:
             print 'Token: ' + repr(tt)
-        else:
-            break
+        break

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle/legacy.py
 import weakref
 import GUI
@@ -52,7 +52,7 @@ class TutorialUILoader(object):
 
             return result
 
-    def unload(self, isItemsRevert = True):
+    def unload(self, isItemsRevert=True):
         if self._loader is None:
             return False
         else:
@@ -136,7 +136,7 @@ class ScaleformLayout(GUIProxy, UIInterface):
         self.onGUILoaded()
         return
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         self.eManager.clear()
         if self._guiRef is None or self._guiRef() is None:
             return
@@ -154,7 +154,7 @@ class ScaleformLayout(GUIProxy, UIInterface):
     def reloadConfig(self, filePath):
         self.config = gui_config.readConfig(filePath, forced=True)
 
-    def playEffect(self, effectName, args, itemRef = None, containerRef = None):
+    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
         if itemRef is not None:
             item = self.config.getItem(itemRef)
             if item is None:
@@ -176,7 +176,7 @@ class ScaleformLayout(GUIProxy, UIInterface):
     def stopEffect(self, effectName, effectID):
         self._movieView.effects.stop(effectName, effectID)
 
-    def setItemProps(self, itemRef, props, revert = False):
+    def setItemProps(self, itemRef, props, revert=False):
         item = self.config.getItem(itemRef)
         if item is None:
             LOG_ERROR('GUI Item not found', itemRef)

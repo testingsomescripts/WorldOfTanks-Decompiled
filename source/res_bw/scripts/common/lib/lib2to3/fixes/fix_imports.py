@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_imports.py
 """Fix incompatible imports and module references."""
 from .. import fixer_base
@@ -56,7 +56,7 @@ def alternates(members):
     return '(' + '|'.join(map(repr, members)) + ')'
 
 
-def build_pattern(mapping = MAPPING):
+def build_pattern(mapping=MAPPING):
     mod_list = ' | '.join([ "module_name='%s'" % key for key in mapping ])
     bare_names = alternates(mapping.keys())
     yield "name_import=import_name< 'import' ((%s) |\n               multiple_imports=dotted_as_names< any* (%s) any* >) >\n          " % (mod_list, mod_list)

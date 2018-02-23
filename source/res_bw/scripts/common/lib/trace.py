@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/trace.py
 """program/module to trace Python program or function execution
 
@@ -67,7 +68,7 @@ rx_blank = re.compile('^\\s*(#.*)?$')
 
 class Ignore:
 
-    def __init__(self, modules = None, dirs = None):
+    def __init__(self, modules=None, dirs=None):
         self._mods = modules or []
         self._dirs = dirs or []
         self._dirs = map(os.path.normpath, self._dirs)
@@ -129,7 +130,7 @@ def fullmodname(path):
 
 class CoverageResults:
 
-    def __init__(self, counts = None, calledfuncs = None, infile = None, callers = None, outfile = None):
+    def __init__(self, counts=None, calledfuncs=None, infile=None, callers=None, outfile=None):
         self.counts = counts
         if self.counts is None:
             self.counts = {}
@@ -170,7 +171,7 @@ class CoverageResults:
         for key in other_callers.keys():
             callers[key] = 1
 
-    def write_results(self, show_missing = True, summary = False, coverdir = None):
+    def write_results(self, show_missing=True, summary=False, coverdir=None):
         """
         @param coverdir
         """
@@ -341,7 +342,7 @@ def find_executable_linenos(filename):
 
 class Trace:
 
-    def __init__(self, count = 1, trace = 1, countfuncs = 0, countcallers = 0, ignoremods = (), ignoredirs = (), infile = None, outfile = None, timing = False):
+    def __init__(self, count=1, trace=1, countfuncs=0, countcallers=0, ignoremods=(), ignoredirs=(), infile=None, outfile=None, timing=False):
         """
         @param count true iff it should count number of times each
                      line is executed
@@ -395,7 +396,7 @@ class Trace:
         dict = __main__.__dict__
         self.runctx(cmd, dict, dict)
 
-    def runctx(self, cmd, globals = None, locals = None):
+    def runctx(self, cmd, globals=None, locals=None):
         if globals is None:
             globals = {}
         if locals is None:
@@ -527,7 +528,7 @@ def _err_exit(msg):
     sys.exit(1)
 
 
-def main(argv = None):
+def main(argv=None):
     import getopt
     if argv is None:
         argv = sys.argv
@@ -619,7 +620,7 @@ def main(argv = None):
                 ignore_dirs.append(s)
 
             continue
-        raise 0 or AssertionError('Should never get here')
+        assert 0, 'Should never get here'
 
     if listfuncs and (count or trace):
         _err_exit('cannot specify both --listfuncs and (--trace or --count)')

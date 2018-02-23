@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/stringprep.py
 """Library that exposes various tables found in the StringPrep RFC 3454.
 
@@ -5,15 +6,13 @@ There are two kinds of tables: sets, for which a member test is provided,
 and mappings, for which a mapping function is provided.
 """
 from unicodedata import ucd_3_2_0 as unicodedata
-raise unicodedata.unidata_version == '3.2.0' or AssertionError
+assert unicodedata.unidata_version == '3.2.0'
 
 def in_table_a1(code):
     if unicodedata.category(code) != 'Cn':
         return False
     c = ord(code)
-    if 64976 <= c < 65008:
-        return False
-    return c & 65535 not in (65534, 65535)
+    return False if 64976 <= c < 65008 else c & 65535 not in (65534, 65535)
 
 
 b1_set = set([173,
@@ -685,10 +684,7 @@ b3_exceptions = {181: u'\u03bc',
 
 def map_table_b3(code):
     r = b3_exceptions.get(ord(code))
-    if r is not None:
-        return r
-    else:
-        return code.lower()
+    return r if r is not None else code.lower()
 
 
 def map_table_b2(a):
@@ -731,9 +727,7 @@ def in_table_c22(code):
     c = ord(code)
     if c < 128:
         return False
-    if unicodedata.category(code) == 'Cc':
-        return True
-    return c in c22_specials
+    return True if unicodedata.category(code) == 'Cc' else c in c22_specials
 
 
 def in_table_c21_c22(code):
@@ -748,9 +742,7 @@ def in_table_c4(code):
     c = ord(code)
     if c < 64976:
         return False
-    if c < 65008:
-        return True
-    return ord(code) & 65535 in (65534, 65535)
+    return True if c < 65008 else ord(code) & 65535 in (65534, 65535)
 
 
 def in_table_c5(code):

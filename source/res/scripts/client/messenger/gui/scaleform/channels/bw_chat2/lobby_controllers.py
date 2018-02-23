@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/lobby_controllers.py
 from gui.prb_control.prb_helpers import PrbListener
 from gui.prb_control.settings import PREBATTLE_ROSTER
@@ -14,7 +14,7 @@ from messenger_common_chat2 import MESSENGER_LIMITS
 
 class UnitChannelController(_LobbyLayout):
 
-    def __init__(self, channel, mBuilder = None):
+    def __init__(self, channel, mBuilder=None):
         super(UnitChannelController, self).__init__(channel, mBuilder)
         self.fireInitEvent()
 
@@ -38,7 +38,7 @@ class UnitChannelController(_LobbyLayout):
     def _broadcast(self, message):
         self._getChat().broadcast(message)
 
-    def _format(self, message, doFormatting = True):
+    def _format(self, message, doFormatting=True):
         if not doFormatting:
             return message.text
         dbID = message.accountDBID
@@ -83,7 +83,7 @@ class LobbyChannelController(UnitChannelController):
 
 class TrainingChannelController(LobbyChannelController, PrbListener):
 
-    def __init__(self, channel, mBuilder = None):
+    def __init__(self, channel, mBuilder=None):
         super(TrainingChannelController, self).__init__(channel, mBuilder)
         self.__isListening = False
 

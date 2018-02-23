@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/result.py
 """Test result object"""
 import os
@@ -37,7 +38,7 @@ class TestResult(object):
     _testRunEntered = False
     _moduleSetUpFailed = False
 
-    def __init__(self, stream = None, descriptions = None, verbosity = None):
+    def __init__(self, stream=None, descriptions=None, verbosity=None):
         self.failfast = False
         self.failures = []
         self.errors = []

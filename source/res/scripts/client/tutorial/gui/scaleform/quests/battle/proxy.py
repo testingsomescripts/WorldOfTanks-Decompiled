@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/quests/battle/proxy.py
 from tutorial.gui import GUIProxy
 from tutorial.gui.Scaleform import effects_player
@@ -18,8 +18,8 @@ class BattleQuestsProxy(GUIProxy):
     def getSceneID(self):
         pass
 
-    def playEffect(self, effectName, args, itemRef = None, containerRef = None):
+    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
         return False
 
-    def isEffectRunning(self, effectName, effectID = None):
+    def isEffectRunning(self, effectName, effectID=None):
         return False

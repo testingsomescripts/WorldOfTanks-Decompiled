@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/misc.py
 
 
@@ -7,8 +7,7 @@ def flatten(tup):
     for elt in tup:
         if isinstance(elt, tuple):
             elts = elts + flatten(elt)
-        else:
-            elts.append(elt)
+        elts.append(elt)
 
     return elts
 

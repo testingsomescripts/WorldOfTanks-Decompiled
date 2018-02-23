@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/ast.py
 """Python abstract syntax node definitions
 
@@ -14,8 +14,7 @@ def flatten(seq):
             for elt2 in flatten(elt):
                 l.append(elt2)
 
-        else:
-            l.append(elt)
+        l.append(elt)
 
     return l
 
@@ -65,7 +64,7 @@ class Expression(Node):
 
 class Add(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -82,7 +81,7 @@ class Add(Node):
 
 class And(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -100,7 +99,7 @@ class And(Node):
 
 class AssAttr(Node):
 
-    def __init__(self, expr, attrname, flags, lineno = None):
+    def __init__(self, expr, attrname, flags, lineno=None):
         self.expr = expr
         self.attrname = attrname
         self.flags = flags
@@ -118,7 +117,7 @@ class AssAttr(Node):
 
 class AssList(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -136,7 +135,7 @@ class AssList(Node):
 
 class AssName(Node):
 
-    def __init__(self, name, flags, lineno = None):
+    def __init__(self, name, flags, lineno=None):
         self.name = name
         self.flags = flags
         self.lineno = lineno
@@ -153,7 +152,7 @@ class AssName(Node):
 
 class AssTuple(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -171,7 +170,7 @@ class AssTuple(Node):
 
 class Assert(Node):
 
-    def __init__(self, test, fail, lineno = None):
+    def __init__(self, test, fail, lineno=None):
         self.test = test
         self.fail = fail
         self.lineno = lineno
@@ -195,7 +194,7 @@ class Assert(Node):
 
 class Assign(Node):
 
-    def __init__(self, nodes, expr, lineno = None):
+    def __init__(self, nodes, expr, lineno=None):
         self.nodes = nodes
         self.expr = expr
         self.lineno = lineno
@@ -218,7 +217,7 @@ class Assign(Node):
 
 class AugAssign(Node):
 
-    def __init__(self, node, op, expr, lineno = None):
+    def __init__(self, node, op, expr, lineno=None):
         self.node = node
         self.op = op
         self.expr = expr
@@ -236,7 +235,7 @@ class AugAssign(Node):
 
 class Backquote(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -252,7 +251,7 @@ class Backquote(Node):
 
 class Bitand(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -270,7 +269,7 @@ class Bitand(Node):
 
 class Bitor(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -288,7 +287,7 @@ class Bitor(Node):
 
 class Bitxor(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -306,7 +305,7 @@ class Bitxor(Node):
 
 class Break(Node):
 
-    def __init__(self, lineno = None):
+    def __init__(self, lineno=None):
         self.lineno = lineno
 
     def getChildren(self):
@@ -321,7 +320,7 @@ class Break(Node):
 
 class CallFunc(Node):
 
-    def __init__(self, node, args, star_args = None, dstar_args = None, lineno = None):
+    def __init__(self, node, args, star_args=None, dstar_args=None, lineno=None):
         self.node = node
         self.args = args
         self.star_args = star_args
@@ -355,7 +354,7 @@ class CallFunc(Node):
 
 class Class(Node):
 
-    def __init__(self, name, bases, doc, code, decorators = None, lineno = None):
+    def __init__(self, name, bases, doc, code, decorators=None, lineno=None):
         self.name = name
         self.bases = bases
         self.doc = doc
@@ -390,7 +389,7 @@ class Class(Node):
 
 class Compare(Node):
 
-    def __init__(self, expr, ops, lineno = None):
+    def __init__(self, expr, ops, lineno=None):
         self.expr = expr
         self.ops = ops
         self.lineno = lineno
@@ -413,7 +412,7 @@ class Compare(Node):
 
 class Const(Node):
 
-    def __init__(self, value, lineno = None):
+    def __init__(self, value, lineno=None):
         self.value = value
         self.lineno = lineno
 
@@ -429,7 +428,7 @@ class Const(Node):
 
 class Continue(Node):
 
-    def __init__(self, lineno = None):
+    def __init__(self, lineno=None):
         self.lineno = lineno
 
     def getChildren(self):
@@ -444,7 +443,7 @@ class Continue(Node):
 
 class Decorators(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -462,7 +461,7 @@ class Decorators(Node):
 
 class Dict(Node):
 
-    def __init__(self, items, lineno = None):
+    def __init__(self, items, lineno=None):
         self.items = items
         self.lineno = lineno
 
@@ -480,7 +479,7 @@ class Dict(Node):
 
 class Discard(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -496,7 +495,7 @@ class Discard(Node):
 
 class Div(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -513,7 +512,7 @@ class Div(Node):
 
 class Ellipsis(Node):
 
-    def __init__(self, lineno = None):
+    def __init__(self, lineno=None):
         self.lineno = lineno
 
     def getChildren(self):
@@ -528,7 +527,7 @@ class Ellipsis(Node):
 
 class Exec(Node):
 
-    def __init__(self, expr, locals, globals, lineno = None):
+    def __init__(self, expr, locals, globals, lineno=None):
         self.expr = expr
         self.locals = locals
         self.globals = globals
@@ -556,7 +555,7 @@ class Exec(Node):
 
 class FloorDiv(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -573,7 +572,7 @@ class FloorDiv(Node):
 
 class For(Node):
 
-    def __init__(self, assign, list, body, else_, lineno = None):
+    def __init__(self, assign, list, body, else_, lineno=None):
         self.assign = assign
         self.list = list
         self.body = body
@@ -606,7 +605,7 @@ class For(Node):
 
 class From(Node):
 
-    def __init__(self, modname, names, level, lineno = None):
+    def __init__(self, modname, names, level, lineno=None):
         self.modname = modname
         self.names = names
         self.level = level
@@ -624,7 +623,7 @@ class From(Node):
 
 class Function(Node):
 
-    def __init__(self, decorators, name, argnames, defaults, flags, doc, code, lineno = None):
+    def __init__(self, decorators, name, argnames, defaults, flags, doc, code, lineno=None):
         self.decorators = decorators
         self.name = name
         self.argnames = argnames
@@ -671,7 +670,7 @@ class Function(Node):
 
 class GenExpr(Node):
 
-    def __init__(self, code, lineno = None):
+    def __init__(self, code, lineno=None):
         self.code = code
         self.lineno = lineno
         self.argnames = ['.0']
@@ -690,7 +689,7 @@ class GenExpr(Node):
 
 class GenExprFor(Node):
 
-    def __init__(self, assign, iter, ifs, lineno = None):
+    def __init__(self, assign, iter, ifs, lineno=None):
         self.assign = assign
         self.iter = iter
         self.ifs = ifs
@@ -717,7 +716,7 @@ class GenExprFor(Node):
 
 class GenExprIf(Node):
 
-    def __init__(self, test, lineno = None):
+    def __init__(self, test, lineno=None):
         self.test = test
         self.lineno = lineno
 
@@ -733,7 +732,7 @@ class GenExprIf(Node):
 
 class GenExprInner(Node):
 
-    def __init__(self, expr, quals, lineno = None):
+    def __init__(self, expr, quals, lineno=None):
         self.expr = expr
         self.quals = quals
         self.lineno = lineno
@@ -756,7 +755,7 @@ class GenExprInner(Node):
 
 class Getattr(Node):
 
-    def __init__(self, expr, attrname, lineno = None):
+    def __init__(self, expr, attrname, lineno=None):
         self.expr = expr
         self.attrname = attrname
         self.lineno = lineno
@@ -773,7 +772,7 @@ class Getattr(Node):
 
 class Global(Node):
 
-    def __init__(self, names, lineno = None):
+    def __init__(self, names, lineno=None):
         self.names = names
         self.lineno = lineno
 
@@ -789,7 +788,7 @@ class Global(Node):
 
 class If(Node):
 
-    def __init__(self, tests, else_, lineno = None):
+    def __init__(self, tests, else_, lineno=None):
         self.tests = tests
         self.else_ = else_
         self.lineno = lineno
@@ -813,7 +812,7 @@ class If(Node):
 
 class IfExp(Node):
 
-    def __init__(self, test, then, else_, lineno = None):
+    def __init__(self, test, then, else_, lineno=None):
         self.test = test
         self.then = then
         self.else_ = else_
@@ -831,7 +830,7 @@ class IfExp(Node):
 
 class Import(Node):
 
-    def __init__(self, names, lineno = None):
+    def __init__(self, names, lineno=None):
         self.names = names
         self.lineno = lineno
 
@@ -847,7 +846,7 @@ class Import(Node):
 
 class Invert(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -863,7 +862,7 @@ class Invert(Node):
 
 class Keyword(Node):
 
-    def __init__(self, name, expr, lineno = None):
+    def __init__(self, name, expr, lineno=None):
         self.name = name
         self.expr = expr
         self.lineno = lineno
@@ -880,7 +879,7 @@ class Keyword(Node):
 
 class Lambda(Node):
 
-    def __init__(self, argnames, defaults, flags, code, lineno = None):
+    def __init__(self, argnames, defaults, flags, code, lineno=None):
         self.argnames = argnames
         self.defaults = defaults
         self.flags = flags
@@ -916,7 +915,7 @@ class Lambda(Node):
 
 class LeftShift(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -933,7 +932,7 @@ class LeftShift(Node):
 
 class List(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -951,7 +950,7 @@ class List(Node):
 
 class ListComp(Node):
 
-    def __init__(self, expr, quals, lineno = None):
+    def __init__(self, expr, quals, lineno=None):
         self.expr = expr
         self.quals = quals
         self.lineno = lineno
@@ -974,7 +973,7 @@ class ListComp(Node):
 
 class ListCompFor(Node):
 
-    def __init__(self, assign, list, ifs, lineno = None):
+    def __init__(self, assign, list, ifs, lineno=None):
         self.assign = assign
         self.list = list
         self.ifs = ifs
@@ -1000,7 +999,7 @@ class ListCompFor(Node):
 
 class ListCompIf(Node):
 
-    def __init__(self, test, lineno = None):
+    def __init__(self, test, lineno=None):
         self.test = test
         self.lineno = lineno
 
@@ -1016,7 +1015,7 @@ class ListCompIf(Node):
 
 class SetComp(Node):
 
-    def __init__(self, expr, quals, lineno = None):
+    def __init__(self, expr, quals, lineno=None):
         self.expr = expr
         self.quals = quals
         self.lineno = lineno
@@ -1039,7 +1038,7 @@ class SetComp(Node):
 
 class DictComp(Node):
 
-    def __init__(self, key, value, quals, lineno = None):
+    def __init__(self, key, value, quals, lineno=None):
         self.key = key
         self.value = value
         self.quals = quals
@@ -1065,7 +1064,7 @@ class DictComp(Node):
 
 class Mod(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -1082,7 +1081,7 @@ class Mod(Node):
 
 class Module(Node):
 
-    def __init__(self, doc, node, lineno = None):
+    def __init__(self, doc, node, lineno=None):
         self.doc = doc
         self.node = node
         self.lineno = lineno
@@ -1099,7 +1098,7 @@ class Module(Node):
 
 class Mul(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -1116,7 +1115,7 @@ class Mul(Node):
 
 class Name(Node):
 
-    def __init__(self, name, lineno = None):
+    def __init__(self, name, lineno=None):
         self.name = name
         self.lineno = lineno
 
@@ -1132,7 +1131,7 @@ class Name(Node):
 
 class Not(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -1148,7 +1147,7 @@ class Not(Node):
 
 class Or(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -1166,7 +1165,7 @@ class Or(Node):
 
 class Pass(Node):
 
-    def __init__(self, lineno = None):
+    def __init__(self, lineno=None):
         self.lineno = lineno
 
     def getChildren(self):
@@ -1181,7 +1180,7 @@ class Pass(Node):
 
 class Power(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -1198,7 +1197,7 @@ class Power(Node):
 
 class Print(Node):
 
-    def __init__(self, nodes, dest, lineno = None):
+    def __init__(self, nodes, dest, lineno=None):
         self.nodes = nodes
         self.dest = dest
         self.lineno = lineno
@@ -1222,7 +1221,7 @@ class Print(Node):
 
 class Printnl(Node):
 
-    def __init__(self, nodes, dest, lineno = None):
+    def __init__(self, nodes, dest, lineno=None):
         self.nodes = nodes
         self.dest = dest
         self.lineno = lineno
@@ -1246,7 +1245,7 @@ class Printnl(Node):
 
 class Raise(Node):
 
-    def __init__(self, expr1, expr2, expr3, lineno = None):
+    def __init__(self, expr1, expr2, expr3, lineno=None):
         self.expr1 = expr1
         self.expr2 = expr2
         self.expr3 = expr3
@@ -1275,7 +1274,7 @@ class Raise(Node):
 
 class Return(Node):
 
-    def __init__(self, value, lineno = None):
+    def __init__(self, value, lineno=None):
         self.value = value
         self.lineno = lineno
 
@@ -1291,7 +1290,7 @@ class Return(Node):
 
 class RightShift(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -1308,7 +1307,7 @@ class RightShift(Node):
 
 class Set(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -1326,7 +1325,7 @@ class Set(Node):
 
 class Slice(Node):
 
-    def __init__(self, expr, flags, lower, upper, lineno = None):
+    def __init__(self, expr, flags, lower, upper, lineno=None):
         self.expr = expr
         self.flags = flags
         self.lower = lower
@@ -1359,7 +1358,7 @@ class Slice(Node):
 
 class Sliceobj(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -1377,7 +1376,7 @@ class Sliceobj(Node):
 
 class Stmt(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -1395,7 +1394,7 @@ class Stmt(Node):
 
 class Sub(Node):
 
-    def __init__(self, leftright, lineno = None):
+    def __init__(self, leftright, lineno=None):
         self.left = leftright[0]
         self.right = leftright[1]
         self.lineno = lineno
@@ -1412,7 +1411,7 @@ class Sub(Node):
 
 class Subscript(Node):
 
-    def __init__(self, expr, flags, subs, lineno = None):
+    def __init__(self, expr, flags, subs, lineno=None):
         self.expr = expr
         self.flags = flags
         self.subs = subs
@@ -1437,7 +1436,7 @@ class Subscript(Node):
 
 class TryExcept(Node):
 
-    def __init__(self, body, handlers, else_, lineno = None):
+    def __init__(self, body, handlers, else_, lineno=None):
         self.body = body
         self.handlers = handlers
         self.else_ = else_
@@ -1464,7 +1463,7 @@ class TryExcept(Node):
 
 class TryFinally(Node):
 
-    def __init__(self, body, final, lineno = None):
+    def __init__(self, body, final, lineno=None):
         self.body = body
         self.final = final
         self.lineno = lineno
@@ -1481,7 +1480,7 @@ class TryFinally(Node):
 
 class Tuple(Node):
 
-    def __init__(self, nodes, lineno = None):
+    def __init__(self, nodes, lineno=None):
         self.nodes = nodes
         self.lineno = lineno
 
@@ -1499,7 +1498,7 @@ class Tuple(Node):
 
 class UnaryAdd(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -1515,7 +1514,7 @@ class UnaryAdd(Node):
 
 class UnarySub(Node):
 
-    def __init__(self, expr, lineno = None):
+    def __init__(self, expr, lineno=None):
         self.expr = expr
         self.lineno = lineno
 
@@ -1531,7 +1530,7 @@ class UnarySub(Node):
 
 class While(Node):
 
-    def __init__(self, test, body, else_, lineno = None):
+    def __init__(self, test, body, else_, lineno=None):
         self.test = test
         self.body = body
         self.else_ = else_
@@ -1558,7 +1557,7 @@ class While(Node):
 
 class With(Node):
 
-    def __init__(self, expr, vars, body, lineno = None):
+    def __init__(self, expr, vars, body, lineno=None):
         self.expr = expr
         self.vars = vars
         self.body = body
@@ -1585,7 +1584,7 @@ class With(Node):
 
 class Yield(Node):
 
-    def __init__(self, value, lineno = None):
+    def __init__(self, value, lineno=None):
         self.value = value
         self.lineno = lineno
 

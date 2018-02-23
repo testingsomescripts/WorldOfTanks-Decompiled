@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/findertools.py
 """Utility routines depending on the finder,
 a combination of code by Jack Jansen and erik@letterror.com.
@@ -124,7 +125,7 @@ def update(file):
     return finder.update(file_alias)
 
 
-def comment(object, comment = None):
+def comment(object, comment=None):
     """comment: get or set the Finder-comment of the item, displayed in the 'Get Info' window."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
@@ -146,10 +147,7 @@ def _setcomment(object_alias, comment):
     _reply, args, attrs = finder.send('core', 'setd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def _getcomment(object_alias):
@@ -162,10 +160,7 @@ def _getcomment(object_alias):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def processes():
@@ -188,7 +183,7 @@ def processes():
         for proc in p:
             if hasattr(proc, 'seld'):
                 processnames.append(proc.seld)
-            elif hasattr(proc, 'type'):
+            if hasattr(proc, 'type'):
                 if proc.type == 'psn ':
                     processnumbers.append(proc.data)
 
@@ -225,8 +220,6 @@ def isactiveprocess(processname):
         if n == processname:
             return 1
 
-    return 0
-
 
 def processinfo(processname):
     """Return an object with all process properties as attributes for processname. MacOS9"""
@@ -258,10 +251,7 @@ def _processproperty(processname, property):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def openwindow(object):
@@ -298,14 +288,12 @@ def closewindow(object):
     return
 
 
-def location(object, pos = None):
+def location(object, pos=None):
     """Set the position of a Finder window for folder to pos=(w, h). Specify file by name or fsspec.
     If pos=None, location will return the current position of the object."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
-    if not pos:
-        return _getlocation(object_alias)
-    return _setlocation(object_alias, pos)
+    return _getlocation(object_alias) if not pos else _setlocation(object_alias, pos)
 
 
 def _setlocation(object_alias, (x, y)):
@@ -341,7 +329,7 @@ def _getlocation(object_alias):
         return
 
 
-def label(object, index = None):
+def label(object, index=None):
     """label: set or get the label of the item. Specify file by name or fsspec."""
     object = Carbon.File.FSRef(object)
     object_alias = object.FSNewAliasMinimal()
@@ -364,10 +352,7 @@ def _getlabel(object_alias):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def _setlabel(object_alias, index):
@@ -387,7 +372,7 @@ def _setlabel(object_alias, index):
     return index
 
 
-def windowview(folder, view = None):
+def windowview(folder, view=None):
     """windowview: Set the view of the window for the folder. Specify file by name or fsspec.
     0 = by icon (default)
     1 = by name
@@ -395,13 +380,10 @@ def windowview(folder, view = None):
     """
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
-    if view is None:
-        return _getwindowview(folder_alias)
-    else:
-        return _setwindowview(folder_alias, view)
+    return _getwindowview(folder_alias) if view is None else _setwindowview(folder_alias, view)
 
 
-def _setwindowview(folder_alias, view = 0):
+def _setwindowview(folder_alias, view=0):
     """set the windowview"""
     attrs = {}
     args = {}
@@ -423,10 +405,7 @@ def _setwindowview(folder_alias, view = 0):
     _reply, args, attrs = finder.send(_code, _subcode, args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def _getwindowview(folder_alias):
@@ -446,13 +425,10 @@ def _getwindowview(folder_alias):
     views = {'iimg': 0,
      'pnam': 1,
      'lgbu': 2}
-    if '----' in args:
-        return views[args['----'].enum]
-    else:
-        return
+    return views[args['----'].enum] if '----' in args else None
 
 
-def windowsize(folder, size = None):
+def windowsize(folder, size=None):
     """Set the size of a Finder window for folder to size=(w, h), Specify by path.
     If size=None, windowsize will return the current size of the window.
     Specify file by name or fsspec.
@@ -460,9 +436,7 @@ def windowsize(folder, size = None):
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
     openwindow(fsr)
-    if not size:
-        return _getwindowsize(folder_alias)
-    return _setwindowsize(folder_alias, size)
+    return _getwindowsize(folder_alias) if not size else _setwindowsize(folder_alias, size)
 
 
 def _setwindowsize(folder_alias, (w, h)):
@@ -496,13 +470,10 @@ def _getwindowsize(folder_alias):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
-def windowposition(folder, pos = None):
+def windowposition(folder, pos=None):
     """Set the position of a Finder window for folder to pos=(w, h)."""
     fsr = Carbon.File.FSRef(folder)
     folder_alias = fsr.FSNewAliasMinimal()
@@ -527,10 +498,7 @@ def _setwindowposition(folder_alias, (x, y)):
     _reply, args, attrs = finder.send('core', 'setd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def _getwindowposition(folder_alias):
@@ -545,23 +513,17 @@ def _getwindowposition(folder_alias):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
-def icon(object, icondata = None):
+def icon(object, icondata=None):
     """icon sets the icon of object, if no icondata is given,
     icon will return an AE object with binary data for the current icon.
     If left untouched, this data can be used to paste the icon on another file.
     Development opportunity: get and set the data as PICT."""
     fsr = Carbon.File.FSRef(object)
     object_alias = fsr.FSNewAliasMinimal()
-    if icondata is None:
-        return _geticon(object_alias)
-    else:
-        return _seticon(object_alias, icondata)
+    return _geticon(object_alias) if icondata is None else _seticon(object_alias, icondata)
 
 
 def _geticon(object_alias):
@@ -575,10 +537,7 @@ def _geticon(object_alias):
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def _seticon(object_alias, icondata):
@@ -593,13 +552,10 @@ def _seticon(object_alias, icondata):
     _reply, args, attrs = finder.send('core', 'setd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----'].data
-    else:
-        return
+    return args['----'].data if '----' in args else None
 
 
-def mountvolume(volume, server = None, username = None, password = None):
+def mountvolume(volume, server=None, username=None, password=None):
     """mount a volume, local or on a server on AppleTalk.
     Note: mounting a ASIP server requires a different operation.
     server is the name of the server where the volume belongs
@@ -617,8 +573,7 @@ def mountvolume(volume, server = None, username = None, password = None):
     _reply, args, attrs = finder.send('aevt', 'mvol', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
+    return args['----'] if '----' in args else None
 
 
 def unmountvolume(volume):
@@ -635,10 +590,7 @@ def putaway(object):
     _reply, args, attrs = talker.send('fndr', 'ptwy', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def volumelevel(level):
@@ -654,8 +606,7 @@ def volumelevel(level):
     _reply, args, attrs = finder.send('aevt', 'stvl', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
+    return args['----'] if '----' in args else None
 
 
 def OSversion():
@@ -668,10 +619,7 @@ def OSversion():
     _reply, args, attrs = finder.send('core', 'getd', args, attrs)
     if 'errn' in args:
         raise Error, aetools.decodeerror(args)
-    if '----' in args:
-        return args['----']
-    else:
-        return
+    return args['----'] if '----' in args else None
 
 
 def filesharing():

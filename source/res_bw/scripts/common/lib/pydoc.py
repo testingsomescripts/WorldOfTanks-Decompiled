@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pydoc.py
 """Generate Python documentation in HTML or text for interactive use.
 
@@ -76,9 +77,7 @@ def splitdoc(doc):
     lines = split(strip(doc), '\n')
     if len(lines) == 1:
         return (lines[0], '')
-    if len(lines) >= 2 and not rstrip(lines[1]):
-        return (lines[0], join(lines[2:], '\n'))
-    return ('', join(lines, '\n'))
+    return (lines[0], join(lines[2:], '\n')) if len(lines) >= 2 and not rstrip(lines[1]) else ('', join(lines, '\n'))
 
 
 def classname(object, modname):
@@ -149,13 +148,12 @@ def _split_list(s, predicate):
     for x in s:
         if predicate(x):
             yes.append(x)
-        else:
-            no.append(x)
+        no.append(x)
 
     return (yes, no)
 
 
-def visiblename(name, all = None, obj = None):
+def visiblename(name, all=None, obj=None):
     """Decide whether to show documentation on a variable."""
     _hidden_names = ('__builtins__', '__doc__', '__file__', '__path__', '__module__', '__name__', '__slots__', '__package__')
     if name in _hidden_names:
@@ -196,7 +194,7 @@ except NameError:
 
     _encoding = 'ascii'
 
-    def _encode(text, encoding = 'ascii'):
+    def _encode(text, encoding='ascii'):
         return text
 
 
@@ -204,7 +202,7 @@ else:
     import locale
     _encoding = locale.getpreferredencoding()
 
-    def _encode(text, encoding = None):
+    def _encode(text, encoding=None):
         if isinstance(text, unicode):
             return text.encode(encoding or _encoding, 'xmlcharrefreplace')
         else:
@@ -212,9 +210,7 @@ else:
 
 
 def _binstr(obj):
-    if isinstance(obj, _unicode):
-        return obj.encode(_encoding, 'xmlcharrefreplace')
-    return str(obj)
+    return obj.encode(_encoding, 'xmlcharrefreplace') if isinstance(obj, _unicode) else str(obj)
 
 
 def ispackage(path):
@@ -252,7 +248,7 @@ def source_synopsis(file):
     return result
 
 
-def synopsis(filename, cache = {}):
+def synopsis(filename, cache={}):
     """Get the one-line summary out of a module file."""
     mtime = os.stat(filename).st_mtime
     lastupdate, result = cache.get(filename, (None, None))
@@ -316,7 +312,7 @@ def importfile(path):
     return module
 
 
-def safeimport(path, forceload = 0, cache = {}):
+def safeimport(path, forceload=0, cache={}):
     """Import a module; handle errors; return None if the module isn't found.
     
     If the module *is* found but an exception occurs, it's wrapped in an
@@ -355,7 +351,7 @@ def safeimport(path, forceload = 0, cache = {}):
 
 class Doc():
 
-    def document(self, object, name = None, *args):
+    def document(self, object, name=None, *args):
         """Generate documentation for an object."""
         args = (object, name) + args
         if inspect.isgetsetdescriptor(object):
@@ -372,11 +368,9 @@ class Doc():
         except AttributeError:
             pass
 
-        if isinstance(object, property):
-            return self.docproperty(*args)
-        return self.docother(*args)
+        return self.docproperty(*args) if isinstance(object, property) else self.docother(*args)
 
-    def fail(self, object, name = None, *args):
+    def fail(self, object, name=None, *args):
         """Raise an exception for unimplemented types."""
         message = "don't know how to document object%s of type %s" % (name and ' ' + repr(name), type(object).__name__)
         raise TypeError, message
@@ -427,9 +421,7 @@ class HTMLRepr(Repr):
     def repr_string(self, x, level):
         test = cram(x, self.maxstring)
         testrepr = repr(test)
-        if '\\' in test and '\\' not in replace(testrepr, '\\\\', ''):
-            return 'r' + testrepr[0] + self.escape(test) + testrepr[0]
-        return re.sub('((\\\\[\\\\abfnrtv\\\'"]|\\\\[0-9]..|\\\\x..|\\\\u....)+)', '<font color="#c040c0">\\1</font>', self.escape(testrepr))
+        return 'r' + testrepr[0] + self.escape(test) + testrepr[0] if '\\' in test and '\\' not in replace(testrepr, '\\\\', '') else re.sub('((\\\\[\\\\abfnrtv\\\'"]|\\\\[0-9]..|\\\\x..|\\\\u....)+)', '<font color="#c040c0">\\1</font>', self.escape(testrepr))
 
     repr_str = repr_string
 
@@ -452,7 +444,7 @@ class HTMLDoc(Doc):
         """Format an HTML page."""
         return _encode('\n<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">\n<html><head><title>Python: %s</title>\n<meta charset="utf-8">\n</head><body bgcolor="#f0f0f8">\n%s\n</body></html>' % (title, contents), 'ascii')
 
-    def heading(self, title, fgcol, bgcol, extras = ''):
+    def heading(self, title, fgcol, bgcol, extras=''):
         """Format a page heading."""
         return '\n<table width="100%%" cellspacing=0 cellpadding=2 border=0 summary="heading">\n<tr bgcolor="%s">\n<td valign=bottom>&nbsp;<br>\n<font color="%s" face="helvetica, arial">&nbsp;<br>%s</font></td\n><td align=right valign=bottom\n><font color="%s" face="helvetica, arial">%s</font></td></tr></table>\n    ' % (bgcol,
          fgcol,
@@ -460,7 +452,7 @@ class HTMLDoc(Doc):
          fgcol,
          extras or '&nbsp;')
 
-    def section(self, title, fgcol, bgcol, contents, width = 6, prelude = '', marginalia = None, gap = '&nbsp;'):
+    def section(self, title, fgcol, bgcol, contents, width=6, prelude='', marginalia=None, gap='&nbsp;'):
         """Format a section with a heading."""
         if marginalia is None:
             marginalia = '<tt>' + '&nbsp;' * width + '</tt>'
@@ -484,7 +476,7 @@ class HTMLDoc(Doc):
         text = self.escape(expandtabs(text))
         return replace(text, '\n\n', '\n \n', '\n\n', '\n \n', ' ', '&nbsp;', '\n', '<br>\n')
 
-    def multicolumn(self, list, format, cols = 4):
+    def multicolumn(self, list, format, cols=4):
         """Format a list of items into a multi-column list."""
         result = ''
         rows = (len(list) + cols - 1) // cols
@@ -512,9 +504,7 @@ class HTMLDoc(Doc):
     def classlink(self, object, modname):
         """Make a link for a class."""
         name, module = object.__name__, sys.modules.get(object.__module__)
-        if hasattr(module, name) and getattr(module, name) is object:
-            return '<a href="%s.html#%s">%s</a>' % (module.__name__, name, classname(object, modname))
-        return classname(object, modname)
+        return '<a href="%s.html#%s">%s</a>' % (module.__name__, name, classname(object, modname)) if hasattr(module, name) and getattr(module, name) is object else classname(object, modname)
 
     def modulelink(self, object):
         """Make a link for a module."""
@@ -535,7 +525,7 @@ class HTMLDoc(Doc):
             text = name
         return '<a href="%s">%s</a>' % (url, text)
 
-    def markup(self, text, escape = None, funcs = {}, classes = {}, methods = {}):
+    def markup(self, text, escape=None, funcs={}, classes={}, methods={}):
         """Mark up some plain text, given a context of symbols to look for.
         Each context dictionary maps object names to anchor names."""
         escape = escape or self.escape
@@ -569,7 +559,7 @@ class HTMLDoc(Doc):
         results.append(escape(text[here:]))
         return join(results, '')
 
-    def formattree(self, tree, modname, parent = None):
+    def formattree(self, tree, modname, parent=None):
         """Produce HTML for a class tree as given by inspect.getclasstree()."""
         result = ''
         for entry in tree:
@@ -584,12 +574,12 @@ class HTMLDoc(Doc):
 
                     result = result + '(' + join(parents, ', ') + ')'
                 result = result + '\n</font></dt>'
-            elif type(entry) is type([]):
+            if type(entry) is type([]):
                 result = result + '<dd>\n%s</dd>\n' % self.formattree(entry, modname, c)
 
         return '<dl>\n%s</dl>\n' % result
 
-    def docmodule(self, object, name = None, mod = None, *ignored):
+    def docmodule(self, object, name=None, mod=None, *ignored):
         """Produce HTML documentation for a module object."""
         name = object.__name__
         try:
@@ -676,7 +666,7 @@ class HTMLDoc(Doc):
             contents = self.multicolumn(modpkgs, self.modpkglink)
             result = result + self.bigsection('Package Contents', '#ffffff', '#aa55cc', contents)
         elif modules:
-            contents = self.multicolumn(modules, lambda key_value, s = self: s.modulelink(key_value[1]))
+            contents = self.multicolumn(modules, lambda key_value, s=self: s.modulelink(key_value[1]))
             result = result + self.bigsection('Modules', '#ffffff', '#aa55cc', contents)
         if classes:
             classlist = map(lambda key_value: key_value[1], classes)
@@ -705,7 +695,7 @@ class HTMLDoc(Doc):
             result = result + self.bigsection('Credits', '#ffffff', '#7799ee', contents)
         return result
 
-    def docclass(self, object, name = None, mod = None, funcs = {}, classes = {}, *ignored):
+    def docclass(self, object, name=None, mod=None, funcs={}, classes={}, *ignored):
         """Produce HTML documentation for a class object."""
         realname = object.__name__
         name = name or realname
@@ -819,7 +809,7 @@ class HTMLDoc(Doc):
             attrs = spill('Static methods %s' % tag, attrs, lambda t: t[1] == 'static method')
             attrs = spilldescriptors('Data descriptors %s' % tag, attrs, lambda t: t[1] == 'data descriptor')
             attrs = spilldata('Data and other attributes %s' % tag, attrs, lambda t: t[1] == 'data')
-            raise attrs == [] or AssertionError
+            assert attrs == []
             attrs = inherited
 
         contents = ''.join(contents)
@@ -841,7 +831,7 @@ class HTMLDoc(Doc):
         """Format an argument default value as text."""
         return self.grey('=' + self.repr(object))
 
-    def docroutine(self, object, name = None, mod = None, funcs = {}, classes = {}, methods = {}, cl = None):
+    def docroutine(self, object, name=None, mod=None, funcs={}, classes={}, methods={}, cl=None):
         """Produce HTML documentation for a function or method object."""
         realname = object.__name__
         name = name or realname
@@ -895,20 +885,20 @@ class HTMLDoc(Doc):
         push('</dl>\n')
         return ''.join(results)
 
-    def docproperty(self, object, name = None, mod = None, cl = None):
+    def docproperty(self, object, name=None, mod=None, cl=None):
         """Produce html documentation for a property."""
         return self._docdescriptor(name, object, mod)
 
-    def docother(self, object, name = None, mod = None, *ignored):
+    def docother(self, object, name=None, mod=None, *ignored):
         """Produce HTML documentation for a data object."""
         lhs = name and '<strong>%s</strong> = ' % name or ''
         return lhs + self.repr(object)
 
-    def docdata(self, object, name = None, mod = None, cl = None):
+    def docdata(self, object, name=None, mod=None, cl=None):
         """Produce html documentation for a data descriptor."""
         return self._docdescriptor(name, object, mod)
 
-    def index(self, dir, shadowed = None):
+    def index(self, dir, shadowed=None):
         """Generate an HTML index for a directory of modules."""
         modpkgs = []
         if shadowed is None:
@@ -944,9 +934,7 @@ class TextRepr(Repr):
     def repr_string(self, x, level):
         test = cram(x, self.maxstring)
         testrepr = repr(test)
-        if '\\' in test and '\\' not in replace(testrepr, '\\\\', ''):
-            return 'r' + testrepr[0] + test + testrepr[0]
-        return testrepr
+        return 'r' + testrepr[0] + test + testrepr[0] if '\\' in test and '\\' not in replace(testrepr, '\\\\', '') else testrepr
 
     repr_str = repr_string
 
@@ -966,12 +954,12 @@ class TextDoc(Doc):
         """Format a string in bold by overstriking."""
         return join(map(lambda ch: ch + '\x08' + ch, text), '')
 
-    def indent(self, text, prefix = '    '):
+    def indent(self, text, prefix='    '):
         """Indent text by prepending a given prefix to each line."""
         if not text:
             return ''
         lines = split(text, '\n')
-        lines = map(lambda line, prefix = prefix: prefix + line, lines)
+        lines = map(lambda line, prefix=prefix: prefix + line, lines)
         if lines:
             lines[-1] = rstrip(lines[-1])
         return join(lines, '\n')
@@ -980,7 +968,7 @@ class TextDoc(Doc):
         """Format a section with a given heading."""
         return self.bold(title) + '\n' + rstrip(self.indent(contents)) + '\n\n'
 
-    def formattree(self, tree, modname, parent = None, prefix = ''):
+    def formattree(self, tree, modname, parent=None, prefix=''):
         """Render in text a class tree as returned by inspect.getclasstree()."""
         result = ''
         for entry in tree:
@@ -988,15 +976,15 @@ class TextDoc(Doc):
                 c, bases = entry
                 result = result + prefix + classname(c, modname)
                 if bases and bases != (parent,):
-                    parents = map(lambda c, m = modname: classname(c, m), bases)
+                    parents = map(lambda c, m=modname: classname(c, m), bases)
                     result = result + '(%s)' % join(parents, ', ')
                 result = result + '\n'
-            elif type(entry) is type([]):
+            if type(entry) is type([]):
                 result = result + self.formattree(entry, modname, c, prefix + '    ')
 
         return result
 
-    def docmodule(self, object, name = None, mod = None):
+    def docmodule(self, object, name=None, mod=None):
         """Produce text documentation for a given module object."""
         name = object.__name__
         synop, desc = splitdoc(getdoc(object))
@@ -1041,8 +1029,7 @@ class TextDoc(Doc):
                 modpkgs_names.add(modname)
                 if ispkg:
                     modpkgs.append(modname + ' (package)')
-                else:
-                    modpkgs.append(modname)
+                modpkgs.append(modname)
 
             modpkgs.sort()
             result = result + self.section('PACKAGE CONTENTS', join(modpkgs, '\n'))
@@ -1086,13 +1073,13 @@ class TextDoc(Doc):
             result = result + self.section('CREDITS', _binstr(object.__credits__))
         return result
 
-    def docclass(self, object, name = None, mod = None, *ignored):
+    def docclass(self, object, name=None, mod=None, *ignored):
         """Produce text documentation for a given class object."""
         realname = object.__name__
         name = name or realname
         bases = object.__bases__
 
-        def makename(c, m = object.__module__):
+        def makename(c, m=object.__module__):
             return classname(c, m)
 
         if name == realname:
@@ -1184,19 +1171,17 @@ class TextDoc(Doc):
             attrs = spill('Static methods %s:\n' % tag, attrs, lambda t: t[1] == 'static method')
             attrs = spilldescriptors('Data descriptors %s:\n' % tag, attrs, lambda t: t[1] == 'data descriptor')
             attrs = spilldata('Data and other attributes %s:\n' % tag, attrs, lambda t: t[1] == 'data')
-            raise attrs == [] or AssertionError
+            assert attrs == []
             attrs = inherited
 
         contents = '\n'.join(contents)
-        if not contents:
-            return title + '\n'
-        return title + '\n' + self.indent(rstrip(contents), ' |  ') + '\n'
+        return title + '\n' if not contents else title + '\n' + self.indent(rstrip(contents), ' |  ') + '\n'
 
     def formatvalue(self, object):
         """Format an argument default value as text."""
         return '=' + self.repr(object)
 
-    def docroutine(self, object, name = None, mod = None, cl = None):
+    def docroutine(self, object, name=None, mod=None, cl=None):
         """Produce text documentation for a function or method object."""
         realname = object.__name__
         name = name or realname
@@ -1246,15 +1231,15 @@ class TextDoc(Doc):
             push('\n')
         return ''.join(results)
 
-    def docproperty(self, object, name = None, mod = None, cl = None):
+    def docproperty(self, object, name=None, mod=None, cl=None):
         """Produce text documentation for a property."""
         return self._docdescriptor(name, object, mod)
 
-    def docdata(self, object, name = None, mod = None, cl = None):
+    def docdata(self, object, name=None, mod=None, cl=None):
         """Produce text documentation for a data descriptor."""
         return self._docdescriptor(name, object, mod)
 
-    def docother(self, object, name = None, mod = None, parent = None, maxlen = None, doc = None):
+    def docother(self, object, name=None, mod=None, parent=None, maxlen=None, doc=None):
         """Produce text documentation for a data object."""
         repr = self.repr(object)
         if maxlen:
@@ -1400,12 +1385,10 @@ def describe(thing):
         return 'function ' + thing.__name__
     if inspect.ismethod(thing):
         return 'method ' + thing.__name__
-    if type(thing) is types.InstanceType:
-        return 'instance of ' + thing.__class__.__name__
-    return type(thing).__name__
+    return 'instance of ' + thing.__class__.__name__ if type(thing) is types.InstanceType else type(thing).__name__
 
 
-def locate(path, forceload = 0):
+def locate(path, forceload=0):
     """Locate an object by name or dotted path, importing as necessary."""
     parts = [ part for part in split(path, '.') if part ]
     module, n = (None, 0)
@@ -1413,8 +1396,7 @@ def locate(path, forceload = 0):
         nextmodule = safeimport(join(parts[:n + 1], '.'), forceload)
         if nextmodule:
             module, n = nextmodule, n + 1
-        else:
-            break
+        break
 
     if module:
         object = module
@@ -1438,7 +1420,7 @@ class _OldStyleClass():
 
 _OLD_INSTANCE_TYPE = type(_OldStyleClass())
 
-def resolve(thing, forceload = 0):
+def resolve(thing, forceload=0):
     """Given an object or a path to an object, get the object and its name."""
     if isinstance(thing, str):
         object = locate(thing, forceload)
@@ -1451,7 +1433,7 @@ def resolve(thing, forceload = 0):
         return
 
 
-def render_doc(thing, title = 'Python Library Documentation: %s', forceload = 0):
+def render_doc(thing, title='Python Library Documentation: %s', forceload=0):
     """Render text documentation, given an object or a path to an object."""
     object, name = resolve(thing, forceload)
     desc = describe(object)
@@ -1468,7 +1450,7 @@ def render_doc(thing, title = 'Python Library Documentation: %s', forceload = 0)
     return title % desc + '\n\n' + text.document(object, name)
 
 
-def doc(thing, title = 'Python Library Documentation: %s', forceload = 0):
+def doc(thing, title='Python Library Documentation: %s', forceload=0):
     """Display text documentation, given an object or a path to an object."""
     try:
         pager(render_doc(thing, title, forceload))
@@ -1476,7 +1458,7 @@ def doc(thing, title = 'Python Library Documentation: %s', forceload = 0):
         print value
 
 
-def writedoc(thing, forceload = 0):
+def writedoc(thing, forceload=0):
     """Write HTML documentation to a file in the current directory."""
     try:
         object, name = resolve(thing, forceload)
@@ -1489,7 +1471,7 @@ def writedoc(thing, forceload = 0):
         print value
 
 
-def writedocs(dir, pkgpath = '', done = None):
+def writedocs(dir, pkgpath='', done=None):
     """Write out HTML documentation for all modules in a directory tree."""
     if done is None:
         done = {}
@@ -1639,7 +1621,7 @@ class Helper():
      'DEBUGGING': ('debugger', 'pdb'),
      'CONTEXTMANAGERS': ('context-managers', 'with')}
 
-    def __init__(self, input = None, output = None):
+    def __init__(self, input=None, output=None):
         self._input = input
         self._output = output
 
@@ -1650,11 +1632,10 @@ class Helper():
         if inspect.stack()[1][3] == '?':
             self()
             return ''
-        return '<pydoc.Helper instance>'
 
     _GoInteractive = object()
 
-    def __call__(self, request = _GoInteractive):
+    def __call__(self, request=_GoInteractive):
         if request is not self._GoInteractive:
             self.help(request)
         else:
@@ -1718,7 +1699,7 @@ class Helper():
     def intro(self):
         self.output.write('\nWelcome to Python %s!  This is the online help utility.\n\nIf this is your first time using Python, you should definitely check out\nthe tutorial on the Internet at http://docs.python.org/%s/tutorial/.\n\nEnter the name of any module, keyword, or topic to get help on writing\nPython programs and using Python modules.  To quit this help utility and\nreturn to the interpreter, just type "quit".\n\nTo get a list of available modules, keywords, or topics, type "modules",\n"keywords", or "topics".  Each module also comes with a one-line summary\nof what it does; to list the modules whose summaries contain a given word\nsuch as "spam", type "modules spam".\n' % tuple([sys.version[:3]] * 2))
 
-    def list(self, items, columns = 4, width = 80):
+    def list(self, items, columns=4, width=80):
         items = items[:]
         items.sort()
         colw = width / columns
@@ -1745,7 +1726,7 @@ class Helper():
         self.output.write('\nHere is a list of available topics.  Enter any topic name to get more help.\n\n')
         self.list(self.topics.keys())
 
-    def showtopic(self, topic, more_xrefs = ''):
+    def showtopic(self, topic, more_xrefs=''):
         try:
             import pydoc_data.topics
         except ImportError:
@@ -1779,7 +1760,7 @@ class Helper():
         topic, _, xrefs = target.partition(' ')
         self.showtopic(topic, xrefs)
 
-    def listmodules(self, key = ''):
+    def listmodules(self, key=''):
         if key:
             self.output.write('\nHere is a list of matching modules.  Enter any module name to get more help.\n\n')
             apropos(key)
@@ -1787,7 +1768,7 @@ class Helper():
             self.output.write('\nPlease wait a moment while I gather a list of all available modules...\n\n')
             modules = {}
 
-            def callback(path, modname, desc, modules = modules):
+            def callback(path, modname, desc, modules=modules):
                 if modname and modname[-9:] == '.__init__':
                     modname = modname[:-9] + ' (package)'
                 if find(modname, '.') < 0:
@@ -1833,7 +1814,7 @@ class Scanner():
 class ModuleScanner():
     """An interruptible scanner that searches module synopses."""
 
-    def run(self, callback, key = None, completer = None, onerror = None):
+    def run(self, callback, key=None, completer=None, onerror=None):
         if key:
             key = lower(key)
         self.quit = False
@@ -1853,21 +1834,20 @@ class ModuleScanner():
                 break
             if key is None:
                 callback(None, modname, '')
-            else:
-                loader = importer.find_module(modname)
-                if hasattr(loader, 'get_source'):
-                    import StringIO
-                    desc = source_synopsis(StringIO.StringIO(loader.get_source(modname))) or ''
-                    if hasattr(loader, 'get_filename'):
-                        path = loader.get_filename(modname)
-                    else:
-                        path = None
+            loader = importer.find_module(modname)
+            if hasattr(loader, 'get_source'):
+                import StringIO
+                desc = source_synopsis(StringIO.StringIO(loader.get_source(modname))) or ''
+                if hasattr(loader, 'get_filename'):
+                    path = loader.get_filename(modname)
                 else:
-                    module = loader.load_module(modname)
-                    desc = (module.__doc__ or '').splitlines()[0]
-                    path = getattr(module, '__file__', None)
-                if find(lower(modname + ' - ' + desc), key) >= 0:
-                    callback(path, modname, desc)
+                    path = None
+            else:
+                module = loader.load_module(modname)
+                desc = (module.__doc__ or '').splitlines()[0]
+                path = getattr(module, '__file__', None)
+            if find(lower(modname + ' - ' + desc), key) >= 0:
+                callback(path, modname, desc)
 
         if completer:
             completer()
@@ -1890,12 +1870,12 @@ def apropos(key):
         ModuleScanner().run(callback, key, onerror=onerror)
 
 
-def serve(port, callback = None, completer = None):
+def serve(port, callback=None, completer=None):
     import BaseHTTPServer, mimetools, select
 
     class Message(mimetools.Message):
 
-        def __init__(self, fp, seekable = 1):
+        def __init__(self, fp, seekable=1):
             Message = self.__class__
             Message.__bases__[0].__bases__[0].__init__(self, fp, seekable)
             self.encodingheader = self.getheader('content-transfer-encoding')
@@ -1976,9 +1956,11 @@ def serve(port, callback = None, completer = None):
     DocServer.handler = DocHandler
     DocHandler.MessageClass = Message
     try:
-        DocServer(port, callback).serve_until_quit()
-    except (KeyboardInterrupt, select.error):
-        pass
+        try:
+            DocServer(port, callback).serve_until_quit()
+        except (KeyboardInterrupt, select.error):
+            pass
+
     finally:
         if completer:
             completer()
@@ -1989,7 +1971,7 @@ def gui():
 
     class GUI:
 
-        def __init__(self, window, port = 7464):
+        def __init__(self, window, port=7464):
             self.window = window
             self.server = None
             self.scanner = None
@@ -2045,7 +2027,7 @@ def gui():
             self.open_btn.config(state='normal')
             self.quit_btn.config(state='normal')
 
-        def open(self, event = None, url = None):
+        def open(self, event=None, url=None):
             url = url or self.server.url
             try:
                 import webbrowser
@@ -2058,12 +2040,12 @@ def gui():
                     if rc:
                         os.system('netscape "%s" &' % url)
 
-        def quit(self, event = None):
+        def quit(self, event=None):
             if self.server:
                 self.server.quit = 1
             self.window.quit()
 
-        def search(self, event = None):
+        def search(self, event=None):
             key = self.search_ent.get()
             self.stop_btn.pack(side='right')
             self.stop_btn.config(state='normal')
@@ -2084,7 +2066,7 @@ def gui():
                 modname = modname[:-9] + ' (package)'
             self.result_lst.insert('end', modname + ' - ' + (desc or '(no description)'))
 
-        def stop(self, event = None):
+        def stop(self, event=None):
             if self.scanner:
                 self.scanner.quit = 1
                 self.scanner = None
@@ -2100,10 +2082,10 @@ def gui():
             self.stop_btn.config(state='disabled')
             return
 
-        def select(self, event = None):
+        def select(self, event=None):
             self.goto_btn.config(state='normal')
 
-        def goto(self, event = None):
+        def goto(self, event=None):
             selection = self.result_lst.curselection()
             if selection:
                 modname = split(self.result_lst.get(selection[0]))[0]
@@ -2131,7 +2113,7 @@ def gui():
             self.window.wm_minsize(self.minwidth, self.bigminheight)
             self.expanded = 1
 
-        def hide(self, event = None):
+        def hide(self, event=None):
             self.stop()
             self.collapse()
 

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/version.py
 """Provides classes to represent module version numbers (one class for
 each style of version numbering).  There are currently two such classes
@@ -27,7 +27,7 @@ class Version:
     seem to be the same for all version numbering classes.
     """
 
-    def __init__(self, vstring = None):
+    def __init__(self, vstring=None):
         if vstring:
             self.parse(vstring)
 
@@ -146,7 +146,7 @@ class LooseVersion(Version):
     """
     component_re = re.compile('(\\d+ | [a-z]+ | \\.)', re.VERBOSE)
 
-    def __init__(self, vstring = None):
+    def __init__(self, vstring=None):
         if vstring:
             self.parse(vstring)
 

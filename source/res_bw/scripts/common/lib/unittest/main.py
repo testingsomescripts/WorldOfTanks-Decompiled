@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/main.py
 """Unittest main program"""
 import sys
@@ -19,7 +20,7 @@ class TestProgram(object):
     USAGE = USAGE_FROM_MODULE
     failfast = catchbreak = buffer = progName = None
 
-    def __init__(self, module = '__main__', defaultTest = None, argv = None, testRunner = None, testLoader = loader.defaultTestLoader, exit = True, verbosity = 1, failfast = None, catchbreak = None, buffer = None):
+    def __init__(self, module='__main__', defaultTest=None, argv=None, testRunner=None, testLoader=loader.defaultTestLoader, exit=True, verbosity=1, failfast=None, catchbreak=None, buffer=None):
         if isinstance(module, basestring):
             self.module = __import__(module)
             for part in module.split('.')[1:]:
@@ -42,7 +43,7 @@ class TestProgram(object):
         self.runTests()
         return
 
-    def usageExit(self, msg = None):
+    def usageExit(self, msg=None):
         if msg:
             print msg
         usage = {'progName': self.progName,
@@ -110,7 +111,7 @@ class TestProgram(object):
             self.test = self.testLoader.loadTestsFromNames(self.testNames, self.module)
         return
 
-    def _do_discovery(self, argv, Loader = None):
+    def _do_discovery(self, argv, Loader=None):
         if Loader is None:
             Loader = lambda : self.testLoader
         self.progName = '%s discover' % self.progName

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix5/panelparser.py
 from warnings import warnpy3k
 warnpy3k('the panelparser module has been removed in Python 3.0', stacklevel=2)
@@ -12,9 +13,9 @@ def tokenize_string(s):
         c = s[:1]
         if c in whitespace:
             s = s[1:]
-        elif c == ';':
+        if c == ';':
             s = ''
-        elif c == '"':
+        if c == '"':
             n = len(s)
             i = 1
             while i < n:
@@ -27,19 +28,18 @@ def tokenize_string(s):
 
             tokens.append(s[:i])
             s = s[i:]
-        elif c in operators:
+        if c in operators:
             tokens.append(c)
             s = s[1:]
-        else:
-            n = len(s)
-            i = 1
-            while i < n:
-                if s[i] in separators:
-                    break
-                i = i + 1
+        n = len(s)
+        i = 1
+        while i < n:
+            if s[i] in separators:
+                break
+            i = i + 1
 
-            tokens.append(s[:i])
-            s = s[i:]
+        tokens.append(s[:i])
+        s = s[i:]
 
     return tokens
 
@@ -70,9 +70,8 @@ def parse_expr(tokens):
         if tokens[0] == '(':
             subexpr, tokens = parse_expr(tokens)
             expr.append(subexpr)
-        else:
-            expr.append(tokens[0])
-            tokens = tokens[1:]
+        expr.append(tokens[0])
+        tokens = tokens[1:]
 
 
 def parse_file(fp):

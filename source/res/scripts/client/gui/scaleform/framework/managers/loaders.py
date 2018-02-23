@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/loaders.py
 from collections import namedtuple
 import Event
@@ -15,13 +15,13 @@ NO_IMPL_ALIAS = 'noImpl'
 NO_IMPL_URL = 'development/noImpl.swf'
 
 class LoaderManager(LoaderManagerMeta):
-    eManager = Event.EventManager()
-    onViewLoadInit = Event.Event(eManager)
-    onViewLoaded = Event.Event(eManager)
-    onViewLoadError = Event.Event(eManager)
 
     def __init__(self, app):
         super(LoaderManager, self).__init__()
+        self.__eManager = Event.EventManager()
+        self.onViewLoadInit = Event.Event(self.__eManager)
+        self.onViewLoaded = Event.Event(self.__eManager)
+        self.onViewLoadError = Event.Event(self.__eManager)
         self.__app = app
         self.__nameToLoadingItem = {}
 
@@ -85,7 +85,7 @@ class LoaderManager(LoaderManagerMeta):
     def _dispose(self):
         self.__app = None
         self.__nameToLoadingItem.clear()
-        self.eManager.clear()
+        self.__eManager.clear()
         super(LoaderManager, self)._dispose()
         return
 

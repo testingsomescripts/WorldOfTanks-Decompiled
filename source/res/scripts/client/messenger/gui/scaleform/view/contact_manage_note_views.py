@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/contact_manage_note_views.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
@@ -15,7 +15,7 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
 
     def __init__(self):
         super(ContactManageNoteView, self).__init__()
-        self._dbID = 0L
+        self._dbID = 0
         self._note = ''
 
     @proto_getter(PROTO_TYPE.MIGRATION)

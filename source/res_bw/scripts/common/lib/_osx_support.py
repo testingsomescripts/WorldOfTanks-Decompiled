@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_osx_support.py
 """Shared OS X support functions."""
 import os
@@ -11,7 +12,7 @@ _UNIVERSAL_CONFIG_VARS = ('CFLAGS', 'LDFLAGS', 'CPPFLAGS', 'BASECFLAGS', 'BLDSHA
 _COMPILER_CONFIG_VARS = ('BLDSHARED', 'LDSHARED', 'CC', 'CXX')
 _INITPRE = '_OSX_SUPPORT_INITIAL_'
 
-def _find_executable(executable, path = None):
+def _find_executable(executable, path=None):
     """Tries to find 'executable' in the directories listed in 'path'.
     
     A string listing directories separated by 'os.pathsep'; defaults to
@@ -103,9 +104,7 @@ def _supports_universal_builds():
         except ValueError:
             osx_version = ''
 
-    if osx_version:
-        return bool(osx_version >= (10, 4))
-    return False
+    return bool(osx_version >= (10, 4)) if osx_version else False
 
 
 def _find_appropriate_compiler(_config_vars):

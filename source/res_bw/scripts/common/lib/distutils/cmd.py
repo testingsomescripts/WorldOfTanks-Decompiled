@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/cmd.py
 """distutils.cmd
 
@@ -89,7 +89,7 @@ class Command():
         """
         raise RuntimeError, 'abstract method -- subclass %s must override' % self.__class__
 
-    def dump_options(self, header = None, indent = ''):
+    def dump_options(self, header=None, indent=''):
         from distutils.fancy_getopt import longopt_xlate
         if header is None:
             header = "command options for '%s':" % self.get_command_name()
@@ -116,7 +116,7 @@ class Command():
         """
         raise RuntimeError, 'abstract method -- subclass %s must override' % self.__class__
 
-    def announce(self, msg, level = 1):
+    def announce(self, msg, level=1):
         """If the current verbosity level is of greater than or equal to
         'level' print 'msg' to stdout.
         """
@@ -131,7 +131,7 @@ class Command():
             print msg
             sys.stdout.flush()
 
-    def _ensure_stringlike(self, option, what, default = None):
+    def _ensure_stringlike(self, option, what, default=None):
         val = getattr(self, option)
         if val is None:
             setattr(self, option, default)
@@ -141,7 +141,7 @@ class Command():
                 raise DistutilsOptionError, "'%s' must be a %s (got `%s`)" % (option, what, val)
             return val
 
-    def ensure_string(self, option, default = None):
+    def ensure_string(self, option, default=None):
         """Ensure that 'option' is a string; if not defined, set it to
         'default'.
         """
@@ -173,7 +173,7 @@ class Command():
                     raise DistutilsOptionError, "'%s' must be a list of strings (got %r)" % (option, val)
             return
 
-    def _ensure_tested_string(self, option, tester, what, error_fmt, default = None):
+    def _ensure_tested_string(self, option, tester, what, error_fmt, default=None):
         val = self._ensure_stringlike(option, what, default)
         if val is not None and not tester(val):
             raise DistutilsOptionError, ("error in '%s' option: " + error_fmt) % (option, val)
@@ -214,7 +214,7 @@ class Command():
 
         return
 
-    def get_finalized_command(self, command, create = 1):
+    def get_finalized_command(self, command, create=1):
         """Wrapper around Distribution's 'get_command_obj()' method: find
         (create if necessary and 'create' is true) the command object for
         'command', call its 'ensure_finalized()' method, and return the
@@ -224,7 +224,7 @@ class Command():
         cmd_obj.ensure_finalized()
         return cmd_obj
 
-    def reinitialize_command(self, command, reinit_subcommands = 0):
+    def reinitialize_command(self, command, reinit_subcommands=0):
         return self.distribution.reinitialize_command(command, reinit_subcommands)
 
     def run_command(self, command):
@@ -251,37 +251,37 @@ class Command():
     def warn(self, msg):
         log.warn('warning: %s: %s\n' % (self.get_command_name(), msg))
 
-    def execute(self, func, args, msg = None, level = 1):
+    def execute(self, func, args, msg=None, level=1):
         util.execute(func, args, msg, dry_run=self.dry_run)
 
-    def mkpath(self, name, mode = 511):
+    def mkpath(self, name, mode=511):
         dir_util.mkpath(name, mode, dry_run=self.dry_run)
 
-    def copy_file(self, infile, outfile, preserve_mode = 1, preserve_times = 1, link = None, level = 1):
+    def copy_file(self, infile, outfile, preserve_mode=1, preserve_times=1, link=None, level=1):
         """Copy a file respecting verbose, dry-run and force flags.  (The
         former two default to whatever is in the Distribution object, and
         the latter defaults to false for commands that don't define it.)"""
         return file_util.copy_file(infile, outfile, preserve_mode, preserve_times, not self.force, link, dry_run=self.dry_run)
 
-    def copy_tree(self, infile, outfile, preserve_mode = 1, preserve_times = 1, preserve_symlinks = 0, level = 1):
+    def copy_tree(self, infile, outfile, preserve_mode=1, preserve_times=1, preserve_symlinks=0, level=1):
         """Copy an entire directory tree respecting verbose, dry-run,
         and force flags.
         """
         return dir_util.copy_tree(infile, outfile, preserve_mode, preserve_times, preserve_symlinks, not self.force, dry_run=self.dry_run)
 
-    def move_file(self, src, dst, level = 1):
+    def move_file(self, src, dst, level=1):
         """Move a file respecting dry-run flag."""
         return file_util.move_file(src, dst, dry_run=self.dry_run)
 
-    def spawn(self, cmd, search_path = 1, level = 1):
+    def spawn(self, cmd, search_path=1, level=1):
         """Spawn an external command respecting dry-run flag."""
         from distutils.spawn import spawn
         spawn(cmd, search_path, dry_run=self.dry_run)
 
-    def make_archive(self, base_name, format, root_dir = None, base_dir = None, owner = None, group = None):
+    def make_archive(self, base_name, format, root_dir=None, base_dir=None, owner=None, group=None):
         return archive_util.make_archive(base_name, format, root_dir, base_dir, dry_run=self.dry_run, owner=owner, group=group)
 
-    def make_file(self, infiles, outfile, func, args, exec_msg = None, skip_msg = None, level = 1):
+    def make_file(self, infiles, outfile, func, args, exec_msg=None, skip_msg=None, level=1):
         """Special case of 'execute()' for operations that process one or
         more input files and generate one output file.  Works just like
         'execute()', except the operation is skipped and a different

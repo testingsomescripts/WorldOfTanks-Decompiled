@@ -1,22 +1,22 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 from functools import partial
 import time
 import operator
 import types
+from collections import namedtuple, defaultdict
 import BigWorld
 import constants
+from gui.server_events.bonuses import getTutorialBonusObj
 from potapov_quests import PQ_BRANCH
+from debug_utils import LOG_ERROR
+from dossiers2.custom.records import RECORD_DB_IDS
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import GUI_SETTINGS
+from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.EventsCache import g_eventsCache
 from gui.shared.gui_items import Vehicle
-from helpers import i18n, int2roman, time_utils
-from collections import namedtuple
-from shared_utils import CONST_CONTAINER
-from dossiers2.custom.records import RECORD_DB_IDS
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui import makeHtmlString
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors import quests as quests_proc
@@ -25,8 +25,9 @@ from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from helpers import i18n, int2roman, time_utils
+from shared_utils import CONST_CONTAINER
 from quest_xml_source import MAX_BONUS_LIMIT
-from debug_utils import *
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 RENDER_BACKS = {1: RES_ICONS.MAPS_ICONS_QUESTS_EVENTBACKGROUNDS_QUESTS_BACK_EXP,
@@ -46,7 +47,7 @@ class _EventInfo(object):
     def __init__(self, event):
         self.event = event
 
-    def getInfo(self, svrEvents, pCur = None, pPrev = None, noProgressInfo = False):
+    def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
         if noProgressInfo:
             status, statusMsg = EVENT_STATUS.NONE, self._getStatus()[1]
             bonusCount = self.NO_BONUS_COUNT
@@ -181,28 +182,26 @@ class _EventInfo(object):
 
         return result
 
-    def _getStatus(self, pCur = None):
+    def _getStatus(self, pCur=None):
         return (EVENT_STATUS.NONE, '')
 
-    def _getBonusCount(self, pCur = None):
+    def _getBonusCount(self, pCur=None):
         return self.NO_BONUS_COUNT
 
-    def _getProgressValues(self, svrEvents = None, pCur = None, pPrev = None):
+    def _getProgressValues(self, svrEvents=None, pCur=None, pPrev=None):
         return (0,
          0,
          formatters.PROGRESS_BAR_TYPE.NONE,
          None)
 
-    def _getBonuses(self, svrEvents, bonuses = None, useIconFormat = False):
+    def _getBonuses(self, svrEvents, bonuses=None, useIconFormat=False):
         bonuses = bonuses or self.event.getBonuses()
         result = []
         for b in bonuses:
             if b.isShowInGUI():
                 result.append(b.format())
 
-        if len(result):
-            return formatters.todict([formatters.packTextBlock(', '.join(result))])
-        return []
+        return formatters.todict([formatters.packTextBlock(', '.join(result))]) if len(result) else []
 
     def _getRequirements(self, svrEvents):
         return []
@@ -280,7 +279,7 @@ class _QuestInfo(_EventInfo):
     PROGRESS_TOOLTIP_MAX_ITEMS = 4
     SIMPLE_BONUSES_MAX_ITEMS = 5
 
-    def _getBonuses(self, svrEvents, bonuses = None, useIconFormat = False):
+    def _getBonuses(self, svrEvents, bonuses=None, useIconFormat=False):
         bonuses = bonuses or self.event.getBonuses()
         result, simpleBonusesList, customizationsList, vehiclesList, iconBonusesList = ([],
          [],
@@ -320,18 +319,16 @@ class _QuestInfo(_EventInfo):
         for qID, q in self._getEventsByIDs(parents, svrEvents or {}).iteritems():
             result.append(formatters.packTextBlock(i18n.makeString('#quests:bonuses/item/task', q.getUserName()), questID=qID))
 
-        if len(result):
-            return formatters.todict(result)
-        return []
+        return formatters.todict(result) if len(result) else []
 
-    def _getBonusCount(self, pCur = None):
+    def _getBonusCount(self, pCur=None):
         if not self.event.isCompleted(progress=pCur):
             bonusLimit = self.event.bonusCond.getBonusLimit()
             if bonusLimit is None or bonusLimit > 1 or self.event.bonusCond.getGroupByValue() is not None:
                 return self.event.getBonusCount(progress=pCur)
         return self.NO_BONUS_COUNT
 
-    def _getStatus(self, pCur = None):
+    def _getStatus(self, pCur=None):
         if self.event.isCompleted(progress=pCur):
             if self.event.bonusCond.isDaily():
                 msg = i18n.makeString('#quests:details/status/completed/daily', time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
@@ -369,7 +366,7 @@ class _QuestInfo(_EventInfo):
                 msg = i18n.makeString(key, count=bonusLimit)
             return (EVENT_STATUS.NONE, msg)
 
-    def _getProgressValues(self, svrEvents = None, pCur = None, pPrev = None):
+    def _getProgressValues(self, svrEvents=None, pCur=None, pPrev=None):
         current, total, progressType, tooltip = (0,
          0,
          formatters.PROGRESS_BAR_TYPE.NONE,
@@ -453,6 +450,10 @@ class _QuestInfo(_EventInfo):
         return formatters.todict(result)
 
     def _getConditions(self, svrEvents):
+        result = self._packConditions(svrEvents)
+        return formatters.todict(result)
+
+    def _packConditions(self, svrEvents):
         subBlocks = []
         bonus = self.event.bonusCond
         battlesLeft, battlesCount, inrow = None, None, False
@@ -486,22 +487,18 @@ class _QuestInfo(_EventInfo):
             progressesFmt = bonus.formatGroupByProgresses(svrEvents, self.event)
             if len(progressesFmt):
                 result.append(formatters.packTopLevelContainer(i18n.makeString('#quests:details/conditions/groupBy/%s' % bonus.getGroupByValue()), subBlocks=progressesFmt, isResizable=len(progressesFmt) > 5))
-        return formatters.todict(result)
+        return result
 
     def _getActiveDateTimeString(self):
         timeLeft = self.event.getFinishTimeLeft()
-        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
-            return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft))
-        return super(_QuestInfo, self)._getActiveDateTimeString()
+        return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft)) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(_QuestInfo, self)._getActiveDateTimeString()
 
     def _getTimerMsg(self):
         timeLeft = self.event.getFinishTimeLeft()
-        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
-            return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)})
-        return super(_QuestInfo, self)._getTimerMsg()
+        return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)}) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(_QuestInfo, self)._getTimerMsg()
 
     @classmethod
-    def _joinUpToMax(cls, array, separator = ', '):
+    def _joinUpToMax(cls, array, separator=', '):
         if len(array) > cls.SIMPLE_BONUSES_MAX_ITEMS:
             label = separator.join(array[:cls.SIMPLE_BONUSES_MAX_ITEMS]) + '..'
             fullLabel = separator.join(array)
@@ -522,8 +519,7 @@ class _ActionInfo(_EventInfo):
 
     def _getConditionsDescription(self):
         descr = self.event.getDescription()
-        if descr:
-            return formatters.formatBright(descr)
+        return formatters.formatBright(descr) if descr else ''
 
     def _getConditions(self, svrEvents):
         modifiers = defaultdict(list)
@@ -554,22 +550,18 @@ class _ActionInfo(_EventInfo):
         timeLeft = self.event.getFinishTimeLeft()
         if timeLeft <= GUI_SETTINGS.actionComeToEnd:
             return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOEND)
-        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
-            return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft))
-        return super(_ActionInfo, self)._getActiveDateTimeString()
+        return formatters.formatYellow(QUESTS.DETAILS_HEADER_COMETOENDINMINUTES, minutes=getMinutesRoundByTime(timeLeft)) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(_ActionInfo, self)._getActiveDateTimeString()
 
     def _getTimerMsg(self):
         timeLeft = self.event.getFinishTimeLeft()
         if timeLeft <= GUI_SETTINGS.actionComeToEnd:
             return makeHtmlString('html_templates:lobby/quests', 'comeToEnd')
-        if timeLeft <= time_utils.THREE_QUARTER_HOUR:
-            return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)})
-        return super(_ActionInfo, self)._getTimerMsg()
+        return makeHtmlString('html_templates:lobby/quests', 'comeToEndInMinutes', {'minutes': getMinutesRoundByTime(timeLeft)}) if timeLeft <= time_utils.THREE_QUARTER_HOUR else super(_ActionInfo, self)._getTimerMsg()
 
 
 class _PotapovQuestInfo(_QuestInfo):
 
-    def _getBonuses(self, svrEvents, _ = None, useIconFormat = True):
+    def _getBonuses(self, svrEvents, _=None, useIconFormat=True):
         mainBonuses = self.event.getBonuses(isMain=True)
         addBonuses = self.event.getBonuses(isMain=False)
         return (_QuestInfo._getBonuses(self, None, bonuses=mainBonuses, useIconFormat=useIconFormat), _QuestInfo._getBonuses(self, None, bonuses=addBonuses, useIconFormat=False))
@@ -580,8 +572,7 @@ class _PotapovQuestInfo(_QuestInfo):
             return '%s\n%s' % (text_styles.middleTitle(i18n.makeString(titleKey)), text_styles.main(text))
 
         def _packStatus(completed):
-            if completed:
-                return 'done'
+            return 'done' if completed else 'notDone'
 
         return {'title': self.event.getUserName(),
          'questInfo': self.getInfo(svrEvents),
@@ -594,14 +585,57 @@ class _PotapovQuestInfo(_QuestInfo):
          'questType': self.event.getType()}
 
 
+class _MotiveQuestInfo(_QuestInfo):
+
+    def getDetails(self, svrEvents):
+        infoList = []
+        conditions = [formatters.todict(formatters.packQuestDetailsSeparator(0, 0, 5, 10))]
+        conditions.extend(self._getTopConditions(svrEvents))
+        conditions.append(formatters.todict(formatters.packQuestDetailsSeparator(0, 0, 10, 5)))
+        conditions.extend(self._getConditions(svrEvents))
+        conditionsContainer = formatters.todict(formatters.packMotiveContainer(title=i18n.makeString('#quests:quests/conditions'), subBlocks=conditions))
+        infoList.append(conditionsContainer)
+        requirementContainer = formatters.todict(formatters.packTopLevelContainer(title=i18n.makeString('#quests:quests/requirements'), subBlocks=[formatters.packTextBlock(formatters.formatGray(self.event.getRequirementsStr()))]))
+        infoList.append(requirementContainer)
+        infoList.append(formatters.todict(formatters.packQuestDetailsSeparator(0, 0, 5, 0)))
+        tpsContainer = formatters.todict(formatters.packTopLevelContainer(title=i18n.makeString('#quests:QuestTaskDetailsView/description'), subBlocks=[formatters.packTextBlock(formatters.formatGray(self.event.getTips()))]))
+        infoList.append(tpsContainer)
+        return {'image': RES_ICONS.MAPS_ICONS_HANGARTUTORIAL_GOALSQUEST,
+         'title': text_styles.highTitle(self.event.getUserName()),
+         'infoList': infoList,
+         'awards': self._getBonuses(svrEvents, useIconFormat=False)}
+
+    def _getTopConditions(self, svrEvents):
+        result = []
+        preBattleFmt = self.event.preBattleCond.format(svrEvents, self.event)
+        if preBattleFmt is not None:
+            result.extend(preBattleFmt)
+        return formatters.todict(result)
+
+    def _packConditions(self, svrEvents):
+        result = super(_MotiveQuestInfo, self)._packConditions(svrEvents)
+        descr = self.event.getDescription()
+        if descr:
+            result.append(formatters.packTextBlock(formatters.formatGray(descr)))
+        return result
+
+
+class _ClubsQuestInfo(_QuestInfo):
+
+    def _getBonuses(self, svrEvents, bonuses=None, useIconFormat=False):
+        return super(_QuestInfo, self)._getBonuses(svrEvents, bonuses, useIconFormat)
+
+
 def getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.POTAPOV_QUEST:
         return _PotapovQuestInfo(event)
+    if event.getType() == constants.EVENT_TYPE.CLUBS_QUEST:
+        return _ClubsQuestInfo(event)
+    if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
+        return _MotiveQuestInfo(event)
     if event.getType() in constants.EVENT_TYPE.QUEST_RANGE:
         return _QuestInfo(event)
-    if event.getType() == constants.EVENT_TYPE.ACTION:
-        return _ActionInfo(event)
-    return _EventInfo(event)
+    return _ActionInfo(event) if event.getType() == constants.EVENT_TYPE.ACTION else _EventInfo(event)
 
 
 def getMinutesRoundByTime(timeLeft):
@@ -609,15 +643,15 @@ def getMinutesRoundByTime(timeLeft):
     return (timeLeft / time_utils.QUARTER_HOUR + cmp(timeLeft % time_utils.QUARTER_HOUR, 0)) * time_utils.QUARTER
 
 
-def getEventInfo(event, svrEvents = None, noProgressInfo = False):
+def getEventInfo(event, svrEvents=None, noProgressInfo=False):
     return getEventInfoData(event).getInfo(svrEvents, noProgressInfo=noProgressInfo)
 
 
-def getEventDetails(event, svrEvents = None):
+def getEventDetails(event, svrEvents=None):
     return getEventInfoData(event).getDetails(svrEvents)
 
 
-def getEventPostBattleInfo(event, svrEvents = None, pCur = None, pPrev = None, isProgressReset = False, isCompleted = False):
+def getEventPostBattleInfo(event, svrEvents=None, pCur=None, pPrev=None, isProgressReset=False, isCompleted=False):
     return getEventInfoData(event).getPostBattleInfo(svrEvents, pCur or {}, pPrev or {}, isProgressReset, isCompleted)
 
 
@@ -633,6 +667,23 @@ def getTutorialEventsDescriptor():
     return getQuestsDescriptor()
 
 
+def getTutorialQuestsBoosters():
+    result = defaultdict(list)
+    descriptor = getTutorialEventsDescriptor()
+    completed = g_itemsCache.items.stats.tutorialsCompleted
+    if descriptor is not None:
+        for chapter in descriptor:
+            if not chapter.isBonusReceived(completed) and chapter.getChapterStatus(descriptor, completed) == EVENT_STATUS.NONE:
+                bonus = chapter.getBonus()
+                if bonus is not None:
+                    goodies = bonus.getValues().get('goodies', {})
+                    boosterBonus = getTutorialBonusObj('goodies', goodies)
+                    for booster, count in boosterBonus.getBoosters().iteritems():
+                        result[chapter].append((booster, count))
+
+    return result
+
+
 class _PotapovDependenciesResolver(object):
     _DEPENDENCIES_LIST = namedtuple('HandlersList', ['cache',
      'progress',
@@ -644,7 +695,7 @@ class _PotapovDependenciesResolver(object):
     _FALLOUT_DEPENDENCIES = _DEPENDENCIES_LIST(g_eventsCache.fallout, g_eventsCache.falloutQuestsProgress, quests_proc.FalloutQuestSelect, quests_proc.FalloutQuestRefuse, quests_proc.PotapovQuestsGetRegularReward, sorted)
 
     @classmethod
-    def chooseList(cls, questsType = None):
+    def chooseList(cls, questsType=None):
         if questsType is None:
             questsType = caches.getNavInfo().selectedPQType
         if questsType == QUESTS_ALIASES.SEASON_VIEW_TAB_RANDOM:
@@ -654,27 +705,27 @@ class _PotapovDependenciesResolver(object):
         return depList
 
 
-def getPotapovQuestsCache(questsType = None):
+def getPotapovQuestsCache(questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).cache
 
 
-def getPotapovQuestsProgress(questsType = None):
+def getPotapovQuestsProgress(questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).progress
 
 
-def getPotapovQuestsSelectProcessor(questsType = None):
+def getPotapovQuestsSelectProcessor(questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).selectProcessor
 
 
-def getPotapovQuestsRefuseProcessor(questsType = None):
+def getPotapovQuestsRefuseProcessor(questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).refuseProcessor
 
 
-def getPotapovQuestsRewardProcessor(questsType = None):
+def getPotapovQuestsRewardProcessor(questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).rewardsProcessor
 
 
-def sortWithQuestType(items, key, questsType = None):
+def sortWithQuestType(items, key, questsType=None):
     return _PotapovDependenciesResolver.chooseList(questsType).sorter(items, key=key)
 
 

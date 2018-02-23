@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ftplib.py
 """An FTP client class and some helper functions.
 
@@ -101,14 +101,14 @@ class FTP():
     welcome = None
     passiveserver = 1
 
-    def __init__(self, host = '', user = '', passwd = '', acct = '', timeout = _GLOBAL_DEFAULT_TIMEOUT):
+    def __init__(self, host='', user='', passwd='', acct='', timeout=_GLOBAL_DEFAULT_TIMEOUT):
         self.timeout = timeout
         if host:
             self.connect(host)
             if user:
                 self.login(user, passwd, acct)
 
-    def connect(self, host = '', port = 0, timeout = -999):
+    def connect(self, host='', port=0, timeout=-999):
         """Connect to host.  Arguments are:
          - host: hostname to connect to (string, default previous host)
          - port: port to connect to (integer, default previous port)
@@ -305,7 +305,7 @@ class FTP():
             host, port = parse229(self.sendcmd('EPSV'), self.sock.getpeername())
         return (host, port)
 
-    def ntransfercmd(self, cmd, rest = None):
+    def ntransfercmd(self, cmd, rest=None):
         """Initiate a transfer over the data connection.
         
         If the transfer is active, send a port command and the
@@ -356,11 +356,11 @@ class FTP():
             size = parse150(resp)
         return (conn, size)
 
-    def transfercmd(self, cmd, rest = None):
+    def transfercmd(self, cmd, rest=None):
         """Like ntransfercmd() but returns only the socket."""
         return self.ntransfercmd(cmd, rest)[0]
 
-    def login(self, user = '', passwd = '', acct = ''):
+    def login(self, user='', passwd='', acct=''):
         """Login, default anonymous."""
         if not user:
             user = 'anonymous'
@@ -379,7 +379,7 @@ class FTP():
             raise error_reply, resp
         return resp
 
-    def retrbinary(self, cmd, callback, blocksize = 8192, rest = None):
+    def retrbinary(self, cmd, callback, blocksize=8192, rest=None):
         """Retrieve data in binary mode.  A new port is created for you.
         
         Args:
@@ -404,7 +404,7 @@ class FTP():
         conn.close()
         return self.voidresp()
 
-    def retrlines(self, cmd, callback = None):
+    def retrlines(self, cmd, callback=None):
         """Retrieve data in line mode.  A new port is created for you.
         
         Args:
@@ -439,7 +439,7 @@ class FTP():
         conn.close()
         return self.voidresp()
 
-    def storbinary(self, cmd, fp, blocksize = 8192, callback = None, rest = None):
+    def storbinary(self, cmd, fp, blocksize=8192, callback=None, rest=None):
         """Store a file in binary mode.  A new port is created for you.
         
         Args:
@@ -467,7 +467,7 @@ class FTP():
         conn.close()
         return self.voidresp()
 
-    def storlines(self, cmd, fp, callback = None):
+    def storlines(self, cmd, fp, callback=None):
         """Store a file in line mode.  A new port is created for you.
         
         Args:
@@ -639,13 +639,13 @@ else:
         """
         ssl_version = ssl.PROTOCOL_TLSv1
 
-        def __init__(self, host = '', user = '', passwd = '', acct = '', keyfile = None, certfile = None, timeout = _GLOBAL_DEFAULT_TIMEOUT):
+        def __init__(self, host='', user='', passwd='', acct='', keyfile=None, certfile=None, timeout=_GLOBAL_DEFAULT_TIMEOUT):
             self.keyfile = keyfile
             self.certfile = certfile
             self._prot_p = False
             FTP.__init__(self, host, user, passwd, acct, timeout)
 
-        def login(self, user = '', passwd = '', acct = '', secure = True):
+        def login(self, user='', passwd='', acct='', secure=True):
             if secure and not isinstance(self.sock, ssl.SSLSocket):
                 self.auth()
             return FTP.login(self, user, passwd, acct)
@@ -675,13 +675,13 @@ else:
             self._prot_p = False
             return resp
 
-        def ntransfercmd(self, cmd, rest = None):
+        def ntransfercmd(self, cmd, rest=None):
             conn, size = FTP.ntransfercmd(self, cmd, rest)
             if self._prot_p:
                 conn = ssl.wrap_socket(conn, self.keyfile, self.certfile, ssl_version=self.ssl_version)
             return (conn, size)
 
-        def retrbinary(self, cmd, callback, blocksize = 8192, rest = None):
+        def retrbinary(self, cmd, callback, blocksize=8192, rest=None):
             self.voidcmd('TYPE I')
             conn = self.transfercmd(cmd, rest)
             try:
@@ -698,7 +698,7 @@ else:
 
             return self.voidresp()
 
-        def retrlines(self, cmd, callback = None):
+        def retrlines(self, cmd, callback=None):
             if callback is None:
                 callback = print_line
             resp = self.sendcmd('TYPE A')
@@ -727,7 +727,7 @@ else:
 
             return self.voidresp()
 
-        def storbinary(self, cmd, fp, blocksize = 8192, callback = None, rest = None):
+        def storbinary(self, cmd, fp, blocksize=8192, callback=None, rest=None):
             self.voidcmd('TYPE I')
             conn = self.transfercmd(cmd, rest)
             try:
@@ -746,7 +746,7 @@ else:
 
             return self.voidresp()
 
-        def storlines(self, cmd, fp, callback = None):
+        def storlines(self, cmd, fp, callback=None):
             self.voidcmd('TYPE A')
             conn = self.transfercmd(cmd)
             try:
@@ -875,7 +875,7 @@ def print_line(line):
     print line
 
 
-def ftpcp(source, sourcename, target, targetname = '', type = 'I'):
+def ftpcp(source, sourcename, target, targetname='', type='I'):
     """Copy file from one FTP-instance to another."""
     if not targetname:
         targetname = sourcename
@@ -906,7 +906,7 @@ class Netrc():
     __defpasswd = None
     __defacct = None
 
-    def __init__(self, filename = None):
+    def __init__(self, filename=None):
         if filename is None:
             if 'HOME' in os.environ:
                 filename = os.path.join(os.environ['HOME'], '.netrc')
@@ -1042,15 +1042,14 @@ def test():
     for file in sys.argv[2:]:
         if file[:2] == '-l':
             ftp.dir(file[2:])
-        elif file[:2] == '-d':
+        if file[:2] == '-d':
             cmd = 'CWD'
             if file[2:]:
                 cmd = cmd + ' ' + file[2:]
             resp = ftp.sendcmd(cmd)
-        elif file == '-p':
+        if file == '-p':
             ftp.set_pasv(not ftp.passiveserver)
-        else:
-            ftp.retrbinary('RETR ' + file, sys.stdout.write, 1024)
+        ftp.retrbinary('RETR ' + file, sys.stdout.write, 1024)
 
     ftp.quit()
     return

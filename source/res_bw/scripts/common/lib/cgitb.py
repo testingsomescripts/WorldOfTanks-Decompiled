@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cgitb.py
 """More comprehensive traceback formatting for Python scripts.
 
@@ -108,7 +108,7 @@ def scanvars(reader, frame, locals):
     return vars
 
 
-def html(einfo, context = 5):
+def html(einfo, context=5):
     """Return a nice HTML document describing a given traceback."""
     etype, evalue, etb = einfo
     if type(etype) is types.ClassType:
@@ -131,7 +131,7 @@ def html(einfo, context = 5):
             call = 'in ' + strong(func) + inspect.formatargvalues(args, varargs, varkw, locals, formatvalue=lambda value: '=' + pydoc.html.repr(value))
         highlight = {}
 
-        def reader(lnum = [lnum]):
+        def reader(lnum=[lnum]):
             highlight[lnum[0]] = 1
             try:
                 return linecache.getline(file, lnum[0])
@@ -165,8 +165,7 @@ def html(einfo, context = 5):
                 else:
                     name = where + strong(name.split('.')[-1])
                 dump.append('%s&nbsp;= %s' % (name, pydoc.html.repr(value)))
-            else:
-                dump.append(name + ' <em>undefined</em>')
+            dump.append(name + ' <em>undefined</em>')
 
         rows.append('<tr><td>%s</td></tr>' % small(grey(', '.join(dump))))
         frames.append('\n<table width="100%%" cellspacing=0 cellpadding=0 border=0>\n%s</table>' % '\n'.join(rows))
@@ -182,7 +181,7 @@ def html(einfo, context = 5):
     return head + ''.join(frames) + ''.join(exception) + "\n\n\n<!-- The above is a description of an error in a Python program, formatted\n     for a Web browser because the 'cgitb' module was enabled.  In case you\n     are not reading this in a Web browser, here is the original traceback:\n\n%s\n-->\n" % pydoc.html.escape(''.join(traceback.format_exception(etype, evalue, etb)))
 
 
-def text(einfo, context = 5):
+def text(einfo, context=5):
     """Return a plain text document describing a given traceback."""
     etype, evalue, etb = einfo
     if type(etype) is types.ClassType:
@@ -200,7 +199,7 @@ def text(einfo, context = 5):
             call = 'in ' + func + inspect.formatargvalues(args, varargs, varkw, locals, formatvalue=lambda value: '=' + pydoc.text.repr(value))
         highlight = {}
 
-        def reader(lnum = [lnum]):
+        def reader(lnum=[lnum]):
             highlight[lnum[0]] = 1
             try:
                 return linecache.getline(file, lnum[0])
@@ -227,8 +226,7 @@ def text(einfo, context = 5):
                 elif where != 'local':
                     name = where + name.split('.')[-1]
                 dump.append('%s = %s' % (name, pydoc.text.repr(value)))
-            else:
-                dump.append(name + ' undefined')
+            dump.append(name + ' undefined')
 
         rows.append('\n'.join(dump))
         frames.append('\n%s\n' % '\n'.join(rows))
@@ -245,7 +243,7 @@ def text(einfo, context = 5):
 class Hook:
     """A hook to replace sys.excepthook that shows tracebacks in HTML."""
 
-    def __init__(self, display = 1, logdir = None, context = 5, file = None, format = 'html'):
+    def __init__(self, display=1, logdir=None, context=5, file=None, format='html'):
         self.display = display
         self.logdir = logdir
         self.context = context
@@ -255,7 +253,7 @@ class Hook:
     def __call__(self, etype, evalue, etb):
         self.handle((etype, evalue, etb))
 
-    def handle(self, info = None):
+    def handle(self, info=None):
         info = info or sys.exc_info()
         if self.format == 'html':
             self.file.write(reset())
@@ -300,7 +298,7 @@ class Hook:
 
 handler = Hook().handle
 
-def enable(display = 1, logdir = None, context = 5, format = 'html'):
+def enable(display=1, logdir=None, context=5, format='html'):
     """Install an exception handler that formats tracebacks as HTML.
     
     The optional argument 'display' can be set to 0 to suppress sending the

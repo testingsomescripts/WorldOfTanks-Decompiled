@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/generator.py
 """Classes to generate plain text from a message object tree."""
 __all__ = ['Generator', 'DecodedGenerator']
@@ -30,7 +30,7 @@ class Generator():
     text.
     """
 
-    def __init__(self, outfp, mangle_from_ = True, maxheaderlen = 78):
+    def __init__(self, outfp, mangle_from_=True, maxheaderlen=78):
         """Create the generator for message flattening.
         
         outfp is the output file-like object for writing the message to.  It
@@ -54,7 +54,7 @@ class Generator():
     def write(self, s):
         self._fp.write(s)
 
-    def flatten(self, msg, unixfrom = False):
+    def flatten(self, msg, unixfrom=False):
         """Print the message object tree rooted at msg to the output file
         specified when the Generator instance was created.
         
@@ -110,12 +110,11 @@ class Generator():
             print >> self._fp, '%s:' % h,
             if self._maxheaderlen == 0:
                 print >> self._fp, v
-            elif isinstance(v, Header):
+            if isinstance(v, Header):
                 print >> self._fp, v.encode()
-            elif _is8bitstring(v):
+            if _is8bitstring(v):
                 print >> self._fp, v
-            else:
-                print >> self._fp, Header(v, maxlinelen=self._maxheaderlen, header_name=h).encode()
+            print >> self._fp, Header(v, maxlinelen=self._maxheaderlen, header_name=h).encode()
 
         print >> self._fp
 
@@ -195,8 +194,7 @@ class Generator():
             lines = text.split('\n')
             if lines and lines[-1] == '':
                 blocks.append(NL.join(lines[:-1]))
-            else:
-                blocks.append(text)
+            blocks.append(text)
 
         self._fp.write(NL.join(blocks))
 
@@ -219,7 +217,7 @@ class DecodedGenerator(Generator):
     with a format string representing the part.
     """
 
-    def __init__(self, outfp, mangle_from_ = True, maxheaderlen = 78, fmt = None):
+    def __init__(self, outfp, mangle_from_=True, maxheaderlen=78, fmt=None):
         """Like Generator.__init__() except that an additional optional
         argument is allowed.
         
@@ -253,21 +251,20 @@ class DecodedGenerator(Generator):
             maintype = part.get_content_maintype()
             if maintype == 'text':
                 print >> self, part.get_payload(decode=True)
-            elif maintype == 'multipart':
+            if maintype == 'multipart':
                 pass
-            else:
-                print >> self, self._fmt % {'type': part.get_content_type(),
-                 'maintype': part.get_content_maintype(),
-                 'subtype': part.get_content_subtype(),
-                 'filename': part.get_filename('[no filename]'),
-                 'description': part.get('Content-Description', '[no description]'),
-                 'encoding': part.get('Content-Transfer-Encoding', '[no encoding]')}
+            print >> self, self._fmt % {'type': part.get_content_type(),
+             'maintype': part.get_content_maintype(),
+             'subtype': part.get_content_subtype(),
+             'filename': part.get_filename('[no filename]'),
+             'description': part.get('Content-Description', '[no description]'),
+             'encoding': part.get('Content-Transfer-Encoding', '[no encoding]')}
 
 
 _width = len(repr(sys.maxint - 1))
 _fmt = '%%0%dd' % _width
 
-def _make_boundary(text = None):
+def _make_boundary(text=None):
     token = random.randrange(sys.maxint)
     boundary = '===============' + _fmt % token + '=='
     if text is None:

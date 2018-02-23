@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_wininst.py
 """distutils.command.bdist_wininst
 
@@ -163,7 +163,7 @@ class bdist_wininst(Command):
         lines.append('build_info=%s' % build_info)
         return string.join(lines, '\n')
 
-    def create_exe(self, arcname, fullname, bitmap = None):
+    def create_exe(self, arcname, fullname, bitmap=None):
         import struct
         self.mkpath(self.dist_dir)
         cfgdata = self.get_inidata()

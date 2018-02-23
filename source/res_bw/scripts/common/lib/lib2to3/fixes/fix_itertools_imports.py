@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_itertools_imports.py
 """ Fixer for imports of itertools.(imap|ifilter|izip|ifilterfalse) """
 from lib2to3 import fixer_base
@@ -27,7 +27,7 @@ class FixItertoolsImports(fixer_base.BaseFix):
             if member_name in (u'imap', u'izip', u'ifilter'):
                 child.value = None
                 child.remove()
-            elif member_name in (u'ifilterfalse', u'izip_longest'):
+            if member_name in (u'ifilterfalse', u'izip_longest'):
                 node.changed()
                 name_node.value = u'filterfalse' if member_name[1] == u'f' else u'zip_longest'
 
@@ -36,8 +36,7 @@ class FixItertoolsImports(fixer_base.BaseFix):
         for child in children:
             if remove_comma and child.type == token.COMMA:
                 child.remove()
-            else:
-                remove_comma ^= True
+            remove_comma ^= True
 
         while children and children[-1].type == token.COMMA:
             children.pop().remove()

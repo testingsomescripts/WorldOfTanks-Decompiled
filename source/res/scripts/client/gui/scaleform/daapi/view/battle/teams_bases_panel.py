@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/teams_bases_panel.py
 from debug_utils import LOG_DEBUG
 from gui.battle_control import arena_info
@@ -42,7 +42,7 @@ _SETTINGS_TO_TEAM = {0: _TeamBaseSettingItem(2, 'red', i18n.makeString('#ingame_
 _SETTINGS_TO_CONTROL_POINT = {0: _TeamBaseSettingItem(4, 'red', i18n.makeString('#ingame_gui:player_messages/base_captured_by_notification'), i18n.makeString('#ingame_gui:player_messages/base_captured_by_notification')),
  3: _TeamBaseSettingItem(3, 'green', i18n.makeString('#ingame_gui:player_messages/base_captured_by_notification'), i18n.makeString('#ingame_gui:player_messages/base_captured_by_notification'))}
 
-def getSettingItem(clientID, ownTeam, avatar = None):
+def getSettingItem(clientID, ownTeam, avatar=None):
     arenaTypeID = arena_info.getArenaTypeID(avatar)
     baseTeam, baseID = arena_info.parseClientTeamBaseID(clientID)
     item = None

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/videoreader.py
 from warnings import warnpy3k
 warnpy3k('In 3.x, the videoreader module is removed.', stacklevel=2)
@@ -146,14 +147,10 @@ class _Reader:
         return self.videotrack is not None
 
     def GetAudioDuration(self):
-        if not self.audiotrack:
-            return 0
-        return self._gettrackduration_ms(self.audiotrack)
+        return 0 if not self.audiotrack else self._gettrackduration_ms(self.audiotrack)
 
     def GetVideoDuration(self):
-        if not self.videotrack:
-            return 0
-        return self._gettrackduration_ms(self.videotrack)
+        return 0 if not self.videotrack else self._gettrackduration_ms(self.videotrack)
 
     def GetAudioFormat(self):
         if not self.audiodescr:
@@ -186,10 +183,7 @@ class _Reader:
              bps)
 
     def GetAudioFrameRate(self):
-        if not self.audiodescr:
-            return None
-        else:
-            return int(self.audiodescr['sampleRate'])
+        return None if not self.audiodescr else int(self.audiodescr['sampleRate'])
 
     def GetVideoFormat(self):
         width = self.videodescr['width']
@@ -205,7 +199,7 @@ class _Reader:
         dur = self._videotime_to_ms(dur)
         return int(1000.0 / dur + 0.5)
 
-    def ReadAudio(self, nframes, time = None):
+    def ReadAudio(self, nframes, time=None):
         if time is not None:
             self.audiocurtime = time
         flags = QuickTime.nextTimeStep | QuickTime.nextTimeEdgeOK
@@ -221,7 +215,7 @@ class _Reader:
             self.audiocurtime = actualtime + actualcount * sampleduration
             return (self._audiotime_to_ms(actualtime), h.data)
 
-    def ReadVideo(self, time = None):
+    def ReadVideo(self, time=None):
         if time is not None:
             self.videocurtime = time
         flags = QuickTime.nextTimeStep

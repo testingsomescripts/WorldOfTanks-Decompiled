@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/message.py
 """Basic message object for the email package object model."""
 __all__ = ['Message']
@@ -15,13 +15,10 @@ tspecials = re.compile('[ \\(\\)<>@,;:\\\\"/\\[\\]\\?=]')
 
 def _splitparam(param):
     a, sep, b = param.partition(';')
-    if not sep:
-        return (a.strip(), None)
-    else:
-        return (a.strip(), b.strip())
+    return (a.strip(), None) if not sep else (a.strip(), b.strip())
 
 
-def _formatparam(param, value = None, quote = True):
+def _formatparam(param, value=None, quote=True):
     """Convenience function to format and return a key=value pair.
     
     This will quote the value if needed or if quote is true.  If value is a
@@ -100,7 +97,7 @@ class Message:
         """
         return self.as_string(unixfrom=True)
 
-    def as_string(self, unixfrom = False):
+    def as_string(self, unixfrom=False):
         """Return the entire formatted message as a string.
         Optional `unixfrom' when True, means include the Unix From_ envelope
         header.
@@ -139,7 +136,7 @@ class Message:
             self._payload.append(payload)
         return
 
-    def get_payload(self, i = None, decode = False):
+    def get_payload(self, i=None, decode=False):
         """Return a reference to the payload.
         
         The payload will either be a list object or a string.  If you mutate
@@ -187,7 +184,7 @@ class Message:
 
         return payload
 
-    def set_payload(self, payload, charset = None):
+    def set_payload(self, payload, charset=None):
         """Set the payload to the given value.
         
         Optional charset sets the message's default character set.  See
@@ -322,7 +319,7 @@ class Message:
         """
         return self._headers[:]
 
-    def get(self, name, failobj = None):
+    def get(self, name, failobj=None):
         """Get a header value.
         
         Like __getitem__() but return failobj instead of None when the field
@@ -335,7 +332,7 @@ class Message:
 
         return failobj
 
-    def get_all(self, name, failobj = None):
+    def get_all(self, name, failobj=None):
         """Return a list of all the values for the named field.
         
         These will be sorted in the order they appeared in the original
@@ -350,9 +347,7 @@ class Message:
             if k.lower() == name:
                 values.append(v)
 
-        if not values:
-            return failobj
-        return values
+        return failobj if not values else values
 
     def add_header(self, _name, _value, **_params):
         """Extended header setting.
@@ -373,8 +368,7 @@ class Message:
         for k, v in _params.items():
             if v is None:
                 parts.append(k.replace('_', '-'))
-            else:
-                parts.append(_formatparam(k.replace('_', '-'), v))
+            parts.append(_formatparam(k.replace('_', '-'), v))
 
         if _value is not None:
             parts.insert(0, _value)
@@ -414,9 +408,7 @@ class Message:
         if value is missing:
             return self.get_default_type()
         ctype = _splitparam(value)[0].lower()
-        if ctype.count('/') != 1:
-            return 'text/plain'
-        return ctype
+        return 'text/plain' if ctype.count('/') != 1 else ctype
 
     def get_content_maintype(self):
         """Return the message's main content type.
@@ -474,7 +466,7 @@ class Message:
         params = utils.decode_params(params)
         return params
 
-    def get_params(self, failobj = None, header = 'content-type', unquote = True):
+    def get_params(self, failobj=None, header='content-type', unquote=True):
         """Return the message's Content-Type parameters, as a list.
         
         The elements of the returned list are 2-tuples of key/value pairs, as
@@ -496,7 +488,7 @@ class Message:
         else:
             return params
 
-    def get_param(self, param, failobj = None, header = 'content-type', unquote = True):
+    def get_param(self, param, failobj=None, header='content-type', unquote=True):
         """Return the parameter value if found in the Content-Type header.
         
         Optional failobj is the object to return if there is no Content-Type
@@ -532,7 +524,7 @@ class Message:
 
         return failobj
 
-    def set_param(self, param, value, header = 'Content-Type', requote = True, charset = None, language = ''):
+    def set_param(self, param, value, header='Content-Type', requote=True, charset=None, language=''):
         """Set a parameter in the Content-Type header.
         
         If the parameter already exists in the header, its value will be
@@ -570,14 +562,13 @@ class Message:
                     append_param = _formatparam(old_param, old_value, requote)
                 if not ctype:
                     ctype = append_param
-                else:
-                    ctype = SEMISPACE.join([ctype, append_param])
+                ctype = SEMISPACE.join([ctype, append_param])
 
         if ctype != self.get(header):
             del self[header]
             self[header] = ctype
 
-    def del_param(self, param, header = 'content-type', requote = True):
+    def del_param(self, param, header='content-type', requote=True):
         """Remove the given parameter completely from the Content-Type header.
         
         The header will be re-written in place without the parameter or its
@@ -599,7 +590,7 @@ class Message:
             del self[header]
             self[header] = new_ctype
 
-    def set_type(self, type, header = 'Content-Type', requote = True):
+    def set_type(self, type, header='Content-Type', requote=True):
         """Set the main type and subtype for the Content-Type header.
         
         type must be a string in the form "maintype/subtype", otherwise a
@@ -628,7 +619,7 @@ class Message:
         for p, v in params[1:]:
             self.set_param(p, v, header, requote)
 
-    def get_filename(self, failobj = None):
+    def get_filename(self, failobj=None):
         """Return the filename associated with the payload if present.
         
         The filename is extracted from the Content-Disposition header's
@@ -640,11 +631,9 @@ class Message:
         filename = self.get_param('filename', missing, 'content-disposition')
         if filename is missing:
             filename = self.get_param('name', missing, 'content-type')
-        if filename is missing:
-            return failobj
-        return utils.collapse_rfc2231_value(filename).strip()
+        return failobj if filename is missing else utils.collapse_rfc2231_value(filename).strip()
 
-    def get_boundary(self, failobj = None):
+    def get_boundary(self, failobj=None):
         """Return the boundary associated with the payload if present.
         
         The boundary is extracted from the Content-Type header's `boundary'
@@ -652,9 +641,7 @@ class Message:
         """
         missing = object()
         boundary = self.get_param('boundary', missing)
-        if boundary is missing:
-            return failobj
-        return utils.collapse_rfc2231_value(boundary).rstrip()
+        return failobj if boundary is missing else utils.collapse_rfc2231_value(boundary).rstrip()
 
     def set_boundary(self, boundary):
         """Set the boundary parameter in Content-Type to 'boundary'.
@@ -676,8 +663,7 @@ class Message:
             if pk.lower() == 'boundary':
                 newparams.append(('boundary', '"%s"' % boundary))
                 foundp = True
-            else:
-                newparams.append((pk, pv))
+            newparams.append((pk, pv))
 
         if not foundp:
             newparams.append(('boundary', '"%s"' % boundary))
@@ -688,16 +674,14 @@ class Message:
                 for k, v in newparams:
                     if v == '':
                         parts.append(k)
-                    else:
-                        parts.append('%s=%s' % (k, v))
+                    parts.append('%s=%s' % (k, v))
 
                 newheaders.append((h, SEMISPACE.join(parts)))
-            else:
-                newheaders.append((h, v))
+            newheaders.append((h, v))
 
         self._headers = newheaders
 
-    def get_content_charset(self, failobj = None):
+    def get_content_charset(self, failobj=None):
         """Return the charset parameter of the Content-Type header.
         
         The returned string is always coerced to lower case.  If there is no
@@ -724,7 +708,7 @@ class Message:
 
         return charset.lower()
 
-    def get_charsets(self, failobj = None):
+    def get_charsets(self, failobj=None):
         """Return a list containing the charset(s) used in this message.
         
         The returned list of items describes the Content-Type headers'

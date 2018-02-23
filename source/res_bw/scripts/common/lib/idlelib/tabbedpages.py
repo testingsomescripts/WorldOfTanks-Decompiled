@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/tabbedpages.py
 """An implementation of tabbed pages using only standard Tkinter.
 
@@ -26,7 +26,7 @@ class TabSet(Frame):
     
     """
 
-    def __init__(self, page_set, select_command, tabs = None, n_rows = 1, max_tabs_per_row = 5, expand_tabs = False, **kw):
+    def __init__(self, page_set, select_command, tabs=None, n_rows=1, max_tabs_per_row=5, expand_tabs=False, **kw):
         """Constructor arguments:
         
         select_command -- A callable which will be called when a tab is
@@ -214,7 +214,7 @@ class TabSet(Frame):
             self.mskr = Frame(page_set, borderwidth=0, relief=FLAT, background=background)
             self.mskr.mr = Frame(self.mskr, borderwidth=self.bw, relief=RAISED)
 
-        def _place_masks(self, selected = False):
+        def _place_masks(self, selected=False):
             height = self.bw
             if selected:
                 height += self.bw
@@ -297,7 +297,7 @@ class TabbedPageSet(Frame):
         def _hide(self):
             self.frame.pack_forget()
 
-    def __init__(self, parent, page_names = None, page_class = PageLift, n_rows = 1, max_tabs_per_row = 5, expand_tabs = False, **kw):
+    def __init__(self, parent, page_names=None, page_class=PageLift, n_rows=1, max_tabs_per_row=5, expand_tabs=False, **kw):
         """Constructor arguments:
         
         page_names -- A list of strings, each will be the dictionary key to a

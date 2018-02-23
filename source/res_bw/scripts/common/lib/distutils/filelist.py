@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/filelist.py
 """distutils.filelist
 
@@ -27,7 +27,7 @@ class FileList:
         filtering applied)
     """
 
-    def __init__(self, warn = None, debug_print = None):
+    def __init__(self, warn=None, debug_print=None):
         self.allfiles = None
         self.files = []
         return
@@ -35,7 +35,7 @@ class FileList:
     def set_allfiles(self, allfiles):
         self.allfiles = allfiles
 
-    def findall(self, dir = os.curdir):
+    def findall(self, dir=os.curdir):
         self.allfiles = findall(dir)
 
     def debug_print(self, msg):
@@ -138,7 +138,7 @@ class FileList:
             raise DistutilsInternalError, "this cannot happen: invalid action '%s'" % action
         return
 
-    def include_pattern(self, pattern, anchor = 1, prefix = None, is_regex = 0):
+    def include_pattern(self, pattern, anchor=1, prefix=None, is_regex=0):
         """Select strings (presumably filenames) from 'self.files' that
         match 'pattern', a Unix-style wildcard (glob) pattern.
         
@@ -177,7 +177,7 @@ class FileList:
 
         return files_found
 
-    def exclude_pattern(self, pattern, anchor = 1, prefix = None, is_regex = 0):
+    def exclude_pattern(self, pattern, anchor=1, prefix=None, is_regex=0):
         """Remove strings (presumably filenames) from 'files' that match
         'pattern'.
         
@@ -197,7 +197,7 @@ class FileList:
         return files_found
 
 
-def findall(dir = os.curdir):
+def findall(dir=os.curdir):
     """Find all files under 'dir' and return the list of full filenames
     (relative to 'dir').
     """
@@ -218,7 +218,7 @@ def findall(dir = os.curdir):
             mode = stat[ST_MODE]
             if S_ISREG(mode):
                 list.append(fullname)
-            elif S_ISDIR(mode) and not S_ISLNK(mode):
+            if S_ISDIR(mode) and not S_ISLNK(mode):
                 push(fullname)
 
     return list
@@ -240,7 +240,7 @@ def glob_to_re(pattern):
     return pattern_re
 
 
-def translate_pattern(pattern, anchor = 1, prefix = None, is_regex = 0):
+def translate_pattern(pattern, anchor=1, prefix=None, is_regex=0):
     """Translate a shell-like wildcard pattern to a compiled regular
     expression.
     

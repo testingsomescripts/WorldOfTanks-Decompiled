@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/util.py
 import sys, os
 if os.name == 'nt':
@@ -13,16 +13,14 @@ if os.name == 'nt':
         i = sys.version.find(prefix)
         if i == -1:
             return 6
-        i = i + len(prefix)
-        s, rest = sys.version[i:].split(' ', 1)
-        majorVersion = int(s[:-2]) - 6
-        minorVersion = int(s[2:3]) / 10.0
-        if majorVersion == 6:
-            minorVersion = 0
-        if majorVersion >= 6:
-            return majorVersion + minorVersion
         else:
-            return None
+            i = i + len(prefix)
+            s, rest = sys.version[i:].split(' ', 1)
+            majorVersion = int(s[:-2]) - 6
+            minorVersion = int(s[2:3]) / 10.0
+            if majorVersion == 6:
+                minorVersion = 0
+            return majorVersion + minorVersion if majorVersion >= 6 else None
 
 
     def find_msvcrt():
@@ -103,10 +101,7 @@ elif os.name == 'posix':
         if rv == 10:
             raise OSError, 'gcc or cc command not found'
         res = re.search(expr, trace)
-        if not res:
-            return
-        else:
-            return res.group(0)
+        return None if not res else res.group(0)
 
 
     if sys.platform == 'sunos5':
@@ -114,18 +109,16 @@ elif os.name == 'posix':
         def _get_soname(f):
             if not f:
                 return
-            cmd = '/usr/ccs/bin/dump -Lpv 2>/dev/null ' + f
-            f = os.popen(cmd)
-            try:
-                data = f.read()
-            finally:
-                f.close()
-
-            res = re.search('\\[.*\\]\\sSONAME\\s+([^\\s]+)', data)
-            if not res:
-                return
             else:
-                return res.group(1)
+                cmd = '/usr/ccs/bin/dump -Lpv 2>/dev/null ' + f
+                f = os.popen(cmd)
+                try:
+                    data = f.read()
+                finally:
+                    f.close()
+
+                res = re.search('\\[.*\\]\\sSONAME\\s+([^\\s]+)', data)
+                return None if not res else res.group(1)
 
 
     else:
@@ -133,23 +126,21 @@ elif os.name == 'posix':
         def _get_soname(f):
             if not f:
                 return
-            cmd = 'if ! type objdump >/dev/null 2>&1; then exit 10; fi;objdump -p -j .dynamic 2>/dev/null ' + f
-            f = os.popen(cmd)
-            dump = f.read()
-            rv = f.close()
-            if rv == 10:
-                raise OSError, 'objdump command not found'
-            f = os.popen(cmd)
-            try:
-                data = f.read()
-            finally:
-                f.close()
-
-            res = re.search('\\sSONAME\\s+([^\\s]+)', data)
-            if not res:
-                return
             else:
-                return res.group(1)
+                cmd = 'if ! type objdump >/dev/null 2>&1; then exit 10; fi;objdump -p -j .dynamic 2>/dev/null ' + f
+                f = os.popen(cmd)
+                dump = f.read()
+                rv = f.close()
+                if rv == 10:
+                    raise OSError, 'objdump command not found'
+                f = os.popen(cmd)
+                try:
+                    data = f.read()
+                finally:
+                    f.close()
+
+                res = re.search('\\sSONAME\\s+([^\\s]+)', data)
+                return None if not res else res.group(1)
 
 
     if sys.platform.startswith('freebsd') or sys.platform.startswith('openbsd') or sys.platform.startswith('dragonfly'):
@@ -208,7 +199,7 @@ elif os.name == 'posix':
                 return None
 
 
-        def find_library(name, is64 = False):
+        def find_library(name, is64=False):
             return _get_soname(_findLib_crle(name, is64) or _findLib_gcc(name))
 
 
@@ -234,10 +225,7 @@ elif os.name == 'posix':
                 f.close()
 
             res = re.search(expr, data)
-            if not res:
-                return
-            else:
-                return res.group(1)
+            return None if not res else res.group(1)
 
 
         def find_library(name):

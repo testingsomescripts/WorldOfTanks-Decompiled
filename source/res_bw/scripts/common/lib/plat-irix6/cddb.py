@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix6/cddb.py
 from warnings import warnpy3k
 warnpy3k('the cddb module has been removed in Python 3.0', stacklevel=2)
@@ -96,7 +97,7 @@ class Cddb:
                             print "toc's don't match"
                     elif name2 == 'notes':
                         self.notes.append(value)
-                elif name1[:5] == 'track':
+                if name1[:5] == 'track':
                     try:
                         trackno = int(name1[5:])
                     except ValueError:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dbhash.py
 """Provide a (g)dbm-compatible interface to bsddb.hashopen."""
 import sys
@@ -13,5 +13,5 @@ except ImportError:
 __all__ = ['error', 'open']
 error = bsddb.error
 
-def open(file, flag = 'r', mode = 438):
+def open(file, flag='r', mode=438):
     return bsddb.hashopen(file, flag, mode)

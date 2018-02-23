@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hotshot/__init__.py
 """High-perfomance logging profiler, mostly written in C."""
 import _hotshot
@@ -8,7 +8,7 @@ _warnpy3k("The 'hotshot' module is not supported in 3.x, use the 'profile' modul
 
 class Profile:
 
-    def __init__(self, logfn, lineevents = 0, linetimings = 1):
+    def __init__(self, logfn, lineevents=0, linetimings=1):
         self.lineevents = lineevents and 1 or 0
         self.linetimings = linetimings and lineevents and 1 or 0
         self._prof = p = _hotshot.profiler(logfn, self.lineevents, self.linetimings)

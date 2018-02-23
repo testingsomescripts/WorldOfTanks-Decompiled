@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/util.py
 """Miscellaneous WSGI-related Utilities"""
 import posixpath
@@ -11,7 +12,7 @@ __all__ = ['FileWrapper',
 class FileWrapper:
     """Wrapper to convert file-like objects to iterables"""
 
-    def __init__(self, filelike, blksize = 8192):
+    def __init__(self, filelike, blksize=8192):
         self.filelike = filelike
         self.blksize = blksize
         if hasattr(filelike, 'close'):
@@ -59,7 +60,7 @@ def application_uri(environ):
     return url
 
 
-def request_uri(environ, include_query = 1):
+def request_uri(environ, include_query=1):
     """Return the full request URI, optionally including the query string"""
     url = application_uri(environ)
     from urllib import quote

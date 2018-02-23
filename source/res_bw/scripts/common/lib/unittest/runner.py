@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/runner.py
 """Running tests"""
 import sys
@@ -17,7 +18,7 @@ class _WritelnDecorator(object):
             raise AttributeError(attr)
         return getattr(self.stream, attr)
 
-    def writeln(self, arg = None):
+    def writeln(self, arg=None):
         if arg:
             self.write(arg)
         self.write('\n')
@@ -122,7 +123,7 @@ class TextTestRunner(object):
     """
     resultclass = TextTestResult
 
-    def __init__(self, stream = sys.stderr, descriptions = True, verbosity = 1, failfast = False, buffer = False, resultclass = None):
+    def __init__(self, stream=sys.stderr, descriptions=True, verbosity=1, failfast=False, buffer=False, resultclass=None):
         self.stream = _WritelnDecorator(stream)
         self.descriptions = descriptions
         self.verbosity = verbosity

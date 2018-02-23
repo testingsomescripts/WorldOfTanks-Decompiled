@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sets.py
 """Classes to represent arbitrary sets (including sets of sets).
 
@@ -67,7 +68,7 @@ class BaseSet(object):
 
     __str__ = __repr__
 
-    def _repr(self, sorted = False):
+    def _repr(self, sorted=False):
         elements = self._data.keys()
         if sorted:
             elements.sort()
@@ -120,9 +121,7 @@ class BaseSet(object):
         
         (I.e. all elements that are in either set.)
         """
-        if not isinstance(other, BaseSet):
-            return NotImplemented
-        return self.union(other)
+        return NotImplemented if not isinstance(other, BaseSet) else self.union(other)
 
     def union(self, other):
         """Return the union of two sets as a new set.
@@ -138,9 +137,7 @@ class BaseSet(object):
         
         (I.e. all elements that are in both sets.)
         """
-        if not isinstance(other, BaseSet):
-            return NotImplemented
-        return self.intersection(other)
+        return NotImplemented if not isinstance(other, BaseSet) else self.intersection(other)
 
     def intersection(self, other):
         """Return the intersection of two sets as a new set.
@@ -161,9 +158,7 @@ class BaseSet(object):
         
         (I.e. all elements that are in exactly one of the sets.)
         """
-        if not isinstance(other, BaseSet):
-            return NotImplemented
-        return self.symmetric_difference(other)
+        return NotImplemented if not isinstance(other, BaseSet) else self.symmetric_difference(other)
 
     def symmetric_difference(self, other):
         """Return the symmetric difference of two sets as a new set.
@@ -192,9 +187,7 @@ class BaseSet(object):
         
         (I.e. all elements that are in this set and not in the other.)
         """
-        if not isinstance(other, BaseSet):
-            return NotImplemented
-        return self.difference(other)
+        return NotImplemented if not isinstance(other, BaseSet) else self.difference(other)
 
     def difference(self, other):
         """Return the difference of two sets as a new Set.
@@ -311,7 +304,7 @@ class ImmutableSet(BaseSet):
     """Immutable set class."""
     __slots__ = ['_hashcode']
 
-    def __init__(self, iterable = None):
+    def __init__(self, iterable=None):
         """Construct an immutable set from an optional iterable."""
         self._hashcode = None
         self._data = {}
@@ -335,7 +328,7 @@ class Set(BaseSet):
     """ Mutable set class."""
     __slots__ = []
 
-    def __init__(self, iterable = None):
+    def __init__(self, iterable=None):
         """Construct a set from an optional iterable."""
         self._data = {}
         if iterable is not None:
@@ -346,7 +339,7 @@ class Set(BaseSet):
         return (self._data,)
 
     def __setstate__(self, data):
-        self._data, = data
+        self._data = data
 
     def __ior__(self, other):
         """Update a set with the union of itself and another."""
@@ -388,8 +381,7 @@ class Set(BaseSet):
         for elt in other:
             if elt in data:
                 del data[elt]
-            else:
-                data[elt] = value
+            data[elt] = value
 
     def __isub__(self, other):
         """Remove all elements of another set from this set."""

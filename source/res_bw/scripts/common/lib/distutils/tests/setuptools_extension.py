@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/setuptools_extension.py
 from distutils.core import Extension as _Extension
 from distutils.core import Distribution as _Distribution
@@ -36,8 +36,7 @@ class Extension(_Extension):
             for s in self.sources:
                 if s.endswith('.pyx'):
                     sources.append(s[:-3] + 'c')
-                else:
-                    sources.append(s)
+                sources.append(s)
 
             self.sources = sources
 

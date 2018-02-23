@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_types.py
 """Fixer for removing uses of the types module.
 
@@ -49,7 +49,4 @@ class FixTypes(fixer_base.BaseFix):
 
     def transform(self, node, results):
         new_value = unicode(_TYPE_MAPPING.get(results['name'].value))
-        if new_value:
-            return Name(new_value, prefix=node.prefix)
-        else:
-            return None
+        return Name(new_value, prefix=node.prefix) if new_value else None

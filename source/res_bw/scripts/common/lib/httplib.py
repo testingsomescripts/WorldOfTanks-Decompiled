@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/httplib.py
 r"""HTTP/1.1 client library
 
@@ -280,25 +280,24 @@ class HTTPMessage(mimetools.Message):
                 hlist.append(line)
                 self.addheader(headerseen, line[len(headerseen) + 1:].strip())
                 continue
+            if not self.dict:
+                self.status = 'No headers'
             else:
-                if not self.dict:
-                    self.status = 'No headers'
-                else:
-                    self.status = 'Non-header line where header expected'
-                if unread:
-                    unread(line)
-                elif tell:
-                    self.fp.seek(startofline)
-                else:
-                    self.status = self.status + '; bad seek'
-                break
+                self.status = 'Non-header line where header expected'
+            if unread:
+                unread(line)
+            elif tell:
+                self.fp.seek(startofline)
+            else:
+                self.status = self.status + '; bad seek'
+            break
 
         return
 
 
 class HTTPResponse():
 
-    def __init__(self, sock, debuglevel = 0, strict = 0, method = None, buffering = False):
+    def __init__(self, sock, debuglevel=0, strict=0, method=None, buffering=False):
         if buffering:
             self.fp = sock.makefile('rb')
         else:
@@ -425,9 +424,7 @@ class HTTPResponse():
         if conn and 'keep-alive' in conn.lower():
             return False
         pconn = self.msg.getheader('proxy-connection')
-        if pconn and 'keep-alive' in pconn.lower():
-            return False
-        return True
+        return False if pconn and 'keep-alive' in pconn.lower() else True
 
     def close(self):
         if self.fp:
@@ -438,7 +435,7 @@ class HTTPResponse():
     def isclosed(self):
         return self.fp is None
 
-    def read(self, amt = None):
+    def read(self, amt=None):
         if self.fp is None:
             return ''
         elif self._method == 'HEAD':
@@ -548,7 +545,7 @@ class HTTPResponse():
     def fileno(self):
         return self.fp.fileno()
 
-    def getheader(self, name, default = None):
+    def getheader(self, name, default=None):
         if self.msg is None:
             raise ResponseNotReady()
         return self.msg.getheader(name, default)
@@ -569,7 +566,7 @@ class HTTPConnection():
     debuglevel = 0
     strict = 0
 
-    def __init__(self, host, port = None, strict = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT, source_address = None):
+    def __init__(self, host, port=None, strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
         self.timeout = timeout
         self.source_address = source_address
         self.sock = None
@@ -586,7 +583,7 @@ class HTTPConnection():
         self._create_connection = socket.create_connection
         return
 
-    def set_tunnel(self, host, port = None, headers = None):
+    def set_tunnel(self, host, port=None, headers=None):
         """ Set up host and port for HTTP CONNECT tunnelling.
         
         In a connection that uses HTTP Connect tunneling, the host passed to the
@@ -699,7 +696,7 @@ class HTTPConnection():
         """
         self._buffer.append(s)
 
-    def _send_output(self, message_body = None):
+    def _send_output(self, message_body=None):
         r"""Send the currently buffered request and clear the buffer.
         
         Appends an extra \r\n to the buffer.
@@ -716,7 +713,7 @@ class HTTPConnection():
             self.send(message_body)
         return
 
-    def putrequest(self, method, url, skip_host = 0, skip_accept_encoding = 0):
+    def putrequest(self, method, url, skip_host=0, skip_accept_encoding=0):
         """Send a request to the server.
         
         `method' specifies an HTTP request method, e.g. 'GET'.
@@ -780,7 +777,7 @@ class HTTPConnection():
         hdr = '%s: %s' % (header, '\r\n\t'.join([ str(v) for v in values ]))
         self._output(hdr)
 
-    def endheaders(self, message_body = None):
+    def endheaders(self, message_body=None):
         """Indicate that the last header line has been sent to the server.
         
         This method sends the request to the server.  The optional
@@ -795,7 +792,7 @@ class HTTPConnection():
             raise CannotSendHeader()
         self._send_output(message_body)
 
-    def request(self, method, url, body = None, headers = {}):
+    def request(self, method, url, body=None, headers={}):
         """Send a complete request to the server."""
         self._send_request(method, url, body, headers)
 
@@ -830,7 +827,7 @@ class HTTPConnection():
         self.endheaders(body)
         return
 
-    def getresponse(self, buffering = False):
+    def getresponse(self, buffering=False):
         """Get the response from the server."""
         if self.__response and self.__response.isclosed():
             self.__response = None
@@ -861,7 +858,7 @@ class HTTP():
     debuglevel = 0
     _connection_class = HTTPConnection
 
-    def __init__(self, host = '', port = None, strict = None):
+    def __init__(self, host='', port=None, strict=None):
         """Provide a default host, since the superclass requires one."""
         if port == 0:
             port = None
@@ -880,7 +877,7 @@ class HTTP():
         self.file = None
         return
 
-    def connect(self, host = None, port = None):
+    def connect(self, host=None, port=None):
         """Accept arguments to set the host/port, since the superclass doesn't."""
         if host is not None:
             self._conn._set_hostport(host, port)
@@ -891,7 +888,7 @@ class HTTP():
         """Provide a getfile, since the superclass' does not use this concept."""
         return self.file
 
-    def getreply(self, buffering = False):
+    def getreply(self, buffering=False):
         """Compat definition since superclass does not define it.
         
         Returns a tuple consisting of:
@@ -930,7 +927,7 @@ else:
         """This class allows communication via SSL."""
         default_port = HTTPS_PORT
 
-        def __init__(self, host, port = None, key_file = None, cert_file = None, strict = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT, source_address = None):
+        def __init__(self, host, port=None, key_file=None, cert_file=None, strict=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT, source_address=None):
             HTTPConnection.__init__(self, host, port, strict, timeout, source_address)
             self.key_file = key_file
             self.cert_file = cert_file
@@ -955,7 +952,7 @@ else:
         """
         _connection_class = HTTPSConnection
 
-        def __init__(self, host = '', port = None, key_file = None, cert_file = None, strict = None):
+        def __init__(self, host='', port=None, key_file=None, cert_file=None, strict=None):
             if port == 0:
                 port = None
             self._setup(self._connection_class(host, port, key_file, cert_file, strict))
@@ -998,7 +995,7 @@ class UnimplementedFileMode(HTTPException):
 
 class IncompleteRead(HTTPException):
 
-    def __init__(self, partial, expected = None):
+    def __init__(self, partial, expected=None):
         self.args = (partial,)
         self.partial = partial
         self.expected = expected
@@ -1066,7 +1063,7 @@ class LineAndFileWrapper():
         self.readline = self._file.readline
         self.readlines = self._file.readlines
 
-    def read(self, amt = None):
+    def read(self, amt=None):
         if self._line_consumed:
             return self._file.read(amt)
         else:
@@ -1098,7 +1095,7 @@ class LineAndFileWrapper():
         self._done()
         return s
 
-    def readlines(self, size = None):
+    def readlines(self, size=None):
         if self._line_consumed:
             return self._file.readlines(size)
         else:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_dict.py
 """Fixer for dict methods.
 
@@ -69,13 +69,11 @@ class FixDict(fixer_base.BaseFix):
     def in_special_context(self, node, isiter):
         if node.parent is None:
             return False
-        results = {}
-        if node.parent.parent is not None and self.p1.match(node.parent.parent, results):
-            if results['node'] is node:
-                if isiter:
-                    return results['func'].value in iter_exempt
-                return results['func'].value in fixer_util.consuming_calls
-        if not isiter:
-            return False
         else:
-            return self.p2.match(node.parent, results) and results['node'] is node
+            results = {}
+            if node.parent.parent is not None and self.p1.match(node.parent.parent, results):
+                if results['node'] is node:
+                    if isiter:
+                        return results['func'].value in iter_exempt
+                    return results['func'].value in fixer_util.consuming_calls
+            return False if not isiter else self.p2.match(node.parent, results) and results['node'] is node

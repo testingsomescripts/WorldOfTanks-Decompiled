@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/setuptools_build_ext.py
 from distutils.command.build_ext import build_ext as _du_build_ext
 try:
@@ -29,8 +29,7 @@ elif os.name != 'nt':
         pass
 
 def if_dl(s):
-    if have_rtld:
-        return s
+    return s if have_rtld else ''
 
 
 class build_ext(_build_ext):
@@ -141,9 +140,7 @@ class build_ext(_build_ext):
         return
 
     def get_export_symbols(self, ext):
-        if isinstance(ext, Library):
-            return ext.export_symbols
-        return _build_ext.get_export_symbols(self, ext)
+        return ext.export_symbols if isinstance(ext, Library) else _build_ext.get_export_symbols(self, ext)
 
     def build_extension(self, ext):
         _compiler = self.compiler
@@ -179,7 +176,7 @@ class build_ext(_build_ext):
 
         return outputs
 
-    def write_stub(self, output_dir, ext, compile = False):
+    def write_stub(self, output_dir, ext, compile=False):
         log.info('writing stub loader for %s to %s', ext._full_name, output_dir)
         stub_file = os.path.join(output_dir, *ext._full_name.split('.')) + '.py'
         if compile and os.path.exists(stub_file):
@@ -217,14 +214,14 @@ class build_ext(_build_ext):
 
 if use_stubs or os.name == 'nt':
 
-    def link_shared_object(self, objects, output_libname, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link_shared_object(self, objects, output_libname, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         self.link(self.SHARED_LIBRARY, objects, output_libname, output_dir, libraries, library_dirs, runtime_library_dirs, export_symbols, debug, extra_preargs, extra_postargs, build_temp, target_lang)
 
 
 else:
     libtype = 'static'
 
-    def link_shared_object(self, objects, output_libname, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link_shared_object(self, objects, output_libname, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         assert output_dir is None
         output_dir, filename = os.path.split(output_libname)
         basename, ext = os.path.splitext(filename)

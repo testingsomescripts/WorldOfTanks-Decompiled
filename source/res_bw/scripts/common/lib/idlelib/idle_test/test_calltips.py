@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_calltips.py
 import unittest
 import idlelib.CallTips as ct
@@ -12,7 +12,7 @@ class TC(object):
     """doc"""
     tip = '(ai=None, *args)'
 
-    def __init__(self, ai = None, *b):
+    def __init__(self, ai=None, *b):
         """doc"""
         pass
 
@@ -24,7 +24,7 @@ class TC(object):
 
     t1.tip = '(self)'
 
-    def t2(self, ai, b = None):
+    def t2(self, ai, b=None):
         """doc"""
         pass
 
@@ -42,7 +42,7 @@ class TC(object):
 
     t4.tip = '(self, *args)'
 
-    def t5(self, ai, b = None, *args, **kw):
+    def t5(self, ai, b=None, *args, **kw):
         """doc"""
         pass
 
@@ -127,7 +127,7 @@ class Get_signatureTest(unittest.TestCase):
 
         t1.tip = '()'
 
-        def t2(a, b = None):
+        def t2(a, b=None):
             """doc"""
             pass
 
@@ -145,7 +145,7 @@ class Get_signatureTest(unittest.TestCase):
 
         t4.tip = '(*args)'
 
-        def t5(a, b = None, *args, **kwds):
+        def t5(a, b=None, *args, **kwds):
             """doc"""
             pass
 

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-irix5/readcd.py
 from warnings import warnpy3k
 warnpy3k('the readcd module has been removed in Python 3.0', stacklevel=2)
@@ -199,8 +200,7 @@ class Readcd:
             func, arg = self.callbacks[i]
             if func:
                 self.parser.setcallback(i, func, arg)
-            else:
-                self.parser.removecallback(i)
+            self.parser.removecallback(i)
 
         if len(self.list) == 0:
             for i in range(self.status[5], self.status[6] + 1):

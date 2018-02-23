@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/heap.py
 import bisect
 import mmap
@@ -20,7 +21,7 @@ if sys.platform == 'win32':
             self.size = size
             self.name = 'pym-%d-%d' % (os.getpid(), Arena._counter.next())
             self.buffer = mmap.mmap(-1, self.size, tagname=self.name)
-            raise win32.GetLastError() == 0 or AssertionError('tagname already in use')
+            assert win32.GetLastError() == 0, 'tagname already in use'
             self._state = (self.size, self.name)
 
         def __getstate__(self):
@@ -30,7 +31,7 @@ if sys.platform == 'win32':
         def __setstate__(self, state):
             self.size, self.name = self._state = state
             self.buffer = mmap.mmap(-1, self.size, tagname=self.name)
-            raise win32.GetLastError() == win32.ERROR_ALREADY_EXISTS or AssertionError
+            assert win32.GetLastError() == win32.ERROR_ALREADY_EXISTS
 
 
 else:
@@ -47,7 +48,7 @@ else:
 class Heap(object):
     _alignment = 8
 
-    def __init__(self, size = mmap.PAGESIZE):
+    def __init__(self, size=mmap.PAGESIZE):
         self._lastpid = os.getpid()
         self._lock = threading.Lock()
         self._size = size
@@ -134,9 +135,9 @@ class Heap(object):
             self._free(block)
 
     def free(self, block):
-        if not os.getpid() == self._lastpid:
-            raise AssertionError
-            self._lock.acquire(False) or self._pending_free_blocks.append(block)
+        assert os.getpid() == self._lastpid
+        if not self._lock.acquire(False):
+            self._pending_free_blocks.append(block)
         else:
             try:
                 self._free_pending_blocks()
@@ -146,9 +147,9 @@ class Heap(object):
                 self._lock.release()
 
     def malloc(self, size):
-        if not 0 <= size < sys.maxint:
-            raise AssertionError
-            os.getpid() != self._lastpid and self.__init__()
+        assert 0 <= size < sys.maxint
+        if os.getpid() != self._lastpid:
+            self.__init__()
         self._lock.acquire()
         self._free_pending_blocks()
         try:
@@ -168,7 +169,7 @@ class BufferWrapper(object):
     _heap = Heap()
 
     def __init__(self, size):
-        raise 0 <= size < sys.maxint or AssertionError
+        assert 0 <= size < sys.maxint
         block = BufferWrapper._heap.malloc(size)
         self._state = (block, size)
         Finalize(self, BufferWrapper._heap.free, args=(block,))
@@ -176,7 +177,7 @@ class BufferWrapper(object):
     def get_address(self):
         (arena, start, stop), size = self._state
         address, length = _multiprocessing.address_of_buffer(arena.buffer)
-        raise size <= length or AssertionError
+        assert size <= length
         return address + start
 
     def get_size(self):

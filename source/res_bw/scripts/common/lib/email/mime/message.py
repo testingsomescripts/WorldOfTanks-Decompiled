@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/mime/message.py
 """Class representing message/* MIME documents."""
 __all__ = ['MIMEMessage']
@@ -8,7 +8,7 @@ from email.mime.nonmultipart import MIMENonMultipart
 class MIMEMessage(MIMENonMultipart):
     """Class representing message/* MIME documents."""
 
-    def __init__(self, _msg, _subtype = 'rfc822'):
+    def __init__(self, _msg, _subtype='rfc822'):
         """Create a message/* type MIME document.
         
         _msg is a message object and must be an instance of Message, or a

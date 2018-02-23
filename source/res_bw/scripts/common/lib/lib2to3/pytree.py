@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pytree.py
 """
 Python parse tree definitions.
@@ -52,9 +52,7 @@ class Base(object):
         
         This calls the method _eq().
         """
-        if self.__class__ is not other.__class__:
-            return NotImplemented
-        return self._eq(other)
+        return NotImplemented if self.__class__ is not other.__class__ else self._eq(other)
 
     __hash__ = None
 
@@ -64,9 +62,7 @@ class Base(object):
         
         This calls the method _eq().
         """
-        if self.__class__ is not other.__class__:
-            return NotImplemented
-        return not self._eq(other)
+        return NotImplemented if self.__class__ is not other.__class__ else not self._eq(other)
 
     def _eq(self, other):
         """
@@ -135,8 +131,7 @@ class Base(object):
                 if new is not None:
                     l_children.extend(new)
                 found = True
-            else:
-                l_children.append(ch)
+            l_children.append(ch)
 
         assert found, (self.children, self, new)
         self.parent.changed()
@@ -218,10 +213,7 @@ class Base(object):
                 yield x
 
     def depth(self):
-        if self.parent is None:
-            return 0
-        else:
-            return 1 + self.parent.depth()
+        return 0 if self.parent is None else 1 + self.parent.depth()
 
     def get_suffix(self):
         """
@@ -229,10 +221,7 @@ class Base(object):
         effectively equivalent to node.next_sibling.prefix
         """
         next_sib = self.next_sibling
-        if next_sib is None:
-            return u''
-        else:
-            return next_sib.prefix
+        return u'' if next_sib is None else next_sib.prefix
 
     if sys.version_info < (3, 0):
 
@@ -243,7 +232,7 @@ class Base(object):
 class Node(Base):
     """Concrete implementation for interior nodes."""
 
-    def __init__(self, type, children, context = None, prefix = None, fixers_applied = None):
+    def __init__(self, type, children, context=None, prefix=None, fixers_applied=None):
         """
         Initializer.
         
@@ -309,9 +298,7 @@ class Node(Base):
         """
         The whitespace and comments preceding this node in the input.
         """
-        if not self.children:
-            return ''
-        return self.children[0].prefix
+        return '' if not self.children else self.children[0].prefix
 
     def _prefix_setter(self, prefix):
         if self.children:
@@ -355,7 +342,7 @@ class Leaf(Base):
     lineno = 0
     column = 0
 
-    def __init__(self, type, value, context = None, prefix = None, fixers_applied = []):
+    def __init__(self, type, value, context=None, prefix=None, fixers_applied=[]):
         """
         Initializer.
         
@@ -474,7 +461,7 @@ class BasePattern(object):
         """
         return self
 
-    def match(self, node, results = None):
+    def match(self, node, results=None):
         """
         Does this pattern exactly match a node?
         
@@ -500,15 +487,13 @@ class BasePattern(object):
                 results[self.name] = node
             return True
 
-    def match_seq(self, nodes, results = None):
+    def match_seq(self, nodes, results=None):
         """
         Does this pattern exactly match a sequence of nodes?
         
         Default implementation for non-wildcard patterns.
         """
-        if len(nodes) != 1:
-            return False
-        return self.match(nodes[0], results)
+        return False if len(nodes) != 1 else self.match(nodes[0], results)
 
     def generate_matches(self, nodes):
         """
@@ -523,7 +508,7 @@ class BasePattern(object):
 
 class LeafPattern(BasePattern):
 
-    def __init__(self, type = None, content = None, name = None):
+    def __init__(self, type=None, content=None, name=None):
         """
         Initializer.  Takes optional type, content, and name.
         
@@ -544,13 +529,11 @@ class LeafPattern(BasePattern):
         self.name = name
         return
 
-    def match(self, node, results = None):
+    def match(self, node, results=None):
         """Override match() to insist on a leaf node."""
-        if not isinstance(node, Leaf):
-            return False
-        return BasePattern.match(self, node, results)
+        return False if not isinstance(node, Leaf) else BasePattern.match(self, node, results)
 
-    def _submatch(self, node, results = None):
+    def _submatch(self, node, results=None):
         """
         Match the pattern's content to the node's children.
         
@@ -569,7 +552,7 @@ class LeafPattern(BasePattern):
 class NodePattern(BasePattern):
     wildcards = False
 
-    def __init__(self, type = None, content = None, name = None):
+    def __init__(self, type=None, content=None, name=None):
         """
         Initializer.  Takes optional type, content, and name.
         
@@ -600,7 +583,7 @@ class NodePattern(BasePattern):
         self.name = name
         return
 
-    def _submatch(self, node, results = None):
+    def _submatch(self, node, results=None):
         """
         Match the pattern's content to the node's children.
         
@@ -644,7 +627,7 @@ class WildcardPattern(BasePattern):
     except it always uses non-greedy matching.
     """
 
-    def __init__(self, content = None, min = 0, max = HUGE, name = None):
+    def __init__(self, content=None, min=0, max=HUGE, name=None):
         """
         Initializer.
         
@@ -690,16 +673,13 @@ class WildcardPattern(BasePattern):
                 return NodePattern(name=self.name)
             if subpattern is not None and self.name == subpattern.name:
                 return subpattern.optimize()
-        if self.min <= 1 and isinstance(subpattern, WildcardPattern) and subpattern.min <= 1 and self.name == subpattern.name:
-            return WildcardPattern(subpattern.content, self.min * subpattern.min, self.max * subpattern.max, subpattern.name)
-        else:
-            return self
+        return WildcardPattern(subpattern.content, self.min * subpattern.min, self.max * subpattern.max, subpattern.name) if self.min <= 1 and isinstance(subpattern, WildcardPattern) and subpattern.min <= 1 and self.name == subpattern.name else self
 
-    def match(self, node, results = None):
+    def match(self, node, results=None):
         """Does this pattern exactly match a node?"""
         return self.match_seq([node], results)
 
-    def match_seq(self, nodes, results = None):
+    def match_seq(self, nodes, results=None):
         """Does this pattern exactly match a sequence of nodes?"""
         for c, r in self.generate_matches(nodes):
             if c == len(nodes):
@@ -737,16 +717,17 @@ class WildcardPattern(BasePattern):
                 save_stderr = sys.stderr
                 sys.stderr = StringIO()
             try:
-                for count, r in self._recursive_matches(nodes, 0):
-                    if self.name:
-                        r[self.name] = nodes[:count]
-                    yield (count, r)
+                try:
+                    for count, r in self._recursive_matches(nodes, 0):
+                        if self.name:
+                            r[self.name] = nodes[:count]
+                        yield (count, r)
 
-            except RuntimeError:
-                for count, r in self._iterative_matches(nodes):
-                    if self.name:
-                        r[self.name] = nodes[:count]
-                    yield (count, r)
+                except RuntimeError:
+                    for count, r in self._iterative_matches(nodes):
+                        if self.name:
+                            r[self.name] = nodes[:count]
+                        yield (count, r)
 
             finally:
                 if hasattr(sys, 'getrefcount'):
@@ -816,7 +797,7 @@ class WildcardPattern(BasePattern):
 
 class NegatedPattern(BasePattern):
 
-    def __init__(self, content = None):
+    def __init__(self, content=None):
         """
         Initializer.
         
@@ -868,9 +849,8 @@ def generate_matches(patterns, nodes):
         for c0, r0 in p.generate_matches(nodes):
             if not rest:
                 yield (c0, r0)
-            else:
-                for c1, r1 in generate_matches(rest, nodes[c0:]):
-                    r = {}
-                    r.update(r0)
-                    r.update(r1)
-                    yield (c0 + c1, r)
+            for c1, r1 in generate_matches(rest, nodes[c0:]):
+                r = {}
+                r.update(r0)
+                r.update(r1)
+                yield (c0 + c1, r)

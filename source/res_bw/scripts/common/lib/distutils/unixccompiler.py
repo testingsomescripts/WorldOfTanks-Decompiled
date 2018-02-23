@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/unixccompiler.py
 """distutils.unixccompiler
 
@@ -51,7 +51,7 @@ class UnixCCompiler(CCompiler):
     if sys.platform == 'cygwin':
         exe_extension = '.exe'
 
-    def preprocess(self, source, output_file = None, macros = None, include_dirs = None, extra_preargs = None, extra_postargs = None):
+    def preprocess(self, source, output_file=None, macros=None, include_dirs=None, extra_preargs=None, extra_postargs=None):
         ignore, macros, include_dirs = self._fix_compile_args(None, macros, include_dirs)
         pp_opts = gen_preprocess_options(macros, include_dirs)
         pp_args = self.preprocessor + pp_opts
@@ -81,7 +81,7 @@ class UnixCCompiler(CCompiler):
         except DistutilsExecError as msg:
             raise CompileError, msg
 
-    def create_static_lib(self, objects, output_libname, output_dir = None, debug = 0, target_lang = None):
+    def create_static_lib(self, objects, output_libname, output_dir=None, debug=0, target_lang=None):
         objects, output_dir = self._fix_object_args(objects, output_dir)
         output_filename = self.library_filename(output_libname, output_dir=output_dir)
         if self._need_link(objects, output_filename):
@@ -96,7 +96,7 @@ class UnixCCompiler(CCompiler):
         else:
             log.debug('skipping %s (up-to-date)', output_filename)
 
-    def link(self, target_desc, objects, output_filename, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link(self, target_desc, objects, output_filename, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         objects, output_dir = self._fix_object_args(objects, output_dir)
         libraries, library_dirs, runtime_library_dirs = self._fix_lib_args(libraries, library_dirs, runtime_library_dirs)
         lib_opts = gen_lib_options(self, library_dirs, runtime_library_dirs, libraries)
@@ -160,7 +160,7 @@ class UnixCCompiler(CCompiler):
     def library_option(self, lib):
         return '-l' + lib
 
-    def find_library_file(self, dirs, lib, debug = 0):
+    def find_library_file(self, dirs, lib, debug=0):
         shared_f = self.library_filename(lib, lib_type='shared')
         dylib_f = self.library_filename(lib, lib_type='dylib')
         static_f = self.library_filename(lib, lib_type='static')

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SYSTEM_MESSAGES.py
 from debug_utils import LOG_WARNING
 
@@ -476,6 +476,7 @@ class SYSTEM_MESSAGES(object):
     ARTEFACT_BUY_VEHICLE_LOCKED = '#system_messages:artefact_buy/vehicle_locked'
     ARTEFACT_BUY_INVALID_VEHICLE = '#system_messages:artefact_buy/invalid_vehicle'
     ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:artefact_buy/error_not_for_this_vehicle_type'
+    ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE = '#system_messages:artefact_buy/not for current vehicle'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -563,8 +564,8 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_REQUEST_NAME_CLOSE_SLOT = '#system_messages:prebattle/request/name/CLOSE_SLOT'
     PREBATTLE_REQUEST_NAME_CHANGE_RATED = '#system_messages:prebattle/request/name/CHANGE_RATED'
     PREBATTLE_REQUEST_NAME_CHANGE_DIVISION = '#system_messages:prebattle/request/name/CHANGE_DIVISION'
-    PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST = '#system_messages:prebattle/request/name/SET_ES_VEHICLE_LIST'
-    PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE = '#system_messages:prebattle/request/name/CHANGE_ES_TYPE'
+    PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST = '#system_messages:prebattle/request/name/SET_VEHICLE_LIST'
+    PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE = '#system_messages:prebattle/request/name/CHANGE_FALLOUT_QUEUE_TYPE'
     FORTIFICATION_REQUEST_NAME_CREATE_FORT = '#system_messages:fortification/request/name/CREATE_FORT'
     FORTIFICATION_REQUEST_NAME_DELETE_FORT = '#system_messages:fortification/request/name/DELETE_FORT'
     FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION = '#system_messages:fortification/request/name/OPEN_DIRECTION'
@@ -739,6 +740,8 @@ class SYSTEM_MESSAGES(object):
     CLANS_REQUEST_ERRORS_CLAN_IS_FULL_ = '#system_messages:clans/request/errors/Clan is full'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY = '#system_messages:clans/request/errors/Account is in clan already'
     CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN = '#system_messages:clans/request/errors/Account is not in clan'
+    CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED = '#system_messages:clans/request/errors/Account already invited'
+    CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN = '#system_messages:clans/request/errors/Account in cooldown'
     CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH = '#system_messages:clans/request/errors/Recruiting policy mismatch'
     CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS = '#system_messages:clans/request/errors/Account does not meet requirements'
     CLANS_REQUEST_ERRORS_TOO_MANY_INVITES = '#system_messages:clans/request/errors/Too many invites'
@@ -768,6 +771,8 @@ class SYSTEM_MESSAGES(object):
     CLANS_NOTIFICATIONS_INVITESENT = '#system_messages:clans/notifications/inviteSent'
     CLANS_NOTIFICATIONS_INVITESSENT = '#system_messages:clans/notifications/invitesSent'
     CLANS_NOTIFICATIONS_INVITESENDERROR = '#system_messages:clans/notifications/inviteSendError'
+    CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINCLAN = '#system_messages:clans/notifications/inviteSendError/alreadyInClan'
+    CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINVITED = '#system_messages:clans/notifications/inviteSendError/alreadyInvited'
     CLANS_NOTIFICATIONS_INVITESSENDERROR = '#system_messages:clans/notifications/invitesSendError'
     CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED = '#system_messages:clans/notifications/personal/appAccepted'
     CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED = '#system_messages:clans/notifications/personal/appDeclined'
@@ -1051,8 +1056,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
      PREBATTLE_REQUEST_NAME_CHANGE_RATED,
      PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
-     PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST,
-     PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE)
+     PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE)
     FORTIFICATION_REQUEST_NAME_ENUM = (FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -1726,6 +1731,7 @@ class SYSTEM_MESSAGES(object):
      ARTEFACT_BUY_VEHICLE_LOCKED,
      ARTEFACT_BUY_INVALID_VEHICLE,
      ARTEFACT_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     ARTEFACT_BUY_NOT_FOR_CURRENT_VEHICLE,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,
@@ -1813,8 +1819,8 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_CLOSE_SLOT,
      PREBATTLE_REQUEST_NAME_CHANGE_RATED,
      PREBATTLE_REQUEST_NAME_CHANGE_DIVISION,
-     PREBATTLE_REQUEST_NAME_SET_ES_VEHICLE_LIST,
-     PREBATTLE_REQUEST_NAME_CHANGE_ES_TYPE,
+     PREBATTLE_REQUEST_NAME_SET_VEHICLE_LIST,
+     PREBATTLE_REQUEST_NAME_CHANGE_FALLOUT_QUEUE_TYPE,
      FORTIFICATION_REQUEST_NAME_CREATE_FORT,
      FORTIFICATION_REQUEST_NAME_DELETE_FORT,
      FORTIFICATION_REQUEST_NAME_OPEN_DIRECTION,
@@ -1989,6 +1995,8 @@ class SYSTEM_MESSAGES(object):
      CLANS_REQUEST_ERRORS_CLAN_IS_FULL_,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_IN_CLAN_ALREADY,
      CLANS_REQUEST_ERRORS_ACCOUNT_IS_NOT_IN_CLAN,
+     CLANS_REQUEST_ERRORS_ACCOUNT_ALREADY_INVITED,
+     CLANS_REQUEST_ERRORS_ACCOUNT_IN_COOLDOWN,
      CLANS_REQUEST_ERRORS_RECRUITING_POLICY_MISMATCH,
      CLANS_REQUEST_ERRORS_ACCOUNT_DOES_NOT_MEET_REQUIREMENTS,
      CLANS_REQUEST_ERRORS_TOO_MANY_INVITES,
@@ -2018,6 +2026,8 @@ class SYSTEM_MESSAGES(object):
      CLANS_NOTIFICATIONS_INVITESENT,
      CLANS_NOTIFICATIONS_INVITESSENT,
      CLANS_NOTIFICATIONS_INVITESENDERROR,
+     CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINCLAN,
+     CLANS_NOTIFICATIONS_INVITESENDERROR_ALREADYINVITED,
      CLANS_NOTIFICATIONS_INVITESSENDERROR,
      CLANS_NOTIFICATIONS_PERSONAL_APPACCEPTED,
      CLANS_NOTIFICATIONS_PERSONAL_APPDECLINED,

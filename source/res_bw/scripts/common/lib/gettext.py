@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/gettext.py
 """Internationalization and localization support.
 
@@ -73,13 +73,12 @@ def c2py(plural):
     for c in plural:
         if c == '(':
             stack.append('')
-        elif c == ')':
+        if c == ')':
             if len(stack) == 1:
                 raise ValueError, 'unbalanced parenthesis in plural form'
             s = expr.sub(repl, stack.pop())
             stack[-1] += '(%s)' % s
-        else:
-            stack[-1] += c
+        stack[-1] += c
 
     plural = expr.sub(repl, stack.pop())
     return eval('lambda n: int(%s)' % plural)
@@ -132,7 +131,7 @@ def _expand_lang(locale):
 
 class NullTranslations:
 
-    def __init__(self, fp = None):
+    def __init__(self, fp=None):
         self._info = {}
         self._charset = None
         self._output_charset = None
@@ -151,14 +150,10 @@ class NullTranslations:
             self._fallback = fallback
 
     def gettext(self, message):
-        if self._fallback:
-            return self._fallback.gettext(message)
-        return message
+        return self._fallback.gettext(message) if self._fallback else message
 
     def lgettext(self, message):
-        if self._fallback:
-            return self._fallback.lgettext(message)
-        return message
+        return self._fallback.lgettext(message) if self._fallback else message
 
     def ngettext(self, msgid1, msgid2, n):
         if self._fallback:
@@ -177,9 +172,7 @@ class NullTranslations:
             return msgid2
 
     def ugettext(self, message):
-        if self._fallback:
-            return self._fallback.ugettext(message)
-        return unicode(message)
+        return self._fallback.ugettext(message) if self._fallback else unicode(message)
 
     def ungettext(self, msgid1, msgid2, n):
         if self._fallback:
@@ -201,7 +194,7 @@ class NullTranslations:
     def set_output_charset(self, charset):
         self._output_charset = charset
 
-    def install(self, unicode = False, names = None):
+    def install(self, unicode=False, names=None):
         import __builtin__
         __builtin__.__dict__['_'] = unicode and self.ugettext or self.gettext
         if hasattr(names, '__contains__'):
@@ -262,7 +255,7 @@ class GNUTranslations(NullTranslations):
                         self._info[lastk] += '\n' + item
                     if k == 'content-type':
                         self._charset = v.split('charset=')[1]
-                    elif k == 'plural-forms':
+                    if k == 'plural-forms':
                         v = v.split(';')
                         plural = v[1].split('plural=')[1]
                         self.plural = c2py(plural)
@@ -295,9 +288,7 @@ class GNUTranslations(NullTranslations):
             return message
         if self._output_charset:
             return tmsg.encode(self._output_charset)
-        if self._charset:
-            return tmsg.encode(self._charset)
-        return tmsg
+        return tmsg.encode(self._charset) if self._charset else tmsg
 
     def lgettext(self, message):
         missing = object()
@@ -306,9 +297,7 @@ class GNUTranslations(NullTranslations):
             if self._fallback:
                 return self._fallback.lgettext(message)
             return message
-        if self._output_charset:
-            return tmsg.encode(self._output_charset)
-        return tmsg.encode(locale.getpreferredencoding())
+        return tmsg.encode(self._output_charset) if self._output_charset else tmsg.encode(locale.getpreferredencoding())
 
     def ngettext(self, msgid1, msgid2, n):
         try:
@@ -363,7 +352,7 @@ class GNUTranslations(NullTranslations):
         return tmsg
 
 
-def find(domain, localedir = None, languages = None, all = 0):
+def find(domain, localedir=None, languages=None, all=0):
     if localedir is None:
         localedir = _default_localedir
     if languages is None:
@@ -401,7 +390,7 @@ def find(domain, localedir = None, languages = None, all = 0):
 
 _translations = {}
 
-def translation(domain, localedir = None, languages = None, class_ = None, fallback = False, codeset = None):
+def translation(domain, localedir=None, languages=None, class_=None, fallback=False, codeset=None):
     if class_ is None:
         class_ = GNUTranslations
     mofiles = find(domain, localedir, languages, all=1)
@@ -421,13 +410,12 @@ def translation(domain, localedir = None, languages = None, class_ = None, fallb
             t.set_output_charset(codeset)
         if result is None:
             result = t
-        else:
-            result.add_fallback(t)
+        result.add_fallback(t)
 
     return result
 
 
-def install(domain, localedir = None, unicode = False, codeset = None, names = None):
+def install(domain, localedir=None, unicode=False, codeset=None, names=None):
     t = translation(domain, localedir, fallback=True, codeset=codeset)
     t.install(unicode, names)
 
@@ -436,21 +424,21 @@ _localedirs = {}
 _localecodesets = {}
 _current_domain = 'messages'
 
-def textdomain(domain = None):
+def textdomain(domain=None):
     global _current_domain
     if domain is not None:
         _current_domain = domain
     return _current_domain
 
 
-def bindtextdomain(domain, localedir = None):
+def bindtextdomain(domain, localedir=None):
     global _localedirs
     if localedir is not None:
         _localedirs[domain] = localedir
     return _localedirs.get(domain, _default_localedir)
 
 
-def bind_textdomain_codeset(domain, codeset = None):
+def bind_textdomain_codeset(domain, codeset=None):
     global _localecodesets
     if codeset is not None:
         _localecodesets[domain] = codeset

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/extension.py
 """distutils.extension
 
@@ -74,7 +74,7 @@ class Extension:
         from the source extensions if not provided.
     """
 
-    def __init__(self, name, sources, include_dirs = None, define_macros = None, undef_macros = None, library_dirs = None, libraries = None, runtime_library_dirs = None, extra_objects = None, extra_compile_args = None, extra_link_args = None, export_symbols = None, swig_opts = None, depends = None, language = None, **kw):
+    def __init__(self, name, sources, include_dirs=None, define_macros=None, undef_macros=None, library_dirs=None, libraries=None, runtime_library_dirs=None, extra_objects=None, extra_compile_args=None, extra_link_args=None, export_symbols=None, swig_opts=None, depends=None, language=None, **kw):
         assert type(name) is StringType, "'name' must be a string"
         assert type(sources) is ListType and map(type, sources) == [StringType] * len(sources), "'sources' must be a list of strings"
         self.name = name
@@ -136,44 +136,43 @@ def read_setup_file(filename):
                 value = word[2:]
                 if suffix in ('.c', '.cc', '.cpp', '.cxx', '.c++', '.m', '.mm'):
                     ext.sources.append(word)
-                elif switch == '-I':
+                if switch == '-I':
                     ext.include_dirs.append(value)
-                elif switch == '-D':
+                if switch == '-D':
                     equals = string.find(value, '=')
                     if equals == -1:
                         ext.define_macros.append((value, None))
                     else:
                         ext.define_macros.append((value[0:equals], value[equals + 2:]))
-                elif switch == '-U':
+                if switch == '-U':
                     ext.undef_macros.append(value)
-                elif switch == '-C':
+                if switch == '-C':
                     ext.extra_compile_args.append(word)
-                elif switch == '-l':
+                if switch == '-l':
                     ext.libraries.append(value)
-                elif switch == '-L':
+                if switch == '-L':
                     ext.library_dirs.append(value)
-                elif switch == '-R':
+                if switch == '-R':
                     ext.runtime_library_dirs.append(value)
-                elif word == '-rpath':
+                if word == '-rpath':
                     append_next_word = ext.runtime_library_dirs
-                elif word == '-Xlinker':
+                if word == '-Xlinker':
                     append_next_word = ext.extra_link_args
-                elif word == '-Xcompiler':
+                if word == '-Xcompiler':
                     append_next_word = ext.extra_compile_args
-                elif switch == '-u':
+                if switch == '-u':
                     ext.extra_link_args.append(word)
                     if not value:
                         append_next_word = ext.extra_link_args
-                elif word == '-Xcompiler':
+                if word == '-Xcompiler':
                     append_next_word = ext.extra_compile_args
-                elif switch == '-u':
+                if switch == '-u':
                     ext.extra_link_args.append(word)
                     if not value:
                         append_next_word = ext.extra_link_args
-                elif suffix in ('.a', '.so', '.sl', '.o', '.dylib'):
+                if suffix in ('.a', '.so', '.sl', '.o', '.dylib'):
                     ext.extra_objects.append(word)
-                else:
-                    file.warn("unrecognized argument '%s'" % word)
+                file.warn("unrecognized argument '%s'" % word)
 
             extensions.append(ext)
 

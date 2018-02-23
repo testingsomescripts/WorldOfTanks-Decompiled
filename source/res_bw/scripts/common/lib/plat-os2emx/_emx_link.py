@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-os2emx/_emx_link.py
 """_emx_link.py is a simplistic emulation of the Unix link(2) library routine
 for creating so-called hard links.  It is intended to be imported into

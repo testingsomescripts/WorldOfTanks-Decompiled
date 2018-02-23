@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_msi.py
 """
 Implements the bdist_msi command.
@@ -31,7 +31,7 @@ class PyDialog(Dialog):
         """Set the title text of the dialog at the top."""
         self.text('Title', 15, 10, 320, 60, 196611, '{\\VerdanaBold10}%s' % title)
 
-    def back(self, title, next, name = 'Back', active = 1):
+    def back(self, title, next, name='Back', active=1):
         """Add a back button with a given title, the tab-next button,
         its name in the Control table, possibly initially disabled.
         
@@ -42,7 +42,7 @@ class PyDialog(Dialog):
             flags = 1
         return self.pushbutton(name, 180, self.h - 27, 56, 17, flags, title, next)
 
-    def cancel(self, title, next, name = 'Cancel', active = 1):
+    def cancel(self, title, next, name='Cancel', active=1):
         """Add a cancel button with a given title, the tab-next button,
         its name in the Control table, possibly initially disabled.
         
@@ -53,7 +53,7 @@ class PyDialog(Dialog):
             flags = 1
         return self.pushbutton(name, 304, self.h - 27, 56, 17, flags, title, next)
 
-    def next(self, title, next, name = 'Next', active = 1):
+    def next(self, title, next, name='Next', active=1):
         """Add a Next button with a given title, the tab-next button,
         its name in the Control table, possibly initially disabled.
         
@@ -249,22 +249,20 @@ class bdist_msi(Command):
                         default = file + version
                         newdir = Directory(db, cab, dir, file, default, short)
                         todo.append(newdir)
-                    else:
-                        if not dir.component:
-                            dir.start_component(dir.logical, feature, 0)
-                        if afile not in seen:
-                            key = seen[afile] = dir.add_file(file)
-                            if file == self.install_script:
-                                if self.install_script_key:
-                                    raise DistutilsOptionError('Multiple files with name %s' % file)
-                                self.install_script_key = '[#%s]' % key
-                        else:
-                            key = seen[afile]
-                            add_data(self.db, 'DuplicateFile', [(key + version,
-                              dir.component,
-                              key,
-                              None,
-                              dir.logical)])
+                    if not dir.component:
+                        dir.start_component(dir.logical, feature, 0)
+                    if afile not in seen:
+                        key = seen[afile] = dir.add_file(file)
+                        if file == self.install_script:
+                            if self.install_script_key:
+                                raise DistutilsOptionError('Multiple files with name %s' % file)
+                            self.install_script_key = '[#%s]' % key
+                    key = seen[afile]
+                    add_data(self.db, 'DuplicateFile', [(key + version,
+                      dir.component,
+                      key,
+                      None,
+                      dir.logical)])
 
             db.Commit()
 

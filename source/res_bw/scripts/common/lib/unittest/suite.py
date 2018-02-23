@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/suite.py
 """TestSuite"""
 import sys
@@ -14,7 +15,7 @@ class BaseTestSuite(object):
     """A simple test suite that doesn't provide class or module shared fixtures.
     """
 
-    def __init__(self, tests = ()):
+    def __init__(self, tests=()):
         self._tests = []
         self.addTests(tests)
 
@@ -22,9 +23,7 @@ class BaseTestSuite(object):
         return '<%s tests=%s>' % (util.strclass(self.__class__), list(self))
 
     def __eq__(self, other):
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-        return list(self) == list(other)
+        return NotImplemented if not isinstance(other, self.__class__) else list(self) == list(other)
 
     def __ne__(self, other):
         return not self == other
@@ -81,7 +80,7 @@ class TestSuite(BaseTestSuite):
     subclassing, do not forget to call the base class constructor.
     """
 
-    def run(self, result, debug = False):
+    def run(self, result, debug=False):
         topLevel = False
         if getattr(result, '_testRunEntered', False) is False:
             result._testRunEntered = topLevel = True
@@ -97,8 +96,7 @@ class TestSuite(BaseTestSuite):
                     continue
             if not debug:
                 test(result)
-            else:
-                test.debug()
+            test.debug()
 
         if topLevel:
             self._tearDownPreviousClass(None, result)
@@ -130,14 +128,16 @@ class TestSuite(BaseTestSuite):
             if setUpClass is not None:
                 _call_if_exists(result, '_setupStdout')
                 try:
-                    setUpClass()
-                except Exception as e:
-                    if isinstance(result, _DebugResult):
-                        raise
-                    currentClass._classSetupFailed = True
-                    className = util.strclass(currentClass)
-                    errorName = 'setUpClass (%s)' % className
-                    self._addClassOrModuleLevelException(result, e, errorName)
+                    try:
+                        setUpClass()
+                    except Exception as e:
+                        if isinstance(result, _DebugResult):
+                            raise
+                        currentClass._classSetupFailed = True
+                        className = util.strclass(currentClass)
+                        errorName = 'setUpClass (%s)' % className
+                        self._addClassOrModuleLevelException(result, e, errorName)
+
                 finally:
                     _call_if_exists(result, '_restoreStdout')
 
@@ -167,13 +167,15 @@ class TestSuite(BaseTestSuite):
             if setUpModule is not None:
                 _call_if_exists(result, '_setupStdout')
                 try:
-                    setUpModule()
-                except Exception as e:
-                    if isinstance(result, _DebugResult):
-                        raise
-                    result._moduleSetUpFailed = True
-                    errorName = 'setUpModule (%s)' % currentModule
-                    self._addClassOrModuleLevelException(result, e, errorName)
+                    try:
+                        setUpModule()
+                    except Exception as e:
+                        if isinstance(result, _DebugResult):
+                            raise
+                        result._moduleSetUpFailed = True
+                        errorName = 'setUpModule (%s)' % currentModule
+                        self._addClassOrModuleLevelException(result, e, errorName)
+
                 finally:
                     _call_if_exists(result, '_restoreStdout')
 
@@ -204,12 +206,14 @@ class TestSuite(BaseTestSuite):
             if tearDownModule is not None:
                 _call_if_exists(result, '_setupStdout')
                 try:
-                    tearDownModule()
-                except Exception as e:
-                    if isinstance(result, _DebugResult):
-                        raise
-                    errorName = 'tearDownModule (%s)' % previousModule
-                    self._addClassOrModuleLevelException(result, e, errorName)
+                    try:
+                        tearDownModule()
+                    except Exception as e:
+                        if isinstance(result, _DebugResult):
+                            raise
+                        errorName = 'tearDownModule (%s)' % previousModule
+                        self._addClassOrModuleLevelException(result, e, errorName)
+
                 finally:
                     _call_if_exists(result, '_restoreStdout')
 
@@ -231,13 +235,15 @@ class TestSuite(BaseTestSuite):
             if tearDownClass is not None:
                 _call_if_exists(result, '_setupStdout')
                 try:
-                    tearDownClass()
-                except Exception as e:
-                    if isinstance(result, _DebugResult):
-                        raise
-                    className = util.strclass(previousClass)
-                    errorName = 'tearDownClass (%s)' % className
-                    self._addClassOrModuleLevelException(result, e, errorName)
+                    try:
+                        tearDownClass()
+                    except Exception as e:
+                        if isinstance(result, _DebugResult):
+                            raise
+                        className = util.strclass(previousClass)
+                        errorName = 'tearDownClass (%s)' % className
+                        self._addClassOrModuleLevelException(result, e, errorName)
+
                 finally:
                     _call_if_exists(result, '_restoreStdout')
 
@@ -274,7 +280,7 @@ class _ErrorHolder(object):
         return self.run(result)
 
     def countTestCases(self):
-        return 0
+        pass
 
 
 def _isnotsuite(test):

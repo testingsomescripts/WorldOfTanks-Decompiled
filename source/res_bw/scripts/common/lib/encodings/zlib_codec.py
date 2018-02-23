@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/zlib_codec.py
 """ Python 'zlib_codec' Codec - zlib compression encoding
 
@@ -11,7 +11,7 @@
 import codecs
 import zlib
 
-def zlib_encode(input, errors = 'strict'):
+def zlib_encode(input, errors='strict'):
     """ Encodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -25,7 +25,7 @@ def zlib_encode(input, errors = 'strict'):
     return (output, len(input))
 
 
-def zlib_decode(input, errors = 'strict'):
+def zlib_decode(input, errors='strict'):
     """ Decodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -45,21 +45,21 @@ def zlib_decode(input, errors = 'strict'):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         return zlib_encode(input, errors)
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         return zlib_decode(input, errors)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         assert errors == 'strict'
         self.errors = errors
         self.compressobj = zlib.compressobj()
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         if final:
             c = self.compressobj.compress(input)
             return c + self.compressobj.flush()
@@ -72,12 +72,12 @@ class IncrementalEncoder(codecs.IncrementalEncoder):
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def __init__(self, errors = 'strict'):
+    def __init__(self, errors='strict'):
         assert errors == 'strict'
         self.errors = errors
         self.decompressobj = zlib.decompressobj()
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         if final:
             c = self.decompressobj.decompress(input)
             return c + self.decompressobj.flush()

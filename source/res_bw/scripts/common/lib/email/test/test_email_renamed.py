@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/test/test_email_renamed.py
 import os
 import sys
@@ -33,7 +33,7 @@ NL = '\n'
 EMPTYSTRING = ''
 SPACE = ' '
 
-def openfile(filename, mode = 'r'):
+def openfile(filename, mode='r'):
     path = os.path.join(os.path.dirname(landmark), 'data', filename)
     return open(path, mode)
 

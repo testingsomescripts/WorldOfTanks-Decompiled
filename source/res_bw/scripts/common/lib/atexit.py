@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/atexit.py
 """
 atexit.py - allow programmer to define multiple exit functions to be executed
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         print 'running x2(%r)' % (n,)
 
 
-    def x3(n, kwd = None):
+    def x3(n, kwd=None):
         print 'running x3(%r, kwd=%r)' % (n, kwd)
 
 

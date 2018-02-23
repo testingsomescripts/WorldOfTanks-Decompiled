@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/msilib/text.py
 import msilib, os
 dirname = os.path.dirname(__file__)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_vo_converter.py
 from constants import WG_GAMES
 from gui import makeHtmlString
@@ -35,7 +35,7 @@ def makeClubFullName(clubName):
     return formatted
 
 
-def makeContactStatusDescription(isOnline, tags, clientInfo = None):
+def makeContactStatusDescription(isOnline, tags, clientInfo=None):
     name, description = ('', '')
     if isOnline:
         if clientInfo:
@@ -72,7 +72,7 @@ def _setMutableRule(rules, flag):
 class CategoryConverter(object):
     __slots__ = ('_categoryID', '_userString', '_rules')
 
-    def __init__(self, categoryID, rules = _DEF_RULES):
+    def __init__(self, categoryID, rules=_DEF_RULES):
         super(CategoryConverter, self).__init__()
         self._categoryID = categoryID
         self._userString = i18n.makeString(_CATEGORY_I18N_KEY[categoryID])
@@ -84,7 +84,7 @@ class CategoryConverter(object):
     def setMutable(self, value):
         self._rules = _setMutableRule(self._rules, value)
 
-    def makeVO(self, children = None):
+    def makeVO(self, children=None):
         baseVo = self.makeBaseVO()
         baseVo['isOpened'] = True
         baseVo['data']['title'] = self._userString
@@ -131,7 +131,7 @@ class ContactConverter(object):
             color = colors[1]
         return color
 
-    def makeVO(self, contact, includeIcons = True):
+    def makeVO(self, contact, includeIcons=True):
         dbID = contact.getID()
         tags = contact.getTags()
         note = contact.getNote()
@@ -166,7 +166,7 @@ class ContactConverter(object):
          'clanAbbrev': contact.getClanAbbrev()}
 
     @classmethod
-    def makeIconTag(cls, key = 'imgTag', iconPath = ''):
+    def makeIconTag(cls, key='imgTag', iconPath=''):
         if iconPath:
             ctx = {'iconName': iconPath}
         else:
@@ -286,7 +286,7 @@ class OnlineOnlyCondition(OnlineTotalCondition):
 class IContactsConverter(object):
     __slots__ = tuple()
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         raise NotImplementedError
 
     def getContacts(self):
@@ -304,14 +304,14 @@ class IContactsConverter(object):
     def removeContact(self, dbID):
         raise NotImplementedError
 
-    def makeVO(self, pattern = None):
+    def makeVO(self, pattern=None):
         raise NotImplementedError
 
 
 class _ContactsConverter(IContactsConverter):
     __slots__ = ('_contacts', '_condition', '_converter', '_showEmptyItem', '_parent')
 
-    def __init__(self, parent, condition = None, showEmptyItem = False):
+    def __init__(self, parent, condition=None, showEmptyItem=False):
         super(_ContactsConverter, self).__init__()
         self._contacts = {}
         self._condition = condition or _GroupCondition()
@@ -325,7 +325,7 @@ class _ContactsConverter(IContactsConverter):
     def hasContacts(self):
         return len(self._contacts) > 0
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         self._contacts.clear()
         self._condition.clear()
         if full:
@@ -358,7 +358,7 @@ class _ContactsConverter(IContactsConverter):
         self._contacts.pop(dbID, None)
         return result
 
-    def makeVO(self, pattern = None):
+    def makeVO(self, pattern=None):
         if pattern:
             contacts = self._matchPattern(pattern, self._contacts.itervalues())
         else:
@@ -375,7 +375,7 @@ class _ContactsConverter(IContactsConverter):
          'parentItemData': self._parent}
 
     @classmethod
-    def makeEmptyRow(cls, parent, isVisible = True, isActive = True):
+    def makeEmptyRow(cls, parent, isVisible=True, isActive=True):
         return {'gui': {'id': None},
          'parentItemData': parent,
          'data': {'isActive': isActive,
@@ -388,7 +388,7 @@ class _ContactsConverter(IContactsConverter):
 class GroupConverter(_ContactsConverter):
     __slots__ = ('_name', '_criteria', '_isOpened', '_rules', '_parentCategory')
 
-    def __init__(self, name, parentCategory, condition = None, rules = _DEF_RULES, showEmptyItem = False, isOpened = False):
+    def __init__(self, name, parentCategory, condition=None, rules=_DEF_RULES, showEmptyItem=False, isOpened=False):
         self._name = name
         self._criteria = name.lower()
         self._isOpened = isOpened
@@ -396,7 +396,7 @@ class GroupConverter(_ContactsConverter):
         self._parentCategory = parentCategory
         super(GroupConverter, self).__init__(self.__makeBaseVO(parentCategory), condition, showEmptyItem)
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         super(GroupConverter, self).clear()
         if full:
             self._parentCategory = None
@@ -420,7 +420,7 @@ class GroupConverter(_ContactsConverter):
     def toggle(self):
         self._isOpened = not self._isOpened
 
-    def makeVO(self, pattern = None):
+    def makeVO(self, pattern=None):
         contacts = super(GroupConverter, self).makeVO(pattern)
         if pattern:
             isOpened = True
@@ -445,7 +445,7 @@ class GroupConverter(_ContactsConverter):
 
 class ClanConverter(GroupConverter):
 
-    def __init__(self, parentCategory, clanAbbrev = '', condition = None):
+    def __init__(self, parentCategory, clanAbbrev='', condition=None):
         super(ClanConverter, self).__init__(makeClanFullName(clanAbbrev), parentCategory, condition)
 
     def isEmpty(self):
@@ -460,7 +460,7 @@ class ClanConverter(GroupConverter):
 
 class ClubConverter(GroupConverter):
 
-    def __init__(self, parentCategory, clubName = '', condition = None):
+    def __init__(self, parentCategory, clubName='', condition=None):
         super(ClubConverter, self).__init__(makeClubFullName(clubName), parentCategory, condition)
 
     def isEmpty(self):
@@ -543,7 +543,7 @@ class FriendsGroupsConverter(IContactsConverter):
 
         return False
 
-    def clear(self, full = False):
+    def clear(self, full=False):
         while self._groups:
             _, group = self._groups.popitem()
             group.clear()
@@ -606,10 +606,10 @@ class FriendsGroupsConverter(IContactsConverter):
 
         return
 
-    def setGroups(self, groups, isOpened = False):
+    def setGroups(self, groups, isOpened=False):
         self._groups.update(map(lambda group: (group, GroupConverter(group, self.__parentCategory, self._conditionClass(), self._rules, self._showEmptyItem, isOpened)), groups))
 
-    def makeVO(self, pattern = None):
+    def makeVO(self, pattern=None):
         vos = []
         for group in sorted(self._groups.itervalues(), key=lambda group: group.getCriteria()):
             vo = group.makeVO(pattern)

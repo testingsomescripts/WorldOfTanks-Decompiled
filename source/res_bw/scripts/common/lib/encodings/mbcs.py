@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/mbcs.py
 """ Python 'mbcs' Codec for Windows
 
@@ -13,13 +13,13 @@ from codecs import mbcs_encode, mbcs_decode
 import codecs
 encode = mbcs_encode
 
-def decode(input, errors = 'strict'):
+def decode(input, errors='strict'):
     return mbcs_decode(input, errors, True)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return mbcs_encode(input, self.errors)[0]
 
 

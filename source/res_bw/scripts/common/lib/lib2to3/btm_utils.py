@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/btm_utils.py
 """Utility functions used by the btm_matcher module"""
 from . import pytree
@@ -17,7 +17,7 @@ class MinNode(object):
     pattern tree during the conversion to sets of leaf-to-root
     subpatterns"""
 
-    def __init__(self, type = None, name = None):
+    def __init__(self, type=None, name=None):
         self.type = type
         self.name = name
         self.children = []
@@ -97,7 +97,7 @@ class MinNode(object):
             yield self
 
 
-def reduce_tree(node, parent = None):
+def reduce_tree(node, parent=None):
     """
     Internal function. Reduces a compiled pattern tree to an
     intermediate representation suitable for feeding the
@@ -237,5 +237,4 @@ def rec_test(sequence, test_func):
             for y in rec_test(x, test_func):
                 yield y
 
-        else:
-            yield test_func(x)
+        yield test_func(x)

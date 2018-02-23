@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/zipfile.py
 """
 Read and write ZIP files.
@@ -212,7 +213,7 @@ class ZipInfo(object):
     """Class with attributes describing each file in the ZIP archive."""
     __slots__ = ('orig_filename', 'filename', 'date_time', 'compress_type', 'comment', 'extra', 'create_system', 'create_version', 'extract_version', 'reserved', 'flag_bits', 'volume', 'internal_attr', 'external_attr', 'header_offset', 'CRC', 'compress_size', 'file_size', '_raw_time')
 
-    def __init__(self, filename = 'NoName', date_time = (1980, 1, 1, 0, 0, 0)):
+    def __init__(self, filename='NoName', date_time=(1980, 1, 1, 0, 0, 0)):
         self.orig_filename = filename
         null_byte = filename.find(chr(0))
         if null_byte >= 0:
@@ -238,7 +239,7 @@ class ZipInfo(object):
         self.internal_attr = 0
         self.external_attr = 0
 
-    def FileHeader(self, zip64 = None):
+    def FileHeader(self, zip64=None):
         """Return the per-file header as a string."""
         dt = self.date_time
         dosdate = dt[0] - 1980 << 9 | dt[1] << 5 | dt[2]
@@ -339,8 +340,7 @@ class _ZipDecrypter():
             for j in range(8):
                 if crc & 1:
                     crc = crc >> 1 & 2147483647 ^ poly
-                else:
-                    crc = crc >> 1 & 2147483647
+                crc = crc >> 1 & 2147483647
 
             table[i] = crc
 
@@ -401,7 +401,7 @@ class ZipExtFile(io.BufferedIOBase):
     MIN_READ_SIZE = 4096
     PATTERN = re.compile('^(?P<chunk>[^\\r\\n]+)|(?P<newline>\\n|\\r\\n?)')
 
-    def __init__(self, fileobj, mode, zipinfo, decrypter = None, close_fileobj = False):
+    def __init__(self, fileobj, mode, zipinfo, decrypter=None, close_fileobj=False):
         self._fileobj = fileobj
         self._decrypter = decrypter
         self._close_fileobj = close_fileobj
@@ -432,7 +432,7 @@ class ZipExtFile(io.BufferedIOBase):
             self._expected_crc = None
         return
 
-    def readline(self, limit = -1):
+    def readline(self, limit=-1):
         """Read and return a line from the stream.
         
         If limit is specified, at most limit bytes will be read.
@@ -468,7 +468,7 @@ class ZipExtFile(io.BufferedIOBase):
 
             return line
 
-    def peek(self, n = 1):
+    def peek(self, n=1):
         """Returns buffered bytes without advancing the position."""
         if n > len(self._readbuffer) - self._offset:
             chunk = self.read(n)
@@ -482,7 +482,7 @@ class ZipExtFile(io.BufferedIOBase):
     def readable(self):
         return True
 
-    def read(self, n = -1):
+    def read(self, n=-1):
         """Read and return up to n bytes.
         If the argument is omitted, None, or negative, data is read and returned until EOF is reached..
         """
@@ -567,7 +567,7 @@ class ZipFile(object):
     """
     fp = None
 
-    def __init__(self, file, mode = 'r', compression = ZIP_STORED, allowZip64 = False):
+    def __init__(self, file, mode='r', compression=ZIP_STORED, allowZip64=False):
         """Open the ZIP file with mode read "r", write "w" or append "a"."""
         if mode not in ('r', 'w', 'a'):
             raise RuntimeError('ZipFile() requires mode "r", "w", or "a"')
@@ -751,11 +751,11 @@ class ZipFile(object):
         self._comment = comment
         self._didModify = True
 
-    def read(self, name, pwd = None):
+    def read(self, name, pwd=None):
         """Return file bytes (as a string) for name."""
         return self.open(name, 'r', pwd).read()
 
-    def open(self, name, mode = 'r', pwd = None):
+    def open(self, name, mode='r', pwd=None):
         """Return file-like object for 'name'."""
         if mode not in ('r', 'U', 'rU'):
             raise RuntimeError, 'open() requires mode "r", "U", or "rU"'
@@ -808,7 +808,7 @@ class ZipFile(object):
 
         return
 
-    def extract(self, member, path = None, pwd = None):
+    def extract(self, member, path=None, pwd=None):
         """Extract a member from the archive to the current working directory,
            using its full name. Its file information is extracted as accurately
            as possible. `member' may be a filename or a ZipInfo object. You can
@@ -820,7 +820,7 @@ class ZipFile(object):
             path = os.getcwd()
         return self._extract_member(member, path, pwd)
 
-    def extractall(self, path = None, members = None, pwd = None):
+    def extractall(self, path=None, members=None, pwd=None):
         """Extract all members from the archive to the current working
            directory. `path' specifies a different directory to extract to.
            `members' is optional and must be a subset of the list returned
@@ -885,7 +885,7 @@ class ZipFile(object):
             if not self._allowZip64:
                 raise LargeZipFile('Zipfile size would require ZIP64 extensions')
 
-    def write(self, filename, arcname = None, compress_type = None):
+    def write(self, filename, arcname=None, compress_type=None):
         """Put the bytes from filename into the archive under the name
         arcname."""
         if not self.fp:
@@ -965,7 +965,7 @@ class ZipFile(object):
             self.NameToInfo[zinfo.filename] = zinfo
             return
 
-    def writestr(self, zinfo_or_arcname, bytes, compress_type = None):
+    def writestr(self, zinfo_or_arcname, bytes, compress_type=None):
         """Write a file into the archive.  The contents is the string
         'bytes'.  'zinfo_or_arcname' is either a ZipInfo instance or
         the name of the file in the archive."""
@@ -1103,7 +1103,7 @@ class ZipFile(object):
 class PyZipFile(ZipFile):
     """Class to create ZIP archives with Python library files and packages."""
 
-    def writepy(self, pathname, basename = ''):
+    def writepy(self, pathname, basename=''):
         """Add all files from "pathname" to the ZIP archive.
         
         If pathname is a package directory, search the directory and
@@ -1137,7 +1137,7 @@ class PyZipFile(ZipFile):
                     if os.path.isdir(path):
                         if os.path.isfile(os.path.join(path, '__init__.py')):
                             self.writepy(path, basename)
-                    elif ext == '.py':
+                    if ext == '.py':
                         fname, arcname = self._get_codename(path[0:-3], basename)
                         if self.debug:
                             print 'Adding', arcname
@@ -1193,7 +1193,7 @@ class PyZipFile(ZipFile):
         return (fname, archivename)
 
 
-def main(args = None):
+def main(args=None):
     import textwrap
     USAGE = textwrap.dedent('        Usage:\n            zipfile.py -l zipfile.zip        # Show listing of a zipfile\n            zipfile.py -t zipfile.zip        # Test if a zipfile is valid\n            zipfile.py -e zipfile.zip target # Extract zipfile into target dir\n            zipfile.py -c zipfile.zip src ... # Create zipfile from sources\n        ')
     if args is None:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fractions.py
 """Rational, infinite-precision, real numbers."""
 from __future__ import division
@@ -46,7 +46,7 @@ class Fraction(Rational):
     """
     __slots__ = ('_numerator', '_denominator')
 
-    def __new__(cls, numerator = 0, denominator = None):
+    def __new__(cls, numerator=0, denominator=None):
         """Constructs a Fraction.
         
         Takes a string like '3/2' or '1.5', another Rational instance, a
@@ -164,7 +164,7 @@ class Fraction(Rational):
         else:
             return cls(digits, 10 ** (-exp))
 
-    def limit_denominator(self, max_denominator = 1000000):
+    def limit_denominator(self, max_denominator=1000000):
         """Closest Fraction to self with denominator at most max_denominator.
         
         >>> Fraction('3.141592653589793').limit_denominator(10)
@@ -404,9 +404,7 @@ class Fraction(Rational):
             return a ** b._numerator
         if isinstance(a, Rational):
             return Fraction(a.numerator, a.denominator) ** b
-        if b._denominator == 1:
-            return a ** b._numerator
-        return a ** float(b)
+        return a ** b._numerator if b._denominator == 1 else a ** float(b)
 
     def __pos__(a):
         """+a: Coerces a subclass instance to Fraction"""
@@ -501,11 +499,7 @@ class Fraction(Rational):
         return (self.__class__, (str(self),))
 
     def __copy__(self):
-        if type(self) == Fraction:
-            return self
-        return self.__class__(self._numerator, self._denominator)
+        return self if type(self) == Fraction else self.__class__(self._numerator, self._denominator)
 
     def __deepcopy__(self, memo):
-        if type(self) == Fraction:
-            return self
-        return self.__class__(self._numerator, self._denominator)
+        return self if type(self) == Fraction else self.__class__(self._numerator, self._denominator)

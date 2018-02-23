@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sqlite3/test/types.py
 import datetime
 import unittest
@@ -74,11 +75,13 @@ class SqliteTypeTests(unittest.TestCase):
     def CheckNonUtf8_TextFactoryOptimizedUnicode(self):
         orig_text_factory = self.con.text_factory
         try:
-            self.con.text_factory = sqlite.OptimizedUnicode
-            self.cur.execute('select ?', (chr(150),))
-            self.fail('should have raised a ProgrammingError')
-        except sqlite.ProgrammingError:
-            pass
+            try:
+                self.con.text_factory = sqlite.OptimizedUnicode
+                self.cur.execute('select ?', (chr(150),))
+                self.fail('should have raised a ProgrammingError')
+            except sqlite.ProgrammingError:
+                pass
+
         finally:
             self.con.text_factory = orig_text_factory
 
@@ -310,7 +313,6 @@ class ObjectAdaptationTests(unittest.TestCase):
 
 
 @unittest.skipUnless(zlib, 'requires zlib')
-
 class BinaryConverterTests(unittest.TestCase):
 
     def convert(s):

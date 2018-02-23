@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/getopt.py
 """Parser for command line options.
 
@@ -25,7 +25,7 @@ class GetoptError(Exception):
     opt = ''
     msg = ''
 
-    def __init__(self, msg, opt = ''):
+    def __init__(self, msg, opt=''):
         self.msg = msg
         self.opt = opt
         Exception.__init__(self, msg, opt)
@@ -36,7 +36,7 @@ class GetoptError(Exception):
 
 error = GetoptError
 
-def getopt(args, shortopts, longopts = []):
+def getopt(args, shortopts, longopts=[]):
     """getopt(args, options[, long_options]) -> opts, args
     
     Parses command line options and parameter list.  args is the
@@ -73,13 +73,12 @@ def getopt(args, shortopts, longopts = []):
             break
         if args[0].startswith('--'):
             opts, args = do_longs(opts, args[0][2:], longopts, args[1:])
-        else:
-            opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
+        opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
 
     return (opts, args)
 
 
-def gnu_getopt(args, shortopts, longopts = []):
+def gnu_getopt(args, shortopts, longopts=[]):
     """getopt(args, options[, long_options]) -> opts, args
     
     This function works like getopt(), except that GNU style scanning
@@ -112,14 +111,13 @@ def gnu_getopt(args, shortopts, longopts = []):
             break
         if args[0][:2] == '--':
             opts, args = do_longs(opts, args[0][2:], longopts, args[1:])
-        elif args[0][:1] == '-' and args[0] != '-':
+        if args[0][:1] == '-' and args[0] != '-':
             opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
-        elif all_options_first:
+        if all_options_first:
             prog_args += args
             break
-        else:
-            prog_args.append(args[0])
-            args = args[1:]
+        prog_args.append(args[0])
+        args = args[1:]
 
     return (opts, prog_args)
 

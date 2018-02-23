@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/quests/proxy.py
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player
@@ -15,7 +15,7 @@ class SfQuestsProxy(SfLobbyProxy):
         super(SfQuestsProxy, self).__init__(effects_player.EffectsPlayer(effects))
         self._commands = GUICommandsFactory()
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         self._commands = None
         super(SfQuestsProxy, self).fini(isItemsRevert)
         return

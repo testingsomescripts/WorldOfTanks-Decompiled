@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/subprocess.py
 r"""subprocess - Subprocesses with accessible I/O streams
 
@@ -393,7 +394,7 @@ class CalledProcessError(Exception):
     check_output() will also store the output in the output attribute.
     """
 
-    def __init__(self, returncode, cmd, output = None):
+    def __init__(self, returncode, cmd, output=None):
         self.returncode = returncode
         self.cmd = cmd
         self.output = output
@@ -599,15 +600,14 @@ def list2cmdline(seq):
         for c in arg:
             if c == '\\':
                 bs_buf.append(c)
-            elif c == '"':
+            if c == '"':
                 result.append('\\' * len(bs_buf) * 2)
                 bs_buf = []
                 result.append('\\"')
-            else:
-                if bs_buf:
-                    result.extend(bs_buf)
-                    bs_buf = []
-                result.append(c)
+            if bs_buf:
+                result.extend(bs_buf)
+                bs_buf = []
+            result.append(c)
 
         if bs_buf:
             result.extend(bs_buf)
@@ -621,7 +621,7 @@ def list2cmdline(seq):
 class Popen(object):
     _child_created = False
 
-    def __init__(self, args, bufsize = 0, executable = None, stdin = None, stdout = None, stderr = None, preexec_fn = None, close_fds = False, shell = False, cwd = None, env = None, universal_newlines = False, startupinfo = None, creationflags = 0):
+    def __init__(self, args, bufsize=0, executable=None, stdin=None, stdout=None, stderr=None, preexec_fn=None, close_fds=False, shell=False, cwd=None, env=None, universal_newlines=False, startupinfo=None, creationflags=0):
         """Create new Popen instance."""
         _cleanup()
         if not isinstance(bufsize, (int, long)):
@@ -684,7 +684,7 @@ class Popen(object):
         data = data.replace('\r', '\n')
         return data
 
-    def __del__(self, _maxint = sys.maxint):
+    def __del__(self, _maxint=sys.maxint):
         if not self._child_created:
             return
         else:
@@ -693,7 +693,7 @@ class Popen(object):
                 _active.append(self)
             return
 
-    def communicate(self, input = None):
+    def communicate(self, input=None):
         """Interact with process: Send data to stdin.  Read data from
         stdout and stderr, until end-of-file is reached.  Wait for
         process to terminate.  The optional input argument should be a
@@ -830,9 +830,11 @@ class Popen(object):
                 to_close.remove(fd)
 
             try:
-                hp, ht, pid, tid = _subprocess.CreateProcess(executable, args, None, None, int(not close_fds), creationflags, env, cwd, startupinfo)
-            except pywintypes.error as e:
-                raise WindowsError(*e.args)
+                try:
+                    hp, ht, pid, tid = _subprocess.CreateProcess(executable, args, None, None, int(not close_fds), creationflags, env, cwd, startupinfo)
+                except pywintypes.error as e:
+                    raise WindowsError(*e.args)
+
             finally:
                 if p2cread is not None:
                     _close_in_parent(p2cread)
@@ -847,7 +849,7 @@ class Popen(object):
             ht.Close()
             return
 
-        def _internal_poll(self, _deadstate = None, _WaitForSingleObject = _subprocess.WaitForSingleObject, _WAIT_OBJECT_0 = _subprocess.WAIT_OBJECT_0, _GetExitCodeProcess = _subprocess.GetExitCodeProcess):
+        def _internal_poll(self, _deadstate=None, _WaitForSingleObject=_subprocess.WaitForSingleObject, _WAIT_OBJECT_0=_subprocess.WAIT_OBJECT_0, _GetExitCodeProcess=_subprocess.GetExitCodeProcess):
             """Check if child process has terminated.  Returns returncode
             attribute.
             
@@ -981,7 +983,7 @@ class Popen(object):
               errread,
               errwrite), to_close)
 
-        def _set_cloexec_flag(self, fd, cloexec = True):
+        def _set_cloexec_flag(self, fd, cloexec=True):
             try:
                 cloexec_flag = fcntl.FD_CLOEXEC
             except AttributeError:
@@ -1116,7 +1118,7 @@ class Popen(object):
                 raise child_exception
             return
 
-        def _handle_exitstatus(self, sts, _WIFSIGNALED = os.WIFSIGNALED, _WTERMSIG = os.WTERMSIG, _WIFEXITED = os.WIFEXITED, _WEXITSTATUS = os.WEXITSTATUS):
+        def _handle_exitstatus(self, sts, _WIFSIGNALED=os.WIFSIGNALED, _WTERMSIG=os.WTERMSIG, _WIFEXITED=os.WIFEXITED, _WEXITSTATUS=os.WEXITSTATUS):
             if _WIFSIGNALED(sts):
                 self.returncode = -_WTERMSIG(sts)
             elif _WIFEXITED(sts):
@@ -1124,7 +1126,7 @@ class Popen(object):
             else:
                 raise RuntimeError('Unknown child exit status!')
 
-        def _internal_poll(self, _deadstate = None, _waitpid = os.waitpid, _WNOHANG = os.WNOHANG, _os_error = os.error, _ECHILD = errno.ECHILD):
+        def _internal_poll(self, _deadstate=None, _waitpid=os.waitpid, _WNOHANG=os.WNOHANG, _os_error=os.error, _ECHILD=errno.ECHILD):
             """Check if child process has terminated.  Returns returncode
             attribute.
             
@@ -1230,13 +1232,12 @@ class Popen(object):
                         else:
                             if input_offset >= len(input):
                                 close_unregister_and_remove(fd)
-                    elif mode & select_POLLIN_POLLPRI:
+                    if mode & select_POLLIN_POLLPRI:
                         data = os.read(fd, 4096)
                         if not data:
                             close_unregister_and_remove(fd)
                         fd2output[fd].append(data)
-                    else:
-                        close_unregister_and_remove(fd)
+                    close_unregister_and_remove(fd)
 
             return (stdout, stderr)
 

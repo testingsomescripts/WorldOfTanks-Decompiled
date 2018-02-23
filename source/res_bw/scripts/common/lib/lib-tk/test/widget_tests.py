@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/widget_tests.py
 import unittest
 import sys
@@ -36,12 +36,12 @@ class AbstractWidgetTest(object):
         self.addCleanup(widget.destroy)
         return widget
 
-    def assertEqual2(self, actual, expected, msg = None, eq = object.__eq__):
+    def assertEqual2(self, actual, expected, msg=None, eq=object.__eq__):
         if eq(actual, expected):
             return
         self.assertEqual(actual, expected, msg)
 
-    def checkParam(self, widget, name, value, expected = _sentinel, conv = False, eq = None):
+    def checkParam(self, widget, name, value, expected=_sentinel, conv=False, eq=None):
         widget[name] = value
         if expected is _sentinel:
             expected = value
@@ -62,7 +62,7 @@ class AbstractWidgetTest(object):
             self.assertEqual2(t[4], expected, eq=eq)
         return
 
-    def checkInvalidParam(self, widget, name, value, errmsg = None, keep_orig = True):
+    def checkInvalidParam(self, widget, name, value, errmsg=None, keep_orig=True):
         orig = widget[name]
         if errmsg is not None:
             errmsg = errmsg.format(value)
@@ -123,7 +123,7 @@ class AbstractWidgetTest(object):
         self.checkInvalidParam(widget, name, '', errmsg='expected boolean value but got ""')
         self.checkInvalidParam(widget, name, 'spam', errmsg='expected boolean value but got "spam"')
 
-    def checkColorParam(self, widget, name, allow_empty = None, **kwargs):
+    def checkColorParam(self, widget, name, allow_empty=None, **kwargs):
         self.checkParams(widget, name, '#ff0000', '#00ff00', '#0000ff', '#123456', 'red', 'green', 'blue', 'white', 'black', 'grey', **kwargs)
         self.checkInvalidParam(widget, name, 'spam', errmsg='unknown color name "spam"')
 
@@ -466,7 +466,7 @@ def add_standard_options(*source_classes):
                         break
                 else:
 
-                    def test(self, option = option):
+                    def test(self, option=option):
                         widget = self.create()
                         widget[option]
                         raise AssertionError('Option "%s" is not tested in %s' % (option, cls.__name__))

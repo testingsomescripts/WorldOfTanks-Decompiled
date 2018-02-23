@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/account_layout.py
 from dossiers2.common.DossierBlockBuilders import *
 from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES
@@ -358,7 +358,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'falloutSingleWolf',
  'falloutPackOfWolfs',
  'falloutSteelHunter',
- 'falloutAlwaysInLine']
+ 'falloutAlwaysInLine',
+ 'moonSphere']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -378,7 +379,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'falloutSingleWolf',
  'falloutPackOfWolfs',
  'falloutSteelHunter',
- 'falloutAlwaysInLine']
+ 'falloutAlwaysInLine',
+ 'moonSphere']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/charset.py
 __all__ = ['Charset',
  'add_alias',
@@ -63,7 +63,7 @@ CODEC_MAP = {'gb2312': 'eucgb2312_cn',
  'big5': 'big5_tw',
  'us-ascii': None}
 
-def add_charset(charset, header_enc = None, body_enc = None, output_charset = None):
+def add_charset(charset, header_enc=None, body_enc=None, output_charset=None):
     """Add character set properties to the global registry.
     
     charset is the input character set, and must be the canonical name of a
@@ -155,7 +155,7 @@ class Charset:
                   this attribute will have the same value as the input_codec.
     """
 
-    def __init__(self, input_charset = DEFAULT_CHARSET):
+    def __init__(self, input_charset=DEFAULT_CHARSET):
         try:
             if isinstance(input_charset, unicode):
                 input_charset.encode('ascii')
@@ -244,7 +244,7 @@ class Charset:
 
             return
 
-    def from_splittable(self, ustr, to_output = True):
+    def from_splittable(self, ustr, to_output=True):
         """Convert a splittable string back into an encoded string.
         
         Uses the proper codec to try and convert the string from Unicode back
@@ -293,7 +293,7 @@ class Charset:
         else:
             return len(s)
 
-    def header_encode(self, s, convert = False):
+    def header_encode(self, s, convert=False):
         """Header-encode a string, optionally converting it to output_charset.
         
         If convert is True, the string will be converted from the input
@@ -325,7 +325,7 @@ class Charset:
                 return s
             return None
 
-    def body_encode(self, s, convert = True):
+    def body_encode(self, s, convert=True):
         """Body-encode a string and convert it to output_charset.
         
         If convert is True (the default), the string will be converted from

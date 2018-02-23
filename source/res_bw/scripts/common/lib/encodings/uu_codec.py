@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/uu_codec.py
 """ Python 'uu_codec' Codec - UU content transfer encoding
 
@@ -12,7 +12,7 @@
 """
 import codecs, binascii
 
-def uu_encode(input, errors = 'strict', filename = '<data>', mode = 438):
+def uu_encode(input, errors='strict', filename='<data>', mode=438):
     """ Encodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -38,7 +38,7 @@ def uu_encode(input, errors = 'strict', filename = '<data>', mode = 438):
     return (outfile.getvalue(), len(input))
 
 
-def uu_decode(input, errors = 'strict'):
+def uu_decode(input, errors='strict'):
     """ Decodes the object input and returns a tuple (output
         object, length consumed).
     
@@ -87,22 +87,22 @@ def uu_decode(input, errors = 'strict'):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         return uu_encode(input, errors)
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         return uu_decode(input, errors)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return uu_encode(input, self.errors)[0]
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         return uu_decode(input, self.errors)[0]
 
 

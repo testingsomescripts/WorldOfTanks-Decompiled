@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/iso8859_10.py
 """ Python Character Mapping Codec iso8859_10 generated from 'MAPPINGS/ISO8859/8859-10.TXT' with gencodec.py.
 
@@ -7,22 +7,22 @@ import codecs
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         return codecs.charmap_encode(input, errors, encoding_table)
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         return codecs.charmap_decode(input, errors, decoding_table)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return codecs.charmap_encode(input, self.errors, encoding_table)[0]
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         return codecs.charmap_decode(input, self.errors, decoding_table)[0]
 
 

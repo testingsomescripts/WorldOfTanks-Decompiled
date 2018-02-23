@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_join.py
 """TestCases for using the DB.join and DBCursor.join_item methods.
 """
@@ -38,11 +38,11 @@ class JoinTestCase(unittest.TestCase):
             print 'Running %s.test01_join...' % self.__class__.__name__
         priDB = db.DB(self.env)
         priDB.open(self.filename, 'primary', db.DB_BTREE, db.DB_CREATE)
-        map(lambda t, priDB = priDB: priDB.put(*t), ProductIndex)
+        map(lambda t, priDB=priDB: priDB.put(*t), ProductIndex)
         secDB = db.DB(self.env)
         secDB.set_flags(db.DB_DUP | db.DB_DUPSORT)
         secDB.open(self.filename, 'secondary', db.DB_BTREE, db.DB_CREATE)
-        map(lambda t, secDB = secDB: secDB.put(*t), ColorIndex)
+        map(lambda t, secDB=secDB: secDB.put(*t), ColorIndex)
         sCursor = None
         jCursor = None
         try:

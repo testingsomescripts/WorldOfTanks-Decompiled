@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mailbox.py
 """Read/write support for Maildir, mbox, MH, Babyl, and MMDF mailboxes."""
 import sys
@@ -45,7 +45,7 @@ __all__ = ['Mailbox',
 class Mailbox():
     """A group of messages in a particular place."""
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize a Mailbox instance."""
         self._path = os.path.abspath(os.path.expanduser(path))
         self._factory = factory
@@ -72,7 +72,7 @@ class Mailbox():
         """Replace the keyed message; raise KeyError if it doesn't exist."""
         raise NotImplementedError('Method must be implemented by subclass')
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         """Return the keyed message, or default if it doesn't exist."""
         try:
             return self.__getitem__(key)
@@ -153,7 +153,7 @@ class Mailbox():
         for key in self.iterkeys():
             self.discard(key)
 
-    def pop(self, key, default = None):
+    def pop(self, key, default=None):
         """Delete the keyed message and return it, or default."""
         try:
             result = self[key]
@@ -170,7 +170,7 @@ class Mailbox():
         else:
             raise KeyError('No messages in mailbox')
 
-    def update(self, arg = None):
+    def update(self, arg=None):
         """Change the messages that correspond to certain keys."""
         if hasattr(arg, 'iteritems'):
             source = arg.iteritems()
@@ -206,7 +206,7 @@ class Mailbox():
 
     _append_newline = False
 
-    def _dump_message(self, message, target, mangle_from_ = False):
+    def _dump_message(self, message, target, mangle_from_=False):
         """Dump message contents to target file."""
         if isinstance(message, email.message.Message):
             buffer = StringIO.StringIO()
@@ -247,7 +247,7 @@ class Maildir(Mailbox):
     """A qmail-style Maildir mailbox."""
     colon = ':'
 
-    def __init__(self, dirname, factory = rfc822.Message, create = True):
+    def __init__(self, dirname, factory=rfc822.Message, create=True):
         """Initialize a Maildir instance."""
         Mailbox.__init__(self, dirname, factory, create)
         self._paths = {'tmp': os.path.join(self._path, 'tmp'),
@@ -547,7 +547,7 @@ class Maildir(Mailbox):
 class _singlefileMailbox(Mailbox):
     """A single-file mailbox."""
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize a single-file mailbox."""
         Mailbox.__init__(self, path, factory, create)
         try:
@@ -697,7 +697,7 @@ class _singlefileMailbox(Mailbox):
             self.unlock()
         self._file.close()
 
-    def _lookup(self, key = None):
+    def _lookup(self, key=None):
         """Return (start, stop) or raise KeyError."""
         if self._toc is None:
             self._generate_toc()
@@ -742,7 +742,7 @@ class _mboxMMDF(_singlefileMailbox):
         msg.set_from(from_line[5:])
         return msg
 
-    def get_string(self, key, from_ = False):
+    def get_string(self, key, from_=False):
         """Return a string representation or raise a KeyError."""
         start, stop = self._lookup(key)
         self._file.seek(start)
@@ -751,7 +751,7 @@ class _mboxMMDF(_singlefileMailbox):
         string = self._file.read(stop - self._file.tell())
         return string.replace(os.linesep, '\n')
 
-    def get_file(self, key, from_ = False):
+    def get_file(self, key, from_=False):
         """Return a file-like representation or raise a KeyError."""
         start, stop = self._lookup(key)
         self._file.seek(start)
@@ -788,7 +788,7 @@ class mbox(_mboxMMDF):
     _mangle_from_ = True
     _append_newline = True
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize an mbox mailbox."""
         self._message_factory = mboxMessage
         _mboxMMDF.__init__(self, path, factory, create)
@@ -813,16 +813,15 @@ class mbox(_mboxMMDF):
                         stops.append(line_pos)
                 starts.append(line_pos)
                 last_was_empty = False
-            elif not line:
+            if not line:
                 if last_was_empty:
                     stops.append(line_pos - len(os.linesep))
                 else:
                     stops.append(line_pos)
                 break
-            elif line == os.linesep:
+            if line == os.linesep:
                 last_was_empty = True
-            else:
-                last_was_empty = False
+            last_was_empty = False
 
         self._toc = dict(enumerate(zip(starts, stops)))
         self._next_key = len(self._toc)
@@ -832,7 +831,7 @@ class mbox(_mboxMMDF):
 class MMDF(_mboxMMDF):
     """An MMDF mailbox."""
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize an MMDF mailbox."""
         self._message_factory = MMDFMessage
         _mboxMMDF.__init__(self, path, factory, create)
@@ -863,11 +862,11 @@ class MMDF(_mboxMMDF):
                     if line == '\x01\x01\x01\x01' + os.linesep:
                         stops.append(line_pos - len(os.linesep))
                         break
-                    elif line == '':
+                    if line == '':
                         stops.append(line_pos)
                         break
 
-            elif line == '':
+            if line == '':
                 break
 
         self._toc = dict(enumerate(zip(starts, stops)))
@@ -879,7 +878,7 @@ class MMDF(_mboxMMDF):
 class MH(Mailbox):
     """An MH mailbox."""
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize an MH instance."""
         Mailbox.__init__(self, path, factory, create)
         if not os.path.exists(self._path):
@@ -1112,9 +1111,8 @@ class MH(Mailbox):
                     for spec in contents.split():
                         if spec.isdigit():
                             keys.add(int(spec))
-                        else:
-                            start, stop = (int(x) for x in spec.split('-'))
-                            keys.update(range(start, stop + 1))
+                        start, stop = (int(x) for x in spec.split('-'))
+                        keys.update(range(start, stop + 1))
 
                     results[name] = [ key for key in sorted(keys) if key in all_keys ]
                     if len(results[name]) == 0:
@@ -1152,8 +1150,7 @@ class MH(Mailbox):
 
                 if completing:
                     f.write(str(prev) + '\n')
-                else:
-                    f.write('\n')
+                f.write('\n')
 
         finally:
             _sync_close(f)
@@ -1192,7 +1189,7 @@ class MH(Mailbox):
         for name, key_list in all_sequences.iteritems():
             if name in pending_sequences:
                 key_list.append(key)
-            elif key in key_list:
+            if key in key_list:
                 del key_list[key_list.index(key)]
 
         for sequence in pending_sequences:
@@ -1206,7 +1203,7 @@ class Babyl(_singlefileMailbox):
     """An Rmail-style Babyl mailbox."""
     _special_labels = frozenset(('unseen', 'deleted', 'filed', 'answered', 'forwarded', 'edited', 'resent'))
 
-    def __init__(self, path, factory = None, create = True):
+    def __init__(self, path, factory=None, create=True):
         """Initialize a Babyl mailbox."""
         _singlefileMailbox.__init__(self, path, factory, create)
         self._labels = {}
@@ -1305,10 +1302,10 @@ class Babyl(_singlefileMailbox):
                 starts.append(next_pos)
                 labels = [ label.strip() for label in self._file.readline()[1:].split(',') if label.strip() != '' ]
                 label_lists.append(labels)
-            elif line == '\x1f' or line == '\x1f' + os.linesep:
+            if line == '\x1f' or line == '\x1f' + os.linesep:
                 if len(stops) < len(starts):
                     stops.append(line_pos - len(os.linesep))
-            elif line == '':
+            if line == '':
                 stops.append(line_pos - len(os.linesep))
                 break
 
@@ -1342,8 +1339,7 @@ class Babyl(_singlefileMailbox):
             for label in message.get_labels():
                 if label in self._special_labels:
                     special_labels.append(label)
-                else:
-                    labels.append(label)
+                labels.append(label)
 
             self._file.write('1')
             for label in special_labels:
@@ -1431,7 +1427,7 @@ class Babyl(_singlefileMailbox):
 class Message(email.message.Message):
     """Message with mailbox-format-specific properties."""
 
-    def __init__(self, message = None):
+    def __init__(self, message=None):
         """Initialize a Message instance."""
         if isinstance(message, email.message.Message):
             self._become_message(copy.deepcopy(message))
@@ -1462,7 +1458,7 @@ class Message(email.message.Message):
 class MaildirMessage(Message):
     """Message with Maildir-specific properties."""
 
-    def __init__(self, message = None):
+    def __init__(self, message=None):
         """Initialize a MaildirMessage instance."""
         self._subdir = 'new'
         self._info = ''
@@ -1568,7 +1564,7 @@ class MaildirMessage(Message):
 class _mboxMMDFMessage(Message):
     """Message with mbox- or MMDF-specific properties."""
 
-    def __init__(self, message = None):
+    def __init__(self, message=None):
         """Initialize an mboxMMDFMessage instance."""
         self.set_from('MAILER-DAEMON', True)
         if isinstance(message, email.message.Message):
@@ -1582,7 +1578,7 @@ class _mboxMMDFMessage(Message):
         """Return contents of "From " line."""
         return self._from
 
-    def set_from(self, from_, time_ = None):
+    def set_from(self, from_, time_=None):
         """Set "From " line, formatting and appending time_ if specified."""
         if time_ is not None:
             if time_ is True:
@@ -1688,7 +1684,7 @@ class mboxMessage(_mboxMMDFMessage):
 class MHMessage(Message):
     """Message with MH-specific properties."""
 
-    def __init__(self, message = None):
+    def __init__(self, message=None):
         """Initialize an MHMessage instance."""
         self._sequences = []
         Message.__init__(self, message)
@@ -1758,7 +1754,7 @@ class MHMessage(Message):
 class BabylMessage(Message):
     """Message with Babyl-specific properties."""
 
-    def __init__(self, message = None):
+    def __init__(self, message=None):
         """Initialize an BabylMessage instance."""
         self._labels = []
         self._visible = Message()
@@ -1800,8 +1796,7 @@ class BabylMessage(Message):
         for header in self._visible.keys():
             if header in self:
                 self._visible.replace_header(header, self[header])
-            else:
-                del self._visible[header]
+            del self._visible[header]
 
         for header in ('Date', 'From', 'Reply-To', 'To', 'CC', 'Subject'):
             if header in self and header not in self._visible:
@@ -1857,7 +1852,7 @@ class MMDFMessage(_mboxMMDFMessage):
 class _ProxyFile():
     """A read-only wrapper of a file."""
 
-    def __init__(self, f, pos = None):
+    def __init__(self, f, pos=None):
         """Initialize a _ProxyFile."""
         self._file = f
         if pos is None:
@@ -1866,15 +1861,15 @@ class _ProxyFile():
             self._pos = pos
         return
 
-    def read(self, size = None):
+    def read(self, size=None):
         """Read bytes."""
         return self._read(size, self._file.read)
 
-    def readline(self, size = None):
+    def readline(self, size=None):
         """Read a line."""
         return self._read(size, self._file.readline)
 
-    def readlines(self, sizehint = None):
+    def readlines(self, sizehint=None):
         """Read multiple lines."""
         result = []
         for line in self:
@@ -1894,7 +1889,7 @@ class _ProxyFile():
         """Return the position."""
         return self._pos
 
-    def seek(self, offset, whence = 0):
+    def seek(self, offset, whence=0):
         """Change position."""
         if whence == 1:
             self._file.seek(self._pos)
@@ -1921,7 +1916,7 @@ class _ProxyFile():
 class _PartialFile(_ProxyFile):
     """A read-only wrapper of part of a file."""
 
-    def __init__(self, f, start = None, stop = None):
+    def __init__(self, f, start=None, stop=None):
         """Initialize a _PartialFile."""
         _ProxyFile.__init__(self, f, start)
         self._start = start
@@ -1931,7 +1926,7 @@ class _PartialFile(_ProxyFile):
         """Return the position with respect to start."""
         return _ProxyFile.tell(self) - self._start
 
-    def seek(self, offset, whence = 0):
+    def seek(self, offset, whence=0):
         """Change position, possibly with respect to start or stop."""
         if whence == 0:
             self._pos = self._start
@@ -1956,7 +1951,7 @@ class _PartialFile(_ProxyFile):
             del self._file
 
 
-def _lock_file(f, dotlock = True):
+def _lock_file(f, dotlock=True):
     """Lock file f using lockf and dot locking."""
     dotlock_done = False
     try:
@@ -2041,7 +2036,7 @@ def _sync_close(f):
 
 class _Mailbox():
 
-    def __init__(self, fp, factory = rfc822.Message):
+    def __init__(self, fp, factory=rfc822.Message):
         self.fp = fp
         self.seekp = 0
         self.factory = factory
@@ -2132,7 +2127,7 @@ class MmdfMailbox(_Mailbox):
 
 class MHMailbox():
 
-    def __init__(self, dirname, factory = rfc822.Message):
+    def __init__(self, dirname, factory=rfc822.Message):
         import re
         pat = re.compile('^[1-9][0-9]*$')
         self.dirname = dirname

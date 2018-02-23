@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/base64.py
 """RFC 3548: Base16, Base32, Base64 Data Encodings"""
 import re
@@ -29,7 +29,7 @@ def _translate(s, altchars):
     return s.translate(''.join(translation))
 
 
-def b64encode(s, altchars = None):
+def b64encode(s, altchars=None):
     """Encode a string using Base64.
     
     s is the string to encode.  Optional altchars must be a string of at least
@@ -40,14 +40,11 @@ def b64encode(s, altchars = None):
     The encoded string is returned.
     """
     encoded = binascii.b2a_base64(s)[:-1]
-    if altchars is not None:
-        return _translate(encoded, {'+': altchars[0],
-         '/': altchars[1]})
-    else:
-        return encoded
+    return _translate(encoded, {'+': altchars[0],
+     '/': altchars[1]}) if altchars is not None else encoded
 
 
-def b64decode(s, altchars = None):
+def b64decode(s, altchars=None):
     """Decode a Base64 encoded string.
     
     s is the string to decode.  Optional altchars must be a string of at least
@@ -175,12 +172,10 @@ def b32encode(s):
         return encoded[:-4] + '===='
     if leftover == 3:
         return encoded[:-3] + '==='
-    if leftover == 4:
-        return encoded[:-1] + '='
-    return encoded
+    return encoded[:-1] + '=' if leftover == 4 else encoded
 
 
-def b32decode(s, casefold = False, map01 = None):
+def b32decode(s, casefold=False, map01=None):
     """Decode a Base32 encoded string.
     
     s is the string to decode.  Optional casefold is a flag specifying whether
@@ -252,7 +247,7 @@ def b16encode(s):
     return binascii.hexlify(s).upper()
 
 
-def b16decode(s, casefold = False):
+def b16decode(s, casefold=False):
     """Decode a Base16 encoded string.
     
     s is the string to decode.  Optional casefold is a flag specifying whether

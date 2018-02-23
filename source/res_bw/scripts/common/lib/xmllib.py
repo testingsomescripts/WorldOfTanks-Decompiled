@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xmllib.py
 """A parser for XML, using the derived class as static DTD."""
 import re
@@ -90,7 +91,7 @@ class XMLParser():
                 start, end = self.elements.get(tag, (None, None))
                 if start is None:
                     self.elements[tag] = (getattr(self, key), end)
-            elif key[:4] == 'end_':
+            if key[:4] == 'end_':
                 tag = key[4:]
                 start, end = self.elements.get(tag, (None, None))
                 if end is None:
@@ -129,7 +130,7 @@ class XMLParser():
             self.__fixed = 0
             del self.elements
 
-    def translate_references(self, data, all = 1):
+    def translate_references(self, data, all=1):
         if not self.__translate_attribute_references:
             return data
         else:
@@ -173,8 +174,7 @@ class XMLParser():
                 data = data[:s] + str + data[i:]
                 if rescan:
                     i = s
-                else:
-                    i = s + len(str)
+                i = s + len(str)
 
             return
 
@@ -521,8 +521,8 @@ class XMLParser():
             if attrvalue is None:
                 self.syntax_error("no value specified for attribute `%s'" % attrname)
                 attrvalue = attrname
-            elif attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
-                attrvalue = attrvalue[1:-1]
+            elif not attrvalue[:1] == "'" == attrvalue[-1:]:
+                attrvalue = attrvalue[:1] == '"' == attrvalue[-1:] and attrvalue[1:-1]
             elif not self.__accept_unquoted_attributes:
                 self.syntax_error("attribute `%s' value not quoted" % attrname)
             res = xmlns.match(attrname)
@@ -645,10 +645,9 @@ class XMLParser():
                 tag = res.group(0)
                 if self.__map_case:
                     tag = tag.lower()
-                if self.literal:
-                    if not self.stack or tag != self.stack[-1][0]:
-                        self.handle_data(rawdata[i])
-                        return i + 1
+                if self.literal and (not self.stack or tag != self.stack[-1][0]):
+                    self.handle_data(rawdata[i])
+                    return i + 1
                 k = res.end(0)
             if endbracket.match(rawdata, k) is None:
                 self.syntax_error('garbage in end tag')
@@ -826,7 +825,7 @@ class TestXMLParser(XMLParser):
         self.flush()
 
 
-def test(args = None):
+def test(args=None):
     import sys, getopt
     from time import time
     if not args:
@@ -837,7 +836,7 @@ def test(args = None):
     for o, a in opts:
         if o == '-s':
             klass = XMLParser
-        elif o == '-t':
+        if o == '-t':
             do_time = 1
 
     if args:

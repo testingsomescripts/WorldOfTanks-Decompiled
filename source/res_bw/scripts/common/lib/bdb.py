@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bdb.py
 """Debugger basics"""
 import fnmatch
@@ -20,7 +20,7 @@ class Bdb():
     The standard debugger class (pdb.Pdb) is an example.
     """
 
-    def __init__(self, skip = None):
+    def __init__(self, skip=None):
         self.skip = set(skip) if skip else None
         self.breaks = {}
         self.fncache = {}
@@ -164,7 +164,7 @@ class Bdb():
     def user_exception(self, frame, exc_info):
         exc_type, exc_value, exc_traceback = exc_info
 
-    def _set_stopinfo(self, stopframe, returnframe, stoplineno = 0):
+    def _set_stopinfo(self, stopframe, returnframe, stoplineno=0):
         self.stopframe = stopframe
         self.returnframe = returnframe
         self.quitting = 0
@@ -193,7 +193,7 @@ class Bdb():
         """Stop when returning from the given frame."""
         self._set_stopinfo(frame.f_back, frame)
 
-    def set_trace(self, frame = None):
+    def set_trace(self, frame=None):
         """Start debugging from `frame`.
         
         If frame is not specified, debugging starts from caller's frame.
@@ -228,7 +228,7 @@ class Bdb():
         sys.settrace(None)
         return
 
-    def set_break(self, filename, lineno, temporary = 0, cond = None, funcname = None):
+    def set_break(self, filename, lineno, temporary=0, cond=None, funcname=None):
         filename = self.canonic(filename)
         import linecache
         line = linecache.getline(filename, lineno)
@@ -332,7 +332,7 @@ class Bdb():
             i = max(0, len(stack) - 1)
         return (stack, i)
 
-    def format_stack_entry(self, frame_lineno, lprefix = ': '):
+    def format_stack_entry(self, frame_lineno, lprefix=': '):
         import linecache, repr
         frame, lineno = frame_lineno
         filename = self.canonic(frame.f_code.co_filename)
@@ -358,7 +358,7 @@ class Bdb():
             s = s + lprefix + line.strip()
         return s
 
-    def run(self, cmd, globals = None, locals = None):
+    def run(self, cmd, globals=None, locals=None):
         if globals is None:
             import __main__
             globals = __main__.__dict__
@@ -369,16 +369,18 @@ class Bdb():
         if not isinstance(cmd, types.CodeType):
             cmd = cmd + '\n'
         try:
-            exec cmd in globals, locals
-        except BdbQuit:
-            pass
+            try:
+                exec cmd in globals, locals
+            except BdbQuit:
+                pass
+
         finally:
             self.quitting = 1
             sys.settrace(None)
 
         return
 
-    def runeval(self, expr, globals = None, locals = None):
+    def runeval(self, expr, globals=None, locals=None):
         if globals is None:
             import __main__
             globals = __main__.__dict__
@@ -389,9 +391,11 @@ class Bdb():
         if not isinstance(expr, types.CodeType):
             expr = expr + '\n'
         try:
-            return eval(expr, globals, locals)
-        except BdbQuit:
-            pass
+            try:
+                return eval(expr, globals, locals)
+            except BdbQuit:
+                pass
+
         finally:
             self.quitting = 1
             sys.settrace(None)
@@ -406,9 +410,11 @@ class Bdb():
         sys.settrace(self.trace_dispatch)
         res = None
         try:
-            res = func(*args, **kwds)
-        except BdbQuit:
-            pass
+            try:
+                res = func(*args, **kwds)
+            except BdbQuit:
+                pass
+
         finally:
             self.quitting = 1
             sys.settrace(None)
@@ -437,7 +443,7 @@ class Breakpoint():
     bplist = {}
     bpbynumber = [None]
 
-    def __init__(self, file, line, temporary = 0, cond = None, funcname = None):
+    def __init__(self, file, line, temporary=0, cond=None, funcname=None):
         self.funcname = funcname
         self.func_first_executable_line = None
         self.file = file
@@ -470,7 +476,7 @@ class Breakpoint():
     def disable(self):
         self.enabled = 0
 
-    def bpprint(self, out = None):
+    def bpprint(self, out=None):
         if out is None:
             out = sys.stdout
         if self.temporary:
@@ -508,9 +514,7 @@ def checkfuncname(b, frame):
         return False
     if not b.func_first_executable_line:
         b.func_first_executable_line = frame.f_lineno
-    if b.func_first_executable_line != frame.f_lineno:
-        return False
-    return True
+    return False if b.func_first_executable_line != frame.f_lineno else True
 
 
 def effective(file, line, frame):
@@ -535,16 +539,15 @@ def effective(file, line, frame):
                 continue
             else:
                 return (b, 1)
-        else:
-            try:
-                val = eval(b.cond, frame.f_globals, frame.f_locals)
-                if val:
-                    if b.ignore > 0:
-                        b.ignore = b.ignore - 1
-                    else:
-                        return (b, 1)
-            except:
-                return (b, 0)
+        try:
+            val = eval(b.cond, frame.f_globals, frame.f_locals)
+            if val:
+                if b.ignore > 0:
+                    b.ignore = b.ignore - 1
+                else:
+                    return (b, 1)
+        except:
+            return (b, 0)
 
     return (None, None)
 

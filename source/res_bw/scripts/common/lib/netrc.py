@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/netrc.py
 """An object-oriented interface to .netrc files."""
 import os, stat, shlex
@@ -8,7 +9,7 @@ __all__ = ['netrc', 'NetrcParseError']
 class NetrcParseError(Exception):
     """Exception raised on syntax errors in the .netrc file."""
 
-    def __init__(self, msg, filename = None, lineno = None):
+    def __init__(self, msg, filename=None, lineno=None):
         self.filename = filename
         self.lineno = lineno
         self.msg = msg
@@ -20,7 +21,7 @@ class NetrcParseError(Exception):
 
 class netrc:
 
-    def __init__(self, file = None):
+    def __init__(self, file=None):
         default_netrc = file is None
         if file is None:
             try:
@@ -80,11 +81,11 @@ class netrc:
                         break
                     else:
                         raise NetrcParseError('malformed %s entry %s terminated by %s' % (toplevel, entryname, repr(tt)), file, lexer.lineno)
-                elif tt == 'login' or tt == 'user':
+                if tt == 'login' or tt == 'user':
                     login = lexer.get_token()
-                elif tt == 'account':
+                if tt == 'account':
                     account = lexer.get_token()
-                elif tt == 'password':
+                if tt == 'password':
                     if os.name == 'posix' and default_netrc:
                         prop = os.fstat(fp.fileno())
                         if prop.st_uid != os.getuid():
@@ -102,8 +103,7 @@ class netrc:
                         if prop.st_mode & (stat.S_IRWXG | stat.S_IRWXO):
                             raise NetrcParseError('~/.netrc access too permissive: access permissions must restrict access to only the owner', file, lexer.lineno)
                     password = lexer.get_token()
-                else:
-                    raise NetrcParseError('bad follower token %r' % tt, file, lexer.lineno)
+                raise NetrcParseError('bad follower token %r' % tt, file, lexer.lineno)
 
         return
 

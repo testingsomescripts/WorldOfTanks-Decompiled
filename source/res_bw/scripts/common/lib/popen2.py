@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/popen2.py
 """Spawn a command with pipes to its stdin, stdout, and optionally stderr.
 
@@ -32,7 +33,7 @@ class Popen3:
     internally by the functions popen2() and popen3()."""
     sts = -1
 
-    def __init__(self, cmd, capturestderr = False, bufsize = -1):
+    def __init__(self, cmd, capturestderr=False, bufsize=-1):
         """The parameter 'cmd' is the shell command to execute in a
         sub-process.  On UNIX, 'cmd' may be a sequence, in which case arguments
         will be passed directly to the program without shell intervention (as
@@ -82,7 +83,7 @@ class Popen3:
         finally:
             os._exit(1)
 
-    def poll(self, _deadstate = None):
+    def poll(self, _deadstate=None):
         """Return the exit status of the child process if it has finished,
         or -1 if it hasn't finished yet."""
         if self.sts < 0:
@@ -98,9 +99,9 @@ class Popen3:
 
     def wait(self):
         """Wait for and return the exit status of the child process."""
-        pid, sts = self.sts < 0 and os.waitpid(self.pid, 0)
-        if not pid == self.pid:
-            raise AssertionError
+        if self.sts < 0:
+            pid, sts = os.waitpid(self.pid, 0)
+            assert pid == self.pid
             self.sts = sts
         return self.sts
 
@@ -108,7 +109,7 @@ class Popen3:
 class Popen4(Popen3):
     childerr = None
 
-    def __init__(self, cmd, bufsize = -1):
+    def __init__(self, cmd, bufsize=-1):
         _cleanup()
         self.cmd = cmd
         p2cread, p2cwrite = os.pipe()
@@ -129,7 +130,7 @@ if sys.platform[:3] == 'win' or sys.platform == 'os2emx':
     del Popen3
     del Popen4
 
-    def popen2(cmd, bufsize = -1, mode = 't'):
+    def popen2(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a
@@ -140,7 +141,7 @@ if sys.platform[:3] == 'win' or sys.platform == 'os2emx':
         return (r, w)
 
 
-    def popen3(cmd, bufsize = -1, mode = 't'):
+    def popen3(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a
@@ -151,7 +152,7 @@ if sys.platform[:3] == 'win' or sys.platform == 'os2emx':
         return (r, w, e)
 
 
-    def popen4(cmd, bufsize = -1, mode = 't'):
+    def popen4(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a
@@ -164,7 +165,7 @@ if sys.platform[:3] == 'win' or sys.platform == 'os2emx':
 
 else:
 
-    def popen2(cmd, bufsize = -1, mode = 't'):
+    def popen2(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a
@@ -175,7 +176,7 @@ else:
         return (inst.fromchild, inst.tochild)
 
 
-    def popen3(cmd, bufsize = -1, mode = 't'):
+    def popen3(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a
@@ -186,7 +187,7 @@ else:
         return (inst.fromchild, inst.tochild, inst.childerr)
 
 
-    def popen4(cmd, bufsize = -1, mode = 't'):
+    def popen4(cmd, bufsize=-1, mode='t'):
         """Execute the shell command 'cmd' in a sub-process. On UNIX, 'cmd' may
         be a sequence, in which case arguments will be passed directly to the
         program without shell intervention (as with os.spawnv()). If 'cmd' is a

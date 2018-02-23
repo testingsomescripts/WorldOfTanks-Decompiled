@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Cipher/blockalgo.py
 """Module with definitions common to all block ciphers."""
 import sys
@@ -26,7 +26,7 @@ MODE_EAX = 9
 MODE_SIV = 10
 MODE_GCM = 11
 
-def _getParameter(name, index, args, kwargs, default = None):
+def _getParameter(name, index, args, kwargs, default=None):
     """Find a parameter in tuple and dictionary arguments a function receives"""
     param = kwargs.get(name)
     if len(args) > index:
@@ -226,7 +226,7 @@ class BlockAlgo:
         self._cipher = factory.new(key, MODE_CFB, self._encrypted_IV[-self.block_size:], segment_size=self.block_size * 8)
         return
 
-    def _start_ccm(self, assoc_len = None, msg_len = None):
+    def _start_ccm(self, assoc_len=None, msg_len=None):
         if self._cipherMAC.can_reduce():
             return
         else:

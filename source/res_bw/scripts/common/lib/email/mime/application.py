@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/mime/application.py
 """Class representing application/* type MIME documents."""
 __all__ = ['MIMEApplication']
@@ -8,7 +8,7 @@ from email.mime.nonmultipart import MIMENonMultipart
 class MIMEApplication(MIMENonMultipart):
     """Class for generating application/* MIME documents."""
 
-    def __init__(self, _data, _subtype = 'octet-stream', _encoder = encoders.encode_base64, **_params):
+    def __init__(self, _data, _subtype='octet-stream', _encoder=encoders.encode_base64, **_params):
         """Create an application/* type MIME document.
         
         _data is a string containing the raw application data.

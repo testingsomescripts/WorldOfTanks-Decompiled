@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_next.py
 """Fixer for it.next() -> next(it), per PEP 3114."""
 from ..pgen2 import token
@@ -65,13 +65,9 @@ def is_assign_target(node):
 def find_assign(node):
     if node.type == syms.expr_stmt:
         return node
-    elif node.type == syms.simple_stmt or node.parent is None:
-        return
     else:
-        return find_assign(node.parent)
+        return None if node.type == syms.simple_stmt or node.parent is None else find_assign(node.parent)
 
 
 def is_subtree(root, node):
-    if root == node:
-        return True
-    return any((is_subtree(c, node) for c in root.children))
+    return True if root == node else any((is_subtree(c, node) for c in root.children))

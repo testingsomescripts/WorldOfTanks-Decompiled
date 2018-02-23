@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_associate.py
 """
 TestCases for DB.associate.
@@ -120,13 +120,13 @@ class AssociateTestCase(unittest.TestCase):
         test_support.rmtree(self.homeDir)
         return
 
-    def addDataToDB(self, d, txn = None):
+    def addDataToDB(self, d, txn=None):
         for key, value in musicdata.items():
             if type(self.keytype) == type(''):
                 key = '%02d' % key
             d.put(key, '|'.join(value), txn=txn)
 
-    def createDB(self, txn = None):
+    def createDB(self, txn=None):
         self.cur = None
         self.secDB = None
         self.primary = db.DB(self.env)
@@ -193,7 +193,7 @@ class AssociateTestCase(unittest.TestCase):
                 print 'Running %s.test04_associateAfterDB...' % self.__class__.__name__
             return self._associateAfterDB(self.getGenreList)
 
-    def finish_test(self, secDB, txn = None):
+    def finish_test(self, secDB, txn=None):
         vals = secDB.pget('Blues', txn=txn)
         self.assertEqual(vals, None, vals)
         vals = secDB.pget('Unknown', txn=txn)

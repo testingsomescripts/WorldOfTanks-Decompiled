@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/weakref.py
 """Weak reference support for Python.
 
@@ -32,7 +33,7 @@ class WeakValueDictionary(UserDict.UserDict):
 
     def __init__(self, *args, **kw):
 
-        def remove(wr, selfref = ref(self)):
+        def remove(wr, selfref=ref(self)):
             self = selfref()
             if self is not None:
                 if self._iterating:
@@ -115,7 +116,7 @@ class WeakValueDictionary(UserDict.UserDict):
 
         return new
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         try:
             wr = self.data[key]
         except KeyError:
@@ -203,7 +204,7 @@ class WeakValueDictionary(UserDict.UserDict):
             return o
         return
 
-    def setdefault(self, key, default = None):
+    def setdefault(self, key, default=None):
         try:
             wr = self.data[key]
         except KeyError:
@@ -214,7 +215,7 @@ class WeakValueDictionary(UserDict.UserDict):
 
         return wr()
 
-    def update(self, dict = None, **kwargs):
+    def update(self, dict=None, **kwargs):
         if self._pending_removals:
             self._commit_removals()
         d = self.data
@@ -281,10 +282,10 @@ class WeakKeyDictionary(UserDict.UserDict):
     accesses.
     """
 
-    def __init__(self, dict = None):
+    def __init__(self, dict=None):
         self.data = {}
 
-        def remove(k, selfref = ref(self)):
+        def remove(k, selfref=ref(self)):
             self = selfref()
             if self is not None:
                 if self._iterating:
@@ -342,7 +343,7 @@ class WeakKeyDictionary(UserDict.UserDict):
 
         return new
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         return self.data.get(ref(key), default)
 
     def has_key(self, key):
@@ -442,10 +443,10 @@ class WeakKeyDictionary(UserDict.UserDict):
     def pop(self, key, *args):
         return self.data.pop(ref(key), *args)
 
-    def setdefault(self, key, default = None):
+    def setdefault(self, key, default=None):
         return self.data.setdefault(ref(key, self._remove), default)
 
-    def update(self, dict = None, **kwargs):
+    def update(self, dict=None, **kwargs):
         d = self.data
         if dict is not None:
             if not hasattr(dict, 'items'):

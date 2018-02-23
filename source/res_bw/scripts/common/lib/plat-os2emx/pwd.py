@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-os2emx/pwd.py
 """Replacement for pwd standard extension module, intended for use on
 OS/2 and similar systems which don't normally have an /etc/passwd file.
@@ -117,7 +118,7 @@ class Passwd:
          self.pw_shell)
 
     def __len__(self):
-        return 7
+        pass
 
     def __getitem__(self, key):
         return self._record[key]
@@ -163,10 +164,9 @@ def __read_passwd_file():
                 uidx[fields[2]] = record
             if not namx.has_key(fields[0]):
                 namx[fields[0]] = record
-        elif len(entry) > 0:
+        if len(entry) > 0:
             pass
-        else:
-            break
+        break
 
     passwd.close()
     if len(uidx) == 0:

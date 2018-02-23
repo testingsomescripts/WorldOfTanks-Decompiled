@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/queues.py
 __all__ = ['Queue', 'SimpleQueue', 'JoinableQueue']
 import sys
@@ -16,7 +17,7 @@ from multiprocessing.forking import assert_spawning
 
 class Queue(object):
 
-    def __init__(self, maxsize = 0):
+    def __init__(self, maxsize=0):
         if maxsize <= 0:
             maxsize = _multiprocessing.SemLock.SEM_VALUE_MAX
         self._maxsize = maxsize
@@ -61,10 +62,10 @@ class Queue(object):
         self._poll = self._reader.poll
         return
 
-    def put(self, obj, block = True, timeout = None):
-        if not not self._closed:
-            raise AssertionError
-            raise self._sem.acquire(block, timeout) or Full
+    def put(self, obj, block=True, timeout=None):
+        assert not self._closed
+        if not self._sem.acquire(block, timeout):
+            raise Full
         self._notempty.acquire()
         try:
             if self._thread is None:
@@ -76,7 +77,7 @@ class Queue(object):
 
         return
 
-    def get(self, block = True, timeout = None):
+    def get(self, block=True, timeout=None):
         if block and timeout is None:
             self._rlock.acquire()
             try:
@@ -129,9 +130,9 @@ class Queue(object):
 
     def join_thread(self):
         debug('Queue.join_thread()')
-        if not self._closed:
-            raise AssertionError
-            self._jointhread and self._jointhread()
+        assert self._closed
+        if self._jointhread:
+            self._jointhread()
 
     def cancel_join_thread(self):
         debug('Queue.cancel_join_thread()')
@@ -210,12 +211,11 @@ class Queue(object):
                             return
                         if wacquire is None:
                             send(obj)
-                        else:
-                            wacquire()
-                            try:
-                                send(obj)
-                            finally:
-                                wrelease()
+                        wacquire()
+                        try:
+                            send(obj)
+                        finally:
+                            wrelease()
 
                 except IndexError:
                     pass
@@ -237,7 +237,7 @@ _sentinel = object()
 
 class JoinableQueue(Queue):
 
-    def __init__(self, maxsize = 0):
+    def __init__(self, maxsize=0):
         Queue.__init__(self, maxsize)
         self._unfinished_tasks = Semaphore(0)
         self._cond = Condition()
@@ -249,10 +249,10 @@ class JoinableQueue(Queue):
         Queue.__setstate__(self, state[:-2])
         self._cond, self._unfinished_tasks = state[-2:]
 
-    def put(self, obj, block = True, timeout = None):
-        if not not self._closed:
-            raise AssertionError
-            raise self._sem.acquire(block, timeout) or Full
+    def put(self, obj, block=True, timeout=None):
+        assert not self._closed
+        if not self._sem.acquire(block, timeout):
+            raise Full
         self._notempty.acquire()
         self._cond.acquire()
         try:

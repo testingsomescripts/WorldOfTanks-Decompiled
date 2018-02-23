@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/minidom.py
 """Simple implementation of the Level 1 DOM.
 
@@ -32,10 +33,10 @@ class Node(xml.dom.Node):
     def __nonzero__(self):
         return True
 
-    def toxml(self, encoding = None):
+    def toxml(self, encoding=None):
         return self.toprettyxml('', '', encoding)
 
-    def toprettyxml(self, indent = '\t', newl = '\n', encoding = None):
+    def toprettyxml(self, indent='\t', newl='\n', encoding=None):
         writer = _get_StringIO()
         if encoding is not None:
             import codecs
@@ -56,12 +57,10 @@ class Node(xml.dom.Node):
         return self.childNodes
 
     def _get_firstChild(self):
-        if self.childNodes:
-            return self.childNodes[0]
+        return self.childNodes[0] if self.childNodes else None
 
     def _get_lastChild(self):
-        if self.childNodes:
-            return self.childNodes[-1]
+        return self.childNodes[-1] if self.childNodes else None
 
     def insertBefore(self, newChild, refChild):
         if newChild.nodeType == self.DOCUMENT_FRAGMENT_NODE:
@@ -180,10 +179,9 @@ class Node(xml.dom.Node):
                     child.unlink()
                 else:
                     L.append(child)
-            else:
-                L.append(child)
-                if child.nodeType == Node.ELEMENT_NODE:
-                    child.normalize()
+            L.append(child)
+            if child.nodeType == Node.ELEMENT_NODE:
+                child.normalize()
 
         self.childNodes[:] = L
 
@@ -327,7 +325,7 @@ class Attr(Node):
     _is_id = False
     _child_node_types = (Node.TEXT_NODE, Node.ENTITY_REFERENCE_NODE)
 
-    def __init__(self, qName, namespaceURI = EMPTY_NAMESPACE, localName = None, prefix = None):
+    def __init__(self, qName, namespaceURI=EMPTY_NAMESPACE, localName=None, prefix=None):
         d = self.__dict__
         d['nodeName'] = d['name'] = qName
         d['namespaceURI'] = namespaceURI
@@ -485,7 +483,7 @@ class NamedNodeMap(object):
     def values(self):
         return self._attrs.values()
 
-    def get(self, name, value = None):
+    def get(self, name, value=None):
         return self._attrs.get(name, value)
 
     __len__ = _get_length
@@ -626,7 +624,7 @@ class Element(Node):
      Node.CDATA_SECTION_NODE,
      Node.ENTITY_REFERENCE_NODE)
 
-    def __init__(self, tagName, namespaceURI = EMPTY_NAMESPACE, prefix = None, localName = None):
+    def __init__(self, tagName, namespaceURI=EMPTY_NAMESPACE, prefix=None, localName=None):
         self.tagName = self.nodeName = tagName
         self.prefix = prefix
         self.namespaceURI = namespaceURI
@@ -716,10 +714,8 @@ class Element(Node):
         _set_attribute_node(self, attr)
         if old1 is not attr:
             return old1
-        elif old2 is not attr:
-            return old2
         else:
-            return
+            return old2 if old2 is not attr else None
 
     setAttributeNodeNS = setAttributeNode
 
@@ -769,7 +765,7 @@ class Element(Node):
     def __repr__(self):
         return '<DOM Element: %s at %#x>' % (self.tagName, id(self))
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         writer.write(indent + '<' + self.tagName)
         attrs = self._get_attributes()
         a_names = attrs.keys()
@@ -896,7 +892,7 @@ class ProcessingInstruction(Childless, Node):
         else:
             self.__dict__[name] = value
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         writer.write('%s<?%s %s?>%s' % (indent,
          self.target,
          self.data,
@@ -997,7 +993,7 @@ class Text(CharacterData):
         self.data = self.data[:offset]
         return newText
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         _write_data(writer, '%s%s%s' % (indent, self.data, newl))
 
     def _get_wholeText(self):
@@ -1007,16 +1003,14 @@ class Text(CharacterData):
             if n.nodeType in (Node.TEXT_NODE, Node.CDATA_SECTION_NODE):
                 L.insert(0, n.data)
                 n = n.previousSibling
-            else:
-                break
+            break
 
         n = self.nextSibling
         while n is not None:
             if n.nodeType in (Node.TEXT_NODE, Node.CDATA_SECTION_NODE):
                 L.append(n.data)
                 n = n.nextSibling
-            else:
-                break
+            break
 
         return ''.join(L)
 
@@ -1028,8 +1022,7 @@ class Text(CharacterData):
                 next = n.previousSibling
                 parent.removeChild(n)
                 n = next
-            else:
-                break
+            break
 
         n = self.nextSibling
         if not content:
@@ -1039,8 +1032,7 @@ class Text(CharacterData):
                 next = n.nextSibling
                 parent.removeChild(n)
                 n = next
-            else:
-                break
+            break
 
         if content:
             d = self.__dict__
@@ -1095,7 +1087,7 @@ class Comment(Childless, CharacterData):
     def __init__(self, data):
         self.data = self.nodeValue = data
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         if '--' in self.data:
             raise ValueError("'--' is not allowed in a comment node")
         writer.write('%s<!--%s-->%s' % (indent, self.data, newl))
@@ -1105,7 +1097,7 @@ class CDATASection(Text):
     nodeType = Node.CDATA_SECTION_NODE
     nodeName = '#cdata-section'
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         if self.data.find(']]>') >= 0:
             raise ValueError("']]>' not allowed in a CDATA section")
         writer.write('<![CDATA[%s]]>' % self.data)
@@ -1114,7 +1106,7 @@ class CDATASection(Text):
 class ReadOnlySequentialNamedNodeMap(object):
     __slots__ = ('_seq',)
 
-    def __init__(self, seq = ()):
+    def __init__(self, seq=()):
         self._seq = seq
 
     def __len__(self):
@@ -1235,7 +1227,7 @@ class DocumentType(Identified, Childless, Node):
             return
             return
 
-    def writexml(self, writer, indent = '', addindent = '', newl = ''):
+    def writexml(self, writer, indent='', addindent='', newl=''):
         writer.write('<!DOCTYPE ')
         writer.write(self.name)
         if self.publicId:
@@ -1508,12 +1500,12 @@ class Document(Node, DocumentLS):
             clone.version = self.version
             for n in self.childNodes:
                 childclone = _clone_node(n, deep, clone)
-                if not childclone.ownerDocument.isSameNode(clone):
-                    raise AssertionError
-                    clone.childNodes.append(childclone)
-                    raise childclone.nodeType == Node.DOCUMENT_NODE and (clone.documentElement is None or AssertionError)
-                elif not (childclone.nodeType == Node.DOCUMENT_TYPE_NODE and clone.doctype is None):
-                    raise AssertionError
+                assert childclone.ownerDocument.isSameNode(clone)
+                clone.childNodes.append(childclone)
+                if childclone.nodeType == Node.DOCUMENT_NODE:
+                    assert clone.documentElement is None
+                elif childclone.nodeType == Node.DOCUMENT_TYPE_NODE:
+                    assert clone.doctype is None
                     clone.doctype = childclone
                 childclone.parentNode = clone
 
@@ -1611,13 +1603,13 @@ class Document(Node, DocumentLS):
                                     result = node
                                 elif not node._magic_id_nodes:
                                     break
-                        elif info.isId(attr.name):
+                        if info.isId(attr.name):
                             self._id_cache[attr.value] = node
                             if attr.value == id:
                                 result = node
                             elif not node._magic_id_nodes:
                                 break
-                        elif attr._is_id:
+                        if attr._is_id:
                             self._id_cache[attr.value] = node
                             if attr.value == id:
                                 result = node
@@ -1652,7 +1644,7 @@ class Document(Node, DocumentLS):
             raise xml.dom.NotSupportedErr('cannot import document type nodes')
         return _clone_node(node, deep, self)
 
-    def writexml(self, writer, indent = '', addindent = '', newl = '', encoding = None):
+    def writexml(self, writer, indent='', addindent='', newl='', encoding=None):
         if encoding is None:
             writer.write('<?xml version="1.0" ?>' + newl)
         else:
@@ -1745,8 +1737,8 @@ def _clone_node(node, deep, newOwnerDocument):
         clone = newOwnerDocument.createAttributeNS(node.namespaceURI, node.nodeName)
         clone.specified = True
         clone.value = node.value
-    elif not (node.nodeType == Node.DOCUMENT_TYPE_NODE and node.ownerDocument is not newOwnerDocument):
-        raise AssertionError
+    elif node.nodeType == Node.DOCUMENT_TYPE_NODE:
+        assert node.ownerDocument is not newOwnerDocument
         operation = xml.dom.UserDataHandler.NODE_IMPORTED
         clone = newOwnerDocument.implementation.createDocumentType(node.name, node.publicId, node.systemId)
         clone.ownerDocument = newOwnerDocument
@@ -1799,7 +1791,7 @@ def _do_pulldom_parse(func, args, kwargs):
     return rootNode
 
 
-def parse(file, parser = None, bufsize = None):
+def parse(file, parser=None, bufsize=None):
     """Parse a file into a DOM by filename or file object."""
     if parser is None and not bufsize:
         from xml.dom import expatbuilder
@@ -1811,7 +1803,7 @@ def parse(file, parser = None, bufsize = None):
         return
 
 
-def parseString(string, parser = None):
+def parseString(string, parser=None):
     """Parse a file into a DOM from a string."""
     if parser is None:
         from xml.dom import expatbuilder
@@ -1822,7 +1814,7 @@ def parseString(string, parser = None):
         return
 
 
-def getDOMImplementation(features = None):
+def getDOMImplementation(features=None):
     if features:
         if isinstance(features, StringTypes):
             features = domreg._parse_feature_string(features)

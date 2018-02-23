@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/decimal.py
 """
 This is a Py2.3 implementation of decimal floating point arithmetic based on
@@ -393,7 +393,7 @@ except ImportError:
 
     class MockThreading(object):
 
-        def local(self, sys = sys):
+        def local(self, sys=sys):
             return sys.modules[__name__]
 
 
@@ -435,7 +435,7 @@ else:
     if hasattr(local, '__decimal_context__'):
         del local.__decimal_context__
 
-    def getcontext(_local = local):
+    def getcontext(_local=local):
         """Returns this thread's context.
         
         If this thread does not yet have a context, returns
@@ -450,7 +450,7 @@ else:
             return context
 
 
-    def setcontext(context, _local = local):
+    def setcontext(context, _local=local):
         """Set this thread's context to context."""
         if context in (DefaultContext, BasicContext, ExtendedContext):
             context = context.copy()
@@ -461,7 +461,7 @@ else:
     del threading
     del local
 
-def localcontext(ctx = None):
+def localcontext(ctx=None):
     """Return a context manager for a copy of the supplied context
     
     Uses a copy of the current context if no context is specified
@@ -506,7 +506,7 @@ class Decimal(object):
     """Floating point class for decimal arithmetic."""
     __slots__ = ('_exp', '_int', '_sign', '_is_special')
 
-    def __new__(cls, value = '0', context = None):
+    def __new__(cls, value='0', context=None):
         r"""Create a decimal point instance.
         
         >>> Decimal('3.14')              # string input
@@ -585,11 +585,10 @@ class Decimal(object):
             else:
                 digits = []
                 for digit in value[1]:
-                    if isinstance(digit, (int, long)) and 0 <= digit <= 9:
-                        if digits or digit != 0:
-                            digits.append(digit)
-                    else:
-                        raise ValueError('The second value in the tuple must be composed of integers in the range 0 through 9.')
+                    if isinstance(digit, (int, long)):
+                        if 0 <= digit <= 9:
+                            (digits or digit != 0) and digits.append(digit)
+                    raise ValueError('The second value in the tuple must be composed of integers in the range 0 through 9.')
 
                 if value[2] in ('n', 'N'):
                     self._int = ''.join(map(str, digits))
@@ -678,7 +677,7 @@ class Decimal(object):
                 return -1
             return 1
 
-    def _check_nans(self, other = None, context = None):
+    def _check_nans(self, other=None, context=None):
         """Returns whether the number is not actually one.
         
         if self, other are sNaN, signal
@@ -777,59 +776,47 @@ class Decimal(object):
                 return (-1) ** self._sign
             return -(-1) ** self._sign
 
-    def __eq__(self, other, context = None):
+    def __eq__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
-        if self._check_nans(other, context):
-            return False
-        return self._cmp(other) == 0
+        return False if self._check_nans(other, context) else self._cmp(other) == 0
 
-    def __ne__(self, other, context = None):
+    def __ne__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
-        if self._check_nans(other, context):
-            return True
-        return self._cmp(other) != 0
+        return True if self._check_nans(other, context) else self._cmp(other) != 0
 
-    def __lt__(self, other, context = None):
+    def __lt__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
         ans = self._compare_check_nans(other, context)
-        if ans:
-            return False
-        return self._cmp(other) < 0
+        return False if ans else self._cmp(other) < 0
 
-    def __le__(self, other, context = None):
+    def __le__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
         ans = self._compare_check_nans(other, context)
-        if ans:
-            return False
-        return self._cmp(other) <= 0
+        return False if ans else self._cmp(other) <= 0
 
-    def __gt__(self, other, context = None):
+    def __gt__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
         ans = self._compare_check_nans(other, context)
-        if ans:
-            return False
-        return self._cmp(other) > 0
+        return False if ans else self._cmp(other) > 0
 
-    def __ge__(self, other, context = None):
+    def __ge__(self, other, context=None):
         other = _convert_other(other, allow_float=True)
         if other is NotImplemented:
             return other
         ans = self._compare_check_nans(other, context)
-        if ans:
-            return False
-        return self._cmp(other) >= 0
+        return False if ans else self._cmp(other) >= 0
 
-    def compare(self, other, context = None):
+    def compare(self, other, context=None):
         """Compares one to another.
         
         -1 => a < b
@@ -875,7 +862,7 @@ class Decimal(object):
         """Represents the number as an instance of Decimal."""
         return "Decimal('%s')" % str(self)
 
-    def __str__(self, eng = False, context = None):
+    def __str__(self, eng=False, context=None):
         """Return string representation of the number in scientific notation.
         
         Captures all of the information in the underlying representation.
@@ -914,7 +901,7 @@ class Decimal(object):
             exp = ['e', 'E'][context.capitals] + '%+d' % (leftdigits - dotplace)
         return sign + intpart + fracpart + exp
 
-    def to_eng_string(self, context = None):
+    def to_eng_string(self, context=None):
         """Convert to engineering-type string.
         
         Engineering notation has an exponent which is a multiple of 3, so there
@@ -924,7 +911,7 @@ class Decimal(object):
         """
         return self.__str__(eng=True, context=context)
 
-    def __neg__(self, context = None):
+    def __neg__(self, context=None):
         """Returns a copy with the sign switched.
         
         Rounds, if it has reason.
@@ -941,7 +928,7 @@ class Decimal(object):
             ans = self.copy_negate()
         return ans._fix(context)
 
-    def __pos__(self, context = None):
+    def __pos__(self, context=None):
         """Returns a copy, unless it is a sNaN.
         
         Rounds the number (if more then precision digits)
@@ -958,7 +945,7 @@ class Decimal(object):
             ans = Decimal(self)
         return ans._fix(context)
 
-    def __abs__(self, round = True, context = None):
+    def __abs__(self, round=True, context=None):
         """Returns the absolute value of self.
         
         If the keyword argument 'round' is false, do not round.  The
@@ -977,7 +964,7 @@ class Decimal(object):
             ans = self.__pos__(context=context)
         return ans
 
-    def __add__(self, other, context = None):
+    def __add__(self, other, context=None):
         """Returns self + other.
         
         -INF + INF (or the reverse) cause InvalidOperation errors.
@@ -1051,7 +1038,7 @@ class Decimal(object):
 
     __radd__ = __add__
 
-    def __sub__(self, other, context = None):
+    def __sub__(self, other, context=None):
         """Return self - other"""
         other = _convert_other(other)
         if other is NotImplemented:
@@ -1062,14 +1049,12 @@ class Decimal(object):
                 return ans
         return self.__add__(other.copy_negate(), context=context)
 
-    def __rsub__(self, other, context = None):
+    def __rsub__(self, other, context=None):
         """Return other - self"""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__sub__(self, context=context)
+        return other if other is NotImplemented else other.__sub__(self, context=context)
 
-    def __mul__(self, other, context = None):
+    def __mul__(self, other, context=None):
         """Return self * other.
         
         (+-) INF * 0 (or its reverse) raise InvalidOperation.
@@ -1114,7 +1099,7 @@ class Decimal(object):
 
     __rmul__ = __mul__
 
-    def __truediv__(self, other, context = None):
+    def __truediv__(self, other, context=None):
         """Return self / other."""
         other = _convert_other(other)
         if other is NotImplemented:
@@ -1189,17 +1174,15 @@ class Decimal(object):
         ans = context._raise_error(DivisionImpossible, 'quotient too large in //, % or divmod')
         return (ans, ans)
 
-    def __rtruediv__(self, other, context = None):
+    def __rtruediv__(self, other, context=None):
         """Swaps self/other and returns __truediv__."""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__truediv__(self, context=context)
+        return other if other is NotImplemented else other.__truediv__(self, context=context)
 
     __div__ = __truediv__
     __rdiv__ = __rtruediv__
 
-    def __divmod__(self, other, context = None):
+    def __divmod__(self, other, context=None):
         """
         Return (self // other, self % other)
         """
@@ -1229,14 +1212,12 @@ class Decimal(object):
             remainder = remainder._fix(context)
             return (quotient, remainder)
 
-    def __rdivmod__(self, other, context = None):
+    def __rdivmod__(self, other, context=None):
         """Swaps self/other and returns __divmod__."""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__divmod__(self, context=context)
+        return other if other is NotImplemented else other.__divmod__(self, context=context)
 
-    def __mod__(self, other, context = None):
+    def __mod__(self, other, context=None):
         """
         self % other
         """
@@ -1260,14 +1241,12 @@ class Decimal(object):
             remainder = remainder._fix(context)
             return remainder
 
-    def __rmod__(self, other, context = None):
+    def __rmod__(self, other, context=None):
         """Swaps self/other and returns __mod__."""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__mod__(self, context=context)
+        return other if other is NotImplemented else other.__mod__(self, context=context)
 
-    def remainder_near(self, other, context = None):
+    def remainder_near(self, other, context=None):
         """
         Remainder nearest to 0-  abs(remainder-near) <= other/2
         """
@@ -1317,7 +1296,7 @@ class Decimal(object):
             ans = _dec_from_triple(sign, str(r), ideal_exponent)
             return ans._fix(context)
 
-    def __floordiv__(self, other, context = None):
+    def __floordiv__(self, other, context=None):
         """self // other"""
         other = _convert_other(other)
         if other is NotImplemented:
@@ -1340,12 +1319,10 @@ class Decimal(object):
                     return context._raise_error(DivisionUndefined, '0 // 0')
             return self._divide(other, context)[0]
 
-    def __rfloordiv__(self, other, context = None):
+    def __rfloordiv__(self, other, context=None):
         """Swaps self/other and returns __floordiv__."""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__floordiv__(self, context=context)
+        return other if other is NotImplemented else other.__floordiv__(self, context=context)
 
     def __float__(self):
         """Float representation."""
@@ -1529,7 +1506,7 @@ class Decimal(object):
 
     _pick_rounding_function = dict(ROUND_DOWN=_round_down, ROUND_UP=_round_up, ROUND_HALF_UP=_round_half_up, ROUND_HALF_DOWN=_round_half_down, ROUND_HALF_EVEN=_round_half_even, ROUND_CEILING=_round_ceiling, ROUND_FLOOR=_round_floor, ROUND_05UP=_round_05up)
 
-    def fma(self, other, third, context = None):
+    def fma(self, other, third, context=None):
         """Fused multiply-add.
         
         Returns self*other+third with no rounding of the intermediate
@@ -1564,7 +1541,7 @@ class Decimal(object):
         third = _convert_other(third, raiseit=True)
         return product.__add__(third, context)
 
-    def _power_modulo(self, other, modulo, context = None):
+    def _power_modulo(self, other, modulo, context=None):
         """Three argument version of __pow__"""
         other = _convert_other(other, raiseit=True)
         modulo = _convert_other(modulo, raiseit=True)
@@ -1707,9 +1684,9 @@ class Decimal(object):
                     m //= 2
                     n //= 2
 
-                while m % 5 == n % 5 == 0:
-                    m //= 5
-                    n //= 5
+            while m % 5 == n % 5 == 0:
+                m //= 5
+                n //= 5
 
             if n > 1:
                 if xc != 1 and xc_bits <= n:
@@ -1722,8 +1699,7 @@ class Decimal(object):
                     q, r = divmod(xc, a ** (n - 1))
                     if a <= q:
                         break
-                    else:
-                        a = (a * (n - 1) + q) // n
+                    a = (a * (n - 1) + q) // n
 
                 if not (a == q and r == 0):
                     return
@@ -1742,7 +1718,7 @@ class Decimal(object):
                 zeros = 0
             return _dec_from_triple(0, str_xc + '0' * zeros, xe - zeros)
 
-    def __pow__(self, other, modulo = None, context = None):
+    def __pow__(self, other, modulo=None, context=None):
         """Return self ** other [ % modulo].
         
         With two arguments, compute self**other.
@@ -1881,14 +1857,12 @@ class Decimal(object):
                 ans = ans._fix(context)
             return ans
 
-    def __rpow__(self, other, context = None):
+    def __rpow__(self, other, context=None):
         """Swaps self/other and returns __pow__."""
         other = _convert_other(other)
-        if other is NotImplemented:
-            return other
-        return other.__pow__(self, context=context)
+        return other if other is NotImplemented else other.__pow__(self, context=context)
 
-    def normalize(self, context = None):
+    def normalize(self, context=None):
         """Normalize- strip trailing 0s, change anything equal to 0 to 0e0"""
         if context is None:
             context = getcontext()
@@ -1911,7 +1885,7 @@ class Decimal(object):
 
             return _dec_from_triple(dup._sign, dup._int[:end], exp)
 
-    def quantize(self, exp, rounding = None, context = None, watchexp = True):
+    def quantize(self, exp, rounding=None, context=None, watchexp=True):
         """Quantize self so its exponent is the same as that of exp.
         
         Similar to self._rescale(exp._exp) but with error checking.
@@ -1971,9 +1945,7 @@ class Decimal(object):
            * otherwise, return False.
         """
         other = _convert_other(other, raiseit=True)
-        if self._is_special or other._is_special:
-            return self.is_nan() and other.is_nan() or self.is_infinite() and other.is_infinite()
-        return self._exp == other._exp
+        return self.is_nan() and other.is_nan() or self.is_infinite() and other.is_infinite() if self._is_special or other._is_special else self._exp == other._exp
 
     def _rescale(self, exp, rounding):
         """Rescale self so that the exponent is exp, either by padding with zeros
@@ -2022,7 +1994,7 @@ class Decimal(object):
             ans = ans._rescale(ans.adjusted() + 1 - places, rounding)
         return ans
 
-    def to_integral_exact(self, rounding = None, context = None):
+    def to_integral_exact(self, rounding=None, context=None):
         """Rounds to a nearby integer.
         
         If no rounding mode is specified, take the rounding mode from
@@ -2052,7 +2024,7 @@ class Decimal(object):
             context._raise_error(Rounded)
             return ans
 
-    def to_integral_value(self, rounding = None, context = None):
+    def to_integral_value(self, rounding=None, context=None):
         """Rounds to the nearest integer, without raising inexact, rounded."""
         if context is None:
             context = getcontext()
@@ -2071,7 +2043,7 @@ class Decimal(object):
 
     to_integral = to_integral_value
 
-    def sqrt(self, context = None):
+    def sqrt(self, context=None):
         """Return the square root of self."""
         if context is None:
             context = getcontext()
@@ -2109,8 +2081,7 @@ class Decimal(object):
                 q = c // n
                 if n <= q:
                     break
-                else:
-                    n = n + q >> 1
+                n = n + q >> 1
 
             exact = exact and n * n == c
             if exact:
@@ -2128,7 +2099,7 @@ class Decimal(object):
             context.rounding = rounding
             return ans
 
-    def max(self, other, context = None):
+    def max(self, other, context=None):
         """Returns the larger value.
         
         Like max(self, other) except if one is not a number, returns
@@ -2155,7 +2126,7 @@ class Decimal(object):
             ans = self
         return ans._fix(context)
 
-    def min(self, other, context = None):
+    def min(self, other, context=None):
         """Returns the smaller value.
         
         Like min(self, other) except if one is not a number, returns
@@ -2193,9 +2164,7 @@ class Decimal(object):
 
     def _iseven(self):
         """Returns True if self is even.  Assumes self is an integer."""
-        if not self or self._exp > 0:
-            return True
-        return self._int[-1 + self._exp] in '02468'
+        return True if not self or self._exp > 0 else self._int[-1 + self._exp] in '02468'
 
     def adjusted(self):
         """Return the adjusted exponent of self"""
@@ -2204,7 +2173,7 @@ class Decimal(object):
         except TypeError:
             return 0
 
-    def canonical(self, context = None):
+    def canonical(self, context=None):
         """Returns the same Decimal object.
         
         As we do not have different encodings for the same number, the
@@ -2212,7 +2181,7 @@ class Decimal(object):
         """
         return self
 
-    def compare_signal(self, other, context = None):
+    def compare_signal(self, other, context=None):
         """Compares self to the other operand numerically.
         
         It's pretty much like compare(), but all NaNs signal, with signaling
@@ -2220,9 +2189,7 @@ class Decimal(object):
         """
         other = _convert_other(other, raiseit=True)
         ans = self._compare_check_nans(other, context)
-        if ans:
-            return ans
-        return self.compare(other, context=context)
+        return ans if ans else self.compare(other, context=context)
 
     def compare_total(self, other):
         """Compares self to other using the abstract representations.
@@ -2314,7 +2281,7 @@ class Decimal(object):
         other = _convert_other(other, raiseit=True)
         return _dec_from_triple(other._sign, self._int, self._exp, self._is_special)
 
-    def exp(self, context = None):
+    def exp(self, context=None):
         """Returns e ** self."""
         if context is None:
             context = getcontext()
@@ -2381,7 +2348,7 @@ class Decimal(object):
         """Return True if self is a qNaN or sNaN; otherwise return False."""
         return self._exp in ('n', 'N')
 
-    def is_normal(self, context = None):
+    def is_normal(self, context=None):
         """Return True if self is a normal number; otherwise return False."""
         if self._is_special or not self:
             return False
@@ -2402,7 +2369,7 @@ class Decimal(object):
         """Return True if self is a signaling NaN; otherwise return False."""
         return self._exp == 'N'
 
-    def is_subnormal(self, context = None):
+    def is_subnormal(self, context=None):
         """Return True if self is subnormal; otherwise return False."""
         if self._is_special or not self:
             return False
@@ -2433,7 +2400,7 @@ class Decimal(object):
             return len(num) - len(den) - (num < den)
         return e + len(str(10 ** (-e) - c)) - 1
 
-    def ln(self, context = None):
+    def ln(self, context=None):
         """Returns the natural (base e) logarithm of self."""
         if context is None:
             context = getcontext()
@@ -2485,7 +2452,7 @@ class Decimal(object):
         num = str(10 ** (-e) - c)
         return len(num) + e - (num < '231') - 1
 
-    def log10(self, context = None):
+    def log10(self, context=None):
         """Returns the base 10 logarithm of self."""
         if context is None:
             context = getcontext()
@@ -2519,7 +2486,7 @@ class Decimal(object):
             context.rounding = rounding
             return ans
 
-    def logb(self, context = None):
+    def logb(self, context=None):
         """ Returns the exponent of the magnitude of self's MSD.
         
         The result is the integer which is the exponent of the magnitude
@@ -2568,7 +2535,7 @@ class Decimal(object):
             opb = opb[-context.prec:]
         return (opa, opb)
 
-    def logical_and(self, other, context = None):
+    def logical_and(self, other, context=None):
         """Applies an 'and' operation between self and other's digits."""
         if context is None:
             context = getcontext()
@@ -2580,13 +2547,13 @@ class Decimal(object):
             result = ''.join([ str(int(a) & int(b)) for a, b in zip(opa, opb) ])
             return _dec_from_triple(0, result.lstrip('0') or '0', 0)
 
-    def logical_invert(self, context = None):
+    def logical_invert(self, context=None):
         """Invert all its digits."""
         if context is None:
             context = getcontext()
         return self.logical_xor(_dec_from_triple(0, '1' * context.prec, 0), context)
 
-    def logical_or(self, other, context = None):
+    def logical_or(self, other, context=None):
         """Applies an 'or' operation between self and other's digits."""
         if context is None:
             context = getcontext()
@@ -2598,7 +2565,7 @@ class Decimal(object):
             result = ''.join([ str(int(a) | int(b)) for a, b in zip(opa, opb) ])
             return _dec_from_triple(0, result.lstrip('0') or '0', 0)
 
-    def logical_xor(self, other, context = None):
+    def logical_xor(self, other, context=None):
         """Applies an 'xor' operation between self and other's digits."""
         if context is None:
             context = getcontext()
@@ -2610,7 +2577,7 @@ class Decimal(object):
             result = ''.join([ str(int(a) ^ int(b)) for a, b in zip(opa, opb) ])
             return _dec_from_triple(0, result.lstrip('0') or '0', 0)
 
-    def max_mag(self, other, context = None):
+    def max_mag(self, other, context=None):
         """Compares the values numerically with their sign ignored."""
         other = _convert_other(other, raiseit=True)
         if context is None:
@@ -2633,7 +2600,7 @@ class Decimal(object):
             ans = self
         return ans._fix(context)
 
-    def min_mag(self, other, context = None):
+    def min_mag(self, other, context=None):
         """Compares the values numerically with their sign ignored."""
         other = _convert_other(other, raiseit=True)
         if context is None:
@@ -2656,7 +2623,7 @@ class Decimal(object):
             ans = other
         return ans._fix(context)
 
-    def next_minus(self, context = None):
+    def next_minus(self, context=None):
         """Returns the largest representable number smaller than itself."""
         if context is None:
             context = getcontext()
@@ -2667,16 +2634,14 @@ class Decimal(object):
             return _NegativeInfinity
         elif self._isinfinity() == 1:
             return _dec_from_triple(0, '9' * context.prec, context.Etop())
-        context = context.copy()
-        context._set_rounding(ROUND_FLOOR)
-        context._ignore_all_flags()
-        new_self = self._fix(context)
-        if new_self != self:
-            return new_self
         else:
-            return self.__sub__(_dec_from_triple(0, '1', context.Etiny() - 1), context)
+            context = context.copy()
+            context._set_rounding(ROUND_FLOOR)
+            context._ignore_all_flags()
+            new_self = self._fix(context)
+            return new_self if new_self != self else self.__sub__(_dec_from_triple(0, '1', context.Etiny() - 1), context)
 
-    def next_plus(self, context = None):
+    def next_plus(self, context=None):
         """Returns the smallest representable number larger than itself."""
         if context is None:
             context = getcontext()
@@ -2687,16 +2652,14 @@ class Decimal(object):
             return _Infinity
         elif self._isinfinity() == -1:
             return _dec_from_triple(1, '9' * context.prec, context.Etop())
-        context = context.copy()
-        context._set_rounding(ROUND_CEILING)
-        context._ignore_all_flags()
-        new_self = self._fix(context)
-        if new_self != self:
-            return new_self
         else:
-            return self.__add__(_dec_from_triple(0, '1', context.Etiny() - 1), context)
+            context = context.copy()
+            context._set_rounding(ROUND_CEILING)
+            context._ignore_all_flags()
+            new_self = self._fix(context)
+            return new_self if new_self != self else self.__add__(_dec_from_triple(0, '1', context.Etiny() - 1), context)
 
-    def next_toward(self, other, context = None):
+    def next_toward(self, other, context=None):
         """Returns the number closest to self, in the direction towards other.
         
         The result is the closest representable number to self
@@ -2732,7 +2695,7 @@ class Decimal(object):
                     context._raise_error(Clamped)
             return ans
 
-    def number_class(self, context = None):
+    def number_class(self, context=None):
         """Returns an indication of the class of self.
         
         The class is one of the following strings:
@@ -2778,7 +2741,7 @@ class Decimal(object):
         """Just returns 10, as this is Decimal, :)"""
         return Decimal(10)
 
-    def rotate(self, other, context = None):
+    def rotate(self, other, context=None):
         """Returns a rotated copy of self, value-of-other times."""
         if context is None:
             context = getcontext()
@@ -2803,7 +2766,7 @@ class Decimal(object):
             rotated = rotdig[torot:] + rotdig[:torot]
             return _dec_from_triple(self._sign, rotated.lstrip('0') or '0', self._exp)
 
-    def scaleb(self, other, context = None):
+    def scaleb(self, other, context=None):
         """Returns self operand after adding the second value to its exp."""
         if context is None:
             context = getcontext()
@@ -2824,7 +2787,7 @@ class Decimal(object):
             d = d._fix(context)
             return d
 
-    def shift(self, other, context = None):
+    def shift(self, other, context=None):
         """Returns a shifted copy of self, value-of-other times."""
         if context is None:
             context = getcontext()
@@ -2857,16 +2820,12 @@ class Decimal(object):
         return (self.__class__, (str(self),))
 
     def __copy__(self):
-        if type(self) is Decimal:
-            return self
-        return self.__class__(str(self))
+        return self if type(self) is Decimal else self.__class__(str(self))
 
     def __deepcopy__(self, memo):
-        if type(self) is Decimal:
-            return self
-        return self.__class__(str(self))
+        return self if type(self) is Decimal else self.__class__(str(self))
 
-    def __format__(self, specifier, context = None, _localeconv = None):
+    def __format__(self, specifier, context=None, _localeconv=None):
         """Format a Decimal instance according to the given specifier.
         
         The specifier should be a standard format specifier, with the
@@ -2924,7 +2883,7 @@ class Decimal(object):
             return _format_number(self._sign, intpart, fracpart, exp, spec)
 
 
-def _dec_from_triple(sign, coefficient, exponent, special = False):
+def _dec_from_triple(sign, coefficient, exponent, special=False):
     """Create a decimal instance directly, without any validation,
     normalization (e.g. removal of leading zeros) or argument
     conversion.
@@ -2979,7 +2938,7 @@ class Context(object):
     _clamp - If 1, change exponents if too high (Default 0)
     """
 
-    def __init__(self, prec = None, rounding = None, traps = None, flags = None, Emin = None, Emax = None, capitals = None, _clamp = 0, _ignored_flags = None):
+    def __init__(self, prec=None, rounding=None, traps=None, flags=None, Emin=None, Emax=None, capitals=None, _clamp=0, _ignored_flags=None):
         try:
             dc = DefaultContext
         except NameError:
@@ -3036,7 +2995,7 @@ class Context(object):
 
     __copy__ = copy
 
-    def _raise_error(self, condition, explanation = None, *args):
+    def _raise_error(self, condition, explanation=None, *args):
         """Handles an error
         
         If the flag is in _ignored_flags, returns the default response.
@@ -3097,7 +3056,7 @@ class Context(object):
         self.rounding = type
         return rounding
 
-    def create_decimal(self, num = '0'):
+    def create_decimal(self, num='0'):
         """Creates a new Decimal instance but using self as context.
         
         This method implements the to-number operation of the
@@ -3105,9 +3064,7 @@ class Context(object):
         if isinstance(num, basestring) and num != num.strip():
             return self._raise_error(ConversionSyntax, 'no trailing or leading whitespace is permitted.')
         d = Decimal(num, context=self)
-        if d._isnan() and len(d._int) > self.prec - self._clamp:
-            return self._raise_error(ConversionSyntax, 'diagnostic info too long in NaN')
-        return d._fix(self)
+        return self._raise_error(ConversionSyntax, 'diagnostic info too long in NaN') if d._isnan() and len(d._int) > self.prec - self._clamp else d._fix(self)
 
     def create_decimal_from_float(self, f):
         """Creates a new Decimal instance from a float but rounding using self
@@ -4134,7 +4091,7 @@ class Context(object):
         a = _convert_other(a, raiseit=True)
         return a.__pos__(context=self)
 
-    def power(self, a, b, modulo = None):
+    def power(self, a, b, modulo=None):
         """Raises a to the power of b, to modulo if given.
         
         With two arguments, compute a**b.  If a is negative then b
@@ -4590,7 +4547,7 @@ class Context(object):
 class _WorkRep(object):
     __slots__ = ('sign', 'int', 'exp')
 
-    def __init__(self, value = None):
+    def __init__(self, value=None):
         if value is None:
             self.sign = None
             self.int = 0
@@ -4611,7 +4568,7 @@ class _WorkRep(object):
     __str__ = __repr__
 
 
-def _normalize(op1, op2, prec = 0):
+def _normalize(op1, op2, prec=0):
     """Normalizes op1, op2 to have the same exp and length of coefficient.
     
     Done during addition.
@@ -4633,7 +4590,7 @@ def _normalize(op1, op2, prec = 0):
     return (op1, op2)
 
 
-def _nbits(n, correction = {'0': 4,
+def _nbits(n, correction={'0': 4,
  '1': 3,
  '2': 2,
  '3': 2,
@@ -4716,7 +4673,7 @@ def _div_nearest(a, b):
     return q + (2 * r + (q & 1) > b)
 
 
-def _ilog(x, M, L = 8):
+def _ilog(x, M, L=8):
     """Integer approximation to M*log(x/M), with absolute error boundable
     in terms only of x/M.
     
@@ -4728,8 +4685,8 @@ def _ilog(x, M, L = 8):
     much smaller."""
     y = x - M
     R = 0
-    while R <= L and long(abs(y)) << L - R >= M or R > L and abs(y) >> R - L >= M:
-        y = _div_nearest(long(M * y) << 1, M + _sqrt_nearest(M * (M + _rshift_nearest(y, R)), M))
+    while 1:
+        y = (R <= L and long(abs(y)) << L - R >= M or R > L and abs(y) >> R - L >= M) and _div_nearest(long(M * y) << 1, M + _sqrt_nearest(M * (M + _rshift_nearest(y, R)), M))
         R += 1
 
     T = -int(-10 * len(str(M)) // (3 * L))
@@ -4822,7 +4779,7 @@ class _Log10Memoize(object):
 
 _log10_digits = _Log10Memoize().getdigits
 
-def _iexp(x, M, L = 8):
+def _iexp(x, M, L=8):
     """Given integers x and M, M > 0, such that x/M is small in absolute
     value, compute an integer approximation to M*exp(x/M).  For 0 <=
     x/M <= 2.4, the absolute error in the result is bounded by 60 (and
@@ -4900,7 +4857,7 @@ def _dpower(xc, xe, yc, ye, p):
     return (coeff, exp)
 
 
-def _log10_lb(c, correction = {'1': 100,
+def _log10_lb(c, correction={'1': 100,
  '2': 70,
  '3': 53,
  '4': 40,
@@ -4916,7 +4873,7 @@ def _log10_lb(c, correction = {'1': 100,
     return 100 * len(str_c) - correction[str_c[0]]
 
 
-def _convert_other(other, raiseit = False, allow_float = False):
+def _convert_other(other, raiseit=False, allow_float=False):
     """Convert other to Decimal.
     
     Verifies that it's ok to use in an implicit construction.
@@ -4953,7 +4910,7 @@ try:
 except ImportError:
     pass
 
-def _parse_format_specifier(format_spec, _localeconv = None):
+def _parse_format_specifier(format_spec, _localeconv=None):
     """Parse and validate a format specifier.
     
     Turns a standard numeric format specifier into a dict, with the
@@ -5057,7 +5014,7 @@ def _group_lengths(grouping):
     raise ValueError('unrecognised format for grouping')
 
 
-def _insert_thousands_sep(digits, spec, min_width = 1):
+def _insert_thousands_sep(digits, spec, min_width=1):
     """Insert thousands separators into a digit string.
     
     spec is a dictionary whose keys should include 'thousands_sep' and

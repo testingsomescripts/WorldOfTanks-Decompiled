@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_abcoll.py
 """Abstract Base Classes (ABCs) for collections, according to PEP 3119.
 
@@ -36,7 +37,7 @@ class Hashable:
 
     @abstractmethod
     def __hash__(self):
-        return 0
+        pass
 
     @classmethod
     def __subclasshook__(cls, C):
@@ -98,7 +99,7 @@ class Sized:
 
     @abstractmethod
     def __len__(self):
-        return 0
+        pass
 
     @classmethod
     def __subclasshook__(cls, C):
@@ -161,24 +162,16 @@ class Set(Sized, Iterable, Container):
         return True
 
     def __lt__(self, other):
-        if not isinstance(other, Set):
-            return NotImplemented
-        return len(self) < len(other) and self.__le__(other)
+        return NotImplemented if not isinstance(other, Set) else len(self) < len(other) and self.__le__(other)
 
     def __gt__(self, other):
-        if not isinstance(other, Set):
-            return NotImplemented
-        return other.__lt__(self)
+        return NotImplemented if not isinstance(other, Set) else other.__lt__(self)
 
     def __ge__(self, other):
-        if not isinstance(other, Set):
-            return NotImplemented
-        return other.__le__(self)
+        return NotImplemented if not isinstance(other, Set) else other.__le__(self)
 
     def __eq__(self, other):
-        if not isinstance(other, Set):
-            return NotImplemented
-        return len(self) == len(other) and self.__le__(other)
+        return NotImplemented if not isinstance(other, Set) else len(self) == len(other) and self.__le__(other)
 
     def __ne__(self, other):
         return not self == other
@@ -193,9 +186,7 @@ class Set(Sized, Iterable, Container):
         return cls(it)
 
     def __and__(self, other):
-        if not isinstance(other, Iterable):
-            return NotImplemented
-        return self._from_iterable((value for value in other if value in self))
+        return NotImplemented if not isinstance(other, Iterable) else self._from_iterable((value for value in other if value in self))
 
     def isdisjoint(self, other):
         """Return True if two sets have a null intersection."""
@@ -332,8 +323,7 @@ class MutableSet(Set):
             for value in it:
                 if value in self:
                     self.discard(value)
-                else:
-                    self.add(value)
+                self.add(value)
 
         return self
 
@@ -362,7 +352,7 @@ class Mapping(Sized, Iterable, Container):
     def __getitem__(self, key):
         raise KeyError
 
-    def get(self, key, default = None):
+    def get(self, key, default=None):
         """D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None."""
         try:
             return self[key]
@@ -406,9 +396,7 @@ class Mapping(Sized, Iterable, Container):
     __hash__ = None
 
     def __eq__(self, other):
-        if not isinstance(other, Mapping):
-            return NotImplemented
-        return dict(self.items()) == dict(other.items())
+        return NotImplemented if not isinstance(other, Mapping) else dict(self.items()) == dict(other.items())
 
     def __ne__(self, other):
         return not self == other
@@ -494,7 +482,7 @@ class MutableMapping(Mapping):
 
     __marker = object()
 
-    def pop(self, key, default = __marker):
+    def pop(self, key, default=__marker):
         """D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
           If key is not found, d is returned if given, otherwise KeyError is raised.
         """
@@ -557,7 +545,7 @@ class MutableMapping(Mapping):
         for key, value in kwds.items():
             self[key] = value
 
-    def setdefault(self, key, default = None):
+    def setdefault(self, key, default=None):
         """D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D"""
         try:
             return self[key]
@@ -658,7 +646,7 @@ class MutableSequence(Sequence):
         for v in values:
             self.append(v)
 
-    def pop(self, index = -1):
+    def pop(self, index=-1):
         """S.pop([index]) -> item -- remove and return item at index (default last).
            Raise IndexError if list is empty or index is out of range.
         """

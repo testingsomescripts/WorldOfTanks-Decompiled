@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/dep_util.py
 """distutils.dep_util
 
@@ -24,9 +24,7 @@ def newer(source, target):
     """
     if not os.path.exists(source):
         raise DistutilsFileError("file '%s' does not exist" % os.path.abspath(source))
-    if not os.path.exists(target):
-        return True
-    return os.stat(source)[ST_MTIME] > os.stat(target)[ST_MTIME]
+    return True if not os.path.exists(target) else os.stat(source)[ST_MTIME] > os.stat(target)[ST_MTIME]
 
 
 def newer_pairwise(sources, targets):
@@ -47,7 +45,7 @@ def newer_pairwise(sources, targets):
     return (n_sources, n_targets)
 
 
-def newer_group(sources, target, missing = 'error'):
+def newer_group(sources, target, missing='error'):
     """Return true if 'target' is out-of-date with respect to any file
     listed in 'sources'.
     

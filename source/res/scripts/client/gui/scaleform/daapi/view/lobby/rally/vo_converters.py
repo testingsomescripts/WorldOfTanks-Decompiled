@@ -1,7 +1,7 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/vo_converters.py
 import BigWorld
-from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, FALLOUT_BATTLE_TYPE
+from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
 from gui.LobbyContext import g_lobbyContext
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
@@ -23,7 +23,6 @@ from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
-from gui.server_events import g_eventsCache
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.formatters import icons, text_styles
 
@@ -51,7 +50,7 @@ def getSquadPlayerStatus(slotState, pInfo):
         return PLAYER_GUI_STATUS.NORMAL
 
 
-def makeSlotLabel(unitFlags, slotState, isCreator = False, vehCount = 0, checkForVehicles = True, isRequired = False):
+def makeSlotLabel(unitFlags, slotState, isCreator=False, vehCount=0, checkForVehicles=True, isRequired=False):
     slotLabel = SLOT_LABEL.DEFAULT
     if slotState.isFree:
         if unitFlags.isLocked():
@@ -68,7 +67,7 @@ def makeSlotLabel(unitFlags, slotState, isCreator = False, vehCount = 0, checkFo
     return slotLabel
 
 
-def makeStaticSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, checkForVehicles = True, isLegionary = False, isRated = False):
+def makeStaticSlotLabel(unitState, slotState, isCreator=False, vehCount=0, checkForVehicles=True, isLegionary=False, isRated=False):
     slotLabel = SLOT_LABEL.DEFAULT
     if slotState.isFree:
         if unitState.isLocked():
@@ -85,7 +84,7 @@ def makeStaticSlotLabel(unitState, slotState, isCreator = False, vehCount = 0, c
     return slotLabel
 
 
-def makeVehicleBasicVO(vehicle, levelsRange = None, vehicleTypes = None):
+def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
     if vehicle is None:
         return
     else:
@@ -110,7 +109,7 @@ def makeVehicleBasicVO(vehicle, levelsRange = None, vehicleTypes = None):
          'isFalloutVehicle': vehicle.isFalloutSelected}
 
 
-def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isCurrentPlayer = True):
+def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=True):
     vehicleVO = makeVehicleBasicVO(vehicle, levelsRange, vehicleTypes)
     if vehicleVO is None:
         return
@@ -127,7 +126,13 @@ def makeVehicleVO(vehicle, levelsRange = None, vehicleTypes = None, isCurrentPla
         return vehicleVO
 
 
-def makeUserVO(user, colorGetter, isPlayerSpeaking = False):
+def makeFiltersVO(nationIDRange, vTypeRange, vLevelRange):
+    return {'nationIDRange': nationIDRange,
+     'vTypeRange': vTypeRange,
+     'vLevelRange': vLevelRange}
+
+
+def makeUserVO(user, colorGetter, isPlayerSpeaking=False):
     if user is not None:
         colors = colorGetter(user.getGuiType())
         tags = list(user.getTags())
@@ -152,7 +157,7 @@ def makeUserVO(user, colorGetter, isPlayerSpeaking = False):
      'isRatingAvailable': True}
 
 
-def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
+def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     if user is not None:
         colors = colorGetter(user.getGuiType())
         tags = list(user.getTags())
@@ -177,7 +182,7 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
      'isRatingAvailable': not pInfo.isInvite()}
 
 
-def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
+def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     sortiePlayerVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
     sortiePlayerVO['isLegionaries'] = pInfo.isLegionary()
     sortiePlayerVO['clanAbbrev'] = None
@@ -185,14 +190,14 @@ def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
     return sortiePlayerVO
 
 
-def makeStaticFormationPlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
+def makeStaticFormationPlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     staticFormationPlayerVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
     staticFormationPlayerVO['isLegionaries'] = pInfo.isLegionary()
     staticFormationPlayerVO['isRatingAvailable'] = pInfo.isLegionary() and not pInfo.isInSlot
     return staticFormationPlayerVO
 
 
-def makeClanBattlePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking = False):
+def makeClanBattlePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
     clanBattleVO = makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking)
     clanBattleVO['clanAbbrev'] = None
     clanBattleVO['isRatingAvailable'] = False
@@ -203,7 +208,7 @@ _UNIT_RESTRICTION_TO_LABEL = {UNIT_RESTRICTION.MAX_TOTAL_LEVEL: 'levelError',
  UNIT_RESTRICTION.MIN_TOTAL_LEVEL: 'levelError',
  UNIT_RESTRICTION.INVALID_TOTAL_LEVEL: 'levelWarning'}
 
-def makeTotalLevelLabel(unitStats, restriction = ''):
+def makeTotalLevelLabel(unitStats, restriction=''):
     templateKey = 'sumLevelLabel'
     if restriction:
         if restriction in _UNIT_RESTRICTION_TO_LABEL:
@@ -218,7 +223,7 @@ def makeUnitStateLabel(unitState):
     return makeHtmlString('html_templates:lobby/cyberSport', 'teamUnlocked' if unitState.isOpened() else 'teamLocked', {})
 
 
-def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levelsRange = None, checkForVehicles = True):
+def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app=None, levelsRange=None, checkForVehicles=True):
     isPlayerCreator = pInfo.isCreator()
     isPlayerInSlot = pInfo.isInSlot
     slots = []
@@ -230,13 +235,13 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
         isPlayerSpeaking = app.voiceChatManager.isPlayerSpeaking
     else:
         isPlayerSpeaking = lambda dbID: False
-    if unit.isSquad():
-        falloutBattleType = unit.getExtra().eventType
-        isFallout = falloutBattleType != FALLOUT_BATTLE_TYPE.UNDEFINED
-        falloutCfg = g_eventsCache.getFalloutConfig(falloutBattleType)
+    falloutCtrl = getFalloutCtrl()
+    isFallout = falloutCtrl.isEnabled()
+    if isFallout:
+        falloutBattleType = falloutCtrl.getBattleType()
+        falloutCfg = falloutCtrl.getConfig()
     else:
-        falloutBattleType = FALLOUT_BATTLE_TYPE.UNDEFINED
-        isFallout = False
+        falloutBattleType = QUEUE_TYPE.UNKNOWN
         falloutCfg = None
     if unit is None:
         makeVO = makePlayerVO
@@ -263,16 +268,15 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
             slotPlayerUI = makeVO(player, userGetter(dbID), colorGetter, isPlayerSpeaking(dbID))
             isCurrentPlayer = player.isCurrentPlayer()
             if vehicle:
-                if 'vehLevel' in vehicle:
-                    slotLevel = vehicle['vehLevel']
-                if 'vehTypeCompDescr' in vehicle:
-                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle['vehTypeCompDescr']), levelsRange, isCurrentPlayer=isCurrentPlayer)
+                slotLevel = vehicle.vehLevel
+                if vehicle.vehTypeCompDescr:
+                    vehicleVO = makeVehicleVO(vehicleGetter(vehicle.vehTypeCompDescr), levelsRange, isCurrentPlayer=isCurrentPlayer)
         if unit is not None and unit.isClub():
             slotLabel = makeStaticSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, pInfo.isLegionary(), unit.isRated())
         else:
-            isRequired = falloutBattleType == FALLOUT_BATTLE_TYPE.MULTITEAM
+            isRequired = falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM
             slotLabel = makeSlotLabel(unitState, slotState, isPlayerCreator, vehCount, checkForVehicles, isRequired=isRequired)
-        if unit.isSquad():
+        if unit.isSquad() or unit.isFalloutSquad() or unit.isEvent():
             playerStatus = getSquadPlayerStatus(slotState, player)
         else:
             playerStatus = getPlayerStatus(slotState, player)
@@ -301,9 +305,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
                 dbID = player.dbID
                 isCurrentPlayer = player.isCurrentPlayer()
                 if isCurrentPlayer:
-                    falloutCtrl = getFalloutCtrl()
                     statusTemplate = None
-                    if falloutBattleType == FALLOUT_BATTLE_TYPE.MULTITEAM:
+                    if falloutBattleType == QUEUE_TYPE.FALLOUT_MULTITEAM:
                         if len(falloutCtrl.getSelectedVehicles()) < falloutCfg.minVehiclesPerPlayer:
                             statusTemplate = i18n.makeString(MESSENGER.DIALOGS_FALLOUTSQUADCHANNEL_VEHICLENOTIFYMULTITEAM)
                     elif falloutCtrl.mustSelectRequiredVehicle():
@@ -314,8 +317,8 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
                         for slotIdx in range(falloutCfg.minVehiclesPerPlayer):
                             vehiclesNotify[slotIdx] = statusTemplate
 
-                for idx, (vInvID, vehIntCD) in enumerate(unit.getExtra().accountVehicles.get(dbID, ())):
-                    selectedVehicles[idx] = makeVehicleVO(vehicleGetter(vehIntCD), falloutCfg.allowedLevels, isCurrentPlayer=isCurrentPlayer)
+                for idx, vehicle in enumerate(unit.getVehicles().get(dbID, ())):
+                    selectedVehicles[idx] = makeVehicleVO(vehicleGetter(vehicle.vehTypeCompDescr), falloutCfg.allowedLevels, isCurrentPlayer=isCurrentPlayer)
 
             slot['vehiclesNotify'] = vehiclesNotify
             slot['selectedVehicle'] = selectedVehicles
@@ -324,7 +327,7 @@ def _getSlotsData(unitIdx, unit, unitState, pInfo, slotsIter, app = None, levels
     return slots
 
 
-def makeSlotsVOs(unitFunctional, unitIdx = None, app = None):
+def makeSlotsVOs(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -335,7 +338,7 @@ def makeSlotsVOs(unitFunctional, unitIdx = None, app = None):
         return (isRosterSet, slots)
 
 
-def getUnitMaxLevel(unitFunctional, unitIdx = None, app = None):
+def getUnitMaxLevel(unitFunctional, unitIdx=None, app=None):
     level = 10
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is not None:
@@ -345,7 +348,7 @@ def getUnitMaxLevel(unitFunctional, unitIdx = None, app = None):
     return level
 
 
-def makeUnitShortVO(unitFunctional, unitIdx = None, app = None):
+def makeUnitShortVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -357,7 +360,7 @@ def makeUnitShortVO(unitFunctional, unitIdx = None, app = None):
          'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
 
 
-def makeSortieShortVO(unitFunctional, unitIdx = None, app = None):
+def makeSortieShortVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         title = i18n.makeString(FORTIFICATIONS.SORTIE_LISTVIEW_ALERTTEXT_TITLE)
@@ -383,7 +386,7 @@ def makeMsg(value):
     return i18n.makeString(value)
 
 
-def makeFortBattleShortVO(unitFunctional, unitIdx = None, app = None):
+def makeFortBattleShortVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -412,7 +415,7 @@ def makeSimpleClanListRenderVO(member, intTotalMining, intWeekMining, role, role
      'fullName': member.getFullName()}
 
 
-def makeUnitVO(unitFunctional, unitIdx = None, app = None):
+def makeUnitVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -433,7 +436,7 @@ def makeUnitVO(unitFunctional, unitIdx = None, app = None):
          'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
 
 
-def makeStaticFormationUnitVO(unitFunctional, unitIdx = None, app = None):
+def makeStaticFormationUnitVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -453,15 +456,13 @@ def makeStaticFormationUnitVO(unitFunctional, unitIdx = None, app = None):
 
 
 def makeStaticFormationStatusLbl(unitState):
-    if unitState.isOpened():
-        return CYBERSPORT.STATICFORMATION_UNITVIEW_OPENROOM_STATUS
-    return CYBERSPORT.STATICFORMATION_UNITVIEW_CLOSEDROOM_STATUS
+    return CYBERSPORT.STATICFORMATION_UNITVIEW_OPENROOM_STATUS if unitState.isOpened() else CYBERSPORT.STATICFORMATION_UNITVIEW_CLOSEDROOM_STATUS
 
 
-def makeSortieVO(unitFunctional, unitIdx = None, app = None):
+def makeSortieVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
-        return {}
+        return
     else:
         unit, unitState, unitStats, pInfo, slotsIter = fullData
         division = getDivisionNameByType(unit.getRosterTypeID())
@@ -484,7 +485,7 @@ def makeSortieVO(unitFunctional, unitIdx = None, app = None):
          'divisionLbl': divisionLbl}
 
 
-def makeFortBattleVO(unitFunctional, unitIdx = None, app = None):
+def makeFortBattleVO(unitFunctional, unitIdx=None, app=None):
     fullData = unitFunctional.getUnitFullData(unitIdx=unitIdx)
     if fullData is None:
         return {}
@@ -505,7 +506,7 @@ def makeFortBattleVO(unitFunctional, unitIdx = None, app = None):
          'description': unitFunctional.getCensoredComment(unitIdx=unitIdx)}
 
 
-def makeSquadVO(squadFunctional, app = None):
+def makeSquadVO(squadFunctional, app=None):
     fullData = squadFunctional.getUnitFullData()
     if fullData is None:
         return {}
@@ -524,7 +525,7 @@ def makeSquadVO(squadFunctional, app = None):
          'description': ''}
 
 
-def makeUnitRosterVO(unit, pInfo, index = None, isSortie = False, levelsRange = None):
+def makeUnitRosterVO(unit, pInfo, index=None, isSortie=False, levelsRange=None):
     vehicleGetter = g_itemsCache.items.getItemByCD
     if index is None:
         vehiclesData = pInfo.getVehiclesToSlots().keys()
@@ -547,24 +548,22 @@ def makeUnitRosterVO(unit, pInfo, index = None, isSortie = False, levelsRange = 
             vehTypeCD = rosterSlot.vehTypeCompDescr
             if vehTypeCD is not None:
                 conditions.append({'vehicle': makeVehicleVO(vehicleGetter(vehTypeCD), levelsRange)})
-            else:
-                params = {'nationIDRange': tuple(),
-                 'vTypeRange': tuple(),
-                 'vLevelRange': tuple()}
-                isDefault = not isSortie and isDefaultSlot(rosterSlot)
-                if not isDefault:
-                    nationMask = rosterSlot.nationMask
-                    if nationMask != 255:
-                        params['nationIDRange'] = filter(lambda k: 1 << NATIONS_INDICES[k] & nationMask, NATIONS_NAMES)
-                    vehClassMask = rosterSlot.vehClassMask
-                    if vehClassMask != 255:
-                        params['vTypeRange'] = filter(lambda k: 1 << VEHICLE_CLASS_INDICES[k] & vehClassMask, VEHICLE_CLASSES)
-                    levels = rosterSlot.levels
-                    if levels != rosterSlot.DEFAULT_LEVELS or isSortie:
-                        params['vLevelRange'] = levels
-                    conditions.append(params)
-                else:
-                    conditions.append(None)
+            params = {'nationIDRange': tuple(),
+             'vTypeRange': tuple(),
+             'vLevelRange': tuple()}
+            isDefault = not isSortie and isDefaultSlot(rosterSlot)
+            if not isDefault:
+                nationMask = rosterSlot.nationMask
+                if nationMask != 255:
+                    params['nationIDRange'] = filter(lambda k: 1 << NATIONS_INDICES[k] & nationMask, NATIONS_NAMES)
+                vehClassMask = rosterSlot.vehClassMask
+                if vehClassMask != 255:
+                    params['vTypeRange'] = filter(lambda k: 1 << VEHICLE_CLASS_INDICES[k] & vehClassMask, VEHICLE_CLASSES)
+                levels = rosterSlot.levels
+                if levels != rosterSlot.DEFAULT_LEVELS or isSortie:
+                    params['vLevelRange'] = levels
+                conditions.append(params)
+            conditions.append(None)
 
         vehiclesData = pInfo.getVehiclesToSlot(index)
     vehicleVOs = map(lambda vehTypeCD: makeVehicleVO(vehicleGetter(vehTypeCD)), vehiclesData)
@@ -577,7 +576,7 @@ def getUnitRosterModel(vehiclesData, conditions, isCreator):
      'isCreator': isCreator}
 
 
-def getUnitRosterData(unitFunctional, unitIdx = None, index = None):
+def getUnitRosterData(unitFunctional, unitIdx=None, index=None):
     _, unit = unitFunctional.getUnit(unitIdx)
     if unit is None:
         result = {}
@@ -597,7 +596,6 @@ def makeBuildingIndicatorsVOByDescr(buildingDescr):
 
 
 def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResVal, maxDefResVal):
-    defResCompensationValue = 0
     FORMAT_PATTERN = '###'
     if progress == FORT_ALIAS.STATE_FOUNDATION_DEF or progress == FORT_ALIAS.STATE_FOUNDATION:
         hpValueFormatter = text_styles.alert(FORMAT_PATTERN)
@@ -621,7 +619,7 @@ def makeBuildingIndicatorsVO(buildingLevel, progress, hpVal, hpTotalVal, defResV
      'hpCurrentValue': hpVal,
      'hpTotalValue': hpTotalVal,
      'defResCurrentValue': defResVal,
-     'defResCompensationValue': defResCompensationValue,
+     'defResCompensationValue': max(0, defResVal - maxDefResVal),
      'defResTotalValue': maxDefResVal,
      'hpProgressLabels': hpProgressLabels,
      'defResProgressLabels': storeProgressLabels}

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/warnings.py
 """Python part of the warnings subsystem."""
 import linecache
@@ -10,7 +11,7 @@ __all__ = ['warn',
  'resetwarnings',
  'catch_warnings']
 
-def warnpy3k(message, category = None, stacklevel = 1):
+def warnpy3k(message, category=None, stacklevel=1):
     """Issue a deprecation warning for Python 3.x related changes.
     
     Warnings are omitted unless Python is started with the -3 option.
@@ -22,7 +23,7 @@ def warnpy3k(message, category = None, stacklevel = 1):
     return
 
 
-def _show_warning(message, category, filename, lineno, file = None, line = None):
+def _show_warning(message, category, filename, lineno, file=None, line=None):
     """Hook to write a warning to a file; replace if you like."""
     if file is None:
         file = sys.stderr
@@ -36,7 +37,7 @@ def _show_warning(message, category, filename, lineno, file = None, line = None)
 
 showwarning = _show_warning
 
-def formatwarning(message, category, filename, lineno, line = None):
+def formatwarning(message, category, filename, lineno, line=None):
     """Function to format a warning the standard way."""
     s = '%s:%s: %s: %s\n' % (filename,
      lineno,
@@ -49,7 +50,7 @@ def formatwarning(message, category, filename, lineno, line = None):
     return s
 
 
-def filterwarnings(action, message = '', category = Warning, module = '', lineno = 0, append = 0):
+def filterwarnings(action, message='', category=Warning, module='', lineno=0, append=0):
     """Insert an entry into the list of warnings filters (at the front).
     
     'action' -- one of "error", "ignore", "always", "default", "module",
@@ -61,24 +62,24 @@ def filterwarnings(action, message = '', category = Warning, module = '', lineno
     'append' -- if true, append to the list of filters
     """
     import re
-    raise action in ('error', 'ignore', 'always', 'default', 'module', 'once') or AssertionError('invalid action: %r' % (action,))
-    raise isinstance(message, basestring) or AssertionError('message must be a string')
-    raise isinstance(category, (type, types.ClassType)) or AssertionError('category must be a class')
-    raise issubclass(category, Warning) or AssertionError('category must be a Warning subclass')
-    raise isinstance(module, basestring) or AssertionError('module must be a string')
-    if not (isinstance(lineno, int) and lineno >= 0):
-        raise AssertionError('lineno must be an int >= 0')
-        item = (action,
-         re.compile(message, re.I),
-         category,
-         re.compile(module),
-         lineno)
-        append and filters.append(item)
+    assert action in ('error', 'ignore', 'always', 'default', 'module', 'once'), 'invalid action: %r' % (action,)
+    assert isinstance(message, basestring), 'message must be a string'
+    assert isinstance(category, (type, types.ClassType)), 'category must be a class'
+    assert issubclass(category, Warning), 'category must be a Warning subclass'
+    assert isinstance(module, basestring), 'module must be a string'
+    assert isinstance(lineno, int) and lineno >= 0, 'lineno must be an int >= 0'
+    item = (action,
+     re.compile(message, re.I),
+     category,
+     re.compile(module),
+     lineno)
+    if append:
+        filters.append(item)
     else:
         filters.insert(0, item)
 
 
-def simplefilter(action, category = Warning, lineno = 0, append = 0):
+def simplefilter(action, category=Warning, lineno=0, append=0):
     """Insert a simple entry into the list of warnings filters (at the front).
     
     A simple filter matches all modules and messages.
@@ -88,15 +89,15 @@ def simplefilter(action, category = Warning, lineno = 0, append = 0):
     'lineno' -- an integer line number, 0 matches all warnings
     'append' -- if true, append to the list of filters
     """
-    if not action in ('error', 'ignore', 'always', 'default', 'module', 'once'):
-        raise AssertionError('invalid action: %r' % (action,))
-        raise isinstance(lineno, int) and lineno >= 0 or AssertionError('lineno must be an int >= 0')
-        item = (action,
-         None,
-         category,
-         None,
-         lineno)
-        append and filters.append(item)
+    assert action in ('error', 'ignore', 'always', 'default', 'module', 'once'), 'invalid action: %r' % (action,)
+    assert isinstance(lineno, int) and lineno >= 0, 'lineno must be an int >= 0'
+    item = (action,
+     None,
+     category,
+     None,
+     lineno)
+    if append:
+        filters.append(item)
     else:
         filters.insert(0, item)
     return
@@ -190,31 +191,31 @@ def _getcategory(category):
         return cat
 
 
-def warn(message, category = None, stacklevel = 1):
+def warn(message, category=None, stacklevel=1):
     """Issue a warning, or maybe ignore it or raise an exception."""
     if isinstance(message, Warning):
         category = message.__class__
     if category is None:
         category = UserWarning
-    if not issubclass(category, Warning):
-        raise AssertionError
-        try:
-            caller = sys._getframe(stacklevel)
-        except ValueError:
-            globals = sys.__dict__
-            lineno = 1
-        else:
-            globals = caller.f_globals
-            lineno = caller.f_lineno
+    assert issubclass(category, Warning)
+    try:
+        caller = sys._getframe(stacklevel)
+    except ValueError:
+        globals = sys.__dict__
+        lineno = 1
+    else:
+        globals = caller.f_globals
+        lineno = caller.f_lineno
 
-        if '__name__' in globals:
-            module = globals['__name__']
-        else:
-            module = '<string>'
-        filename = globals.get('__file__')
-        if filename:
-            fnl = filename.lower()
-            filename = fnl.endswith(('.pyc', '.pyo')) and filename[:-1]
+    if '__name__' in globals:
+        module = globals['__name__']
+    else:
+        module = '<string>'
+    filename = globals.get('__file__')
+    if filename:
+        fnl = filename.lower()
+        if fnl.endswith(('.pyc', '.pyo')):
+            filename = filename[:-1]
     else:
         if module == '__main__':
             try:
@@ -229,7 +230,7 @@ def warn(message, category = None, stacklevel = 1):
     return
 
 
-def warn_explicit(message, category, filename, lineno, module = None, registry = None, module_globals = None):
+def warn_explicit(message, category, filename, lineno, module=None, registry=None, module_globals=None):
     lineno = int(lineno)
     if module is None:
         module = filename or '<unknown>'
@@ -286,7 +287,7 @@ class WarningMessage(object):
     """Holds the result of a single showwarning() call."""
     _WARNING_DETAILS = ('message', 'category', 'filename', 'lineno', 'file', 'line')
 
-    def __init__(self, message, category, filename, lineno, file = None, line = None):
+    def __init__(self, message, category, filename, lineno, file=None, line=None):
         local_values = locals()
         for attr in self._WARNING_DETAILS:
             setattr(self, attr, local_values[attr])
@@ -318,7 +319,7 @@ class catch_warnings(object):
     
     """
 
-    def __init__(self, record = False, module = None):
+    def __init__(self, record=False, module=None):
         """Specify whether to record warnings and if an alternative module
         should be used other than sys.modules['warnings'].
         

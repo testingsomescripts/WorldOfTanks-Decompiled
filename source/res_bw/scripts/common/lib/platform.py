@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/platform.py
 """ This module tries to retrieve as much platform-identifying data as
     possible. It makes this information available via function APIs.
@@ -20,7 +21,7 @@ except AttributeError:
 
 _libc_search = re.compile('(__libc_init)|(GLIBC_([0-9.]+))|(libc(_\\w+)?\\.so(?:\\.(\\d[0-9.]*))?)')
 
-def libc_ver(executable = sys.executable, lib = '', version = '', chunksize = 2048):
+def libc_ver(executable=sys.executable, lib='', version='', chunksize=2048):
     """ Tries to determine the libc version that the file executable
         (which defaults to the Python interpreter) is linked against.
     
@@ -88,7 +89,7 @@ def _dist_try_harder(distname, version, id):
                 continue
             if tag == 'MIN_DIST_VERSION':
                 version = string.strip(value)
-            elif tag == 'DIST_IDENT':
+            if tag == 'DIST_IDENT':
                 values = string.split(value, '-')
                 id = values[2]
 
@@ -137,7 +138,7 @@ def _parse_release_file(firstline):
         return ('', version, id)
 
 
-def linux_distribution(distname = '', version = '', id = '', supported_dists = _supported_dists, full_distribution_name = 1):
+def linux_distribution(distname='', version='', id='', supported_dists=_supported_dists, full_distribution_name=1):
     """ Tries to determine the name of the Linux OS distribution name.
     
         The function first looks for a distribution release file in
@@ -186,7 +187,7 @@ def linux_distribution(distname = '', version = '', id = '', supported_dists = _
     return (distname, version, id)
 
 
-def dist(distname = '', version = '', id = '', supported_dists = _supported_dists):
+def dist(distname='', version='', id='', supported_dists=_supported_dists):
     """ Tries to determine the name of the Linux OS distribution name.
     
         The function first looks for a distribution release file in
@@ -215,7 +216,7 @@ class _popen:
     bufsize = None
     mode = 'r'
 
-    def __init__(self, cmd, mode = 'r', bufsize = None):
+    def __init__(self, cmd, mode='r', bufsize=None):
         if mode != 'r':
             raise ValueError, 'popen()-emulation only supports read mode'
         import tempfile
@@ -229,12 +230,9 @@ class _popen:
         return self.pipe.read()
 
     def readlines(self):
-        if self.bufsize is not None:
-            return self.pipe.readlines()
-        else:
-            return
+        return self.pipe.readlines() if self.bufsize is not None else None
 
-    def close(self, remove = os.unlink, error = os.error):
+    def close(self, remove=os.unlink, error=os.error):
         if self.pipe:
             rc = self.pipe.close()
         else:
@@ -250,7 +248,7 @@ class _popen:
     __del__ = close
 
 
-def popen(cmd, mode = 'r', bufsize = None):
+def popen(cmd, mode='r', bufsize=None):
     """ Portable popen() interface.
     """
     popen = None
@@ -280,7 +278,7 @@ def popen(cmd, mode = 'r', bufsize = None):
         return
 
 
-def _norm_version(version, build = ''):
+def _norm_version(version, build=''):
     """ Normalize the version and build strings and return a single
         version string using the format major.minor.build (or patchlevel).
     """
@@ -300,7 +298,7 @@ def _norm_version(version, build = ''):
 
 _ver_output = re.compile('(?:([\\w ]+) ([\\w.]+) .*\\[.* ([\\d.]+)\\])')
 
-def _syscmd_ver(system = '', release = '', version = '', supported_platforms = ('win32', 'win16', 'dos', 'os2')):
+def _syscmd_ver(system='', release='', version='', supported_platforms=('win32', 'win16', 'dos', 'os2')):
     """ Tries to figure out the OS version used and returns
         a tuple (system,release,version).
     
@@ -342,7 +340,7 @@ def _syscmd_ver(system = '', release = '', version = '', supported_platforms = (
         return (system, release, version)
 
 
-def _win32_getvalue(key, name, default = ''):
+def _win32_getvalue(key, name, default=''):
     """ Read a value for name from the registry key.
     
         In case this fails, default is returned.
@@ -360,7 +358,7 @@ def _win32_getvalue(key, name, default = ''):
         return default
 
 
-def win32_ver(release = '', version = '', csd = '', ptype = ''):
+def win32_ver(release='', version='', csd='', ptype=''):
     """ Get additional version information from the Windows Registry
         and return a tuple (version,csd,ptype) referring to version
         number, CSD level (service pack), and OS type (multi/single
@@ -493,7 +491,7 @@ def win32_ver(release = '', version = '', csd = '', ptype = ''):
      ptype)
 
 
-def _mac_ver_lookup(selectors, default = None):
+def _mac_ver_lookup(selectors, default=None):
     from gestalt import gestalt
     import MacOS
     l = []
@@ -562,7 +560,7 @@ def _mac_ver_xml():
         return (release, versioninfo, machine)
 
 
-def mac_ver(release = '', versioninfo = ('', '', ''), machine = ''):
+def mac_ver(release='', versioninfo=('', '', ''), machine=''):
     """ Get MacOS version information and return it as tuple (release,
         versioninfo, machine) with versioninfo being a tuple (version,
         dev_stage, non_release_version).
@@ -575,9 +573,7 @@ def mac_ver(release = '', versioninfo = ('', '', ''), machine = ''):
         return info
     else:
         info = _mac_ver_gestalt()
-        if info is not None:
-            return info
-        return (release, versioninfo, machine)
+        return info if info is not None else (release, versioninfo, machine)
 
 
 def _java_getprop(name, default):
@@ -593,7 +589,7 @@ def _java_getprop(name, default):
     return
 
 
-def java_ver(release = '', vendor = '', vminfo = ('', '', ''), osinfo = ('', '', '')):
+def java_ver(release='', vendor='', vminfo=('', '', ''), osinfo=('', '', '')):
     """ Version interface for Jython.
     
         Returns a tuple (release,vendor,vminfo,osinfo) with vminfo being
@@ -696,7 +692,7 @@ def _platform(*args):
     return platform
 
 
-def _node(default = ''):
+def _node(default=''):
     """ Helper to determine the node name of this machine.
     """
     try:
@@ -712,7 +708,7 @@ def _node(default = ''):
 
 if not hasattr(os.path, 'abspath'):
 
-    def _abspath(path, isabs = os.path.isabs, join = os.path.join, getcwd = os.getcwd, normpath = os.path.normpath):
+    def _abspath(path, isabs=os.path.isabs, join=os.path.join, getcwd=os.getcwd, normpath=os.path.normpath):
         if not isabs(path):
             path = join(getcwd(), path)
         return normpath(path)
@@ -732,7 +728,7 @@ def _follow_symlinks(filepath):
     return filepath
 
 
-def _syscmd_uname(option, default = ''):
+def _syscmd_uname(option, default=''):
     """ Interface to the system's uname command.
     """
     if sys.platform in ('dos', 'win32', 'win16', 'os2'):
@@ -750,7 +746,7 @@ def _syscmd_uname(option, default = ''):
         return output
 
 
-def _syscmd_file(target, default = ''):
+def _syscmd_file(target, default=''):
     """ Interface to the system's file command.
     
         The function uses the -b option of the file command to have it
@@ -781,7 +777,7 @@ _default_architecture = {'win32': ('', 'WindowsPE'),
  'dos': ('', 'MSDOS')}
 _architecture_split = re.compile('[\\s,]').split
 
-def architecture(executable = sys.executable, bits = '', linkage = ''):
+def architecture(executable=sys.executable, bits='', linkage=''):
     """ Queries the given executable (defaults to the Python interpreter
         binary) for various architecture information.
     
@@ -1018,7 +1014,7 @@ _ironpython26_sys_version_parser = re.compile('([\\d.]+)\\s*\\(IronPython\\s*[\\
 _pypy_sys_version_parser = re.compile('([\\w.+]+)\\s*\\(#?([^,]+),\\s*([\\w ]+),\\s*([\\w :]+)\\)\\s*\\[PyPy [^\\]]+\\]?')
 _sys_version_cache = {}
 
-def _sys_version(sys_version = None):
+def _sys_version(sys_version=None):
     """ Returns a parsed version of Python's sys.version as tuple
         (name, version, branch, revision, buildno, builddate, compiler)
         referring to the Python implementation name, version, branch,
@@ -1173,7 +1169,7 @@ def python_compiler():
 
 _platform_cache = {}
 
-def platform(aliased = 0, terse = 0):
+def platform(aliased=0, terse=0):
     """ Returns a single string identifying the underlying platform
         with as much useful information as possible (but no more :).
     

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/poplib.py
 """A POP3 client class.
 
@@ -57,7 +58,7 @@ class POP3():
             above.
     """
 
-    def __init__(self, host, port = POP3_PORT, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+    def __init__(self, host, port=POP3_PORT, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         self.host = host
         self.port = port
         self.sock = socket.create_connection((host, port), timeout)
@@ -84,9 +85,7 @@ class POP3():
         octets = len(line)
         if line[-2:] == CRLF:
             return (line[:-2], octets)
-        if line[0] == CR:
-            return (line[1:-1], octets)
-        return (line[:-1], octets)
+        return (line[1:-1], octets) if line[0] == CR else (line[:-1], octets)
 
     def _getresp(self):
         resp, o = self._getline()
@@ -155,7 +154,7 @@ class POP3():
         sizeMessages = int(rets[2])
         return (numMessages, sizeMessages)
 
-    def list(self, which = None):
+    def list(self, which=None):
         """Request listing, return result.
         
         Result without a message number argument is in form
@@ -164,10 +163,7 @@ class POP3():
         Result when a message number argument is given is a
         single response: the "scan listing" for that message.
         """
-        if which is not None:
-            return self._shortcmd('LIST %s' % which)
-        else:
-            return self._longcmd('LIST')
+        return self._shortcmd('LIST %s' % which) if which is not None else self._longcmd('LIST')
 
     def retr(self, which):
         """Retrieve whole message number 'which'.
@@ -240,17 +236,14 @@ class POP3():
         """
         return self._longcmd('TOP %s %s' % (which, howmuch))
 
-    def uidl(self, which = None):
+    def uidl(self, which=None):
         """Return message digest (unique id) list.
         
         If 'which', result contains unique id for that message
         in the form 'response mesgnum uid', otherwise result is
         the list ['response', ['mesgnum uid', ...], octets]
         """
-        if which is not None:
-            return self._shortcmd('UIDL %s' % which)
-        else:
-            return self._longcmd('UIDL')
+        return self._shortcmd('UIDL %s' % which) if which is not None else self._longcmd('UIDL')
 
 
 try:
@@ -272,7 +265,7 @@ else:
             See the methods of the parent class POP3 for more documentation.
         """
 
-        def __init__(self, host, port = POP3_SSL_PORT, keyfile = None, certfile = None):
+        def __init__(self, host, port=POP3_SSL_PORT, keyfile=None, certfile=None):
             self.host = host
             self.port = port
             self.keyfile = keyfile
@@ -322,9 +315,7 @@ else:
             octets = len(line)
             if line[-2:] == CRLF:
                 return (line[:-2], octets)
-            if line[0] == CR:
-                return (line[1:-1], octets)
-            return (line[:-1], octets)
+            return (line[1:-1], octets) if line[0] == CR else (line[:-1], octets)
 
         def _putline(self, line):
             if self._debugging > 1:

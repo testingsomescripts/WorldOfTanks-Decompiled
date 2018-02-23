@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/handler.py
 """
 This module contains the core classes of version 2.0 of SAX for Python.

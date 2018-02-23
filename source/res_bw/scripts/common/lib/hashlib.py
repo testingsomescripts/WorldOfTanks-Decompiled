@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hashlib.py
 r"""hashlib module - A common interface to many hash functions.
 
@@ -90,14 +90,14 @@ def __get_openssl_constructor(name):
         return __get_builtin_constructor(name)
 
 
-def __py_new(name, string = ''):
+def __py_new(name, string=''):
     """new(name, string='') - Return a new hashing object using the named algorithm;
     optionally initialized with a string.
     """
     return __get_builtin_constructor(name)(string)
 
 
-def __hash_new(name, string = ''):
+def __hash_new(name, string=''):
     """new(name, string='') - Return a new hashing object using the named algorithm;
     optionally initialized with a string.
     """

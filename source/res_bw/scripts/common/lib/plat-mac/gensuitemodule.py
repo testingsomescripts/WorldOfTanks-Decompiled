@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/gensuitemodule.py
 """
 gensuitemodule - Generate an AE suite module from an aete/aeut resource
@@ -84,7 +85,7 @@ def main():
     return
 
 
-def main_interactive(interact = 0, basepkgname = 'StdSuites'):
+def main_interactive(interact=0, basepkgname='StdSuites'):
     if interact:
         edit_modnames = None
     else:
@@ -128,7 +129,7 @@ def is_scriptable(application):
     return n_terminology > 0
 
 
-def processfile_fromresource(fullname, output = None, basepkgname = None, edit_modnames = None, creatorsignature = None, dump = None, verbose = None):
+def processfile_fromresource(fullname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, dump=None, verbose=None):
     """Process all resources in a single file"""
     if not is_scriptable(fullname) and verbose:
         print >> verbose, 'Warning: app does not seem scriptable: %s' % fullname
@@ -168,7 +169,7 @@ def processfile_fromresource(fullname, output = None, basepkgname = None, edit_m
     compileaetelist(aetelist, fullname, output=output, basepkgname=basepkgname, edit_modnames=edit_modnames, creatorsignature=creatorsignature, verbose=verbose)
 
 
-def processfile(fullname, output = None, basepkgname = None, edit_modnames = None, creatorsignature = None, dump = None, verbose = None):
+def processfile(fullname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, dump=None, verbose=None):
     """Ask an application for its terminology and process that"""
     if not is_scriptable(fullname) and verbose:
         print >> verbose, 'Warning: app does not seem scriptable: %s' % fullname
@@ -209,7 +210,7 @@ def processfile(fullname, output = None, basepkgname = None, edit_modnames = Non
         return
 
 
-def getappterminology(fullname, verbose = None):
+def getappterminology(fullname, verbose=None):
     """Get application terminology by sending an AppleEvent"""
     if not MacOS.WMAvailable():
         raise RuntimeError, 'Cannot send AppleEvents, no access to window manager'
@@ -234,7 +235,7 @@ def getappterminology(fullname, verbose = None):
     return (reply[1]['----'], cr)
 
 
-def compileaetelist(aetelist, fullname, output = None, basepkgname = None, edit_modnames = None, creatorsignature = None, verbose = None):
+def compileaetelist(aetelist, fullname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, verbose=None):
     for aete, resinfo in aetelist:
         compileaete(aete, resinfo, fullname, output=output, basepkgname=basepkgname, edit_modnames=edit_modnames, creatorsignature=creatorsignature, verbose=verbose)
 
@@ -244,7 +245,7 @@ def dumpaetelist(aetelist, output):
     pprint.pprint(aetelist, output)
 
 
-def decode(data, verbose = None):
+def decode(data, verbose=None):
     """Decode a resource into a python data structure"""
     f = StringIO.StringIO(data)
     aete = generic(getaete, f)
@@ -379,7 +380,7 @@ getaete = [(getword, 'major/minor version in BCD'),
  (getword, 'script code'),
  (getlist, 'suites', getsuite)]
 
-def compileaete(aete, resinfo, fname, output = None, basepkgname = None, edit_modnames = None, creatorsignature = None, verbose = None):
+def compileaete(aete, resinfo, fname, output=None, basepkgname=None, edit_modnames=None, creatorsignature=None, verbose=None):
     """Generate code for a full aete resource. fname passed for doc purposes"""
     version, language, script, suites = aete
     major, minor = divmod(version, 256)
@@ -582,9 +583,7 @@ class SuiteCompiler():
                 return 1
             if not k2[3] or k2[3][0][1] == 'c@#!':
                 return -1
-            if not k1[3] or k1[3][0][1] == 'c@#!':
-                return 1
-            return 0
+            return 1 if not k1[3] or k1[3][0][1] == 'c@#!' else 0
 
         events.sort()
         classes.sort(class_sorter)
@@ -729,7 +728,7 @@ class SuiteCompiler():
 
 class CodeNameMapper():
 
-    def __init__(self, interact = 1, verbose = None):
+    def __init__(self, interact=1, verbose=None):
         self.code2name = {'property': {},
          'class': {},
          'enum': {},
@@ -788,7 +787,7 @@ class CodeNameMapper():
         for code, name in module._compdeclarations.items():
             self.addnamecode('comparison', name, code)
 
-    def prepareforexport(self, name = None):
+    def prepareforexport(self, name=None):
         if not self.modulename:
             self.modulename = name
         return self
@@ -796,7 +795,7 @@ class CodeNameMapper():
 
 class ObjectCompiler():
 
-    def __init__(self, fp, modname, basesuite, othernamemappers = None, interact = 1, verbose = None):
+    def __init__(self, fp, modname, basesuite, othernamemappers=None, interact=1, verbose=None):
         self.fp = fp
         self.verbose = verbose
         self.basesuite = basesuite
@@ -894,7 +893,7 @@ class ObjectCompiler():
         for elem in elements:
             self.compileelement(elem)
 
-    def compileproperty(self, prop, is_application_class = False):
+    def compileproperty(self, prop, is_application_class=False):
         name, code, what = prop
         if code == 'c@#!':
             return
@@ -946,8 +945,7 @@ class ObjectCompiler():
             superclassname, fullyqualifiedname, module = self.findcodename('class', superId)
             if superclassname == cname:
                 pass
-            else:
-                superclassnames.append(superclassname)
+            superclassnames.append(superclassname)
 
         if self.fp:
             self.fp.write('%s._superclassnames = %r\n' % (cname, superclassnames))
@@ -959,8 +957,7 @@ class ObjectCompiler():
             if not name:
                 if self.fp:
                     self.fp.write('# XXXX %s element %r not found!!\n' % (cname, ecode))
-            else:
-                elist.append((name, ename))
+            elist.append((name, ename))
 
         plist.sort()
         elist.sort()
@@ -1068,9 +1065,7 @@ def getdatadoc(data):
         return ascii(descr)
     if type == '****':
         return 'anything'
-    if type == 'obj ':
-        return 'an AE object reference'
-    return 'undocumented, typecode %r' % (type,)
+    return 'an AE object reference' if type == 'obj ' else 'undocumented, typecode %r' % (type,)
 
 
 dataflagdict = {15: 'optional',
@@ -1096,10 +1091,9 @@ def ascii(str):
         return map(ascii, str)
     rv = ''
     for c in str:
-        if c in ('\t', '\n', '\r') or ' ' <= c < chr(127):
-            rv = rv + c
-        else:
-            rv = rv + '\\' + 'x%02.2x' % ord(c)
+        if not c in ('\t', '\n', '\r'):
+            rv = ' ' <= c < chr(127) and rv + c
+        rv = rv + '\\' + 'x%02.2x' % ord(c)
 
     return rv
 

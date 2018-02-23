@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/aifc.py
 """Stuff to parse AIFF-C and AIFF files.
 
@@ -374,10 +374,7 @@ class Aifc_read():
          self.getcompname())
 
     def getmarkers(self):
-        if len(self._markers) == 0:
-            return None
-        else:
-            return self._markers
+        return None if len(self._markers) == 0 else self._markers
 
     def getmark(self, id):
         for marker in self._markers:
@@ -651,10 +648,7 @@ class Aifc_write():
         raise Error, 'marker %r does not exist' % (id,)
 
     def getmarkers(self):
-        if len(self._markers) == 0:
-            return None
-        else:
-            return self._markers
+        return None if len(self._markers) == 0 else self._markers
 
     def tell(self):
         return self._nframeswritten
@@ -883,7 +877,7 @@ class Aifc_write():
             _write_string(self._file, name)
 
 
-def open(f, mode = None):
+def open(f, mode=None):
     if mode is None:
         if hasattr(f, 'mode'):
             mode = f.mode

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 from gui.battle_control import g_sessionProvider
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -29,7 +29,7 @@ def _checkArenaInWaiting(func):
 
 class _ChannelController(_BattleLayout):
 
-    def __init__(self, channel, messageBuilder, isSecondaryChannelCtrl = False):
+    def __init__(self, channel, messageBuilder, isSecondaryChannelCtrl=False):
         super(_ChannelController, self).__init__(channel, messageBuilder, isSecondaryChannelCtrl)
         self.activate()
 
@@ -51,16 +51,12 @@ class _ChannelController(_BattleLayout):
     def canSendMessage(self):
         if not self.isEnabled():
             return (False, '')
-        if self.proto.arenaChat.isBroadcastInCooldown():
-            return (False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC))
-        return (True, '')
+        return (False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)) if self.proto.arenaChat.isBroadcastInCooldown() else (True, '')
 
-    def _formatMessage(self, message, doFormatting = True):
+    def _formatMessage(self, message, doFormatting=True):
         dbID = message.accountDBID
         isCurrent = isCurrentPlayer(message.accountDBID)
-        if not doFormatting:
-            return (isCurrent, message.text)
-        return (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
+        return (isCurrent, message.text) if not doFormatting else (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
 
 
 class TeamChannelController(_ChannelController):
@@ -120,9 +116,7 @@ class SquadChannelController(_ChannelController):
     def canSendMessage(self):
         if not self.isEnabled():
             return (False, '')
-        if self.proto.unitChat.isBroadcastInCooldown():
-            return (False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC))
-        return (True, '')
+        return (False, getBroadcastIsInCoolDownMessage(MESSENGER_LIMITS.BROADCASTS_FROM_CLIENT_COOLDOWN_SEC)) if self.proto.unitChat.isBroadcastInCooldown() else (True, '')
 
     def _broadcast(self, message):
         self.proto.unitChat.broadcast(message, 1)

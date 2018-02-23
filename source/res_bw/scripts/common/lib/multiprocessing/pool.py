@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/pool.py
 __all__ = ['Pool']
 import threading
@@ -32,9 +33,9 @@ class MaybeEncodingError(Exception):
         return '<MaybeEncodingError: %s>' % str(self)
 
 
-def worker(inqueue, outqueue, initializer = None, initargs = (), maxtasks = None):
-    if not (maxtasks is None or type(maxtasks) == int and maxtasks > 0):
-        raise AssertionError
+def worker(inqueue, outqueue, initializer=None, initargs=(), maxtasks=None):
+    if not maxtasks is None:
+        assert type(maxtasks) == int and maxtasks > 0
         put = outqueue.put
         get = inqueue.get
         if hasattr(inqueue, '_writer'):
@@ -77,7 +78,7 @@ class Pool(object):
     """
     Process = Process
 
-    def __init__(self, processes = None, initializer = None, initargs = (), maxtasksperchild = None):
+    def __init__(self, processes=None, initializer=None, initargs=(), maxtasksperchild=None):
         self._setup_queues()
         self._taskqueue = Queue.Queue()
         self._cache = {}
@@ -168,27 +169,27 @@ class Pool(object):
         self._quick_put = self._inqueue._writer.send
         self._quick_get = self._outqueue._reader.recv
 
-    def apply(self, func, args = (), kwds = {}):
+    def apply(self, func, args=(), kwds={}):
         """
         Equivalent of `apply()` builtin
         """
-        raise self._state == RUN or AssertionError
+        assert self._state == RUN
         return self.apply_async(func, args, kwds).get()
 
-    def map(self, func, iterable, chunksize = None):
+    def map(self, func, iterable, chunksize=None):
         """
         Equivalent of `map()` builtin
         """
-        raise self._state == RUN or AssertionError
+        assert self._state == RUN
         return self.map_async(func, iterable, chunksize).get()
 
-    def imap(self, func, iterable, chunksize = 1):
+    def imap(self, func, iterable, chunksize=1):
         """
         Equivalent of `itertools.imap()` -- can be MUCH slower than `Pool.map()`
         """
-        if not self._state == RUN:
-            raise AssertionError
-            result = chunksize == 1 and IMapIterator(self._cache)
+        assert self._state == RUN
+        if chunksize == 1:
+            result = IMapIterator(self._cache)
             self._taskqueue.put((((result._job,
               i,
               func,
@@ -196,7 +197,7 @@ class Pool(object):
               {}) for i, x in enumerate(iterable)), result._set_length))
             return result
         else:
-            raise chunksize > 1 or AssertionError
+            assert chunksize > 1
             task_batches = Pool._get_tasks(func, iterable, chunksize)
             result = IMapIterator(self._cache)
             self._taskqueue.put((((result._job,
@@ -206,13 +207,13 @@ class Pool(object):
               {}) for i, x in enumerate(task_batches)), result._set_length))
             return (item for chunk in result for item in chunk)
 
-    def imap_unordered(self, func, iterable, chunksize = 1):
+    def imap_unordered(self, func, iterable, chunksize=1):
         """
         Like `imap()` method but ordering of results is arbitrary
         """
-        if not self._state == RUN:
-            raise AssertionError
-            result = chunksize == 1 and IMapUnorderedIterator(self._cache)
+        assert self._state == RUN
+        if chunksize == 1:
+            result = IMapUnorderedIterator(self._cache)
             self._taskqueue.put((((result._job,
               i,
               func,
@@ -220,7 +221,7 @@ class Pool(object):
               {}) for i, x in enumerate(iterable)), result._set_length))
             return result
         else:
-            raise chunksize > 1 or AssertionError
+            assert chunksize > 1
             task_batches = Pool._get_tasks(func, iterable, chunksize)
             result = IMapUnorderedIterator(self._cache)
             self._taskqueue.put((((result._job,
@@ -230,11 +231,11 @@ class Pool(object):
               {}) for i, x in enumerate(task_batches)), result._set_length))
             return (item for chunk in result for item in chunk)
 
-    def apply_async(self, func, args = (), kwds = {}, callback = None):
+    def apply_async(self, func, args=(), kwds={}, callback=None):
         """
         Asynchronous equivalent of `apply()` builtin
         """
-        raise self._state == RUN or AssertionError
+        assert self._state == RUN
         result = ApplyResult(self._cache, callback)
         self._taskqueue.put(([(result._job,
            None,
@@ -243,19 +244,19 @@ class Pool(object):
            kwds)], None))
         return result
 
-    def map_async(self, func, iterable, chunksize = None, callback = None):
+    def map_async(self, func, iterable, chunksize=None, callback=None):
         """
         Asynchronous equivalent of `map()` builtin
         """
-        if not self._state == RUN:
-            raise AssertionError
-            if not hasattr(iterable, '__len__'):
-                iterable = list(iterable)
-            if chunksize is None:
-                chunksize, extra = divmod(len(iterable), len(self._pool) * 4)
-                if extra:
-                    chunksize += 1
-            chunksize = len(iterable) == 0 and 0
+        assert self._state == RUN
+        if not hasattr(iterable, '__len__'):
+            iterable = list(iterable)
+        if chunksize is None:
+            chunksize, extra = divmod(len(iterable), len(self._pool) * 4)
+            if extra:
+                chunksize += 1
+        if len(iterable) == 0:
+            chunksize = 0
         task_batches = Pool._get_tasks(func, iterable, chunksize)
         result = MapResult(self._cache, chunksize, len(iterable), callback)
         self._taskqueue.put((((result._job,
@@ -328,11 +329,11 @@ class Pool(object):
                 return
 
             if thread._state:
-                if not thread._state == TERMINATE:
-                    raise AssertionError
-                    debug('result handler found thread._state=TERMINATE')
-                    break
-                task is None and debug('result handler got sentinel')
+                assert thread._state == TERMINATE
+                debug('result handler found thread._state=TERMINATE')
+                break
+            if task is None:
+                debug('result handler got sentinel')
                 break
             job, i, obj = task
             try:
@@ -396,7 +397,7 @@ class Pool(object):
 
     def join(self):
         debug('joining pool')
-        raise self._state in (CLOSE, TERMINATE) or AssertionError
+        assert self._state in (CLOSE, TERMINATE)
         self._worker_handler.join()
         self._task_handler.join()
         self._result_handler.join()
@@ -418,8 +419,8 @@ class Pool(object):
         task_handler._state = TERMINATE
         debug('helping task handler/workers to finish')
         cls._help_stuff_finish(inqueue, task_handler, len(pool))
-        if not (result_handler.is_alive() or len(cache) == 0):
-            raise AssertionError
+        if not result_handler.is_alive():
+            assert len(cache) == 0
             result_handler._state = TERMINATE
             outqueue.put(None)
             debug('joining worker handler')
@@ -460,10 +461,10 @@ class ApplyResult(object):
         return self._ready
 
     def successful(self):
-        raise self._ready or AssertionError
+        assert self._ready
         return self._success
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         self._cond.acquire()
         try:
             if not self._ready:
@@ -471,7 +472,7 @@ class ApplyResult(object):
         finally:
             self._cond.release()
 
-    def get(self, timeout = None):
+    def get(self, timeout=None):
         self.wait(timeout)
         if not self._ready:
             raise TimeoutError
@@ -554,20 +555,21 @@ class IMapIterator(object):
     def __iter__(self):
         return self
 
-    def next(self, timeout = None):
+    def next(self, timeout=None):
         self._cond.acquire()
         try:
-            item = self._items.popleft()
-        except IndexError:
-            if self._index == self._length:
-                raise StopIteration
-            self._cond.wait(timeout)
             try:
                 item = self._items.popleft()
             except IndexError:
                 if self._index == self._length:
                     raise StopIteration
-                raise TimeoutError
+                self._cond.wait(timeout)
+                try:
+                    item = self._items.popleft()
+                except IndexError:
+                    if self._index == self._length:
+                        raise StopIteration
+                    raise TimeoutError
 
         finally:
             self._cond.release()
@@ -626,7 +628,7 @@ class IMapUnorderedIterator(IMapIterator):
 class ThreadPool(Pool):
     from .dummy import Process
 
-    def __init__(self, processes = None, initializer = None, initargs = ()):
+    def __init__(self, processes=None, initializer=None, initargs=()):
         Pool.__init__(self, processes, initializer, initargs)
 
     def _setup_queues(self):

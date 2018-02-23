@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/users_data_providers.py
 from debug_utils import LOG_DEBUG
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
@@ -9,7 +9,7 @@ from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 
 def makeEmptyUserItem():
-    return {'dbID': 0L,
+    return {'dbID': 0,
      'userName': '',
      'fullName': '',
      'tags': [],
@@ -60,7 +60,7 @@ class UsersDataProvider(object):
     def buildList(self):
         self._list = map(self._makeUserItem, sorted(self._getRosterList(), cmp=getUsersCmp()))
 
-    def initialize(self, onlineMode = None):
+    def initialize(self, onlineMode=None):
         usersEvents = g_messengerEvents.users
         usersEvents.onUsersListReceived += self._onUsersReceived
         usersEvents.onUserActionReceived += self._onUserActionReceived
@@ -107,7 +107,7 @@ class DAAPIUsersDataProvider(UsersDataProvider, DAAPIDataProvider):
     def __init__(self, criteria):
         super(DAAPIUsersDataProvider, self).__init__(criteria)
 
-    def init(self, flashObject, onlineMode = None):
+    def init(self, flashObject, onlineMode=None):
         self.setFlashObject(flashObject)
         self.initialize(onlineMode)
 
@@ -125,7 +125,7 @@ class FriendsDataProvider(DAAPIUsersDataProvider):
     def __init__(self):
         super(FriendsDataProvider, self).__init__(shared_find_criteria.FriendsFindCriteria())
 
-    def init(self, flashObject, onlineMode = None):
+    def init(self, flashObject, onlineMode=None):
         events = g_messengerEvents.users
         events.onUserStatusUpdated += self._onUserStatusUpdated
         super(FriendsDataProvider, self).init(flashObject, onlineMode)
@@ -169,7 +169,7 @@ class ClanMembersDataProvider(DAAPIUsersDataProvider):
     def __init__(self):
         super(ClanMembersDataProvider, self).__init__(shared_find_criteria.OnlineFindCriteria())
 
-    def init(self, flashObject, onlineMode = None):
+    def init(self, flashObject, onlineMode=None):
         super(ClanMembersDataProvider, self).init(flashObject, onlineMode)
         usersEvents = g_messengerEvents.users
         usersEvents.onClanMembersListChanged += self._onClanMembersListChanged

@@ -1,13 +1,13 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/fallout_info_panel_helper.py
-from gui.battle_control.arena_info import hasResourcePoints, getIsMultiteam
+from gui.battle_control.arena_info import hasResourcePoints, isFalloutMultiTeam
 import win_points
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.shared.formatters.text_styles import neutral, main
 
-def getHelpTextAsDicts(arenaType = None, arenaBonusType = None):
+def getHelpTextAsDicts(arenaType=None, arenaBonusType=None):
     pointsObjective = hasResourcePoints(arenaType, arenaBonusType)
-    isMultiteam = getIsMultiteam()
+    isMultiteam = isFalloutMultiTeam()
     if pointsObjective:
         objectiveHead = neutral(FALLOUT.INFOPANEL_RESOURCEPOINTS_HEAD)
         objectiveDescr = main(FALLOUT.INFOPANEL_RESOURCEPOINTS_DESCR)
@@ -34,7 +34,7 @@ def getHelpTextAsDicts(arenaType = None, arenaBonusType = None):
       'descr': garageDescr}]
 
 
-def getHelpText(arenaType = None, arenaBonusType = None):
+def getHelpText(arenaType=None, arenaBonusType=None):
     result = []
     helpText = getHelpTextAsDicts(arenaType, arenaBonusType)
     for item in helpText:
@@ -43,12 +43,12 @@ def getHelpText(arenaType = None, arenaBonusType = None):
     return result
 
 
-def getCosts(arenaType, isSolo = False, forVehicle = True):
+def getCosts(arenaType, isSolo=False, forVehicle=True):
     costKill = 0
     costFlags = set()
     costDamage = set()
-    if hasattr(arenaType, 'winPoints'):
-        winPoints = win_points.g_cache[arenaType.winPoints]
+    if hasattr(arenaType, 'winPointsSettings'):
+        winPoints = win_points.g_cache[arenaType.winPointsSettings]
         costKill = winPoints.pointsForKill(isSolo, forVehicle)
         costFlags = set(winPoints.pointsForFlag(isSolo))
         costDamage = winPoints.pointsForDamage(isSolo, forVehicle)

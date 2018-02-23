@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/aims.py
 import math
 import weakref
@@ -54,12 +54,12 @@ class ReloadingStateHandler(object):
         self.__currentAim = None
         return
 
-    def setReloading(self, duration, startTime = None, baseTime = None):
+    def setReloading(self, duration, startTime=None, baseTime=None):
         if self.__currentAim is not None:
             self.__currentAim.setReloading(duration, startTime, baseTime)
         return
 
-    def setReloadingInPercent(self, percent, isReloading = True):
+    def setReloadingInPercent(self, percent, isReloading=True):
         if self.__currentAim is not None:
             self.__currentAim.setReloadingInPercent(percent, isReloading)
         return
@@ -138,7 +138,7 @@ class Aim(Flash):
         self.__aimSettings = None
         return
 
-    def onSettingsChanged(self, diff = None):
+    def onSettingsChanged(self, diff=None):
         if self.mode in self._AIM_TYPES and (diff is None or self.mode in diff):
             self.__aimSettings = self.settingsCore.getSetting(self.mode)
             self.applySettings()
@@ -187,7 +187,7 @@ class Aim(Flash):
     def updateMarkerPos(self, pos, relaxTime):
         self.component.updateMarkerPos(pos, relaxTime)
 
-    def onOffsetUpdate(self, screen, forced = False):
+    def onOffsetUpdate(self, screen, forced=False):
         width, height = screen
         offsetX, offsetY = self._offset[:2]
         scale = self.settingsCore.interfaceScale.get()
@@ -201,7 +201,7 @@ class Aim(Flash):
             self._flashCall('onRecreateDevice', [self._posX, self._posY])
             g_sessionProvider.setAimPositionUpdated(self.mode, self._posX, self._posY)
 
-    def onRecreateDevice(self, scale = None):
+    def onRecreateDevice(self, scale=None):
         screen = _getScreenSize()
         self.component.size = screen
         self.onOffsetUpdate(screen, True)
@@ -209,7 +209,7 @@ class Aim(Flash):
     def setVisible(self, isVisible):
         self.component.visible = isVisible
 
-    def offset(self, value = None):
+    def offset(self, value=None):
         if value is not None and self.offsetChanged(value, self._offset):
             self._offset = value
             self.onOffsetUpdate(_getScreenSize())
@@ -218,9 +218,7 @@ class Aim(Flash):
         return
 
     def offsetChanged(self, offset1, offset2):
-        if type(offset1) is Math.Vector2 and type(offset2) is Math.Vector2:
-            return abs(offset1.x - offset2.x) > Aim.EPSILON or abs(offset1.y - offset2.y) > Aim.EPSILON
-        return abs(offset1[0] - offset2[0]) > Aim.EPSILON or abs(offset1[1] - offset2[1]) > Aim.EPSILON
+        return abs(offset1.x - offset2.x) > Aim.EPSILON or abs(offset1.y - offset2.y) > Aim.EPSILON if isinstance(offset1, Math.Vector2) and isinstance(offset2, Math.Vector2) else abs(offset1[0] - offset2[0]) > Aim.EPSILON or abs(offset1[1] - offset2[1]) > Aim.EPSILON
 
     def setTarget(self, target):
         state = _g_aimState['target']
@@ -269,7 +267,7 @@ class Aim(Flash):
         clip = _g_aimState['clip']
         return clip[0] != 1 or clip[1] != 1
 
-    def setReloading(self, duration, startTime = None, baseTime = None):
+    def setReloading(self, duration, startTime=None, baseTime=None):
         _isReloading = self._reloadingHndl.state.get('isReloading', False)
         _startTime = self._reloadingHndl.state.get('startTime', 0)
         _duration = self._reloadingHndl.state.get('duration', 0)
@@ -350,10 +348,10 @@ class Aim(Flash):
     def _clearTarget(self, startTime):
         self._flashCall('clearTarget', [startTime])
 
-    def setReloadingInPercent(self, percent, isReloading = True):
+    def setReloadingInPercent(self, percent, isReloading=True):
         self._setReloadingAsPercent(percent, isReloading)
 
-    def _setReloading(self, duration, startTime = None, isReloading = True, correction = None, baseTime = None):
+    def _setReloading(self, duration, startTime=None, isReloading=True, correction=None, baseTime=None):
         if correction is not None:
             params = self._getCorrectionReloadingParams(correction)
             if params is not None:
@@ -366,7 +364,7 @@ class Aim(Flash):
              baseTime])
         return
 
-    def _setReloadingAsPercent(self, percent, isReloading = True):
+    def _setReloadingAsPercent(self, percent, isReloading=True):
         self._flashCall('setReloadingAsPercent', [percent, isReloading])
 
     def _correctReloadingTime(self, duration):
@@ -392,7 +390,7 @@ class Aim(Flash):
             self._flashCall('setHealth', [cur / max])
         return
 
-    def _setAmmoStock(self, quantity, quantityInClip, clipReloaded = False):
+    def _setAmmoStock(self, quantity, quantityInClip, clipReloaded=False):
         isLow, state = self.getAmmoState(quantity, quantityInClip)
         self._flashCall('setAmmoStock', [quantity,
          quantityInClip,
@@ -432,7 +430,7 @@ class Aim(Flash):
                     newDistance = None
         return newDistance
 
-    def _flashCall(self, funcName, args = None):
+    def _flashCall(self, funcName, args=None):
         self.call('Aim.' + funcName, args)
 
     def __refreshScale(self, scale):
@@ -442,7 +440,7 @@ class Aim(Flash):
 
 class StrategicAim(Aim):
 
-    def __init__(self, offset, isPostMortem = False):
+    def __init__(self, offset, isPostMortem=False):
         Aim.__init__(self, 'strategic', offset)
         self._distance = 0
 
@@ -495,7 +493,7 @@ class PostMortemAim(Aim):
     def destroy(self):
         Aim.destroy(self)
 
-    def onSettingsChanged(self, diff = None):
+    def onSettingsChanged(self, diff=None):
         super(PostMortemAim, self).onSettingsChanged(diff)
         if diff is not None:
             if 'isColorBlind' in diff:
@@ -579,13 +577,13 @@ class FalloutDeathAim(Aim):
     def destroy(self):
         super(FalloutDeathAim, self).destroy()
 
-    def onSettingsChanged(self, diff = None):
+    def onSettingsChanged(self, diff=None):
         super(FalloutDeathAim, self).onSettingsChanged(diff)
 
 
 class _TimeInterval():
 
-    def __init__(self, interval, funcName, scopeProxy = None):
+    def __init__(self, interval, funcName, scopeProxy=None):
         self.__cbId = None
         self.__interval = interval
         self.__funcName = funcName

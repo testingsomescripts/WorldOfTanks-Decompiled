@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/ActionButtonStateVO.py
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -16,7 +16,6 @@ class ActionButtonStateVO(dict):
     def __init__(self, unitFunctional):
         super(ActionButtonStateVO, self).__init__()
         self._playerInfo = unitFunctional.getPlayerInfo()
-        self._extra = unitFunctional.getExtra()
         self.__unitIsValid, self.__restrictionType = unitFunctional.canPlayerDoAction()
         self.__isEnabled = self._isEnabled(self.__unitIsValid, self.__restrictionType)
         self.__stats = unitFunctional.getStats()
@@ -109,6 +108,8 @@ class ActionButtonStateVO(dict):
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_NOTINSLOT
         elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_NOT_VALID:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_VEHICLENOTVALID
+        elif self.__restrictionType == UNIT_RESTRICTION.VEHICLE_WRONG_MODE:
+            return '#tooltips:cyberSport/unit/fightBtn/vehicleWrongMode'
         elif self.__isEnabled and not self._playerInfo.isReady:
             return TOOLTIPS.CYBERSPORT_UNIT_FIGHTBTN_PRESSFORREADY
         elif self.__isEnabled and self._playerInfo.isReady:
@@ -117,9 +118,7 @@ class ActionButtonStateVO(dict):
             return ''
 
     def __stateTextStyleFormatter(self, state):
-        if self.__restrictionType not in self.__NOT_CRITICAL_STATES:
-            return text_styles.error(state)
-        return text_styles.main(state)
+        return text_styles.error(state) if self.__restrictionType not in self.__NOT_CRITICAL_STATES else text_styles.main(state)
 
     def __notInSlotMessage(self):
         if self.__canTakeSlot:
@@ -130,9 +129,7 @@ class ActionButtonStateVO(dict):
     def __levelMessage(self):
         if self.__restrictionType == UNIT_RESTRICTION.MAX_TOTAL_LEVEL:
             return (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, {'level': self.__stats.maxTotalLevel})
-        if self.__restrictionType == UNIT_RESTRICTION.MIN_TOTAL_LEVEL:
-            return (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, {'level': self.__stats.minTotalLevel})
-        return ('', {})
+        return (CYBERSPORT.WINDOW_UNIT_MESSAGE_LEVEL, {'level': self.__stats.minTotalLevel}) if self.__restrictionType == UNIT_RESTRICTION.MIN_TOTAL_LEVEL else ('', {})
 
     @staticmethod
     def getInvalidVehicleLevelsMessage(unitFunctional):

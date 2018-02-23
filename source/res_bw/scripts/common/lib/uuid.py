@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/uuid.py
 r"""UUID objects (universally unique identifiers) according to RFC 4122.
 
@@ -98,7 +99,7 @@ class UUID(object):
                     when the variant is RFC_4122)
     """
 
-    def __init__(self, hex = None, bytes = None, bytes_le = None, fields = None, int = None, version = None):
+    def __init__(self, hex=None, bytes=None, bytes_le=None, fields=None, int=None, version=None):
         r"""Create a UUID from either a string of 32 hexadecimal digits,
         a string of 16 bytes as the 'bytes' argument, a string of 16 bytes
         in little-endian order as the 'bytes_le' argument, a tuple of six
@@ -175,9 +176,7 @@ class UUID(object):
         return
 
     def __cmp__(self, other):
-        if isinstance(other, UUID):
-            return cmp(self.int, other.int)
-        return NotImplemented
+        return cmp(self.int, other.int) if isinstance(other, UUID) else NotImplemented
 
     def __hash__(self):
         return hash(self.int)
@@ -287,8 +286,7 @@ class UUID(object):
     variant = property(get_variant)
 
     def get_version(self):
-        if self.variant == RFC_4122:
-            return int(self.int >> 76L & 15)
+        return int(self.int >> 76L & 15) if self.variant == RFC_4122 else None
 
     version = property(get_version)
 
@@ -336,9 +334,7 @@ def _ifconfig_getnode():
         return mac
     else:
         mac = _find_mac('lanscan', '-ai', ['lan0'], lambda i: 0)
-        if mac:
-            return mac
-        return
+        return mac if mac else None
 
 
 def _ipconfig_getnode():
@@ -355,14 +351,15 @@ def _ipconfig_getnode():
 
     for dir in dirs:
         try:
-            pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
-        except IOError:
-            continue
-        else:
-            for line in pipe:
-                value = line.split(':')[-1].strip().lower()
-                if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
-                    return int(value.replace('-', ''), 16)
+            try:
+                pipe = os.popen(os.path.join(dir, 'ipconfig') + ' /all')
+            except IOError:
+                continue
+            else:
+                for line in pipe:
+                    value = line.split(':')[-1].strip().lower()
+                    if re.match('([0-9a-f][0-9a-f]-){5}[0-9a-f][0-9a-f]', value):
+                        return int(value.replace('-', ''), 16)
 
         finally:
             pipe.close()
@@ -437,8 +434,7 @@ def _unixdll_getnode():
 def _windll_getnode():
     """Get the hardware address on Windows using ctypes."""
     _buffer = ctypes.create_string_buffer(16)
-    if _UuidCreate(_buffer) == 0:
-        return UUID(bytes=_buffer.raw).node
+    return UUID(bytes=_buffer.raw).node if _UuidCreate(_buffer) == 0 else None
 
 
 def _random_getnode():
@@ -480,14 +476,14 @@ def getnode():
 
 _last_timestamp = None
 
-def uuid1(node = None, clock_seq = None):
+def uuid1(node=None, clock_seq=None):
     """Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
     address.  If 'clock_seq' is given, it is used as the sequence number;
     otherwise a random 14-bit sequence number is chosen."""
     global _last_timestamp
-    if _uuid_generate_time and node is clock_seq is None:
-        _buffer = ctypes.create_string_buffer(16)
+    if _uuid_generate_time:
+        _buffer = node is clock_seq is None and ctypes.create_string_buffer(16)
         _uuid_generate_time(_buffer)
         return UUID(bytes=_buffer.raw)
     else:

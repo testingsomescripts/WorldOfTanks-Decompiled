@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/textwrap.py
 """Text wrapping and filling.
 """
@@ -68,7 +69,7 @@ class TextWrapper():
     wordsep_simple_re = re.compile('(\\s+)')
     sentence_end_re = re.compile('[%s][\\.\\!\\?][\\"\\\']?\\Z' % string.lowercase)
 
-    def __init__(self, width = 70, initial_indent = '', subsequent_indent = '', expand_tabs = True, replace_whitespace = True, fix_sentence_endings = False, break_long_words = True, drop_whitespace = True, break_on_hyphens = True):
+    def __init__(self, width=70, initial_indent='', subsequent_indent='', expand_tabs=True, replace_whitespace=True, fix_sentence_endings=False, break_long_words=True, drop_whitespace=True, break_on_hyphens=True):
         self.width = width
         self.initial_indent = initial_indent
         self.subsequent_indent = subsequent_indent
@@ -143,8 +144,7 @@ class TextWrapper():
             if chunks[i + 1] == ' ' and patsearch(chunks[i]):
                 chunks[i + 1] = '  '
                 i += 2
-            else:
-                i += 1
+            i += 1
 
     def _handle_long_word(self, reversed_chunks, cur_line, cur_len, width):
         """_handle_long_word(chunks : [string],
@@ -196,8 +196,7 @@ class TextWrapper():
                 if cur_len + l <= width:
                     cur_line.append(chunks.pop())
                     cur_len += l
-                else:
-                    break
+                break
 
             if chunks and len(chunks[-1]) > width:
                 self._handle_long_word(chunks, cur_line, cur_len, width)
@@ -233,7 +232,7 @@ class TextWrapper():
         return '\n'.join(self.wrap(text))
 
 
-def wrap(text, width = 70, **kwargs):
+def wrap(text, width=70, **kwargs):
     """Wrap a single paragraph of text, returning a list of wrapped lines.
     
     Reformat the single paragraph in 'text' so it fits in lines of no
@@ -247,7 +246,7 @@ def wrap(text, width = 70, **kwargs):
     return w.wrap(text)
 
 
-def fill(text, width = 70, **kwargs):
+def fill(text, width=70, **kwargs):
     """Fill a single paragraph of text, returning a new string.
     
     Reformat the single paragraph in 'text' to fit in lines of no more
@@ -282,17 +281,16 @@ def dedent(text):
     for indent in indents:
         if margin is None:
             margin = indent
-        elif indent.startswith(margin):
+        if indent.startswith(margin):
             pass
-        elif margin.startswith(indent):
+        if margin.startswith(indent):
             margin = indent
-        else:
-            margin = ''
-            break
+        margin = ''
+        break
 
     if 0 and margin:
         for line in text.split('\n'):
-            raise not line or line.startswith(margin) or AssertionError('line = %r, margin = %r' % (line, margin))
+            assert not line or line.startswith(margin), 'line = %r, margin = %r' % (line, margin)
 
     if margin:
         text = re.sub('(?m)^' + margin, '', text)

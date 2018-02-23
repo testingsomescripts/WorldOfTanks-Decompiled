@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/collections.py
 __all__ = ['Counter',
  'deque',
@@ -41,7 +41,7 @@ class OrderedDict(dict):
         self.__update(*args, **kwds)
         return
 
-    def __setitem__(self, key, value, dict_setitem = dict.__setitem__):
+    def __setitem__(self, key, value, dict_setitem=dict.__setitem__):
         """od.__setitem__(i, y) <==> od[i]=y"""
         if key not in self:
             root = self.__root
@@ -49,7 +49,7 @@ class OrderedDict(dict):
             last[1] = root[0] = self.__map[key] = [last, root, key]
         return dict_setitem(self, key, value)
 
-    def __delitem__(self, key, dict_delitem = dict.__delitem__):
+    def __delitem__(self, key, dict_delitem=dict.__delitem__):
         """od.__delitem__(y) <==> del od[y]"""
         dict_delitem(self, key)
         link_prev, link_next, _ = self.__map.pop(key)
@@ -110,7 +110,7 @@ class OrderedDict(dict):
     __update = update
     __marker = object()
 
-    def pop(self, key, default = __marker):
+    def pop(self, key, default=__marker):
         """od.pop(k[,d]) -> v, remove specified key and return the corresponding
         value.  If key is not found, d is returned if given, otherwise KeyError
         is raised.
@@ -124,14 +124,14 @@ class OrderedDict(dict):
             raise KeyError(key)
         return default
 
-    def setdefault(self, key, default = None):
+    def setdefault(self, key, default=None):
         """od.setdefault(k[,d]) -> od.get(k,d), also set od[k]=d if k not in od"""
         if key in self:
             return self[key]
         self[key] = default
         return default
 
-    def popitem(self, last = True):
+    def popitem(self, last=True):
         """od.popitem() -> (k, v), return and remove a (key, value) pair.
         Pairs are returned in LIFO order if last is true or FIFO order if false.
         
@@ -142,7 +142,7 @@ class OrderedDict(dict):
         value = self.pop(key)
         return (key, value)
 
-    def __repr__(self, _repr_running = {}):
+    def __repr__(self, _repr_running={}):
         """od.__repr__() <==> repr(od)"""
         call_key = (id(self), _get_ident())
         if call_key in _repr_running:
@@ -162,17 +162,14 @@ class OrderedDict(dict):
         for k in vars(OrderedDict()):
             inst_dict.pop(k, None)
 
-        if inst_dict:
-            return (self.__class__, (items,), inst_dict)
-        else:
-            return (self.__class__, (items,))
+        return (self.__class__, (items,), inst_dict) if inst_dict else (self.__class__, (items,))
 
     def copy(self):
         """od.copy() -> a shallow copy of od"""
         return self.__class__(self)
 
     @classmethod
-    def fromkeys(cls, iterable, value = None):
+    def fromkeys(cls, iterable, value=None):
         """OD.fromkeys(S[, v]) -> New ordered dictionary with keys from S.
         If not specified, the value defaults to None.
         
@@ -188,9 +185,7 @@ class OrderedDict(dict):
         while comparison to a regular mapping is order-insensitive.
         
         """
-        if isinstance(other, OrderedDict):
-            return dict.__eq__(self, other) and all(_imap(_eq, self, other))
-        return dict.__eq__(self, other)
+        return dict.__eq__(self, other) and all(_imap(_eq, self, other)) if isinstance(other, OrderedDict) else dict.__eq__(self, other)
 
     def __ne__(self, other):
         """od.__ne__(y) <==> od!=y"""
@@ -213,7 +208,7 @@ _class_template = "class {typename}(tuple):\n    '{typename}({arg_list})'\n\n   
 _repr_template = '{name}=%r'
 _field_template = "    {name} = _property(_itemgetter({index:d}), doc='Alias for field number {index:d}')\n"
 
-def namedtuple(typename, field_names, verbose = False, rename = False):
+def namedtuple(typename, field_names, verbose=False, rename=False):
     """Returns a new subclass of tuple with named fields.
     
     >>> Point = namedtuple('Point', ['x', 'y'])
@@ -325,7 +320,7 @@ class Counter(dict):
     
     """
 
-    def __init__(self, iterable = None, **kwds):
+    def __init__(self, iterable=None, **kwds):
         """Create a new, empty Counter object.  And if given, count elements
         from an input iterable.  Or, initialize the count from another mapping
         of elements to their counts.
@@ -343,7 +338,7 @@ class Counter(dict):
         """The count of elements not in the Counter is zero."""
         pass
 
-    def most_common(self, n = None):
+    def most_common(self, n=None):
         """List the n most common elements and their counts from the most
         common to the least.  If n is None, then list all element counts.
         
@@ -351,10 +346,7 @@ class Counter(dict):
         [('a', 5), ('b', 4), ('c', 3)]
         
         """
-        if n is None:
-            return sorted(self.iteritems(), key=_itemgetter(1), reverse=True)
-        else:
-            return _heapq.nlargest(n, self.iteritems(), key=_itemgetter(1))
+        return sorted(self.iteritems(), key=_itemgetter(1), reverse=True) if n is None else _heapq.nlargest(n, self.iteritems(), key=_itemgetter(1))
 
     def elements(self):
         """Iterator over elements repeating each as many times as its count.
@@ -378,10 +370,10 @@ class Counter(dict):
         return _chain.from_iterable(_starmap(_repeat, self.iteritems()))
 
     @classmethod
-    def fromkeys(cls, iterable, v = None):
+    def fromkeys(cls, iterable, v=None):
         raise NotImplementedError('Counter.fromkeys() is undefined.  Use Counter(iterable) instead.')
 
-    def update(self, iterable = None, **kwds):
+    def update(self, iterable=None, **kwds):
         """Like dict.update() but add counts instead of replacing them.
         
         Source can be an iterable, a dictionary, or another Counter instance.
@@ -412,7 +404,7 @@ class Counter(dict):
             self.update(kwds)
         return
 
-    def subtract(self, iterable = None, **kwds):
+    def subtract(self, iterable=None, **kwds):
         """Like dict.update() but subtracts counts instead of replacing them.
         Counts can be reduced below zero.  Both the inputs and outputs are
         allowed to contain zero and negative counts.
@@ -568,7 +560,7 @@ if __name__ == '__main__':
         __slots__ = ()
         _make = classmethod(tuple.__new__)
 
-        def _replace(self, _map = map, **kwds):
+        def _replace(self, _map=map, **kwds):
             return self._make(_map(kwds.get, ('x', 'y'), self))
 
 

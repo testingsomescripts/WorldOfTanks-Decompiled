@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_parse.py
 """Internal support module for sre"""
 import sys
@@ -42,7 +43,7 @@ class Pattern():
         self.groups = 1
         self.groupdict = {}
 
-    def opengroup(self, name = None):
+    def opengroup(self, name=None):
         gid = self.groups
         self.groups = gid + 1
         if name is not None:
@@ -62,7 +63,7 @@ class Pattern():
 
 class SubPattern():
 
-    def __init__(self, pattern, data = None):
+    def __init__(self, pattern, data=None):
         self.pattern = pattern
         if data is None:
             data = []
@@ -70,7 +71,7 @@ class SubPattern():
         self.width = None
         return
 
-    def dump(self, level = 0):
+    def dump(self, level=0):
         nl = 1
         seqtypes = (type(()), type([]))
         for op, av in self.data:
@@ -100,9 +101,8 @@ class SubPattern():
                             print
                         a.dump(level + 1)
                         nl = 1
-                    else:
-                        print a,
-                        nl = 0
+                    print a,
+                    nl = 0
 
             else:
                 print av,
@@ -120,9 +120,7 @@ class SubPattern():
         del self.data[index]
 
     def __getitem__(self, index):
-        if isinstance(index, slice):
-            return SubPattern(self.pattern, self.data[index])
-        return self.data[index]
+        return SubPattern(self.pattern, self.data[index]) if isinstance(index, slice) else self.data[index]
 
     def __setitem__(self, index, code):
         self.data[index] = code
@@ -155,22 +153,22 @@ class SubPattern():
 
                 lo = lo + i
                 hi = hi + j
-            elif op is CALL:
+            if op is CALL:
                 i, j = av.getwidth()
                 lo = lo + i
                 hi = hi + j
-            elif op is SUBPATTERN:
+            if op is SUBPATTERN:
                 i, j = av[1].getwidth()
                 lo = lo + i
                 hi = hi + j
-            elif op in REPEATCODES:
+            if op in REPEATCODES:
                 i, j = av[2].getwidth()
                 lo = lo + i * av[0]
                 hi = hi + j * av[1]
-            elif op in UNITCODES:
+            if op in UNITCODES:
                 lo = lo + 1
                 hi = hi + 1
-            elif op == SUCCESS:
+            if op == SUCCESS:
                 break
 
         self.width = (min(lo, MAXREPEAT - 1), min(hi, MAXREPEAT))
@@ -201,12 +199,11 @@ class Tokenizer():
             self.next = char
             return
 
-    def match(self, char, skip = 1):
+    def match(self, char, skip=1):
         if char == self.next:
             if skip:
                 self.__next()
             return 1
-        return 0
 
     def get(self):
         this = self.next
@@ -312,7 +309,7 @@ def _escape(source, escape, state):
     raise error, 'bogus escape: %s' % repr(escape)
 
 
-def _parse_sub(source, state, nested = 1):
+def _parse_sub(source, state, nested=1):
     items = []
     itemsappend = items.append
     sourcematch = source.match
@@ -324,8 +321,7 @@ def _parse_sub(source, state, nested = 1):
             break
         if not source.next or sourcematch(')', 0):
             break
-        else:
-            raise error, 'pattern not properly closed'
+        raise error, 'pattern not properly closed'
 
     if len(items) == 1:
         return items[0]
@@ -339,7 +335,7 @@ def _parse_sub(source, state, nested = 1):
                     break
                 if prefix is None:
                     prefix = item[0]
-                elif item[0] != prefix:
+                if item[0] != prefix:
                     break
             else:
                 for item in items:
@@ -414,7 +410,7 @@ def _parse(source, state):
                 continue
         if this and this[0] not in SPECIAL_CHARS:
             subpatternappend((LITERAL, ord(this)))
-        elif this == '[':
+        if this == '[':
             set = []
             setappend = set.append
             if sourcematch('^'):
@@ -452,10 +448,9 @@ def _parse(source, state):
                         setappend((RANGE, (lo, hi)))
                     else:
                         raise error, 'unexpected end of regular expression'
-                else:
-                    if code1[0] is IN:
-                        code1 = code1[1][0]
-                    setappend(code1)
+                if code1[0] is IN:
+                    code1 = code1[1][0]
+                setappend(code1)
 
             if _len(set) == 1 and set[0][0] is LITERAL:
                 subpatternappend(set[0])
@@ -463,7 +458,7 @@ def _parse(source, state):
                 subpatternappend((NOT_LITERAL, set[1][1]))
             else:
                 subpatternappend((IN, set))
-        elif this and this[0] in REPEAT_CHARS:
+        if this and this[0] in REPEAT_CHARS:
             if this == '?':
                 min, max = (0, 1)
             elif this == '*':
@@ -514,9 +509,9 @@ def _parse(source, state):
                 subpattern[-1] = (MIN_REPEAT, (min, max, item))
             else:
                 subpattern[-1] = (MAX_REPEAT, (min, max, item))
-        elif this == '.':
+        if this == '.':
             subpatternappend((ANY, None))
-        elif this == '(':
+        if this == '(':
             group = 1
             name = None
             condgroup = None
@@ -586,8 +581,7 @@ def _parse(source, state):
                         raise error, 'unbalanced parenthesis'
                     if char == '=':
                         subpatternappend((ASSERT, (dir, p)))
-                    else:
-                        subpatternappend((ASSERT_NOT, (dir, p)))
+                    subpatternappend((ASSERT_NOT, (dir, p)))
                     continue
                 elif sourcematch('('):
                     condname = ''
@@ -641,20 +635,19 @@ def _parse(source, state):
                         break
                     raise error, 'unknown extension'
 
-        elif this == '^':
+        if this == '^':
             subpatternappend((AT, AT_BEGINNING))
-        elif this == '$':
+        if this == '$':
             subpattern.append((AT, AT_END))
-        elif this and this[0] == '\\':
+        if this and this[0] == '\\':
             code = _escape(source, this, state)
             subpatternappend(code)
-        else:
-            raise error, 'parser error'
+        raise error, 'parser error'
 
     return subpattern
 
 
-def parse(str, flags = 0, pattern = None):
+def parse(str, flags=0, pattern=None):
     source = Tokenizer(str)
     if pattern is None:
         pattern = Pattern()
@@ -668,10 +661,7 @@ def parse(str, flags = 0, pattern = None):
         raise error, 'bogus characters at end of regular expression'
     if flags & SRE_FLAG_DEBUG:
         p.dump()
-    if not flags & SRE_FLAG_VERBOSE and p.pattern.flags & SRE_FLAG_VERBOSE:
-        return parse(str, p.pattern.flags)
-    else:
-        return p
+    return parse(str, p.pattern.flags) if not flags & SRE_FLAG_VERBOSE and p.pattern.flags & SRE_FLAG_VERBOSE else p
 
 
 def parse_template(source, pattern):
@@ -680,7 +670,7 @@ def parse_template(source, pattern):
     p = []
     a = p.append
 
-    def literal(literal, p = p, pappend = a):
+    def literal(literal, p=p, pappend=a):
         if p and p[-1][0] is LITERAL:
             p[-1] = (LITERAL, p[-1][1] + literal)
         else:
@@ -746,8 +736,7 @@ def parse_template(source, pattern):
                     pass
 
                 literal(this)
-        else:
-            literal(this)
+        literal(this)
 
     i = 0
     groups = []

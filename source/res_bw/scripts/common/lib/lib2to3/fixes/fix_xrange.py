@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_xrange.py
 """Fixer that changes xrange(...) into range(...)."""
 from .. import fixer_base
@@ -49,6 +49,4 @@ class FixXrange(fixer_base.BaseFix):
             return False
         else:
             results = {}
-            if node.parent.parent is not None and self.p1.match(node.parent.parent, results) and results['node'] is node:
-                return results['func'].value in consuming_calls
-            return self.p2.match(node.parent, results) and results['node'] is node
+            return results['func'].value in consuming_calls if node.parent.parent is not None and self.p1.match(node.parent.parent, results) and results['node'] is node else self.p2.match(node.parent, results) and results['node'] is node

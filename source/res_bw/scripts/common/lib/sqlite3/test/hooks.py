@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sqlite3/test/hooks.py
 import os, unittest
 import sqlite3 as sqlite
@@ -152,7 +153,6 @@ class ProgressTests(unittest.TestCase):
 
         def progress():
             action.append(1)
-            return 0
 
         con.set_progress_handler(progress, 1)
         con.set_progress_handler(None, 1)

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/py_compile.py
 """Routine to "compile" a .py file to a .pyc (or .pyo) file.
 
@@ -39,7 +40,7 @@ class PyCompileError(Exception):
     
     """
 
-    def __init__(self, exc_type, exc_value, file, msg = ''):
+    def __init__(self, exc_type, exc_value, file, msg=''):
         exc_type_name = exc_type.__name__
         if exc_type is SyntaxError:
             tbtext = ''.join(traceback.format_exception_only(exc_type, exc_value))
@@ -64,7 +65,7 @@ def wr_long(f, x):
     f.write(chr(x >> 24 & 255))
 
 
-def compile(file, cfile = None, dfile = None, doraise = False):
+def compile(file, cfile=None, dfile=None, doraise=False):
     """Byte-compile one Python source file to Python bytecode.
     
     Arguments:
@@ -128,7 +129,7 @@ def compile(file, cfile = None, dfile = None, doraise = False):
     return
 
 
-def main(args = None):
+def main(args=None):
     """Compile several source files.
     
     The files named in 'args' (or on the command line, if 'args' is

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/dist.py
 """distutils.dist
 
@@ -64,7 +64,7 @@ class Distribution():
     display_option_names = map(lambda x: translate_longopt(x[0]), display_options)
     negative_opt = {'quiet': 'verbose'}
 
-    def __init__(self, attrs = None):
+    def __init__(self, attrs=None):
         """Construct a new Distribution instance: initialize all the
         attributes of a Distribution, and then use 'attrs' (a dictionary
         mapping attribute names to values) to assign some of those
@@ -126,16 +126,14 @@ class Distribution():
             for key, val in attrs.items():
                 if hasattr(self.metadata, 'set_' + key):
                     getattr(self.metadata, 'set_' + key)(val)
-                elif hasattr(self.metadata, key):
+                if hasattr(self.metadata, key):
                     setattr(self.metadata, key, val)
-                elif hasattr(self, key):
+                if hasattr(self, key):
                     setattr(self, key, val)
-                else:
-                    msg = 'Unknown distribution option: %s' % repr(key)
-                    if warnings is not None:
-                        warnings.warn(msg)
-                    else:
-                        sys.stderr.write(msg + '\n')
+                msg = 'Unknown distribution option: %s' % repr(key)
+                if warnings is not None:
+                    warnings.warn(msg)
+                sys.stderr.write(msg + '\n')
 
         self.want_user_cfg = True
         if self.script_args is not None:
@@ -160,7 +158,7 @@ class Distribution():
             dict = self.command_options[command] = {}
         return dict
 
-    def dump_option_dicts(self, header = None, commands = None, indent = ''):
+    def dump_option_dicts(self, header=None, commands=None, indent=''):
         from pprint import pformat
         if commands is None:
             commands = self.command_options.keys()
@@ -176,11 +174,10 @@ class Distribution():
                 opt_dict = self.command_options.get(cmd_name)
                 if opt_dict is None:
                     self.announce(indent + "no option dict for '%s' command" % cmd_name)
-                else:
-                    self.announce(indent + "option dict for '%s' command:" % cmd_name)
-                    out = pformat(opt_dict)
-                    for line in out.split('\n'):
-                        self.announce(indent + '  ' + line)
+                self.announce(indent + "option dict for '%s' command:" % cmd_name)
+                out = pformat(opt_dict)
+                for line in out.split('\n'):
+                    self.announce(indent + '  ' + line)
 
             return
 
@@ -220,7 +217,7 @@ class Distribution():
             self.announce('using config files: %s' % ', '.join(files))
         return files
 
-    def parse_config_files(self, filenames = None):
+    def parse_config_files(self, filenames=None):
         from ConfigParser import ConfigParser
         if filenames is None:
             filenames = self.find_config_files()
@@ -344,18 +341,18 @@ class Distribution():
         if hasattr(opts, 'help') and opts.help:
             self._show_help(parser, display_options=0, commands=[cmd_class])
             return
-        if hasattr(cmd_class, 'help_options') and isinstance(cmd_class.help_options, list):
-            help_option_found = 0
-            for help_option, short, desc, func in cmd_class.help_options:
-                if hasattr(opts, parser.get_attr_name(help_option)):
-                    help_option_found = 1
-                    if hasattr(func, '__call__'):
-                        func()
-                    else:
-                        raise DistutilsClassError("invalid help function %r for help option '%s': must be a callable object (function, etc.)" % (func, help_option))
+        if hasattr(cmd_class, 'help_options'):
+            if isinstance(cmd_class.help_options, list):
+                help_option_found = 0
+                for help_option, short, desc, func in cmd_class.help_options:
+                    if hasattr(opts, parser.get_attr_name(help_option)):
+                        help_option_found = 1
+                        if hasattr(func, '__call__'):
+                            func()
+                        else:
+                            raise DistutilsClassError("invalid help function %r for help option '%s': must be a callable object (function, etc.)" % (func, help_option))
 
-            if help_option_found:
-                return
+                return help_option_found and None
         opt_dict = self.get_option_dict(command)
         for name, value in vars(opts).items():
             opt_dict[name] = ('command line', value)
@@ -377,7 +374,7 @@ class Distribution():
 
         return
 
-    def _show_help(self, parser, global_options = 1, display_options = 1, commands = []):
+    def _show_help(self, parser, global_options=1, display_options=1, commands=[]):
         """Show help for the setup script command-line in the form of
         several lists of command-line options.  'parser' should be a
         FancyGetopt instance; do not expect it to be returned in the
@@ -572,7 +569,7 @@ class Distribution():
 
         raise DistutilsModuleError("invalid command '%s'" % command)
 
-    def get_command_obj(self, command, create = 1):
+    def get_command_obj(self, command, create=1):
         """Return the command object for 'command'.  Normally this object
         is cached on a previous call to 'get_command_obj()'; if no command
         object for 'command' is in the cache, then we either create and
@@ -590,7 +587,7 @@ class Distribution():
                 self._set_command_options(cmd_obj, options)
         return cmd_obj
 
-    def _set_command_options(self, command_obj, option_dict = None):
+    def _set_command_options(self, command_obj, option_dict=None):
         """Set the options for 'command_obj' from 'option_dict'.  Basically
         this means copying elements of a dictionary ('option_dict') to
         attributes of an instance ('command').
@@ -632,7 +629,7 @@ class Distribution():
 
         return
 
-    def reinitialize_command(self, command, reinit_subcommands = 0):
+    def reinitialize_command(self, command, reinit_subcommands=0):
         """Reinitializes a command to the state it was in when first
         returned by 'get_command_obj()': ie., initialized but not yet
         finalized.  This provides the opportunity to sneak option
@@ -669,7 +666,7 @@ class Distribution():
 
         return command
 
-    def announce(self, msg, level = log.INFO):
+    def announce(self, msg, level=log.INFO):
         log.log(level, msg)
 
     def run_commands(self):
@@ -727,7 +724,7 @@ class DistributionMetadata():
     """
     _METHOD_BASENAMES = ('name', 'version', 'author', 'author_email', 'maintainer', 'maintainer_email', 'url', 'license', 'description', 'long_description', 'keywords', 'platforms', 'fullname', 'contact', 'contact_email', 'license', 'classifiers', 'download_url', 'provides', 'requires', 'obsoletes')
 
-    def __init__(self, path = None):
+    def __init__(self, path=None):
         if path is not None:
             self.read_pkg_file(open(path))
         else:
@@ -756,17 +753,11 @@ class DistributionMetadata():
 
         def _read_field(name):
             value = msg[name]
-            if value == 'UNKNOWN':
-                return None
-            else:
-                return value
+            return None if value == 'UNKNOWN' else value
 
         def _read_list(name):
             values = msg.get_all(name, None)
-            if values == []:
-                return
-            else:
-                return values
+            return None if values == [] else values
 
         metadata_version = msg['metadata-version']
         self.name = _read_field('name')
@@ -844,10 +835,8 @@ class DistributionMetadata():
     def _encode_field(self, value):
         if value is None:
             return
-        elif isinstance(value, unicode):
-            return value.encode(PKG_INFO_ENCODING)
         else:
-            return str(value)
+            return value.encode(PKG_INFO_ENCODING) if isinstance(value, unicode) else str(value)
 
     def get_name(self):
         return self.name or 'UNKNOWN'

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/settings.py
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
 from helpers import i18n
@@ -20,6 +20,7 @@ class ARENA_LISTENER_SCOPE(object):
     TEAMS_BASES = 4
     PERIOD = 8
     RESPAWN = 16
+    FIRST_OF_APRIL = 32
 
 
 class VEHICLE_STATUS(BitmaskHelper):
@@ -53,7 +54,7 @@ def makeContourIconResPath(vName):
     return CONTOUR_ICON_RES_PATH.format(vName.replace(':', '-'))
 
 
-def getOrderByVehicleClass(className = None):
+def getOrderByVehicleClass(className=None):
     if className and className in VEHICLE_BATTLE_TYPES_ORDER_INDICES:
         result = VEHICLE_BATTLE_TYPES_ORDER_INDICES[className]
     else:

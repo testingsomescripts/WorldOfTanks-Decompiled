@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-riscos/riscospath.py
 """
 Instead of importing this module directly, import os and refer to this module
@@ -94,10 +95,9 @@ def join(a, *p):
         fs, drive, path = _split(b)
         if j == '' or fs != '' or drive != '' or path[:1] in _roots:
             j = b
-        elif j[-1] == ':':
+        if j[-1] == ':':
             j = j + b
-        else:
-            j = j + '.' + b
+        j = j + '.' + b
 
     return j
 
@@ -109,9 +109,7 @@ def split(p):
     """
     fs, drive, path = _split(p)
     q = string.rfind(path, '.')
-    if q != -1:
-        return (fs + drive + path[:q], path[q + 1:])
-    return ('', p)
+    return (fs + drive + path[:q], path[q + 1:]) if q != -1 else ('', p)
 
 
 def splitext(p):
@@ -294,12 +292,11 @@ def normpath(p):
         path, el = split(path)
         if el == '^':
             ups = ups + 1
-        elif ups > 0:
+        if ups > 0:
             ups = ups - 1
-        elif rhs == '':
+        if rhs == '':
             rhs = el
-        else:
-            rhs = el + '.' + rhs
+        rhs = el + '.' + rhs
 
     while ups > 0:
         ups = ups - 1

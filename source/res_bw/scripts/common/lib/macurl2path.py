@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/macurl2path.py
 """Macintosh-specific module for conversion between pathnames and URLs.
 
@@ -22,13 +22,12 @@ def url2pathname(pathname):
     while i < len(components):
         if components[i] == '.':
             del components[i]
-        elif components[i] == '..' and i > 0 and components[i - 1] not in ('', '..'):
+        if components[i] == '..' and i > 0 and components[i - 1] not in ('', '..'):
             del components[i - 1:i + 1]
             i = i - 1
-        elif components[i] == '' and i > 0 and components[i - 1] != '':
+        if components[i] == '' and i > 0 and components[i - 1] != '':
             del components[i]
-        else:
-            i = i + 1
+        i = i + 1
 
     if not components[0]:
         rv = ':'.join(components[1:])

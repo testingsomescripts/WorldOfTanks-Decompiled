@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/patcomp.py
 """Pattern compiler.
 
@@ -30,7 +30,7 @@ def tokenize_wrapper(input):
 
 class PatternCompiler(object):
 
-    def __init__(self, grammar_file = _PATTERN_GRAMMAR_FILE):
+    def __init__(self, grammar_file=_PATTERN_GRAMMAR_FILE):
         """Initializer.
         
         Takes an optional alternative filename for the pattern grammar.
@@ -41,7 +41,7 @@ class PatternCompiler(object):
         self.pysyms = pygram.python_symbols
         self.driver = driver.Driver(self.grammar, convert=pattern_convert)
 
-    def compile_pattern(self, input, debug = False, with_tree = False):
+    def compile_pattern(self, input, debug=False, with_tree=False):
         """Compiles a pattern string to a nested pytree.*Pattern object."""
         tokens = tokenize_wrapper(input)
         try:
@@ -114,7 +114,7 @@ class PatternCompiler(object):
                 pattern.name = name
             return pattern.optimize()
 
-    def compile_basic(self, nodes, repeat = None):
+    def compile_basic(self, nodes, repeat=None):
         assert len(nodes) >= 1
         node = nodes[0]
         if node.type == token.STRING:

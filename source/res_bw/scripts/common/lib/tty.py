@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tty.py
 """Terminal utilities."""
 from termios import *
@@ -10,7 +11,7 @@ ISPEED = 4
 OSPEED = 5
 CC = 6
 
-def setraw(fd, when = TCSAFLUSH):
+def setraw(fd, when=TCSAFLUSH):
     """Put terminal into a raw mode."""
     mode = tcgetattr(fd)
     mode[IFLAG] = mode[IFLAG] & ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON)
@@ -23,7 +24,7 @@ def setraw(fd, when = TCSAFLUSH):
     tcsetattr(fd, when, mode)
 
 
-def setcbreak(fd, when = TCSAFLUSH):
+def setcbreak(fd, when=TCSAFLUSH):
     """Put terminal into a cbreak mode."""
     mode = tcgetattr(fd)
     mode[LFLAG] = mode[LFLAG] & ~(ECHO | ICANON)

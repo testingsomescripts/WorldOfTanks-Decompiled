@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/dir_util.py
 """distutils.dir_util
 
@@ -10,7 +10,7 @@ from distutils.errors import DistutilsFileError, DistutilsInternalError
 from distutils import log
 _path_created = {}
 
-def mkpath(name, mode = 511, verbose = 1, dry_run = 0):
+def mkpath(name, mode=511, verbose=1, dry_run=0):
     """Create a directory and any missing ancestor directories.
     
     If the directory already exists (or if 'name' is the empty string, which
@@ -55,7 +55,7 @@ def mkpath(name, mode = 511, verbose = 1, dry_run = 0):
     return created_dirs
 
 
-def create_tree(base_dir, files, mode = 511, verbose = 1, dry_run = 0):
+def create_tree(base_dir, files, mode=511, verbose=1, dry_run=0):
     """Create all the empty directories under 'base_dir' needed to put 'files'
     there.
     
@@ -75,7 +75,7 @@ def create_tree(base_dir, files, mode = 511, verbose = 1, dry_run = 0):
         mkpath(dir, mode, verbose=verbose, dry_run=dry_run)
 
 
-def copy_tree(src, dst, preserve_mode = 1, preserve_times = 1, preserve_symlinks = 0, update = 0, verbose = 1, dry_run = 0):
+def copy_tree(src, dst, preserve_mode=1, preserve_times=1, preserve_symlinks=0, update=0, verbose=1, dry_run=0):
     """Copy an entire directory tree 'src' to a new location 'dst'.
     
     Both 'src' and 'dst' must be directory names.  If 'src' is not a
@@ -121,11 +121,10 @@ def copy_tree(src, dst, preserve_mode = 1, preserve_times = 1, preserve_symlinks
             if not dry_run:
                 os.symlink(link_dest, dst_name)
             outputs.append(dst_name)
-        elif os.path.isdir(src_name):
+        if os.path.isdir(src_name):
             outputs.extend(copy_tree(src_name, dst_name, preserve_mode, preserve_times, preserve_symlinks, update, verbose=verbose, dry_run=dry_run))
-        else:
-            copy_file(src_name, dst_name, preserve_mode, preserve_times, update, verbose=verbose, dry_run=dry_run)
-            outputs.append(dst_name)
+        copy_file(src_name, dst_name, preserve_mode, preserve_times, update, verbose=verbose, dry_run=dry_run)
+        outputs.append(dst_name)
 
     return outputs
 
@@ -136,13 +135,12 @@ def _build_cmdtuple(path, cmdtuples):
         real_f = os.path.join(path, f)
         if os.path.isdir(real_f) and not os.path.islink(real_f):
             _build_cmdtuple(real_f, cmdtuples)
-        else:
-            cmdtuples.append((os.remove, real_f))
+        cmdtuples.append((os.remove, real_f))
 
     cmdtuples.append((os.rmdir, path))
 
 
-def remove_tree(directory, verbose = 1, dry_run = 0):
+def remove_tree(directory, verbose=1, dry_run=0):
     """Recursively remove an entire directory tree.
     
     Any errors are ignored (apart from being reported to stdout if 'verbose'

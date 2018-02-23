@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/os2emxpath.py
 """Common pathname manipulations, OS/2 EMX version.
 
@@ -65,10 +66,9 @@ def join(a, *p):
     for b in p:
         if isabs(b):
             path = b
-        elif path == '' or path[-1:] in '/\\:':
+        if path == '' or path[-1:] in '/\\:':
             path = path + b
-        else:
-            path = path + '/' + b
+        path = path + '/' + b
 
     return path
 
@@ -130,13 +130,12 @@ def normpath(path):
     while i < len(comps):
         if comps[i] == '.':
             del comps[i]
-        elif comps[i] == '..' and i > 0 and comps[i - 1] not in ('', '..'):
+        if comps[i] == '..' and i > 0 and comps[i - 1] not in ('', '..'):
             del comps[i - 1:i + 1]
             i = i - 1
-        elif comps[i] == '' and i > 0 and comps[i - 1] != '':
+        if comps[i] == '' and i > 0 and comps[i - 1] != '':
             del comps[i]
-        else:
-            i = i + 1
+        i = i + 1
 
     if not prefix and not comps:
         comps.append('.')

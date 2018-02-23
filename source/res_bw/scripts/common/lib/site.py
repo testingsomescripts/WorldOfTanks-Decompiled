@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/site.py
 """Append module search paths for third-party packages to sys.path.
 
@@ -160,7 +161,7 @@ def addpackage(sitedir, name, known_paths):
     return known_paths
 
 
-def addsitedir(sitedir, known_paths = None):
+def addsitedir(sitedir, known_paths=None):
     """Add 'sitedir' argument to sys.path if missing and handle .pth files in
     'sitedir'"""
     if known_paths is None:
@@ -338,7 +339,7 @@ def setquit():
         def __repr__(self):
             return 'Use %s() or %s to exit' % (self.name, eof)
 
-        def __call__(self, code = None):
+        def __call__(self, code=None):
             try:
                 sys.stdin.close()
             except:
@@ -355,7 +356,7 @@ class _Printer(object):
     contributors and the copyright notice."""
     MAXLINES = 23
 
-    def __init__(self, name, data, files = (), dirs = ()):
+    def __init__(self, name, data, files=(), dirs=()):
         self.__name = name
         self.__data = data
         self.__files = files
@@ -438,7 +439,7 @@ class _Helper(object):
     """
 
     def __repr__(self):
-        return 'Type help() for interactive help, or help(object) for help about object.'
+        pass
 
     def __call__(self, *args, **kwds):
         import pydoc

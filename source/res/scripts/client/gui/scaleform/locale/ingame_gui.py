@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/INGAME_GUI.py
 from debug_utils import LOG_WARNING
 
@@ -164,6 +164,9 @@ class INGAME_GUI(object):
     DAMAGE_PANEL_DEVICES_TRACK_NORMAL = '#ingame_gui:damage_panel/devices/track/normal'
     DAMAGE_PANEL_DEVICES_TRACK_CRITICAL = '#ingame_gui:damage_panel/devices/track/critical'
     DAMAGE_PANEL_DEVICES_TRACK_DESTROYED = '#ingame_gui:damage_panel/devices/track/destroyed'
+    DAMAGE_PANEL_DEVICES_CHASSIS_NORMAL = '#ingame_gui:damage_panel/devices/chassis/normal'
+    DAMAGE_PANEL_DEVICES_CHASSIS_CRITICAL = '#ingame_gui:damage_panel/devices/chassis/critical'
+    DAMAGE_PANEL_DEVICES_CHASSIS_DESTROYED = '#ingame_gui:damage_panel/devices/chassis/destroyed'
     DAMAGE_PANEL_DEVICES_RADIO_NORMAL = '#ingame_gui:damage_panel/devices/radio/normal'
     DAMAGE_PANEL_DEVICES_RADIO_CRITICAL = '#ingame_gui:damage_panel/devices/radio/critical'
     DAMAGE_PANEL_DEVICES_RADIO_DESTROYED = '#ingame_gui:damage_panel/devices/radio/destroyed'
@@ -336,6 +339,8 @@ class INGAME_GUI(object):
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF'
     VEHICLE_MESSAGES_DEATH_FROM_DEATH_ZONE_ALLY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_DEATH_ZONE_ALLY_SELF'
+    VEHICLE_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_GAS_ATTACK_ENEMY_SELF'
+    VEHICLE_MESSAGES_DEATH_FROM_GAS_ATTACK_ALLY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_GAS_ATTACK_ALLY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_SUICIDE'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_SELF_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_SELF_ENEMY'
@@ -347,6 +352,14 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_SELF = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_ENEMY_SELF'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_ENEMY_ALLY'
     PLAYER_MESSAGES_DEATH_FROM_DEATH_ZONE_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_DEATH_ZONE_ENEMY_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_SELF_ALLY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_SELF_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_SELF_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_SELF_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ALLY_SELF = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ALLY_SELF'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ALLY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ALLY_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ALLY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ALLY_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_SELF = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ENEMY_SELF'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ENEMY_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_GAS_ATTACK_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_GAS_ATTACK_ENEMY_ENEMY'
     VEHICLE_MESSAGES_DEATH_FROM_RAMMING_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_RAMMING_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_ENEMY_SELF'
     VEHICLE_MESSAGES_DEATH_FROM_RAMMING_ALLY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_RAMMING_ALLY_SELF'
@@ -367,6 +380,7 @@ class INGAME_GUI(object):
     POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE = '#ingame_gui:potapovQuests/tip/noQuests/battleType'
     FORTCONSUMABLES_TIMER_POSTFIX = '#ingame_gui:fortConsumables/timer/postfix'
     FLAGS_TIMER = '#ingame_gui:flags/timer'
+    COUNTRIBBONS_MULTISEPARATOR = '#ingame_gui:countRibbons/multiSeparator'
     EFFICIENCYRIBBONS_ARMOR = '#ingame_gui:efficiencyRibbons/armor'
     EFFICIENCYRIBBONS_CAPTURE = '#ingame_gui:efficiencyRibbons/capture'
     EFFICIENCYRIBBONS_DAMAGE = '#ingame_gui:efficiencyRibbons/damage'
@@ -377,6 +391,7 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_CRITS = '#ingame_gui:efficiencyRibbons/crits'
     RESPAWNVIEW_TITLE = '#ingame_gui:respawnView/title'
     RESPAWNVIEW_ADDITIONALTIP = '#ingame_gui:respawnView/additionalTip'
+    RESPAWNVIEW_ADDITIONALTIPLIMITED = '#ingame_gui:respawnView/additionalTipLimited'
     RESPAWNVIEW_COOLDOWNLBL = '#ingame_gui:respawnView/cooldownLbl'
     RESPAWNVIEW_DESTROYEDLBL = '#ingame_gui:respawnView/destroyedLbl'
     RESPAWNVIEW_DISABLEDLBL = '#ingame_gui:respawnView/disabledLbl'
@@ -402,6 +417,12 @@ class INGAME_GUI(object):
     TABSTATSHINT = '#ingame_gui:tabStatsHint'
     REPAIRPOINT_TITLE = '#ingame_gui:repairPoint/title'
     REPAIRPOINT_UNAVAILABLE = '#ingame_gui:repairPoint/unavailable'
+    EVENT_RANDOM = '#ingame_gui:event/random'
+    EVENT_BOUNCE = '#ingame_gui:event/bounce'
+    EVENT_ARTILLERY = '#ingame_gui:event/artillery'
+    EVENT_IMPULSE = '#ingame_gui:event/impulse'
+    EVENT_SLIDE = '#ingame_gui:event/slide'
+    EVENT_NOTHING = '#ingame_gui:event/nothing'
     CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,

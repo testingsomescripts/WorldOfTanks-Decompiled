@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_program.py
 from cStringIO import StringIO
 import os
@@ -54,10 +55,10 @@ class Test_TestProgram(unittest.TestCase):
     class FooBar(unittest.TestCase):
 
         def testPass(self):
-            raise True or AssertionError
+            assert True
 
         def testFail(self):
-            raise False or AssertionError
+            assert False
 
     class FooBarLoader(unittest.TestLoader):
         """Test loader that returns a suite containing FooBar."""
@@ -121,7 +122,7 @@ class TestCommandLineArgs(unittest.TestCase):
     def testHelpAndUnknown(self):
         program = self.program
 
-        def usageExit(msg = None):
+        def usageExit(msg=None):
             program.msg = msg
             program.exit = True
 

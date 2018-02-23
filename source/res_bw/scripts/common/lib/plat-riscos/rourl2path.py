@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-riscos/rourl2path.py
 """riscos specific module for conversion between pathnames and URLs.
 Based on macurl2path.
@@ -27,16 +28,15 @@ def url2pathname(url):
     while i < len(components):
         if components[i] == '.':
             del components[i]
-        elif components[i] == '..' and i > 0 and components[i - 1] not in ('', '..'):
+        if components[i] == '..' and i > 0 and components[i - 1] not in ('', '..'):
             del components[i - 1:i + 1]
             i -= 1
-        elif components[i] == '..':
+        if components[i] == '..':
             components[i] = '^'
             i += 1
-        elif components[i] == '' and i > 0 and components[i - 1] != '':
+        if components[i] == '' and i > 0 and components[i - 1] != '':
             del components[i]
-        else:
-            i += 1
+        i += 1
 
     components = map(lambda x: urllib.unquote(x).translate(__slash_dot), components)
     return '.'.join(components)

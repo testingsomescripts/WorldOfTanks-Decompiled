@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_ext.py
 """distutils.command.build_ext
 
@@ -234,7 +234,7 @@ class build_ext(Command):
                         raise DistutilsSetupError, "'macros' element of build info dict must be 1- or 2-tuple"
                     if len(macro) == 1:
                         ext.undef_macros.append(macro[0])
-                    elif len(macro) == 2:
+                    if len(macro) == 2:
                         ext.define_macros.append(macro)
 
             extensions[i] = ext
@@ -310,8 +310,7 @@ class build_ext(Command):
                 new_sources.append(base + '_wrap' + target_ext)
                 swig_sources.append(source)
                 swig_targets[source] = new_sources[-1]
-            else:
-                new_sources.append(source)
+            new_sources.append(source)
 
         if not swig_sources:
             return new_sources
@@ -391,9 +390,7 @@ class build_ext(Command):
         if os.name == 'os2':
             ext_path[len(ext_path) - 1] = ext_path[len(ext_path) - 1][:8]
         so_ext = get_config_var('SO')
-        if os.name == 'nt' and self.debug:
-            return os.path.join(*ext_path) + '_d' + so_ext
-        return os.path.join(*ext_path) + so_ext
+        return os.path.join(*ext_path) + '_d' + so_ext if os.name == 'nt' and self.debug else os.path.join(*ext_path) + so_ext
 
     def get_export_symbols(self, ext):
         """Return the list of symbols that a shared extension has to
@@ -438,8 +435,7 @@ class build_ext(Command):
                 for lib in sysconfig.get_config_var('SHLIBS').split():
                     if lib.startswith('-l'):
                         extra.append(lib[2:])
-                    else:
-                        extra.append(lib)
+                    extra.append(lib)
 
                 return ext.libraries + [pythonlib, 'm'] + extra
             if sys.platform == 'darwin':

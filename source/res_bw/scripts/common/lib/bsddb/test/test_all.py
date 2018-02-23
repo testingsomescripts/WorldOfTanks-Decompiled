@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_all.py
 """Run all test cases.
 """
@@ -101,13 +101,13 @@ if sys.version_info[0] >= 3:
             v = self._dbcursor.set_recno(num)
             return self._fix(v)
 
-        def set_range(self, k, dlen = -1, doff = -1):
+        def set_range(self, k, dlen=-1, doff=-1):
             if isinstance(k, str):
                 k = bytes(k, charset)
             v = self._dbcursor.set_range(k, dlen=dlen, doff=doff)
             return self._fix(v)
 
-        def dup(self, flags = 0):
+        def dup(self, flags=0):
             cursor = self._dbcursor.dup(flags)
             return dup_cursor_py3k(cursor)
 
@@ -119,14 +119,14 @@ if sys.version_info[0] >= 3:
             v = self._dbcursor.next_nodup()
             return self._fix(v)
 
-        def put(self, key, data, flags = 0, dlen = -1, doff = -1):
+        def put(self, key, data, flags=0, dlen=-1, doff=-1):
             if isinstance(key, str):
                 key = bytes(key, charset)
             if isinstance(data, str):
                 value = bytes(data, charset)
             return self._dbcursor.put(key, data, flags=flags, dlen=dlen, doff=doff)
 
-        def current(self, flags = 0, dlen = -1, doff = -1):
+        def current(self, flags=0, dlen=-1, doff=-1):
             v = self._dbcursor.current(flags=flags, dlen=dlen, doff=doff)
             return self._fix(v)
 
@@ -134,7 +134,7 @@ if sys.version_info[0] >= 3:
             v = self._dbcursor.first()
             return self._fix(v)
 
-        def pget(self, key = None, data = None, flags = 0):
+        def pget(self, key=None, data=None, flags=0):
             if isinstance(key, int) and data is None and flags == 0:
                 flags = key
                 key = None
@@ -245,7 +245,7 @@ if sys.version_info[0] >= 3:
         def __len__(self):
             return len(self._db)
 
-        def has_key(self, k, txn = None):
+        def has_key(self, k, txn=None):
             if isinstance(k, str):
                 k = bytes(k, charset)
             return self._db.has_key(k, txn=txn)
@@ -264,14 +264,14 @@ if sys.version_info[0] >= 3:
             source = self._db.get_re_source()
             return source.decode(charset)
 
-        def put(self, key, data, txn = None, flags = 0, dlen = -1, doff = -1):
+        def put(self, key, data, txn=None, flags=0, dlen=-1, doff=-1):
             if isinstance(key, str):
                 key = bytes(key, charset)
             if isinstance(data, str):
                 value = bytes(data, charset)
             return self._db.put(key, data, flags=flags, txn=txn, dlen=dlen, doff=doff)
 
-        def append(self, value, txn = None):
+        def append(self, value, txn=None):
             if isinstance(value, str):
                 value = bytes(value, charset)
             return self._db.append(value, txn=txn)
@@ -286,7 +286,7 @@ if sys.version_info[0] >= 3:
                 key = bytes(key, charset)
             return self._db.exists(key, *args, **kwargs)
 
-        def get(self, key, default = 'MagicCookie', txn = None, flags = 0, dlen = -1, doff = -1):
+        def get(self, key, default='MagicCookie', txn=None, flags=0, dlen=-1, doff=-1):
             if isinstance(key, str):
                 key = bytes(key, charset)
             if default != 'MagicCookie':
@@ -297,7 +297,7 @@ if sys.version_info[0] >= 3:
                 v = v.decode(charset)
             return v
 
-        def pget(self, key, txn = None):
+        def pget(self, key, txn=None):
             if isinstance(key, str):
                 key = bytes(key, charset)
             v = self._db.pget(key, txn=txn)
@@ -308,7 +308,7 @@ if sys.version_info[0] >= 3:
                 v = (v1, v2.decode(charset))
             return v
 
-        def get_both(self, key, value, txn = None, flags = 0):
+        def get_both(self, key, value, txn=None, flags=0):
             if isinstance(key, str):
                 key = bytes(key, charset)
             if isinstance(value, str):
@@ -318,7 +318,7 @@ if sys.version_info[0] >= 3:
                 v = v.decode(charset)
             return v
 
-        def delete(self, key, txn = None):
+        def delete(self, key, txn=None):
             if isinstance(key, str):
                 key = bytes(key, charset)
             return self._db.delete(key, txn=txn)
@@ -342,7 +342,7 @@ if sys.version_info[0] >= 3:
 
             return data2
 
-        def associate(self, secondarydb, callback, flags = 0, txn = None):
+        def associate(self, secondarydb, callback, flags=0, txn=None):
 
             class associate_callback(object):
 
@@ -369,7 +369,7 @@ if sys.version_info[0] >= 3:
 
             return self._db.associate(secondarydb._db, associate_callback(callback).callback, flags=flags, txn=txn)
 
-        def cursor(self, txn = None, flags = 0):
+        def cursor(self, txn=None, flags=0):
             return cursor_py3k(self._db, txn=txn, flags=flags)
 
         def join(self, cursor_list):
@@ -385,7 +385,7 @@ if sys.version_info[0] >= 3:
         def __getattr__(self, v):
             return getattr(self._dbenv, v)
 
-        def log_cursor(self, flags = 0):
+        def log_cursor(self, flags=0):
             return logcursor_py3k(self._dbenv)
 
         def get_lg_dir(self):
@@ -572,7 +572,7 @@ else:
     import sys
     print >> sys.stderr, 'Work to do!'
 
-def suite(module_prefix = '', timing_check = None):
+def suite(module_prefix='', timing_check=None):
     test_modules = ['test_associate',
      'test_basics',
      'test_dbenv',

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cgi.py
 """Support module for CGI (Common Gateway Interface) scripts.
 
@@ -95,7 +95,7 @@ def nolog(*allargs):
 log = initlog
 maxlen = 0
 
-def parse(fp = None, environ = os.environ, keep_blank_values = 0, strict_parsing = 0):
+def parse(fp=None, environ=os.environ, keep_blank_values=0, strict_parsing=0):
     """Parse a query in the environment or from a file (default stdin)
     
         Arguments, all optional:
@@ -151,13 +151,13 @@ def parse(fp = None, environ = os.environ, keep_blank_values = 0, strict_parsing
     return urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
 
 
-def parse_qs(qs, keep_blank_values = 0, strict_parsing = 0):
+def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     """Parse a query given as a string argument."""
     warn('cgi.parse_qs is deprecated, use urlparse.parse_qs instead', PendingDeprecationWarning, 2)
     return urlparse.parse_qs(qs, keep_blank_values, strict_parsing)
 
 
-def parse_qsl(qs, keep_blank_values = 0, strict_parsing = 0):
+def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
     """Parse a query given as a string argument."""
     warn('cgi.parse_qsl is deprecated, use urlparse.parse_qsl instead', PendingDeprecationWarning, 2)
     return urlparse.parse_qsl(qs, keep_blank_values, strict_parsing)
@@ -250,8 +250,7 @@ def parse_multipart(fp, pdict):
             continue
         if name in partdict:
             partdict[name].append(data)
-        else:
-            partdict[name] = [data]
+        partdict[name] = [data]
 
     return partdict
 
@@ -281,10 +280,10 @@ def parse_header(line):
     pdict = {}
     for p in parts:
         i = p.find('=')
-        if i >= 0:
-            name = p[:i].strip().lower()
-            value = p[i + 1:].strip()
-            if len(value) >= 2 and value[0] == value[-1] == '"':
+        name = i >= 0 and p[:i].strip().lower()
+        value = p[i + 1:].strip()
+        if len(value) >= 2:
+            if value[0] == value[-1] == '"':
                 value = value[1:-1]
                 value = value.replace('\\\\', '\\').replace('\\"', '"')
             pdict[name] = value
@@ -355,7 +354,7 @@ class FieldStorage():
     
     """
 
-    def __init__(self, fp = None, headers = None, outerboundary = '', environ = os.environ, keep_blank_values = 0, strict_parsing = 0):
+    def __init__(self, fp=None, headers=None, outerboundary='', environ=os.environ, keep_blank_values=0, strict_parsing=0):
         """Constructor.  Read multipart/* until last part.
         
         Arguments, all optional:
@@ -491,7 +490,7 @@ class FieldStorage():
             return found
             return
 
-    def getvalue(self, key, default = None):
+    def getvalue(self, key, default=None):
         """Dictionary style get() method, including 'value' lookup."""
         if key in self:
             value = self[key]
@@ -502,7 +501,7 @@ class FieldStorage():
         else:
             return default
 
-    def getfirst(self, key, default = None):
+    def getfirst(self, key, default=None):
         """ Return the first value received."""
         if key in self:
             value = self[key]
@@ -693,7 +692,7 @@ class FieldStorage():
                     break
             last_line_lfend = line.endswith('\n')
 
-    def make_file(self, binary = None):
+    def make_file(self, binary=None):
         """Overridable: return a readable & writable file.
         
         The file will be used as follows:
@@ -735,7 +734,7 @@ class FormContentDict(UserDict.UserDict):
     
     """
 
-    def __init__(self, environ = os.environ, keep_blank_values = 0, strict_parsing = 0):
+    def __init__(self, environ=os.environ, keep_blank_values=0, strict_parsing=0):
         self.dict = self.data = parse(environ=environ, keep_blank_values=keep_blank_values, strict_parsing=strict_parsing)
         self.query_string = environ['QUERY_STRING']
 
@@ -766,8 +765,7 @@ class SvFormContentDict(FormContentDict):
         for value in self.dict.values():
             if len(value) == 1:
                 result.append(value[0])
-            else:
-                result.append(value)
+            result.append(value)
 
         return result
 
@@ -776,8 +774,7 @@ class SvFormContentDict(FormContentDict):
         for key, value in self.dict.items():
             if len(value) == 1:
                 result.append((key, value[0]))
-            else:
-                result.append((key, value))
+            result.append((key, value))
 
         return result
 
@@ -860,7 +857,7 @@ class FormContent(FormContentDict):
         return self.dict
 
 
-def test(environ = os.environ):
+def test(environ=os.environ):
     """Robust test CGI script, usable as main program.
     
     Write minimal HTTP headers and dump all information provided to
@@ -882,7 +879,7 @@ def test(environ = os.environ):
         def f():
             exec 'testing print_exception() -- <I>italics?</I>'
 
-        def g(f = f):
+        def g(f=f):
             f()
 
         print '<H3>What follows is a test, not an actual exception:</H3>'
@@ -902,7 +899,7 @@ def test(environ = os.environ):
         print_exception()
 
 
-def print_exception(type = None, value = None, tb = None, limit = None):
+def print_exception(type=None, value=None, tb=None, limit=None):
     if type is None:
         type, value, tb = sys.exc_info()
     import traceback
@@ -914,7 +911,7 @@ def print_exception(type = None, value = None, tb = None, limit = None):
     return
 
 
-def print_environ(environ = os.environ):
+def print_environ(environ=os.environ):
     """Dump the shell environment as HTML."""
     keys = environ.keys()
     keys.sort()
@@ -974,7 +971,7 @@ def print_environ_usage():
     print '\n<H3>These environment variables could have been set:</H3>\n<UL>\n<LI>AUTH_TYPE\n<LI>CONTENT_LENGTH\n<LI>CONTENT_TYPE\n<LI>DATE_GMT\n<LI>DATE_LOCAL\n<LI>DOCUMENT_NAME\n<LI>DOCUMENT_ROOT\n<LI>DOCUMENT_URI\n<LI>GATEWAY_INTERFACE\n<LI>LAST_MODIFIED\n<LI>PATH\n<LI>PATH_INFO\n<LI>PATH_TRANSLATED\n<LI>QUERY_STRING\n<LI>REMOTE_ADDR\n<LI>REMOTE_HOST\n<LI>REMOTE_IDENT\n<LI>REMOTE_USER\n<LI>REQUEST_METHOD\n<LI>SCRIPT_NAME\n<LI>SERVER_NAME\n<LI>SERVER_PORT\n<LI>SERVER_PROTOCOL\n<LI>SERVER_ROOT\n<LI>SERVER_SOFTWARE\n</UL>\nIn addition, HTTP headers sent by the server may be passed in the\nenvironment as well.  Here are some common variable names:\n<UL>\n<LI>HTTP_ACCEPT\n<LI>HTTP_CONNECTION\n<LI>HTTP_HOST\n<LI>HTTP_PRAGMA\n<LI>HTTP_REFERER\n<LI>HTTP_USER_AGENT\n</UL>\n'
 
 
-def escape(s, quote = None):
+def escape(s, quote=None):
     """Replace special characters "&", "<" and ">" to HTML-safe sequences.
     If the optional flag quote is true, the quotation mark character (")
     is also translated."""
@@ -986,7 +983,7 @@ def escape(s, quote = None):
     return s
 
 
-def valid_boundary(s, _vb_pattern = '^[ -~]{0,200}[!-~]$'):
+def valid_boundary(s, _vb_pattern='^[ -~]{0,200}[!-~]$'):
     import re
     return re.match(_vb_pattern, s)
 

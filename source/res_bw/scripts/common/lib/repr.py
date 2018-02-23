@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/repr.py
 """Redo the builtin repr() (representation) but with limits on most sizes."""
 __all__ = ['Repr', 'repr']
@@ -37,7 +38,7 @@ class Repr:
                 s = s[:i] + '...' + s[len(s) - j:]
             return s
 
-    def _repr_iterable(self, x, level, left, right, maxiter, trail = ''):
+    def _repr_iterable(self, x, level, left, right, maxiter, trail=''):
         n = len(x)
         if level <= 0 and n:
             s = '...'

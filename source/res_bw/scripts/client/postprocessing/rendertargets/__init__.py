@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/RenderTargets/__init__.py
 """RenderTargets python module
 This module manages the render targets used by the post-processing chain.
@@ -93,7 +93,7 @@ rtData = {'PostProcessing/backBufferCopy': (0, 0),
                                     False,
                                     'A32B32G32R32F')}
 
-def _create(name, width, height, reuseZ = False, format = 'A8R8G8B8'):
+def _create(name, width, height, reuseZ=False, format='A8R8G8B8'):
     global rts
     rt = BigWorld.RenderTarget(name, int(width), int(height), reuseZ, format)
     rts[name] = rt

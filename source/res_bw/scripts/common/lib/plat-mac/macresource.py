@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/macresource.py
 """macresource - Locate and open the resources needed for a script."""
 from warnings import warnpy3k
@@ -16,7 +17,7 @@ class ResourceFileNotFoundError(ImportError):
     pass
 
 
-def need(restype, resid, filename = None, modname = None):
+def need(restype, resid, filename=None, modname=None):
     """Open a resource file, if needed. restype and resid
     are required parameters, and identify the resource for which to test. If it
     is available we are done. If it is not available we look for a file filename
@@ -24,53 +25,53 @@ def need(restype, resid, filename = None, modname = None):
     where modname was loaded from, or otherwise across sys.path.
     
     Returns the refno of the resource file opened (or None)"""
-    if modname is None and filename is None:
-        raise ArgumentError, 'Either filename or modname argument (or both) must be given'
-    if type(resid) is type(1):
-        try:
-            h = Res.GetResource(restype, resid)
-        except Res.Error:
-            pass
-        else:
-            return
+    if modname is None:
+        if filename is None:
+            raise ArgumentError, 'Either filename or modname argument (or both) must be given'
+        if type(resid) is type(1):
+            try:
+                h = Res.GetResource(restype, resid)
+            except Res.Error:
+                pass
+            else:
+                return
 
-    else:
-        try:
-            h = Res.GetNamedResource(restype, resid)
-        except Res.Error:
-            pass
         else:
-            return
+            try:
+                h = Res.GetNamedResource(restype, resid)
+            except Res.Error:
+                pass
+            else:
+                return
 
-    if not filename:
-        if '.' in modname:
-            filename = modname.split('.')[-1] + '.rsrc'
+        if not filename:
+            if '.' in modname:
+                filename = modname.split('.')[-1] + '.rsrc'
+            else:
+                filename = modname + '.rsrc'
+        searchdirs = []
+        if modname == '__main__':
+            searchdirs = [os.curdir]
+        if modname in sys.modules:
+            mod = sys.modules[modname]
+            if hasattr(mod, '__file__'):
+                searchdirs = [os.path.dirname(mod.__file__)]
+        searchdirs.extend(sys.path)
+        for dir in searchdirs:
+            pathname = os.path.join(dir, filename)
+            if os.path.exists(pathname):
+                break
         else:
-            filename = modname + '.rsrc'
-    searchdirs = []
-    if modname == '__main__':
-        searchdirs = [os.curdir]
-    if modname in sys.modules:
-        mod = sys.modules[modname]
-        if hasattr(mod, '__file__'):
-            searchdirs = [os.path.dirname(mod.__file__)]
-    searchdirs.extend(sys.path)
-    for dir in searchdirs:
-        pathname = os.path.join(dir, filename)
-        if os.path.exists(pathname):
-            break
-    else:
-        raise ResourceFileNotFoundError, filename
+            raise ResourceFileNotFoundError, filename
 
-    refno = open_pathname(pathname)
-    if type(resid) is type(1):
-        h = Res.GetResource(restype, resid)
+        refno = open_pathname(pathname)
+        h = type(resid) is type(1) and Res.GetResource(restype, resid)
     else:
         h = Res.GetNamedResource(restype, resid)
     return refno
 
 
-def open_pathname(pathname, verbose = 0):
+def open_pathname(pathname, verbose=0):
     """Open a resource file given by pathname, possibly decoding an
     AppleSingle file"""
     try:
@@ -85,7 +86,7 @@ def open_pathname(pathname, verbose = 0):
     refno = Res.FSOpenResourceFile(pathname, u'', 1)
 
 
-def resource_pathname(pathname, verbose = 0):
+def resource_pathname(pathname, verbose=0):
     """Return the pathname for a resource file (either DF or RF based).
     If the pathname given already refers to such a file simply return it,
     otherwise first decode it."""
@@ -107,7 +108,7 @@ def open_error_resource():
     need('Estr', 1, filename='errors.rsrc', modname=__name__)
 
 
-def _decode(pathname, verbose = 0):
+def _decode(pathname, verbose=0):
     newpathname = pathname + '.df.rsrc'
     if os.path.exists(newpathname) and os.stat(newpathname).st_mtime >= os.stat(pathname).st_mtime:
         return newpathname

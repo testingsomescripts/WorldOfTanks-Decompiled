@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/data_providers.py
 from abc import abstractmethod
 from debug_utils import LOG_ERROR
@@ -21,7 +21,7 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
         self.__selectedRallyIndex = index
 
     @abstractmethod
-    def getVO(self, unitIndex = None):
+    def getVO(self, unitIndex=None):
         return None
 
     @abstractmethod
@@ -54,10 +54,7 @@ class BaseRallyListDataProvider(SortableDAAPIDataProvider):
         return None
 
     def getItem(self, index):
-        if 0 <= index < len(self.__list):
-            return self.__list[index]
-        else:
-            return None
+        return self.__list[index] if 0 <= index < len(self.__list) else None
 
     def getRally(self, index):
         cfdUnitID = 0

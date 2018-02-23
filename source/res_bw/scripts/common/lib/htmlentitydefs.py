@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/htmlentitydefs.py
 """HTML character entity references."""
 name2codepoint = {'AElig': 198,
@@ -259,8 +259,7 @@ for name, codepoint in name2codepoint.iteritems():
     codepoint2name[codepoint] = name
     if codepoint <= 255:
         entitydefs[name] = chr(codepoint)
-    else:
-        entitydefs[name] = '&#%d;' % codepoint
+    entitydefs[name] = '&#%d;' % codepoint
 
 del name
 del codepoint

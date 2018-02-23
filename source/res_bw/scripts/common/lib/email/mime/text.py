@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/mime/text.py
 """Class representing text/* type MIME documents."""
 __all__ = ['MIMEText']
@@ -8,7 +8,7 @@ from email.mime.nonmultipart import MIMENonMultipart
 class MIMEText(MIMENonMultipart):
     """Class for generating text/* type MIME documents."""
 
-    def __init__(self, _text, _subtype = 'plain', _charset = 'us-ascii'):
+    def __init__(self, _text, _subtype='plain', _charset='us-ascii'):
         """Create a text/* type MIME document.
         
         _text is the string for this message object.

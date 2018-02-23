@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/bundlebuilder.py
 """bundlebuilder.py -- Tools to assemble MacOS X (application) bundles.
 
@@ -140,7 +141,7 @@ class BundleBuilder(Defaults):
     def _addMetaFiles(self):
         contents = pathjoin(self.bundlepath, 'Contents')
         makedirs(contents)
-        raise len(self.type) == len(self.creator) == 4 or AssertionError('type and creator must be 4-byte strings.')
+        assert len(self.type) == len(self.creator) == 4, 'type and creator must be 4-byte strings.'
         pkginfo = pathjoin(contents, 'PkgInfo')
         f = open(pkginfo, 'wb')
         f.write(self.type + self.creator)
@@ -171,10 +172,9 @@ class BundleBuilder(Defaults):
             dst = pathjoin(self.bundlepath, dst)
             if self.symlink:
                 symlink(src, dst, mkdirs=1)
-            else:
-                copy(src, dst, mkdirs=1)
+            copy(src, dst, mkdirs=1)
 
-    def message(self, msg, level = 0):
+    def message(self, msg, level=0):
         if level <= self.verbosity:
             indent = ''
             if level > 1:
@@ -356,8 +356,7 @@ class AppBuilder(BundleBuilder):
             self.files.append((src, dst))
 
     def _getSiteCode(self):
-        if self.use_zipimport:
-            return compile(SITE_PY % {'semi_standalone': self.semi_standalone}, '<-bundlebuilder.py->', 'exec')
+        return compile(SITE_PY % {'semi_standalone': self.semi_standalone}, '<-bundlebuilder.py->', 'exec') if self.use_zipimport else None
 
     def addPythonModules(self):
         self.message('Adding Python modules', 1)
@@ -402,17 +401,16 @@ class AppBuilder(BundleBuilder):
                         continue
                     if os.path.isdir(path):
                         walk(path)
-                    else:
-                        mod = os.stat(path)[stat.ST_MODE]
-                        if not mod & 64:
-                            continue
-                        relpath = path[len(self.bundlepath):]
-                        self.message('Stripping %s' % relpath, 2)
-                        inf, outf = os.popen4('%s -S "%s"' % (STRIP_EXEC, path))
-                        output = outf.read().strip()
-                        if output:
-                            self.message('Problem stripping %s:' % relpath, 3)
-                            self.message(output, 3)
+                    mod = os.stat(path)[stat.ST_MODE]
+                    if not mod & 64:
+                        continue
+                    relpath = path[len(self.bundlepath):]
+                    self.message('Stripping %s' % relpath, 2)
+                    inf, outf = os.popen4('%s -S "%s"' % (STRIP_EXEC, path))
+                    output = outf.read().strip()
+                    if output:
+                        self.message('Problem stripping %s:' % relpath, 3)
+                        self.message(output, 3)
 
             walk(self.bundlepath)
 
@@ -502,7 +500,7 @@ class AppBuilder(BundleBuilder):
 SUFFIXES = [ _suf for _suf, _mode, _tp in imp.get_suffixes() ]
 identifierRE = re.compile('[_a-zA-z][_a-zA-Z0-9]*$')
 
-def findPackageContents(name, searchpath = None):
+def findPackageContents(name, searchpath=None):
     head = name.split('.')[-1]
     if identifierRE.match(head) is None:
         return {}
@@ -532,7 +530,7 @@ def writePyc(code, path):
     f.close()
 
 
-def copy(src, dst, mkdirs = 0):
+def copy(src, dst, mkdirs=0):
     """Copy a file or a directory."""
     if mkdirs:
         makedirs(os.path.dirname(dst))
@@ -558,7 +556,7 @@ def makedirs(dir):
             raise
 
 
-def symlink(src, dst, mkdirs = 0):
+def symlink(src, dst, mkdirs=0):
     """Copy a file or a directory."""
     if not os.path.exists(src):
         raise IOError, "No such file or directory: '%s'" % src
@@ -571,21 +569,21 @@ def pathjoin(*args):
     """Safe wrapper for os.path.join: asserts that all but the first
     argument are relative paths."""
     for seg in args[1:]:
-        raise seg[0] != '/' or AssertionError
+        assert seg[0] != '/'
 
     return os.path.join(*args)
 
 
 cmdline_doc = 'Usage:\n  python bundlebuilder.py [options] command\n  python mybuildscript.py [options] command\n\nCommands:\n  build      build the application\n  report     print a report\n\nOptions:\n  -b, --builddir=DIR     the build directory; defaults to "build"\n  -n, --name=NAME        application name\n  -r, --resource=FILE    extra file or folder to be copied to Resources\n  -f, --file=SRC:DST     extra file or folder to be copied into the bundle;\n                         DST must be a path relative to the bundle root\n  -e, --executable=FILE  the executable to be used\n  -m, --mainprogram=FILE the Python main program\n  -a, --argv             add a wrapper main program to create sys.argv\n  -p, --plist=FILE       .plist file (default: generate one)\n      --nib=NAME         main nib name\n  -c, --creator=CCCC     4-char creator code (default: \'????\')\n      --iconfile=FILE    filename of the icon (an .icns file) to be used\n                         as the Finder icon\n      --bundle-id=ID     the CFBundleIdentifier, in reverse-dns format\n                         (eg. org.python.BuildApplet; this is used for\n                         the preferences file name)\n  -l, --link             symlink files/folder instead of copying them\n      --link-exec        symlink the executable instead of copying it\n      --standalone       build a standalone application, which is fully\n                         independent of a Python installation\n      --semi-standalone  build a standalone application, which depends on\n                         an installed Python, yet includes all third-party\n                         modules.\n      --no-zipimport     Do not copy code into a zip file\n      --python=FILE      Python to use in #! line in stead of current Python\n      --lib=FILE         shared library or framework to be copied into\n                         the bundle\n  -x, --exclude=MODULE   exclude module (with --(semi-)standalone)\n  -i, --include=MODULE   include module (with --(semi-)standalone)\n      --package=PACKAGE  include a whole package (with --(semi-)standalone)\n      --strip            strip binaries (remove debug info)\n  -v, --verbose          increase verbosity level\n  -q, --quiet            decrease verbosity level\n  -h, --help             print this message\n'
 
-def usage(msg = None):
+def usage(msg=None):
     if msg:
         print msg
     print cmdline_doc
     sys.exit(1)
 
 
-def main(builder = None):
+def main(builder=None):
     if builder is None:
         builder = AppBuilder(verbosity=1)
     shortopts = 'b:n:r:f:e:m:c:p:lx:i:hvqa'
@@ -598,60 +596,60 @@ def main(builder = None):
     for opt, arg in options:
         if opt in ('-b', '--builddir'):
             builder.builddir = arg
-        elif opt in ('-n', '--name'):
+        if opt in ('-n', '--name'):
             builder.name = arg
-        elif opt in ('-r', '--resource'):
+        if opt in ('-r', '--resource'):
             builder.resources.append(os.path.normpath(arg))
-        elif opt in ('-f', '--file'):
+        if opt in ('-f', '--file'):
             srcdst = arg.split(':')
             if len(srcdst) != 2:
                 usage('-f or --file argument must be two paths, separated by a colon')
             builder.files.append(srcdst)
-        elif opt in ('-e', '--executable'):
+        if opt in ('-e', '--executable'):
             builder.executable = arg
-        elif opt in ('-m', '--mainprogram'):
+        if opt in ('-m', '--mainprogram'):
             builder.mainprogram = arg
-        elif opt in ('-a', '--argv'):
+        if opt in ('-a', '--argv'):
             builder.argv_emulation = 1
-        elif opt in ('-c', '--creator'):
+        if opt in ('-c', '--creator'):
             builder.creator = arg
-        elif opt == '--bundle-id':
+        if opt == '--bundle-id':
             builder.bundle_id = arg
-        elif opt == '--iconfile':
+        if opt == '--iconfile':
             builder.iconfile = arg
-        elif opt == '--lib':
+        if opt == '--lib':
             builder.libs.append(os.path.normpath(arg))
-        elif opt == '--nib':
+        if opt == '--nib':
             builder.nibname = arg
-        elif opt in ('-p', '--plist'):
+        if opt in ('-p', '--plist'):
             builder.plist = Plist.fromFile(arg)
-        elif opt in ('-l', '--link'):
+        if opt in ('-l', '--link'):
             builder.symlink = 1
-        elif opt == '--link-exec':
+        if opt == '--link-exec':
             builder.symlink_exec = 1
-        elif opt in ('-h', '--help'):
+        if opt in ('-h', '--help'):
             usage()
-        elif opt in ('-v', '--verbose'):
+        if opt in ('-v', '--verbose'):
             builder.verbosity += 1
-        elif opt in ('-q', '--quiet'):
+        if opt in ('-q', '--quiet'):
             builder.verbosity -= 1
-        elif opt == '--standalone':
+        if opt == '--standalone':
             builder.standalone = 1
-        elif opt == '--semi-standalone':
+        if opt == '--semi-standalone':
             builder.semi_standalone = 1
-        elif opt == '--python':
+        if opt == '--python':
             builder.python = arg
-        elif opt in ('-x', '--exclude'):
+        if opt in ('-x', '--exclude'):
             builder.excludeModules.append(arg)
-        elif opt in ('-i', '--include'):
+        if opt in ('-i', '--include'):
             builder.includeModules.append(arg)
-        elif opt == '--package':
+        if opt == '--package':
             builder.includePackages.append(arg)
-        elif opt == '--strip':
+        if opt == '--strip':
             builder.strip = 1
-        elif opt == '--destroot':
+        if opt == '--destroot':
             builder.destroot = arg
-        elif opt == '--no-zipimport':
+        if opt == '--no-zipimport':
             builder.use_zipimport = False
 
     if len(args) != 1:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/raw_unicode_escape.py
 """ Python 'raw-unicode-escape' Codec
 
@@ -17,13 +17,13 @@ class Codec(codecs.Codec):
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return codecs.raw_unicode_escape_encode(input, self.errors)[0]
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         return codecs.raw_unicode_escape_decode(input, self.errors)[0]
 
 

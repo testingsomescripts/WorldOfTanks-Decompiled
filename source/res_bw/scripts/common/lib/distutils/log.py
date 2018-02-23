@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/log.py
 """A simple log mechanism styled after PEP 282."""
 DEBUG = 1
@@ -10,7 +10,7 @@ import sys
 
 class Log:
 
-    def __init__(self, threshold = WARN):
+    def __init__(self, threshold=WARN):
         self.threshold = threshold
 
     def _log(self, level, msg, args):

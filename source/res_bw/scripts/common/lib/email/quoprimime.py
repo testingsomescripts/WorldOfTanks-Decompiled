@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/quoprimime.py
 """Quoted-printable content transfer encoding per RFCs 2045-2047.
 
@@ -62,8 +62,7 @@ def header_quopri_len(s):
     for c in s:
         if hqre.match(c):
             count += 3
-        else:
-            count += 1
+        count += 1
 
     return count
 
@@ -74,13 +73,12 @@ def body_quopri_len(str):
     for c in str:
         if bqre.match(c):
             count += 3
-        else:
-            count += 1
+        count += 1
 
     return count
 
 
-def _max_append(L, s, maxlen, extra = ''):
+def _max_append(L, s, maxlen, extra=''):
     if not L:
         L.append(s.lstrip())
     elif len(L[-1]) + len(s) <= maxlen:
@@ -98,7 +96,7 @@ def quote(c):
     return '=%02X' % ord(c)
 
 
-def header_encode(header, charset = 'iso-8859-1', keep_eols = False, maxlinelen = 76, eol = NL):
+def header_encode(header, charset='iso-8859-1', keep_eols=False, maxlinelen=76, eol=NL):
     r"""Encode a single header line with quoted-printable (like) encoding.
     
     Defined in RFC 2045, this `Q' encoding is similar to quoted-printable, but
@@ -139,16 +137,15 @@ def header_encode(header, charset = 'iso-8859-1', keep_eols = False, maxlinelen 
         for c in header:
             if c == ' ':
                 _max_append(quoted, '_', max_encoded)
-            elif not hqre.match(c):
+            if not hqre.match(c):
                 _max_append(quoted, c, max_encoded)
-            else:
-                _max_append(quoted, '=%02X' % ord(c), max_encoded)
+            _max_append(quoted, '=%02X' % ord(c), max_encoded)
 
         joiner = eol + ' '
         return joiner.join([ '=?%s?q?%s?=' % (charset, line) for line in quoted ])
 
 
-def encode(body, binary = False, maxlinelen = 76, eol = NL):
+def encode(body, binary=False, maxlinelen=76, eol=NL):
     r"""Encode with quoted-printable, wrapping at maxlinelen characters.
     
     If binary is False (the default), end-of-line characters will be converted
@@ -218,7 +215,7 @@ def encode(body, binary = False, maxlinelen = 76, eol = NL):
 body_encode = encode
 encodestring = encode
 
-def decode(encoded, eol = NL):
+def decode(encoded, eol=NL):
     r"""Decode a quoted-printable string.
     
     Lines are separated with eol, which defaults to \n.

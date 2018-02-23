@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/anydbm.py
 """Generic interface to all dbm clones.
 
@@ -59,7 +59,7 @@ if not _defaultmod:
     raise ImportError, 'no dbm clone found; tried %s' % _names
 error = tuple(_errors)
 
-def open(file, flag = 'r', mode = 438):
+def open(file, flag='r', mode=438):
     """Open or create database at path given by *file*.
     
     Optional argument *flag* can be 'r' (default) for read-only access, 'w'

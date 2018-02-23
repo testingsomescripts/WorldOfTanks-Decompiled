@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/sdist.py
 """distutils.command.sdist
 
@@ -176,10 +176,9 @@ class sdist(Command):
 
                 if not got_it:
                     self.warn('standard file not found: should have one of ' + string.join(alts, ', '))
-            elif os.path.exists(fn):
+            if os.path.exists(fn):
                 self.filelist.append(fn)
-            else:
-                self.warn("standard file '%s' not found" % fn)
+            self.warn("standard file '%s' not found" % fn)
 
         optional = ['test/test*.py', 'setup.cfg']
         for pattern in optional:
@@ -200,12 +199,11 @@ class sdist(Command):
                     item = convert_path(item)
                     if os.path.isfile(item):
                         self.filelist.append(item)
-                else:
-                    dirname, filenames = item
-                    for f in filenames:
-                        f = convert_path(f)
-                        if os.path.isfile(f):
-                            self.filelist.append(f)
+                dirname, filenames = item
+                for f in filenames:
+                    f = convert_path(f)
+                    if os.path.isfile(f):
+                        self.filelist.append(f)
 
         if self.distribution.has_ext_modules():
             build_ext = self.get_finalized_command('build_ext')
@@ -329,9 +327,8 @@ class sdist(Command):
         for file in files:
             if not os.path.isfile(file):
                 log.warn("'%s' not a regular file -- skipping" % file)
-            else:
-                dest = os.path.join(base_dir, file)
-                self.copy_file(file, dest, link=link)
+            dest = os.path.join(base_dir, file)
+            self.copy_file(file, dest, link=link)
 
         self.distribution.metadata.write_pkg_info(base_dir)
         return

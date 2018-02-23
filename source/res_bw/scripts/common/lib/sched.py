@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sched.py
 """A generally useful event scheduler class.
 
@@ -101,13 +102,11 @@ class scheduler:
             now = timefunc()
             if now < time:
                 delayfunc(time - now)
-            else:
-                event = pop(q)
-                if event is checked_event:
-                    action(*argument)
-                    delayfunc(0)
-                else:
-                    heapq.heappush(q, event)
+            event = pop(q)
+            if event is checked_event:
+                action(*argument)
+                delayfunc(0)
+            heapq.heappush(q, event)
 
     @property
     def queue(self):

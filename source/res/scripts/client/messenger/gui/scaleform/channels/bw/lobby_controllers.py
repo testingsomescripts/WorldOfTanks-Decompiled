@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw/lobby_controllers.py
 import types
 import BigWorld
@@ -59,7 +59,7 @@ class _ChannelController(_LobbyLayout):
                 return
         self.proto.channels.sendMessage(self._channel.getID(), message)
 
-    def _format(self, message, doFormatting = True):
+    def _format(self, message, doFormatting=True):
         isString = type(message) is types.StringType
         if not doFormatting or isString:
             if isString:
@@ -109,14 +109,14 @@ class LazyChannelController(_ChannelController):
         self.__clearExitCallback()
         self.join()
 
-    def deactivate(self, entryClosing = False):
+    def deactivate(self, entryClosing=False):
         super(LazyChannelController, self).deactivate()
         if not entryClosing:
             self.__clearExitCallback()
             if self._channel.isJoined():
                 self.__exitCallbackID = BigWorld.callback(self.__EXIT_DELAY, self.__exitFromLazyChannel)
 
-    def addMessage(self, message, doFormatting = True):
+    def addMessage(self, message, doFormatting=True):
         super(LazyChannelController, self).addMessage(message, doFormatting)
         return True
 

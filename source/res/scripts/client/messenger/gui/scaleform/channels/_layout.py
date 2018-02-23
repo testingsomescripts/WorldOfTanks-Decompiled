@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/_layout.py
 import BattleReplay
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -11,7 +11,7 @@ from messenger.gui.interfaces import IChannelController, IBattleChannelView
 
 class _LobbyLayout(IChannelController):
 
-    def __init__(self, channel, mBuilder = None):
+    def __init__(self, channel, mBuilder=None):
         self._view = None
         self._mBuilder = mBuilder or LobbyMessageBuilder()
         self._membersDP = None
@@ -31,7 +31,7 @@ class _LobbyLayout(IChannelController):
     def activate(self):
         self._activated = True
 
-    def deactivate(self, entryClosing = False):
+    def deactivate(self, entryClosing=False):
         self.removeView()
         self._activated = False
 
@@ -71,9 +71,7 @@ class _LobbyLayout(IChannelController):
                 self.addMessage(message)
 
     def getHistory(self):
-        if self._channel:
-            return self._channel.getHistory()
-        return []
+        return self._channel.getHistory() if self._channel else []
 
     def setMembersDP(self, membersDP):
         if self._membersDP:
@@ -99,7 +97,7 @@ class _LobbyLayout(IChannelController):
             self._view.as_addMessageS(errorMsg)
         return result
 
-    def addMessage(self, message, doFormatting = True):
+    def addMessage(self, message, doFormatting=True):
         text = self._format(message, doFormatting)
         if self._activated:
             if self._view:
@@ -137,7 +135,7 @@ class _LobbyLayout(IChannelController):
     def _broadcast(self, message):
         raise NotImplementedError
 
-    def _format(self, message, doFormatting = True):
+    def _format(self, message, doFormatting=True):
         raise NotImplementedError
 
     def _fireInitEvent(self):
@@ -155,7 +153,7 @@ class _LobbyLayout(IChannelController):
 
 class _BattleLayout(IChannelController):
 
-    def __init__(self, channel, mBuilder, isSecondaryChannelCtrl = False):
+    def __init__(self, channel, mBuilder, isSecondaryChannelCtrl=False):
         super(_BattleLayout, self).__init__()
         self._channel = channel
         self._view = None
@@ -173,9 +171,7 @@ class _BattleLayout(IChannelController):
         raise NotImplementedError
 
     def getHistory(self):
-        if self._channel:
-            return self._channel.getHistory()
-        return []
+        return self._channel.getHistory() if self._channel else []
 
     def isEnabled(self):
         return isBattleChatEnabled()
@@ -209,7 +205,7 @@ class _BattleLayout(IChannelController):
             self._view.addMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': errorMsg}))
         return result
 
-    def addMessage(self, message, doFormatting = True):
+    def addMessage(self, message, doFormatting=True):
         isCurrent, text = self._formatMessage(message, doFormatting)
         if not self._isSecondaryChannelCtrl:
             self._channel.addMessage(text)
@@ -227,7 +223,7 @@ class _BattleLayout(IChannelController):
     def _broadcast(self, message):
         raise NotImplementedError
 
-    def _formatMessage(self, message, doFormatting = True):
+    def _formatMessage(self, message, doFormatting=True):
         raise NotImplementedError
 
     def _formatCommand(self, command):

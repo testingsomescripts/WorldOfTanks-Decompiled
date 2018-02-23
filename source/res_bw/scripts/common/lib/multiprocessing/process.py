@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/process.py
 __all__ = ['Process', 'current_process', 'active_children']
 import os
@@ -41,8 +42,8 @@ class Process(object):
     """
     _Popen = None
 
-    def __init__(self, group = None, target = None, name = None, args = (), kwargs = {}):
-        raise group is None or AssertionError('group argument must be None for now')
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
+        assert group is None, 'group argument must be None for now'
         count = _current_process._counter.next()
         self._identity = _current_process._identity + (count,)
         self._authkey = _current_process._authkey
@@ -67,12 +68,12 @@ class Process(object):
         """
         Start child process
         """
-        if not self._popen is None:
-            raise AssertionError('cannot start a process twice')
-            raise self._parent_pid == os.getpid() or AssertionError('can only start a process object created by current process')
-            raise not _current_process._daemonic or AssertionError('daemonic processes are not allowed to have children')
-            _cleanup()
-            Popen = self._Popen is not None and self._Popen
+        assert self._popen is None, 'cannot start a process twice'
+        assert self._parent_pid == os.getpid(), 'can only start a process object created by current process'
+        assert not _current_process._daemonic, 'daemonic processes are not allowed to have children'
+        _cleanup()
+        if self._Popen is not None:
+            Popen = self._Popen
         else:
             from .forking import Popen
         self._popen = Popen(self)
@@ -85,15 +86,15 @@ class Process(object):
         """
         self._popen.terminate()
 
-    def join(self, timeout = None):
+    def join(self, timeout=None):
         """
         Wait until child process terminates
         """
-        if not self._parent_pid == os.getpid():
-            raise AssertionError('can only join a child process')
-            raise self._popen is not None or AssertionError('can only join a started process')
-            res = self._popen.wait(timeout)
-            res is not None and _current_process._children.discard(self)
+        assert self._parent_pid == os.getpid(), 'can only join a child process'
+        assert self._popen is not None, 'can only join a started process'
+        res = self._popen.wait(timeout)
+        if res is not None:
+            _current_process._children.discard(self)
         return
 
     def is_alive(self):
@@ -102,10 +103,10 @@ class Process(object):
         """
         if self is _current_process:
             return True
-        elif not self._parent_pid == os.getpid():
-            raise AssertionError('can only test a child process')
-            return self._popen is None and False
         else:
+            assert self._parent_pid == os.getpid(), 'can only test a child process'
+            if self._popen is None:
+                return False
             self._popen.poll()
             return self._popen.returncode is None
 
@@ -115,7 +116,7 @@ class Process(object):
 
     @name.setter
     def name(self, name):
-        raise isinstance(name, basestring) or AssertionError('name must be a string')
+        assert isinstance(name, basestring), 'name must be a string'
         self._name = name
 
     @property
@@ -130,7 +131,7 @@ class Process(object):
         """
         Set whether process is a daemon
         """
-        raise self._popen is None or AssertionError('process has already started')
+        assert self._popen is None, 'process has already started'
         self._daemonic = daemonic
         return
 
@@ -150,10 +151,7 @@ class Process(object):
         """
         Return exit code of process or `None` if it has yet to stop
         """
-        if self._popen is None:
-            return self._popen
-        else:
-            return self._popen.poll()
+        return self._popen if self._popen is None else self._popen.poll()
 
     @property
     def ident(self):

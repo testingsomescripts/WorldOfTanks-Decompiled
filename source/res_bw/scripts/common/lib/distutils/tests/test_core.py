@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_core.py
 """Tests for distutils.core."""
 import StringIO
@@ -35,7 +35,7 @@ class CoreTestCase(support.EnvironGuard, unittest.TestCase):
         elif os.path.isdir(path):
             shutil.rmtree(path)
 
-    def write_setup(self, text, path = test.test_support.TESTFN):
+    def write_setup(self, text, path=test.test_support.TESTFN):
         f = open(path, 'w')
         try:
             f.write(text)

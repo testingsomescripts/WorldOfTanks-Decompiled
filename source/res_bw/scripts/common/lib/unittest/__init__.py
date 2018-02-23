@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/__init__.py
 """
 Python unit testing framework, based on Erich Gamma's JUnit and Kent Beck's

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/dbrecio.py
 """
 File-like objects that read from or write to a bsddb record.
@@ -33,7 +33,7 @@ import string
 
 class DBRecIO:
 
-    def __init__(self, db, key, txn = None):
+    def __init__(self, db, key, txn=None):
         self.db = db
         self.key = key
         self.txn = txn
@@ -53,7 +53,7 @@ class DBRecIO:
         if self.closed:
             raise ValueError, 'I/O operation on closed file'
 
-    def seek(self, pos, mode = 0):
+    def seek(self, pos, mode=0):
         if self.closed:
             raise ValueError, 'I/O operation on closed file'
         if mode == 1:
@@ -67,7 +67,7 @@ class DBRecIO:
             raise ValueError, 'I/O operation on closed file'
         return self.pos
 
-    def read(self, n = -1):
+    def read(self, n=-1):
         if self.closed:
             raise ValueError, 'I/O operation on closed file'
         if n < 0:
@@ -81,7 +81,7 @@ class DBRecIO:
 
     __fixme = '\n    def readline(self, length=None):\n        if self.closed:\n            raise ValueError, "I/O operation on closed file"\n        if self.buflist:\n            self.buf = self.buf + string.joinfields(self.buflist, \'\')\n            self.buflist = []\n        i = string.find(self.buf, \'\n\', self.pos)\n        if i < 0:\n            newpos = self.len\n        else:\n            newpos = i+1\n        if length is not None:\n            if self.pos + length < newpos:\n                newpos = self.pos + length\n        r = self.buf[self.pos:newpos]\n        self.pos = newpos\n        return r\n\n    def readlines(self, sizehint = 0):\n        total = 0\n        lines = []\n        line = self.readline()\n        while line:\n            lines.append(line)\n            total += len(line)\n            if 0 < sizehint <= total:\n                break\n            line = self.readline()\n        return lines\n    '
 
-    def truncate(self, size = None):
+    def truncate(self, size=None):
         if self.closed:
             raise ValueError, 'I/O operation on closed file'
         if size is None:

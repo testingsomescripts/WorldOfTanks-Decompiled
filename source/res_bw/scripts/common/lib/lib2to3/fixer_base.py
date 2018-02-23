@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixer_base.py
 """Base class for fixers (optional, but recommended)."""
 import logging
@@ -90,7 +90,7 @@ class BaseFix(object):
         """
         raise NotImplementedError()
 
-    def new_name(self, template = u'xxx_todo_changeme'):
+    def new_name(self, template=u'xxx_todo_changeme'):
         """Return a string suitable for use as an identifier
         
         The new name is guaranteed not to conflict with other identifiers.
@@ -108,7 +108,7 @@ class BaseFix(object):
             self.log.append('### In file %s ###' % self.filename)
         self.log.append(message)
 
-    def cannot_convert(self, node, reason = None):
+    def cannot_convert(self, node, reason=None):
         """Warn the user that a given chunk of code is not valid Python 3,
         but that it cannot be converted automatically.
         

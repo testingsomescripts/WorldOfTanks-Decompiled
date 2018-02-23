@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/markers.py
 from functools import partial
 import math
@@ -9,6 +9,7 @@ from account_helpers.settings_core import g_settingsCore
 import constants
 import GUI
 import BigWorld
+from gui.battle_control.arena_info import getGasAttackSettings
 from gui.battle_control.dyn_squad_functional import IDynSquadEntityClient
 from gui.battle_control.gas_attack_controller import GAS_ATTACK_STATE
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -79,7 +80,9 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         self.colorManager = ColorSchemeManager._ColorSchemeManager()
         self.colorManager.populateUI(weakref.proxy(self))
         self.__plugins = PluginsCollection(self)
-        plugins = {'equipments': _EquipmentsMarkerPlugin}
+        plugins = {}
+        if not arena_info.isEventBattle():
+            plugins['equipments'] = _EquipmentsMarkerPlugin
         if arena_info.hasFlags():
             plugins['flags'] = _FlagsMarkerPlugin
         if arena_info.hasRepairPoints():
@@ -100,14 +103,14 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         marker = self.__markers[vID]
         self.invokeMarker(marker.id, 'setEntityName', [PLAYER_GUI_PROPS.squadman.name()])
 
-    def setScaleProps(self, minScale = 40, maxScale = 100, defScale = 100, speed = 3.0):
+    def setScaleProps(self, minScale=40, maxScale=100, defScale=100, speed=3.0):
         if constants.IS_DEVELOPMENT:
             self.__ownUI.scaleProperties = (minScale,
              maxScale,
              defScale,
              speed)
 
-    def setAlphaProps(self, minAlpha = 40, maxAlpha = 100, defAlpha = 100, speed = 3.0):
+    def setAlphaProps(self, minAlpha=40, maxAlpha=100, defAlpha=100, speed=3.0):
         if constants.IS_DEVELOPMENT:
             self.__ownUI.alphaProperties = (minAlpha,
              maxAlpha,
@@ -177,17 +180,9 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         battleCtx = g_sessionProvider.getCtx()
         fullName, pName, clanAbbrev, regionCode, vehShortName = battleCtx.getFullPlayerNameWithParts(vProxy.id)
         vType = vInfo.vehicleType
-        squadIcon = ''
-        if arena_info.getIsMultiteam() and vInfo.isSquadMan():
+        teamIdx = -1
+        if arena_info.isFalloutMultiTeam() and vInfo.isSquadMan():
             teamIdx = g_sessionProvider.getArenaDP().getMultiTeamsIndexes()[vInfo.team]
-            squadIconTemplate = '%s%d'
-            if guiProps.name() == 'squadman':
-                squadTeam = 'my'
-            elif isAlly:
-                squadTeam = 'ally'
-            else:
-                squadTeam = 'enemy'
-            squadIcon = squadIconTemplate % (squadTeam, teamIdx)
         self.invokeMarker(markerID, 'init', [vType.classTag,
          vType.iconPath,
          vehShortName,
@@ -202,8 +197,8 @@ class MarkersManager(Flash, IDynSquadEntityClient):
          speaking,
          hunting,
          guiProps.base,
-         g_ctfManager.isFlagBearer(vInfo.vehicleID),
-         squadIcon])
+         g_ctfManager.getVehicleCarriedFlagID(vInfo.vehicleID) is not None,
+         teamIdx])
         return markerID
 
     def removeVehicleMarker(self, vehicleID):
@@ -223,7 +218,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         if self.__ownUI:
             self.__ownUI.delMarker(handle)
 
-    def updateMarkerState(self, handle, newState, isImmediate = False):
+    def updateMarkerState(self, handle, newState, isImmediate=False):
         self.invokeMarker(handle, 'updateState', [newState, isImmediate])
 
     def showActionMarker(self, handle, newState):
@@ -246,7 +241,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         marker = self.__markers[vID]
         self.invokeMarker(marker.id, 'setSpeaking', [flag])
 
-    def updateMarkersScale(self, scale = None):
+    def updateMarkersScale(self, scale=None):
         if self.__ownUIProxy() is not None:
             if scale is None:
                 self.__ownUIProxy().markerSetScale(g_settingsCore.interfaceScale.get())
@@ -259,11 +254,11 @@ class MarkersManager(Flash, IDynSquadEntityClient):
             return
         marker = self.__markers[vID]
         ctx = g_sessionProvider.getCtx()
-        if not ctx.isTeamKiller(vID=vID) or ctx.isSquadMan(vID=vID) and not arena_info.isEventBattle():
+        if not ctx.isTeamKiller(vID=vID) or ctx.isSquadMan(vID=vID) and not arena_info.isFalloutBattle():
             return
         self.invokeMarker(marker.id, 'setEntityName', [PLAYER_GUI_PROPS.teamKiller.name()])
 
-    def invokeMarker(self, handle, function, args = None):
+    def invokeMarker(self, handle, function, args=None):
         if handle != -1:
             self.__ownUI.markerInvoke(handle, (function, args))
 
@@ -285,7 +280,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
         for marker in self.__markers.itervalues():
             self.invokeMarker(marker.id, 'updateMarkerSettings')
 
-    def __invokeCanvas(self, function, args = None):
+    def __invokeCanvas(self, function, args=None):
         if args is None:
             args = []
         self.call('battle.vehicleMarkersCanvas.' + function, args)
@@ -302,9 +297,7 @@ class MarkersManager(Flash, IDynSquadEntityClient):
             return _DAMAGE_TYPE.FROM_SQUAD
         if entityName == PLAYER_GUI_PROPS.ally:
             return _DAMAGE_TYPE.FROM_ALLY
-        if entityName == PLAYER_GUI_PROPS.enemy:
-            return _DAMAGE_TYPE.FROM_ENEMY
-        return _DAMAGE_TYPE.FROM_UNKNOWN
+        return _DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else _DAMAGE_TYPE.FROM_UNKNOWN
 
     def __onVehicleMarkerAdded(self, vProxy, vInfo, guiProps):
         self.addVehicleMarker(vProxy, vInfo, guiProps)
@@ -415,7 +408,7 @@ class _FlagsMarkerPlugin(IPlugin):
         self.__capturePoints = []
         self.__spawnPoints = []
         self.__captureMarkers = []
-        self.__playerTeam = 0
+        self.__playerTeam = NEUTRAL_TEAM
         self.__isTeamPlayer = False
 
     def init(self):
@@ -442,7 +435,7 @@ class _FlagsMarkerPlugin(IPlugin):
         arena = player.arena
         arenaType = arena.arenaType
         self.__playerTeam = player.team
-        self.__isTeamPlayer = self.__playerTeam in arenaType.squadTeamNumbers if arena_info.getIsMultiteam(arenaType) else True
+        self.__isTeamPlayer = self.__playerTeam in arenaType.squadTeamNumbers if arena_info.isFalloutMultiTeam() else True
         self.__capturePoints = arenaType.flagAbsorptionPoints
         self.__spawnPoints = arenaType.flagSpawnPoints
         isFlagBearer = False
@@ -454,7 +447,7 @@ class _FlagsMarkerPlugin(IPlugin):
                     self.__onFlagSpawning(flagID, flagInfo['respawnTime'])
                 elif flagState in (constants.FLAG_STATE.ON_GROUND, constants.FLAG_STATE.ON_SPAWN):
                     self.__onSpawnedAtBase(flagID, flagInfo['team'], flagInfo['minimapPos'])
-            elif vehicleID == playerVehicleID:
+            if vehicleID == playerVehicleID:
                 isFlagBearer = True
 
         if isFlagBearer:
@@ -560,10 +553,10 @@ class _FlagsMarkerPlugin(IPlugin):
                 self.__delCaptureMarkers()
         return
 
-    def __getFlagMarkerType(self, flagID, flagTeam = 0):
+    def __getFlagMarkerType(self, flagID, flagTeam=0):
         player = BigWorld.player()
         currentTeam = player.team
-        if flagTeam > 0:
+        if flagTeam != NEUTRAL_TEAM:
             if flagTeam == currentTeam:
                 return _FLAG_TYPE.ALLY
             return _FLAG_TYPE.ENEMY
@@ -575,6 +568,7 @@ class _RepairsMarkerPlugin(IPlugin):
     def __init__(self, parentObj):
         super(_RepairsMarkerPlugin, self).__init__(parentObj)
         self.__markers = {}
+        self.__playerTeam = NEUTRAL_TEAM
 
     def init(self):
         super(_RepairsMarkerPlugin, self).init()
@@ -586,24 +580,28 @@ class _RepairsMarkerPlugin(IPlugin):
 
     def start(self):
         player = BigWorld.player()
+        playerTeam = player.team
         arena = player.arena
         arenaType = arena.arenaType
         for pointID, point in enumerate(arenaType.repairPoints):
             repairPos = point['position']
+            team = point['team']
             isActive = True
+            isAlly = team in (NEUTRAL_TEAM, playerTeam)
             callbackID = None
             _, handle = self._parentObj.createStaticMarker(repairPos + _MARKER_POSITION_ADJUSTMENT, _REPAIR_MARKER_TYPE)
-            self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown'])
+            self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown', isAlly])
             self.__markers[pointID] = (handle,
              callbackID,
              repairPos,
-             isActive)
+             isActive,
+             isAlly)
 
         super(_RepairsMarkerPlugin, self).start()
         return
 
     def stop(self):
-        for handle, callbackID, _, _ in self.__markers.values():
+        for handle, callbackID, _, _, _ in self.__markers.values():
             self._parentObj.destroyStaticMarker(handle)
             if callbackID is not None:
                 BigWorld.cancelCallback(callbackID)
@@ -614,12 +612,13 @@ class _RepairsMarkerPlugin(IPlugin):
 
     def __initTimer(self, timer, repairID):
         timer -= 1
-        handle, _, repairPos, wasActive = self.__markers[repairID]
+        handle, _, repairPos, wasActive, isAlly = self.__markers[repairID]
         if timer < 0:
             self.__markers[repairID] = (handle,
              None,
              repairPos,
-             wasActive)
+             wasActive,
+             isAlly)
             return
         else:
             self._parentObj.invokeMarker(handle, 'setLabel', [time_utils.getTimeLeftFormat(timer)])
@@ -627,32 +626,34 @@ class _RepairsMarkerPlugin(IPlugin):
             self.__markers[repairID] = (handle,
              callbackId,
              repairPos,
-             wasActive)
+             wasActive,
+             isAlly)
             return
 
-    def __onStateChanged(self, repairPointID, action, timeLeft = 0):
+    def __onStateChanged(self, repairPointID, action, timeLeft=0):
         if repairPointID not in self.__markers:
             LOG_ERROR('Got repair point state changed for not available repair point: ', repairPointID, action, timeLeft)
             return
         else:
             if action in (constants.REPAIR_POINT_ACTION.START_REPAIR, constants.REPAIR_POINT_ACTION.COMPLETE_REPAIR, constants.REPAIR_POINT_ACTION.BECOME_READY):
-                handle, callbackID, repairPos, wasActive = self.__markers[repairPointID]
+                handle, callbackID, repairPos, wasActive, isAlly = self.__markers[repairPointID]
                 isActive = action in (constants.REPAIR_POINT_ACTION.START_REPAIR, constants.REPAIR_POINT_ACTION.BECOME_READY)
                 if wasActive == isActive:
                     return
                 if callbackID is not None:
                     BigWorld.cancelCallback(callbackID)
                     callbackID = None
-                self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown'])
+                self._parentObj.invokeMarker(handle, 'setIcon', ['active' if isActive else 'cooldown', isAlly])
                 self._parentObj.invokeMarker(handle, 'setLabel', [''])
                 self.__markers[repairPointID] = (handle,
                  callbackID,
                  repairPos,
-                 isActive)
+                 isActive,
+                 isAlly)
                 if not isActive:
                     self.__initTimer(int(math.ceil(timeLeft)), repairPointID)
             elif action == constants.REPAIR_POINT_ACTION.BECOME_DISABLED:
-                handle, callbackID, _, _ = self.__markers.pop(repairPointID)
+                handle, callbackID, _, _, _ = self.__markers.pop(repairPointID)
                 self._parentObj.destroyStaticMarker(handle)
                 if callbackID is not None:
                     BigWorld.cancelCallback(callbackID)
@@ -762,7 +763,10 @@ class _GasAttackSafeZonePlugin(IPlugin):
         super(_GasAttackSafeZonePlugin, self).__init__(parentObj)
         self.__safeZoneMarkerHandle = None
         self.__isMarkerVisible = False
-        self.__settings = BigWorld.player().arena.arenaType.gasAttackSettings
+        self.__settings = getGasAttackSettings()
+        if self.__settings is None:
+            from GasAttackSettings import GasAttackSettings
+            self.__settings = GasAttackSettings(180, 10.0, (27.0147, 116.592636, -176.879059), 600.0, 500.0, 120.0)
         return
 
     def init(self):
@@ -771,8 +775,10 @@ class _GasAttackSafeZonePlugin(IPlugin):
         self.__initMarker(self.__settings.position)
 
     def fini(self):
+        self.__settings = None
         g_sessionProvider.getGasAttackCtrl().onUpdated -= self.__onGasAttackUpdate
         super(_GasAttackSafeZonePlugin, self).fini()
+        return
 
     def start(self):
         super(_GasAttackSafeZonePlugin, self).start()
@@ -798,5 +804,4 @@ class _GasAttackSafeZonePlugin(IPlugin):
         return
 
     def __onGasAttackUpdate(self, state):
-        isVisible = not state.state == GAS_ATTACK_STATE.INSIDE_SAFE_ZONE
-        self.__updateSafeZoneMarker(isVisible)
+        self.__updateSafeZoneMarker(state.state in GAS_ATTACK_STATE.VISIBLE)

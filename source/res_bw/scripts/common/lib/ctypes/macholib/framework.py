@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/framework.py
 """
 Generic framework path manipulation
@@ -28,15 +28,12 @@ def framework_info(filename):
     if not present
     """
     is_framework = STRICT_FRAMEWORK_RE.match(filename)
-    if not is_framework:
-        return None
-    else:
-        return is_framework.groupdict()
+    return None if not is_framework else is_framework.groupdict()
 
 
 def test_framework_info():
 
-    def d(location = None, name = None, shortname = None, version = None, suffix = None):
+    def d(location=None, name=None, shortname=None, version=None, suffix=None):
         return dict(location=location, name=name, shortname=shortname, version=version, suffix=suffix)
 
     assert framework_info('completely/invalid') is None

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/macpath.py
 """Pathname and path-related operations for the Macintosh."""
 import os
@@ -173,8 +173,7 @@ def normpath(s):
                 i = i - 1
             else:
                 raise norm_error, 'Cannot use :: immediately after volume name'
-        else:
-            i = i + 1
+        i = i + 1
 
     s = ':'.join(comps)
     if s[-1] == ':' and len(comps) > 2 and s != ':' * len(s):
