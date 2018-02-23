@@ -288,14 +288,20 @@ class NotificationItem(object):
         return hash(self.asString)
 
 
-_VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?([0-9]+\\.[0-9]+\\.[0-9]+)(_[0-9]+)?$')
+_VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?(([0-9]+\\.){2,4}[0-9]+)(_[0-9]+)?$')
 
 def parseVersion(version):
+    """ Parses given version with formatter reg and returns realm code,
+    main and patch version
+    
+    :param version: Account.def/Properties/requiredVersion
+    :return: (realm_code, main_version, patch_version) or None
+    """
     result = _VERSION_REGEXP.search(version)
     if result is None:
         return
     else:
-        realmCode, mainVersion, patchVersion = result.groups()
+        realmCode, mainVersion, _, patchVersion = result.groups()
         if mainVersion:
             realmCode = realmCode.replace('_', '') if realmCode else ''
             patchVersion = int(patchVersion.replace('_', '')) if patchVersion else 0
@@ -320,6 +326,20 @@ def isValidClientVersion(clientVersion, serverVersion):
         if clientPatchVersion < serverPatchVersion:
             return False
     return True
+
+
+def getClientMainVersion():
+    mainVersion = None
+    try:
+        try:
+            _, clentVersion = readClientServerVersion()
+            parsedVersion = parseVersion(clentVersion)
+            _, mainVersion, _ = parsedVersion
+        except:
+            LOG_ERROR('Can not read or parse client-server version')
+
+    finally:
+        return mainVersion
 
 
 def readClientServerVersion():

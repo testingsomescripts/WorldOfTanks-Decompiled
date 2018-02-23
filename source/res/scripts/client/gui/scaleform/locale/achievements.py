@@ -3,6 +3,12 @@
 
 
 class ACHIEVEMENTS(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
     MARKSONGUN_DESCR_PARAM_LABEL = '#achievements:marksOnGun/descr/param/label'
     MARKSONGUN_DESCR_PARAM_VALUE = '#achievements:marksOnGun/descr/param/value'
     ACHIEVEMENT_RANK1 = '#achievements:achievement/rank1'
@@ -82,6 +88,8 @@ class ACHIEVEMENTS(object):
     STRATEGICOPERATIONS = '#achievements:strategicOperations'
     STRATEGICOPERATIONS_DESCR = '#achievements:strategicOperations_descr'
     STRATEGICOPERATIONS_CONDITION = '#achievements:strategicOperations_condition'
+    MARKI100YEARS = '#achievements:markI100Years'
+    MARKI100YEARS_DESCR = '#achievements:markI100Years_descr'
     MEDALCRUCIALCONTRIBUTION = '#achievements:medalCrucialContribution'
     MEDALCRUCIALCONTRIBUTION_DESCR = '#achievements:medalCrucialContribution_descr'
     MEDALCRUCIALCONTRIBUTION_CONDITION = '#achievements:medalCrucialContribution_condition'
@@ -249,6 +257,9 @@ class ACHIEVEMENTS(object):
     MECHANICENGINEER7 = '#achievements:mechanicEngineer7'
     MECHANICENGINEER7_DESCR = '#achievements:mechanicEngineer7_descr'
     MECHANICENGINEER7_CONDITION = '#achievements:mechanicEngineer7_condition'
+    MECHANICENGINEER8 = '#achievements:mechanicEngineer8'
+    MECHANICENGINEER8_DESCR = '#achievements:mechanicEngineer8_descr'
+    MECHANICENGINEER8_CONDITION = '#achievements:mechanicEngineer8_condition'
     TANKEXPERT = '#achievements:tankExpert'
     TANKEXPERT_DESCR = '#achievements:tankExpert_descr'
     TANKEXPERT0 = '#achievements:tankExpert0'
@@ -267,6 +278,8 @@ class ACHIEVEMENTS(object):
     TANKEXPERT6_DESCR = '#achievements:tankExpert6_descr'
     TANKEXPERT7 = '#achievements:tankExpert7'
     TANKEXPERT7_DESCR = '#achievements:tankExpert7_descr'
+    TANKEXPERT8 = '#achievements:tankExpert8'
+    TANKEXPERT8_DESCR = '#achievements:tankExpert8_descr'
     TITLESNIPER = '#achievements:titleSniper'
     TITLESNIPER_DESCR = '#achievements:titleSniper_descr'
     TITLESNIPER_CONDITION = '#achievements:titleSniper_condition'
@@ -475,6 +488,12 @@ class ACHIEVEMENTS(object):
     WFC2014 = '#achievements:WFC2014'
     WFC2014_DESCR = '#achievements:WFC2014_descr'
     WFC2014_CONDITION = '#achievements:WFC2014_condition'
+    EFC2016 = '#achievements:EFC2016'
+    EFC2016_DESCR = '#achievements:EFC2016_descr'
+    EFC2016_CONDITION = '#achievements:EFC2016_condition'
+    EFC2016GOLEADOR = '#achievements:EFC2016Goleador'
+    EFC2016GOLEADOR_DESCR = '#achievements:EFC2016Goleador_descr'
+    EFC2016GOLEADOR_CONDITION = '#achievements:EFC2016Goleador_condition'
     DEATHTRACK = '#achievements:deathTrack'
     DEATHTRACK_DESCR = '#achievements:deathTrack_descr'
     DEATHTRACK_CONDITION = '#achievements:deathTrack_condition'
@@ -541,6 +560,18 @@ class ACHIEVEMENTS(object):
     SAURONEYE = '#achievements:sauronEye'
     SAURONEYE_DESCR = '#achievements:sauronEye_descr'
     SAURONEYE_CONDITION = '#achievements:sauronEye_condition'
+    MARKIPROTECTOR = '#achievements:markIProtector'
+    MARKIPROTECTOR_DESCR = '#achievements:markIProtector_descr'
+    MARKIPROTECTOR_CONDITION = '#achievements:markIProtector_condition'
+    MARKIBASEPROTECTOR = '#achievements:markIBaseProtector'
+    MARKIBASEPROTECTOR_DESCR = '#achievements:markIBaseProtector_descr'
+    MARKIBASEPROTECTOR_CONDITION = '#achievements:markIBaseProtector_condition'
+    MARKIBOMBERMAN = '#achievements:markIBomberman'
+    MARKIBOMBERMAN_DESCR = '#achievements:markIBomberman_descr'
+    MARKIBOMBERMAN_CONDITION = '#achievements:markIBomberman_condition'
+    MARKIREPAIRER = '#achievements:markIRepairer'
+    MARKIREPAIRER_DESCR = '#achievements:markIRepairer_descr'
+    MARKIREPAIRER_CONDITION = '#achievements:markIRepairer_condition'
     HISTBATTLE1_HISTORYLESSONS = '#achievements:histBattle1_historyLessons'
     HISTBATTLE1_HISTORYLESSONS_DESCR = '#achievements:histBattle1_historyLessons_descr'
     HISTBATTLE1_HISTORYLESSONS_CONDITION = '#achievements:histBattle1_historyLessons_condition'
@@ -675,6 +706,8 @@ class ACHIEVEMENTS(object):
      STRATEGICOPERATIONS,
      STRATEGICOPERATIONS_DESCR,
      STRATEGICOPERATIONS_CONDITION,
+     MARKI100YEARS,
+     MARKI100YEARS_DESCR,
      MEDALCRUCIALCONTRIBUTION,
      MEDALCRUCIALCONTRIBUTION_DESCR,
      MEDALCRUCIALCONTRIBUTION_CONDITION,
@@ -842,6 +875,9 @@ class ACHIEVEMENTS(object):
      MECHANICENGINEER7,
      MECHANICENGINEER7_DESCR,
      MECHANICENGINEER7_CONDITION,
+     MECHANICENGINEER8,
+     MECHANICENGINEER8_DESCR,
+     MECHANICENGINEER8_CONDITION,
      TANKEXPERT,
      TANKEXPERT_DESCR,
      TANKEXPERT0,
@@ -860,6 +896,8 @@ class ACHIEVEMENTS(object):
      TANKEXPERT6_DESCR,
      TANKEXPERT7,
      TANKEXPERT7_DESCR,
+     TANKEXPERT8,
+     TANKEXPERT8_DESCR,
      TITLESNIPER,
      TITLESNIPER_DESCR,
      TITLESNIPER_CONDITION,
@@ -1068,6 +1106,12 @@ class ACHIEVEMENTS(object):
      WFC2014,
      WFC2014_DESCR,
      WFC2014_CONDITION,
+     EFC2016,
+     EFC2016_DESCR,
+     EFC2016_CONDITION,
+     EFC2016GOLEADOR,
+     EFC2016GOLEADOR_DESCR,
+     EFC2016GOLEADOR_CONDITION,
      DEATHTRACK,
      DEATHTRACK_DESCR,
      DEATHTRACK_CONDITION,
@@ -1134,6 +1178,18 @@ class ACHIEVEMENTS(object):
      SAURONEYE,
      SAURONEYE_DESCR,
      SAURONEYE_CONDITION,
+     MARKIPROTECTOR,
+     MARKIPROTECTOR_DESCR,
+     MARKIPROTECTOR_CONDITION,
+     MARKIBASEPROTECTOR,
+     MARKIBASEPROTECTOR_DESCR,
+     MARKIBASEPROTECTOR_CONDITION,
+     MARKIBOMBERMAN,
+     MARKIBOMBERMAN_DESCR,
+     MARKIBOMBERMAN_CONDITION,
+     MARKIREPAIRER,
+     MARKIREPAIRER_DESCR,
+     MARKIREPAIRER_CONDITION,
      HISTBATTLE1_HISTORYLESSONS,
      HISTBATTLE1_HISTORYLESSONS_DESCR,
      HISTBATTLE1_HISTORYLESSONS_CONDITION,
@@ -1194,14 +1250,22 @@ class ACHIEVEMENTS(object):
 
     @staticmethod
     def achievement(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#achievements:achievement/%s' % key
         if outcome not in ACHIEVEMENTS.ACHIEVEMENT_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome
 
     @staticmethod
     def all(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#achievements:%s' % key
         if outcome not in ACHIEVEMENTS.all_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
+            raise Exception('locale key "' + outcome + '" was not found')
         return outcome

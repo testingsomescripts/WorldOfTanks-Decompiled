@@ -2,24 +2,24 @@
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
 from collections import namedtuple
 import functools
+import copy
+from functools import partial
+import math
+import weakref
+import json
 from AvatarInputHandler.cameras import FovExtended
-import BigWorld
 import Math
 import ResMgr
 import Keys
-import copy
-import MusicController
+import MusicControllerWWISE
+from vehicle_systems.tankStructure import VehiclePartsTuple
 from account_helpers.settings_core import g_settingsCore
 from debug_utils import *
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
-from functools import partial
 from gui import g_tankActiveCamouflage
 from gui import game_control, g_keyEventHandlers, g_mouseEventHandlers
 import items.vehicles
-import math
-import time
 import VehicleStickers
-from HangarVehicle import HangarVehicle
 import constants
 from PlayerEvents import g_playerEvents
 from ConnectionManager import connectionManager
@@ -29,11 +29,10 @@ from AvatarInputHandler import mathUtils
 import MapActivities
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
 import TankHangarShadowProxy
-import weakref
 import SoundGroups
-import json
-import VehicleAppearance
-from VehicleEffects import RepaintParams
+from vehicle_systems import camouflages, model_assembler
+from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.CompoundAppearance import CompoundAppearance
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
@@ -261,6 +260,17 @@ class ClientHangarSpace():
         self.__vAppearance = _VehicleAppearance(self.__spaceId, self.__vEntityId, self)
         self.__yawCameraFilter = HangarCameraYawFilter(math.radians(_CFG['cam_yaw_constr'][0]), math.radians(_CFG['cam_yaw_constr'][1]), _CFG['cam_sens'])
         self.__setupCamera()
+        self.setDefaultCameraDistance()
+        self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
+        self.__destroyFunc = None
+        MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
+        g_keyEventHandlers.add(self.handleKeyEvent)
+        g_mouseEventHandlers.add(self.handleMouseEventGlobal)
+        g_postProcessing.enable('hangar')
+        BigWorld.pauseDRRAutoscaling(True)
+        return
+
+    def setDefaultCameraDistance(self):
         distConstrs = _CFG['cam_dist_constr']
         previewConstr = _CFG.get('preview_cam_dist_constr', distConstrs)
         if distConstrs is not None:
@@ -270,14 +280,10 @@ class ClientHangarSpace():
                 self.__camDistConstr = (distConstrs, distConstrs)
         else:
             self.__camDistConstr = ((0.0, 0.0), (0.0, 0.0))
-        self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
-        self.__destroyFunc = None
-        MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
-        g_keyEventHandlers.add(self.handleKeyEvent)
-        g_mouseEventHandlers.add(self.handleMouseEventGlobal)
-        g_postProcessing.enable('hangar')
-        BigWorld.pauseDRRAutoscaling(True)
         return
+
+    def setCameraDistance(self, distance):
+        self.__camDistConstr = ((distance, distance), (distance, distance))
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
         if self.__vAppearance is None:
@@ -336,10 +342,12 @@ class ClientHangarSpace():
 
     def handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
+            from gui.shared.utils.HangarSpace import g_hangarSpace
             self.__isMouseDown = event.isKeyDown()
             if self.__isMouseDown:
-                from gui.shared.utils.HangarSpace import g_hangarSpace
                 g_hangarSpace.leftButtonClicked()
+            elif event.isKeyUp():
+                g_hangarSpace.leftButtonReleased()
         return False
 
     def handleMouseEventGlobal(self, event):
@@ -415,44 +423,47 @@ class ClientHangarSpace():
         return
 
     def updateCameraByMouseMove(self, dx, dy, dz):
-        if self.__selectedEmblemInfo is not None:
-            self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
-            self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
-            if self.__locatedOnEmbelem:
-                self.__cam.maxDistHalfLife = 0.0
-            else:
-                self.__cam.maxDistHalfLife = _CFG['cam_fluency']
-        sourceMat = Math.Matrix(self.__cam.source)
-        yaw = sourceMat.yaw
-        pitch = sourceMat.pitch
-        dist = self.__cam.pivotMaxDist
-        currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
-        currentYaw = currentMatrix.yaw
-        yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
-        pitch -= dy * _CFG['cam_sens']
-        dist -= dz * _CFG['cam_sens']
-        pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
-        prevDist = dist
-        distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
-        dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
-        if self.__boundingRadius is not None:
-            boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
-            dist = dist if dist > boundingRadius else boundingRadius
-        if dist > prevDist and dz > 0:
+        if self.__cam != BigWorld.camera():
+            return
+        else:
             if self.__selectedEmblemInfo is not None:
-                self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
-                return
-        self.__locatedOnEmbelem = False
-        mat = Math.Matrix()
-        mat.setRotateYPR((yaw, pitch, 0.0))
-        self.__cam.source = mat
-        self.__cam.pivotMaxDist = dist
-        if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
-            relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
-            _, minFov, maxFov = g_settingsCore.getSetting('fov')
-            fov = mathUtils.lerp(minFov, maxFov, relativeDist)
-            BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
-        return
+                self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
+                self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
+                if self.__locatedOnEmbelem:
+                    self.__cam.maxDistHalfLife = 0.0
+                else:
+                    self.__cam.maxDistHalfLife = _CFG['cam_fluency']
+            sourceMat = Math.Matrix(self.__cam.source)
+            yaw = sourceMat.yaw
+            pitch = sourceMat.pitch
+            dist = self.__cam.pivotMaxDist
+            currentMatrix = Math.Matrix(self.__cam.invViewMatrix)
+            currentYaw = currentMatrix.yaw
+            yaw = self.__yawCameraFilter.getNextYaw(currentYaw, yaw, dx)
+            pitch -= dy * _CFG['cam_sens']
+            dist -= dz * _CFG['cam_sens']
+            pitch = mathUtils.clamp(math.radians(_CFG['cam_pitch_constr'][0]), math.radians(_CFG['cam_pitch_constr'][1]), pitch)
+            prevDist = dist
+            distConstr = self.__camDistConstr[1] if self.__selectedEmblemInfo is not None else self.__camDistConstr[0]
+            dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
+            if self.__boundingRadius is not None:
+                boundingRadius = self.__boundingRadius if self.__boundingRadius < distConstr[1] else distConstr[1]
+                dist = dist if dist > boundingRadius else boundingRadius
+            if dist > prevDist and dz > 0:
+                if self.__selectedEmblemInfo is not None:
+                    self.locateCameraOnEmblem(*self.__selectedEmblemInfo)
+                    return
+            self.__locatedOnEmbelem = False
+            mat = Math.Matrix()
+            mat.setRotateYPR((yaw, pitch, 0.0))
+            self.__cam.source = mat
+            self.__cam.pivotMaxDist = dist
+            if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
+                relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
+                _, minFov, maxFov = g_settingsCore.getSetting('fov')
+                fov = mathUtils.lerp(minFov, maxFov, relativeDist)
+                BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
+            return
 
     def spaceLoaded(self):
         return not self.__loadingStatus < 1
@@ -462,7 +473,7 @@ class ClientHangarSpace():
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')
-        MusicController.g_musicController.unloadCustomSounds()
+        MusicControllerWWISE.unloadCustomSounds()
         if self.__cam == BigWorld.camera():
             self.__cam.spaceID = 0
             BigWorld.camera(None)
@@ -535,20 +546,30 @@ class ClientHangarSpace():
         BigWorld.loadResourceListBG(tuple(resources), partial(self.__onFakeShadowLoaded))
 
     def __onFakeShadowLoaded(self, resourceRefs):
-        fakeShadowModel = resourceRefs[_CFG['shadow_model_name']]
-        shadowProxyNodes = [ udo for udo in BigWorld.userDataObjects.values() if isinstance(udo, TankHangarShadowProxy.TankHangarShadowProxy) ]
-        if len(shadowProxyNodes) == 1:
-            shadowProxy = shadowProxyNodes[0]
-            shadowXFormPosition = shadowProxy.position
-            shadowXFormOrientation = (shadowProxy.roll, shadowProxy.pitch, shadowProxy.yaw)
-        else:
-            LOG_DEBUG('Too many TankHangarShadowProxies? Or not enough.')
+        modelName = _CFG['shadow_model_name']
+        fakeShadowModel = None
+        if modelName not in resourceRefs.failedIDs and resourceRefs.has_key(modelName):
+            fakeShadowModel = resourceRefs[modelName]
+        if fakeShadowModel is None:
+            LOG_ERROR('Could not load model %s' % modelName)
             return
-        self.__fakeShadowId = BigWorld.createEntity('OfflineEntity', self.__spaceId, 0, shadowXFormPosition, shadowXFormOrientation, dict())
-        entity = BigWorld.entity(self.__fakeShadowId)
-        entity.model = fakeShadowModel
-        self.modifyFakeShadowScale(self.__fakeShadowScale)
-        self.modifyFakeShadowAsset(self.__fakeShadowAsset)
+        else:
+            shadowProxyNodes = [ udo for udo in BigWorld.userDataObjects.values() if isinstance(udo, TankHangarShadowProxy.TankHangarShadowProxy) ]
+            if len(shadowProxyNodes) == 1:
+                shadowProxy = shadowProxyNodes[0]
+                shadowXFormPosition = shadowProxy.position
+                shadowXFormOrientation = (shadowProxy.roll, shadowProxy.pitch, shadowProxy.yaw)
+            else:
+                LOG_DEBUG('Too many TankHangarShadowProxies? Or not enough.')
+                return
+            self.__fakeShadowId = BigWorld.createEntity('OfflineEntity', self.__spaceId, 0, shadowXFormPosition, shadowXFormOrientation, dict())
+            entity = BigWorld.entity(self.__fakeShadowId)
+            entity.model = fakeShadowModel
+            entity.model.position = shadowProxy.position
+            entity.model.yaw = shadowProxy.yaw
+            self.modifyFakeShadowScale(self.__fakeShadowScale)
+            self.modifyFakeShadowAsset(self.__fakeShadowAsset)
+            return
 
     def __getFakeShadowModel(self):
         fakeShadowId = self.__fakeShadowId
@@ -588,17 +609,15 @@ class _VehicleAppearance():
         self.__curBuildInd = 0
         self.__vDesc = None
         self.__vState = None
-        self.__componentIDs = {}
+        self.__fashions = VehiclePartsTuple(None, None, None, None)
         self.__spaceId = spaceId
         self.__vEntityId = vEntityId
         self.__onLoadedCallback = None
         self.__emblemsAlpha = _CFG['emblems_alpha_undamaged']
-        self.__models = ()
         self.__vehicleStickers = None
         self.__isVehicleDestroyed = False
         self.__smCb = None
         self.__smRemoveCb = None
-        self.__setupModelCb = None
         self.__hangarSpace = weakref.proxy(hangarSpace)
         self.__removeHangarShadowMap()
         from account_helpers.settings_core.SettingsCore import g_settingsCore
@@ -617,6 +636,9 @@ class _VehicleAppearance():
             self.__onLoadedCallback = None
             self.__isLoaded = False
             self.__startBuild(self.__vDesc, self.__vState)
+        entity = BigWorld.entity(self.__vEntityId)
+        if entity is not None:
+            entity.releaseBspModels()
         return
 
     def destroy(self):
@@ -626,15 +648,12 @@ class _VehicleAppearance():
         self.__isLoaded = False
         self.__curBuildInd = 0
         self.__vEntityId = None
-        self.__componentIDs = {}
         if self.__smCb is not None:
             BigWorld.cancelCallback(self.__smCb)
             self.__smCb = None
         if self.__smRemoveCb is not None:
             BigWorld.cancelCallback(self.__smRemoveCb)
             self.__smRemoveCb = None
-        if self.__setupModelCb is not None:
-            BigWorld.cancelCallback(self.__setupModelCb)
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
@@ -649,11 +668,7 @@ class _VehicleAppearance():
         self.__vState = vState
         self.__resources = {}
         self.__vehicleStickers = None
-        self.__componentIDs = {'chassis': vDesc.chassis['models'][vState],
-         'hull': vDesc.hull['models'][vState],
-         'turret': vDesc.turret['models'][vState],
-         'gun': vDesc.gun['models'][vState],
-         'camouflageExclusionMask': vDesc.type.camouflageExclusionMask}
+        camouflageResources = {'camouflageExclusionMask': vDesc.type.camouflageExclusionMask}
         customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)
         if customization is not None and vDesc.camouflages is not None:
             activeCamo = g_tankActiveCamouflage['historical'].get(vDesc.type.compactDescr)
@@ -662,17 +677,19 @@ class _VehicleAppearance():
             camouflageID = vDesc.camouflages[activeCamo][0]
             camouflageDesc = customization['camouflages'].get(camouflageID)
             if camouflageDesc is not None:
-                self.__componentIDs['camouflageTexture'] = camouflageDesc['texture']
+                camouflageResources['camouflageTexture'] = camouflageDesc['texture']
         if vState == 'undamaged':
             self.__emblemsAlpha = _CFG['emblems_alpha_undamaged']
             self.__isVehicleDestroyed = False
         else:
             self.__emblemsAlpha = _CFG['emblems_alpha_damaged']
             self.__isVehicleDestroyed = True
-        resources = self.__componentIDs.values()
+        resources = camouflageResources.values()
         splineDesc = vDesc.chassis['splineDesc']
         if splineDesc is not None:
             resources.extend(splineDesc.values())
+        from vehicle_systems import model_assembler
+        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, self.__vState, self.__spaceId))
         BigWorld.loadResourceListBG(tuple(resources), partial(self.__onResourcesLoaded, self.__curBuildInd))
         return
 
@@ -708,32 +725,20 @@ class _VehicleAppearance():
 
     def __assembleModel(self):
         resources = self.__resources
-        compIDs = self.__componentIDs
-        chassis = resources[compIDs['chassis']]
-        hull = resources[compIDs['hull']]
-        turret = resources[compIDs['turret']]
-        gun = resources[compIDs['gun']]
-        self.__models = (chassis,
-         hull,
-         turret,
-         gun)
-        chassis.node(self.__ROOT_NODE_NAME).attach(hull)
-        turretJointName = self.__vDesc.hull['turretHardPoints'][0]
-        hull.node(turretJointName).attach(turret)
-        turret.node('HP_gunJoint').attach(gun)
+        self.__model = resources[self.__vDesc.name]
         self.__setupEmblems(self.__vDesc)
-        self.__vehicleStickers.show = False
         if not self.__isVehicleDestroyed:
-            fashion = BigWorld.WGVehicleFashion(False, _CFG['v_scale'], False)
-            VehicleAppearance.setupTracksFashion(fashion, self.__vDesc, self.__isVehicleDestroyed)
-            chassis.wg_fashion = fashion
-            fashion.initialUpdateTracks(1.0, 10.0)
-            VehicleAppearance.setupSplineTracks(fashion, self.__vDesc, chassis, self.__resources)
-        for model in self.__models:
-            model.visible = False
-            model.visibleAttachments = False
-
-        return chassis
+            self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False, _CFG['v_scale'], True, 'wheeledVehicle' in self.__vDesc.type.tags), None, None, None)
+            import VehicleUtils
+            VehicleUtils.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
+            self.__model.setupFashions(self.__fashions.stripEmpty())
+            chassisFashion = self.__fashions.chassis
+            chassisFashion.initialUpdateTracks(1.0, 10.0)
+            VehicleUtils.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
+        else:
+            self.__fashions = VehiclePartsTuple(None, None, None, None)
+        self.updateCamouflage()
+        return self.__model
 
     def __removeHangarShadowMap(self):
         if self.__smCb is not None:
@@ -789,13 +794,7 @@ class _VehicleAppearance():
             insigniaRank = self.__getThisVehicleDossierInsigniaRank()
         self.__vehicleStickers = VehicleStickers.VehicleStickers(vDesc, insigniaRank)
         self.__vehicleStickers.alpha = self.__emblemsAlpha
-        chassis = self.__models[0]
-        hull = self.__models[1]
-        turret = self.__models[2]
-        gun = self.__models[3]
-        turretJointName = self.__vDesc.hull['turretHardPoints'][0]
-        modelsWithParents = ((hull, chassis.node(self.__ROOT_NODE_NAME)), (turret, hull.node(turretJointName)), (gun, turret.node('HP_gunJoint')))
-        self.__vehicleStickers.attach(modelsWithParents, self.__isVehicleDestroyed, False)
+        self.__vehicleStickers.attach(self.__model, self.__isVehicleDestroyed, False)
         BigWorld.player().stats.get('clanDBID', self.__onClanDBIDRetrieved)
         return
 
@@ -817,75 +816,54 @@ class _VehicleAppearance():
 
     def __setupModel(self, buildIdx):
         model = self.__assembleModel()
-        model.addMotor(BigWorld.Servo(_createMatrix(_CFG['v_scale'], _CFG['v_start_angles'], _CFG['v_start_pos'])))
+        matrix = mathUtils.createSRTMatrix(Math.Vector3(_CFG['v_scale'], _CFG['v_scale'], _CFG['v_scale']), _CFG['v_start_angles'], _CFG['v_start_pos'])
+        model.matrix = matrix
+        self.__doFinalSetup(buildIdx, model)
         entity = BigWorld.entity(self.__vEntityId)
-        if isinstance(entity, HangarVehicle):
+        if entity is not None:
             entity.typeDescriptor = self.__vDesc
-        BigWorld.addModel(model)
-        if self.__setupModelCb is not None:
-            BigWorld.cancelCallback(self.__setupModelCb)
-        self.__setupModelCb = BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, True))
         return
 
-    def __doFinalSetup(self, buildIdx, model, delModel):
-        if delModel:
-            BigWorld.delModel(model)
-        if model.attached:
-            self.__setupModelCb = BigWorld.callback(0.0, partial(self.__doFinalSetup, buildIdx, model, False))
+    def __doFinalSetup(self, buildIdx, model):
+        if buildIdx != self.__curBuildInd:
             return
         else:
-            self.__setupModelCb = None
-            if buildIdx != self.__curBuildInd:
-                return
             entity = BigWorld.entity(self.__vEntityId)
             if entity:
-                for m in self.__models:
-                    m.visible = True
-                    m.visibleAttachments = True
-
-                self.__vehicleStickers.show = True
                 entity.model = model
-                entity.model.delMotor(entity.model.motors[0])
-                entity.model.addMotor(BigWorld.Servo(_createMatrix(_CFG['v_scale'], _CFG['v_start_angles'], _CFG['v_start_pos'])))
                 self.__isLoaded = True
+                if entity is not None:
+                    entity.canDoHitTest(True)
                 if self.__onLoadedCallback is not None:
                     self.__onLoadedCallback()
                     self.__onLoadedCallback = None
-                self.updateCamouflage()
-                self.updateRepaint()
                 if self.__smCb is None:
                     self.__setupHangarShadowMap()
             if self.__vDesc is not None and 'observer' in self.__vDesc.type.tags:
                 model.visible = False
-                model.visibleAttachments = False
             return
 
     def getEmblemPos(self, onHull, emblemType, emblemIdx):
-        model = None
         emblemsDesc = None
         hitTester = ModelHitTester()
         worldMat = None
-        chassis = self.__models[0]
         if onHull:
-            model = self.__models[1]
             hitTester.bspModelName = self.__vDesc.hull['models']['undamaged']
             emblemsDesc = self.__vDesc.hull['emblemSlots']
-            worldMat = Math.Matrix(model.matrix)
+            worldMat = Math.Matrix(self.__model.node(TankPartNames.HULL))
         else:
             if self.__vDesc.turret['showEmblemsOnGun']:
-                model = self.__models[3]
+                node = self.__model.node(TankPartNames.GUN)
                 hitTester.bspModelName = self.__vDesc.gun['models']['undamaged']
             else:
-                model = self.__models[2]
+                node = self.__model.node(TankPartNames.TURRET)
                 hitTester.bspModelName = self.__vDesc.turret['models']['undamaged']
             emblemsDesc = self.__vDesc.turret['emblemSlots']
-            worldMat = Math.Matrix(model.matrix)
-        if model is None:
+            worldMat = Math.Matrix(node)
+        desiredEmblems = [ emblem for emblem in emblemsDesc if emblem.type == emblemType ]
+        if emblemIdx >= len(desiredEmblems):
             return
         else:
-            desiredEmblems = [ emblem for emblem in emblemsDesc if emblem.type == emblemType ]
-            if emblemIdx >= len(desiredEmblems):
-                return
             emblem = desiredEmblems[emblemIdx]
             dir = emblem[1] - emblem[0]
             dir.normalise()
@@ -923,11 +901,9 @@ class _VehicleAppearance():
         return [ m.applyPoint(vec) for vec in result ]
 
     def __correctEmblemLookAgainstGun(self, hitPos, dir, up, emblem):
-        turretModel = self.__models[2]
-        gunModel = self.__models[3]
         hitTester = self.__vDesc.gun['hitTester']
         hitTester.loadBspModel()
-        toLocalGun = Math.Matrix(gunModel.matrix)
+        toLocalGun = Math.Matrix(self.__model.node(TankPartNames.GUN))
         toLocalGun.invert()
         checkDirLocal = toLocalGun.applyVector(dir) * -10
         cornersLocal = self.__getEmblemCorners(hitPos, dir, up, emblem)
@@ -939,7 +915,7 @@ class _VehicleAppearance():
             return dir
         dirRot = Math.Matrix()
         angle = _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT
-        turretMat = Math.Matrix(turretModel.matrix)
+        turretMat = Math.Matrix(self.__model.node(TankPartNames.TURRET))
         fromTurretToHit = hitPos - turretMat.translation
         gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
         if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) < 0:
@@ -951,113 +927,45 @@ class _VehicleAppearance():
         dir = dirRot.applyVector(Math.Vector3(0, 0, 1))
         return dir
 
-    def updateCamouflage(self, camouflageID=None):
-        texture = ''
-        colors = [0,
-         0,
-         0,
-         0]
-        weights = Math.Vector4(1, 0, 0, 0)
-        camouflagePresent = True
-        vDesc = self.__vDesc
-        if vDesc is None:
-            return
+    def __getCurrentCamouflage(self):
+        camouflageIdPerTeam = CompoundAppearance.EVENT_CAMOUFLAGES.get(self.__vDesc.name)
+        if camouflageIdPerTeam is not None:
+            savedTeam = g_tankActiveCamouflage.get(self.__vDesc.type.compactDescr)
+            currentTeam = savedTeam if savedTeam is not None else 1
+            camouflageId = camouflageIdPerTeam[0] if currentTeam == 1 else camouflageIdPerTeam[1]
+            return camouflageId
         else:
-            if camouflageID is None and vDesc.camouflages is not None:
-                activeCamo = g_tankActiveCamouflage['historical'].get(vDesc.type.compactDescr)
+            if self.__vDesc.camouflages is not None:
+                activeCamo = g_tankActiveCamouflage['historical'].get(self.__vDesc.type.compactDescr)
                 if activeCamo is None:
-                    activeCamo = g_tankActiveCamouflage.get(vDesc.type.compactDescr, 0)
-                camouflageID = vDesc.camouflages[activeCamo][0]
+                    activeCamo = g_tankActiveCamouflage.get(self.__vDesc.type.compactDescr, 0)
+                camouflageID = self.__vDesc.camouflages[activeCamo][0]
             if camouflageID is None:
-                for camouflageData in vDesc.camouflages:
+                for camouflageData in self.__vDesc.camouflages:
                     if camouflageData[0] is not None:
                         camouflageID = camouflageData[0]
                         break
 
-            customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)
-            defaultTiling = None
-            if camouflageID is not None and customization is not None:
-                camouflage = customization['camouflages'].get(camouflageID)
-                if camouflage is not None:
-                    camouflagePresent = True
-                    texture = camouflage['texture']
-                    colors = camouflage['colors']
-                    weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in colors ])
-                    defaultTiling = camouflage['tiling'].get(vDesc.type.compactDescr)
-            if self.__isVehicleDestroyed:
-                weights *= 0.1
-            if vDesc.camouflages is not None:
-                _, camStartTime, camNumDays = vDesc.camouflages[g_tankActiveCamouflage.get(vDesc.type.compactDescr, 0)]
-                if camNumDays > 0:
-                    timeAmount = (time.time() - camStartTime) / (camNumDays * 86400)
-                    if timeAmount > 1.0:
-                        weights *= _CAMOUFLAGE_MIN_INTENSITY
-                    elif timeAmount > 0:
-                        weights *= (1.0 - timeAmount) * (1.0 - _CAMOUFLAGE_MIN_INTENSITY) + _CAMOUFLAGE_MIN_INTENSITY
-            for model in self.__models:
-                exclusionMap = vDesc.type.camouflageExclusionMask
-                tiling = defaultTiling
-                if tiling is None:
-                    tiling = vDesc.type.camouflageTiling
-                if model == self.__models[0]:
-                    compDesc = vDesc.chassis
-                elif model == self.__models[1]:
-                    compDesc = vDesc.hull
-                elif model == self.__models[2]:
-                    compDesc = vDesc.turret
-                elif model == self.__models[3]:
-                    compDesc = vDesc.gun
-                else:
-                    compDesc = None
-                if compDesc is not None:
-                    coeff = compDesc.get('camouflageTiling')
-                    if coeff is not None:
-                        if tiling is not None:
-                            tiling = (tiling[0] * coeff[0],
-                             tiling[1] * coeff[1],
-                             tiling[2] + coeff[2],
-                             tiling[3] + coeff[3])
-                        else:
-                            tiling = coeff
-                    if compDesc.get('camouflageExclusionMask'):
-                        exclusionMap = compDesc['camouflageExclusionMask']
-                useCamouflage = camouflagePresent and texture
-                fashion = None
-                if hasattr(model, 'wg_fashion'):
-                    fashion = model.wg_fashion
-                elif hasattr(model, 'wg_gunRecoil'):
-                    fashion = model.wg_gunRecoil
-                elif useCamouflage:
-                    fashion = model.wg_baseFashion = BigWorld.WGBaseFashion()
-                elif hasattr(model, 'wg_baseFashion'):
-                    delattr(model, 'wg_baseFashion')
-                if fashion is not None:
-                    if useCamouflage:
-                        fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], weights)
-                    else:
-                        fashion.removeCamouflage()
+            return camouflageID
 
-            return
+    def initFashions(self):
+        fashions = list(self.__fashions)
+        for fashionIdx, descId in enumerate(TankPartNames.ALL):
+            fashion = self.__fashions[fashionIdx]
+            if fashion is None:
+                fashions[fashionIdx] = BigWorld.WGBaseFashion()
 
-    def updateRepaint(self):
-        if not hasattr(self.__vDesc.type, 'repaintParameters'):
-            return
-        else:
-            repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale = RepaintParams.getRepaintParams(self.__vDesc)
-            for model in self.__models:
-                fashion = None
-                if hasattr(model, 'wg_fashion'):
-                    fashion = model.wg_fashion
-                elif hasattr(model, 'wg_baseFashion'):
-                    fashion = model.wg_baseFashion
-                elif hasattr(model, 'wg_gunRecoil'):
-                    fashion = model.wg_gunRecoil
-                else:
-                    fashion = model.wg_baseFashion = BigWorld.WGBaseFashion()
-                if fashion is not None:
-                    fashion.setRepaint(repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale)
+        self.__fashions = VehiclePartsTuple(*fashions)
+        self.__model.setupFashions(self.__fashions.stripEmpty())
+        return
 
-            return
+    def updateCamouflage(self, camouflageID=None):
+        if camouflageID is None:
+            camouflageID = self.__getCurrentCamouflage()
+        self.initFashions()
+        self.__fashions = camouflages.applyCamouflage(self.__vDesc, self.__fashions, self.__vState != 'undamaged', camouflageID)
+        self.__fashions = camouflages.applyRepaint(self.__vDesc, self.__fashions)
+        return
 
 
 class _ClientHangarSpacePathOverride():

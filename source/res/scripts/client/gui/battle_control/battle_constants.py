@@ -1,6 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_constants.py
+from avatar_helpers.aim_global_binding import CTRL_MODE_NAME
 from enumerations import Enumeration, AttributeEnumItem
+
+class BATTLE_CTRL_ID(object):
+    AMMO, EQUIPMENTS, OPTIONAL_DEVICES, OBSERVED_VEHICLE_STATE, ARENA_LOAD_PROGRESS, ARENA_PERIOD, TEAM_BASES, DEBUG, HIT_DIRECTION, FEEDBACK, CHAT_COMMANDS, MESSAGES, DRR_SCALE, RESPAWN, REPAIR, DYN_SQUADS, AVATAR_PRIVATE_STATS, GAS_ATTACK, FLAG_NOTS, CROSSHAIR, MOD, GUI, MARK1_EVENT_NOTS, MARK1_BONUS = range(1, 25)
+
+
+REUSABLE_BATTLE_CTRL_IDS = (BATTLE_CTRL_ID.MOD, BATTLE_CTRL_ID.GUI)
+BATTLE_CTRL_NAMES = dict([ (v, k) for k, v in BATTLE_CTRL_ID.__dict__.iteritems() if not k.startswith('_') ])
+
+def getBattleCtrlName(ctrlID):
+    if ctrlID in BATTLE_CTRL_NAMES:
+        return BATTLE_CTRL_NAMES[ctrlID]
+    else:
+        return 'UNKNOWN_{}'.format(ctrlID)
+
+
+class VIEW_COMPONENT_RULE(object):
+    NONE = 0
+    PROXY = 1
+
+
+PLAYERS_PANEL_LENGTH = 24
+HIT_INDICATOR_MAX_ON_SCREEN = 5
 
 class SHELL_SET_RESULT(object):
     UNDEFINED = 0
@@ -42,10 +65,13 @@ class VEHICLE_VIEW_STATE(object):
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')
+WHEEL_VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftWheel', 'rightWheel', 'surveyingDevice', 'radio', 'fuelTank')
 VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'surveyingDevice', 'radio', 'fuelTank')
+WHEEL_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'wheelChassis', 'surveyingDevice', 'radio', 'fuelTank')
 VEHICLE_DEVICE_IN_COMPLEX_ITEM = {'leftTrack': 'chassis',
  'rightTrack': 'chassis'}
-VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack')}
+VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack', 'rightTrack'),
+ 'wheelChassis': ('leftWheel', 'rightWheel')}
 DEVICE_STATES_RANGE = ('normal', 'critical', 'destroyed', 'repaired')
 DEVICE_STATE_AS_DAMAGE = ('critical', 'destroyed')
 
@@ -53,6 +79,7 @@ class VEHICLE_INDICATOR_TYPE(object):
     DEFAULT = 'Tank'
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
+    CAR = 'Car'
 
 
 EXTRA_SUFFIX = 'Health'
@@ -74,7 +101,7 @@ VEHICLE_WAINING_INTERVAL = 0.05
 VEHICLE_UPDATE_INTERVAL = 0.03
 
 class FEEDBACK_EVENT_ID(object):
-    PLAYER_KILLED_ENEMY, PLAYER_DAMAGED_HP_ENEMY, PLAYER_DAMAGED_DEVICE_ENEMY, PLAYER_SPOTTED_ENEMY, PLAYER_ASSIST_TO_KILL_ENEMY, PLAYER_USED_ARMOR, PLAYER_CAPTURED_BASE, PLAYER_DROPPED_CAPTURE, VEHICLE_HEALTH, VEHICLE_HIT, VEHICLE_ARMOR_PIERCED, VEHICLE_DEAD, VEHICLE_SHOW_MARKER, VEHICLE_ATTRS_CHANGED, SHOW_VEHICLE_DAMAGES_DEVICES, HIDE_VEHICLE_DAMAGES_DEVICES, MINIMAP_SHOW_MARKER, MINIMAP_MARK_CELL = range(1, 19)
+    PLAYER_KILLED_ENEMY, PLAYER_DAMAGED_HP_ENEMY, PLAYER_DAMAGED_DEVICE_ENEMY, PLAYER_SPOTTED_ENEMY, PLAYER_ASSIST_TO_KILL_ENEMY, PLAYER_USED_ARMOR, PLAYER_CAPTURED_BASE, PLAYER_DROPPED_CAPTURE, VEHICLE_HEALTH, VEHICLE_HIT, VEHICLE_ARMOR_PIERCED, VEHICLE_DEAD, VEHICLE_SHOW_MARKER, VEHICLE_ATTRS_CHANGED, VEHICLE_IN_FOCUS, VEHICLE_HAS_AMMO, SHOW_VEHICLE_DAMAGES_DEVICES, HIDE_VEHICLE_DAMAGES_DEVICES, MINIMAP_SHOW_MARKER, MINIMAP_MARK_CELL = range(1, 21)
 
 
 class COUNTDOWN_STATE(object):
@@ -86,6 +113,7 @@ class COUNTDOWN_STATE(object):
 
 
 class MULTIPLE_TEAMS_TYPE(object):
+    UNDEFINED = ''
     FFA = 'ffa'
     TDM = 'teams'
     MIXED = 'mixed'
@@ -129,3 +157,66 @@ class WinStatus(object):
     @classmethod
     def empty(cls):
         return cls(status=None)
+
+
+class VEHICLE_LOCATION(object):
+    UNDEFINED = 0
+    AOI = 1
+    FAR = 2
+    AOI_TO_FAR = 3
+
+
+class GAS_ATTACK_STATE(object):
+    NO_ATTACK = 0
+    PREPEARING = 1
+    INSIDE_SAFE_ZONE = 2
+    NEAR_SAFE = 3
+    NEAR_CLOUD = 4
+    INSIDE_CLOUD = 5
+    DEAD = 6
+    VISIBLE = (NEAR_SAFE, NEAR_CLOUD, INSIDE_CLOUD)
+
+
+class REPAIR_STATE_ID(object):
+    UNRESOLVED = 0
+    DISABLED = 1
+    READY = 2
+    REPAIRING = 3
+    COOLDOWN = 4
+
+
+class CROSSHAIR_VIEW_ID(object):
+    UNDEFINED = 0
+    ARCADE = 1
+    SNIPER = 2
+    STRATEGIC = 3
+    POSTMORTEM = 4
+
+
+_CTRL_MODE_TO_VIEW_ID = {CTRL_MODE_NAME.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
+ CTRL_MODE_NAME.STRATEGIC: CROSSHAIR_VIEW_ID.STRATEGIC,
+ CTRL_MODE_NAME.SNIPER: CROSSHAIR_VIEW_ID.SNIPER,
+ CTRL_MODE_NAME.POSTMORTEM: CROSSHAIR_VIEW_ID.POSTMORTEM,
+ CTRL_MODE_NAME.FALLOUT_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM}
+
+def getCrosshairViewIDByCtrlMode(ctrlMode):
+    """Gets viewID by avatar control mode.
+    If control mode has not UI, that function return CROSSHAIR_VIEW_ID.UNDEFINED
+    :param ctrlMode: string containing one of CTRL_MODE_NAME.
+    :return: integer containing one of CROSSHAIR_VIEW_ID.
+    """
+    if ctrlMode in _CTRL_MODE_TO_VIEW_ID:
+        viewID = _CTRL_MODE_TO_VIEW_ID[ctrlMode]
+    else:
+        viewID = CROSSHAIR_VIEW_ID.UNDEFINED
+    return viewID
+
+
+class GUN_RELOADING_VALUE_TYPE(object):
+    TIME = 1
+    PERCENT = 2
+
+
+class BATTLE_SYNC_LOCKS(object):
+    MARK1_EVENT_NOTIFICATIONS = 1
+    BATTLE_MARK1_AT_BASE_SOUND_LOCK = 2

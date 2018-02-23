@@ -52,11 +52,15 @@ class CombatSelectedArea(object):
         return
 
     def relocate(self, position, direction):
-        self.__matrix.setRotateYPR((direction.yaw, 0, 0))
-        self.__matrix.translation = position
-        self.__terrainSelectedArea.updateHeights()
-        if self.__terrainRotatedArea:
-            self.__terrainRotatedArea.updateHeights()
+        if position is None:
+            return
+        else:
+            self.__matrix.setRotateYPR((direction.yaw, 0, 0))
+            self.__matrix.translation = position
+            self.__terrainSelectedArea.updateHeights()
+            if self.__terrainRotatedArea:
+                self.__terrainRotatedArea.updateHeights()
+            return
 
     def setGUIVisible(self, isVisible):
         self.__fakeModel.visible = isVisible
@@ -73,6 +77,10 @@ class CombatSelectedArea(object):
             self.__time += deltaTime
         else:
             self.__matrix.translation = self.__nextPosition
+
+    def updatePosition(self, position):
+        self.__matrix.translation = position
+        self.__terrainSelectedArea.updateHeights()
 
     def setupDefault(self, position, direction, size, marker):
         self.setup(position, direction, size, DEFAULT_RADIUS_MODEL, COLOR_WHITE, marker)

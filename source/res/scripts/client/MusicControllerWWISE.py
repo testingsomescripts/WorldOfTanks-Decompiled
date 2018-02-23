@@ -1,24 +1,29 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MusicControllerWWISE.py
-import account_helpers
 import BigWorld
 import ResMgr
 import WWISE
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+import SoundGroups
 from constants import ARENA_PERIOD
 from items import _xml
 from PlayerEvents import g_playerEvents
 from helpers import isPlayerAvatar
-import SoundGroups
 MUSIC_EVENT_NONE = 0
-MUSIC_EVENT_LOGIN = 1
 MUSIC_EVENT_LOBBY = 2
 MUSIC_EVENT_COMBAT = 3
 MUSIC_EVENT_COMBAT_LOADING = 4
 MUSIC_EVENT_COMBAT_VICTORY = 5
 MUSIC_EVENT_COMBAT_LOSE = 6
 MUSIC_EVENT_COMBAT_DRAW = 7
-_BATTLE_RESULT_MUSIC_EVENTS = (MUSIC_EVENT_COMBAT_VICTORY, MUSIC_EVENT_COMBAT_LOSE, MUSIC_EVENT_COMBAT_DRAW)
+MUSIC_EVENT_COMBAT_EVENT_VICTORY = 8
+MUSIC_EVENT_COMBAT_EVENT_LOSE = 9
+MUSIC_EVENT_COMBAT_EVENT_DRAW = 10
+_BATTLE_RESULT_MUSIC_EVENTS = (MUSIC_EVENT_COMBAT_VICTORY,
+ MUSIC_EVENT_COMBAT_LOSE,
+ MUSIC_EVENT_COMBAT_DRAW,
+ MUSIC_EVENT_COMBAT_EVENT_VICTORY,
+ MUSIC_EVENT_COMBAT_EVENT_LOSE,
+ MUSIC_EVENT_COMBAT_EVENT_DRAW)
 AMBIENT_EVENT_NONE = 1000
 AMBIENT_EVENT_LOBBY = 1001
 AMBIENT_EVENT_SHOP = 1002
@@ -51,9 +56,49 @@ _SERVER_OVERRIDDEN = 0
 _CLIENT_OVERRIDDEN = 1
 g_musicController = None
 
-def init():
+def create():
     global g_musicController
-    g_musicController = MusicController()
+    if g_musicController is None:
+        g_musicController = MusicController()
+    return
+
+
+def init(arenaName):
+    global g_musicController
+    if g_musicController is None:
+        g_musicController = MusicController()
+    g_musicController.init(arenaName)
+    return
+
+
+def destroy():
+    if g_musicController is not None:
+        g_musicController.destroy()
+    return
+
+
+def onLeaveArena():
+    if g_musicController is not None:
+        g_musicController.onLeaveArena()
+    return
+
+
+def onEnterArena():
+    if g_musicController is not None:
+        g_musicController.onEnterArena()
+    return
+
+
+def unloadCustomSounds():
+    if g_musicController is not None:
+        g_musicController.unloadCustomSounds()
+    return
+
+
+def play(eventId):
+    if g_musicController is not None:
+        g_musicController.play(eventId)
+    return
 
 
 class MusicController(object):
@@ -68,7 +113,10 @@ class MusicController(object):
 
         def replace(self, event, eventId, playNew):
             if self.__event is not None:
-                self.stop(self.__event.name == event.name)
+                if self.__event.name == event.name:
+                    playNew = False
+                else:
+                    self.stop()
             self.__event = event
             self.__eventID = eventId
             if playNew is True:
@@ -90,13 +138,11 @@ class MusicController(object):
                         self.__event.play()
             return
 
-        def stop(self, force=False):
+        def stop(self):
             if self.__event is not None:
-                if force:
-                    self.__event.stop()
-                elif self.__eventID == MUSIC_EVENT_COMBAT_LOADING:
+                if self.__eventID == MUSIC_EVENT_COMBAT_LOADING:
                     WWISE.WW_eventGlobalSync('ue_stop_loadscreen_music')
-                elif self.__eventID >= MUSIC_EVENT_COMBAT_VICTORY and self.__eventID <= MUSIC_EVENT_COMBAT_DRAW:
+                elif self.__eventID in _BATTLE_RESULT_MUSIC_EVENTS:
                     WWISE.WW_eventGlobalSync('ue_events_hangar_stop_afterBattleMusic')
                 else:
                     self.__event.stop()
@@ -109,7 +155,7 @@ class MusicController(object):
             return self.__eventID
 
         def isPlaying(self):
-            return self.__event is not None
+            return self.__event.isPlaying if self.__event is not None else False
 
         def destroy(self):
             if self.__event is not None:
@@ -128,7 +174,6 @@ class MusicController(object):
         self.__sndEventMusic = None
         self.__soundEvents = {MUSIC_EVENT_NONE: None,
          AMBIENT_EVENT_NONE: None}
-        self.eventArena = False
         self.init()
         return
 
@@ -138,8 +183,6 @@ class MusicController(object):
         if path is not None:
             self.__loadCustomSounds(path)
         self.__loadConfig()
-        if path is not None:
-            self.eventArena = path == '119_moon_pool'
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
         for musicEvent in self.__musicEvents:
             self.play(musicEvent.getEventId())
@@ -174,14 +217,12 @@ class MusicController(object):
             return
 
     def stopMusic(self):
-        for musicEvent in self.__musicEvents:
-            musicEvent.destroy()
+        musicEvent = self.__musicEvents[MusicController._MUSIC_EVENT]
+        musicEvent.destroy()
 
     def stopAmbient(self):
         ambientEvent = self.__musicEvents[MusicController._AMBIENT_EVENT]
-        if ambientEvent is not None:
-            ambientEvent.destroy()
-        return
+        ambientEvent.destroy()
 
     def stop(self):
         self.stopAmbient()
@@ -192,6 +233,10 @@ class MusicController(object):
         if e is not None:
             e.stop()
         return
+
+    def muteMusic(self, isMute):
+        musicEvent = self.__musicEvents[MusicController._MUSIC_EVENT]
+        musicEvent.mute(isMute)
 
     def setEventParam(self, eventId, paramName, paramValue):
         WWISE.WW_setRTCPGlobal(paramName, paramValue)
@@ -207,7 +252,8 @@ class MusicController(object):
 
     def setAccountAttrs(self, accAttrs, restart=False):
         wasPremiumAccount = self.__isPremiumAccount
-        self.__isPremiumAccount = account_helpers.isPremiumAccount(accAttrs)
+        from account_helpers import isPremiumAccount
+        self.__isPremiumAccount = isPremiumAccount(accAttrs)
         musicEventId = self.__musicEvents[MusicController._MUSIC_EVENT].getEventId()
         if restart and self.__isPremiumAccount != wasPremiumAccount and musicEventId == MUSIC_EVENT_LOBBY:
             self.play(musicEventId)
@@ -273,16 +319,13 @@ class MusicController(object):
         for i in section.items():
             s = i[1]
             if i[0] == 'music':
-                eventNames[MUSIC_EVENT_LOGIN] = s.readString('wwlogin')
                 eventNames[MUSIC_EVENT_LOBBY] = (s.readString('wwlobby'), s.readString('wwlobby'))
-                if self.eventArena:
-                    eventNames[MUSIC_EVENT_COMBAT_VICTORY] = 'music_spheretank_result'
-                    eventNames[MUSIC_EVENT_COMBAT_LOSE] = 'music_spheretank_result'
-                    eventNames[MUSIC_EVENT_COMBAT_DRAW] = 'music_spheretank_result'
-                else:
-                    eventNames[MUSIC_EVENT_COMBAT_VICTORY] = s.readString('wwcombat_victory')
-                    eventNames[MUSIC_EVENT_COMBAT_LOSE] = s.readString('wwcombat_lose')
-                    eventNames[MUSIC_EVENT_COMBAT_DRAW] = s.readString('wwcombat_draw')
+                eventNames[MUSIC_EVENT_COMBAT_VICTORY] = s.readString('wwcombat_victory')
+                eventNames[MUSIC_EVENT_COMBAT_LOSE] = s.readString('wwcombat_lose')
+                eventNames[MUSIC_EVENT_COMBAT_DRAW] = s.readString('wwcombat_draw')
+                eventNames[MUSIC_EVENT_COMBAT_EVENT_VICTORY] = s.readString('wwcombat_event_victory')
+                eventNames[MUSIC_EVENT_COMBAT_EVENT_LOSE] = s.readString('wwcombat_event_lose')
+                eventNames[MUSIC_EVENT_COMBAT_EVENT_DRAW] = s.readString('wwcombat_event_draw')
             if i[0] == 'ambient':
                 eventNames[AMBIENT_EVENT_LOBBY] = (s.readString('wwlobby'), s.readString('wwlobby'))
                 eventNames[AMBIENT_EVENT_SHOP] = (s.readString('wwshop'), s.readString('wwlobby'))
@@ -392,12 +435,12 @@ class MusicController(object):
         else:
             musicName = settings.readString('wwmusic')
             ambientName = settings.readString('wwambientSound')
-            if self.eventArena:
-                combatVictory = combatLose = combatDraw = 'music_spheretank_result'
-            else:
-                combatVictory = settings.readString('wwcombatVictory')
-                combatLose = settings.readString('wwcombatLose')
-                combatDraw = settings.readString('wwcombatDraw')
+            combatVictory = settings.readString('wwcombatVictory')
+            combatLose = settings.readString('wwcombatLose')
+            combatDraw = settings.readString('wwcombatDraw')
+            combatEventVictory = settings.readString('wwcombatEventVictory')
+            combatEventLose = settings.readString('wwcombatEventLose')
+            combatEventDraw = settings.readString('wwcombatEventDraw')
             if musicName:
                 self.__updateOverridden(MUSIC_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (musicName, musicName))
             if combatVictory:
@@ -406,6 +449,12 @@ class MusicController(object):
                 self.__updateOverridden(MUSIC_EVENT_COMBAT_LOSE, _CLIENT_OVERRIDDEN, combatLose)
             if combatDraw:
                 self.__updateOverridden(MUSIC_EVENT_COMBAT_DRAW, _CLIENT_OVERRIDDEN, combatDraw)
+            if combatEventVictory:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_VICTORY, _CLIENT_OVERRIDDEN, combatEventVictory)
+            if combatEventLose:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_LOSE, _CLIENT_OVERRIDDEN, combatEventLose)
+            if combatEventDraw:
+                self.__updateOverridden(MUSIC_EVENT_COMBAT_EVENT_DRAW, _CLIENT_OVERRIDDEN, combatEventDraw)
             if ambientName:
                 self.__updateOverridden(AMBIENT_EVENT_LOBBY, _CLIENT_OVERRIDDEN, (ambientName, ambientName))
                 self.__updateOverridden(AMBIENT_EVENT_SHOP, _CLIENT_OVERRIDDEN, (ambientName, ambientName))

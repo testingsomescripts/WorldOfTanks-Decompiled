@@ -21,7 +21,7 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, GlobalListener):
     def getTooltipData(self, itemData):
         tooltip = ''
         if itemData == 'eventSquad':
-            tooltip = TOOLTIPS.HANGAR_POPOVERSQUAD_MOONEVENT_SQUAD
+            tooltip = TOOLTIPS.HEADER_EVENTSQUAD
         elif itemData == 'squad':
             tooltip = TOOLTIPS.HEADER_SQUAD
         return tooltip
