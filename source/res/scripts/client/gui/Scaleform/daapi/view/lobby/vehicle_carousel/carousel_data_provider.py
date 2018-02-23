@@ -9,10 +9,11 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items.Vehicle import Vehicle, VEHICLE_TYPES_ORDER_INDICES, getVehicleStateIcon, getBattlesLeft, getSmallIconPath, getIconPath
+from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 
-def _sortedIndices(seq, getter):
+def sortedIndices(seq, getter, reverse=False):
     """ Sort the sequence by value fetched by getter func and return the
     list with indices of items in the original list
     
@@ -23,16 +24,13 @@ def _sortedIndices(seq, getter):
     :param getter: function that fetches values from the original list
     :return: indices in the original list
     """
-    return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]))
+    return sorted(range(len(seq)), key=lambda idx: getter(seq[idx]), reverse=reverse)
 
 
-def _getStatusStyles(vStateLvl):
+def getStatusCountStyle(vStateLvl):
     """ Get text styles for small and large slots according to vehicle's state.
     """
-    if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL:
-        return (text_styles.stats, text_styles.vehicleStatusCriticalText)
-    else:
-        return (text_styles.stats, text_styles.vehicleStatusInfoText)
+    return (text_styles.stats, text_styles.vehicleStatusCriticalText) if vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL else (text_styles.stats, text_styles.vehicleStatusInfoText)
 
 
 def _isLockedBackground(vState, vStateLvl):
@@ -72,16 +70,13 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
     state = MENU.tankcarousel_vehiclestates(vState)
     status = ms(state, **ctx)
     if style is None:
-        smallStyle, largeStyle = _getStatusStyles(vStateLvl)
+        smallStyle, largeStyle = getStatusCountStyle(vStateLvl)
     else:
         smallStyle = largeStyle = style
     if status:
         return (smallStyle(status), largeStyle(status))
-    elif substitute:
-        return (text_styles.middleTitle(substitute), status)
     else:
-        return (status, status)
-        return
+        return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
 def getVehicleDataVO(vehicle):
@@ -115,6 +110,7 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
+     'isEvent': True if 'event_battles' in vehicle.tags else False,
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
@@ -138,8 +134,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._filteredIndices = []
         self._selectedIdx = -1
         self._showVehicleStats = False
-        self._vehiclesStats = {}
+        self._randomStats = None
         self._filter.load()
+        self.__sortedIndices = []
+        return
 
     def hasRentedVehicles(self):
         """ Returns True if there is at least one rented vehicle, False otherwise
@@ -183,7 +181,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def selectVehicle(self, filteredIdx):
         """ Select one of vehicles.
@@ -207,7 +205,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         if isFullResync or isVehicleAdded or isVehicleRemoved:
             self.buildList()
         else:
-            self._updateVehicleItems(newVehiclesCollection)
+            self._updateVehicleItems(newVehiclesCollection.values())
         return
 
     def buildList(self):
@@ -225,7 +223,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
         currentVehicleInvID = self._currentVehicle.invID
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
-        sortedVehicleIndices = _sortedIndices(self._vehicles, self._vehicleComparisonKey)
+        sortedVehicleIndices = self._getSortedIndices()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -241,10 +239,19 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def setShowStats(self, showVehicleStats):
         self._showVehicleStats = showVehicleStats
 
+    def _getSortedIndices(self):
+        return self._getCachedSortedIndices(False)
+
+    def _getCachedSortedIndices(self, reverse=False):
+        if not self.__sortedIndices:
+            self.__sortedIndices = sortedIndices(self._vehicles, self._vehicleComparisonKey, reverse)
+        return self.__sortedIndices
+
     def _dispose(self):
         self._filter = None
         self._itemsCache = None
         self._currentVehicle = None
+        self._randomStats = None
         super(CarouselDataProvider, self)._dispose()
         return
 
@@ -257,11 +264,11 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def _buildVehicleItems(self):
         self._vehicles = []
+        self.__resetSortedIndices()
         self._vehicleItems = []
-        self._vehiclesStats = self._itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
+        self._randomStats = self._itemsCache.items.getAccountDossier().getRandomStats()
         vehicleIcons = []
-        vehiclesCollection = self._itemsCache.items.getVehicles(self._baseCriteria)
-        for intCD, vehicle in vehiclesCollection.iteritems():
+        for vehicle in self._itemsCache.items.getVehicles(self._baseCriteria).itervalues():
             vehicleIcons.append(vehicle.icon)
             self._vehicles.append(vehicle)
             vehicleDataVO = self._buildVehicle(vehicle)
@@ -271,15 +278,19 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self.app.imageManager.loadImages(vehicleIcons)
 
     def _buildVehicle(self, vehicle):
-        return getVehicleDataVO(vehicle)
+        vo = getVehicleDataVO(vehicle)
+        return vo
 
     def _getVehicleStats(self, vehicle):
         intCD = vehicle.intCD
-        if intCD in self._vehiclesStats:
-            battlesCount, wins, markOfMastery, xp = self._vehiclesStats.get(intCD)
-            markOfMasteryText = ''
-            if markOfMastery > 0:
+        vehicleRandomStats = self._randomStats.getVehicles() if self._randomStats is not None else {}
+        if intCD in vehicleRandomStats:
+            battlesCount, wins, xp = vehicleRandomStats.get(intCD)
+            markOfMastery = self._randomStats.getMarkOfMasteryForVehicle(intCD)
+            if isMarkOfMasteryAchieved(markOfMastery):
                 markOfMasteryText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'markOfMastery', ctx={'markOfMastery': markOfMastery})
+            else:
+                markOfMasteryText = ''
             winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
             winsEfficiencyStr = BigWorld.wg_getIntegralFormat(round(winsEfficiency)) + '%'
             winsText = makeHtmlString('html_templates:lobby/tank_carousel/statistic', 'wins', ctx={'wins': winsEfficiencyStr})
@@ -302,8 +313,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         """
         updateIndices = []
         updateVehicles = []
-        self._vehiclesStats = self._itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
-        for intCD, newVehicle in vehiclesCollection.iteritems():
+        self._randomStats = self._itemsCache.items.getAccountDossier().getRandomStats()
+        for newVehicle in vehiclesCollection:
             for idx, oldVehicle in enumerate(self._vehicles):
                 if oldVehicle.intCD == newVehicle.intCD:
                     vehicleDataVO = self._buildVehicle(newVehicle)
@@ -313,6 +324,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
                     updateIndices.append(idx)
                     updateVehicles.append(self._vehicleItems[idx])
 
+        if updateVehicles:
+            self.__resetSortedIndices()
         self.flashObject.invalidateItems(updateIndices, updateVehicles)
         self.applyFilter()
 
@@ -339,6 +352,8 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
          GUI_NATIONS_ORDER_INDEX[vehicle.nationName],
          VEHICLE_TYPES_ORDER_INDICES[vehicle.type],
          vehicle.level,
-         vehicle.buyPrice.gold,
-         vehicle.buyPrice.credits,
+         tuple(vehicle.buyPrices.itemPrice.price.iterallitems(byWeight=True)),
          vehicle.userName)
+
+    def __resetSortedIndices(self):
+        self.__sortedIndices = []

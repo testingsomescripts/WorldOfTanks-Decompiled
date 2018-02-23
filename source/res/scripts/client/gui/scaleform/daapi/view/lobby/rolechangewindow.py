@@ -122,7 +122,7 @@ class RoleChangeWindow(RoleChangeMeta):
     @decorators.process('changingRole')
     def changeRole(self, role, vehicleId):
         result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.auxData:
             SystemMessages.pushMessage(result.auxData.userMsg, type=result.auxData.sysMsgType)
@@ -171,7 +171,7 @@ class RoleChangeWindow(RoleChangeMeta):
 
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []
-        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED
+        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.CREW_LOCKED
         vehicles = self.itemsCache.items.getVehicles(criteria)
         vehiclesData = vehicles.values()
         if nativeVehicleCD not in vehicles:

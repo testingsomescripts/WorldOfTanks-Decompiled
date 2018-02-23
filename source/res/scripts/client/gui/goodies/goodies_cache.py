@@ -6,6 +6,7 @@ from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.money import Money, MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
@@ -29,7 +30,6 @@ def _createDiscount(discountID, discountDescription, proxy):
     else:
         LOG_WARNING('Current discount with ID: %s and type: %s is not supported by UX' % (discountID, targetType))
         return None
-        return None
 
 
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
@@ -45,7 +45,6 @@ class GoodiesCache(IGoodiesCache):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
-        self._items = weakref.proxy(self.itemsCache.items)
         self.__goodiesCache = defaultdict(dict)
         self.__activeBoostersTypes = None
         return
@@ -58,7 +57,7 @@ class GoodiesCache(IGoodiesCache):
 
     def clear(self):
         self.__activeBoostersTypes = None
-        while len(self.__goodiesCache):
+        while self.__goodiesCache:
             _, cache = self.__goodiesCache.popitem()
             cache.clear()
 
@@ -73,10 +72,27 @@ class GoodiesCache(IGoodiesCache):
 
     def getBoosterPriceData(self, boosterID):
         """
-        Gets tuple of Booster price, Booster default price, is booster hidden
+        Gets tuple of booster price-related data: (buy price, def price, alt price, def alt price, is booster hidden).
         """
         shop = self._items.shop
-        return (shop.getBoosterPrice(boosterID), shop.defaults.getBoosterPrice(boosterID), boosterID in shop.getHiddenBoosters())
+        prices = Money.makeFromMoneyTuple(shop.getBoosterPricesTuple(boosterID))
+        defPrices = Money.makeFromMoneyTuple(shop.defaults.getBoosterPricesTuple(boosterID))
+        if prices.isCompound():
+            currency = prices.getCurrency(byWeight=True)
+            buyPrice = Money.makeFrom(currency, prices.get(currency))
+            defPrice = Money.makeFrom(currency, defPrices.getSignValue(currency))
+            altPrice = prices.replace(currency, None)
+            defAltPrice = defPrices.replace(currency, None)
+        else:
+            buyPrice = prices
+            defPrice = defPrices
+            altPrice = None
+            defAltPrice = None
+        return (buyPrice,
+         defPrice,
+         altPrice,
+         defAltPrice,
+         boosterID in shop.getHiddenBoosters())
 
     def getItemByTargetValue(self, targetValue):
         """
@@ -100,7 +116,6 @@ class GoodiesCache(IGoodiesCache):
 
             self.__activeBoostersTypes = activeBoosterTypes
             return self.__activeBoostersTypes
-            return
 
     def getBooster(self, boosterID):
         """
@@ -127,6 +142,10 @@ class GoodiesCache(IGoodiesCache):
         Gets personal discounts GUI instances in format: {discountID: discount, ...}
         """
         return self.__getGoodies(self._items.shop.discounts, criteria)
+
+    @property
+    def _items(self):
+        return self.itemsCache.items
 
     def __getGoodies(self, goodies, criteria=REQ_CRITERIA.EMPTY):
         """

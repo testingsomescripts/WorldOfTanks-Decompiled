@@ -3,7 +3,6 @@
 import math
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared.money import ZERO_MONEY
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
@@ -114,12 +113,11 @@ def formatRecoveryLeftValue(secondsLeft):
         return makeString(TOOLTIPS.template_all_short(name), value=timeLeft)
     else:
         return makeString(TOOLTIPS.TEMPLATE_TIME_LESSTHENMINUTE)
-        return
 
 
 def getRecoveryStatusText(restoreInfo):
     price, timeLeft = restoreInfo
-    if price == ZERO_MONEY:
+    if not price:
         itemsCache = dependency.instance(IItemsCache)
         restoreConfig = itemsCache.items.shop.tankmenRestoreConfig
         duration = restoreConfig.billableDuration - restoreConfig.freeDuration
@@ -162,10 +160,10 @@ class TankmanStatusField(ToolTipDataField):
                 else:
                     header = makeString(statusTemplate % 'wrongVehicle/header') % {'vehicle': vehicle.shortUserName}
                     text = makeString(statusTemplate % 'wrongVehicle/text')
-            elif len(inactiveRoles):
+            elif inactiveRoles:
 
                 def roleFormat(role):
-                    return makeString(statusTemplate % 'inactiveSkillsRoleFormat') % makeString(getSkillsConfig()[role]['userString'])
+                    return makeString(statusTemplate % 'inactiveSkillsRoleFormat') % makeString(getSkillsConfig().getSkill(role).userString)
 
                 header = makeString(statusTemplate % 'inactiveSkills/header')
                 text = makeString(statusTemplate % 'inactiveSkills/text') % {'skills': ', '.join([ roleFormat(role) for role in inactiveRoles ])}

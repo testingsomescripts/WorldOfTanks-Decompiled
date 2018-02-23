@@ -5,6 +5,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.Scaleform.daapi.view.bootcamp.BCBattlePage import BootcampMinimapComponent
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.shared.events import BootcampEvent
@@ -34,9 +35,10 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCRibbonsPanel import BCRibbonsPanel
     from gui.Scaleform.daapi.view.bootcamp.BCSecondaryHint import BCSecondaryHint
     from gui.Scaleform.daapi.view.bootcamp.BCPrebattleHints import BCPrebattleHints
+    from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, BCIntroVideoPage, 'BCIntroVideo.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, BCBattlePage, 'BCbattlePage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT, BCBattleTopHint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, BCOverlayFinalWindow, 'BCOverlayFinalWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -53,7 +55,8 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL, destroy_timers_panel.DestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, BootcampMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, BootcampMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -84,7 +87,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
 
     def onShowIntro(self, event):
         LOG_DEBUG_DEV_BOOTCAMP('onShowIntro', event.name, event.ctx)
-        self._app.loadView(event.eventType, event.name, event.ctx)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
 
     def onShowHint(self, event):
         if not self.__hideHints:
@@ -142,7 +145,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
     def onShowBattleFinished(self, event):
         self.onCloseHint(event)
         self.__hideHints = True
-        self._app.loadView(event.eventType, event.name, event.ctx)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
 
     def __loadPage(self, event):
         page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)

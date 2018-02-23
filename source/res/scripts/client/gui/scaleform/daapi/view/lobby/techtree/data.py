@@ -18,7 +18,7 @@ from helpers import dependency
 from items import ITEM_TYPE_NAMES, getTypeOfCompactDescr as getTypeOfCD, vehicles as vehicles_core
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
-__all__ = ['ResearchItemsData', 'NationTreeData']
+__all__ = ('ResearchItemsData', 'NationTreeData')
 
 class _ItemsData(object):
     """
@@ -102,7 +102,7 @@ class _ItemsData(object):
         :param full: if value equals True than removes references that
         set in __init__, otherwise - clears nodes data only.
         """
-        while len(self._nodes):
+        while self._nodes:
             self._nodes.pop().clear()
 
         self._nodesIdx.clear()
@@ -138,7 +138,7 @@ class _ItemsData(object):
         nodeCDs = map(lambda node: node['id'], self._getNodesToInvalidate())
         LOG_DEBUG('getInventoryVehicles', nodeCDs)
         inventory_vehicles = self._items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.IN_CD_LIST(nodeCDs))
-        return dict(map(lambda item: (item.inventoryID, item), inventory_vehicles.itervalues()))
+        return dict(map(lambda item: (item.invID, item), inventory_vehicles.itervalues()))
 
     def getVehicleCDs(self):
         """
@@ -449,7 +449,7 @@ class ResearchItemsData(_ItemsData):
         self._enableInstallItems = False
 
     def clear(self, full=False):
-        while len(self._topLevel):
+        while self._topLevel:
             self._topLevel.pop().clear()
 
         self._topLevelCDs.clear()
@@ -694,7 +694,7 @@ class ResearchItemsData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
-            if guiItem.buyPrice != guiItem.defaultPrice:
+            if guiItem.buyPrices.itemPrice.isActionPrice():
                 state |= NODE_STATE_FLAGS.SHOP_ACTION
         else:
             if not topLevel:
@@ -724,11 +724,12 @@ class ResearchItemsData(_ItemsData):
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
         else:
             renderer = 'item'
+        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
         return {'id': nodeCD,
          'earnedXP': unlockStats.getVehXP(nodeCD),
          'state': state,
          'unlockProps': unlockProps,
-         'GUIPrice': getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate),
+         'GUIPrice': price,
          'displayInfo': {'path': list(path),
                          'renderer': renderer,
                          'level': level}}
@@ -858,7 +859,7 @@ class NationTreeData(_ItemsData):
         :param nationID: ID of nation. Index in nations.NAMES.
         """
         self.clear()
-        vehicleList = sorted(vehicles_core.g_list.getList(nationID).values(), key=lambda item: item['level'])
+        vehicleList = sorted(vehicles_core.g_list.getList(nationID).values(), key=lambda item: item.level)
         g_techTreeDP.setOverride(override)
         g_techTreeDP.load()
         getDisplayInfo = g_techTreeDP.getDisplayInfo
@@ -866,7 +867,7 @@ class NationTreeData(_ItemsData):
         selectedID = ResearchItemsData.getRootCD()
         unlockStats = self.getUnlockStats()
         for item in vehicleList:
-            nodeCD = item['compactDescr']
+            nodeCD = item.compactDescr
             displayInfo = getDisplayInfo(nodeCD)
             if displayInfo is not None:
                 item = getItem(nodeCD)
@@ -885,7 +886,7 @@ class NationTreeData(_ItemsData):
         Gets root vehicle.
         :return: instance of Vehicle or None. @see gui.shared.gui_items.
         """
-        return self._nodes[0] if len(self._nodes) else None
+        return self._nodes[0] if self._nodes else None
 
     def invalidateUnlocks(self, unlocks):
         """
@@ -906,10 +907,10 @@ class NationTreeData(_ItemsData):
         unlocked = []
         unlockStats = self.getUnlockStats()
         items = g_techTreeDP.getNext2UnlockByItems(unlocks, **unlockStats._asdict())
-        if len(items):
+        if items:
             next2Unlock = map(lambda item: (item[0], self._changeNext2Unlock(item[0], item[1], unlockStats), item[1]._makeTuple()), items.iteritems())
         filtered = filter(lambda unlock: getTypeOfCD(unlock) == GUI_ITEM_TYPE.VEHICLE, unlocks)
-        if len(filtered):
+        if filtered:
             unlocked = map(lambda item: (item, self._change2UnlockedByCD(item)), filtered)
         return (next2Unlock, unlocked)
 
@@ -971,7 +972,7 @@ class NationTreeData(_ItemsData):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
-            if guiItem.buyPrice != guiItem.defaultPrice:
+            if guiItem.buyPrices.itemPrice.isActionPrice():
                 state |= NODE_STATE_FLAGS.SHOP_ACTION
         elif available:
             state = NODE_STATE_FLAGS.NEXT_2_UNLOCK
@@ -991,11 +992,12 @@ class NationTreeData(_ItemsData):
         state = self._checkRestoreState(state, guiItem)
         state = self._checkRentableState(state, guiItem)
         state = self._checkTradeInState(state, guiItem)
+        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
         return {'id': nodeCD,
          'earnedXP': earnedXP,
          'state': state,
          'unlockProps': unlockProps,
-         'GUIPrice': getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate),
+         'GUIPrice': price,
          'displayInfo': displayInfo}
 
     def _canSell(self, nodeCD):

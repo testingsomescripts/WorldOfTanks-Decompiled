@@ -11,6 +11,7 @@ from gui.shared.events import VehicleBuyEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import ITradeInController
 from gui.shared.tooltips.formatters import packItemActionTooltipData
@@ -98,7 +99,7 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
@@ -127,7 +128,7 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
         if vehicleVO is None:
             return
         else:
-            vehicleVO['price'] = vehicle.tradeOffPrice.gold
+            vehicleVO['price'] = vehicle.tradeOffPrice.getSignValue(Currency.GOLD)
             vehicleVO['actionPrice'] = self._getItemPriceActionData(vehicle)
             vState, vStateLvl = vehicle.getState()
             if vState in (Vehicle.VEHICLE_STATE.DAMAGED,
@@ -142,4 +143,4 @@ class _TradeInDataProvider(SortableDAAPIDataProvider):
             return vehicleVO
 
     def _getItemPriceActionData(self, vehicle):
-        return packItemActionTooltipData(vehicle) if vehicle.buyPrice != vehicle.defaultPrice else None
+        return packItemActionTooltipData(vehicle) if vehicle.buyPrices.itemPrice.isActionPrice() else None

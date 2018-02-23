@@ -221,23 +221,25 @@ class AssistDetailsBlock(base.StatsBlock):
 
 class StunDetailsBlock(base.StatsBlock):
     """The block contains information about stun for one enemy."""
-    __slots__ = ('stunNum', 'stunValues', 'stunNames')
+    __slots__ = ('stunNum', 'stunValues', 'stunNames', 'stunDuration')
 
     def __init__(self, meta=None, field='', *path):
         super(StunDetailsBlock, self).__init__(meta, field, *path)
         self.stunNum = None
         self.stunValues = None
         self.stunNames = None
+        self.stunDuration = None
         return
 
     def setRecord(self, result, _):
         count = result.stunNum
         assisted = result.damageAssistedStun
+        duration = result.stunDuration
         self.stunNum = count
-        if count > 0 or assisted > 0:
-            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count)]
-            tooltipStyle = style.getTooltipParamsStyle()
-            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2)]
+        self.stunDuration = duration
+        if count > 0 or assisted > 0 or duration > 0:
+            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count), BigWorld.wg_getFractionalFormat(duration)]
+            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART3, vals=style.getTooltipParamsStyle(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL_SECONDS))]
 
 
 class CritsDetailsBlock(base.StatsBlock):
@@ -274,7 +276,7 @@ class CritsDetailsBlock(base.StatsBlock):
 
 class TeamBaseDetailsBlock(base.StatsBlock):
     """The basic block contains information about one team base."""
-    __slots__ = ('_showCapturePoints', '_showDefencePoints', 'captureTotalItems', 'defenceTotalItems', 'captureValues', 'captureNames', 'defenceValues', 'defenceNames', 'label')
+    __slots__ = ('_showCapturePoints', '_showDefencePoints', 'captureTotalItems', 'defenceTotalItems', 'captureValues', 'captureNames', 'defenceValues', 'defenceNames', 'label', 'isEnemyBase')
 
     def __init__(self, meta=None, field='', *path):
         super(TeamBaseDetailsBlock, self).__init__(meta, field, *path)
@@ -287,6 +289,7 @@ class TeamBaseDetailsBlock(base.StatsBlock):
         self.captureNames = None
         self.defenceValues = None
         self.defenceNames = None
+        self.isEnemyBase = False
         return
 
     def setRecord(self, result, _):
@@ -302,25 +305,15 @@ class TeamBaseDetailsBlock(base.StatsBlock):
             self.defenceNames = (i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_DEFENCE_TOTALPOINTS),)
 
 
-class DominationTeamBaseDetailBlock(TeamBaseDetailsBlock):
-    """The block contains information about one team base in domination gameplay."""
-    __slots__ = ('_showCapturePoints', '_showDefencePoints', 'label')
-
-    def __init__(self, meta=None, field='', *path):
-        super(DominationTeamBaseDetailBlock, self).__init__(meta, field, *path)
-        self._showCapturePoints = True
-        self._showDefencePoints = True
-        self.label = i18n.makeString(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_NEUTRALBASE)
-
-
 class EnemyTeamBaseDetailBlock(TeamBaseDetailsBlock):
     """The block contains information about one enemy base."""
-    __slots__ = ('_showCapturePoints', 'label')
+    __slots__ = ('_showCapturePoints', 'label', 'isEnemyBase')
 
     def __init__(self, meta=None, field='', *path):
         super(EnemyTeamBaseDetailBlock, self).__init__(meta, field, *path)
         self._showCapturePoints = True
         self.label = text_styles.standard(i18n.makeString(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_ENEMYBASE))
+        self.isEnemyBase = True
 
 
 class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
@@ -331,6 +324,7 @@ class AllyTeamBaseDetailBlock(TeamBaseDetailsBlock):
         super(AllyTeamBaseDetailBlock, self).__init__(meta, field, *path)
         self._showDefencePoints = True
         self.label = text_styles.standard(i18n.makeString(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_ALLYBASE))
+        self.isEnemyBase = False
 
 
 class EnemyDetailsBlock(base.StatsBlock):
@@ -373,7 +367,7 @@ class EnemyDetailsBlock(base.StatsBlock):
 
 class TotalEfficiencyDetailsHeader(base.StatsBlock):
     """The block contains header of personal efficiency table in tab 'Common'."""
-    __slots__ = ('kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'damageAssisted', 'damageAssistedStun', 'spotted', 'killsTooltip', 'damageDealtTooltip', 'criticalDamagesTooltip', 'damageBlockedTooltip', 'damageAssistedTooltip', 'spottedTooltip', 'damageAssistedStunTooltip')
+    __slots__ = ('kills', 'damageDealt', 'criticalDamages', 'damageBlockedByArmor', 'damageAssisted', 'damageAssistedStun', 'spotted', 'killsTooltip', 'damageDealtTooltip', 'criticalDamagesTooltip', 'damageBlockedTooltip', 'damageAssistedTooltip', 'spottedTooltip', 'damageAssistedStunTooltip', 'hasEfficencyStats')
 
     def __init__(self, meta=None, field='', *path):
         super(TotalEfficiencyDetailsHeader, self).__init__(meta, field, *path)
@@ -391,6 +385,7 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
         self.damageAssistedTooltip = None
         self.damageAssistedStunTooltip = None
         self.spottedTooltip = None
+        self.hasEfficencyStats = None
         return
 
     def setRecord(self, result, reusable):
@@ -416,6 +411,7 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
         value = info.spotted
         self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
         self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
+        self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
 
     @classmethod
     def __makeEfficiencyHeaderTooltip(cls, key, value):
@@ -429,7 +425,6 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
             body = BigWorld.wg_getIntegralFormat(value)
             return makeTooltip(header, body)
         else:
-            return None
             return None
 
 
@@ -445,22 +440,15 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
             for info in bases:
                 if info.capturePoints > 0 or info.droppedCapturePoints > 0:
                     components.append(style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_BASES))
-                    if arenaSubType == 'domination':
-                        component = DominationTeamBaseDetailBlock()
-                        component.setRecord(info, reusable)
-                        components.append(component)
-                    else:
-                        if info.capturePoints > 0:
-                            component = EnemyTeamBaseDetailBlock()
-                            component.setRecord(info, reusable)
-                            components.append(component)
-                        if info.droppedCapturePoints > 0:
-                            component = AllyTeamBaseDetailBlock()
-                            component.setRecord(info, reusable)
-                            components.append(component)
+                    component = EnemyTeamBaseDetailBlock()
+                    component.setRecord(info, reusable)
+                    components.append(component)
+                    component = AllyTeamBaseDetailBlock()
+                    component.setRecord(info, reusable)
+                    components.append(component)
 
             block = base.StatsBlock(base.ListMeta())
-            if components:
+            if enemies:
                 block.addComponent(block.getNextComponentIndex(), style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_TECHNIQUE))
             for info in enemies:
                 component = EnemyDetailsBlock()

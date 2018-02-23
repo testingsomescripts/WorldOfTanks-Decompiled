@@ -101,7 +101,7 @@ class PlayerUnitInfo(object):
             slots = self.unit.getFreeSlots()
             if slotIdx in slots:
                 vehicles = self.getVehiclesToSlot(slotIdx)
-                return (len(vehicles) > 0, vehicles)
+                return (bool(vehicles), vehicles)
         return (False, [])
 
     def getVehiclesToSlots(self, allSlots=False):
@@ -243,6 +243,12 @@ class UnitFlags(object):
     def isInArenaChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.IN_ARENA > 0
 
+    def isArenaFinished(self):
+        return self.__flags & UNIT_FLAGS.ARENA_FINISHED > 0
+
+    def isArenaFinishedChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.ARENA_FINISHED > 0
+
     def isFreezed(self):
         return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena()
 
@@ -293,10 +299,7 @@ class UnitRosterSettings(object):
         return self._maxTotalLevel
 
     def getLevelsRange(self, minLevel=-1, maxLevel=-1):
-        if minLevel == -1 and maxLevel == -1:
-            return range(self._minLevel, self._maxLevel + 1)
-        else:
-            return range(minLevel, maxLevel + 1)
+        return range(self._minLevel, self._maxLevel + 1) if minLevel == -1 and maxLevel == -1 else range(minLevel, maxLevel + 1)
 
     def getAllSlotsRange(self):
         return xrange(CREATOR_SLOT_INDEX, self._maxSlots)

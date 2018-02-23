@@ -6,7 +6,6 @@ import BigWorld
 import Event
 import SoundGroups
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
-from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
@@ -14,6 +13,7 @@ from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
 from items import vehicles, EQUIPMENT_TYPES
 from shared_utils import findFirst, forEach
+from debug_utils import LOG_ERROR
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
 class NotApplyingError(_ActivationError):
@@ -248,7 +248,7 @@ class _ExpandedItem(_EquipmentItem):
 
     def _canActivate(self, entityName=None, avatar=None):
         deviceStates = avatar_getter.getVehicleDeviceStates(avatar)
-        if not len(deviceStates):
+        if not deviceStates:
             return (False, _ActivationError(self._getEntitiesAreSafeKey(), None))
         elif entityName is None:
             for item in self.getEntitiesIterator():
@@ -316,10 +316,7 @@ class _RepairKitItem(_ExpandedItem):
         pass
 
     def _getEntityUserString(self, entityName, avatar=None):
-        if entityName in VEHICLE_COMPLEX_ITEMS:
-            return i18n.makeString('#ingame_gui:devices/{0}'.format(entityName))
-        else:
-            return super(_RepairKitItem, self)._getEntityUserString(entityName, avatar)
+        return i18n.makeString('#ingame_gui:devices/{0}'.format(entityName)) if entityName in VEHICLE_COMPLEX_ITEMS else super(_RepairKitItem, self)._getEntityUserString(entityName, avatar)
 
 
 class _OrderItem(_TriggerItem):
@@ -334,8 +331,7 @@ class _OrderItem(_TriggerItem):
             result = False
             error = _ActivationError('orderNotReady', {'name': self._descriptor.userString})
             return (result, error)
-        else:
-            return super(_OrderItem, self).canActivate(entityName, avatar)
+        return super(_OrderItem, self).canActivate(entityName, avatar)
 
     def update(self, quantity, stage, timeRemaining):
         from AvatarInputHandler import MapCaseMode
@@ -426,7 +422,7 @@ class EquipmentsController(IBattleController):
         if leave:
             self.__eManager.clear()
         self._order = []
-        while len(self._equipments):
+        while self._equipments:
             _, item = self._equipments.popitem()
             item.clear()
 
@@ -466,11 +462,7 @@ class EquipmentsController(IBattleController):
     def getOrderedEquipmentsLayout(self):
 
         def getEquipment(intCD):
-            if intCD:
-                return (intCD, self._equipments[intCD])
-            else:
-                return (0, None)
-                return None
+            return (intCD, self._equipments[intCD]) if intCD else (0, None)
 
         return map(getEquipment, self._order)
 
@@ -486,7 +478,7 @@ class EquipmentsController(IBattleController):
             if item.becomeReady:
                 EquipmentSound.playReady(item)
         else:
-            descriptor = vehicles.getDictDescr(intCD)
+            descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType == EQUIPMENT_TYPES.regular:
                 item = self.createItem(descriptor, quantity, stage, timeRemaining)
                 self._equipments[intCD] = item
@@ -580,18 +572,12 @@ class _ReplayItem(_EquipmentItem):
 class _ReplayMedKitItem(_ReplayItem):
     __slots__ = ('__cooldownTime',)
 
-    def __init__(self, descriptor, quantity, stage, timeRemaining, tag=None):
-        super(_ReplayMedKitItem, self).__init__(descriptor, quantity, stage, timeRemaining, tag)
-
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.TankmenStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))
 
 
 class _ReplayRepairKitItem(_ReplayItem):
     __slots__ = ('__cooldownTime',)
-
-    def __init__(self, descriptor, quantity, stage, timeRemaining, tag=None):
-        super(_ReplayRepairKitItem, self).__init__(descriptor, quantity, stage, timeRemaining, tag)
 
     def getEntitiesIterator(self, avatar=None):
         return vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(avatar), avatar_getter.getVehicleTypeDescriptor(avatar))

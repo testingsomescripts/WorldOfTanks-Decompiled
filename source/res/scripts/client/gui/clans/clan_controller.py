@@ -75,8 +75,8 @@ class _ClanDossier(object):
 
     def isSynced(self, key=None):
         if key is None:
-            for key in self.__vitalInfo.keys():
-                if not self.__syncState & key:
+            for syncKey in self.__vitalInfo.keys():
+                if not self.__syncState & syncKey:
                     return False
 
             return True
@@ -180,7 +180,7 @@ class _ClanDossier(object):
     @process
     def requestClanRatings(self, callback):
         result = yield self.__requestClanRatings()
-        if len(result) > 0:
+        if result:
             callback(result[0])
         else:
             callback(items.ClanRatingsData())
@@ -220,6 +220,18 @@ class _ClanDossier(object):
     @async
     def requestRankedPosition(self, callback):
         self.__doRequest(contexts.RankedPositionCtx(), callback)
+
+    @async
+    def requestHofUserInfo(self, callback):
+        self.__doRequest(contexts.HofUserInfoCtx(), callback)
+
+    @async
+    def requestHofUserExclude(self, callback):
+        self.__doRequest(contexts.HofUserExcludeCtx(), callback)
+
+    @async
+    def requestHofUserRestore(self, callback):
+        self.__doRequest(contexts.HofUserRestoreCtx(), callback)
 
     @async
     def __requestClanRatings(self, callback):
@@ -513,6 +525,9 @@ class ClanController(ClansListeners, IClanController):
     def isEnabled(self):
         settings = self.lobbyContext.getServerSettings()
         return settings.clanProfile.isEnabled() if settings is not None else True
+
+    def compareStates(self, state):
+        return self.__state.compare(state)
 
     def isAvailable(self):
         return self.__state.isAvailable()

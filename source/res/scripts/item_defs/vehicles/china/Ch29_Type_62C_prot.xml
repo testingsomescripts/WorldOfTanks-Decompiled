@@ -380,7 +380,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_L7A3C>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_105mm_L7A3C>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
             <armor_1>	200	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
@@ -529,9 +529,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </Ch29_Type_62C_prot.xml>

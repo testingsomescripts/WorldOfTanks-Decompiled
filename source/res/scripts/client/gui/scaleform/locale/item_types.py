@@ -19,6 +19,8 @@ class ITEM_TYPES(object):
     VEHICLE_TAGS_SPG_DESC = '#item_types:vehicle/tags/spg/desc'
     VEHICLE_TAGS_AT_SPG_NAME = '#item_types:vehicle/tags/at-spg/name'
     VEHICLE_TAGS_AT_SPG_DESC = '#item_types:vehicle/tags/at-spg/desc'
+    VEHICLE_TAGS_HE2017_2C_NAME = '#item_types:vehicle/tags/HE2017_2C/name'
+    VEHICLE_TAGS_HE2017_F1_NAME = '#item_types:vehicle/tags/HE2017_F1/name'
     CHASSIS_NAME = '#item_types:chassis/name'
     CHASSIS_DESC = '#item_types:chassis/desc'
     CHASSIS_TAGS = '#item_types:chassis/tags'
@@ -137,12 +139,6 @@ class ITEM_TYPES(object):
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
      SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
-    SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
-     SHELL_KINDS_ARMOR_PIERCING_CR,
-     SHELL_KINDS_ARMOR_PIERCING_HE,
-     SHELL_KINDS_HOLLOW_CHARGE,
-     SHELL_KINDS_HIGH_EXPLOSIVE)
-    TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
      TANKMAN_SKILLS_REPAIR,
      TANKMAN_SKILLS_REPAIR_DESCR,
@@ -212,24 +208,6 @@ class ITEM_TYPES(object):
     def shell_kindsabbreviation(cls, key0):
         outcome = '#item_types:shell/kindsAbbreviation/{}'.format(key0)
         if outcome not in cls.SHELL_KINDSABBREVIATION_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def shell_kinds(cls, key0):
-        outcome = '#item_types:shell/kinds/{}'.format(key0)
-        if outcome not in cls.SHELL_KINDS_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def tankman_skills_type(cls, key0):
-        outcome = '#item_types:tankman/skills/type/{}'.format(key0)
-        if outcome not in cls.TANKMAN_SKILLS_TYPE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

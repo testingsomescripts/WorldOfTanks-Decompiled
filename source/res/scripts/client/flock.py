@@ -58,7 +58,7 @@ class DebugLine(object):
         self.end = end
         direction = end - start
         m = mathUtils.createSRTMatrix((self.__thickness, self.__thickness, direction.length), (direction.yaw, direction.pitch, 0), start + direction)
-        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(0.0, 0.0, -0.5)))
+        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(-0.5, -0.5, -0.5)))
         self.motor.signal = m
 
 
@@ -186,7 +186,7 @@ class Flock(BigWorld.Entity, FlockLike):
         if BattleReplay.g_replayCtrl.isPlaying:
             return
         self._loadModels(prereqs)
-        if len(self.models) > 0:
+        if self.models:
             self._addSound(self.models[0])
         self.__decisionStrategy = self.__doUsualFly
         if self.flyAroundCenter != Flock.STRATEGY_USUAL_FLY:

@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/economics.py
 from ItemRestore import getVehicleRestorePrice
-from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.money import Money, Currency
 
 def getActionPrc(price, defaultPrice):
 
     def calculate(price, defaultPrice):
+        price = price or 0
+        defaultPrice = defaultPrice or 0
         return 0 if defaultPrice == 0 or price == defaultPrice else int(round((1 - float(price) / defaultPrice) * 100))
 
     if isinstance(price, Money):
@@ -23,13 +25,12 @@ def calcRentPackages(vehicle, proxy):
     if proxy is not None and vehicle.isRentable:
         rentCost = proxy.shop.getVehicleRentPrices().get(vehicle.intCD, {})
         defaultRentCost = proxy.shop.defaults.getVehicleRentPrices().get(vehicle.intCD, {})
-        if len(rentCost) and len(defaultRentCost) is not None:
-            for key in sorted(rentCost.keys()):
-                rentPrice = Money(*rentCost[key].get('cost', ZERO_MONEY))
-                defaultRentPrice = Money(*defaultRentCost.get(key, {}).get('cost', rentPrice))
-                result.append({'days': key,
-                 'rentPrice': rentPrice,
-                 'defaultRentPrice': defaultRentPrice})
+        for key in sorted(rentCost.iterkeys()):
+            rentPrice = Money.makeFromMoneyTuple(rentCost[key].get('cost', ()))
+            defaultRentPrice = Money.makeFromMoneyTuple(defaultRentCost.get(key, {}).get('cost', rentPrice.toMoneyTuple()))
+            result.append({'days': key,
+             'rentPrice': rentPrice,
+             'defaultRentPrice': defaultRentPrice})
 
     return result
 
@@ -48,8 +49,8 @@ def calcVehicleRestorePrice(defaultPrice, proxy):
     """
     exchangeRate = proxy.exchangeRate
     sellPriceFactor = proxy.sellPriceModif
-    resorePriceModif = proxy.vehiclesRestoreConfig.restorePriceModif
-    return Money(*getVehicleRestorePrice(defaultPrice, exchangeRate, sellPriceFactor, resorePriceModif))
+    restorePriceModif = proxy.vehiclesRestoreConfig.restorePriceModif
+    return Money.makeFromMoneyTuple(getVehicleRestorePrice(defaultPrice, exchangeRate, sellPriceFactor, restorePriceModif))
 
 
 def getGUIPrice(item, money, exchangeRate):
@@ -65,8 +66,7 @@ def getGUIPrice(item, money, exchangeRate):
         if item.isRestoreAvailable():
             if item.mayRestoreWithExchange(money, exchangeRate) or not mayRent:
                 return item.restorePrice
-            else:
-                return item.minRentPrice
-        elif item.hasRestoreCooldown():
+            return item.minRentPrice
+        if item.hasRestoreCooldown():
             return item.minRentPrice or item.restorePrice
-    return item.minRentPrice or item.altPrice or item.buyPrice
+    return item.minRentPrice or item.getBuyPrice(preferred=False).price

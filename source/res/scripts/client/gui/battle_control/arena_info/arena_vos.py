@@ -3,7 +3,7 @@
 import operator
 from collections import defaultdict
 import nations
-from constants import IGR_TYPE, FLAG_ACTION
+from constants import IGR_TYPE, FLAG_ACTION, ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.battle_control import avatar_getter, vehicle_getter
@@ -17,6 +17,47 @@ _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
 
+class EPIC_RANDOM_KEYS():
+    PLAYER_GROUP = 'playerGroup'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [EPIC_RANDOM_KEYS.PLAYER_GROUP] if static else []
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return [EPIC_RANDOM_KEYS.PLAYER_GROUP] if static else []
+
+
+GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
+ ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS}
+
+class GameModeDataVO(object):
+    __slots__ = ('__internalData', '__sortingKeys')
+
+    def __init__(self, gameMode, static=True):
+        self.__internalData = {}
+        if gameMode in GAMEMODE_SPECIFIC_KEYS:
+            keys = GAMEMODE_SPECIFIC_KEYS[gameMode]
+            for key in keys.getKeys(static):
+                self.__internalData[key] = None
+
+            self.__sortingKeys = keys.getSortingKeys(static)
+        return
+
+    def update(self, data):
+        invalidate = _INVALIDATE_OP.NONE
+        for key, value in data.items():
+            if key in self.__sortingKeys:
+                invalidate = _INVALIDATE_OP.SORTING
+            self.__internalData[key] = value
+
+        return invalidate
+
+    def getValue(self, key):
+        return self.__internalData[key] if key in self.__internalData else None
+
+
 def isObserver(tags):
     return VEHICLE_TAGS.OBSERVER in tags
 
@@ -29,17 +70,25 @@ def isPremiumIGR(tags):
     return VEHICLE_TAGS.PREMIUM_IGR in tags
 
 
+def isMultiTurret(tags):
+    return VEHICLE_TAGS.MULTI_TURRET in tags
+
+
+def isLeviathan(tags):
+    return VEHICLE_TAGS.LEVIATHAN in tags
+
+
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'potapovQuestIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
+    __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, potapovQuestIDs=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
+    def __init__(self, accountDBID=0L, name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, isPrebattleCreator=False, forbidInBattleInvitations=False, **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
         self.name = name
         self.clanAbbrev = clanAbbrev
         self.igrType = igrType
-        self.potapovQuestIDs = potapovQuestIDs or []
+        self.personaMissionIDs = personalMissionIDs or []
         self.isPrebattleCreator = isPrebattleCreator
         self.forbidInBattleInvitations = forbidInBattleInvitations
 
@@ -63,24 +112,20 @@ class PlayerInfoVO(object):
     def getPlayerLabel(self):
         return self.name if self.name else settings.UNKNOWN_PLAYER_NAME
 
-    def getRandomPotapovQuests(self):
+    def getRandomPersonalMissions(self):
         pQuests = self.eventsCache.random.getQuests()
-        return self.__getPotapovQuests(pQuests)
+        return self.__getPersonaMissionIDs(pQuests)
 
-    def getFalloutPotapovQuests(self):
-        pQuests = self.eventsCache.fallout.getQuests()
-        return self.__getPotapovQuests(pQuests)
-
-    def __getPotapovQuests(self, pQuests):
+    def __getPersonaMissionIDs(self, pQuests):
         try:
-            return map(lambda qID: pQuests[qID], self.potapovQuestIDs)
+            return map(lambda qID: pQuests[qID], self.personaMissionIDs)
         except KeyError as e:
-            LOG_ERROR('Key error trying to get potapov quests: no key in cache', e)
+            LOG_ERROR('Key error trying to get personal mission: no key in cache', e)
             return []
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'isLeviathan', 'isMultiTurret')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -118,6 +163,8 @@ class VehicleTypeInfoVO(object):
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
             self.maxHealth = vehicleDescr.maxHealth
+            self.isLeviathan = isLeviathan(tags)
+            self.isMultiTurret = isMultiTurret(tags)
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
@@ -137,21 +184,19 @@ class VehicleTypeInfoVO(object):
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
             self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
             self.maxHealth = None
+            self.isLeviathan = False
+            self.isMultiTurret = False
         return
 
     def getClassName(self):
-        if self.classTag is not None:
-            return self.classTag
-        else:
-            return settings.UNKNOWN_VEHICLE_CLASS_NAME
-            return
+        return self.classTag if self.classTag is not None else settings.UNKNOWN_VEHICLE_CLASS_NAME
 
     def getOrderByClass(self):
         return settings.getOrderByVehicleClass(self.classTag)
 
 
 class VehicleArenaInfoVO(object):
-    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked')
+    __slots__ = ('vehicleID', 'team', 'player', 'playerStatus', 'vehicleType', 'vehicleStatus', 'prebattleID', 'events', 'squadIndex', 'invitationDeliveryStatus', 'ranked', 'gameModeSpecific')
 
     def __init__(self, vehicleID, team=0, isAlive=None, isAvatarReady=None, isTeamKiller=None, prebattleID=None, events=None, forbidInBattleInvitations=False, ranked=None, **kwargs):
         super(VehicleArenaInfoVO, self).__init__()
@@ -166,6 +211,9 @@ class VehicleArenaInfoVO(object):
         self.events = events or {}
         self.squadIndex = 0
         self.ranked = PlayerRankedInfoVO(*ranked) if ranked is not None else PlayerRankedInfoVO()
+        arena = avatar_getter.getArena()
+        guiType = None if not arena else arena.guiType
+        self.gameModeSpecific = GameModeDataVO(guiType, True)
         return
 
     def __repr__(self):
@@ -223,6 +271,9 @@ class VehicleArenaInfoVO(object):
             invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_INFO)
         return invalidate
 
+    def updateGameModeSpecificStats(self, *args):
+        return self.gameModeSpecific.update(*args)
+
     def update(self, **kwargs):
         invalidate = _INVALIDATE_OP.VEHICLE_INFO
         newPrbID = kwargs.get('prebattleID', 0)
@@ -243,11 +294,8 @@ class VehicleArenaInfoVO(object):
     def isSquadMan(self, prebattleID=None, playerTeam=None):
         if playerTeam and self.team != playerTeam:
             return False
-        elif prebattleID is not None and self.prebattleID != prebattleID:
-            return False
         else:
-            return self.playerStatus & _PLAYER_STATUS.IS_SQUAD_MAN > 0
-            return
+            return False if prebattleID is not None and self.prebattleID != prebattleID else self.playerStatus & _PLAYER_STATUS.IS_SQUAD_MAN > 0
 
     def isSquadCreator(self):
         return self.player.isPrebattleCreator and self.isSquadMan()
@@ -383,13 +431,14 @@ class VehicleArenaInteractiveStatsVO(object):
 
 class VehicleArenaStatsVO(object):
     """Value object containing statistics that are related to vehicles."""
-    __slots__ = ('vehicleID', '__frags', '__interactive')
+    __slots__ = ('vehicleID', '__frags', '__interactive', '__gameModeSpecific')
 
     def __init__(self, vehicleID, frags=0, **kwargs):
         super(VehicleArenaStatsVO, self).__init__()
         self.vehicleID = vehicleID
         self.__frags = frags
         self.__interactive = None
+        self.__gameModeSpecific = None
         return
 
     def __repr__(self):
@@ -397,11 +446,7 @@ class VehicleArenaStatsVO(object):
 
     @property
     def frags(self):
-        if self.__interactive is not None:
-            return self.__frags + self.__interactive.equipmentKills
-        else:
-            return self.__frags
-            return
+        return self.__frags + self.__interactive.equipmentKills if self.__interactive is not None else self.__frags
 
     @property
     def interactive(self):
@@ -410,20 +455,20 @@ class VehicleArenaStatsVO(object):
         return self.__interactive
 
     @property
+    def gameModeSpecific(self):
+        if self.__gameModeSpecific is None:
+            arena = avatar_getter.getArena()
+            guiType = None if not arena else arena.guiType
+            self.__gameModeSpecific = GameModeDataVO(guiType, False)
+        return self.__gameModeSpecific
+
+    @property
     def stopRespawn(self):
-        if self.__interactive is not None:
-            return self.__interactive.stopRespawn
-        else:
-            return False
-            return
+        return self.__interactive.stopRespawn if self.__interactive is not None else False
 
     @property
     def winPoints(self):
-        if self.__interactive is not None:
-            return self.__interactive.winPoints
-        else:
-            return 0
-            return
+        return self.__interactive.winPoints if self.__interactive is not None else 0
 
     def clearInteractiveStats(self):
         if self.__interactive is not None:
@@ -435,13 +480,19 @@ class VehicleArenaStatsVO(object):
             self.__interactive = VehicleArenaInteractiveStatsVO()
         return self.__interactive.update(*args)
 
+    def updateGameModeSpecificStats(self, *args):
+        if self.__gameModeSpecific is None:
+            arena = avatar_getter.getArena()
+            guiType = None if not arena else arena.guiType
+            self.__gameModeSpecific = GameModeDataVO(guiType, False)
+        return self.__gameModeSpecific.update(*args)
+
     def updateVehicleStats(self, frags=None, **kwargs):
         if frags is not None:
             self.__frags = frags
             return _INVALIDATE_OP.VEHICLE_STATS
         else:
             return _INVALIDATE_OP.NONE
-            return
 
 
 class PlayerRankedInfoVO(object):

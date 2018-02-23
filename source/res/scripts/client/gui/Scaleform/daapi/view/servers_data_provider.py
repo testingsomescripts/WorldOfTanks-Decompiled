@@ -3,7 +3,7 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import icons
 from gui.shared.formatters.servers import formatPingStatus
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -39,6 +39,10 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def collection(self):
         return self._list
 
+    @property
+    def isColorBlind(self):
+        return self.__isColorBlind
+
     def emptyItem(self):
         return None
 
@@ -51,7 +55,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     def fini(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
@@ -128,7 +132,6 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         if 'isColorBlind' in diff:
             self.__isColorBlind = diff['isColorBlind']
             for item in self._list:
-                item['colorBlind'] = self.__isColorBlind
                 pingValue, pingStatus = g_preDefinedHosts.getHostPingData(item['data'])
                 pingValueStr = formatPingStatus(item['csisStatus'], self.__isColorBlind, False, pingStatus, pingValue)
                 item['pingValue'] = pingValueStr
@@ -144,18 +147,14 @@ class ServersDataProvider(SortableDAAPIDataProvider):
             else:
                 LOG_ERROR('Mismatch ping status "{}" and available indicator statuses.'.format(income_status))
                 return None
-                return None
 
         csisStatus = item['csisStatus']
         if pingStatus == PING_STATUSES.REQUESTED:
             return _INDICATOR_STATUSES.WAITING
-        elif csisStatus == HOST_AVAILABILITY.RECOMMENDED or csisStatus == HOST_AVAILABILITY.UNKNOWN:
+        if csisStatus == HOST_AVAILABILITY.RECOMMENDED or csisStatus == HOST_AVAILABILITY.UNKNOWN:
             return __checkPingForValidStatus(pingStatus)
-        elif csisStatus in (HOST_AVAILABILITY.NOT_AVAILABLE, HOST_AVAILABILITY.NOT_RECOMMENDED):
+        if csisStatus in (HOST_AVAILABILITY.NOT_AVAILABLE, HOST_AVAILABILITY.NOT_RECOMMENDED):
             return _INDICATOR_STATUSES.IGNORED
-        elif csisStatus == HOST_AVAILABILITY.REQUESTED:
+        if csisStatus == HOST_AVAILABILITY.REQUESTED:
             return _INDICATOR_STATUSES.WAITING
-        elif item['data'] == AUTO_LOGIN_QUERY_URL:
-            return _INDICATOR_STATUSES.IGNORED
-        else:
-            return __checkPingForValidStatus(pingStatus)
+        return _INDICATOR_STATUSES.IGNORED if item['data'] == AUTO_LOGIN_QUERY_URL else __checkPingForValidStatus(pingStatus)

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/views.py
 from gui.Scaleform.framework import COMMON_VIEW_ALIAS
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 
 class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     PREMIUM_WINDOW = 'premiumWindow'
@@ -19,6 +20,13 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_PROFILE = 'profile'
     LOBBY_MISSIONS = 'missions'
     LOBBY_MISSION_DETAILS = 'missionDetails'
+    LOBBY_PERSONAL_MISSION_DETAILS = 'personalMissionDetails'
+    LOBBY_PERSONAL_MISSIONS = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS
+    PERSONAL_MISSIONS_PAGE = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS
+    LOBBY_EVENT_BOARDS_TABLE = 'eventBoardsTable'
+    LOBBY_EVENT_BOARDS_AWARDGROUP = 'eventBoardsAwardGroupsLobby'
+    LOBBY_EVENT_BOARDS_PAGINATION = 'eventBoardsPaginationLobby'
+    LOBBY_EVENT_BOARDS_MAINTENANCE = 'eventBoardsMaintenanceLobby'
     PROFILE_TAB_NAVIGATOR = 'profileTabNavigator'
     PROFILE_SUMMARY_PAGE = 'profileSummaryPage'
     PROFILE_SUMMARY_WINDOW = 'profileSummaryWindow'
@@ -27,6 +35,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     PROFILE_TECHNIQUE_PAGE = 'profileTechniquePage'
     PROFILE_TECHNIQUE_WINDOW = 'profileTechniqueWindow'
     PROFILE_FORMATIONS_PAGE = 'profileFormationsPage'
+    PROFILE_HOF = 'profileHof'
     LOBBY_TECHTREE = 'techtree'
     LOBBY_RESEARCH = 'research'
     LOBBY_BARRACKS = 'barracks'
@@ -71,9 +80,11 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_ACADEMY = 'academy'
-    STRONGHOLD_VIEW = 'StrongholdView'
+    LOBBY_STRONGHOLD = 'StrongholdView'
+    BROWSER_VIEW = 'BrowserView'
     SIMPLE_DIALOG = 'simpleDialog'
     CONFIRM_MODULE_DIALOG = 'confirmModuleDialog'
+    USE_FREEW_AWARD_SHEET_DIALOG = 'useFreeAwardSheetDialog'
     CONFIRM_BOOSTER_DIALOG = 'confirmBoosterDialog'
     ICON_DIALOG = 'iconDialog'
     ICON_PRICE_DIALOG = 'iconPriceDialog'
@@ -96,7 +107,9 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOSTERS_WINDOW = 'boostersWindow'
     GET_PREMIUM_POPOVER = 'getPremiumPopover'
     FITTING_SELECT_POPOVER = 'fittingSelectPopover'
+    FITTING_SELECT_POPOVER_MULTITURRET = 'fittingSelectPopoverMultiTurret'
     FITTING_CMP_SELECT_POPOVER = 'fittingCmpSelectPopover'
+    BOOSTER_CMP_SELECT_POPOVER = 'boosterCmpSelectPopover'
     RESERVE_SELECT_POPOVER = 'reserveSelectPopover'
     BOOSTER_SELECT_POPOVER = 'boosterSelectPopover'
     OPT_DEVICES_SELECT_POPOVER = 'optDevicesSelectPopover'
@@ -137,11 +150,14 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     FALLOUT_MULTITEAM_PAGE = 'falloutMultiteamPage'
     DEV_BATTLE_PAGE = 'devBattlePage'
     BADGES_PAGE = 'badgesPage'
+    EPIC_RANDOM_PAGE = 'epicRandomPage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
     BOOTCAMP_BATTLE_PAGE = 'bootcampBattlePage'
+    HALLOWEEN_PVP_BATTLE_PAGE = 'halloweenBattlePage'
+    BOSS_MODE_BATTLE_PAGE = 'bossModeBattlePage'
     INGAME_MENU = 'ingameMenu'
     INGAME_HELP = 'ingameHelp'
     INGAME_DESERTER = 'ingameDeserter'
@@ -149,29 +165,21 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOTCAMP_INTRO_VIDEO = 'bootcampIntroVideo'
     BOOTCAMP_OUTRO_VIDEO = 'bootcampOutroVideo'
     BOOTCAMP_INTRO_FADEOUT = 'bootcampIntroFadeout'
-    BOOTCAMP_BATTLE_RESULT = 'bootcampBattleResult'
     BOOTCAMP_BATTLE_TOP_HINT = 'bootcampBattleTopHint'
     BOOTCAMP_BATTLE_LEFT_HINT = 'bootcampBattleLeftHint'
     BOOTCAMP_TOOLTIPS_WINDOW = 'bootcampTooltipsWindow'
     BOOTCAMP_LOBBY_OVERLAY_WINDOW = 'bootcampLobbyOverlayWindow'
     BOOTCAMP_LOBBY_HEADER = 'bootcampLobbyHeader'
     BOOTCAMP_LOBBY_MENU = 'bootcampMainMenu'
-    BOOTCAMP_LOBBY_RESEARCH = 'bootcampLobbyResearch'
-    BOOTCAMP_LOBBY_TECHTREE = 'bootcampLobbyTechTree'
-    BOOTCAMP_VEHICLE_PREVIEW = 'bootcampVehiclePreview'
-    BOOTCAMP_PERSONAL_CASE = 'bootcampPresonalCase'
     BOOTCAMP_MESSAGE_WINDOW = 'bootcampMessageWindow'
-    BOOTCAMP_VEHICLE_BUY_WINDOW = 'bootcampVehicleBuyWindow'
     BOOTCAMP_VEHICLE_BUY_VIEW = 'bootcampVehicleBuyView'
     BOOTCAMP_LOBBY_HIGHLIGHTS = 'bootcampLobbyHighlights'
     BOOTCAMP_BATTLE_HIGHLIGHTS = 'bootcampBattleHighlights'
     BOOTCAMP_NATIONS_WINDOW = 'bootcampNationsWindow'
     BOOTCAMP_BATTLE_FINISHED_WINDOW = 'bootcampBattleFinishedWindow'
-    BOOTCAMP_TECHNICAL_MAINTENANCE = 'bootcampTechnicalMaintenance'
-    BOOTCAMP_FITTING_SELECT_POPOVER = 'bootcampFittingSelectPopover'
     BOOTCAMP_CREW = 'bootcampCrew'
     BOOTCAMP_QUESTS_CONTROL = 'bootcampQuestControl'
-    BOOTCAMP_QUESTS_WINDOW = 'bootcampQuestsWindow'
+    BOOTCAMP_QUESTS_VIEW = 'bootcampQuestsView'
     BOOTCAMP_SECONDARY_HINT = 'bootcampSecondaryHint'
     BOOTCAMP_BATTLE_TYPE_SELECT_POPOVER = 'bootcampBattleTypeSelectPopover'
     BOOTCAMP_PREBATTLE_HITNS = 'bootcampPrebattleHints'
@@ -179,6 +187,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOTCAMP_LOGIN_QUEUE = 'bootcampLoginQueue'
     BOOTCAMP_EXECUTION_CHOOSER = 'bootcampExecutionChooser'
     BOOTCAMP_SIMPLE_DIALOG = 'bootcampSimpleDialog'
+    LEVIATHAN_PREVIEW = 'leviathanPreview'
+    HALLOWEEN_BATTLE_SELECTOR = 'halloweenBattleSelector'
     LOADINGS = (BATTLE_LOADING, FALLOUT_MULTI_TEAM_BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,
@@ -187,4 +197,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
-     BOOTCAMP_BATTLE_PAGE)
+     BOOTCAMP_BATTLE_PAGE,
+     HALLOWEEN_PVP_BATTLE_PAGE,
+     BOSS_MODE_BATTLE_PAGE)

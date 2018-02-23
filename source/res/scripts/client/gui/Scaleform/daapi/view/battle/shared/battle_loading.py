@@ -19,10 +19,7 @@ def isBattleLoadingShowed():
     """is battle loading screen has been showed
     """
     global __bBattleLoadingShowed
-    if BattleReplay.isPlaying():
-        return __bBattleLoadingShowed
-    else:
-        return False
+    return __bBattleLoadingShowed if BattleReplay.isPlaying() else False
 
 
 def _setBattleLoading(value):
@@ -110,24 +107,34 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         BigWorld.wg_setGUIBackground(self._battleCtx.getArenaScreenIcon())
 
     def __makeVisualTipVO(self, arenaDP, tip=None):
-        setting = self.settingsCore.options.getSetting(settings_constants.GAME.BATTLE_LOADING_INFO)
-        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle(), isFallout=self.isFalloutMode())
+        loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
+        setting = self.settingsCore.options.getSetting(loadingInfo)
+        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle() or self._arenaVisitor.gui.isRankedBattle(), isEventTwo=self._arenaVisitor.gui.isEventBattlesTwo())
         vo = {'settingID': settingID,
          'tipIcon': tip.icon if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
          'arenaTypeID': self._arenaVisitor.type.getID(),
          'minimapTeam': arenaDP.getNumberOfTeam(),
          'showMinimap': settingID == BattleLoadingTipSetting.OPTIONS.MINIMAP,
          'showTipsBackground': settingID == BattleLoadingTipSetting.OPTIONS.MINIMAP}
-        viewSettings = self.__getViewSettingByID(settingID)
+        viewSettings = self._getViewSettingByID(settingID)
         vo.update(viewSettings)
         return vo
 
-    def __getViewSettingByID(self, settingID):
+    def _getViewSettingByID(self, settingID):
         """ Get settings for view by type
         :return:
         """
         result = {}
-        if settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
+        if settingID == BattleLoadingTipSetting.OPTIONS.EVENT_TWO:
+            result.update({'leftTeamTitleLeft': -410,
+             'rightTeamTitleLeft': 204,
+             'tipTitleTop': 536,
+             'tipBodyTop': 562,
+             'showTableBackground': False,
+             'showTipsBackground': False,
+             'loadingOffsetX': 200,
+             'hideRightTeam': True})
+        elif settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
             result.update({'leftTeamTitleLeft': -410,
              'rightTeamTitleLeft': 204,
              'tipTitleTop': 536,

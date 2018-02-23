@@ -11,14 +11,25 @@ def hasTurretRotator(vDesc):
     else:
         result = True
         tags = vDesc.type.tags
-        if tags & {'SPG', 'AT-SPG'} and vDesc.gun['turretYawLimits'] is not None:
-            if len(vDesc.hull.get('fakeTurrets', {}).get('battle', ())) > 0:
+        if tags & {'SPG', 'AT-SPG'}:
+            if vDesc.turrets[0].gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
                 result = False
         return result
 
 
-def getYawLimits(vDesc):
-    return None if vDesc is None else vDesc.gun['turretYawLimits']
+def hasSecondaryTurretRotator(vDesc):
+    if vDesc is None:
+        return False
+    else:
+        tags = vDesc.type.tags
+        return True if tags & {'multi_turret'} else False
+
+
+def getYawLimits(vDesc, turretIndex=0):
+    if vDesc is None:
+        return
+    else:
+        return vDesc.turrets[turretIndex].gun.turretYawLimits if len(vDesc.turrets) > turretIndex else None
 
 
 def hasYawLimits(vDesc):
@@ -26,7 +37,9 @@ def hasYawLimits(vDesc):
 
 
 def getVehicleIndicatorType(vDesc):
-    if vDesc is None:
+    if vDesc.type.id == (4, 4):
+        return 'B1TANK'
+    elif vDesc is None:
         return VEHICLE_INDICATOR_TYPE.DEFAULT
     else:
         iType = VEHICLE_INDICATOR_TYPE.DEFAULT
@@ -45,7 +58,7 @@ def getAutoRotationFlag(vDesc):
     :return: one of AUTO_ROTATION_FLAG.*.
     """
     flag = AUTO_ROTATION_FLAG.IGNORE_IN_UI
-    if hasYawLimits(vDesc):
+    if hasYawLimits(vDesc) and not vDesc.isMultiTurret:
         aih = avatar_getter.getInputHandler()
         if aih is None or aih.getAutorotation():
             flag = AUTO_ROTATION_FLAG.TURN_ON
@@ -91,7 +104,7 @@ class TankmenStatesIterator(object):
         return self
 
     def next(self):
-        if len(self._rolesEnum):
+        if self._rolesEnum:
             role = self._rolesEnum.pop(0)
             if role in self._mainRoles:
                 state = self._states[role]
@@ -116,16 +129,15 @@ class VehicleDeviceStatesIterator(object):
         return self
 
     def next(self):
-        if len(self._devices):
+        if self._devices:
             name = self._devices.pop(0)
             if name == 'turretRotator' and not self._hasTurret:
                 return (name, None)
-            else:
-                return (name, self._states[name])
+            return (name, self._states[name])
         else:
             self._states.clear()
             raise StopIteration()
-        return None
+            return None
 
     def clear(self):
         self._states.clear()

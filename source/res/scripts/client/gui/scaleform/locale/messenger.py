@@ -7,27 +7,16 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class MESSENGER(object):
-    CONTACTS_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/tooltips/btns/search'
-    CONTACTS_TOOLTIPS_BTNS_ADDGROUP = '#messenger:contacts/tooltips/btns/addGroup'
-    CONTACTS_TOOLTIPS_BTNS_SETTINGS = '#messenger:contacts/tooltips/btns/settings'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/searchView/tooltips/btns/search'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD = '#messenger:contacts/searchView/tooltips/btns/add'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/searchView/tooltips/btns/close'
-    CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH = '#messenger:contacts/tooltips/btns/externalSearch'
     CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/settingsView/tooltips/btns/apply'
     CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/settingsView/tooltips/btns/close'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD = '#messenger:contacts/searchView/tooltips/btns/add'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/searchView/tooltips/btns/close'
     CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/createGroupView/tooltips/btns/apply'
     CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/createGroupView/tooltips/btns/close'
     CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupRenameView/tooltips/btns/apply'
     CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupRenameView/tooltips/btns/close'
     CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupDeleteView/tooltips/btns/apply'
     CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupDeleteView/tooltips/btns/close'
-    PREBATTLE_ADDALLBTN_TOOLTIP = '#messenger:prebattle/addAllBtn/tooltip'
-    PREBATTLE_ADDBTN_TOOLTIP = '#messenger:prebattle/addBtn/tooltip'
-    PREBATTLE_REMOVEALLBTN_TOOLTIP = '#messenger:prebattle/removeAllBtn/tooltip'
-    PREBATTLE_REMOVEBTN_TOOLTIP = '#messenger:prebattle/removeBtn/tooltip'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED = '#messenger:contacts/searchView/tooltips/searchDisabled'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS = '#messenger:contacts/searchView/tooltips/searchCredentials'
     MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_CLOSE = '#messenger:messenger/contacts/editNote/tooltips/btns/close'
     MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_OK = '#messenger:messenger/contacts/editNote/tooltips/btns/ok'
     MESSENGER_CONTACTS_CREATENOTE_TOOLTIPS_BTNS_OK = '#messenger:messenger/contacts/createNote/tooltips/btns/ok'
@@ -149,6 +138,7 @@ class MESSENGER(object):
     DIALOGS_SQUAD_EVENT_VEHICLE = '#messenger:dialogs/squad/event/vehicle'
     DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL = '#messenger:dialogs/squad/message/invalidVehicleLevel'
     DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN = '#messenger:dialogs/squad/message/spgForbidden'
+    DIALOGS_SQUAD_MESSAGE_SPGFULL = '#messenger:dialogs/squad/message/spgFull'
     DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS = '#messenger:dialogs/squad/message/vehicles/differentLevels'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES = '#messenger:dialogs/falloutSquadChannel/vehicles'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES_STEELHUNTING = '#messenger:dialogs/falloutSquadChannel/vehicles/steelHunting'
@@ -351,7 +341,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMQUESTS = '#messenger:serviceChannelMessages/battleResults/refSystemQuests'
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMBOUGHTVEHICLE = '#messenger:serviceChannelMessages/battleResults/refSystemBoughtVehicle'
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMCONTRIBUTEXP = '#messenger:serviceChannelMessages/battleResults/refSystemContributeXp'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_POTAPOVQUESTS = '#messenger:serviceChannelMessages/battleResults/potapovQuests'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE = '#messenger:serviceChannelMessages/battleResults/fortResource'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTBUILDING = '#messenger:serviceChannelMessages/battleResults/fortBuilding'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
@@ -368,6 +358,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/reasons/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_TIMEOUT = '#messenger:serviceChannelMessages/battleTutorial/reasons/timeout'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_EXTERMINATION = '#messenger:serviceChannelMessages/battleTutorial/reasons/extermination'
+    SERVICECHANNELMESSAGES_BOOTCAMP_FINISHED = '#messenger:serviceChannelMessages/bootcamp/finished'
+    SERVICECHANNELMESSAGES_BOOTCAMP_AWARDS = '#messenger:serviceChannelMessages/bootcamp/awards'
+    SERVICECHANNELMESSAGES_BOOTCAMP_NO_AWARDS = '#messenger:serviceChannelMessages/bootcamp/no_awards'
+    SERVICECHANNELMESSAGES_BOOTCAMP_DEVICES = '#messenger:serviceChannelMessages/bootcamp/devices'
+    SERVICECHANNELMESSAGES_BOOTCAMP_CREW = '#messenger:serviceChannelMessages/bootcamp/crew'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/goldReceived/financial_transaction'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_DATE = '#messenger:serviceChannelMessages/goldReceived/date'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_RECEIVED = '#messenger:serviceChannelMessages/goldReceived/received'
@@ -411,6 +406,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWWITHDRAWN = '#messenger:serviceChannelMessages/invoiceReceived/crewWithdrawn'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMENFREEXPACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/tankmenFreeXpAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMENFREEXPDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/tankmenFreeXpDebited'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEAWARDLISTSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/freeAwardListsAccrued'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEAWARDLISTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/freeAwardListsDebited'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccounExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -752,6 +749,7 @@ class MESSENGER(object):
     CHAT_POSTBATTLESHARING_LABEL = '#messenger:chat/postBattleSharing/label'
     CHAT_TOXICMESSAGES_BLOCKEDMESSAGE = '#messenger:chat/toxicMessages/blockedMessage'
     BATTLE_TOOLTIPS_TOXICMESSAGE = '#messenger:battle/toolTips/toxicMessage'
+    PERSONALMISSIONS_COMPLETIONTOKENGAIN = '#messenger:personalMissions/completionTokenGain'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,
@@ -834,11 +832,6 @@ class MESSENGER(object):
      LISTVIEW_EMPTYLIST_INFO,
      LISTVIEW_EMPTYLIST_INVITE,
      LISTVIEW_EMPTYLIST_OFFER)
-    DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM = (DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_NOTREADY,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK)
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED,
@@ -930,15 +923,6 @@ class MESSENGER(object):
     def listview_emptylist(cls, key0):
         outcome = '#messenger:listView/emptyList/{}'.format(key0)
         if outcome not in cls.LISTVIEW_EMPTYLIST_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def dialogs_squadchannel_tooltips_status(cls, key0):
-        outcome = '#messenger:dialogs/squadChannel/tooltips/status/{}'.format(key0)
-        if outcome not in cls.DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

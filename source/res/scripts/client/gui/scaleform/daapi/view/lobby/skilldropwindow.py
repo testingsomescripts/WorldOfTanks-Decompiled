@@ -46,10 +46,11 @@ class SkillDropWindow(SkillDropMeta):
                 skillCost['action'] = action
                 dropSkillsCost.append(skillCost)
 
-            skills_count = list(tankmen.ACTIVE_SKILLS)
-            availableSkillsCount = len(skills_count) - len(tankman.skills)
-            hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(tankman.skills))
-            self.as_setDataS({'money': items.stats.money,
+            skills_count = tankmen.getSkillsConfig().getNumberOfActiveSkills()
+            lenSkills = len(tankman.skills)
+            availableSkillsCount = skills_count - lenSkills
+            hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not lenSkills)
+            self.as_setDataS({'money': items.stats.money.toMoneyTuple(),
              'tankman': packTankman(tankman, isCountPermanentSkills=False),
              'dropSkillsCost': dropSkillsCost,
              'hasNewSkills': hasNewSkills,
@@ -118,7 +119,7 @@ class SkillDropWindow(SkillDropMeta):
         tankman = self.itemsCache.items.getTankman(self.tmanInvID)
         proc = TankmanDropSkills(tankman, dropSkillCostIdx)
         result = yield proc.request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.onWindowClose()

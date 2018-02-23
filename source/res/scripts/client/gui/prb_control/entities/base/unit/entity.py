@@ -377,9 +377,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         self.clear()
         return super(_UnitEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
-    def showGUI(self, ctx=None):
-        return super(_UnitEntity, self).showGUI(ctx)
-
     def getEntityType(self):
         return self._prbType
 
@@ -668,7 +665,6 @@ class UnitEntity(_UnitEntity):
         self._actionsHandler = self._createActionsHandler()
         self._requestsProcessor = None
         self._vehiclesWatcher = None
-        self._cooldown = self._createCooldownManager()
         self._deferredReset = False
         self._showLeadershipNotification = False
         return
@@ -868,10 +864,7 @@ class UnitEntity(_UnitEntity):
     def getCensoredComment(self, unitMgrID=None):
         _, unit = self.getUnit(unitMgrID=unitMgrID)
         pInfo = self.getPlayerInfo(unitMgrID=unitMgrID)
-        if not pInfo.isCommander():
-            return passCensor(unit.getComment())
-        else:
-            return unit.getComment()
+        return passCensor(unit.getComment()) if not pInfo.isCommander() else unit.getComment()
 
     def getExtra(self, unitMgrID=None):
         _, unit = self.getUnit(unitMgrID=unitMgrID)
@@ -1850,7 +1843,7 @@ class UnitEntity(_UnitEntity):
                     callback(False)
                 return
             vehicle = invVehs[vehTypeCD]
-            vehInvID = vehicle.inventoryID
+            vehInvID = vehicle.invID
         else:
             LOG_ERROR('Context is invalid', ctx)
             if callback:

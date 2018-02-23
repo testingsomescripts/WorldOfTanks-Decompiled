@@ -28,6 +28,7 @@ NOT_AFFECTED_EQUIPMENTS = {'handExtinguishers',
  'largeRepairkit'}
 OPTIONAL_DEVICE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]
 EQUIPMENT_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]
+BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
 
 def createTankman(nationID, vehicleTypeID, role, roleLevel, skills):
     """
@@ -86,7 +87,7 @@ def getVehicleCrewSkills(vehicle):
                 if role in leftRoles:
                     leftRoles.remove(role)
                     outcome[idx][1] |= _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]
-                    if len(leftRoles) == 0:
+                    if not leftRoles:
                         return outcome
 
     else:
@@ -131,8 +132,18 @@ def installEquipmentOnVehicle(vehicle, intCD, slotIndex, itemsCache=None):
         if not success:
             LOG_WARNING('Equipment could not installed, reason: '.format(reason))
             return
-    vehicle.eqs[slotIndex] = equipment
-    vehicle.eqsLayout[slotIndex] = equipment
+    vehicle.equipment.regularConsumables[slotIndex] = equipment
+    vehicle.equipmentLayout.regularConsumables[slotIndex] = equipment
+    return
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def installBattleBoosterOnVehicle(vehicle, intCD, itemsCache=None):
+    if intCD and itemsCache is not None:
+        booster = itemsCache.items.getItemByCD(int(intCD))
+    else:
+        booster = None
+    vehicle.equipment.battleBoosterConsumables[0] = booster
     return
 
 

@@ -33,7 +33,7 @@ class CandidatesDataProvider(DAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def clear(self):
         self._list = []
@@ -277,6 +277,6 @@ class ManualSearchDataProvider(BaseRallyListDataProvider):
             self._selectedIdx = self.mapping[selectedID]
         if isFullUpdate:
             self.refresh()
-        elif len(diff):
+        elif diff:
             self.updateItems(diff)
         return self._selectedIdx

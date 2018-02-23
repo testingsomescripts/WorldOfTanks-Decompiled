@@ -91,6 +91,10 @@ def middleBonusTitle(text):
     return _formatText('middleBonusTitle', text)
 
 
+def tankParamsSubtitle(text):
+    return _formatText('tankParamsSubtitle', text)
+
+
 def highTitle(text):
     return _formatText('highTitle', text)
 
@@ -218,6 +222,10 @@ def alignText(text, align):
 
 def alignStandartText(text, align):
     return alignText(standard(text), align)
+
+
+def vehicleStatusSimpleText(text):
+    return _formatText('vehicleStatusSimpleText', text)
 
 
 def vehicleStatusInfoText(text):

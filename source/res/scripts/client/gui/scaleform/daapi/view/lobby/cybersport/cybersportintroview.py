@@ -90,14 +90,13 @@ class CyberSportIntroView(CyberSportIntroMeta):
         super(CyberSportIntroView, self)._dispose()
 
     def __updateSelectedVehicles(self, event):
-        if event.ctx is not None and len(event.ctx) > 0:
+        if event.ctx:
             vehIntCD = int(event.ctx[0])
             self.prbEntity.setSelectedVehicles(self._section, [vehIntCD])
             self.__updateAutoSearchVehicle([vehIntCD])
-        return
 
     def __updateAutoSearchVehicle(self, vehsIntCD):
-        if len(vehsIntCD):
+        if vehsIntCD:
             vehIntCD = vehsIntCD[0]
             vehicle = self.itemsCache.items.getItemByCD(vehIntCD)
             levelsRange = self.prbEntity.getRosterSettings().getLevelsRange()
@@ -105,6 +104,9 @@ class CyberSportIntroView(CyberSportIntroMeta):
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLELEVEL
             elif vehicle.type not in _ACCEPTED_VEH_TYPES:
+                isReadyVehicle = False
+                warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
+            elif 'event_battles' in vehicle.tags:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
             else:

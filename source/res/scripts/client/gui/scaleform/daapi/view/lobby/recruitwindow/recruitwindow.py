@@ -78,8 +78,8 @@ class RecruitWindow(RecruitWindowMeta):
         academyUpgradeAction = None
         if academyUpgradePrice != academyUpgradeDefPrice:
             academyUpgradeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'goldTankmanCost', True, Money(gold=academyUpgradePrice), Money(gold=academyUpgradeDefPrice))
-        data = {'credits': money.credits,
-         'gold': money.gold,
+        data = {Currency.CREDITS: money.getSignValue(Currency.CREDITS),
+         Currency.GOLD: money.getSignValue(Currency.GOLD),
          'schoolUpgradePrice': schoolUpgradePrice,
          'schoolUpgradeActionPriceData': schoolUpgradeAction,
          'academyUpgradePrice': academyUpgradePrice,
@@ -105,10 +105,11 @@ class RecruitWindow(RecruitWindowMeta):
         for module in modulesAll:
             typesDP.append({'id': module.innationID,
              'label': module.shortUserName})
+            skillsConfig = getSkillsConfig()
             for role in module.descriptor.type.crewRoles:
                 if role[0] == roleType:
                     rolesDP.append({'id': role[0],
-                     'label': convert(getSkillsConfig()[role[0]]['userString'])})
+                     'label': convert(skillsConfig.getSkill(role[0]).userString)})
 
             break
 
@@ -116,7 +117,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
+        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.CREW_LOCKED
 
     def updateNationDropdown(self):
         vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
@@ -185,13 +186,14 @@ class RecruitWindow(RecruitWindowMeta):
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         modulesAll.sort()
+        skillsConfig = getSkillsConfig()
         for module in modulesAll:
             for role in module.descriptor.type.crewRoles:
                 if role[0] in roles:
                     continue
                 roles.append(role[0])
                 data.append({'id': role[0],
-                 'label': convert(getSkillsConfig()[role[0]]['userString'])})
+                 'label': convert(skillsConfig.getSkill(role[0]).userString)})
 
         self.flashObject.as_setRoleDropdown(data)
         Waiting.hide('updating')
@@ -206,7 +208,7 @@ class RecruitWindow(RecruitWindowMeta):
         recruiter = TankmanRecruit(int(nationID), int(vehTypeID), role, int(studyType))
         success, msg, msgType, tmanInvID = yield recruiter.request()
         tankman = None
-        if len(msg):
+        if msg:
             SystemMessages.pushI18nMessage(msg, type=msgType)
         if success:
             tankman = self.itemsCache.items.getTankman(tmanInvID)
@@ -217,7 +219,7 @@ class RecruitWindow(RecruitWindowMeta):
     @process
     def __equipTankman(self, tankman, vehicle, slot, callback):
         result = yield TankmanEquip(tankman, vehicle, slot).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         callback(result.success)
 
@@ -225,7 +227,7 @@ class RecruitWindow(RecruitWindowMeta):
     @process
     def __buyAndEquipTankman(self, vehicle, slot, studyType, callback):
         result = yield TankmanRecruitAndEquip(vehicle, slot, studyType).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         callback(result.success)
 

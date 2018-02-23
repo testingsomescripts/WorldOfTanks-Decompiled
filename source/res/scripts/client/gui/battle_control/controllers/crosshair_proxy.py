@@ -22,7 +22,8 @@ _GUN_MARKERS_SET_IDS = (_BINDING_ID.GUN_MARKERS_FLAGS,
  _BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER,
- _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
+ _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
+ _BINDING_ID.CLIENT_SUB_GUN_MARKER_DATA_PROVIDER)
 _STRATEGIC_CAMERA_TO_ID = {_STRATEGIC_CAMERA.AERIAL: STRATEGIC_CAMERA_ID.AERIAL,
  _STRATEGIC_CAMERA.TRAJECTORY: STRATEGIC_CAMERA_ID.TRAJECTORY}
 
@@ -41,6 +42,7 @@ def getCrosshairViewIDByCtrlMode(ctrlMode):
 
 class GunMarkersSetInfo(object):
     clientMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER)
+    clientSubMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_SUB_GUN_MARKER_DATA_PROVIDER)
     clientSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     serverMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     serverSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
@@ -108,6 +110,7 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.subscribe(_BINDING_ID.CTRL_MODE_NAME, self.__onAvatarControlModeChanged)
         aih_global_binding.subscribe(_BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         aih_global_binding.subscribe(_BINDING_ID.CLIENT_GUN_MARKER_STATE, self.__onClientGunMarkerStateChanged)
+        aih_global_binding.subscribe(_BINDING_ID.SUB_GUN_MARKER_STATE, self.__onSubGunMarkerStateChanged)
         aih_global_binding.subscribe(_BINDING_ID.SERVER_GUN_MARKER_STATE, self.__onServerGunMarkerStateChanged)
         aih_global_binding.subscribe(_BINDING_ID.ZOOM_FACTOR, self.__onZoomFactorChanged)
         aih_global_binding.subscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
@@ -126,6 +129,7 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.unsubscribe(_BINDING_ID.CTRL_MODE_NAME, self.__onAvatarControlModeChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.CLIENT_GUN_MARKER_STATE, self.__onClientGunMarkerStateChanged)
+        aih_global_binding.unsubscribe(_BINDING_ID.SUB_GUN_MARKER_STATE, self.__onSubGunMarkerStateChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.SERVER_GUN_MARKER_STATE, self.__onServerGunMarkerStateChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.ZOOM_FACTOR, self.__onZoomFactorChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
@@ -161,6 +165,22 @@ class CrosshairDataProxy(IBattleController):
             posX = int(self.__positionX)
             posY = int(self.__positionY)
         return (posX, posY)
+
+    def getDisaredPosition(self):
+        """ This method invokes 'getScaledPosition' in usual cases.
+        Special case, when player switches on to arty mode, when camera is moved with interpolation,
+        this method returns center of screen with scale. Because of we do not have mechanics
+        to predict when camera will be in desired position without reducing of performance,
+        see WOTD-83447."""
+        if self.__ctrlMode == _CTRL_MODE.ARTY:
+            if self.__scale > 1.0:
+                posX = int(0.5 * self.__width / self.__scale)
+                posY = int(0.5 * self.__height / self.__scale)
+            else:
+                posX = int(0.5 * self.__width)
+                posY = int(0.5 * self.__height)
+            return (posX, posY)
+        return self.getScaledPosition()
 
     def getScaleFactor(self):
         """Gets scale of crosshair view.
@@ -237,6 +257,9 @@ class CrosshairDataProxy(IBattleController):
 
     def __onClientGunMarkerStateChanged(self, value):
         self.__setGunMarkerState(_MARKER_TYPE.CLIENT, value)
+
+    def __onSubGunMarkerStateChanged(self, value):
+        self.__setGunMarkerState(_MARKER_TYPE.SUB, value)
 
     def __onServerGunMarkerStateChanged(self, value):
         self.__setGunMarkerState(_MARKER_TYPE.SERVER, value)

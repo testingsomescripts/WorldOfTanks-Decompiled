@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
-import BigWorld
 from collections import namedtuple
 
 class ModelStates:
@@ -14,6 +13,8 @@ class TankPartNames:
     HULL = 'hull'
     TURRET = 'turret'
     GUN = 'gun'
+    ADDITIONAL_TURRET = 'additional_turret_'
+    ADDITIONAL_GUN = 'additional_gun_'
     ALL = (CHASSIS,
      HULL,
      TURRET,
@@ -25,6 +26,13 @@ class TankPartNames:
             if n == name:
                 return idx
 
+        if name.find('additional') != -1:
+            lastUnderscore = name.rfind('_') + 1
+            addlComponentIndex = int(name[lastUnderscore:])
+            realIndex = (addlComponentIndex + 1) * 2
+            if name.find('turret') != -1:
+                return realIndex
+            return realIndex + 1
         raise Exception('Invalid part name!')
 
 
@@ -110,10 +118,23 @@ UNDAMAGED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''),
 CRASHED_SKELETON = VehiclePartsTuple(chassis=[('Tank', ''), ('V', 'Tank'), ('HP_gui', '')], hull=[('HP_Fire_1', '')], turret=[('HP_gunJoint', '')], gun=[])
 
 def getCrashedSkeleton(vehicleDesc):
-    turretJointNode = (vehicleDesc.hull['turretHardPoints'][0], '')
+    turretJointNode = (vehicleDesc.hull.turretHardPoints[0], '')
     result = VehiclePartsTuple(chassis=CRASHED_SKELETON.chassis, hull=CRASHED_SKELETON.hull + [turretJointNode], turret=CRASHED_SKELETON.turret, gun=CRASHED_SKELETON.gun)
     return result
 
 
 def getPartModelsFromDesc(vehicleDesc, modelStateName):
-    return VehiclePartsTuple(vehicleDesc.chassis['models'][modelStateName], vehicleDesc.hull['models'][modelStateName], vehicleDesc.turret['models'][modelStateName], vehicleDesc.gun['models'][modelStateName])
+    return VehiclePartsTuple(chassis=vehicleDesc.chassis.models.getPathByStateName(modelStateName), hull=vehicleDesc.hull.models.getPathByStateName(modelStateName), turret=vehicleDesc.turret.models.getPathByStateName(modelStateName), gun=vehicleDesc.gun.models.getPathByStateName(modelStateName))
+
+
+def getAdditionalTurretsModelsFromDesc(vehicleDesc, modelStateName):
+    additionalTurrets = []
+    for turret in vehicleDesc.turrets:
+        if turret == vehicleDesc.turrets[0]:
+            continue
+        turretModelName = turret.turret.models.getPathByStateName(modelStateName)
+        gunModelName = turret.gun.models.getPathByStateName(modelStateName)
+        turretInfo = (turretModelName, gunModelName)
+        additionalTurrets.append(turretInfo)
+
+    return additionalTurrets

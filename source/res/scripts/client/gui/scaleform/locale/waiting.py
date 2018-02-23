@@ -49,6 +49,10 @@ class WAITING(object):
     RESEARCH = '#waiting:research'
     DRAW_RESEARCH_ITEMS = '#waiting:draw_research_items'
     BROWSER_INIT = '#waiting:browser/init'
+    HALLOWEENSEARCHING_1 = '#waiting:halloweenSearching_1'
+    HALLOWEENSEARCHING_2 = '#waiting:halloweenSearching_2'
+    HALLOWEENSEARCHING_3 = '#waiting:halloweenSearching_3'
+    HALLOWEENSEARCHING_4 = '#waiting:halloweenSearching_4'
     TECHMAINTENANCEEQUIPMENTS = '#waiting:techMaintenanceEquipments'
     TECHMAINTENANCE = '#waiting:techMaintenance'
     VOICECHAT = '#waiting:voiceChat'
@@ -108,6 +112,7 @@ class WAITING(object):
     DOWNLOAD_DISCOUNTS = '#waiting:download/discounts'
     DOWNLOAD_RECYCLEBIN = '#waiting:download/recycleBin'
     DOWNLOAD_RANKED = '#waiting:download/ranked'
+    DOWNLOAD_BADGES = '#waiting:download/badges'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
     PREBATTLE_TEAM_READY = '#waiting:prebattle/team_ready'
@@ -153,6 +158,7 @@ class WAITING(object):
     FORT_RETURNCONSUMABLE = '#waiting:fort/returnConsumable'
     MESSENGER_SUBSCRIBE = '#waiting:messenger/subscribe'
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
+    HOF_LOADING = '#waiting:hof/loading'
     TITLES_ENUM = (TITLES_QUEUE,
      TITLES_REGISTERING,
      TITLES_ANOTHER_PERIPHERY,

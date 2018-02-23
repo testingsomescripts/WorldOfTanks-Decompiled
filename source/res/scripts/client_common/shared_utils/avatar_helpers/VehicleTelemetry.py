@@ -6,7 +6,7 @@ import math
 import os.path
 import datetime
 import ResMgr
-from debug_utils import *
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CODEPOINT_WARNING
 from constants import ENABLE_DEBUG_DYNAMICS_INFO
 from physics_shared import G
 
@@ -104,8 +104,8 @@ class VehicleTelemetry:
         descr = self.avatar.getVehicleAttached().typeDescriptor
         parts = name.split(VehicleTelemetry.NAME_DELIMITER)
         header = VehicleTelemetry.HEADER_TMPL % {'Veh': descr.name,
-         'Eng': descr.engine['name'],
-         'Css': descr.chassis['name'],
+         'Eng': descr.engine.name,
+         'Css': descr.chassis.name,
          'Scn': parts[2],
          'Sec': parts[-2],
          'Phy': parts[-1]}

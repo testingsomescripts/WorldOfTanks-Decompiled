@@ -107,13 +107,17 @@ class RequestCriteria(object):
 
 class VehsSuitableCriteria(RequestCriteria):
 
-    def __init__(self, vehsItems, itemTypeIDs=None):
+    def __init__(self, vehsItems, itemTypeIDs=None, isMultiTurret=False, tabIndex=0):
         itemTypeIDs = itemTypeIDs or GUI_ITEM_TYPE.VEHICLE_MODULES
         suitableCompDescrs = set()
         for vehicle in vehsItems:
             for itemTypeID in itemTypeIDs:
+                if isMultiTurret:
+                    for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID, tabIndex, onlySpecificTurretPID=True)[0]:
+                        suitableCompDescrs.add(descr.compactDescr)
+
                 for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID)[0]:
-                    suitableCompDescrs.add(descr['compactDescr'])
+                    suitableCompDescrs.add(descr.compactDescr)
 
         super(VehsSuitableCriteria, self).__init__(PredicateCondition(lambda item: item.intCD in suitableCompDescrs))
 
@@ -123,7 +127,7 @@ class REQ_CRITERIA(object):
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isHidden))
     SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
-    DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: item.inventoryCount > 0 or not item.isSecret))
+    DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: (item.inventoryCount > 0 or not item.isSecret) and not item.isOnlyForEventBattles))
     UNLOCKED = RequestCriteria(PredicateCondition(lambda item: item.isUnlocked))
     REMOVABLE = RequestCriteria(PredicateCondition(lambda item: item.isRemovable))
     INVENTORY = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0))
@@ -133,8 +137,8 @@ class REQ_CRITERIA(object):
     ITEM_TYPES_NAMES = staticmethod(lambda *args: RequestCriteria(PredicateCondition(lambda item: item.itemTypeName in args)))
     IN_CD_LIST = staticmethod(lambda itemsList: RequestCriteria(PredicateCondition(lambda item: item.intCD in itemsList)))
     INVENTORY_OR_UNLOCKED = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0 or item.isUnlocked and not item.isInitiallyUnlocked))
-    DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.actionPrc != 0 and not item.isRestoreAvailable()))
-    DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellActionPrc != 0))
+    DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.buyPrices.itemPrice.isActionPrice() and not item.isRestoreAvailable()))
+    DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellPrices.itemPrice.isActionPrice()))
 
     class VEHICLE:
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
@@ -148,7 +152,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_CD = staticmethod(lambda typeCompDescrs: RequestCriteria(PredicateCondition(lambda item: item.intCD in typeCompDescrs)))
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
         SPECIFIC_BY_INV_ID = staticmethod(lambda invIDs: RequestCriteria(PredicateCondition(lambda item: item.invID in invIDs)))
-        SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
+        SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None, isMultiTurret=False, tabIndex=0: VehsSuitableCriteria(vehsItems, itemTypeIDs, isMultiTurret, tabIndex))
         RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented))
         ACTIVE_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
@@ -160,6 +164,7 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        CREW_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isCrewLocked))
         LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
@@ -167,7 +172,7 @@ class REQ_CRITERIA(object):
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
-        DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.actionPrc != 0 or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
+        DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -192,6 +197,7 @@ class REQ_CRITERIA(object):
         """
         BattleBooster is subtype of Equipment. It does not have any relations with BOOSTER.
         """
+        ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
         CREW_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isCrewBooster()))
         OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: not item.isCrewBooster()))
 
@@ -204,6 +210,13 @@ class REQ_CRITERIA(object):
         """
         SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe()))
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe()))
+
+    class BADGE:
+        """
+        Criteria for badges
+        """
+        SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
+        ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
 
 
 class RESEARCH_CRITERIA(object):
@@ -221,7 +234,7 @@ class ItemsRequester(IItemsRequester):
     """
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -230,6 +243,7 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation = vehicleRotation
         self.__recycleBin = recycleBin
         self.__ranked = ranked
+        self.__badges = badges
         self.__itemsCache = defaultdict(dict)
         self.__vehCustomStateCache = defaultdict(dict)
 
@@ -265,6 +279,10 @@ class ItemsRequester(IItemsRequester):
     def ranked(self):
         return self.__ranked
 
+    @property
+    def badges(self):
+        return self.__badges
+
     @async
     @process
     def request(self, callback=None):
@@ -287,8 +305,11 @@ class ItemsRequester(IItemsRequester):
         yield self.__recycleBin.request()
         Waiting.hide('download/recycleBin')
         Waiting.show('download/ranked')
-        yield self.ranked.request()
+        yield self.__ranked.request()
         Waiting.hide('download/ranked')
+        Waiting.show('download/badges')
+        yield self.__badges.request()
+        Waiting.hide('download/badges')
         callback(self)
 
     def isSynced(self):
@@ -325,7 +346,7 @@ class ItemsRequester(IItemsRequester):
         callback(userVehDossier)
 
     def clear(self):
-        while len(self.__itemsCache):
+        while self.__itemsCache:
             _, cache = self.__itemsCache.popitem()
             cache.clear()
 
@@ -337,7 +358,8 @@ class ItemsRequester(IItemsRequester):
         self.__goodies.clear()
         self.__vehicleRotation.clear()
         self.__recycleBin.clear()
-        self.ranked.clear()
+        self.__ranked.clear()
+        self.__badges.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -399,17 +421,19 @@ class ItemsRequester(IItemsRequester):
 
             if itemTypeID == GUI_ITEM_TYPE.SHELL:
                 invalidate[itemTypeID].update(itemsDiff.keys())
-                for shellIntCD in itemsDiff.iterkeys():
-                    for vehicle in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues():
-                        shells = vehicle['shells']
-                        for intCD, _, _ in LayoutIterator(shells):
-                            if shellIntCD == intCD:
-                                vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
-                                invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                                vehicleData = self.__inventory.getItemData(vehicleIntCD)
-                                if vehicleData is not None:
-                                    gunIntCD = vehicleData.descriptor.gun['compactDescr']
-                                    invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
+                vehicleItems = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                if vehicleItems:
+                    for shellIntCD in itemsDiff.iterkeys():
+                        for vehicle in vehicleItems.itervalues():
+                            shells = vehicle['shells']
+                            for intCD, _, _ in LayoutIterator(shells):
+                                if shellIntCD == intCD:
+                                    vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
+                                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                                    vehicleData = self.__inventory.getItemData(vehicleIntCD)
+                                    if vehicleData is not None:
+                                        gunIntCD = vehicleData.descriptor.turrets[0].gun.compactDescr
+                                        invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 
@@ -505,6 +529,20 @@ class ItemsRequester(IItemsRequester):
 
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
+
+    def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
+        """
+        Returns badges items collection. Unfortunately, no caching is available due to
+        specific storing system.
+        :return: ItemsCollection with badges
+        """
+        result = ItemsCollection()
+        for badgeID, badgeData in self.__badges.available.iteritems():
+            item = self.itemsFactory.createBadge(badgeData, proxy=self)
+            if criteria(item):
+                result[badgeID] = item
+
+        return result
 
     def getItemByCD(self, typeCompDescr):
         """

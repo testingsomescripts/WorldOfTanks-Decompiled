@@ -160,7 +160,7 @@ class I18nDialogMeta(SimpleDialogMeta):
         result = None
         if self._meta is not None:
             result = self._meta.getTitle()
-        if result is None or not len(result):
+        if not result:
             result = self._makeString(I18N_TITLE_KEY.format(self._key), self._titleCtx)
         return result
 
@@ -168,7 +168,7 @@ class I18nDialogMeta(SimpleDialogMeta):
         result = None
         if self._meta is not None:
             result = self._meta.getMessage()
-        if result is None or not len(result):
+        if not result:
             result = self._makeString(I18N_MESSAGE_KEY.format(self._key), self._messageCtx)
         return result
 
@@ -190,11 +190,7 @@ class I18nDialogMeta(SimpleDialogMeta):
         return i18n.makeString(_getDialogStr(key), **ctx)
 
     def getViewScopeType(self):
-        if self._meta is not None:
-            return self._meta.getViewScopeType()
-        else:
-            return super(I18nDialogMeta, self).getViewScopeType()
-            return
+        return self._meta.getViewScopeType() if self._meta is not None else super(I18nDialogMeta, self).getViewScopeType()
 
 
 class I18nInfoDialogMeta(I18nDialogMeta):
@@ -220,10 +216,7 @@ class TankmanOperationDialogMeta(I18nConfirmDialogMeta):
         return
 
     def getEventType(self):
-        if self.__tankman.isDismissed:
-            return events.ShowDialogEvent.SHOW_RESTORE_TANKMAN_DIALOG
-        else:
-            return events.ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG
+        return events.ShowDialogEvent.SHOW_RESTORE_TANKMAN_DIALOG if self.__tankman.isDismissed else events.ShowDialogEvent.SHOW_DISMISS_TANKMAN_DIALOG
 
     def getTankman(self):
         return self.__tankman
@@ -235,9 +228,6 @@ class TankmanOperationDialogMeta(I18nConfirmDialogMeta):
 
 class IconDialogMeta(I18nConfirmDialogMeta):
 
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
-        super(IconDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
-
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_ICON_DIALOG
 
@@ -245,7 +235,7 @@ class IconDialogMeta(I18nConfirmDialogMeta):
         result = None
         if self._meta is not None:
             result = self._meta.getIcon()
-        if result is None or not len(result):
+        if not result:
             result = self._messageCtx.get('icon')
         return result
 
@@ -256,12 +246,13 @@ class IconPriceDialogMeta(IconDialogMeta):
         super(IconPriceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._operationPrice = self.__calcMessagePrice()
         self._action = self.__calcAction()
+        self._item = messageCtx.get('item')
 
     def __calcMessagePrice(self):
         result = None
         if self._meta is not None:
             result = self._meta.getMessagePrice()
-        if result is None or not len(result):
+        if not result:
             result = self._messageCtx.get('price')
         return result
 
@@ -269,7 +260,7 @@ class IconPriceDialogMeta(IconDialogMeta):
         result = None
         if self._meta is not None:
             result = self._meta.getAction()
-        if result is None or not len(result):
+        if not result:
             result = self._messageCtx.get('action')
         return result
 
@@ -285,9 +276,6 @@ class IconPriceDialogMeta(IconDialogMeta):
 
 class DestroyDeviceDialogMeta(IconDialogMeta):
 
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
-        super(DestroyDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
-
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_DESTROY_DEVICE_DIALOG
 
@@ -295,15 +283,14 @@ class DestroyDeviceDialogMeta(IconDialogMeta):
 class DemountDeviceDialogMeta(IconPriceDialogMeta):
     DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
 
-    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, itemsCache=None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self.onConfirmationStatusChnaged = Event.Event()
-        self.__userGoldAmount = itemsCache.items.stats.gold
         self.__isOperationAllowed = False
         self.__checkIsOperationAllowed()
-        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__goldChangeHandler)
-        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler})
+        g_clientUpdateManager.addMoneyCallback(self.__moneyChangeHandler)
+        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler,
+         'shop.paidDeluxeRemovalCost': self.__paidRemovalCostChangeHandler})
 
     @property
     def isOperationAllowed(self):
@@ -312,17 +299,20 @@ class DemountDeviceDialogMeta(IconPriceDialogMeta):
     def getIcon(self):
         return self.DISMANTLE_DEVICE_PATH
 
-    def __goldChangeHandler(self, gold):
-        self.__userGoldAmount = gold
+    def __moneyChangeHandler(self, *args):
         self.__checkIsOperationAllowed()
 
-    def __paidRemovalCostChangeHandler(self, paidRemovalCost):
-        self._operationPrice = paidRemovalCost
+    def __paidRemovalCostChangeHandler(self, *args):
         self.__checkIsOperationAllowed()
 
-    def __checkIsOperationAllowed(self):
-        self.__isOperationAllowed = self.__userGoldAmount >= self._operationPrice
-        self.onConfirmationStatusChnaged(self.__isOperationAllowed)
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __checkIsOperationAllowed(self, itemsCache=None):
+        userMoney = itemsCache.items.stats.money
+        itemRemovalPrice = self._item.getRemovalPrice(itemsCache.items)
+        operationAllowed = userMoney >= itemRemovalPrice.price
+        if self.__isOperationAllowed != operationAllowed:
+            self.__isOperationAllowed = operationAllowed
+            self.onConfirmationStatusChnaged(operationAllowed)
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG

@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/functions.py
 from operator import itemgetter
+from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
 from items import utils, tankmen
 
 def getVehicleFactors(vehicle):
-    factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
-    eqs = [ eq.descriptor for eq in vehicle.eqs if eq is not None ]
+    factors = vehicleDescr.type.createAttributeFactors()
+    eqs = [ eq.descriptor for eq in vehicle.equipment.regularConsumables if eq is not None ]
+    if vehicle.equipment.battleBoosterConsumables[0] is not None:
+        eqs.append(vehicle.equipment.battleBoosterConsumables[0].descriptor)
     crewCompactDescrs = extractCrewDescrs(vehicle)
     utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors)
     return factors
@@ -33,11 +36,7 @@ def extractCrewDescrs(vehicle, replaceNone=True):
             tankmanDescr = createFakeTankmanDescr(role, vehicleDescr.type)
         crewCompactDescrs.append(tankmanDescr)
 
-    if replaceNone:
-        return crewCompactDescrs
-    else:
-        return (crewCompactDescrs, emptySlots, otherVehicleSlots)
-        return
+    return crewCompactDescrs if replaceNone else (crewCompactDescrs, emptySlots, otherVehicleSlots)
 
 
 def createFakeTankmanDescr(role, vehicleType, roleLevel=100):
@@ -50,4 +49,4 @@ def getBasicShell(vehDescr):
     """
         basic is shell which goes first in XML describing particular gun
     """
-    return vehDescr.gun['shots'][0]['shell']
+    return vehDescr.gun.shots[0].shell

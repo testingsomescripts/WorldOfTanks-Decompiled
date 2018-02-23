@@ -71,6 +71,13 @@
       <sinai></sinai>
       <patton></patton>
       <scout></scout>
+      <mediumTank1></mediumTank1>
+      <mediumTank2></mediumTank2>
+      <mediumTank3></mediumTank3>
+      <heavyTank1></heavyTank1>
+      <heavyTank2></heavyTank2>
+      <AT-SPG1></AT-SPG1>
+      <AT-SPG2></AT-SPG2>
       <secret></secret>
       <special></special>
       <disabledInRoaming></disabledInRoaming>
@@ -88,6 +95,9 @@
       <unrecoverable></unrecoverable>
       <siegeMode></siegeMode>
       <lockCrew></lockCrew>
+      <multi_turret></multi_turret>
+      <leviathan></leviathan>
+      <cannot_be_researched></cannot_be_researched>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -168,6 +178,7 @@
       <coatedOptics></coatedOptics>
       <aimingStabilizer></aimingStabilizer>
       <enhancedAimDrives></enhancedAimDrives>
+      <notForSale></notForSale>
     </tags>
   </equipment>
 </item_types.xml>

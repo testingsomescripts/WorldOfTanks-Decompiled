@@ -10,9 +10,6 @@ class SuspensionController(svarog_script.py_component.Component):
         self.__vehicleDescriptor = None
         return
 
-    def activate(self):
-        super(SuspensionController, self).activate()
-
     def deactivate(self):
         self.__vehicleFilter = None
         self.__vehicleDescriptor = None
@@ -36,7 +33,7 @@ class SuspensionController(svarog_script.py_component.Component):
             physics = self.__vehicleFilter.getVehiclePhysics()
             if physics is None or not needUpdateSpringsLength:
                 return
-            newSuspensionSpringLength = self.__vehicleDescriptor.chassis['suspensionSpringsLength']
+            newSuspensionSpringLength = self.__vehicleDescriptor.chassis.suspensionSpringsLength
             if newSuspensionSpringLength is not None:
                 physics.setDamperSpringsLength(newSuspensionSpringLength['left'], newSuspensionSpringLength['right'])
             return

@@ -17,6 +17,7 @@ from gui.shared import events, EVENT_BUS_SCOPE, event_dispatcher as shared_event
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from gui.shared.money import Currency
 from gui.shared.utils.functions import getViewName, makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
@@ -105,7 +106,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         """
         super(StoreComponent, self)._dispose()
         self.__clearTableData()
-        while len(self.__nations):
+        while self.__nations:
             self.__nations.pop()
 
         self.__nations = None
@@ -160,9 +161,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         noItemsInfo = None
         if showNoItemsInfo:
             noItemsInfo = {'message': text_styles.main(MENU.STORE_MENU_NOITEMS)}
-        self._table.as_setDataS({'gold': self.itemsCache.items.stats.gold,
-         'credits': self.itemsCache.items.stats.credits,
-         'type': self._currentTab.getTableType(),
+        self._table.as_setDataS({'type': self._currentTab.getTableType(),
          'showNoItemsInfo': showNoItemsInfo,
          'noItemsInfo': noItemsInfo})
         self.as_setActionAvailableS(self._currentTab.hasDiscounts())
@@ -191,7 +190,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         """
         Set nations into Flash
         """
-        while len(self.__nations):
+        while self.__nations:
             self.__nations.pop()
 
         for name in GUI_NATIONS:

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
@@ -130,6 +131,6 @@ class TankCarousel(TankCarouselMeta):
     def __onFittingUpdate(self, *args):
         self.updateParams()
 
-    def __onViewLoaded(self, view):
+    def __onViewLoaded(self, view, *args, **kwargs):
         if view.settings.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)

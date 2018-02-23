@@ -8,6 +8,7 @@ Please, don't edit this file manually.
 class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_LABEL = '#vehicle_preview:header/backBtn/label'
     HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE = '#vehicle_preview:header/backBtn/descrLabel/researchTree'
+    HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS = '#vehicle_preview:header/backBtn/descrLabel/personalAwards'
     HEADER_BACKBTN_DESCRLABEL_SHOP = '#vehicle_preview:header/backBtn/descrLabel/shop'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'
@@ -26,7 +27,3 @@ class VEHICLE_PREVIEW(object):
     INFOPANEL_TAB_CREWINFO_NAME = '#vehicle_preview:infoPanel/tab/crewInfo/name'
     INFOPANEL_TAB_FACTSHEET_NAME = '#vehicle_preview:infoPanel/tab/factSheet/name'
     INFOPANEL_TAB_CREWINFO_LISTDESC_TEXT = '#vehicle_preview:infoPanel/tab/crewInfo/listDesc/text'
-    SPECIALCREW_SABATON_NAME = '#vehicle_preview:specialCrew/sabaton/name'
-    SPECIALCREW_SABATON_DESCRIPTION = '#vehicle_preview:specialCrew/sabaton/description'
-    SPECIALCREW_SABATON_PERK = '#vehicle_preview:specialCrew/sabaton/perk'
-    BUYINGPANEL_SABATON_BUYLABEL = '#vehicle_preview:buyingPanel/sabaton/buyLabel'

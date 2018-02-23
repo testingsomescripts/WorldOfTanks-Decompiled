@@ -14,7 +14,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items.serializers import packTankman
-from gui.shared.money import Currency, ZERO_MONEY
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -62,7 +62,7 @@ class _TankmanOperationDialogBase(TankmanOperationDialogMeta):
             preLastSkillIcon = skills[-2]['icon']['small']
         roleLevel = packedTankman['roleLevel']
         hasNewSkill = self._tankman.hasNewSkill(useCombinedRoles=True)
-        isSkilledTankmen = roleLevel == MAX_SKILL_LEVEL or lastSkillIcon is not '' or hasNewSkill
+        isSkilledTankmen = roleLevel == MAX_SKILL_LEVEL or lastSkillIcon != '' or hasNewSkill
         isProtectedState = self._isDismissState and isSkilledTankmen
         if not isSkilledTankmen:
             skillsCount = -1
@@ -125,7 +125,7 @@ class DismissTankmanDialog(_TankmanOperationDialogBase):
         if not self._tankman.isRestorable():
             alertText = text_styles.alert(icons.alert() + _ms(DIALOGS.PROTECTEDDISMISSTANKMAN_ALERT))
             alertTooltip = TOOLTIPS.DISMISSTANKMANDIALOG_CANTRESTORALERT
-        elif len(deletedTankmen) > 0:
+        elif deletedTankmen:
             alertImgSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
             alertTooltip = makeTooltip(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_HEADER, _ms(TOOLTIPS.DISMISSTANKMANDIALOG_BUFFERISFULL_BODY, placeCount=self.restore.getMaxTankmenBufferLength(), currCount=len(self.restore.getDismissedTankmen()), tankmanNew=self._tankman.fullUserName, tankmanOld=formatDeletedTankmanStr(deletedTankmen[0])))
         return {'alertText': alertText,
@@ -156,19 +156,19 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
         actionPriceVO = None
         restorePrice, lengthInHours = getTankmenRestoreInfo(self._tankman)
         warningTexts = []
-        if restorePrice == ZERO_MONEY:
+        if not restorePrice:
             currencyTextFrame = ICON_TEXT_FRAMES.EMPTY
             restorePriceStr = text_styles.success(_ms(DIALOGS.RESTORETANKMAN_FORFREE))
             isEnoughMoney = True
         else:
             currencyName = restorePrice.getCurrency()
             currencyTextFrame = self._CURRENCY_TO_TEXT_FRAME[currencyName]
-            restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.credits))
-            isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName) >= restorePrice.get(currencyName)
+            restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.getSignValue(currencyName)))
+            isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName, 0) >= restorePrice.get(currencyName, 0)
             if self._showPeriodEndWarning:
                 daysCount = lengthInHours / time_utils.HOURS_IN_DAY
                 warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMAN_NEWPERIODWARNING, daysCount=daysCount)))
-            if constants.IS_KOREA and restorePrice.gold > 0:
+            if constants.IS_KOREA and restorePrice.isSet(Currency.GOLD):
                 warningTexts.append(text_styles.standard(DIALOGS.BUYVEHICLEDIALOG_WARNING))
         if isLongDisconnectedFromCenter():
             warningTexts.append(text_styles.error(DIALOGS.RESTORETANKMAN_DISCONNECTEDFROMCENTER))
