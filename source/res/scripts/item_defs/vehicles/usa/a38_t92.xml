@@ -1,4 +1,4 @@
-<a38_t92.xml>
+<A38_T92.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -215,7 +215,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -403,4 +402,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a38_t92.xml>
+</A38_T92.xml>

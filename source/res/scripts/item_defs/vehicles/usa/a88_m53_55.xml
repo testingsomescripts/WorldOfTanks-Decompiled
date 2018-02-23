@@ -1,4 +1,4 @@
-<a88_m53_55.xml>
+<A88_M53_55.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -198,7 +198,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -538,7 +537,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -853,4 +851,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a88_m53_55.xml>
+</A88_M53_55.xml>

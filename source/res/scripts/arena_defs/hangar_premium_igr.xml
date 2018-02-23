@@ -1,4 +1,4 @@
-<hangar_premium_igr.xml>
+<hangar_premium_IGR.xml>
   <wwmusic>	hangar_premium_IGR_drone	</wwmusic>
   <wwambientSound>	hangar_premium_IGR_silence	</wwambientSound>
   <soundRemapping>
@@ -9,4 +9,4 @@
       <bank>	hangar_v2.bnk	</bank>
     </unloadBanks>
   </soundRemapping>
-</hangar_premium_igr.xml>
+</hangar_premium_IGR.xml>

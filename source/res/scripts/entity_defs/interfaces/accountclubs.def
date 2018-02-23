@@ -1,4 +1,4 @@
-<accountclubs.def>
+<AccountClubs.def>
   <BaseMethods>
     <accountClubs_receiveResponse>
       <Arg>	UINT8	</Arg>
@@ -33,4 +33,4 @@
       <Arg>	STRING	</Arg>
     </receiveClubNotification>
   </ClientMethods>
-</accountclubs.def>
+</AccountClubs.def>

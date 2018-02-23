@@ -1,4 +1,4 @@
-<gb06_vickers_medium_mk_iii.xml>
+<GB06_Vickers_Medium_Mk_III.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -383,7 +383,6 @@
       <trackThickness>	-0.0026	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -691,7 +690,6 @@
       <trackThickness>	-0.0026	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1177,4 +1175,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb06_vickers_medium_mk_iii.xml>
+</GB06_Vickers_Medium_Mk_III.xml>

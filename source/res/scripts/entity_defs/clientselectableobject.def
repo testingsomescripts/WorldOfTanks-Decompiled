@@ -1,4 +1,4 @@
-<clientselectableobject.def>
+<ClientSelectableObject.def>
   <Volatile>
     <position></position>
     <yaw></yaw>
@@ -26,4 +26,4 @@
     </clickSoundName>
   </Properties>
   <ClientMethods></ClientMethods>
-</clientselectableobject.def>
+</ClientSelectableObject.def>

@@ -1,4 +1,4 @@
-<artilleryequipment.def>
+<ArtilleryEquipment.def>
   <BaseMethods>
     <artilleryEquipment_startArtilleryStrike>
       <Arg>	ATTACKER_INFO	</Arg>
@@ -6,4 +6,4 @@
       <Arg>	PYTHON	</Arg>
     </artilleryEquipment_startArtilleryStrike>
   </BaseMethods>
-</artilleryequipment.def>
+</ArtilleryEquipment.def>

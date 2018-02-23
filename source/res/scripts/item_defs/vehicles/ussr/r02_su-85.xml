@@ -1,4 +1,4 @@
-<r02_su-85.xml>
+<R02_SU-85.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -208,7 +208,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -582,7 +581,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1222,4 +1220,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r02_su-85.xml>
+</R02_SU-85.xml>

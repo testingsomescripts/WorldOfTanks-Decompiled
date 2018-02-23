@@ -1,4 +1,4 @@
-<falloutmultiteammgr.def>
+<FalloutMultiteamMgr.def>
   <Parent>	FalloutMgr	</Parent>
   <Properties></Properties>
   <BaseMethods>
@@ -12,4 +12,4 @@
       <Arg>	MAILBOX	</Arg>
     </onCreateFalloutUnit>
   </BaseMethods>
-</falloutmultiteammgr.def>
+</FalloutMultiteamMgr.def>

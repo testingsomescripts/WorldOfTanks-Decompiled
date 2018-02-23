@@ -1,4 +1,4 @@
-<gb87_chieftain_t95_turret.xml>
+<GB87_Chieftain_T95_turret.xml>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -172,7 +172,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -544,4 +543,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb87_chieftain_t95_turret.xml>
+</GB87_Chieftain_T95_turret.xml>

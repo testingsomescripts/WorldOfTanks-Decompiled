@@ -1,4 +1,4 @@
-<unitfinder.def>
+<UnitFinder.def>
   <Properties></Properties>
   <BaseMethods>
     <browserSubscribe>
@@ -39,4 +39,4 @@
       <Arg>	MAILBOX	</Arg>
     </unitRestore>
   </BaseMethods>
-</unitfinder.def>
+</UnitFinder.def>

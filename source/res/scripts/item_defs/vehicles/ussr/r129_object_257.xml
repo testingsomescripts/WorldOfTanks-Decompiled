@@ -1,4 +1,4 @@
-<r129_object_257.xml>
+<R129_Object_257.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -184,7 +184,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -551,4 +550,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r129_object_257.xml>
+</R129_Object_257.xml>

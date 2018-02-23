@@ -9,21 +9,16 @@ import ResMgr
 import BigWorld
 import constants
 import ArenaType
-from account_helpers.settings_core import g_settingsCore
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
-from gui.goodies.GoodiesCache import g_goodiesCache
-from shared_utils import findFirst, CONST_CONTAINER
+from gui.goodies.goodies_cache import g_goodiesCache
+from helpers import dependency
+from shared_utils import findFirst
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
-from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
-from gui.clans.clan_controller import g_clanCtrl
 from gui.clans.items import formatField
-from gui.clubs import formatters as club_fmts
-from gui.clubs.ClubsController import g_clubsCtrl
-from gui.clubs.settings import getLadderChevron256x256, getPointsToNextDivision
-from gui.prb_control.prb_getters import getBattleID
 from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
@@ -31,38 +26,40 @@ from gui.shared.view_helpers import UsersInfoHelper
 from gui.LobbyContext import g_lobbyContext
 from gui.shared.tooltips import efficiency
 from gui.shared.money import Money, Currency
-from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeClubFullName, makeContactStatusDescription
-from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, getPingStatus, PING_STATUSES
+from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
+from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from ConnectionManager import connectionManager
 from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import i18n, time_utils, html, int2roman
 from helpers.i18n import makeString as ms, makeString
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils.FortViewHelper import FortViewHelper
-from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS as FORT
 from UnitBase import SORTIE_DIVISION
-from gui import g_htmlTemplates, makeHtmlString, game_control
-from gui.Scaleform.daapi.view.lobby.fortifications.components.sorties_dps import makeDivisionData
+from gui import g_htmlTemplates, makeHtmlString
+from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.daapi.view.lobby.fortifications.fort_utils import fort_formatters
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeBuildingIndicatorsVO
 from gui.prb_control.items.unit_items import SupportedRosterSettings
+from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipMethodField, ToolTipParameterField, ToolTipData, ToolTipAttrField
+from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
 from gui.shared import g_itemsCache
-from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.Scaleform.daapi.view.lobby.fortifications.components.FortBattlesSortieListView import formatGuiTimeLimitStr
+from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from items import vehicles
 from messenger.storage import storage_getter
 from messenger.m_constants import USER_TAG
 from gui.shared.tooltips import formatters
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.clans import IClanController
+from skeletons.gui.game_control import IRefSystemController, IIGRController, IServerStatsController
+from skeletons.gui.server_events import IEventsCache
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 
 class FortOrderParamField(ToolTipParameterField):
@@ -72,6 +69,8 @@ class FortOrderParamField(ToolTipParameterField):
 
 
 class IgrTooltipData(ToolTipBaseData):
+    igrCtrl = dependency.descriptor(IIGRController)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, context):
         super(IgrTooltipData, self).__init__(context, TOOLTIP_TYPE.IGR)
@@ -79,10 +78,10 @@ class IgrTooltipData(ToolTipBaseData):
     def getDisplayableData(self, *args):
         qLabels, qProgress = [], []
         premVehQuests = []
-        if game_control.g_instance.igr.getRoomType() in (constants.IGR_TYPE.PREMIUM, constants.IGR_TYPE.BASE):
-            quests = g_eventsCache.getQuests()
+        if self.igrCtrl.getRoomType() in (constants.IGR_TYPE.PREMIUM, constants.IGR_TYPE.BASE):
+            quests = self.eventsCache.getQuests()
             for q in quests.itervalues():
-                if game_control.g_instance.igr.getRoomType() == constants.IGR_TYPE.PREMIUM:
+                if self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM:
                     template = g_htmlTemplates['html_templates:lobby/tooltips']['igr_quest']
                     if q.accountReqs.hasIGRCondition() and not q.hasPremIGRVehBonus():
                         metaList = q.getBonuses('meta')
@@ -112,8 +111,8 @@ class IgrTooltipData(ToolTipBaseData):
                          'descr': text})
 
         descriptionTemplate = 'igr_description' if len(qLabels) == 0 else 'igr_description_with_quests'
-        igrPercent = (game_control.g_instance.igr.getXPFactor() - 1) * 100
-        igrType = game_control.g_instance.igr.getRoomType()
+        igrPercent = (self.igrCtrl.getXPFactor() - 1) * 100
+        igrType = self.igrCtrl.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
         return {'title': i18n.makeString(TOOLTIPS.IGR_TITLE, igrIcon=icon),
          'description': makeHtmlString('html_templates:lobby/tooltips', descriptionTemplate, {'igrValue': '{0}%'.format(BigWorld.wg_getIntegralFormat(igrPercent))}),
@@ -236,9 +235,9 @@ class ContactTooltipData(ToolTipBaseData):
         if userEntity is None:
             return {'userProps': {'userName': defaultName}}
         else:
-            commonGuiData = self.__converter.makeVO(userEntity, False)
+            commonGuiData = self.__converter.makeVO(userEntity, useBigIcons=True)
             tags = userEntity.getTags()
-            resourceID = commonGuiData['resource']
+            resourceID = self.__converter.getGuiResourceID(userEntity)
             if resourceID == WG_GAMES.TANKS:
                 statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
             else:
@@ -281,11 +280,6 @@ class ContactTooltipData(ToolTipBaseData):
             if clanAbbrev and USER_TAG.CLAN_MEMBER in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeClanFullName(clanAbbrev)
-            if USER_TAG.CLUB_MEMBER in tags:
-                clubName = self.playerCtx.getMyClubName()
-                if clubName:
-                    groupsStr += self.__addComma(groupsStr)
-                    groupsStr += makeClubFullName(clubName)
             if USER_TAG.IGNORED in tags or USER_TAG.IGNORED_TMP in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
@@ -315,26 +309,67 @@ class ContactTooltipData(ToolTipBaseData):
         return ', ' if currStr != '' else ''
 
 
-class SortieDivisionTooltipData(ToolTipBaseData):
+class StrongholdTooltipData(ToolTipBaseData):
+
+    def _getEntity(self):
+        from gui.prb_control.dispatcher import g_prbLoader
+        dispatcher = g_prbLoader.getDispatcher()
+        return dispatcher.getEntity()
+
+    def _getData(self):
+        data = self._getEntity().getStrongholdData()
+        return data
+
+
+class SortieDivisionTooltipData(StrongholdTooltipData):
 
     def __init__(self, context):
         super(SortieDivisionTooltipData, self).__init__(context, TOOLTIP_TYPE.FORTIFICATIONS)
 
     def getDisplayableData(self):
-        divisionsData = []
-        divisions = makeDivisionData()
-        for division in divisions:
-            minLvl, maxLvl = division['vehLvls']
-            if maxLvl == minLvl:
-                divisLevels = fort_formatters.getTextLevel(maxLvl)
+        data = self._getEntity().getStrongholdData()
+        if data is None:
+            return
+        else:
+            isSortie = data.isSortie()
+            minLvl, maxLvl = data.getMinLevel(), data.getMaxLevel()
+            divisLevel = fort_formatters.getTextLevel(minLvl)
+            if maxLvl != minLvl:
+                divisLevel += ' - ' + fort_formatters.getTextLevel(maxLvl)
+            minPlayers, maxPlayers = data.getMinPlayerCount(), data.getMaxPlayerCount()
+            divisPlayers = str(minPlayers)
+            if minPlayers != maxPlayers:
+                divisPlayers += '-' + str(maxPlayers)
+            battleDuration = data.getBattleDurationMinuts()
+            minuts = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_MINUTS)
+            hours = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_HOURS)
+            battleDurationTime = '%d%s' % (battleDuration, minuts)
+            divisionData = {}
+            level = fort_formatters.getTextLevel(maxLvl)
+            if data.isSortie():
+                divisTime = battleDurationTime
+                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_SORTIETITLE, level=level)
             else:
-                divisLevels = fort_formatters.getTextLevel(minLvl) + ' - ' + fort_formatters.getTextLevel(maxLvl)
-            divisionsData.append({'divisName': division['label'],
-             'divisLevels': text_styles.main(divisLevels),
-             'divisBonus': self.__getBonusStr(division['profit']),
-             'divisPlayers': self.__getPlayerLimitsStr(*self.__getPlayerLimits(division['level']))})
-
-        return {'divisions': divisionsData}
+                battleSeriesDurationMinuts = data.getBattleSeriesDurationMinuts()
+                battleSeriesDurationHours = data.getBattleSeriesDurationHours()
+                if battleSeriesDurationHours >= 1:
+                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationHours, hours)
+                else:
+                    battleSeriesDurationTime = '%d%s' % (battleSeriesDurationMinuts, minuts)
+                divisTime = '%s (%s)' % (battleDurationTime, battleSeriesDurationTime)
+                direction = getDirection(data.getDirection())
+                divisName = i18n.makeString(FORTIFICATIONS.FORT2TOOLTIPS_FORTTITLE, direction=direction)
+            resourceMultiplier = data.getResourceMultiplier()
+            if resourceMultiplier > 1:
+                dailyBonus = 'x%d' % resourceMultiplier
+                divisionData['dailyBonus'] = dailyBonus
+            divisionData['isSortie'] = isSortie
+            divisionData['divisName'] = divisName
+            divisionData['divisLevels'] = divisLevel
+            divisionData['divisLegionnaires'] = str(data.getMaxLegCount())
+            divisionData['divisPlayers'] = divisPlayers
+            divisionData['divisTime'] = divisTime
+            return {'divisions': [divisionData]}
 
     def __getPlayerLimits(self, divisionType):
         divisionIndex = SORTIE_DIVISION._ORDER.index(divisionType)
@@ -346,6 +381,58 @@ class SortieDivisionTooltipData(ToolTipBaseData):
 
     def __getBonusStr(self, bonus):
         return ''.join((text_styles.defRes(BigWorld.wg_getIntegralFormat(bonus) + ' '), icons.nut()))
+
+
+class ReserveTooltipData(StrongholdTooltipData):
+
+    def __init__(self, context):
+        super(ReserveTooltipData, self).__init__(context, TOOLTIP_TYPE.RESERVE)
+
+    def __getSelectReason(self, data, reserve, selected):
+        reasonMap = {SUPPORT_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SUPPORTACTIVATION,
+         REQUISITION_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_REQUISITIONACTIVATION,
+         HEAVYTRUCKS_TYPE: FORTIFICATIONS.FORT2RESERVE_TOOLTIP_HEAVYTRUCKSACTIVATION}
+        if selected:
+            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_SELECTED)
+        else:
+            title = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_READYTOSELECT)
+        groupType = reserve.getGroupType()
+        reason = i18n.makeString(reasonMap[groupType])
+        return (title, reason)
+
+    def getDisplayableData(self, *args, **kwargs):
+        data = self._getData()
+        if data is None:
+            return
+        else:
+            isLegionary = self._getEntity().getPlayerInfo().isLegionary()
+            toolTipData = {}
+            reserveId = args[0]
+            reserve = data.getReserveById(reserveId)
+            moduleLabel = getReserveNameVO(reserve.getType())
+            infoLevel = '%s %s' % (fort_formatters.getTextLevel(reserve.getLevel()), i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_LEVEL))
+            selected = reserve in data.getSelectedReserves()
+            reserveCount = data.getReserveCount(reserve.getType(), reserve.getLevel())
+            if selected:
+                reserveCount -= 1
+            infoCount = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_INSTORAGE, count=reserveCount)
+            infoDescription1 = '+%s%%' % reserve.getBonusPercent()
+            infoDescription2 = '%s' % reserve.getDescription()
+            infoDescription3 = i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITIONREQUISITION) if reserve.isRequsition() else i18n.makeString(FORTIFICATIONS.FORT2RESERVE_TOOLTIP_CONDITION)
+            selected = reserve in data.getSelectedReserves()
+            infoStatus, infoDescription = self.__getSelectReason(data, reserve, selected)
+            toolTipData['moduleLabel'] = moduleLabel
+            toolTipData['infoTitle'] = reserve.getTitle()
+            toolTipData['infoDescription'] = infoDescription
+            toolTipData['level'] = reserve.getLevel()
+            toolTipData['infoLevel'] = infoLevel
+            if not isLegionary:
+                toolTipData['infoCount'] = infoCount
+            toolTipData['infoDescription1'] = infoDescription1
+            toolTipData['infoDescription2'] = infoDescription2
+            toolTipData['infoDescription3'] = infoDescription3
+            toolTipData['infoStatus'] = infoStatus
+            return toolTipData
 
 
 class MapTooltipData(ToolTipBaseData):
@@ -381,6 +468,8 @@ class SettingsControlTooltipData(ToolTipBaseData):
 
 
 class SettingsButtonTooltipData(BlocksTooltipData):
+    serverStats = dependency.descriptor(IServerStatsController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, context):
         super(SettingsButtonTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
@@ -397,41 +486,67 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         serverBlocks = list()
         serverBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_SERVER), padding=formatters.packPadding(0, 0, 4)))
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
-        pings = g_preDefinedHosts.getPingResult()
-        isColorBlind = g_settingsCore.getSetting('isColorBlind')
+        isColorBlind = self.settingsCore.getSetting('isColorBlind')
         if connectionManager.peripheryID == 0:
-            serverBlocks.append(self.__packServerBlock(self.__wrapServerName(connectionManager.serverUserName), pings.get(connectionManager.url, -1), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
+            serverBlocks.append(self.__packServerBlock(self.__wrapServerName(connectionManager.serverUserName), self.__getPingData(connectionManager.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
         if len(simpleHostList):
             currServUrl = connectionManager.url
-            for key, name, csisStatus, peripheryID in simpleHostList:
-                serverBlocks.append(self.__packServerBlock(name, pings.get(key, -1), csisStatus, currServUrl == key, isColorBlind))
-
+            serverBlocks.append(self.__packServerListBlock(simpleHostList, currServUrl, isColorBlind))
         items.append(formatters.packBuildUpBlockData(serverBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         serversStats = None
         if constants.IS_SHOW_SERVER_STATS:
-            serversStats, _ = game_control.g_instance.serverStats.getFormattedStats()
+            serversStats, _ = self.serverStats.getFormattedStats()
         if not constants.IS_CHINA:
             items.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.HEADER_MENU_PLAYERSONSERVER)), formatters.packImageTextBlockData('', serversStats, RES_ICONS.MAPS_ICONS_LIBRARY_CREW_ONLINE, imgPadding=formatters.packPadding(-4, -10), padding=formatters.packPadding(5))]))
         return items
 
     @classmethod
-    def __packServerBlock(cls, name, ping, csisStatus, isSelected=False, isColorBlind=False):
-        separator = '  '
-        pingStatus = getPingStatus(ping)
+    def __packServerBlock(cls, name, pingData, csisStatus, isSelected=False, isColorBlind=False):
+        """
+        Provides necessary block data from passed parameters
+        :param name: str, the name of host
+        :param pingData: predefined_hosts.PingData
+        :param csisStatus: predefined_hosts.HOST_AVAILABILITY
+        :param isSelected: bool
+        :param isColorBlind: bool
+        :return:
+        """
+        pingValue, pingStatus = pingData
+        formattedPing, pingStatusIcon = cls.__formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), text_styles.concatStylesToSingleLine(formattedPing, '  ', pingStatusIcon), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
+    def __packServerListBlock(cls, simpleHostList, currServUrl, isColorBlind=False):
+        """
+        Collect all server names and statuses for one textBlock
+        """
+        serverNames = []
+        pingTexts = []
+        for key, name, csisStatus, peripheryID in simpleHostList:
+            pingValue, pingStatus = cls.__getPingData(key)
+            isSelected = currServUrl == key
+            formattedPing, pingStatusIcon = cls.__formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+            serverNames.append(cls.__formatServerName(name, isSelected))
+            pingTexts.append(text_styles.concatStylesToSingleLine(formattedPing, '  ', pingStatusIcon))
+
+        return formatters.packTextParameterBlockData(concatStylesToMultiLine(*serverNames), concatStylesToMultiLine(*pingTexts), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+
+    @classmethod
+    def __formatPingStatus(cls, csisStatus, isColorBlind, isSelected, pingStatus, pingValue):
         if csisStatus != HOST_AVAILABILITY.NOT_AVAILABLE and pingStatus != PING_STATUSES.UNDEFINED:
             if pingStatus == PING_STATUSES.LOW:
-                formattedPing = text_styles.success(ping)
+                formattedPing = text_styles.success(pingValue)
             else:
-                formattedPing = text_styles.main(ping) if isSelected else text_styles.standard(ping)
+                formattedPing = text_styles.main(pingValue) if isSelected else text_styles.standard(pingValue)
         else:
-            ping = _UNAVAILABLE_DATA_PLACEHOLDER
+            pingValue = _UNAVAILABLE_DATA_PLACEHOLDER
             pingStatus = PING_STATUSES.UNDEFINED
-            formattedPing = text_styles.standard(ping)
+            formattedPing = text_styles.standard(pingValue)
         colorBlindName = ''
         if isColorBlind and pingStatus == PING_STATUSES.HIGH:
             colorBlindName = '_color_blind'
         pingStatusIcon = cls.__formatPingStatusIcon(RES_ICONS.maps_icons_pingstatus_stairs_indicator(str(pingStatus) + colorBlindName + '.png'))
-        return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), text_styles.concatStylesToSingleLine(formattedPing, separator, pingStatusIcon), valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
+        return (formattedPing, pingStatusIcon)
 
     @classmethod
     def __formatServerName(cls, name, isSelected=False):
@@ -443,7 +558,15 @@ class SettingsButtonTooltipData(BlocksTooltipData):
 
     @classmethod
     def __formatPingStatusIcon(cls, icon):
-        return icons.makeImageTag(icon, 16, 16, -4)
+        return icons.makeImageTag(icon, 14, 14, -3)
+
+    @classmethod
+    def __getPingData(cls, url):
+        pingData = g_preDefinedHosts.getHostPingData(url)
+        if pingData.status == PING_STATUSES.REQUESTED:
+            return PingData(pingData.value, PING_STATUSES.UNDEFINED)
+        else:
+            return pingData
 
     @staticmethod
     def __wrapServerName(name):
@@ -554,13 +677,14 @@ class CustomizationItemTooltipData(ToolTipBaseData):
 
 
 class ClanCommonInfoTooltipData(ToolTipBaseData):
+    clanCtrl = dependency.descriptor(IClanController)
 
     def __init__(self, context):
         super(ClanCommonInfoTooltipData, self).__init__(context, TOOLTIP_TYPE.CLAN_PROFILE)
         self.__usersInfoHelper = UsersInfoHelper()
 
     def getDisplayableData(self, clanDBID):
-        data = g_clanCtrl.getClanCommonData(clanDBID)
+        data = self.clanCtrl.getClanCommonData(clanDBID)
         if data is None:
             return {}
         else:
@@ -692,6 +816,7 @@ class ClanInfoTooltipData(ToolTipBaseData, FortViewHelper):
 
 class ToolTipRefSysDescription(ToolTipBaseData):
     BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
+    refSystem = dependency.descriptor(IRefSystemController)
 
     def __init__(self, context):
         super(ToolTipRefSysDescription, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
@@ -711,14 +836,14 @@ class ToolTipRefSysDescription(ToolTipBaseData):
         return text_styles.main(ms(value))
 
     def __makeConditions(self):
-        return text_styles.standard(ms(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=game_control.g_instance.refSystem.getPosByXPinTeam()))
+        return text_styles.standard(ms(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
 
     def __makeStandardText(self, value):
         return text_styles.standard(ms(value))
 
     def __makeBlocks(self):
         result = []
-        for xp, quests in game_control.g_instance.refSystem.getQuests():
+        for xp, quests in self.refSystem.getQuests():
             xpCost = BigWorld.wg_getIntegralFormat(xp)
             awardDescrPars = []
             for quest in quests:
@@ -737,6 +862,8 @@ class ToolTipRefSysDescription(ToolTipBaseData):
 
 class ToolTipRefSysAwards(ToolTipBaseData):
     BONUSES_PRIORITY = ('vehicles', 'tankmen', 'credits')
+    eventsCache = dependency.descriptor(IEventsCache)
+    refSystem = dependency.descriptor(IRefSystemController)
 
     def __init__(self, context):
         super(ToolTipRefSysAwards, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
@@ -747,7 +874,7 @@ class ToolTipRefSysAwards(ToolTipBaseData):
         def filterFunc(q):
             return q.getID() in questIDs
 
-        quests = g_eventsCache.getHiddenQuests(filterFunc)
+        quests = self.eventsCache.getHiddenQuests(filterFunc)
         icon = ''
         awardDescrPars = []
         isCompleted = True
@@ -776,7 +903,7 @@ class ToolTipRefSysAwards(ToolTipBaseData):
         return text_styles.highTitle(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_TITLE_GENERAL, awardMsg=award))
 
     def __makeBody(self, expCount, isCompleted):
-        howManyExp = expCount - game_control.g_instance.refSystem.getReferralsXPPool()
+        howManyExp = expCount - self.refSystem.getReferralsXPPool()
         notEnoughMsg = ''
         if not isCompleted and howManyExp > 0:
             notEnough = text_styles.error(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_REQUIREMENTS_NOTENOUGH))
@@ -790,7 +917,7 @@ class ToolTipRefSysAwards(ToolTipBaseData):
         return value + icon
 
     def __makeConditions(self):
-        return text_styles.standard(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=game_control.g_instance.refSystem.getPosByXPinTeam()))
+        return text_styles.standard(i18n.makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
 
     def __makeStatus(self, isReceived):
         loc = TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_NOTACCESS
@@ -800,20 +927,20 @@ class ToolTipRefSysAwards(ToolTipBaseData):
 
 
 class ToolTipRefSysXPMultiplier(ToolTipBaseData):
+    refSystem = dependency.descriptor(IRefSystemController)
 
     def __init__(self, context):
         super(ToolTipRefSysXPMultiplier, self).__init__(context, TOOLTIP_TYPE.REF_SYSTEM)
 
     def getDisplayableData(self):
-        refSystem = game_control.g_instance.refSystem
         icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0)
-        expNum = text_styles.credits(ms(BigWorld.wg_getNiceNumberFormat(refSystem.getMaxReferralXPPool())))
+        expNum = text_styles.credits(ms(BigWorld.wg_getNiceNumberFormat(self.refSystem.getMaxReferralXPPool())))
         titleText = text_styles.highTitle(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
         descriptionText = text_styles.main(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
         conditionsText = text_styles.standard(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
         bottomText = text_styles.main(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
         xpBlocks = []
-        for i, (period, bonus) in enumerate(refSystem.getRefPeriods()):
+        for i, (period, bonus) in enumerate(self.refSystem.getRefPeriods()):
             xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
             condition = self.__formatPeriod(period)
             xpBlocks.append({'xpIconSource': RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON,
@@ -850,6 +977,7 @@ class _BattleStatus(object):
 
 
 class ActionTooltipData(ToolTipBaseData):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, context):
         super(ActionTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
@@ -865,9 +993,10 @@ class ActionTooltipData(ToolTipBaseData):
         oldPriceValue = 0
         oldPriceCurrency = None
         hasRentCompensation = False
+        hasPersonalDiscount = False
         rentCompensation = None
         if type == ACTION_TOOLTIPS_TYPE.ECONOMICS:
-            actions = g_eventsCache.getEconomicsAction(key)
+            actions = self.eventsCache.getEconomicsAction(key)
             newPriceValue = newPrice.credits if forCredits else newPrice.gold
             oldPriceValue = oldPrice.credits if forCredits else oldPrice.gold
             newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
@@ -877,7 +1006,7 @@ class ActionTooltipData(ToolTipBaseData):
                     newPriceCurrency = oldPriceCurrency = 'freeXp'
         elif type == ACTION_TOOLTIPS_TYPE.RENT:
             item = g_itemsCache.items.getItemByCD(int(key))
-            actions = g_eventsCache.getRentAction(item, rentPackage)
+            actions = self.eventsCache.getRentAction(item, rentPackage)
             if actions:
                 actionNames = map(itemgetter(1), actions)
                 newPriceValue = newPrice.credits if forCredits else newPrice.gold
@@ -889,15 +1018,22 @@ class ActionTooltipData(ToolTipBaseData):
             newPriceValue = newPrice.gold if useGold else newPrice.credits
             oldPriceValue = oldPrice.gold if useGold else oldPrice.credits
             newPriceCurrency = oldPriceCurrency = Currency.GOLD if useGold else Currency.CREDITS
-            actions = g_eventsCache.getItemAction(item, True, forCredits)
+            actions = self.eventsCache.getItemAction(item, True, forCredits)
             if item.itemTypeID in (GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.EQUIPMENT) and item.isPremium and not useGold:
-                actions += g_eventsCache.getEconomicsAction('exchangeRateForShellsAndEqs')
+                actions += self.eventsCache.getEconomicsAction('exchangeRateForShellsAndEqs')
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and item.isPremium and not isBuying:
-                actions += g_eventsCache.getEconomicsAction('exchangeRate')
+                actions += self.eventsCache.getEconomicsAction('exchangeRate')
             if actions:
                 actionNames = map(lambda x: x[1], actions)
+            if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and isBuying:
+                shop = g_itemsCache.items.shop
+                shopPrice = shop.getItemPrice(item.intCD)
+                personalPrice = shop.getPersonalVehicleDiscountPrice(item.intCD)
+                if personalPrice is not None and personalPrice.get(newPriceCurrency) <= shopPrice.get(newPriceCurrency):
+                    actionNames = None
+                    hasPersonalDiscount = True
             if not isBuying:
-                sellingActions = g_eventsCache.getItemAction(item, False, forCredits)
+                sellingActions = self.eventsCache.getItemAction(item, False, forCredits)
                 if sellingActions:
                     actionNames = map(lambda x: x[1], sellingActions)
 
@@ -915,7 +1051,7 @@ class ActionTooltipData(ToolTipBaseData):
                     rentCompensation = item.rentCompensation.gold
         elif type == ACTION_TOOLTIPS_TYPE.CAMOUFLAGE:
             intCD, type = cPickle.loads(key)
-            actions = g_eventsCache.getCamouflageAction(intCD) + g_eventsCache.getEconomicsAction(type)
+            actions = self.eventsCache.getCamouflageAction(intCD) + self.eventsCache.getEconomicsAction(type)
             if actions:
                 actionNames = map(lambda x: x[1], actions)
                 newPriceValue = newPrice.credits if forCredits else newPrice.gold
@@ -923,7 +1059,7 @@ class ActionTooltipData(ToolTipBaseData):
                 newPriceCurrency = oldPriceCurrency = Currency.CREDITS if forCredits else Currency.GOLD
         elif type == ACTION_TOOLTIPS_TYPE.EMBLEMS:
             group, type = cPickle.loads(key)
-            actions = g_eventsCache.getEmblemsAction(group) + g_eventsCache.getEconomicsAction(type)
+            actions = self.eventsCache.getEmblemsAction(group) + self.eventsCache.getEconomicsAction(type)
             if actions:
                 actionNames = map(lambda x: x[1], actions)
                 newPriceValue = newPrice.credits if forCredits else newPrice.gold
@@ -933,7 +1069,7 @@ class ActionTooltipData(ToolTipBaseData):
             item = g_itemsCache.items.getItemByCD(int(key))
             actions = []
             for shell in item.gun.defaultAmmo:
-                actions += g_eventsCache.getItemAction(shell, isBuying, True)
+                actions += self.eventsCache.getItemAction(shell, isBuying, True)
 
             if actions:
                 actionNames = map(lambda x: x[1], actions)
@@ -942,7 +1078,7 @@ class ActionTooltipData(ToolTipBaseData):
                 newPriceCurrency = oldPriceCurrency = Currency.CREDITS
         elif type == ACTION_TOOLTIPS_TYPE.BOOSTER:
             booster = g_goodiesCache.getBooster(int(key))
-            actions = g_eventsCache.getBoosterAction(booster, isBuying, forCredits)
+            actions = self.eventsCache.getBoosterAction(booster, isBuying, forCredits)
             if actions:
                 actionNames = map(lambda x: x[1], actions)
                 newPriceValue = newPrice.credits if forCredits else newPrice.gold
@@ -957,7 +1093,7 @@ class ActionTooltipData(ToolTipBaseData):
         if actionNames:
 
             def mapName(item):
-                action = g_eventsCache.getActions().get(item)
+                action = self.eventsCache.getActions().get(item)
                 return i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
 
             actionUserNames = ', '.join(map(mapName, actionNames))
@@ -965,6 +1101,8 @@ class ActionTooltipData(ToolTipBaseData):
                 descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTIONS, actions=actionUserNames)
             else:
                 descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, action=actionUserNames)
+        if hasPersonalDiscount:
+            descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORPERSONALDISCOUNT)
         if hasRentCompensation:
             formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', 'gold', {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
@@ -1042,51 +1180,6 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
             columns = [col1Str, col2Str]
         return {'name': makeString(TOOLTIPS.QUESTS_VEHICLESBONUS_TITLE),
          'columns': columns}
-
-
-class LadderTooltipData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(LadderTooltipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
-
-    def getDisplayableData(self, clubDbID):
-        club = g_clubsCtrl.getClub(clubDbID)
-        if club is None:
-            return
-        else:
-            seasonState = g_clubsCtrl.getSeasonState()
-            ladderInfo = club.getLadderInfo()
-            if ladderInfo.isInLadder():
-                icon = getLadderChevron256x256(ladderInfo.getDivision())
-                league = club_fmts.getLeagueString(ladderInfo.getLeague())
-                division = club_fmts.getDivisionString(ladderInfo.getDivision())
-                ladderPlace = text_styles.promoSubTitle(i18n.makeString(TOOLTIPS.LADDER_PLACE, num=ladderInfo.position))
-                state = text_styles.middleTitle(i18n.makeString(TOOLTIPS.LADDER_STATE, league=text_styles.highTitle(league), division=text_styles.highTitle(division)))
-                if seasonState.isActive():
-                    points = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_POINTS, num=text_styles.stats(str(ladderInfo.getRatingPoints()))))
-                else:
-                    points = None
-                if not ladderInfo.isTop():
-                    valueStr = str(getPointsToNextDivision(ladderInfo.getRatingPoints()))
-                    ladderStatus = text_styles.main(i18n.makeString(TOOLTIPS.LADDER_LEVELUP, num=text_styles.stats(valueStr)))
-                else:
-                    ladderStatus = None
-            else:
-                state, points = (None, None)
-                icon = RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_NO_LADDER
-                ladderPlace = text_styles.middleTitle(TOOLTIPS.LADDER_INACTIVE_HEADER)
-                ladderStatus = text_styles.main(TOOLTIPS.LADDER_INACTIVE_DESCR)
-            if not seasonState.isActive():
-                seasonStateString = '\n'.join([text_styles.middleTitle(club_fmts.getSeasonStateUserString(seasonState)), text_styles.main('#tooltips:ladder/season/%s' % seasonState.getStateString())])
-            else:
-                seasonStateString = None
-            return {'state': state,
-             'points': points,
-             'status': ladderStatus,
-             'season': seasonStateString,
-             'icon': icon,
-             'name': text_styles.highTitle(TOOLTIPS.LADDER_HEADER),
-             'place': ladderPlace}
 
 
 class FortDivisionTooltipData(ToolTipBaseData):
@@ -1184,57 +1277,6 @@ class SquadRestrictionsInfo(BlocksTooltipData):
         return tooltipBlocks
 
 
-class LadderRegulations(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(LadderRegulations, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
-
-    def getTextForPeriphery(self, serverID, serverName, availabilityCtrl, isHeader=False):
-        _ms = i18n.makeString
-        forbiddenPeriods = availabilityCtrl.getForbiddenPeriods(serverID)
-        if not availabilityCtrl.isServerAvailable(serverID):
-            if isHeader:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_BAN, server=text_styles.alert(serverName))
-            else:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_BAN, server=text_styles.stats(serverName))
-        elif forbiddenPeriods:
-            if isHeader:
-                text = text_styles.main(_ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_LIMITATION, server=text_styles.alert(serverName), time=text_styles.alert(self.getForbiddenHoursText(forbiddenPeriods))))
-            else:
-                text = text_styles.main(_ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_LIMITATION, server=text_styles.stats(serverName), time=self.getForbiddenHoursText(forbiddenPeriods)))
-        else:
-            text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_FREE, server=text_styles.stats(serverName))
-            if isHeader:
-                text = _ms(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_HEADER_FREE, server=text_styles.alert(serverName))
-        return text_styles.main(text)
-
-    def getForbiddenHoursText(self, forbiddenPeriods):
-        forbiddenHours = []
-        for forbiddenPeriod in forbiddenPeriods:
-            guiTimeLimit = formatGuiTimeLimitStr(*forbiddenPeriod)
-            forbiddenHours.append(i18n.makeString(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_DATE, startTime=guiTimeLimit['startTime'], endTime=guiTimeLimit['endTime']))
-
-        return ', '.join(forbiddenHours)
-
-    def getDisplayableData(self):
-        from ConnectionManager import connectionManager
-        availabilityCtrl = g_clubsCtrl.getAvailabilityCtrl()
-        allRules = []
-        currServerName = connectionManager.serverUserName
-        currPeripheryID = connectionManager.peripheryID
-        for url, name, status, peripheryID in g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming()):
-            allRules.append(self.getTextForPeriphery(peripheryID, name, availabilityCtrl))
-
-        data = {'name': text_styles.highTitle(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_NAME),
-         'thisRules': self.getTextForPeriphery(currPeripheryID, currServerName, availabilityCtrl, True),
-         'info': text_styles.main(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_INFO)}
-        if not connectionManager.isStandalone():
-            data.update({'rulesName': text_styles.middleTitle(CYBERSPORT.LADDERREGULATIONS_TOOLTIP_SCHEDULE_NAME),
-             'allRules': '\n'.join(allRules),
-             'hasRules': len(allRules) != 0})
-        return data
-
-
 _CurrencySetting = namedtuple('_CurrencySetting', 'text, icon, textStyle, frame')
 
 class CURRENCY_SETTINGS(object):
@@ -1295,7 +1337,99 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
             actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
             text = text_styles.concatStylesToMultiLine(text, actionText)
             newPrice = Money(gold=price) if settings.frame == ICON_TEXT_FRAMES.GOLD else Money(credits=price)
+            oldPrice = Money(gold=oldPrice) if settings.frame == ICON_TEXT_FRAMES.GOLD else Money(credits=oldPrice)
             return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice,
-             'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding))
+             'oldPrice': oldPrice,
+             'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
         return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
         return
+
+
+class SettingsBaseKey(BlocksTooltipData):
+    TEMPLATE_NAME = 'html_templates:lobby/tooltips/settings_key_commands'
+
+    def __init__(self, context):
+        super(SettingsBaseKey, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+        self._setWidth(350)
+        self._enemyBlockImage = ''
+        self._enemyBlockTitle = ''
+        self._allyBlockImage = ''
+        self._allyBlockTitle = ''
+
+    def _getEnemyDescription(self):
+        enemyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'enemy_description')
+        return text_styles.main(ms(TOOLTIPS.SETTINGS_KEY_ENEMY_BODY, enemy=enemyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ENEMY)))
+
+    def _packBlocks(self, *args):
+        tooltipBlocks = super(SettingsBaseKey, self)._packBlocks()
+        headerBlock = formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYFOLLOWME_TITLE))
+        allyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'ally_description')
+        allyDescription = text_styles.main(ms(TOOLTIPS.SETTINGS_KEY_ALLY_BODY, ally=allyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ALLY)))
+        enemyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._enemyBlockTitle), desc=self._getEnemyDescription(), img=self._enemyBlockImage, imgPadding={'left': -4,
+         'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})
+        allyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._allyBlockTitle), desc=allyDescription, img=self._allyBlockImage, imgPadding={'left': -4,
+         'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})
+        tooltipBlocks.append(headerBlock)
+        tooltipBlocks.append(enemyBlock)
+        tooltipBlocks.append(allyBlock)
+        return tooltipBlocks
+
+
+class SettingsKeyFollowMe(SettingsBaseKey):
+
+    def __init__(self, context):
+        super(SettingsKeyFollowMe, self).__init__(context)
+        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_SUPPORTTOOLTIP
+        self._enemyBlockTitle = TOOLTIPS.SETTINGS_SUPPORT_SUBTITLE
+        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_FOLLOWMETOOLTIP
+        self._allyBlockTitle = TOOLTIPS.SETTINGS_FOLLOWME_SUBTITLE
+
+
+class SettingsKeyTurnBack(SettingsBaseKey):
+
+    def __init__(self, context):
+        super(SettingsKeyTurnBack, self).__init__(context)
+        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_DEFENDBASETOOLTIP
+        self._enemyBlockTitle = TOOLTIPS.SETTINGS_DEFENDBASE_SUBTITLE
+        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_TURNBACKTOOLTIP
+        self._allyBlockTitle = TOOLTIPS.SETTINGS_TURNBACK_SUBTITLE
+
+    def _getEnemyDescription(self):
+        return text_styles.main(TOOLTIPS.SETTINGS_DEFENDBASE_ENEMY_BODY)
+
+
+class SettingsKeyNeedHelp(SettingsBaseKey):
+
+    def __init__(self, context):
+        super(SettingsKeyNeedHelp, self).__init__(context)
+        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_NEEDHELPTOOLTIP
+        self._enemyBlockTitle = TOOLTIPS.SETTINGS_NEEDHELP_SUBTITLE
+        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_NEEDHELPTOOLTIP
+        self._allyBlockTitle = TOOLTIPS.SETTINGS_HELPME_SUBTITLE
+
+    def _getEnemyDescription(self):
+        return text_styles.main(TOOLTIPS.SETTINGS_NEEDHELP_ENEMY_BODY)
+
+
+class SettingsKeyReload(SettingsBaseKey):
+
+    def __init__(self, context):
+        super(SettingsKeyReload, self).__init__(context)
+        self._enemyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_RESETTOOLTIP
+        self._enemyBlockTitle = TOOLTIPS.SETTINGS_RELOAD_SUBTITLE
+        self._allyBlockImage = RES_ICONS.MAPS_ICONS_SETTINGS_STOPICONTOOLTIP
+        self._allyBlockTitle = TOOLTIPS.SETTINGS_STOP_SUBTITLE
+
+    def _getEnemyDescription(self):
+        return text_styles.main(TOOLTIPS.SETTINGS_RELOAD_ENEMY_BODY)
+
+
+class SettingKeySwitchMode(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SettingKeySwitchMode, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def _packBlocks(self, *args, **kwargs):
+        tooltipBlocks = super(SettingKeySwitchMode, self)._packBlocks(*args, **kwargs)
+        tooltipBlocks.append(formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYMOVEMENT_TITLE), text_styles.main(TOOLTIPS.SETTINGS_SWITCHMODE_BODY)))
+        return tooltipBlocks

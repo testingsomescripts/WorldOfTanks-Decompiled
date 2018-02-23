@@ -8,12 +8,13 @@ from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import ViewTypes
 from gui.app_loader import g_appLoader
-from gui.login import g_loginManager
+from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import LoginEventEx, GUICommonEvent
 from gui.shared.actions.chains import ActionsChain
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.shared.events import LoginEventEx, GUICommonEvent
+from helpers import dependency
 from predefined_hosts import g_preDefinedHosts, getHostURL
+from skeletons.gui.login_manager import ILoginManager
 __all__ = ['LeavePrbModalEntity',
  'DisconnectFromPeriphery',
  'ConnectToPeriphery',
@@ -56,7 +57,7 @@ class LeavePrbModalEntity(Action):
             if state.hasModalEntity:
                 factory = dispatcher.getControlFactories().get(state.ctrlTypeID)
                 if factory:
-                    ctx = factory.createLeaveCtx()
+                    ctx = factory.createLeaveCtx(flags=FUNCTIONAL_FLAG.SWITCH)
                     if ctx:
                         self._running = True
                         self.__doLeave(dispatcher, ctx)
@@ -77,7 +78,7 @@ class LeavePrbModalEntity(Action):
         if self._completed:
             LOG_DEBUG('Leave modal entity. Player left prebattle/unit.')
         else:
-            LOG_ERROR('Leave modal entity. Action was failed.')
+            LOG_DEBUG('Leave modal entity. Action was failed.')
         self._running = False
 
 
@@ -98,7 +99,7 @@ class DisconnectFromPeriphery(Action):
         if app:
             from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
             view = app.containerManager.getView(ViewTypes.DEFAULT)
-            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view._isCreated() and connectionManager.isDisconnected():
+            if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionManager.isDisconnected():
                 LOG_DEBUG('Disconnect action. Player came to login')
                 self._completed = True
                 self._running = False
@@ -106,6 +107,7 @@ class DisconnectFromPeriphery(Action):
 
 
 class ConnectToPeriphery(Action):
+    loginManager = dependency.descriptor(ILoginManager)
 
     def __init__(self, peripheryID):
         super(ConnectToPeriphery, self).__init__()
@@ -145,7 +147,7 @@ class ConnectToPeriphery(Action):
     def __doConnect(self):
         login, token2 = self.__credentials
         self.__addHandlers()
-        g_loginManager.initiateRelogin(login, token2, getHostURL(self.__host, token2))
+        self.loginManager.initiateRelogin(login, token2, getHostURL(self.__host, token2))
 
     def __addHandlers(self):
         g_eventBus.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__onLoginQueueClosed, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -238,19 +240,21 @@ class WaitFlagActivation(Action):
         return False
 
 
-class ShowCompanyWindow(Action):
+class OnLobbyInitedAction(Action):
 
-    def __init__(self):
-        super(ShowCompanyWindow, self).__init__()
+    def __init__(self, onInited=None):
+        super(OnLobbyInitedAction, self).__init__()
         self.__isLobbyInited = False
+        self.__onInited = onInited
         g_eventBus.addListener(GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyInited)
 
     def invoke(self):
         self._running = True
         self._completed = False
         if self.__isLobbyInited:
-            from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-            battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.COMPANY)
+            onInited = self.__onInited
+            if onInited and callable(onInited):
+                onInited()
             self._completed = True
             self._running = False
 

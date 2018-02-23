@@ -1,4 +1,4 @@
-<j21_type_91.xml>
+<J21_Type_91.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner></gunner>
@@ -210,7 +210,6 @@
       <drivingWheels>	WD_L0 WD_L8	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -432,7 +431,6 @@
       <drivingWheels>	WD_L0 WD_L8	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -817,4 +815,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</j21_type_91.xml>
+</J21_Type_91.xml>

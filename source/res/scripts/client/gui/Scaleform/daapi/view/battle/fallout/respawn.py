@@ -6,14 +6,17 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.FalloutRespawnViewMeta import FalloutRespawnViewMeta
 from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control import g_sessionProvider, avatar_getter
-from gui.battle_control.arena_info.arena_vos import getClassTag, isPremium, isPremiumIGR
+from gui.battle_control import avatar_getter
+from gui.battle_control.arena_info.arena_vos import isPremium, isPremiumIGR
 from gui.battle_control.controllers.respawn_ctrl import IRespawnView
 from gui.shared.formatters.text_styles import standard, main, statInfo, warning
+from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import getIconPath
+from helpers import dependency
 from helpers import i18n, time_utils
 from helpers.i18n import makeString
 from shared_utils import findFirst
+from skeletons.gui.battle_session import IBattleSessionProvider
 _FLAG_ICON_TEMPLATE = '../maps/icons/battle/respawn/optimize_flags_160x100/%s.png'
 _VEHICLE_TYPE_TEMPLATE = '../maps/icons/vehicleTypes/%s.png'
 _VEHICLE_TYPE_ELITE_TEMPLATE = '../maps/icons/vehicleTypes/elite/%s.png'
@@ -21,6 +24,7 @@ _VEHICLE_LEVEL_TEMPLATE = '../maps/icons/levels/tank_level_%d.png'
 _HTML_TEMPLATE_FALLOUT_INFO_KEY = 'html_templates:battle/falloutSingleInfo'
 
 class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(FalloutRespawn, self).__init__()
@@ -35,13 +39,13 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
         super(FalloutRespawn, self)._dispose()
 
     def onVehicleSelected(self, vehicleID):
-        ctrl = g_sessionProvider.dynamic.respawn
+        ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.chooseVehicleForRespawn(int(vehicleID))
         return
 
     def onPostmortemBtnClick(self):
-        ctrl = g_sessionProvider.dynamic.respawn
+        ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
             ctrl.startPostmortem()
         return
@@ -49,7 +53,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
     def start(self, vehsList, isLimited):
         mainData = self.__getMainData(isLimited)
         slotsData = self.__getSlotsData(vehsList)
-        self.as_initializeS(mainData, slotsData)
+        self.as_initializeComponentS(mainData, slotsData)
 
     def show(self, selectedID, vehsList, cooldowns):
         self.__selectedVehicleID = selectedID
@@ -89,7 +93,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
              'vehicleName': self.__getVehicleName(v),
              'flagIcon': _FLAG_ICON_TEMPLATE % nations.NAMES[nationID],
              'vehicleIcon': getIconPath(v.type.name),
-             'vehicleType': _VEHICLE_TYPE_TEMPLATE % getClassTag(v.type.tags),
+             'vehicleType': _VEHICLE_TYPE_TEMPLATE % Vehicle.getVehicleClassTag(v.type.tags),
              'isElite': False,
              'isPremium': isPremium(v.type.tags),
              'vehicleLevel': _VEHICLE_LEVEL_TEMPLATE % v.type.level})
@@ -119,7 +123,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
             if not enabled:
                 if self.__disabled:
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/disabledLbl')
-                elif cooldownTime > g_sessionProvider.shared.arenaPeriod.getEndTime():
+                elif cooldownTime > self.sessionProvider.shared.arenaPeriod.getEndTime():
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/destroyedLbl')
                 else:
                     cooldownStr = i18n.makeString('#ingame_gui:respawnView/cooldownLbl', time=time_utils.getTimeLeftFormat(cooldown))
@@ -131,7 +135,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
         return result
 
     def __getHelpText(self):
-        visitor = g_sessionProvider.arenaVisitor
+        visitor = self.sessionProvider.arenaVisitor
         isSolo = visitor.isSoloTeam(avatar_getter.getPlayerTeam())
         plusStr = makeString(FALLOUT.INFOPANEL_SINGLEHELPTEXT_PLUS)
         isMultiteam = visitor.gui.isFalloutMultiTeam()

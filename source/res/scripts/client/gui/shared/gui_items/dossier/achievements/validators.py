@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/validators.py
-
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 
 def questHasThisAchievementAsBonus(name, block):
-    from gui.server_events import g_eventsCache
-    for records in g_eventsCache.getQuestsDossierBonuses().itervalues():
+    eventsCache = dependency.instance(IEventsCache)
+    for records in eventsCache.getQuestsDossierBonuses().itervalues():
         if (block, name) in records:
             return True
 
@@ -17,7 +18,7 @@ def alreadyAchieved(achievementClass, name, block, dossier):
 
 def requiresFortification():
     from gui.LobbyContext import g_lobbyContext
-    return g_lobbyContext.getServerSettings().isFortsEnabled()
+    return g_lobbyContext.getServerSettings() is not None and g_lobbyContext.getServerSettings().isStrongholdsEnabled()
 
 
 def accountIsRoaming(dossier):

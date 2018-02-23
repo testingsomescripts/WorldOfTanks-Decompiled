@@ -1,6 +1,7 @@
-<r115_is-3_auto.xml>
+<R115_IS-3_auto.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
@@ -16,7 +17,7 @@
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
     <firePenalty>	0.18	</firePenalty>
   </invisibility>
-  <repairCost>	7.5	</repairCost>
+  <repairCost>	4.5	</repairCost>
   <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -187,7 +188,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -535,4 +535,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r115_is-3_auto.xml>
+</R115_IS-3_auto.xml>

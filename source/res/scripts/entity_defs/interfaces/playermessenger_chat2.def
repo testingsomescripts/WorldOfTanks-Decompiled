@@ -1,4 +1,4 @@
-<playermessenger_chat2.def>
+<PlayerMessenger_chat2.def>
   <BaseMethods>
     <messenger_onActionByServer_chat2>
       <Arg>	MAILBOX	</Arg>
@@ -28,4 +28,4 @@
       </VariableLengthHeaderSize>
     </messenger_onActionByServer_chat2>
   </ClientMethods>
-</playermessenger_chat2.def>
+</PlayerMessenger_chat2.def>

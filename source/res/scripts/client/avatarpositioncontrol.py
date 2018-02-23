@@ -45,9 +45,10 @@ class ConsistentMatrices(object):
 
     def notifyPreBind(self, avatar, targetVehicleID=None):
         bindMatrix = Math.Matrix(self.attachedVehicleMatrix)
+        vehicle = avatar.getVehicleAttached()
         useStatic = True
-        if avatar.vehicle is not None and avatar.vehicle.id == targetVehicleID:
-            bindMatrix = avatar.vehicle.matrix
+        if vehicle is not None and vehicle.id == targetVehicleID:
+            bindMatrix = vehicle.matrix
             useStatic = False
         self.__setTarget(bindMatrix, useStatic)
         return
@@ -105,7 +106,7 @@ class AvatarPositionControl(CallbackDelayer):
         if bValue:
             self.__doBind(vehicleID)
         else:
-            self.__doUnbind()
+            self.__doUnbind(vehicleID)
         return
 
     def followCamera(self, bValue=True):
@@ -115,9 +116,9 @@ class AvatarPositionControl(CallbackDelayer):
         else:
             self.stopCallback(self.__followCameraTick)
 
-    def switchViewpoint(self, toPrevious):
+    def switchViewpoint(self, isViewpoint, vehOrPointId):
         BigWorld.player().consistentMatrices.notifyPreBind(BigWorld.player())
-        self.__avatar.cell.switchViewpoint(toPrevious)
+        self.__avatar.cell.switchViewPointOrBindToVehicle(isViewpoint, vehOrPointId)
 
     def moveTo(self, pos):
         self.__avatar.cell.moveTo(pos)
@@ -139,8 +140,11 @@ class AvatarPositionControl(CallbackDelayer):
     def __doBind(self, vehicleID):
         self.__avatar.cell.bindToVehicle(vehicleID)
 
-    def __doUnbind(self):
-        self.__avatar.cell.bindToVehicle(0)
+    def __doUnbind(self, vehicleID=None):
+        if vehicleID is None:
+            vehicleID = 0
+        self.__avatar.cell.bindToVehicle(vehicleID)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.setPlayerVehicleID(0)
+        return

@@ -1,4 +1,4 @@
-<voicechatmgr.def>
+<VoiceChatMgr.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
   </Implements>
@@ -20,4 +20,4 @@
   <BaseMethods>
     <increaseUniqueLoginCounter></increaseUniqueLoginCounter>
   </BaseMethods>
-</voicechatmgr.def>
+</VoiceChatMgr.def>

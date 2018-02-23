@@ -1,4 +1,4 @@
-<f10_amx_50b_fallout.xml>
+<F10_AMX_50B_fallout.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner>	loader	</gunner>
@@ -223,7 +223,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -614,4 +613,4 @@
     <refColorMult>	9	</refColorMult>
     <refGlossMult>	3	</refGlossMult>
   </repaintParameters>
-</f10_amx_50b_fallout.xml>
+</F10_AMX_50B_fallout.xml>

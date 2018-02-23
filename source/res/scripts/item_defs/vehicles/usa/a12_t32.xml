@@ -1,4 +1,4 @@
-<a12_t32.xml>
+<A12_T32.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -200,7 +200,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -485,7 +484,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1151,4 +1149,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a12_t32.xml>
+</A12_T32.xml>

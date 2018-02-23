@@ -1,4 +1,4 @@
-<flagabsorptionpoint.def>
+<FlagAbsorptionPoint.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <team>
@@ -30,4 +30,4 @@
       <Editable>	true	</Editable>
     </redFlagModel>
   </Properties>
-</flagabsorptionpoint.def>
+</FlagAbsorptionPoint.def>

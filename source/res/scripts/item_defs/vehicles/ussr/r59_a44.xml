@@ -1,4 +1,4 @@
-<r59_a44.xml>
+<R59_A44.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -189,7 +189,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -311,7 +310,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1021,4 +1019,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r59_a44.xml>
+</R59_A44.xml>

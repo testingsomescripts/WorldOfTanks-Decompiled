@@ -130,7 +130,8 @@ class _NavigationInfo(object):
     def selectRandomQuest(self, tileID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
-        self.random = self.random.update(tileID=tileID, questID=questID)
+        self.random = self.random.update(tileID=tileID, questID=questID, filters=None)
+        return
 
     def selectFalloutQuest(self, tileID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
@@ -147,10 +148,6 @@ class _NavigationInfo(object):
     def selectTutorialQuest(self, questID):
         self.tabID = _QA.TAB_BEGINNER_QUESTS
         self.tutorial = self.tutorial.update(questID=questID)
-
-    def selectLadderQuest(self, questID):
-        self.tabID = _QA.TAB_LADDER_QUESTS
-        self.common = self.common.update(questID=questID)
 
 
 _g_navInfo = None

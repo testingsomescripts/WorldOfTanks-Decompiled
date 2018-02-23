@@ -1,4 +1,4 @@
-<trackslip_effects.xml>
+<trackSlip_effects.xml>
   <nodes>
     <node>
       <name>	HP_Track_LFront	</name>
@@ -54,7 +54,87 @@
       <waterY>	False	</waterY>
       <drawOrder>	0	</drawOrder>
     </node>
+    <node>
+      <name>	gun	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	0	</drawOrder>
+    </node>
+    <node>
+      <name>	HP_gui	</name>
+      <model>	hull	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	0	</drawOrder>
+    </node>
+    <node>
+      <name>	chassis	</name>
+      <model>	chassis	</model>
+      <waterY>	False	</waterY>
+      <drawOrder>	0	</drawOrder>
+    </node>
   </nodes>
+  <effectLists>
+    <strv_change_hull_ground>
+      <timeline>
+        <impactEnd>	0.7	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/strv_change_hull_ground.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </strv_change_hull_ground>
+    <strv_change_hull_sand>
+      <timeline>
+        <impactEnd>	0.7	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/strv_change_hull_sand.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </strv_change_hull_sand>
+    <strv_change_hull_snow>
+      <timeline>
+        <impactEnd>	0.7	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/strv_change_hull_snow.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </strv_change_hull_snow>
+    <strv_change_hull_stone>
+      <timeline>
+        <impactEnd>	0.7	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/strv_change_hull_stone.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </strv_change_hull_stone>
+    <strv_change_hull_water>
+      <timeline>
+        <impactEnd>	0.7	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/strv_change_hull_water.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </strv_change_hull_water>
+  </effectLists>
   <constants>
     <constantsGroup>
       <name>	small	</name>
@@ -3046,5 +3126,71 @@
         </selector>
       </selector>
     </largeTankMud>
+    <strvMud>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1	</name>
+          <constantsGroup>	large	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	template	</type>
+          <name>	TrackEffect1_NPC	</name>
+          <constantsGroup>	large	</constantsGroup>
+        </selector>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	siegeStart	</variable>
+          <selector>
+            <key>	1	</key>
+            <type>	matkind	</type>
+            <variable>	matkindR	</variable>
+            <selector>
+              <key>	ground	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_ground	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	stone	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_stone	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	wood	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_ground	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	metal	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_stone	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	snow	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_snow	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	sand	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_sand	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+            <selector>
+              <key>	water	</key>
+              <type>	effectList	</type>
+              <name>	strv_change_hull_water	</name>
+              <effectHP>	chassis	</effectHP>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </strvMud>
   </effects>
-</trackslip_effects.xml>
+</trackSlip_effects.xml>

@@ -1,4 +1,4 @@
-<flockexotic.def>
+<FlockExotic.def>
   <Volatile>
     <position></position>
     <yaw></yaw>
@@ -130,4 +130,4 @@
     </flightSound>
   </Properties>
   <ClientMethods></ClientMethods>
-</flockexotic.def>
+</FlockExotic.def>

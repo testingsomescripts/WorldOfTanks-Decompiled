@@ -1,4 +1,4 @@
-<g120_m41_90_grandfinal.xml>
+<G120_M41_90_GrandFinal.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -199,7 +199,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -555,4 +554,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
-</g120_m41_90_grandfinal.xml>
+</G120_M41_90_GrandFinal.xml>

@@ -1,4 +1,4 @@
-<accountsurrogate.def>
+<AccountSurrogate.def>
   <Implements>
     <Interface>	InterclusterSender	</Interface>
   </Implements>
@@ -22,4 +22,4 @@
     </name>
   </Properties>
   <BaseMethods></BaseMethods>
-</accountsurrogate.def>
+</AccountSurrogate.def>

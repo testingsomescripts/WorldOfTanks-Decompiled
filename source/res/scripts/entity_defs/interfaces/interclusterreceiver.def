@@ -1,4 +1,4 @@
-<interclusterreceiver.def>
+<InterclusterReceiver.def>
   <BaseMethods>
     <processInterclusterRequest>
       <Arg>	INT32	</Arg>
@@ -11,4 +11,4 @@
       <Arg>	STRING	</Arg>
     </processInterclusterRequest>
   </BaseMethods>
-</interclusterreceiver.def>
+</InterclusterReceiver.def>

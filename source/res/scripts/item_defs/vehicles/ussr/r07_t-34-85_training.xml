@@ -1,4 +1,4 @@
-<r07_t-34-85_training.xml>
+<R07_T-34-85_training.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -434,7 +434,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -670,4 +669,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r07_t-34-85_training.xml>
+</R07_T-34-85_training.xml>

@@ -1,4 +1,4 @@
-<g41_dickermax.xml>
+<G41_DickerMax.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -219,7 +219,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -540,4 +539,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g41_dickermax.xml>
+</G41_DickerMax.xml>

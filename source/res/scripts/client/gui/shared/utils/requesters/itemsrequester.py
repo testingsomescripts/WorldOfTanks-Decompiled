@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
+import re
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+import unicodedata
 from constants import ARENA_BONUS_TYPE
 import dossiers2
 import nations
@@ -139,6 +141,9 @@ class REQ_CRITERIA(object):
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
+        CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
+        CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
+        NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -320,9 +325,10 @@ class ItemsRequester(object):
                             if shellIntCD == intCD:
                                 vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
                                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                                vehicelData = self.inventory.getItemData(vehicleIntCD)
-                                gunIntCD = vehicelData.descriptor.gun['compactDescr']
-                                invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
+                                vehicleData = self.inventory.getItemData(vehicleIntCD)
+                                if vehicleData is not None:
+                                    gunIntCD = vehicleData.descriptor.gun['compactDescr']
+                                    invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 
@@ -332,6 +338,13 @@ class ItemsRequester(object):
                 if itemType == 'tankmen':
                     invalidate[GUI_ITEM_TYPE.TANKMAN].add(itemID * -1)
                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(itemID)
+
+        if 'goodies' in diff:
+            vehicleDiscounts = self.shop.getVehicleDiscountDescriptions()
+            for goodieID in diff['goodies'].iterkeys():
+                if goodieID in vehicleDiscounts:
+                    vehicleDiscount = vehicleDiscounts[goodieID]
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleDiscount.target.targetValue)
 
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
@@ -343,11 +356,21 @@ class ItemsRequester(object):
         return self.__makeVehicle(vehInvData.descriptor.type.compactDescr, vehInvData) if vehInvData is not None else None
 
     def getStockVehicle(self, typeCompDescr, useInventory=False):
+        """
+        Make vehicle copy with stock configuration
+        """
         if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE:
             proxy = self if useInventory else None
             return Vehicle(typeCompDescr=typeCompDescr, proxy=proxy)
         else:
             return
+
+    def getVehicleCopy(self, vehicle):
+        """
+        Gets full vehicle copy with crew, artefacts, shells and other if vehicle is in inventory
+        else return vehicle copy without inventory data
+        """
+        return Vehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self)
 
     def getTankman(self, tmanInvID):
         tankman = None
@@ -355,7 +378,7 @@ class ItemsRequester(object):
         if tmanInvData is not None:
             tankman = self.__makeTankman(tmanInvID, tmanInvData)
         else:
-            duration = self.shop.tankmenRestoreConfig.goldDuration
+            duration = self.shop.tankmenRestoreConfig.creditsDuration
             tankmanData = self.recycleBin.getTankman(tmanInvID, duration)
             if tankmanData is not None:
                 tankman = self.__makeDismissedTankman(tmanInvID, tankmanData)
@@ -382,7 +405,7 @@ class ItemsRequester(object):
             if criteria(item):
                 result[invID] = item
 
-        duration = self.shop.tankmenRestoreConfig.goldDuration
+        duration = self.shop.tankmenRestoreConfig.creditsDuration
         dismissedTankmenData = self.recycleBin.getTankmen(duration)
         for invID, tankmanData in dismissedTankmenData.iteritems():
             item = self.__makeDismissedTankman(invID, tankmanData)
@@ -453,23 +476,25 @@ class ItemsRequester(object):
         else:
             return VehicleDossier(dossier, vehTypeCompDescr, playerDBID=databaseID)
 
+    def getVehicleDossiersIterator(self):
+        for intCD, dossier in self.dossiers.getVehDossiersIterator():
+            yield (intCD, dossiers2.getVehicleDossierDescr(dossier))
+
     def getAccountDossier(self, databaseID=None):
         """
         Returns account dossier item
         @return: AccountDossier object
         """
         if databaseID is None:
-            from gui.clubs.ClubsController import g_clubsCtrl
             dossierDescr = self.__getAccountDossierDescr()
-            seasonDossiers = dict(((s.getSeasonID(), s.getDossierDescr()) for s in g_clubsCtrl.getSeasons()))
-            return AccountDossier(dossierDescr, rated7x7Seasons=seasonDossiers)
+            return AccountDossier(dossierDescr)
         container = self.__itemsCache[GUI_ITEM_TYPE.ACCOUNT_DOSSIER]
-        dossier, _, seasons = container.get(int(databaseID))
+        dossier, _, _ = container.get(int(databaseID))
         if dossier is None:
             LOG_WARNING('Trying to get empty user dossier', databaseID)
             return
         else:
-            return AccountDossier(dossier, databaseID, seasons)
+            return AccountDossier(dossier, databaseID)
 
     def getClanInfo(self, databaseID=None):
         if databaseID is None:

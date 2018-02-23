@@ -25,6 +25,10 @@ def walkBonuses(bonusWithProbabilities, visitor):
 
 class ProbabilityVisitor(object):
 
+    def __init__(self, mergers, *args):
+        self.__mergers = mergers
+        self.__mergersArgs = args
+
     def onOneOf(self, bonus, value):
         rand = random.random()
         for probability, bonusValue in value:
@@ -49,17 +53,12 @@ class ProbabilityVisitor(object):
         return deeper
 
     def onValue(self, bonus, name, value):
-        if isinstance(value, dict):
-            bonus.setdefault(name, {}).update(value)
-        elif isinstance(value, list):
-            bonus.setdefault(name, []).extend(value)
-        elif isinstance(value, (int, long, float)):
-            bonus[name] = bonus.get(name, 0) + value
-        else:
-            bonus[name] = value
+        if name in self.__mergers:
+            self.__mergers[name](bonus, name, value, True, *self.__mergersArgs)
 
     def onMerge(self, bonus, name, value):
-        self.onValue(bonus, name, value)
+        if name in self.__mergers:
+            self.__mergers[name](bonus, name, value, False, *self.__mergersArgs)
 
     @staticmethod
     def resultHolder(result):

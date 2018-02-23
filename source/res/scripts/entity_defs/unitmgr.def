@@ -1,4 +1,4 @@
-<unitmgr.def>
+<UnitMgr.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
   </Implements>
@@ -18,7 +18,7 @@
   </Properties>
   <BaseMethods>
     <addPlayer>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT32	</Arg>
@@ -29,18 +29,14 @@
       <Arg>	BOOL	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	BOOL	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </addPlayer>
     <checkPlayerJoined>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
     </checkPlayerJoined>
-    <addInvite>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	STRING	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	STRING	</Arg>
-    </addInvite>
     <updatePlayerInfo>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
@@ -48,30 +44,61 @@
     </updatePlayerInfo>
     <kickAll>
       <Arg>	UINT8	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </kickAll>
+    <setLeadership>
+      <Arg>	UINT64	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </setLeadership>
+    <addInvite>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	UINT64	</Arg>
+      <Arg>	STRING	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </addInvite>
     <removePlayer>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	INT32	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </removePlayer>
     <setIgnoreList>
       <Arg>	MAILBOX	</Arg>
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </setIgnoreList>
     <callUnitMethod>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </callUnitMethod>
     <callUnitPlayerMethod>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	PYTHON	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </callUnitPlayerMethod>
     <onEnqueued>
       <Arg>	UINT8	</Arg>
@@ -94,21 +121,33 @@
       <Arg>	MAILBOX	</Arg>
     </onCenterAccountReadyAgain>
     <start>
-      <Arg>	UINT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
       <Arg>	PYTHON	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </start>
     <stop>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </stop>
     <startAutoSearch>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </startAutoSearch>
     <stopAutoSearch>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
       <Arg>	MAILBOX	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
     </stopAutoSearch>
     <onArenaCreated>
       <Arg>	MAILBOX	</Arg>
@@ -145,5 +184,28 @@
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
     </onPublisherError>
+    <addInviteExtraData>
+      <Arg>	PYTHON	</Arg>
+    </addInviteExtraData>
+    <getInviteExtraData>
+      <ReturnValues>
+        <Arg>	PYTHON	</Arg>
+      </ReturnValues>
+    </getInviteExtraData>
+    <changeUnitFlags>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </changeUnitFlags>
+    <changePlayerRole>
+      <Arg>	UINT64	</Arg>
+      <Arg>	UINT32	</Arg>
+      <Arg>	BOOL	</Arg>
+      <ReturnValues>
+        <Arg>	INT32	</Arg>
+      </ReturnValues>
+    </changePlayerRole>
   </BaseMethods>
-</unitmgr.def>
+</UnitMgr.def>

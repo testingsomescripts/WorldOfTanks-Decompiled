@@ -1,7 +1,9 @@
-<a01_t1_cunningham_bot.xml>
+<A01_T1_Cunningham_bot.xml>
   <crew>
     <commander>	radioman
+
 			gunner
+
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -288,7 +290,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -468,4 +469,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a01_t1_cunningham_bot.xml>
+</A01_T1_Cunningham_bot.xml>

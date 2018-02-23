@@ -1,4 +1,4 @@
-<gb77_fv304_igr.xml>
+<GB77_FV304_IGR.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -205,7 +205,6 @@
       <drivingWheels>	WD_L0 W_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -491,4 +490,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb77_fv304_igr.xml>
+</GB77_FV304_IGR.xml>

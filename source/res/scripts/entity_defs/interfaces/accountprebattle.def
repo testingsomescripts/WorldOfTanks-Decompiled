@@ -1,4 +1,4 @@
-<accountprebattle.def>
+<AccountPrebattle.def>
   <BaseMethods>
     <accountPrebattle_onPrebattleJoined>
       <Arg>	OBJECT_ID	</Arg>
@@ -76,4 +76,4 @@
       <Arg>	UINT8	</Arg>
     </accountPrebattle_onSendPrebattleInvites>
   </BaseMethods>
-</accountprebattle.def>
+</AccountPrebattle.def>

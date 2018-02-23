@@ -2,15 +2,17 @@
 # Embedded file name: scripts/client/gui/customization/data_aggregator.py
 import nations
 from constants import IGR_TYPE
-from gui.game_control import getIGRCtrl
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
-from gui.customization.shared import CUSTOMIZATION_TYPE, SLOT_TYPE, TYPE_NAME, EMBLEM_IGR_GROUP_NAME, ELEMENT_PLACEMENT
 from gui.customization.elements import InstalledElement, Emblem, Inscription, Camouflage, Qualifier, CamouflageQualifier
+from gui.customization.shared import CUSTOMIZATION_TYPE, SLOT_TYPE, TYPE_NAME, EMBLEM_IGR_GROUP_NAME, ELEMENT_PLACEMENT
+from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from helpers import dependency
+from skeletons.gui.game_control import IIGRController
+from skeletons.gui.server_events import IEventsCache
 _ITEM_CLASS = {CUSTOMIZATION_TYPE.EMBLEM: Emblem,
  CUSTOMIZATION_TYPE.INSCRIPTION: Inscription,
  CUSTOMIZATION_TYPE.CAMOUFLAGE: Camouflage}
-_VEHICLE_CAMOUFLAGE_BONUS = {VEHICLE_CLASS_NAME.LIGHT_TANK: 3,
+VEHICLE_CAMOUFLAGE_BONUS = {VEHICLE_CLASS_NAME.LIGHT_TANK: 3,
  VEHICLE_CLASS_NAME.MEDIUM_TANK: 3,
  VEHICLE_CLASS_NAME.HEAVY_TANK: 2,
  VEHICLE_CLASS_NAME.AT_SPG: 4,
@@ -22,13 +24,13 @@ class DataAggregator(object):
     """
     Class which aggregates customization data for currently selected vehicle.
     """
+    _questsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, events, dependencies):
         self._events = events
         self.__currentVehicleInventoryID = None
         self.__incompleteQuestItems = None
         self.__inventoryItems = None
-        self._questsCache = dependencies.g_questsCache
         self._currentVehicle = dependencies.g_currentVehicle
         self._itemsCache = dependencies.g_itemsCache
         self._vehiclesCache = dependencies.g_vehiclesCache
@@ -66,7 +68,7 @@ class DataAggregator(object):
             if rawElement[7] in self._qualifiersCache.qualifiers:
                 qualifier = Qualifier(self._qualifiersCache.qualifiers[rawElement[7]])
             else:
-                qualifier = CamouflageQualifier('winter', _VEHICLE_CAMOUFLAGE_BONUS[self._currentVehicle.item.type])
+                qualifier = CamouflageQualifier('winter', VEHICLE_CAMOUFLAGE_BONUS[self._currentVehicle.item.type])
             group = groups[rawElement[0]]
             readableGroupName = group[1]
             if len(group) == 5:
@@ -80,7 +82,7 @@ class DataAggregator(object):
         else:
             groupName = rawElement['groupName']
             igrLessGroupName = groupName[3:] if groupName.startswith('IGR') else groupName
-            qualifier = CamouflageQualifier(igrLessGroupName, _VEHICLE_CAMOUFLAGE_BONUS[self._currentVehicle.item.type])
+            qualifier = CamouflageQualifier(igrLessGroupName, VEHICLE_CAMOUFLAGE_BONUS[self._currentVehicle.item.type])
             allowedNations = None
             allowedVehicles = list(rawElement['allow'])
             notAllowedVehicles = rawElement['deny']
@@ -275,7 +277,7 @@ class DataAggregator(object):
                 else:
                     isInstalled = False
 
-                isInDossier = elementID in inDossier[cType] or replacedByIGRItem or not isMigrated
+                isInDossier = elementID in inDossier[cType] or replacedByIGRItem and not rawElement[0] == 'auto' or not isMigrated
                 if isInShop or isInQuests or isInDossier or isInstalled or elementID in self.__inventoryItems[cType]:
                     containerToFill[elementID] = self.createElement(elementID, cType, cNationID, isInShop, isInDossier, isInQuests, replacedByIGRItem, self.__inventoryItems)
 
@@ -284,7 +286,7 @@ class DataAggregator(object):
     def __updateDisplayedElementsAndGroups(self, rawElementGroups, curVehDescr, cNationID, notMigratedElements, installedElements):
         allElements = self.__getAvailableElements(curVehDescr, cNationID, notMigratedElements, installedElements)
         displayedElements = ({}, {}, {})
-        displayedGroups = (set([]), set([]), set([]))
+        displayedGroups = (set(), set(), set())
         for cType in CUSTOMIZATION_TYPE.ALL:
             containerToFill = displayedElements[cType]
             for itemID, availableItem in allElements[cType].iteritems():
@@ -342,24 +344,24 @@ class DataAggregator(object):
 
 
 class IgrDataAggregator(DataAggregator):
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, events, externalDependencies):
         DataAggregator.__init__(self, events, externalDependencies)
         self._displayIgrItems = False
         self.__igrReplacedItems = None
-        self.__gameControlInstance = externalDependencies.g_gameControlInstance
         return
 
     def init(self):
         DataAggregator.init(self)
-        self.__gameControlInstance.igr.onIgrTypeChanged += self.__onIGRTypeChanged
+        self.igrCtrl.onIgrTypeChanged += self.__onIGRTypeChanged
 
     def fini(self):
-        self.__gameControlInstance.igr.onIgrTypeChanged -= self.__onIGRTypeChanged
+        self.igrCtrl.onIgrTypeChanged -= self.__onIGRTypeChanged
         DataAggregator.fini(self)
 
     def _update(self):
-        self._displayIgrItems = getIGRCtrl().getRoomType() == IGR_TYPE.PREMIUM
+        self._displayIgrItems = self.igrCtrl.getRoomType() == IGR_TYPE.PREMIUM
         self.__igrReplacedItems = [{}, {}, {}]
         DataAggregator._update(self)
 
@@ -368,7 +370,7 @@ class IgrDataAggregator(DataAggregator):
         if self._displayIgrItems:
             igrLayout = self._itemsCache.items.inventory.getIgrCustomizationsLayout()
             vehicleId = self._currentVehicle.item.invID
-            igrRoomType = getIGRCtrl().getRoomType()
+            igrRoomType = self.igrCtrl.getRoomType()
             igrVehDescr = []
             if vehicleId in igrLayout:
                 if igrRoomType in igrLayout[vehicleId]:

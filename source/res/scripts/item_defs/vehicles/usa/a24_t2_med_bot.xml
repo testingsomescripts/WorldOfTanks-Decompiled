@@ -1,4 +1,4 @@
-<a24_t2_med_bot.xml>
+<A24_T2_med_bot.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
@@ -193,7 +193,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -527,4 +526,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a24_t2_med_bot.xml>
+</A24_T2_med_bot.xml>

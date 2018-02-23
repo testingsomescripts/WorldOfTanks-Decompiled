@@ -72,6 +72,32 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
+def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
+    data = {'name': title,
+     'value': value,
+     'valueAtRight': valueAtRight,
+     'iconAlpha': iconAlpha,
+     'gap': gap}
+    if icon is not None:
+        data['icon'] = icon
+    if valueWidth != -1:
+        data['valueWidth'] = valueWidth
+    if titlePadding is not None:
+        data['titlePadding'] = titlePadding
+    if valuePadding is not None:
+        data['valuePadding'] = valuePadding
+    if iconPadding is not None:
+        data['iconPadding'] = iconPadding
+    if gap != -1:
+        data['gap'] = gap
+    if desc is not None:
+        blocks = [packBlockDataItem(linkage, data), packTextBlockData(desc)]
+        return packBuildUpBlockData(blocks, gap, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding)
+    else:
+        return packBlockDataItem(linkage, data, padding)
+        return
+
+
 def packBuildUpBlockData(blocks, gap=0, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding=None, stretchBg=True):
     data = {'blocksData': blocks,
      'stretchBg': stretchBg}
@@ -126,10 +152,11 @@ def packImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, linkage=
     return packBlockDataItem(linkage, data, padding)
 
 
-def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONSTANTS.STATE_CAMOUFLAGE, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None):
+def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONSTANTS.STATE_CAMOUFLAGE, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_SALE_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None, currency=None):
     data = {'name': name,
      'saleData': saleData,
-     'actionStyle': actionStyle}
+     'actionStyle': actionStyle,
+     'currency': currency}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -138,6 +165,13 @@ def packStatusDeltaBlockData(title, valueStr, statusBarData, buffIconSrc='', lin
      'valueStr': valueStr,
      'statusBarData': statusBarData,
      'buffIconSrc': buffIconSrc}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packCrewSkillsBlockData(crewStr, skillsStr, crewfIconSrc='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_CREW_SKILLS_BLOCK_LINKAGE, padding=None):
+    data = {'crewStr': crewStr,
+     'skillsStr': skillsStr,
+     'crewfIconSrc': crewfIconSrc}
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -208,10 +242,20 @@ def packItemRentActionTooltipData(item, rentPackage):
      'rentPackage': rentPackage['days']}
 
 
-def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_LIST_BLOCK_LINKAGE, padding=None):
-    return packBlockDataItem(linkage, {'listIconSrc': listIconSrc,
+def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'dataType': 'String',
+     'rendererType': 'ImageRendererUI',
+     'listIconSrc': listIconSrc,
      'columnWidth': columnWidth,
      'rowHeight': rowHeight}, padding)
+
+
+def packQuestAwardsBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.data.AwardItemVO',
+     'rendererType': 'AwardItemRendererUI',
+     'listIconSrc': listData,
+     'columnWidth': 85,
+     'rowHeight': 50}, padding)
 
 
 def getActionPriceData(item):

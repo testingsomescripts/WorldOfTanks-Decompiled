@@ -17,7 +17,7 @@ class PostmortemDelay:
     KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS = (1.5, 3.0)
     KILLER_VEHICLE_PITCH_OFFSET = -0.3
 
-    def __init__(self, arcadeCamera, onStop):
+    def __init__(self, arcadeCamera, onKillerVisionStart, onStop):
         assert isinstance(arcadeCamera, ArcadeCamera)
         self.__killerVehicleID = None
         self.__bActive = False
@@ -28,6 +28,7 @@ class PostmortemDelay:
         self.__savedCameraDistance = None
         self.__savedYawPitch = None
         self.__arcadeCamera = arcadeCamera
+        self.__onKillerVisionStart = onKillerVisionStart
         self.__onStop = onStop
         self.__cbIDWait = None
         BigWorld.player().onVehicleLeaveWorld += self.__onVehicleLeaveWorld
@@ -37,6 +38,7 @@ class PostmortemDelay:
     def destroy(self):
         self.stop()
         self.__arcadeCamera = None
+        self.__onKillerVisionStart = None
         self.__onStop = None
         BigWorld.player().onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
         g_playerEvents.onArenaPeriodChange -= self.__onRoundFinished
@@ -93,7 +95,8 @@ class PostmortemDelay:
         vehicle = BigWorld.entity(vehicleID)
         if vehicle is None:
             if vehicleID == BigWorld.player().playerVehicleID:
-                targetMatrix = BigWorld.player().getOwnVehicleStabilisedMatrix()
+                steadyMatrix = BigWorld.player().inputHandler.steadyVehicleMatrixCalculator
+                targetMatrix = steadyMatrix.outputMProv
                 self.__setCameraSettings(targetMP=targetMatrix, pivotSettings=self.__savedPivotSettings, cameraDistance=self.__savedCameraDistance, yawPitch=self.__savedYawPitch)
                 return True
             return False
@@ -143,6 +146,7 @@ class PostmortemDelay:
             LOG_DEBUG("<PostmortemDelay>: can't move camera to killer vehicle")
             self.__showChoiceWindow()
             return
+        self.__onKillerVisionStart(self.__killerVehicleID)
         self.__bKillerVisionActive = True
         self.__cbIDWait = BigWorld.callback(self.KILLER_VISION_TIME, self.__onKillerVisionFinished)
 

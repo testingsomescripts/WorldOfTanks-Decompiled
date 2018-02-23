@@ -19,9 +19,9 @@ CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
 CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
+SEARCH_NAME_VEHICLE = 'searchNameVehicle'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
-VEHICLE_BUY_WINDOW_SETTINGS = 'vehicleBuyWindowSettings'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
@@ -38,17 +38,23 @@ LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
+PROFILE_TECHNIQUE = 'profileTechnique'
+PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 LAST_CLUB_OPENED_FOR_APPS = 'lastClubOpenedForApps'
 SHOW_INVITE_COMMAND_BTN_ANIMATION = 'showInviteCommandBtnAnimation'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
+STATS_REGULAR_SORTING = 'statsSorting'
+STATS_SORTIE_SORTING = 'statsSortingSortie'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE),
-               'shop_vehicle': {'obtainingType': STORE_CONSTANTS.BUY_VEHICLE_OBTAINING_TYPE,
+               'shop_vehicle': {'obtainingType': STORE_CONSTANTS.VEHICLE,
                                 'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME,
                                 'extra': [STORE_CONSTANTS.LOCKED_EXTRA_NAME]},
-               'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE_OBTAINING_TYPE,
+               'shop_restoreVehicle': {'obtainingType': STORE_CONSTANTS.RESTORE_VEHICLE,
+                                       'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
+               'shop_tradeInVehicle': {'obtainingType': STORE_CONSTANTS.TRADE_IN_VEHICLE,
                                        'vehicleType': STORE_CONSTANTS.ALL_FILTER_NAME},
                'shop_module': {'fitsType': STORE_CONSTANTS.MY_VEHICLES_ARTEFACT_FIT,
                                'vehicleCD': -1,
@@ -120,8 +126,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                CAROUSEL_FILTER_2: {'premium': False,
                                    'elite': False,
                                    'igr': False,
-                                   'hideRented': False,
-                                   'hideEvent': False,
+                                   'rented': True,
+                                   'event': True,
                                    'favorite': False,
                                    'bonus': False},
                FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
@@ -151,11 +157,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                FALLOUT_CAROUSEL_FILTER_2: {'premium': False,
                                            'elite': False,
                                            'igr': False,
-                                           'hideRented': False,
-                                           'hideEvent': False,
+                                           'rented': True,
+                                           'event': True,
                                            'gameMode': False,
                                            'favorite': False,
                                            'bonus': False},
+               SEARCH_NAME_VEHICLE: '',
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -197,7 +204,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         'battlesCountAward': -1,
                         'pveBattlesCountAward': -1},
                LAST_CLUB_OPENED_FOR_APPS: 0,
-               SHOW_INVITE_COMMAND_BTN_ANIMATION: True},
+               SHOW_INVITE_COMMAND_BTN_ANIMATION: True,
+               PROFILE_TECHNIQUE: {'selectedColumn': 4,
+                                   'selectedColumnSorting': 'descending',
+                                   'isInHangarSelected': False},
+               PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
+                                          'selectedColumnSorting': 'descending'}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
@@ -295,7 +307,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                      'markerAltHp': 1,
                                      'markerAltVehicleName': True,
                                      'markerAltPlayerName': False}},
-                VEHICLE_BUY_WINDOW_SETTINGS: True,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -314,7 +325,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'nationalVoices': False,
                 'enableVoIP': True,
                 'replayEnabled': 1,
-                'players_panel': {'state': 'medium',
+                'players_panel': {'state': 2,
                                   'showLevels': True,
                                   'showTypes': True},
                 'gameplayMask': gameplay_ctx.getDefaultMask(),
@@ -333,7 +344,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'customization': {},
                 'showVehModelsOnMap': 0,
                 'battleLoadingInfo': 1,
-                'simplifiedTTC': True,
                 'relativePower': False,
                 'relativeArmor': False,
                 'relativeMobility': False,
@@ -355,6 +365,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'bulbVoices': 'lightbulb',
                 PREVIEW_INFO_PANEL_IDX: 0,
                 'carouselType': 0,
+                'doubleCarouselType': 0,
+                'vehicleCarouselStats': True,
+                'siegeModeHintCounter': 10,
                 NEW_SETTINGS_COUNTER: {'FeedbackSettings0': True,
                                        'FeedbackSettings1': True,
                                        'FeedbackSettings2': True,
@@ -376,7 +389,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 26
+    version = 27
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -680,6 +693,22 @@ class AccountSettings(object):
                 for key, section in _filterAccountSection(ads):
                     AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('new_customization_items')
                     AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('statsSortingEvent')
+
+            if currVersion < 27:
+                legacyToNewMode = {'hidden': 0,
+                 'short': 1,
+                 'medium': 2,
+                 'medium2': 3,
+                 'large': 4}
+                for key, section in _filterAccountSection(ads):
+                    settingsSection = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    if 'players_panel' in settingsSection.keys():
+                        panelSettings = _unpack(settingsSection['players_panel'].asString)
+                        if 'state' in panelSettings:
+                            presentMode = panelSettings['state']
+                            if presentMode in legacyToNewMode.keys():
+                                panelSettings['state'] = legacyToNewMode[presentMode]
+                                settingsSection.write('players_panel', _pack(panelSettings))
 
             ads.writeInt('version', AccountSettings.version)
         return

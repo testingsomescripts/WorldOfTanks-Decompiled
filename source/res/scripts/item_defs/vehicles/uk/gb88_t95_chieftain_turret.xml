@@ -1,4 +1,4 @@
-<gb88_t95_chieftain_turret.xml>
+<GB88_T95_Chieftain_turret.xml>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -184,7 +184,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -657,4 +656,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb88_t95_chieftain_turret.xml>
+</GB88_T95_Chieftain_turret.xml>

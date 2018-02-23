@@ -1,4 +1,4 @@
-<r04_t-34.xml>
+<R04_T-34.xml>
   <crew>
     <commander>	gunner	</commander>
     <radioman></radioman>
@@ -440,7 +440,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	trds_t34_pc	</wwsoundPC>
@@ -815,7 +814,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	trds_t34_pc	</wwsoundPC>
@@ -1449,4 +1447,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r04_t-34.xml>
+</R04_T-34.xml>

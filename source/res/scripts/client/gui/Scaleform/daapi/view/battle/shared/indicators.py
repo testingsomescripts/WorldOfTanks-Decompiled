@@ -2,28 +2,37 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/indicators.py
 import BigWorld
 import GUI
+import CommandMapping
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
-from gui import DEPTH_OF_Aim, GUI_SETTINGS
+from gui import DEPTH_OF_Aim, GUI_SETTINGS, makeHtmlString
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
-from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.settings_constants import CONTROLS, SOUND, DAMAGE_INDICATOR, GRAPHICS
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
+from gui.Scaleform.daapi.view.battle.shared import siege_component
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
+from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.shared.crits_mask_parser import critsParserGenerator
-from gui.battle_control import g_sessionProvider
+from gui.shared.formatters import text_styles
+from gui.shared.utils.key_mapping import getReadableKey
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import DEVICE_STATES_RANGE
 from gui.battle_control.controllers.hit_direction_ctrl import IHitIndicator
 from gui.Scaleform.genConsts.DAMAGE_INDICATOR_ATLAS_ITEMS import DAMAGE_INDICATOR_ATLAS_ITEMS
 from helpers import i18n
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 import SoundGroups
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
 _DAMAGE_INDICATOR_SWF = 'damageIndicator.swf'
 _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
 _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
 _DAMAGE_INDICATOR_SWF_SIZE = (680, 680)
-_DAMAGE_INDICATOR_TOTAL_FRAMES = 140
+_DAMAGE_INDICATOR_TOTAL_FRAMES = 160
 _BEGIN_ANIMATION_FRAMES = 11
 _DAMAGE_INDICATOR_FRAME_RATE = 24
 _BEGIN_ANIMATION_DURATION = _BEGIN_ANIMATION_FRAMES / float(_DAMAGE_INDICATOR_FRAME_RATE)
@@ -32,6 +41,8 @@ _DIRECT_INDICATOR_SWF = 'directionIndicator.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
 _DIRECT_INDICATOR_SWF_SIZE = (680, 680)
+_MARKER_SMALL_SIZE_THRESHOLD = 0.1
+_MARKER_LARGE_SIZE_THRESHOLD = 0.3
 
 class _MARKER_TYPE(CONST_CONTAINER):
     """
@@ -173,6 +184,10 @@ class _StandardMarkerVOBuilder(_MarkerVOBuilder):
 
 class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
 
+    def __init__(self, dynamicIndicatorSize):
+        super(_ExtendedMarkerVOBuilder, self).__init__()
+        self.__dynamicIndicatorSize = dynamicIndicatorSize
+
     def buildVO(self, markerData):
         vo = super(_ExtendedMarkerVOBuilder, self).buildVO(markerData)
         vo.update({'circleStr': self._getCircleBackground(markerData),
@@ -195,14 +210,13 @@ class _ExtendedMarkerVOBuilder(_MarkerVOBuilder):
     def _getDamageLabel(self, markerData):
         return str(markerData.hitData.getDamage())
 
-    @staticmethod
-    def _getSizeType(hp, damage):
+    def _getSizeType(self, hp, damage):
         sizeType = _MARKER_SIZE_TYPE.SMALL
-        if hp > 0:
+        if self.__dynamicIndicatorSize and hp > 0:
             ratio = float(damage) / hp
-            if ratio <= 0.1:
+            if ratio <= _MARKER_SMALL_SIZE_THRESHOLD:
                 sizeType = _MARKER_SIZE_TYPE.SMALL
-            elif ratio <= 0.3:
+            elif ratio <= _MARKER_LARGE_SIZE_THRESHOLD:
                 sizeType = _MARKER_SIZE_TYPE.MEDIUM
             else:
                 sizeType = _MARKER_SIZE_TYPE.LARGE
@@ -256,12 +270,30 @@ class _ExtendedCriticalMarkerVOBuilder(_ExtendedMarkerVOBuilder):
         return critType
 
 
-def _getExtendedMarkerVOBuilderClass(markerData):
-    return _ExtendedCriticalMarkerVOBuilder if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder
+class _AbstractMarkerVOBuilderFactory(object):
+
+    def getVOBuilder(self, markerData):
+        raise NotImplementedError
+
+    def buildMarkerVO(self, markerData):
+        builder = self.getVOBuilder(markerData)
+        return builder.buildVO(markerData)
 
 
-def _getStandardMarkerVOBuilderClass(markerData):
-    return _StandardMarkerVOBuilder
+class _ExtendedMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+
+    def __init__(self, isIndicatorSizeDynamic):
+        super(_ExtendedMarkerVOBuilderFactory, self).__init__()
+        self.__isIndicatorSizeDynamic = isIndicatorSizeDynamic
+
+    def getVOBuilder(self, markerData):
+        return _ExtendedCriticalMarkerVOBuilder(self.__isIndicatorSizeDynamic) if markerData.markerType == _MARKER_TYPE.CRITICAL_DAMAGE else _ExtendedMarkerVOBuilder(self.__isIndicatorSizeDynamic)
+
+
+class _StandardMarkerVOBuilderFactory(_AbstractMarkerVOBuilderFactory):
+
+    def getVOBuilder(self, markerData):
+        return _StandardMarkerVOBuilder()
 
 
 _DEFAULT_DAMAGE_INDICATOR_TYPE = DAMAGE_INDICATOR_TYPE.EXTENDED
@@ -277,6 +309,7 @@ class DamageIndicatorMeta(Flash):
         self._as_setYaw = root.as_setYaw
         self._as_hide = root.as_hide
         self._as_setScreenSettings = root.as_setScreenSettings
+        self._as_setPosition = root.as_setPosition
 
     def destroy(self):
         self._as_updateSettings = None
@@ -285,6 +318,7 @@ class DamageIndicatorMeta(Flash):
         self._as_setYaw = None
         self._as_hide = None
         self._as_setScreenSettings = None
+        self._as_setPosition = None
         return
 
     def as_updateSettingsS(self, isStandard, isWithTankInfo, isWithAnimation, isWithValue):
@@ -305,13 +339,18 @@ class DamageIndicatorMeta(Flash):
     def as_setScreenSettingsS(self, scale, screenWidth, screenHeight):
         return self._as_setScreenSettings(scale, screenWidth, screenHeight)
 
+    def as_setPosition(self, posX, posY):
+        self._as_setPosition(posX, posY)
+
 
 class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, hitsCount):
         names = tuple(map(lambda i: _DAMAGE_INDICATOR_MC_NAME.format(i), xrange(hitsCount)))
         super(_DamageIndicator, self).__init__(_DAMAGE_INDICATOR_SWF, _DAMAGE_INDICATOR_COMPONENT, (names,), SCALEFORM_SWF_PATH_V3)
-        self.__voBuilderFactoryMethod = None
+        self.__voBuilderFactory = None
         self.__updateMethod = None
         self.component.wg_inputKeyMode = 2
         self.component.position.z = DEPTH_OF_Aim
@@ -321,15 +360,16 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.heightMode = 'PIXEL'
         self.component.widthMode = 'PIXEL'
         self.movie.scaleMode = 'NoScale'
-        self.__isBlind = bool(g_settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
+        self.__isBlind = bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND))
         self.__setUpVOBuilderFactoryAndUpdateMethod(_DEFAULT_DAMAGE_INDICATOR_TYPE)
-        g_settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
-        ctrl = g_sessionProvider.shared.crosshair
+        self.settingsCore.interfaceScale.onScaleChanged += self.__setMarkersScale
+        ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
-            ctrl.onCrosshairOffsetChanged += self.__onCrosshairOffsetChanged
-            self.__onCrosshairOffsetChanged(*ctrl.getOffset())
+            ctrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            self.__onCrosshairPositionChanged(*ctrl.getPosition())
         self.__setMarkersScale()
         self.active(True)
+        self.component.offsetRotationElementsInDegree(10.0, 10.0)
         return
 
     def __del__(self):
@@ -337,10 +377,10 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def destroy(self):
         super(_DamageIndicator, self).destroy()
-        g_settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
-        ctrl = g_sessionProvider.shared.crosshair
+        self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
+        ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
-            ctrl.onCrosshairOffsetChanged -= self.__onCrosshairOffsetChanged
+            ctrl.onCrosshairOffsetChanged -= self.__onCrosshairPositionChanged
         self.__updateMethod = None
         self.close()
         return
@@ -355,7 +395,7 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         self.component.visible = flag
 
     def invalidateSettings(self):
-        getter = g_settingsCore.getSetting
+        getter = self.settingsCore.getSetting
         self.__isBlind = bool(getter(GRAPHICS.COLOR_BLIND))
         indicatorType = getter(DAMAGE_INDICATOR.TYPE)
         self.__setUpVOBuilderFactoryAndUpdateMethod(indicatorType)
@@ -364,36 +404,36 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     def showHitDirection(self, idx, hitData, timeLeft):
         self.as_setYawS(idx, hitData.getYaw())
         markerData = _MarkerData(idx=idx, timeLeft=timeLeft, hitData=hitData, isBlind=self.__isBlind)
-        voBuilderClass = self.__voBuilderFactoryMethod(markerData)
-        builder = voBuilderClass()
-        vo = builder.buildVO(markerData)
+        vo = self.__voBuilderFactory.buildMarkerVO(markerData)
         LOG_DEBUG_DEV('showHitDirection hit={}, vo={}'.format(hitData, vo))
         self.__updateMethod(**vo)
 
     def hideHitDirection(self, idx):
         self.as_hideS(idx)
 
-    def __onCrosshairOffsetChanged(self, xOffset, yOffset):
-        self.component.position.x = xOffset
-        self.component.position.y = yOffset
+    def __onCrosshairPositionChanged(self, posX, posY):
+        self.as_setPosition(posX, posY)
 
     def __setUpVOBuilderFactoryAndUpdateMethod(self, indicatorType):
         if indicatorType == DAMAGE_INDICATOR_TYPE.EXTENDED:
-            self.__voBuilderFactoryMethod = _getExtendedMarkerVOBuilderClass
+            isIndicatorSizeDynamic = bool(self.settingsCore.getSetting(DAMAGE_INDICATOR.DYNAMIC_INDICATOR))
+            self.__voBuilderFactory = _ExtendedMarkerVOBuilderFactory(isIndicatorSizeDynamic)
             self.__updateMethod = self.as_showExtendedS
         else:
-            self.__voBuilderFactoryMethod = _getStandardMarkerVOBuilderClass
+            self.__voBuilderFactory = _StandardMarkerVOBuilderFactory()
             self.__updateMethod = self.as_showStandardS
 
     def __setMarkersScale(self, scale=None):
         if scale is None:
-            scale = g_settingsCore.interfaceScale.get()
+            scale = self.settingsCore.interfaceScale.get()
         width, height = GUI.screenResolution()
         self.as_setScreenSettingsS(scale, width, height)
         return
 
 
 class SixthSenseIndicator(SixthSenseMeta):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(SixthSenseIndicator, self).__init__()
@@ -410,36 +450,32 @@ class SixthSenseIndicator(SixthSenseMeta):
 
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
-        detectionAlertSetting = g_settingsCore.options.getSetting(SOUND.DETECTION_ALERT_SOUND)
+        detectionAlertSetting = self.settingsCore.options.getSetting(SOUND.DETECTION_ALERT_SOUND)
         self.__setDetectionSoundEvent(detectionAlertSetting.getEventName())
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
-        ctrl = g_sessionProvider.shared.vehicleState
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
         return
 
     def _dispose(self):
         self.__cancelCallback()
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(SixthSenseIndicator, self)._dispose()
         return
 
     def __show(self):
         if self.__detectionSoundEvent is not None:
             if self.__detectionSoundEvent.isPlaying:
-                self.__detectionSoundEvent.stop()
-                BigWorld.callback(0.01, self.__playCallback)
+                self.__detectionSoundEvent.restart()
             else:
                 self.__detectionSoundEvent.play()
         self.as_showS()
         self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
         return
-
-    def __playCallback(self):
-        self.__detectionSoundEvent.play()
 
     def __hide(self):
         self.__callbackID = None
@@ -464,13 +500,219 @@ class SixthSenseIndicator(SixthSenseMeta):
     def __onSettingsChanged(self, diff):
         key = SOUND.DETECTION_ALERT_SOUND
         if key in diff:
-            detectionAlertSetting = g_settingsCore.options.getSetting(key)
+            detectionAlertSetting = self.settingsCore.options.getSetting(key)
             self.__setDetectionSoundEvent(detectionAlertSetting.getEventName())
 
     def __setDetectionSoundEvent(self, soundEventName):
         if self.__detectionSoundEventName != soundEventName:
             self.__detectionSoundEventName = soundEventName
             self.__detectionSoundEvent = SoundGroups.g_instance.getSound2D(self.__detectionSoundEventName)
+
+
+class SiegeModeIndicator(SiegeModeIndicatorMeta):
+    """ Class responsible for siege mode state indication (enabled, disabled,
+    switching), displaying a special hint that helps players to understand how
+    to switch between siege modes, and also displaying damaged engine or chassis
+    (since siege mode mechanics depend on them).
+    """
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self):
+        super(SiegeModeIndicator, self).__init__()
+        self._isEnabled = False
+        self._siegeState = _SIEGE_STATE.DISABLED
+        self._devices = {'engine': 'normal',
+         'leftTrack': 'normal',
+         'rightTrack': 'normal'}
+        self._switchTime = 0.0
+        self._startTime = BigWorld.serverTime()
+        self._switchTimeTable = {}
+        self._hintsLeft = 0
+        self._isHintShown = False
+        self._isInPostmortem = False
+        self._isObserver = False
+        self._siegeComponent = None
+        return
+
+    def _populate(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        keyboardSetting = self.settingsCore.options.getSetting(CONTROLS.KEYBOARD)
+        arenaDP = self.sessionProvider.getArenaDP()
+        isReplayPlaying = self.sessionProvider.isReplayPlaying
+        self._siegeComponent = siege_component.createSiegeComponent(self, isReplayPlaying)
+        keyboardSetting.onKeyBindingsChanged += self.__onKeyBindingsChanged
+        self._hintsLeft = AccountSettings.getSettings('siegeModeHintCounter')
+        if arenaDP is not None:
+            vInfo = arenaDP.getVehicleInfo()
+            self._isObserver = vInfo.isObserver()
+        else:
+            self._isObserver = False
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            vehicle = vStateCtrl.getControllingVehicle()
+            if vehicle is not None:
+                self.__onVehicleControlling(vehicle)
+        self.as_setVisibleS(self._isEnabled)
+        return
+
+    def _dispose(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        keyboardSetting = self.settingsCore.options.getSetting(CONTROLS.KEYBOARD)
+        keyboardSetting.onKeyBindingsChanged -= self.__onKeyBindingsChanged
+        if crosshairCtrl is not None:
+            crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
+            crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+            vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+        self._switchTimeTable.clear()
+        self._siegeComponent.clear()
+        self._siegeComponent = None
+        AccountSettings.setSettings('siegeModeHintCounter', self._hintsLeft)
+        return
+
+    def __updateIndicatorView(self, isSmooth=False):
+        """ Update indicator according to current siege state (enabled, disabled or switching).
+        
+        :param isSmooth: flag indication whether animation should be smooth.
+        """
+        LOG_DEBUG('Updating siege mode: indicator')
+        engineState = self._devices['engine']
+        totalTime = self._switchTimeTable[self._siegeState][engineState]
+        self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
+        self.__updateHintView()
+
+    def __updateHintView(self):
+        """ Update hint according to current siege state.
+        """
+        LOG_DEBUG('Updating siege mode: hint')
+        if self._isInPostmortem or self._isObserver:
+            return
+        if self._siegeState not in _SIEGE_STATE.SWITCHING and self._hintsLeft:
+            self.as_showHintS(*self.__getHint())
+            self._isHintShown = True
+        elif self._isHintShown:
+            self.as_hideHintS()
+            self._isHintShown = False
+
+    def __updateDevicesView(self):
+        """ Update devices according to current siege state.
+        """
+        LOG_DEBUG('Updating siege mode: devices')
+        engine = self._devices['engine']
+        leftTrack = self._devices['leftTrack']
+        rightTrack = self._devices['rightTrack']
+        if DEVICE_STATES_RANGE.index(leftTrack) > DEVICE_STATES_RANGE.index(rightTrack):
+            chassis = leftTrack
+        else:
+            chassis = rightTrack
+        if chassis == 'critical':
+            chassis = 'normal'
+        if DEVICE_STATES_RANGE.index(chassis) > DEVICE_STATES_RANGE.index(engine):
+            deviceName, deviceState = 'chassis', chassis
+        else:
+            deviceName, deviceState = 'engine', engine
+        self.as_updateDeviceStateS(deviceName, deviceState)
+
+    def __onVehicleControlling(self, vehicle):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        vTypeDesc = vehicle.typeDescriptor
+        vType = vTypeDesc.type
+        if vehicle.isAlive() and vTypeDesc.hasSiegeMode:
+            siegeModeParams = vType.siegeModeParams
+            self._switchTimeTable.update({_SIEGE_STATE.DISABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
+             _SIEGE_STATE.SWITCHING_ON: siegeModeParams[_SIEGE_STATE.SWITCHING_ON],
+             _SIEGE_STATE.ENABLED: siegeModeParams[_SIEGE_STATE.SWITCHING_OFF],
+             _SIEGE_STATE.SWITCHING_OFF: siegeModeParams[_SIEGE_STATE.SWITCHING_OFF]})
+            self._isEnabled = True
+            for stateID in (VEHICLE_VIEW_STATE.DEVICES, VEHICLE_VIEW_STATE.SIEGE_MODE):
+                value = vStateCtrl.getStateValue(stateID)
+                if value is not None:
+                    if stateID == VEHICLE_VIEW_STATE.DEVICES:
+                        for v in value:
+                            self.__onVehicleStateUpdated(stateID, v)
+
+                    else:
+                        self.__onVehicleStateUpdated(stateID, value)
+
+            self.__onCrosshairPositionChanged()
+            self.__updateIndicatorView()
+            self.__updateDevicesView()
+        else:
+            self._isEnabled = False
+            for deviceName in self._devices:
+                self._devices[deviceName] = 'normal'
+
+        self.as_setVisibleS(self._isEnabled)
+        return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if not self._isEnabled:
+            return
+        if state == VEHICLE_VIEW_STATE.SIEGE_MODE:
+            self.__updateSiegeState(*value)
+        elif state == VEHICLE_VIEW_STATE.DEVICES:
+            self.__updateDevicesState(*value)
+        elif state == VEHICLE_VIEW_STATE.DESTROYED:
+            self.__updateDestroyed(value)
+        elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
+            self.__updateDestroyed(value)
+
+    def __onPostMortemSwitched(self):
+        self._isInPostmortem = True
+
+    def __onCrosshairPositionChanged(self, *args):
+        if not self._isEnabled:
+            return
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        scaledPosition = crosshairCtrl.getScaledPosition()
+        self.as_updateLayoutS(*scaledPosition)
+
+    def __onKeyBindingsChanged(self):
+        if not self._isEnabled:
+            return
+        self.__updateHintView()
+
+    def __updateSiegeState(self, siegeState, switchTime):
+        if siegeState == _SIEGE_STATE.SWITCHING_OFF:
+            if not self._isObserver and not self._isInPostmortem:
+                self._hintsLeft = max(0, self._hintsLeft - 1)
+        if self._siegeState in _SIEGE_STATE.SWITCHING:
+            isSmooth = siegeState not in _SIEGE_STATE.SWITCHING
+        else:
+            isSmooth = siegeState in _SIEGE_STATE.SWITCHING
+        self._startTime = BigWorld.serverTime()
+        self._siegeState = siegeState
+        self._switchTime = switchTime
+        self.__updateIndicatorView(isSmooth)
+
+    def __updateDevicesState(self, deviceName, _, realState):
+        if deviceName in ('engine', 'leftTrack', 'rightTrack'):
+            self._devices[deviceName] = realState
+            self.__updateDevicesView()
+
+    def __updateDestroyed(self, _):
+        self._isEnabled = False
+        self.as_setVisibleS(False)
+
+    def __getHint(self):
+        keyName = getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        if keyName:
+            pressText = text_styles.tutorial(INGAME_GUI.SIEGEMODE_HINT_PRESS)
+            hintText = text_styles.tutorial(INGAME_GUI.siegeModeHint(self._siegeState))
+            keyText = makeHtmlString('html_templates:battle/siegeMode', 'toggle', ctx={'key': keyName})
+            return (keyText, pressText, hintText)
+        else:
+            return ('', '', text_styles.tutorial(INGAME_GUI.SIEGEMODE_HINT_NOBINDING))
 
 
 class IDirectionIndicator(object):

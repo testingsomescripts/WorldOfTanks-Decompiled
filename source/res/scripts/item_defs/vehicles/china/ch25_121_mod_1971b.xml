@@ -1,4 +1,4 @@
-<ch25_121_mod_1971b.xml>
+<Ch25_121_mod_1971B.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -16,7 +16,7 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.395	</firePenalty>
   </invisibility>
-  <repairCost>	7.0	</repairCost>
+  <repairCost>	13.0	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
@@ -172,7 +172,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -594,4 +593,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</ch25_121_mod_1971b.xml>
+</Ch25_121_mod_1971B.xml>

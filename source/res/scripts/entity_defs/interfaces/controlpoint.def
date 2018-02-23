@@ -1,8 +1,8 @@
-<controlpoint.def>
+<ControlPoint.def>
   <Implements>
     <Interface>	EntityTrap	</Interface>
   </Implements>
   <TempProperties>
     <_ControlPoint__p></_ControlPoint__p>
   </TempProperties>
-</controlpoint.def>
+</ControlPoint.def>

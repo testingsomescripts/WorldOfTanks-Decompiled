@@ -1,4 +1,4 @@
-<s15_l_60.xml>
+<S15_L_60.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -195,7 +195,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <AODecals>
@@ -497,4 +496,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</s15_l_60.xml>
+</S15_L_60.xml>

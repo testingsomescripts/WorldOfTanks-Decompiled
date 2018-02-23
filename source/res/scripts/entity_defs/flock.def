@@ -1,4 +1,4 @@
-<flock.def>
+<Flock.def>
   <Volatile>
     <position></position>
     <yaw></yaw>
@@ -94,4 +94,4 @@
     </flyAroundCenter>
   </Properties>
   <ClientMethods></ClientMethods>
-</flock.def>
+</Flock.def>

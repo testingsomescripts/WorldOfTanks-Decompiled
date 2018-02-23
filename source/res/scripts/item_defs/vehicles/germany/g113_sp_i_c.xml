@@ -1,6 +1,7 @@
-<g113_sp_i_c.xml>
+<G113_SP_I_C.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
@@ -313,7 +314,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -555,7 +555,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1090,4 +1089,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g113_sp_i_c.xml>
+</G113_SP_I_C.xml>

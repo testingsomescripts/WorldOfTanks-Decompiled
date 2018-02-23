@@ -1,4 +1,4 @@
-<accountregistrator.def>
+<AccountRegistrator.def>
   <Properties>
     <consumer_tag>
       <Type>	STRING	</Type>
@@ -15,4 +15,4 @@
       <Arg>	DB_ID	</Arg>
     </cloneAccount>
   </BaseMethods>
-</accountregistrator.def>
+</AccountRegistrator.def>

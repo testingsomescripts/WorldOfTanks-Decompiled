@@ -1,4 +1,4 @@
-<gb70_fv4202_105.xml>
+<GB70_FV4202_105.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -187,7 +187,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -395,4 +394,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb70_fv4202_105.xml>
+</GB70_FV4202_105.xml>

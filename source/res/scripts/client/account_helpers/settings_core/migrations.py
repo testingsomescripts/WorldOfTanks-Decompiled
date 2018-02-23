@@ -1,21 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
-from account_helpers.settings_core.SettingsCache import g_settingsCache
-import constants
 import BigWorld
+import constants
 from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS
 from adisp import process, async
 from debug_utils import LOG_DEBUG
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.game_control import IIGRController
 
 def _initializeDefaultSettings(core, data, initialized):
     LOG_DEBUG('Initializing server settings.')
     from account_helpers.AccountSettings import AccountSettings
+    options = core.options
     gameData = data['gameData'] = {GAME.DATE_TIME_MESSAGE_INDEX: 2,
-     GAME.ENABLE_OL_FILTER: core.getSetting(GAME.ENABLE_OL_FILTER),
-     GAME.ENABLE_SPAM_FILTER: core.getSetting(GAME.ENABLE_SPAM_FILTER),
-     GAME.INVITES_FROM_FRIENDS: core.getSetting(GAME.INVITES_FROM_FRIENDS),
-     GAME.RECEIVE_FRIENDSHIP_REQUEST: core.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST),
-     GAME.STORE_RECEIVER_IN_BATTLE: core.getSetting(GAME.STORE_RECEIVER_IN_BATTLE),
+     GAME.ENABLE_OL_FILTER: options.getSetting(GAME.ENABLE_OL_FILTER).getDefaultValue(),
+     GAME.ENABLE_SPAM_FILTER: options.getSetting(GAME.ENABLE_SPAM_FILTER).getDefaultValue(),
+     GAME.INVITES_FROM_FRIENDS: options.getSetting(GAME.INVITES_FROM_FRIENDS).getDefaultValue(),
+     GAME.RECEIVE_FRIENDSHIP_REQUEST: core.options.getSetting(GAME.RECEIVE_FRIENDSHIP_REQUEST).getDefaultValue(),
+     GAME.STORE_RECEIVER_IN_BATTLE: core.options.getSetting(GAME.STORE_RECEIVER_IN_BATTLE).getDefaultValue(),
      GAME.REPLAY_ENABLED: core.getSetting(GAME.REPLAY_ENABLED),
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
@@ -28,8 +31,8 @@ def _initializeDefaultSettings(core, data, initialized):
     controlsData = data['controlsData'] = {CONTROLS.MOUSE_HORZ_INVERSION: core.getSetting(CONTROLS.MOUSE_HORZ_INVERSION),
      CONTROLS.MOUSE_VERT_INVERSION: core.getSetting(CONTROLS.MOUSE_VERT_INVERSION),
      CONTROLS.BACK_DRAFT_INVERSION: core.getSetting(CONTROLS.BACK_DRAFT_INVERSION)}
-    from gui import game_control
-    if game_control.g_instance.igr.getRoomType() == constants.IGR_TYPE.NONE:
+    igrCtrl = dependency.instance(IIGRController)
+    if igrCtrl.getRoomType() == constants.IGR_TYPE.NONE:
         import Settings
         section = Settings.g_instance.userPrefs
         if section.has_key(Settings.KEY_MESSENGER_PREFERENCES):
@@ -76,7 +79,6 @@ def _initializeDefaultSettings(core, data, initialized):
                 LOG_DEBUG('Controls preferences is not available.')
 
     data['markersData'] = AccountSettings.getSettings('markers')
-    data['keyboardData'] = core.options.getSetting('keyboard').getCurrentMapping()
     data['graphicsData'] = {GAME.LENS_EFFECT: core.getSetting(GAME.LENS_EFFECT)}
     data['marksOnGun'] = {GAME.SHOW_MARKS_ON_GUN: core.getSetting(GAME.SHOW_MARKS_ON_GUN)}
     return
@@ -96,6 +98,10 @@ def _reinitializeDefaultSettings(core, data, initialized, callback=None):
     return
 
 
+def _getSettingsCache():
+    return dependency.instance(ISettingsCache)
+
+
 def _migrateTo3(core, data, initialized):
     aimData = data['aimData']
     if not initialized:
@@ -110,7 +116,7 @@ def _migrateTo3(core, data, initialized):
 def _migrateTo4(core, data, initialized):
     gameData = data['gameData']
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     if storedValue & 128:
         gameData[GAME.REPLAY_ENABLED] = 2
     else:
@@ -123,7 +129,7 @@ def _migrateTo5(core, data, initialized):
 
 def _migrateTo6(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     maskOffset = 7168
     currentMask = (storedValue & maskOffset) >> 10
     import ArenaType
@@ -177,7 +183,7 @@ def _migrateTo17(core, data, initialized):
 def _migrateTo18(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from constants import QUEUE_TYPE
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.FALLOUT, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FALLOUT, 0)
     currentType = storedValue & 3
     if currentType > 0:
         oldTypeToNewType = {1: QUEUE_TYPE.FALLOUT_CLASSIC,
@@ -207,12 +213,12 @@ def _migrateTo21(core, data, initialized):
 
 
 def _migrateTo22(core, data, initialized):
-    data['gameExtData'][GAME.SIMPLIFIED_TTC] = True
+    pass
 
 
 def _migrateTo23(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME, 0)
     settingOffset = 1610612736
     currentValue = (storedValue & settingOffset) >> 29
     if currentValue == 0:
@@ -224,12 +230,12 @@ def _migrateTo24(core, data, initialized):
 
 
 def _migrateTo25(core, data, initialized):
-    data['carousel_filter']['hideEvent'] = False
+    data['carousel_filter']['event'] = False
 
 
 def _migrateTo26(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-    storedValue = g_settingsCache.getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAME_EXTENDED, 0)
     maskOffset = 1
     if (storedValue & maskOffset) >> 0:
         clear = data['clear']
@@ -251,11 +257,52 @@ def _migrateTo26(core, data, initialized):
 
 
 def _migrateTo27(core, data, initialized):
-    data['carousel_filter']['hideEvent'] = False
+    data['carousel_filter']['event'] = False
 
 
 def _migrateTo28(core, data, initialized):
     data['gameExtData'][GAME.CAROUSEL_TYPE] = 1
+
+
+def _migrateTo29(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 0)
+    settingOffset = 8
+    if storedValue & settingOffset:
+        data['onceOnlyHints']['ShopTradeInHint'] = 1
+        clear = data['clear']
+        clear['onceOnlyHints'] = clear.get('onceOnlyHints', 0) | settingOffset
+    else:
+        data['onceOnlyHints']['ShopTradeInHint'] = 0
+
+
+def _migrateTo30(core, data, initialized):
+    feedbackData = data.get('feedbackData', {})
+    feedbackData[BATTLE_EVENTS.ENEMY_WORLD_COLLISION] = True
+    feedbackData[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = True
+    data['feedbackData'] = feedbackData
+
+
+def _migrateTo31(core, data, initialized):
+    feedbackData = data.get('feedbackData', {})
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    currentVal = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.FEEDBACK, 0)
+    maskOffset = 33554432
+    if not currentVal & maskOffset:
+        feedbackData[DAMAGE_INDICATOR.DYNAMIC_INDICATOR] = False
+    feedbackData[BATTLE_EVENTS.RECEIVED_DAMAGE] = True
+    feedbackData[BATTLE_EVENTS.RECEIVED_CRITS] = True
+    feedbackData[DAMAGE_LOG.SHOW_EVENT_TYPES] = 0
+    feedbackData[DAMAGE_LOG.EVENT_POSITIONS] = 0
+
+
+def _migrateTo32(core, data, initialized):
+    data['carousel_filter']['rented'] = True
+    data['carousel_filter']['event'] = True
+
+
+def _migrateTo33(core, data, initialized):
+    data['gameExtData'][GAME.VEHICLE_CAROUSEL_STATS] = True
 
 
 _versions = ((1,
@@ -364,6 +411,26 @@ _versions = ((1,
   False),
  (28,
   _migrateTo28,
+  False,
+  False),
+ (29,
+  _migrateTo29,
+  False,
+  False),
+ (30,
+  _migrateTo30,
+  False,
+  False),
+ (31,
+  _migrateTo31,
+  False,
+  False),
+ (32,
+  _migrateTo32,
+  False,
+  False),
+ (33,
+  _migrateTo33,
   False,
   False))
 

@@ -1,4 +1,4 @@
-<clan.def>
+<Clan.def>
   <Implements>
     <Interface>	TransactionUser	</Interface>
     <Interface>	InterclusterReceiver	</Interface>
@@ -150,6 +150,14 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT32	</Arg>
     </resetLeaderChangeCooldown>
+    <activateOrder>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	UINT32	</Arg>
+    </activateOrder>
     <startPostcreation>
       <Arg>	MAILBOX	</Arg>
       <Arg>	STRING	</Arg>
@@ -191,4 +199,4 @@
       <Arg>	INT32	</Arg>
     </unsubscribePeriphery>
   </BaseMethods>
-</clan.def>
+</Clan.def>

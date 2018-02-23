@@ -1,4 +1,4 @@
-<gb39_universal_carrierqf2.xml>
+<GB39_Universal_CarrierQF2.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -208,7 +208,6 @@
       <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -328,7 +327,6 @@
       <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -643,4 +641,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb39_universal_carrierqf2.xml>
+</GB39_Universal_CarrierQF2.xml>

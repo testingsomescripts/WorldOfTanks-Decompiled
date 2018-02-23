@@ -1,4 +1,4 @@
-<g103_ru_251.xml>
+<G103_RU_251.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -235,6 +235,7 @@
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.051	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -242,6 +243,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -250,6 +252,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -258,6 +261,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
           <rightSibling>	Track_VT_L4	</rightSibling>
         </node>
@@ -266,6 +270,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.78	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
         </node>
         <node>
@@ -297,6 +302,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.051	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -304,6 +310,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -312,6 +319,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -320,6 +328,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
           <rightSibling>	Track_VT_R4	</rightSibling>
         </node>
@@ -328,6 +337,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.78	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
         </node>
       </trackNodes>
@@ -346,7 +356,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.97278 0.000000	</hullPosition>
@@ -407,7 +416,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.53	</textureScale>
+        <textureScale>	-2.09	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -504,6 +513,7 @@
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.051	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -511,6 +521,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -519,6 +530,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -527,6 +539,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
           <rightSibling>	Track_VT_L4	</rightSibling>
         </node>
@@ -535,6 +548,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.78	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
         </node>
         <node>
@@ -566,6 +580,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.051	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -573,6 +588,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -581,6 +597,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -589,6 +606,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
           <rightSibling>	Track_VT_R4	</rightSibling>
         </node>
@@ -597,6 +615,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.78	</forwardElastK>
           <backwardElastK>	3.5	</backwardElastK>
+          <offset>	-0.051	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
         </node>
       </trackNodes>
@@ -615,7 +634,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -902,4 +920,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g103_ru_251.xml>
+</G103_RU_251.xml>

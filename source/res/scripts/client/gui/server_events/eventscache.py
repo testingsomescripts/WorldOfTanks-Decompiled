@@ -6,7 +6,6 @@ import sys
 import zlib
 from collections import defaultdict
 import BigWorld
-import clubs_quests
 import motivation_quests
 import nations
 from Event import Event, EventManager
@@ -15,11 +14,10 @@ from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from gui.LobbyContext import g_lobbyContext
 from gui.server_events import caches as quests_caches
 from gui.server_events.CompanyBattleController import CompanyBattleController
 from gui.server_events.PQController import RandomPQController, FalloutPQController
-from gui.server_events.event_items import CompanyBattles, ClubsQuest
+from gui.server_events.event_items import CompanyBattles
 from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
 from gui.shared import events
@@ -31,15 +29,12 @@ from items import getTypeOfCompactDescr
 from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
+from skeletons.gui.server_events import IEventsCache
 QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
  QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_BONUS_TYPE.FALLOUT_MULTITEAM}
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
-
-
-def _clubsQuestMaker(qID, qData, progress, seasonID, questDescr):
-    return ClubsQuest(seasonID, questDescr, progress.getQuestProgress(qID))
 
 
 def _motiveQuestMaker(qID, qData, progress):
@@ -78,7 +73,7 @@ class _PotapovComposer(object):
         return result
 
 
-class _EventsCache(object):
+class EventsCache(IEventsCache):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
      EVENT_TYPE.TOKEN_QUEST,
      EVENT_TYPE.FORT_QUEST,
@@ -278,7 +273,7 @@ class _EventsCache(object):
     def getEventVehicles(self):
         from gui.shared import g_itemsCache
         result = []
-        for v in g_eventsCache.getEventBattles().vehicles:
+        for v in self.getEventBattles().vehicles:
             item = g_itemsCache.items.getItemByCD(v)
             if item.isInInventory:
                 result.append(item)
@@ -427,12 +422,14 @@ class _EventsCache(object):
                 if qID in result:
                     result[qID].setGroupID(gID)
 
-        children, parents = self._makeQuestsRelations(result)
+        children, parents, parentsName = self._makeQuestsRelations(result)
         for qID, q in result.iteritems():
             if qID in children:
                 q.setChildren(children[qID])
             if qID in parents:
                 q.setParents(parents[qID])
+            if qID in parentsName:
+                q.setParentsName(parentsName[qID])
 
         return result
 
@@ -522,13 +519,15 @@ class _EventsCache(object):
             for tokenID in tokensIDs:
                 children[parentID][tokenID] = makeTokens.get(tokenID, [])
 
-        parents = defaultdict(dict)
+        parents = defaultdict(lambda : defaultdict(list))
+        parentsName = defaultdict(lambda : defaultdict(list))
         for parentID, tokens in children.iteritems():
             for tokenID, chn in tokens.iteritems():
                 for childID in chn:
-                    parents[childID][tokenID] = [parentID]
+                    parents[childID][tokenID].append(parentID)
+                    parentsName[childID][tokenID].append(quests[parentID].getUserName())
 
-        return (children, parents)
+        return (children, parents, parentsName)
 
     def __invalidateData(self, callback=lambda *args: None):
         self.__clearCache()
@@ -657,11 +656,6 @@ class _EventsCache(object):
         for qID, qData in questsData.iteritems():
             yield (qID, self._makeQuest(qID, qData))
 
-        currentESportSeasonID = g_lobbyContext.getServerSettings().eSportCurrentSeason.getID()
-        eSportQuests = clubs_quests.g_cache.getLadderQuestsBySeasonID(currentESportSeasonID) or []
-        for questDescr in eSportQuests:
-            yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_clubsQuestMaker, seasonID=currentESportSeasonID, questDescr=questDescr))
-
         motiveQuests = motivation_quests.g_cache.getAllQuests() or []
         for questDescr in motiveQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_motiveQuestMaker))
@@ -693,6 +687,3 @@ class _EventsCache(object):
 
     def __onLockedQuestsChanged(self):
         self.__lockedQuestIds = BigWorld.player().potapovQuestsLock
-
-
-g_eventsCache = _EventsCache()

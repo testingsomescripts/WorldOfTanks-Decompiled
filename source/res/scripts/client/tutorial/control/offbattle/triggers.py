@@ -2,15 +2,49 @@
 # Embedded file name: scripts/client/tutorial/control/offbattle/triggers.py
 from constants import QUEUE_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.prb_control.prb_helpers import GlobalListener
+from gui.prb_control.entities.listener import IGlobalListener
 from tutorial import LOG_ERROR
 from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
+from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.functional import ContentChangedEvent
 from tutorial.control.triggers import Trigger
-from tutorial.control.offbattle.context import OffBattleClientCtx
-__all__ = ['TutorialQueueTrigger', 'AllBonusesTrigger']
+__all__ = ['TutorialModeTrigger', 'TutorialQueueTrigger', 'AllBonusesTrigger']
 
-class TutorialQueueTrigger(Trigger, GlobalListener):
+class TutorialModeTrigger(Trigger, IGlobalListener):
+    _inAvailable = GlobalStorage(GLOBAL_FLAG.MODE_IS_AVAILABLE, False)
+
+    def __init__(self, triggerID):
+        super(TutorialModeTrigger, self).__init__(triggerID)
+        self._inMode = False
+
+    def run(self):
+        if not self.isSubscribed:
+            self.startGlobalListening()
+            self.isSubscribed = True
+        self.__setState()
+        super(TutorialModeTrigger, self).run()
+
+    def isOn(self, *args):
+        return self._inMode
+
+    def clear(self):
+        if self.isSubscribed:
+            self.stopGlobalListening()
+            self.isSubscribed = False
+        self._inMode = False
+        super(TutorialModeTrigger, self).clear()
+
+    def onPrbEntitySwitched(self):
+        self.__setState()
+        self.toggle(isOn=self._inMode)
+
+    def __setState(self):
+        funcState = self.prbDispatcher.getFunctionalState()
+        self._inMode = funcState.isInPreQueue(QUEUE_TYPE.TUTORIAL)
+        self._inAvailable = funcState.isInPreQueue(QUEUE_TYPE.RANDOMS) or funcState.isInPreQueue(QUEUE_TYPE.SANDBOX)
+
+
+class TutorialQueueTrigger(Trigger, IGlobalListener):
     _inQueue = GlobalStorage(GLOBAL_FLAG.IN_QUEUE, False)
 
     def __init__(self, triggerID, popUpID):

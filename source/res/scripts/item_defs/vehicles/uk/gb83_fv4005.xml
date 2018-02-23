@@ -1,4 +1,4 @@
-<gb83_fv4005.xml>
+<GB83_FV4005.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -308,7 +308,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -538,4 +537,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb83_fv4005.xml>
+</GB83_FV4005.xml>

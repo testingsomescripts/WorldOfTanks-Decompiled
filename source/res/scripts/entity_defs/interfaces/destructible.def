@@ -1,4 +1,4 @@
-<destructible.def>
+<Destructible.def>
   <CellMethods>
     <receiveProjectile>
       <Arg>	UINT8	</Arg>
@@ -20,7 +20,7 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      <Arg>	ARRAY	  <of>	MAILBOX	</of>
       </Arg>
       <Arg>	TUPLE	  <of>	FLOAT32	</of>
         <size>	2	</size>
@@ -54,4 +54,4 @@
       <Arg>	ATTACKER_INFO	</Arg>
     </receiveRamming>
   </CellMethods>
-</destructible.def>
+</Destructible.def>

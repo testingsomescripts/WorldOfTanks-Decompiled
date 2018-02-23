@@ -1,5 +1,5 @@
-<invoicing.def>
+<Invoicing.def>
   <BaseMethods>
     <invoicing_processInvoices></invoicing_processInvoices>
   </BaseMethods>
-</invoicing.def>
+</Invoicing.def>

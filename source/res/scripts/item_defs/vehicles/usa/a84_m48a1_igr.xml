@@ -1,4 +1,4 @@
-<a84_m48a1_igr.xml>
+<A84_M48A1_IGR.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -239,7 +239,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -634,4 +633,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a84_m48a1_igr.xml>
+</A84_M48A1_IGR.xml>

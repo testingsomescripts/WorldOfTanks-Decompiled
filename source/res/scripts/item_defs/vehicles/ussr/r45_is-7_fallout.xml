@@ -1,4 +1,4 @@
-<r45_is-7_fallout.xml>
+<R45_IS-7_fallout.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -508,7 +508,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.896721 0.000000	</hullPosition>
@@ -736,4 +735,4 @@
     <refColorMult>	14.0	</refColorMult>
     <refGlossMult>	2.0	</refGlossMult>
   </repaintParameters>
-</r45_is-7_fallout.xml>
+</R45_IS-7_fallout.xml>

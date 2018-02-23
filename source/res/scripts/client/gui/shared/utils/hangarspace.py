@@ -4,16 +4,14 @@ import BigWorld
 import Event
 import Keys
 import ResMgr
-from account_shared import getCustomizedVehCompDescr
-from gui.shared import g_itemsCache
-from items import vehicles
 import constants
-from gui import game_control, g_mouseEventHandlers, InputHandler
+from debug_utils import LOG_DEBUG
+from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
-from gui.LobbyContext import g_lobbyContext
-from debug_utils import LOG_DEBUG
+from helpers import dependency
 from helpers.statistics import g_statistics, HANGAR_LOADING_STATE
+from skeletons.gui.game_control import IGameSessionController, IIGRController
 
 class HangarVideoCameraController:
     import AvatarInputHandler
@@ -78,6 +76,8 @@ class HangarVideoCameraController:
 
 class _HangarSpace(object):
     isPremium = property(lambda self: self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium)
+    gameSession = dependency.descriptor(IGameSessionController)
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self):
         self.__space = ClientHangarSpace()
@@ -122,15 +122,15 @@ class _HangarSpace(object):
             Waiting.show('loadHangarSpace')
             self.__inited = True
             self.__isSpacePremium = isPremium
-            self.__igrSpaceType = game_control.g_instance.igr.getRoomType()
+            self.__igrSpaceType = self.igrCtrl.getRoomType()
             self.__space.create(isPremium, self.__spaceDone)
             if self.__lastUpdatedVehicle is not None:
                 self.updateVehicle(self.__lastUpdatedVehicle)
-            game_control.g_instance.gameSession.onPremiumNotify += self.onPremiumChanged
+            self.gameSession.onPremiumNotify += self.onPremiumChanged
         return
 
     def refreshSpace(self, isPremium, forceRefresh=False):
-        igrType = game_control.g_instance.igr.getRoomType()
+        igrType = self.igrCtrl.getRoomType()
         if self.__isSpacePremium == isPremium and self.__igrSpaceType == igrType and not forceRefresh:
             return
         elif not self.__spaceInited and self.__space.spaceLoading():
@@ -164,7 +164,7 @@ class _HangarSpace(object):
         if self.__delayedRefreshCallback is not None:
             BigWorld.cancelCallback(self.__delayedRefreshCallback)
             self.__delayedRefreshCallback = None
-        game_control.g_instance.gameSession.onPremiumNotify -= self.onPremiumChanged
+        self.gameSession.onPremiumNotify -= self.onPremiumChanged
         return
 
     def updateVehicle(self, vehicle):

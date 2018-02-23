@@ -1,4 +1,4 @@
-<exampledestructible.def>
+<ExampleDestructible.def>
   <Implements>
     <Interface>	Destructible	</Interface>
   </Implements>
@@ -18,4 +18,4 @@
   </ClientMethods>
   <CellMethods></CellMethods>
   <BaseMethods></BaseMethods>
-</exampledestructible.def>
+</ExampleDestructible.def>

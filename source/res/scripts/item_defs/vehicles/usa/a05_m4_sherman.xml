@@ -1,4 +1,4 @@
-<a05_m4_sherman.xml>
+<A05_M4_Sherman.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -330,7 +330,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -579,7 +578,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
@@ -1100,4 +1098,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a05_m4_sherman.xml>
+</A05_M4_Sherman.xml>

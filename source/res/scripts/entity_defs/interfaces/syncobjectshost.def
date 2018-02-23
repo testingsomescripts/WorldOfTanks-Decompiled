@@ -1,7 +1,7 @@
-<syncobjectshost.def>
+<SyncObjectsHost.def>
   <TempProperties>
     <_syncObjects></_syncObjects>
     <_syncScopeDepth></_syncScopeDepth>
     <_syncDiff></_syncDiff>
   </TempProperties>
-</syncobjectshost.def>
+</SyncObjectsHost.def>

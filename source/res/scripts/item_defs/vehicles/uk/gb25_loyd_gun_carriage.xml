@@ -1,6 +1,7 @@
-<gb25_loyd_gun_carriage.xml>
+<GB25_Loyd_Gun_Carriage.xml>
   <crew>
     <commander>	gunner
+
 			radioman	</commander>
     <loader></loader>
     <driver></driver>
@@ -214,7 +215,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -450,7 +450,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -791,4 +790,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb25_loyd_gun_carriage.xml>
+</GB25_Loyd_Gun_Carriage.xml>

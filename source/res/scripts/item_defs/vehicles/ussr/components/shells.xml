@@ -1051,6 +1051,50 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_BR-412D>
+  <_100mm_UBR-412BM>
+    <id>	170	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412BM	</userString>
+    <icon>	ap	</icon>
+    <price>	370	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_100mm_UBR-412BM>
+  <_100mm_UBR-412PBM>
+    <id>	171	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PBM	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_100mm_UBR-412PBM>
+  <_100mm_UOF-412BM>
+    <id>	172	</id>
+    <userString>	#ussr_vehicles:_100mm_UOF-412BM	</userString>
+    <icon>	he	</icon>
+    <price>	245	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	360	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_100mm_UOF-412BM>
   <_107mm_UBR-420>
     <id>	45	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420	</userString>
@@ -1227,6 +1271,35 @@
       <devices>	165	</devices>
     </damage>
   </_122mm_UBR-471PBM>
+  <_122mm_UBR-471BMM>
+    <id>	168	</id>
+    <userString>	#ussr_vehicles:_122mm_UBR-471BMM	</userString>
+    <icon>	ap	</icon>
+    <price>	1025	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_UBR-471BMM>
+  <_122mm_UBR-471PBMM>
+    <id>	169	</id>
+    <userString>	#ussr_vehicles:_122mm_UBR-471PBMM	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	12	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_UBR-471PBMM>
   <_122mm_3VBK6>
     <id>	138	</id>
     <userString>	#ussr_vehicles:_122mm_3VBK6	</userString>

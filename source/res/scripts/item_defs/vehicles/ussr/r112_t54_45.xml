@@ -1,4 +1,4 @@
-<r112_t54_45.xml>
+<R112_T54_45.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -434,7 +434,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -669,4 +668,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r112_t54_45.xml>
+</R112_T54_45.xml>

@@ -1,4 +1,4 @@
-<g58_vk4502p7.xml>
+<G58_VK4502P7.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -167,7 +167,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -397,4 +396,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g58_vk4502p7.xml>
+</G58_VK4502P7.xml>

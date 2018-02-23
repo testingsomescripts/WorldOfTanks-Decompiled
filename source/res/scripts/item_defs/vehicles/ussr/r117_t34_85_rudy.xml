@@ -1,4 +1,4 @@
-<r117_t34_85_rudy.xml>
+<R117_T34_85_Rudy.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -168,7 +168,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -633,4 +632,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r117_t34_85_rudy.xml>
+</R117_T34_85_Rudy.xml>

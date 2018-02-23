@@ -1,4 +1,4 @@
-<circularflyer.def>
+<CircularFlyer.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <radius>
@@ -37,4 +37,4 @@
       <Editable>	True	</Editable>
     </soundName>
   </Properties>
-</circularflyer.def>
+</CircularFlyer.def>

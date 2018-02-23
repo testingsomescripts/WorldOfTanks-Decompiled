@@ -1,4 +1,4 @@
-<chatprovider_chat2.def>
+<ChatProvider_chat2.def>
   <BaseMethods>
     <messenger_onActionByClient_chat2>
       <Arg>	MAILBOX	</Arg>
@@ -14,4 +14,4 @@
       <Arg>	GENERIC_MESSENGER_ARGS_chat2	</Arg>
     </messenger_onActionByServer_chat2>
   </BaseMethods>
-</chatprovider_chat2.def>
+</ChatProvider_chat2.def>

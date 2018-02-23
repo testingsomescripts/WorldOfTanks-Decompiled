@@ -1,25 +1,30 @@
-<soundzonetrigger.def>
+<SoundZoneTrigger.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
-    <RTPC>
+    <ZoneEnter>
       <Type>	STRING	</Type>
       <Editable>	True	</Editable>
-      <Default>	RTPC_village	</Default>
-    </RTPC>
-    <ZoneEnter>
-      <Type>	FLOAT	</Type>
-      <Editable>	True	</Editable>
-      <Default>	1.0	</Default>
+      <Default></Default>
     </ZoneEnter>
     <ZoneExit>
-      <Type>	FLOAT	</Type>
+      <Type>	STRING	</Type>
       <Editable>	True	</Editable>
-      <Default>	0.0	</Default>
+      <Default></Default>
     </ZoneExit>
     <Size>
       <Type>	VECTOR2	</Type>
       <Editable>	True	</Editable>
       <Default>	5.0 5.0	</Default>
     </Size>
+    <Reverb>
+      <Type>	STRING	</Type>
+      <Editable>	True	</Editable>
+      <Default></Default>
+    </Reverb>
+    <ReverbLevel>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	1	</Default>
+    </ReverbLevel>
   </Properties>
-</soundzonetrigger.def>
+</SoundZoneTrigger.def>

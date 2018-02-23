@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/hints_manager.py
-from account_helpers.settings_core.SettingsCore import g_settingsCore
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial import settings
+from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
 from tutorial.doc_loader.parsers import HintsParser
 from debug_utils import LOG_DEBUG
@@ -9,6 +11,7 @@ from tutorial.gui.Scaleform.hints.proxy import HintsProxy
 _DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
 
 class HintsManager(object):
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(HintsManager, self).__init__()
@@ -40,9 +43,19 @@ class HintsManager(object):
         self._gui = None
         return
 
+    def stopOnceOnlyHint(self, itemID):
+        if self._data is None:
+            return
+        else:
+            hint = self._data.hintForItem(itemID)
+            if hint is not None:
+                self._data.markAsShown(hint)
+                self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+            return
+
     def __loadHintsData(self):
         LOG_DEBUG('Hints are loading')
-        shownHints = g_settingsCore.serverSettings.getOnceOnlyHintsSettings()
+        shownHints = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
         shownHints = [ key for key, value in shownHints.iteritems() if value == 1 ]
         self._data = HintsParser.parse(_DESCRIPTOR_PATH, shownHints)
 
@@ -63,19 +76,21 @@ class HintsManager(object):
     def __onGUIInput(self, event):
         itemID = event.getTargetID()
         if itemID in self.__activeHints:
-            hint = self.__activeHints[itemID]
             self.__hideHint(itemID)
-            self._data.markAsShown(hint)
-            g_settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+            self.stopOnceOnlyHint(itemID)
             if self._data.hintsCount == 0:
                 self.stop()
 
     def __onItemFound(self, itemID):
         hint = self._data.hintForItem(itemID)
-        if hint is not None and itemID not in self.__activeHints:
+        if hint is not None and itemID not in self.__activeHints and self.__checkConditions(hint):
             self.__showHint(hint)
         return
 
     def __onItemLost(self, itemID):
         if itemID in self.__activeHints:
             self.__hideHint(itemID)
+
+    def __checkConditions(self, hint):
+        conditions = hint['conditions']
+        return True if conditions is None else FunctionalConditions(conditions).allConditionsOk()

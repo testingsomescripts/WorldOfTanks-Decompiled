@@ -1,4 +1,4 @@
-<chatchannel.def>
+<ChatChannel.def>
   <Implements>
     <Interface>	AccountEditor	</Interface>
   </Implements>
@@ -135,4 +135,4 @@
       <Arg>	STRING	</Arg>
     </rename>
   </BaseMethods>
-</chatchannel.def>
+</ChatChannel.def>

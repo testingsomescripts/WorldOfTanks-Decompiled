@@ -1,4 +1,4 @@
-<g114_skorpian.xml>
+<G114_Skorpian.xml>
   <crew>
     <commander>	loader	</commander>
     <radioman></radioman>
@@ -190,7 +190,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -597,4 +596,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g114_skorpian.xml>
+</G114_Skorpian.xml>

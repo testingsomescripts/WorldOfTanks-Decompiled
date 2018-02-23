@@ -1,4 +1,4 @@
-<gb33_sentinel_ac_i.xml>
+<GB33_Sentinel_AC_I.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -197,7 +197,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 1.00221 0.000000	</hullPosition>
@@ -529,4 +528,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb33_sentinel_ac_i.xml>
+</GB33_Sentinel_AC_I.xml>

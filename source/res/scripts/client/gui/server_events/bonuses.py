@@ -4,27 +4,26 @@ from collections import namedtuple
 import BigWorld
 import Math
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE
-from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.goodies import g_goodiesCache
-from gui.shared.formatters import text_styles, icons
-from gui.shared.utils.functions import makeTooltip
-from helpers import time_utils
-from items import vehicles, tankmen
-from gui.Scaleform.locale.QUESTS import QUESTS
-from helpers import getLocalizedData, i18n
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from shared_utils import makeTupleByDict
 from gui import makeHtmlString
+from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
+from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.goodies import g_goodiesCache
 from gui.shared import g_itemsCache
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import getSmallIconPath
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.shared.utils.functions import makeTooltip
+from helpers import getLocalizedData, i18n
+from helpers import time_utils
+from items import vehicles, tankmen
+from shared_utils import makeTupleByDict
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 
 def _getAchievement(block, record, value):
@@ -213,6 +212,66 @@ class TokensBonus(SimpleBonus):
         return result
 
 
+class BattleTokensBonus(TokensBonus):
+
+    def __init__(self, name, value):
+        super(TokensBonus, self).__init__(name, value)
+        self._name = 'battleToken'
+
+    def isShowInGUI(self):
+        return self.__getFirstQuestName() != ''
+
+    def getCarouselList(self, isReceived=False):
+        return [{'imgSource': RES_ICONS.MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN,
+          'tooltip': self.getTooltip()}]
+
+    def getTooltip(self):
+        """ Get award's tooltip for award carousel.
+        """
+        if len(self._value) > 1 or len(self._value.values()[0].get('questNames', [])) > 1:
+            nameFormat = '{}/several'.format(self._name)
+            header = i18n.makeString(TOOLTIPS.getAwardHeader(nameFormat))
+            body = self.__getAllQuestNames()
+        else:
+            nameFormat = '{}/one'.format(self._name)
+            header = i18n.makeString(TOOLTIPS.getAwardHeader(nameFormat))
+            body = i18n.makeString(TOOLTIPS.getAwardBody(nameFormat), name=self.__getFirstQuestName())
+        if header or body:
+            return makeTooltip(header or None, body or None)
+        else:
+            return ''
+            return None
+
+    def __getAllQuestNames(self):
+        """Return formatted string for tooltip with several quest
+        1. "quest name 1"
+        2. "quest name 2"
+        ...
+        :return:
+        """
+        tooltip = [i18n.makeString(TOOLTIPS.AWARDITEM_BATTLETOKEN_SEVERAL_BODY)]
+        questIdx = 0
+        for item in self._value.values():
+            names = item.get('questNames', [])
+            for name in names:
+                if name:
+                    questIdx += 1
+                    tooltip.append(i18n.makeString(TOOLTIPS.AWARDITEM_BATTLETOKEN_SEVERAL_LINE, num=questIdx, name=name))
+
+        return '\n'.join(tooltip)
+
+    def __getFirstQuestName(self):
+        """We're show only one (first) quest in tooltip
+        :return:
+        """
+        if len(self._value) > 0:
+            _, firstItem = self._value.items()[0]
+            if firstItem:
+                names = firstItem.get('questNames', [])
+                if len(names) > 0:
+                    return names[0]
+
+
 class PotapovTokensBonus(TokensBonus):
 
     def __init__(self, name, value):
@@ -292,18 +351,23 @@ class ItemsBonus(SimpleBonus):
         return result
 
 
-class BoosterBonus(SimpleBonus):
+class GoodiesBonus(SimpleBonus):
 
     def getBoosters(self):
-        boosters = {}
-        if self._value is not None:
-            _getBooster = g_goodiesCache.getBooster
-            for boosterID, info in self._value.iteritems():
-                booster = _getBooster(int(boosterID))
-                if booster is not None and booster.enabled:
-                    boosters[booster] = info.get('count', 1)
+        return self._getGoodies(g_goodiesCache.getBooster)
 
-        return boosters
+    def getDiscounts(self):
+        return self._getGoodies(g_goodiesCache.getDiscount)
+
+    def _getGoodies(self, goodieGetter):
+        goodies = {}
+        if self._value is not None:
+            for boosterID, info in self._value.iteritems():
+                goodie = goodieGetter(int(boosterID))
+                if goodie is not None and goodie.enabled:
+                    goodies[goodie] = info.get('count', 1)
+
+        return goodies
 
     def format(self):
         return ', '.join(self.formattedList())
@@ -328,6 +392,13 @@ class BoosterBonus(SimpleBonus):
                  'tooltip': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
                  'boosterVO': self.__makeBoosterVO(booster)})
 
+        for discount, count in sorted(self.getDiscounts().iteritems()):
+            if discount is not None:
+                tooltip = makeTooltip(header=discount.userName, body=discount.description)
+                result.append({'value': discount.getFormattedValue(),
+                 'itemSource': discount.icon,
+                 'tooltip': tooltip})
+
         return result
 
     def formattedList(self):
@@ -335,6 +406,10 @@ class BoosterBonus(SimpleBonus):
         for booster, count in self.getBoosters().iteritems():
             if booster is not None:
                 result.append(i18n.makeString('#quests:bonuses/boosters/name', name=booster.userName, quality=booster.qualityStr, count=count))
+
+        for discount, count in self.getDiscounts().iteritems():
+            if discount is not None:
+                result.append(i18n.makeString('#quests:bonuses/discount/name', name=discount.userName, targetName=discount.targetName, effectValue=discount.getFormattedValue(), count=count))
 
         return result
 
@@ -347,6 +422,11 @@ class BoosterBonus(SimpleBonus):
                  'isSpecial': True,
                  'specialAlias': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
                  'specialArgs': [booster.boosterID]})
+
+        for discount, count in sorted(self.getDiscounts().iteritems()):
+            result.append({'imgSource': discount.icon,
+             'counter': discount.getFormattedValue(text_styles.stats),
+             'tooltip': makeTooltip(header=discount.userName, body=discount.description)})
 
         return result
 
@@ -738,6 +818,9 @@ _BONUSES = {'credits': CreditsBonus,
  'vehicles': VehiclesBonus,
  'meta': MetaBonus,
  'tokens': {'default': TokensBonus,
+            _ET.BATTLE_QUEST: BattleTokensBonus,
+            _ET.TOKEN_QUEST: BattleTokensBonus,
+            _ET.PERSONAL_QUEST: BattleTokensBonus,
             _ET.POTAPOV_QUEST: {'regular': PotapovTokensBonus,
                                 'fallout': FalloutTokensBonus}},
  'dossier': {'default': DossierBonus,
@@ -746,7 +829,7 @@ _BONUSES = {'credits': CreditsBonus,
              _ET.POTAPOV_QUEST: PotapovTankmenBonus,
              _ET.REF_SYSTEM_QUEST: RefSystemTankmenBonus},
  'customizations': CustomizationsBonus,
- 'goodies': BoosterBonus,
+ 'goodies': GoodiesBonus,
  'strBonus': SimpleBonus}
 _BONUSES_PRIORITY = ('tokens',)
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
@@ -786,7 +869,15 @@ def _initFromTree(key, name, value):
 def getBonusObj(quest, name, value):
     questType = quest.getType()
     key = [name, questType]
-    if questType == _ET.POTAPOV_QUEST:
+    if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
+        parentsName = quest.getParentsName()
+        for n, v in value.iteritems():
+            if n in parentsName:
+                questNames = parentsName[n]
+                if questNames:
+                    v.update({'questNames': questNames})
+
+    elif questType == _ET.POTAPOV_QUEST:
         key.append(quest.getQuestBranchName())
     return _initFromTree(key, name, value)
 

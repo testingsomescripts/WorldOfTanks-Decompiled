@@ -1,4 +1,4 @@
-<gamestatscollector.def>
+<GameStatsCollector.def>
   <Properties></Properties>
   <BaseMethods>
     <updateBaseappStats>
@@ -21,4 +21,4 @@
       <Arg>	PYTHON	</Arg>
     </incStatsCounters>
   </BaseMethods>
-</gamestatscollector.def>
+</GameStatsCollector.def>

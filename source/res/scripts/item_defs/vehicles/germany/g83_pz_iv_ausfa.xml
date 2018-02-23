@@ -1,4 +1,4 @@
-<g83_pz_iv_ausfa.xml>
+<G83_Pz_IV_AusfA.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -194,7 +194,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -316,7 +315,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -724,4 +722,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g83_pz_iv_ausfa.xml>
+</G83_Pz_IV_AusfA.xml>

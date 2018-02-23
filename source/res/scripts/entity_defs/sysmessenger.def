@@ -1,4 +1,4 @@
-<sysmessenger.def>
+<SysMessenger.def>
   <Properties></Properties>
   <BaseMethods>
     <addUserSystemMessage>
@@ -15,4 +15,4 @@
       <Arg>	UINT32	</Arg>
     </addUserSystemMessageWithTimeout>
   </BaseMethods>
-</sysmessenger.def>
+</SysMessenger.def>

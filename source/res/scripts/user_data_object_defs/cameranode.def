@@ -1,4 +1,4 @@
-<cameranode.def>
+<CameraNode.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <next>
@@ -24,4 +24,4 @@
       <Default>	60.0	</Default>
     </fov>
   </Properties>
-</cameranode.def>
+</CameraNode.def>

@@ -1,4 +1,4 @@
-<a01_t1_cunningham.xml>
+<A01_T1_Cunningham.xml>
   <camouflage>
     <priceFactor>	0.2	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -179,7 +179,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -448,7 +447,9 @@
   </turrets0>
   <crew>
     <commander>	radioman
+
 			gunner
+
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -536,4 +537,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a01_t1_cunningham.xml>
+</A01_T1_Cunningham.xml>

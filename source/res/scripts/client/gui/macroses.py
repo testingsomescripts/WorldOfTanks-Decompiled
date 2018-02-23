@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/macroses.py
+import BigWorld
 import base64
 from urllib import quote_plus
 import constants
-from adisp import async
+from adisp import async, process
 from ConnectionManager import connectionManager
-from constants import TOKEN_TYPE
-from helpers import getClientLanguage
+from helpers import getClientLanguage, dependency
+from skeletons.gui.clans import IClanController
 
 def getLanguageCode(args=None):
     """
@@ -70,6 +71,27 @@ def getDatabaseID(args=None):
     return result
 
 
+def getPeripheryID(args=None):
+    """
+    Gets periphery ID. Macros is $PERIPHERY_ID.
+    @return: string containing periphery ID.
+    """
+    return str(connectionManager.peripheryID)
+
+
+def getUnitServerID(args=None):
+    """
+    Gets UnitMrg ID. Macros is UNIT_SERVER_ID.
+    @return: string containing UnitMrg ID.
+    """
+    try:
+        unitID = str(BigWorld.player().unitMgr.id)
+    except AttributeError:
+        unitID = ''
+
+    return unitID
+
+
 def getTargetURL(args=None):
     """
     Gets target URL, that sets manual. Macros is $TARGET_URL.
@@ -90,18 +112,29 @@ def getAuthRealm(args=None):
     return constants.AUTH_REALM
 
 
+def getClanDBID(args=None):
+    """
+    Gets player's clan database ID. Macros is CLAN_DBID.
+    @return: string containing player's clan database ID.
+    """
+    clansCtrl = dependency.instance(IClanController)
+    return str(clansCtrl.getClanDbID())
+
+
 def getSyncMacroses():
     return {'LANGUAGE_CODE': getLanguageCode,
      'AREA_ID': getAreaID,
      'ENCODED_LOGIN': getEncodedLogin,
      'QUOTED_LOGIN': getQuotedLogin,
      'DB_ID': getDatabaseID,
+     'PERIPHERY_ID': getPeripheryID,
      'AUTH_REALM': getAuthRealm,
-     'TARGET_URL': getTargetURL}
+     'UNIT_SERVER_ID': getUnitServerID,
+     'CLAN_DBID': getClanDBID}
 
 
 @async
-def getWgniToken(args, callback):
+def getWgniToken(proxy, args, callback):
     """
     Gets WGNI login token. Macros is $WGNI_TOKEN.
     @return: string containing WGNI token
@@ -113,7 +146,8 @@ def getWgniToken(args, callback):
         else:
             callback('')
 
-    tokenRqs = _getTokenRequester()
+    from gui.shared.utils.requesters import getTokenRequester
+    tokenRqs = getTokenRequester(constants.TOKEN_TYPE.WGNI)
     if not tokenRqs.isInProcess():
         tokenRqs.request(timeout=10.0)(_cbWrapper)
     else:
@@ -121,23 +155,26 @@ def getWgniToken(args, callback):
     return
 
 
+@async
+@process
+def getTargetURL(proxy, args, callback):
+    """
+    Gets target URL, that sets manual. Macros is $TARGET_URL.
+    trying to get target url from given args
+    or take it from stored attribute
+    @return: string containing quoted target URL.
+    """
+    yield lambda callback: callback(True)
+    if args:
+        result = args
+    else:
+        result = ''
+    if result:
+        url = yield proxy.parse(result)
+        result = quote_plus(url)
+    callback(result)
+
+
 def getAsyncMacroses():
-    return {'WGNI_TOKEN': getWgniToken}
-
-
-_tokenRqs = None
-
-def fini():
-    global _tokenRqs
-    if _tokenRqs is not None:
-        _tokenRqs.clear()
-        _tokenRqs = None
-    return
-
-
-def _getTokenRequester():
-    global _tokenRqs
-    if _tokenRqs is None:
-        from gui.shared.utils.requesters.TokenRequester import TokenRequester
-        _tokenRqs = TokenRequester(TOKEN_TYPE.WGNI, cache=False)
-    return _tokenRqs
+    return {'WGNI_TOKEN': getWgniToken,
+     'TARGET_URL': getTargetURL}

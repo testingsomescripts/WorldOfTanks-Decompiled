@@ -1,4 +1,4 @@
-<a81_t95_e2.xml>
+<A81_T95_E2.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -177,7 +177,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -643,4 +642,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a81_t95_e2.xml>
+</A81_T95_E2.xml>

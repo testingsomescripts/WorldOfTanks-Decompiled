@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/HangarVehicle.py
 import BigWorld
 import Math
+from AvatarInputHandler import mathUtils
 from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult
 
 class HangarVehicle(BigWorld.Entity):
@@ -72,8 +73,15 @@ class HangarVehicle(BigWorld.Entity):
         offset -= vehicleDescr.hull['turretPositions'][0]
         m.setTranslate(offset)
         res.append((vehicleDescr.turret, m))
-        m = Math.Matrix()
+        yaw = vehicleDescr.gun.get('staticTurretYaw', 0.0)
+        pitch = vehicleDescr.gun.get('staticPitch', 0.0)
         offset -= vehicleDescr.turret['gunPosition']
-        m.setTranslate(offset)
-        res.append((vehicleDescr.gun, m))
+        if yaw is None:
+            yaw = 0.0
+        if pitch is None:
+            pitch = 0.0
+        m = Math.Matrix()
+        gunMatrix = mathUtils.createRTMatrix(Math.Vector3(yaw, pitch, 0.0), offset)
+        gunMatrix.postMultiply(m)
+        res.append((vehicleDescr.gun, gunMatrix))
         return res

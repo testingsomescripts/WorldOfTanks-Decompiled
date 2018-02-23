@@ -93,7 +93,7 @@ class Tutorial(object):
                 self._gui.setDispatcher(None)
                 LOG_ERROR('GUI can not init. Tutorial is stopping.')
                 return False
-            LOG_DEBUG('Start training', ctx)
+            LOG_DEBUG('Start training', self.getID())
             self._stopped = False
             proxy = weakref.proxy(self)
             setTutorialProxy(proxy)
@@ -103,7 +103,8 @@ class Tutorial(object):
                 self._gui.onPageChanging += self.__onPageChanging
                 self._gui.onItemFound += self.__onItemFound
                 self._gui.onItemLost += self.__onItemLost
-                self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
+                if ctx.canResolveChapterOnStart:
+                    self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
             self.onStarted()
             return True
 
@@ -141,6 +142,7 @@ class Tutorial(object):
             self._stopped = True
             self._initialized = 0
             self._triggeredEffects.clear()
+            LOG_DEBUG('Tutorial is stopped', self.getID())
             self.onStopped()
             return
 
@@ -367,6 +369,10 @@ class Tutorial(object):
 
     def unlockState(self, targetID):
         self._currentState.unlock(targetID)
+
+    def startBattle(self):
+        self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
+        return True
 
     def __timeLoop(self):
         self.__callbackID = None

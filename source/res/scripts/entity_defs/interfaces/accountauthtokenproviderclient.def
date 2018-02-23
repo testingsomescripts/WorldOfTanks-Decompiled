@@ -1,4 +1,4 @@
-<accountauthtokenproviderclient.def>
+<AccountAuthTokenProviderClient.def>
   <ClientMethods>
     <onTokenReceived>
       <Arg>	UINT16	</Arg>
@@ -6,4 +6,4 @@
       <Arg>	STRING	</Arg>
     </onTokenReceived>
   </ClientMethods>
-</accountauthtokenproviderclient.def>
+</AccountAuthTokenProviderClient.def>

@@ -41,6 +41,10 @@ def _readInventoryVehicleTriggerSection(xmlCtx, section, chapter, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.InventoryVehicleTrigger)
 
 
+def _readPermanentVehicleOwnTriggerSection(xmlCtx, section, chapter, triggerID):
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.PermanentVehicleOwnTrigger)
+
+
 def _readXpExchangeTriggerSection(xmlCtx, section, chapter, triggerID):
     return triggers.XpExchangeTrigger(triggerID)
 
@@ -136,6 +140,7 @@ def init():
      'researchVehicle': _readResearchVehicleTriggerSection,
      'buyVehicle': _readBuyVehicleTriggerSection,
      'inventoryVehicle': _readInventoryVehicleTriggerSection,
+     'permanentOwnVehicle': _readPermanentVehicleOwnTriggerSection,
      'buySlot': lobby.readFreeVehicleSlotTriggerSection,
      'vehicleBattlesCount': _readVehicleBattlesCountTriggerSection,
      'xpExchange': _readXpExchangeTriggerSection,

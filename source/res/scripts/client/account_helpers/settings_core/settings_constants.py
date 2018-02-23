@@ -6,11 +6,12 @@ VERSION = 'VERSION'
 
 class GRAPHICS(CONST_CONTAINER):
     MONITOR = 'monitor'
-    FULLSCREEN = 'fullScreen'
+    VIDEO_MODE = 'screenMode'
+    WINDOW_MODE = 'windowMode'
     WINDOW_SIZE = 'windowSize'
     RESOLUTION = 'resolution'
+    BORDERLESS_SIZE = 'borderlessSize'
     REFRESH_RATE = 'refreshRate'
-    ASPECT_RATIO = 'aspectRatio'
     CUSTOM_AA = 'customAA'
     MULTISAMPLING = 'multisampling'
     GAMMA = 'gamma'
@@ -28,27 +29,20 @@ class GRAPHICS(CONST_CONTAINER):
     FOV = 'fov'
     DYNAMIC_FOV_ENABLED = 'dynamicFov'
     INTERFACE_SCALE = 'interfaceScale'
-    RENDER_PIPELINE = 'RENDER_PIPELINE'
-    TEXTURE_QUALITY = 'TEXTURE_QUALITY'
-    DECALS_QUALITY = 'DECALS_QUALITY'
-    OBJECT_LOD = 'OBJECT_LOD'
-    FAR_PLANE = 'FAR_PLANE'
-    TERRAIN_QUALITY = 'TERRAIN_QUALITY'
-    SHADOWS_QUALITY = 'SHADOWS_QUALITY'
-    LIGHTING_QUALITY = 'LIGHTING_QUALITY'
-    SPEEDTREE_QUALITY = 'SPEEDTREE_QUALITY'
-    FLORA_QUALITY = 'FLORA_QUALITY'
-    WATER_QUALITY = 'WATER_QUALITY'
-    EFFECTS_QUALITY = 'EFFECTS_QUALITY'
-    POST_PROCESSING_QUALITY = 'POST_PROCESSING_QUALITY'
     DRR_AUTOSCALER_ENABLED = 'DRR_AUTOSCALER_ENABLED'
-    MOTION_BLUR_QUALITY = 'MOTION_BLUR_QUALITY'
-    SNIPER_MODE_EFFECTS_QUALITY = 'SNIPER_MODE_EFFECTS_QUALITY'
-    VEHICLE_DUST_ENABLED = 'VEHICLE_DUST_ENABLED'
-    SNIPER_MODE_GRASS_ENABLED = 'SNIPER_MODE_GRASS_ENABLED'
-    VEHICLE_TRACES_ENABLED = 'VEHICLE_TRACES_ENABLED'
-    COLOR_GRADING_TECHNIQUE = 'COLOR_GRADING_TECHNIQUE'
-    SEMITRANSPARENT_LEAVES_ENABLED = 'SEMITRANSPARENT_LEAVES_ENABLED'
+    RENDER_PIPELINE = 'RENDER_PIPELINE'
+
+    @classmethod
+    def getScreenConstants(cls):
+        """Returns only the subset of constants related to screen/monitor settings."""
+        return (cls.MONITOR,
+         cls.VIDEO_MODE,
+         cls.WINDOW_SIZE,
+         cls.RESOLUTION,
+         cls.BORDERLESS_SIZE,
+         cls.REFRESH_RATE,
+         cls.DYNAMIC_RENDERER,
+         cls.INTERFACE_SCALE)
 
 
 class GAME(CONST_CONTAINER):
@@ -61,7 +55,6 @@ class GAME(CONST_CONTAINER):
     RECEIVE_CLAN_INVITES_NOTIFICATIONS = 'receiveClanInvitesNotifications'
     RECEIVE_INVITES_IN_BATTLE = 'receiveInvitesInBattle'
     BATTLE_LOADING_INFO = 'battleLoadingInfo'
-    SIMPLIFIED_TTC = 'simplifiedTTC'
     RECEIVE_FRIENDSHIP_REQUEST = 'receiveFriendshipRequest'
     STORE_RECEIVER_IN_BATTLE = 'storeReceiverInBattle'
     DISABLE_BATTLE_CHAT = 'disableBattleChat'
@@ -94,6 +87,8 @@ class GAME(CONST_CONTAINER):
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
     SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
     CAROUSEL_TYPE = 'carouselType'
+    DOUBLE_CAROUSEL_TYPE = 'doubleCarouselType'
+    VEHICLE_CAROUSEL_STATS = 'vehicleCarouselStats'
 
 
 class TUTORIAL(CONST_CONTAINER):
@@ -131,6 +126,7 @@ class SOUND(CONST_CONTAINER):
     NATIONS_VOICES = 'nationalVoices'
     ALT_VOICES = 'alternativeVoices'
     SOUND_DEVICE = 'soundDevice'
+    SOUND_SPEAKERS = 'soundSpeakers'
     VOICE_NOTIFICATION = 'voiceNotificationVolume'
     DETECTION_ALERT_SOUND = 'bulbVoices'
     CAPTURE_DEVICES = 'captureDevice'
@@ -190,6 +186,7 @@ class DAMAGE_INDICATOR(CONST_CONTAINER):
     DAMAGE_VALUE = 'damageIndicatorDamageValue'
     VEHICLE_INFO = 'damageIndicatorVehicleInfo'
     ANIMATION = 'damageIndicatorAnimation'
+    DYNAMIC_INDICATOR = 'damageIndicatorDynamicIndicator'
 
 
 class DAMAGE_LOG(CONST_CONTAINER):
@@ -197,6 +194,8 @@ class DAMAGE_LOG(CONST_CONTAINER):
     BLOCKED_DAMAGE = 'damageLogBlockedDamage'
     ASSIST_DAMAGE = 'damageLogAssistDamage'
     SHOW_DETAILS = 'damageLogShowDetails'
+    SHOW_EVENT_TYPES = 'damageLogShowEventTypes'
+    EVENT_POSITIONS = 'damageLogEventsPosition'
 
 
 class BATTLE_EVENTS(CONST_CONTAINER):
@@ -214,6 +213,9 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     ENEMY_CRITICAL_HIT = 'battleEventsEnemyCriticalHit'
     EVENT_NAME = 'battleEventsEventName'
     VEHICLE_INFO = 'battleEventsVehicleInfo'
+    ENEMY_WORLD_COLLISION = 'battleEventsEnemyWorldCollision'
+    RECEIVED_DAMAGE = 'battleEventsReceivedDamage'
+    RECEIVED_CRITS = 'battleEventsReceivedCrits'
 
 
 class CONTACTS(CONST_CONTAINER):

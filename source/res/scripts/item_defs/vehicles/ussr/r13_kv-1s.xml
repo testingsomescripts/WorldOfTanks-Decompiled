@@ -1,4 +1,4 @@
-<r13_kv-1s.xml>
+<R13_KV-1s.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -320,7 +320,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -573,7 +572,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1142,4 +1140,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r13_kv-1s.xml>
+</R13_KV-1s.xml>

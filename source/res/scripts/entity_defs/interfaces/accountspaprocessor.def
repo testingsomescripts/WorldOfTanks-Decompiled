@@ -1,4 +1,4 @@
-<accountspaprocessor.def>
+<AccountSpaProcessor.def>
   <BaseMethods>
     <accountSPA_processSpaAttributes>
       <Arg>	MAILBOX	</Arg>
@@ -7,4 +7,4 @@
       <Arg>	PYTHON	</Arg>
     </accountSPA_processSpaAttributes>
   </BaseMethods>
-</accountspaprocessor.def>
+</AccountSpaProcessor.def>

@@ -1,4 +1,4 @@
-<g65_jagdtiger_sdkfz_185.xml>
+<G65_JagdTiger_SdKfz_185.xml>
   <crew>
     <commander></commander>
     <radioman></radioman>
@@ -209,7 +209,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -629,4 +628,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g65_jagdtiger_sdkfz_185.xml>
+</G65_JagdTiger_SdKfz_185.xml>

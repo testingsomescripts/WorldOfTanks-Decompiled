@@ -3,13 +3,13 @@
 from helpers import aop
 import aspects
 
-class DisableAcceptButton(aop.Pointcut):
+class PrbDisableAcceptButton(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.prb_control.invites', 'InvitesManager', 'canAcceptInvite', aspects=(aspects.DisableAcceptButton,))
+        aop.Pointcut.__init__(self, 'gui.prb_control.invites', 'InvitesManager', 'canAcceptInvite', aspects=(aspects.DisableAccept,))
 
 
-class InvitationText(aop.Pointcut):
+class PrbInvitationText(aop.Pointcut):
 
     def __init__(self):
         aop.Pointcut.__init__(self, 'gui.prb_control.formatters.invites', 'PrbInviteHtmlTextFormatter', 'getNote', aspects=(aspects.InvitationNote,))

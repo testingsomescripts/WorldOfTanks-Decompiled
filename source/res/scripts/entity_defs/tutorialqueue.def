@@ -1,4 +1,4 @@
-<tutorialqueue.def>
+<TutorialQueue.def>
   <Properties></Properties>
   <BaseMethods>
     <enqueue>
@@ -23,4 +23,4 @@
       <Arg>	OBJECT_ID	</Arg>
     </removeArena>
   </BaseMethods>
-</tutorialqueue.def>
+</TutorialQueue.def>

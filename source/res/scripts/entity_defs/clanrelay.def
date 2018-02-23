@@ -1,4 +1,4 @@
-<clanrelay.def>
+<ClanRelay.def>
   <Properties></Properties>
   <BaseMethods>
     <onFortUpdate>
@@ -43,4 +43,4 @@
       <Arg>	STRING	</Arg>
     </onGlobalMapBattleUpdate>
   </BaseMethods>
-</clanrelay.def>
+</ClanRelay.def>

@@ -1,4 +1,4 @@
-<admin.def>
+<Admin.def>
   <Implements>
     <Interface>	AccountEditor	</Interface>
   </Implements>
@@ -41,4 +41,4 @@
       <Arg>	STRING	</Arg>
     </onFortReply>
   </BaseMethods>
-</admin.def>
+</Admin.def>

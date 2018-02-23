@@ -3,45 +3,34 @@
 import constants
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.SettingsCore import g_settingsCore
 from gui import SystemMessages
-from gui.game_control import g_instance as g_gameCtrl
+from gui.Scaleform import getButtonsAssetPath
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import CarouselDataProvider
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_filter import CarouselFilter
+from gui.Scaleform.daapi.view.lobby.hangar.filter_contexts import getFilterSetupContexts, FilterSetupContext
+from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.Scaleform import getButtonsAssetPath
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_filter import CarouselFilter
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import CarouselDataProvider
-from gui.Scaleform.daapi.view.meta.TankCarouselMeta import TankCarouselMeta
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController
 _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
 if constants.IS_KOREA:
     _CAROUSEL_FILTERS += ('igr',)
 
-class FilterSetupContext(object):
-    """ Class responsible for configuration of filter creation.
-    
-    Some filters require specifically named asset or some additional runtime information,
-    this class provides this kind of stuff.
-    """
-
-    def __init__(self, ctx=None, asset=None):
-        """
-        :param ctx: context with runtime information required by filter
-        :param asset: name of the asset (icon) for filter
-        """
-        self.ctx = ctx or {}
-        self.asset = asset or ''
-        self.asset = self.asset.format(**self.ctx)
-
-
 class TankCarousel(TankCarouselMeta):
+    rentals = dependency.descriptor(IRentalsController)
+    igrCtrl = dependency.descriptor(IIGRController)
+    clanLock = dependency.descriptor(IClanLockController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -109,21 +98,20 @@ class TankCarousel(TankCarouselMeta):
     def applyFilter(self):
         self._carouselDP.applyFilter()
         if not self.filter.isDefault():
-            currentVehiclesCount = self._carouselDP.getCurrentVehiclesCount()
-            totalVehiclesCount = self._carouselDP.getTotalVehiclesCount()
-            if currentVehiclesCount == 0:
-                style = text_styles.error
-                drawAttention = True
-            else:
-                style = text_styles.stats
-                drawAttention = False
-            self.as_showCounterS('{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount)), drawAttention)
+            drawAttention = self._carouselDP.getCurrentVehiclesCount() == 0
+            self.as_showCounterS(self.formatCountVehicles(), drawAttention)
         else:
             self.as_hideCounterS()
 
+    def formatCountVehicles(self):
+        currentVehiclesCount = self._carouselDP.getCurrentVehiclesCount()
+        totalVehiclesCount = self._carouselDP.getTotalVehiclesCount()
+        style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
+        return '{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount))
+
     def updateVehicles(self, vehicles=None, filterCriteria=None):
         if vehicles is None and filterCriteria is None:
-            self.as_initCarouselFilterS(self.__getInitialFilterVO(self._getFilterSetupContexts()))
+            self.as_initCarouselFilterS(self.__getInitialFilterVO(getFilterSetupContexts(self._itemsCache.items.shop.dailyXPFactor)))
         self._carouselDP.updateVehicles(vehicles, filterCriteria)
         self.applyFilter()
         return
@@ -138,29 +126,33 @@ class TankCarousel(TankCarouselMeta):
 
     def _populate(self):
         super(TankCarousel, self)._populate()
-        g_gameCtrl.rentals.onRentChangeNotify += self.__updateRent
-        g_gameCtrl.igr.onIgrTypeChanged += self.__updateIgrType
-        g_gameCtrl.clanLock.onClanLockUpdate += self.__updateClanLocks
-        g_settingsCore.onSettingsChanged += self.__onCarouselTypeChange
+        self.rentals.onRentChangeNotify += self.__updateRent
+        self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
+        self.clanLock.onClanLockUpdate += self.__updateClanLocks
+        self.settingsCore.onSettingsChanged += self.__onCarouselSettingsChange
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        setting = g_settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
         self.as_rowCountS(setting.getRowCount())
         self._itemsCache = g_itemsCache
         self._carouselDPConfig.update({'carouselFilter': self._carouselFilterCls(),
          'itemsCache': self._itemsCache,
          'currentVehicle': g_currentVehicle})
         self._carouselDP = self._carouselDPCls(**self._carouselDPConfig)
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
+        self._carouselDP.setShowStats(setting.get())
         self._carouselDP.setEnvironment(self.app)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
         self._carouselDP.buildList()
-        self.as_initCarouselFilterS(self.__getInitialFilterVO(self._getFilterSetupContexts()))
+        setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
+        self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
+        self.as_initCarouselFilterS(self.__getInitialFilterVO(getFilterSetupContexts(self._itemsCache.items.shop.dailyXPFactor)))
         self.applyFilter()
 
     def _dispose(self):
-        g_gameCtrl.rentals.onRentChangeNotify -= self.__updateRent
-        g_gameCtrl.igr.onIgrTypeChanged -= self.__updateIgrType
-        g_gameCtrl.clanLock.onClanLockUpdate -= self.__updateClanLocks
-        g_settingsCore.onSettingsChanged -= self.__onCarouselTypeChange
+        self.rentals.onRentChangeNotify -= self.__updateRent
+        self.igrCtrl.onIgrTypeChanged -= self.__updateIgrType
+        self.clanLock.onClanLockUpdate -= self.__updateClanLocks
+        self.settingsCore.onSettingsChanged -= self.__onCarouselSettingsChange
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         self._itemsCache = None
         self._carouselDP.fini()
@@ -168,17 +160,6 @@ class TankCarousel(TankCarouselMeta):
         self._carouselDPConfig.clear()
         super(TankCarousel, self)._dispose()
         return
-
-    def _getFilterSetupContexts(self):
-        """ Generate contexts for the filters that require special info.
-        
-        :return: dict {filter_name: FilterSetupContext}
-        """
-        xpRateMultiplier = self._itemsCache.items.shop.dailyXPFactor
-        return {'elite': FilterSetupContext(asset='elite_small_icon'),
-         'premium': FilterSetupContext(asset='prem_small_icon'),
-         'igr': FilterSetupContext(asset='premium_small'),
-         'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}')}
 
     def __getInitialFilterVO(self, contexts):
         filters = self.filter.getFilters(self._usedFilters)
@@ -201,7 +182,7 @@ class TankCarousel(TankCarouselMeta):
     def __buySlot(self):
         result = yield VehicleSlotBuyer().request()
         if result.userMsg:
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __updateRent(self, vehicles):
         self.updateVehicles(vehicles)
@@ -215,10 +196,17 @@ class TankCarousel(TankCarouselMeta):
         else:
             self.updateVehicles(vehicles)
 
-    def __onCarouselTypeChange(self, diff):
+    def __onCarouselSettingsChange(self, diff):
         if settings_constants.GAME.CAROUSEL_TYPE in diff:
-            setting = g_settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
+            setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
             self.as_rowCountS(setting.getRowCount())
+        if settings_constants.GAME.DOUBLE_CAROUSEL_TYPE in diff:
+            setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
+            self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
+        if settings_constants.GAME.VEHICLE_CAROUSEL_STATS in diff:
+            setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
+            self._carouselDP.setShowStats(setting.get())
+            self._carouselDP.updateVehicles()
 
     def __onViewLoaded(self, view):
         if view is not None and view.settings is not None:

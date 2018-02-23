@@ -1,4 +1,4 @@
-<a95_t95_e6.xml>
+<A95_T95_E6.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -177,7 +177,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -684,4 +683,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a95_t95_e6.xml>
+</A95_T95_E6.xml>

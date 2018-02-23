@@ -1,4 +1,4 @@
-<r18_su-152.xml>
+<R18_SU-152.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -355,7 +355,6 @@
       </groundNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -612,7 +611,6 @@
       </groundNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -945,4 +943,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r18_su-152.xml>
+</R18_SU-152.xml>

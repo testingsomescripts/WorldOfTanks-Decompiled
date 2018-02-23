@@ -1,4 +1,4 @@
-<clubunitmgr.def>
+<ClubUnitMgr.def>
   <Parent>	UnitMgr	</Parent>
   <BaseMethods>
     <onQueueMatched>
@@ -10,4 +10,4 @@
       <Arg>	STRING	</Arg>
     </onPlayerClubChanged>
   </BaseMethods>
-</clubunitmgr.def>
+</ClubUnitMgr.def>

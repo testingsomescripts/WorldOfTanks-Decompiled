@@ -11,7 +11,7 @@ from unit_roster_config import SortieRoster6, SortieRoster8, SortieRoster10, For
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import ClubExtrasHandler, SortieExtrasHandler
-from unit_helpers.ExtrasHandler import SquadExtrasHandler
+from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 
@@ -33,6 +33,7 @@ class UNIT_FLAGS:
     SORTIES_FORBIDDEN = 64
     RATED_BATTLE_FORBIDDEN = 128
     IN_PRE_ARENA = 256
+    IS_WGSH_TEST = 512
     IS_DYNAMIC = 1024
     DEFAULT = 0
     PRE_QUEUE = 0
@@ -51,6 +52,17 @@ class UNIT_BROWSER_TYPE:
 
 
 UNIT_BROWSER_TYPE_NAMES = buildNamesDict(UNIT_BROWSER_TYPE)
+
+class UNIT_CREATE_TYPE:
+    DEFAULT = 0
+    FALLOUT = 1
+    SQUAD = 2
+    EVENT = 3
+    EXPOSED_TYPES = (DEFAULT,
+     FALLOUT,
+     SQUAD,
+     EVENT)
+
 
 class UNIT_ERROR:
     OK = 0
@@ -138,6 +150,21 @@ class UNIT_ERROR:
     TOO_MANY_VEHICLES = 82
     BAD_FALLOUT_TYPE = 83
     BAD_VEHICLES_SET = 84
+    WRONG_UNIT_API = 85
+    NO_ACCOUNT = 86
+    ASYNC_CALL_FAILED = 87
+    BAD_WGSH_CMD = 88
+    FAIL_EXT_BATTLE_MGR_CALL = 89
+    FAIL_EXT_ACCOUNT_CALL = 90
+    FAIL_EXT_UNIT_MGR_CALL = 91
+    FAIL_EXT_UNIT_QUEUE_CALL = 92
+    UNIT_DESTROYED = 93
+    UNIT_NOT_IN_QUEUE = 94
+    UNIT_LOCKED_IN_QUEUE = 95
+    UNIT_KICKED_FROM_QUEUE = 96
+    UNIT_BACK_TO_QUEUE = 97
+    EXTERNAL_UNIT_NOT_ENABLED = 98
+    BAD_ARENA_BONUS_TYPE = 99
 
 
 OK = UNIT_ERROR.OK
@@ -150,6 +177,8 @@ class UNIT_SLOT:
 
 INV_ID_CLEAR_VEHICLE = 0
 LEADER_SLOT = 0
+UNIT_CONFIRMATION_WAIT_TIME = 5.0
+MAX_UNIT_ROSTER_ELEMENTS = 14
 
 class UNIT_OP:
     SET_VEHICLE = 1
@@ -220,6 +249,8 @@ class UNIT_BROWSER_ERROR:
     ALREADY_SUBSCRIBED = 7
     NOT_SUBSCRIBED = 8
     SERVICE_UNAVAILABLE = 9
+    BAD_ACCOUNT_TYPE = 10
+    COOLDOWN = 11
 
 
 class UNIT_PUBLISHER_ERROR:
@@ -241,6 +272,7 @@ class UNIT_NOTIFY_CMD:
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
     REMOVED_VEHICLE = 13
+    UPD_VEHICLE_DESCRS = 14
 
 
 class CLIENT_UNIT_CMD:
@@ -269,9 +301,11 @@ class CLIENT_UNIT_CMD:
     SET_GAMEPLAYS_MASK = 22
     SET_VEHICLE_LIST = 23
     CHANGE_FALLOUT_TYPE = 24
+    SET_UNIT_VEHICLE_TYPE = 25
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
+FORCED_CLIENT_UNIT_CMDS = (CLIENT_UNIT_CMD.LEAVE_UNIT,)
 
 class UNIT_NOTIFY_ID:
     PARENT_UNIT_MGR = -1
@@ -292,6 +326,49 @@ class UNIT_MGR_FLAGS:
     FALLOUT_CLASSIC = 256
     FALLOUT_MULTITEAM = 512
     EVENT = 1024
+    EXTERNAL = 2048
+
+
+def _prebattleTypeFromFlags(flags):
+    if flags & UNIT_MGR_FLAGS.SORTIE:
+        return PREBATTLE_TYPE.SORTIE
+    elif flags & UNIT_MGR_FLAGS.FORT_BATTLE:
+        return PREBATTLE_TYPE.FORT_BATTLE
+    elif flags & UNIT_MGR_FLAGS.CLUBS:
+        return PREBATTLE_TYPE.CLUBS
+    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
+        return PREBATTLE_TYPE.FALLOUT
+    elif flags & UNIT_MGR_FLAGS.EVENT:
+        return PREBATTLE_TYPE.EVENT
+    elif flags & UNIT_MGR_FLAGS.SQUAD:
+        return PREBATTLE_TYPE.SQUAD
+    elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
+        return PREBATTLE_TYPE.CLAN
+    elif flags & UNIT_MGR_FLAGS.EXTERNAL:
+        return PREBATTLE_TYPE.EXTERNAL
+    else:
+        return PREBATTLE_TYPE.UNIT
+
+
+def _entityNameFromFlags(flags):
+    if flags & UNIT_MGR_FLAGS.CLUBS:
+        return 'ClubUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.SORTIE:
+        return 'ClanUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.FORT_BATTLE:
+        return 'ClanUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
+        return 'SpecUnitMgr'
+    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
+        return 'FalloutUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.EVENT:
+        return 'EventUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.SQUAD:
+        return 'SquadUnitMgr'
+    elif flags & UNIT_MGR_FLAGS.EXTERNAL:
+        return 'ExternalUnitMgr'
+    else:
+        return 'UnitMgr'
 
 
 class ROSTER_TYPE:
@@ -307,7 +384,8 @@ class ROSTER_TYPE:
     SQUAD_ROSTER = UNIT_MGR_FLAGS.SQUAD
     SPEC_ROSTER = UNIT_MGR_FLAGS.SPEC_BATTLE
     EVENT_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EVENT
-    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8 | CLUB_ROSTER_10 | SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT
+    EXTERNAL_ROSTER = UNIT_MGR_FLAGS.EXTERNAL
+    _MASK = UNIT_MGR_FLAGS.SORTIE | UNIT_MGR_FLAGS.SORTIE_DIVISION_8 | UNIT_MGR_FLAGS.SORTIE_DIVISION_6 | UNIT_MGR_FLAGS.FORT_BATTLE | UNIT_MGR_FLAGS.FORT_BATTLE_DIVISION_8 | CLUB_ROSTER_10 | SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -317,6 +395,7 @@ class EXTRAS_HANDLER_TYPE:
     SORTIE = 3
     SQUAD = 4
     SPEC_BATTLE = 5
+    EXTERNAL = 6
 
 
 class SORTIE_DIVISION(object):
@@ -358,13 +437,15 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SPEC_ROSTER: SpecRoster,
  ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER: FalloutClassicRoster,
  ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER: FalloutMultiteamRoster,
- ROSTER_TYPE.EVENT_ROSTER: EventRoster}
+ ROSTER_TYPE.EVENT_ROSTER: EventRoster,
+ ROSTER_TYPE.EXTERNAL_ROSTER: SpecRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.FORT_BATTLE: ClanBattleExtrasHandler,
  EXTRAS_HANDLER_TYPE.CLUBS: ClubExtrasHandler,
  EXTRAS_HANDLER_TYPE.SORTIE: SortieExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
- EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler}
+ EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
+ EXTRAS_HANDLER_TYPE.EXTERNAL: ExternalExtrasHandler}
 
 class UnitBase(OpsUnpacker):
     _opsFormatDefs = initOpsFormatDef({UNIT_OP.SET_VEHICLE: ('qHi', '_setVehicle'),
@@ -449,6 +530,7 @@ class UnitBase(OpsUnpacker):
     def _setVehicleList(self, accountDBID, vehShortList):
         vehs = []
         vehInvIDs = []
+        vehTypeCompDescrs = []
         for vehInvID, vehTypeCompDescr in vehShortList:
             classTag = vehicles.getVehicleClass(vehTypeCompDescr)
             vehType = vehicles.getVehicleType(vehTypeCompDescr)
@@ -456,10 +538,12 @@ class UnitBase(OpsUnpacker):
             vehTuple = UnitVehicle(vehInvID, vehTypeCompDescr, vehType.level, vehClassIdx)
             vehs.append(vehTuple)
             vehInvIDs.append(vehInvID)
+            vehTypeCompDescrs.append(vehTypeCompDescr)
 
         self._vehicles[accountDBID] = vehs
         self.storeOp(UNIT_OP.SET_VEHICLE_LIST, accountDBID, vehShortList)
         self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [vehInvIDs])
+        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.UPD_VEHICLE_DESCRS, [accountDBID, vehTypeCompDescrs])
         self._dirty = 1
         return True
 
@@ -471,6 +555,7 @@ class UnitBase(OpsUnpacker):
         self._dirty = 1
         self.storeOp(UNIT_OP.CLEAR_VEHICLE, accountDBID)
         self._storeNotification(accountDBID, UNIT_NOTIFY_CMD.SET_VEHICLE_LIST, [[]])
+        self._storeNotification(UNIT_NOTIFY_ID.PARENT_UNIT_MGR, UNIT_NOTIFY_CMD.UPD_VEHICLE_DESCRS, [accountDBID, []])
         return
 
     def _setMember(self, accountDBID, slotChosenIdx):
@@ -501,7 +586,7 @@ class UnitBase(OpsUnpacker):
     def _addPlayer(self, accountDBID, **kwargs):
         self._players[accountDBID] = kwargs
         self._dirty = 1
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0))
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0))
         packed += packPascalString(kwargs.get('nickName', ''))
         packed += packPascalString(kwargs.get('clanAbbrev', ''))
         self._appendOp(UNIT_OP.ADD_PLAYER, packed)
@@ -552,7 +637,7 @@ class UnitBase(OpsUnpacker):
         return True
 
     _HEADER = '<HHHHHHBii'
-    _PLAYER_DATA = '<qiIHBHH'
+    _PLAYER_DATA = '<qiIHBHHq'
     _PLAYER_VEHICLES_LIST = '<qH'
     _PLAYER_VEHICLE_TUPLE = '<iH'
     _SLOT_PLAYERS = '<Bq'
@@ -595,7 +680,7 @@ class UnitBase(OpsUnpacker):
             packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
 
         for accountDBID, playerData in players.iteritems():
-            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0))
+            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0), playerData.get('clanDBID', 0))
             packed += packPascalString(playerData.get('nickName', ''))
             packed += packPascalString(playerData.get('clanAbbrev', ''))
 
@@ -635,11 +720,11 @@ class UnitBase(OpsUnpacker):
 
         sz = self._PLAYER_DATA_SIZE
         for i in xrange(0, playerCount):
-            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, unpacking)
+            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, unpacking)
             nickName, lenNickBytes = unpackPascalString(unpacking, sz)
             clanAbbrev, lenClanBytes = unpackPascalString(unpacking, sz + lenNickBytes)
             unpacking = unpacking[sz + lenNickBytes + lenClanBytes:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -677,6 +762,7 @@ class UnitBase(OpsUnpacker):
         oldExtras = copy.deepcopy(self._extras)
         self._extrasHandler.updateUnitExtras(self._extras, updateStr)
         newExtras = self._extras
+        LOG_DEBUG_DEV('updateUnitExtras', oldExtras, newExtras)
         self.storeOp(UNIT_OP.EXTRAS_UPDATE, updateStr)
         for accountDBID, playerData in self._players.iteritems():
             if playerData and playerData.get('role', 0) & UNIT_ROLE.INVITED == 0:
@@ -715,9 +801,6 @@ class UnitBase(OpsUnpacker):
 
     def isInArena(self):
         return bool(self._flags & UNIT_FLAGS.IN_ARENA)
-
-    def isInPreArena(self):
-        return bool(self._flags & UNIT_FLAGS.IN_PRE_ARENA)
 
     def isSortiesForbidden(self):
         return bool(self._flags & UNIT_FLAGS.SORTIES_FORBIDDEN)
@@ -999,10 +1082,10 @@ class UnitBase(OpsUnpacker):
 
     def _unpackPlayer(self, packedOps):
         sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID = struct.unpack_from(self._PLAYER_DATA, packedOps)
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, packedOps)
         nickName, lenNickBytes = unpackPascalString(packedOps, sz)
         clanAbbrev, lenClanBytes = unpackPascalString(packedOps, sz + lenNickBytes)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
         self._addPlayer(accountDBID, **playerInfo)
         return packedOps[sz + lenNickBytes + lenClanBytes:]
 

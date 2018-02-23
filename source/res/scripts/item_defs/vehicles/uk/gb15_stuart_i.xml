@@ -1,4 +1,4 @@
-<gb15_stuart_i.xml>
+<GB15_Stuart_I.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner></gunner>
@@ -231,7 +231,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -554,7 +553,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1015,4 +1013,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb15_stuart_i.xml>
+</GB15_Stuart_I.xml>

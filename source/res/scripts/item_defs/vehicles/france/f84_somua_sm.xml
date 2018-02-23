@@ -1,4 +1,4 @@
-<f84_somua_sm.xml>
+<F84_Somua_SM.xml>
   <crew>
     <commander>	loader	</commander>
     <driver></driver>
@@ -199,7 +199,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -553,4 +552,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f84_somua_sm.xml>
+</F84_Somua_SM.xml>

@@ -1,4 +1,4 @@
-<g122_vk6501h.xml>
+<G122_VK6501H.xml>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -197,7 +197,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -524,4 +523,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g122_vk6501h.xml>
+</G122_VK6501H.xml>

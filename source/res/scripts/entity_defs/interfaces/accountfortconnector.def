@@ -1,4 +1,4 @@
-<accountfortconnector.def>
+<AccountFortConnector.def>
   <BaseMethods>
     <accountFortConnector_requestFortPublicInfo>
       <Exposed></Exposed>
@@ -65,4 +65,4 @@
       <Arg>	STRING	</Arg>
     </accountFortConnector_onFortBattleEnd>
   </BaseMethods>
-</accountfortconnector.def>
+</AccountFortConnector.def>

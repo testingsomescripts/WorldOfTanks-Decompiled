@@ -1,4 +1,4 @@
-<g52_pz38_na.xml>
+<G52_Pz38_NA.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -337,7 +337,6 @@
       <trackThickness>	0.000000	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -606,7 +605,6 @@
       <trackThickness>	0.000000	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1131,4 +1129,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g52_pz38_na.xml>
+</G52_Pz38_NA.xml>

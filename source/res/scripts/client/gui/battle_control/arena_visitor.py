@@ -4,13 +4,14 @@ import functools
 import weakref
 import BigWorld
 import constants
+import arena_bonus_type_caps
 import win_points
 from gui import GUI_SETTINGS
 _GUI_TYPE = constants.ARENA_GUI_TYPE
 _GUI_TYPE_LABEL = constants.ARENA_GUI_TYPE_LABEL
 _BONUS_TYPE = constants.ARENA_BONUS_TYPE
 _PERIOD = constants.ARENA_PERIOD
-_CAPS = constants.ARENA_BONUS_TYPE_CAPS
+_CAPS = arena_bonus_type_caps.ARENA_BONUS_TYPE_CAPS
 
 def _getClientArena(avatar=None):
     if avatar is None:
@@ -84,6 +85,7 @@ class _ClientArenaSkeleton(object):
     vehicles = {}
     statistics = {}
     extraData = {}
+    viewPoints = []
 
 
 class _ArenaTypeSkeleton(object):
@@ -248,6 +250,9 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getMaxTeamsOnArena(self):
         return self._arenaType.maxTeamsInArena
 
+    def getTeamsOnArenaRange(self):
+        return range(1, self.getMaxTeamsOnArena() + 1)
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.soloTeamNumbers)
     def getSoloTeamNumbers(self):
         return self._arenaType.soloTeamNumbers
@@ -358,22 +363,28 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
         self._bonusType = _BONUS_TYPE.UNKNOWN
 
     def hasFlags(self):
-        return _CAPS.get(self._bonusType) & _CAPS.FLAG_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.FLAG_MECHANICS)
 
     def hasResourcePoints(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RESOURCE_POINTS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RESOURCE_POINTS)
 
     def hasRepairPoints(self):
-        return _CAPS.get(self._bonusType) & _CAPS.REPAIR_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.REPAIR_MECHANICS)
 
     def hasRage(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RAGE_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RAGE_MECHANICS)
 
     def hasRespawns(self):
-        return _CAPS.get(self._bonusType) & _CAPS.RESPAWN > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.RESPAWN)
 
     def hasGasAttack(self):
-        return _CAPS.get(self._bonusType) & _CAPS.GAS_ATTACK_MECHANICS > 0
+        return _CAPS.checkAny(self._bonusType, _CAPS.GAS_ATTACK_MECHANICS)
+
+    def isSquadSupported(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SQUADS)
+
+    def canTakeSquadXP(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -607,3 +618,7 @@ class _ClientArenaVisitor(object):
     @catch_attribute_exception(default=_ClientArenaSkeleton.statistics)
     def getArenaStatistics(self):
         return self._arena.statistics
+
+    @catch_attribute_exception(default=_ClientArenaSkeleton.viewPoints)
+    def getArenaViewPoints(self):
+        return self._arena.viewPoints

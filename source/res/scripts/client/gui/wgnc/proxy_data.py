@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
-import SoundGroups
-from gui.awards.event_dispatcher import showClanJoinAward
-from gui.game_control import getEncyclopediaController
+from account_helpers import getAccountDatabaseID
+from adisp import process
+from debug_utils import LOG_WARNING
+from gui.Scaleform.locale.MENU import MENU
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from account_helpers import getAccountDatabaseID
+from gui.wgnc.common import WebHandlersContainer
+from helpers import dependency
+from skeletons.gui.game_control import IEncyclopediaController, IBrowserController
 
 class _ProxyDataItem(object):
 
@@ -44,6 +47,32 @@ class ClanApplicationItem(_ClanBaseAooItem):
 
     def getID(self):
         return self.getApplicationID()
+
+
+class _ClanApplicationActionItem(_ProxyDataItem):
+
+    def __init__(self, account_id, application_id):
+        super(_ClanApplicationActionItem, self).__init__()
+        self.__accountId = account_id
+        self.__appId = application_id
+
+    def getAccountID(self):
+        return self.__accountId
+
+    def getApplicationID(self):
+        return self.__appId
+
+
+class ClanAppAcceptedActionItem(_ClanApplicationActionItem):
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED_FOR_MEMBERS
+
+
+class ClanAppDeclinedActionItem(_ClanApplicationActionItem):
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.CLAN_APP_DECLINED_FOR_MEMBERS
 
 
 class ClanInviteItem(_ClanBaseAooItem):
@@ -114,10 +143,6 @@ class ClanAppAcceptedItem(_ClanPersonalAppItem):
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.CLAN_APP_ACCEPTED
 
-    def show(self, notID):
-        showClanJoinAward(self.getClanTag(), self.getClanName(), self.getClanId())
-        super(ClanAppAcceptedItem, self).show(notID)
-
 
 class _ClanInviteActionResultItem(_ProxyDataItem):
 
@@ -132,11 +157,34 @@ class _ClanInviteActionResultItem(_ProxyDataItem):
     def getInviteId(self):
         return self.__inviteId
 
+    def getID(self):
+        return self.getInviteId()
+
 
 class ClanInviteDeclinedItem(_ClanInviteActionResultItem):
 
     def getType(self):
         return WGNC_DATA_PROXY_TYPE.CLAN_INVITE_DECLINED
+
+
+class ClanInvitesCreatedItem(_ProxyDataItem):
+
+    def __init__(self, account_id, invite_id):
+        super(ClanInvitesCreatedItem, self).__init__()
+        self.__accountIds = account_id
+        self.__inviteIds = invite_id
+
+    def getAccountIDs(self):
+        return self.__accountIds
+
+    def getInviteIds(self):
+        return self.__inviteIds
+
+    def getNewInvitesCount(self):
+        return len(self.__inviteIds)
+
+    def getType(self):
+        return WGNC_DATA_PROXY_TYPE.CLAN_INVITES_CREATED
 
 
 class ClanInviteAcceptedItem(_ClanInviteActionResultItem):
@@ -146,27 +194,44 @@ class ClanInviteAcceptedItem(_ClanInviteActionResultItem):
 
 
 class EncyclopediaContentItem(_ProxyDataItem):
+    encyclopedia = dependency.descriptor(IEncyclopediaController)
 
     def __init__(self, contentId):
         self.__contentId = contentId
 
     def getType(self):
-        return WGNC_DATA_PROXY_TYPE.UNDEFINED
+        return WGNC_DATA_PROXY_TYPE.ENCYCLOPEDIA_CONTENT_RECEIVED
 
     def show(self, _):
-        getEncyclopediaController().addEncyclopediaRecommendation(self.__contentId)
+        self.encyclopedia.addEncyclopediaRecommendation(self.__contentId)
 
 
-class PlaySoundItem(_ProxyDataItem):
+class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
+    browserCtrl = dependency.descriptor(IBrowserController)
 
-    def __init__(self, eventID):
-        self.__eventID = eventID
+    def __init__(self, url, size=None, title=None, showRefresh=False, webHandlerName='', titleKey=''):
+        self.__url = url
+        self.__size = size
+        self.__title = title
+        self.__titleKey = titleKey
+        self.__showRefresh = showRefresh
+        self.__webHandlerName = webHandlerName
 
     def getType(self):
-        return WGNC_DATA_PROXY_TYPE.UNDEFINED
+        return WGNC_DATA_PROXY_TYPE.SHOW_IN_BROWSER
 
+    @process
     def show(self, _):
-        SoundGroups.g_instance.playSound2D(self.__eventID)
+        browserId = yield self.browserCtrl.load(self.__url, browserSize=self.__size, title=self.__getTitle(), showActionBtn=self.__showRefresh, handlers=self.getWebHandler(self.__webHandlerName))
+        browser = self.browserCtrl.getBrowser(browserId)
+        if browser:
+            browser.useSpecialKeys = False
+
+    def __getTitle(self):
+        localizedValue = None
+        if self.__titleKey:
+            localizedValue = MENU.browser_customtitle(self.__titleKey)
+        return localizedValue or self.__title
 
 
 class ProxyDataHolder(object):

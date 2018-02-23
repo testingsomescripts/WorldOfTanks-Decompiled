@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/formatters.py
-import BigWorld
 from itertools import chain
+import BigWorld
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
+from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, PARAMS_GROUPS
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
 MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
@@ -14,15 +17,14 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'areaSquare': MENU.TANK_PARAMS_SQM,
  'armor': MENU.TANK_PARAMS_FACEFRONTBOARDINMM,
  'artDelayRange': MENU.TANK_PARAMS_S,
- 'avgDamage': MENU.TANK_PARAMS_VAL,
+ 'avgDamageList': MENU.TANK_PARAMS_VAL,
  'avgPiercingPower': MENU.TANK_PARAMS_MM,
  'bombDamage': MENU.TANK_PARAMS_VAL,
  'bombsNumberRange': MENU.TANK_PARAMS_CNT,
  'chassisRotationSpeed': MENU.TANK_PARAMS_GPS,
  'circularVisionRadius': MENU.TANK_PARAMS_M,
  'clipFireRate': MENU.TANK_PARAMS_CLIPSEC,
- 'damageAvg': MENU.TANK_PARAMS_VAL,
- 'damageAvgPerMinute': MENU.TANK_PARAMS_VPM,
+ 'avgDamage': MENU.TANK_PARAMS_VAL,
  'avgDamagePerMinute': MENU.TANK_PARAMS_VPM,
  'fireStartingChance': MENU.TANK_PARAMS_PERCENT,
  'maxHealth': MENU.TANK_PARAMS_VAL,
@@ -55,22 +57,15 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'turretRotationSpeed': MENU.TANK_PARAMS_GPS,
  'invisibilityStillFactor': MENU.TANK_PARAMS_PERCENT,
  'invisibilityMovingFactor': MENU.TANK_PARAMS_PERCENT,
- 'maxShotDistance': MENU.TANK_PARAMS_M}
-NO_COLORIZE_FORMATTERS = (text_styles.stats, text_styles.stats, text_styles.stats)
-NO_BONUS_SIMPLIFIED_FORMATTERS = (text_styles.warning, text_styles.warning, text_styles.warning)
-NO_BONUS_BASE_FORMATTERS = (text_styles.error, text_styles.stats, text_styles.stats)
-SIMPLIFIED_FORMATTERS = (text_styles.critical, text_styles.warning, text_styles.statInfo)
-BASE_FORMATTERS = (text_styles.error, text_styles.stats, text_styles.bonusAppliedText)
-RELATIVE_POWER_PARAMS = ('damage', 'piercingPower', 'reloadTime', 'reloadTimeSecs', 'gunRotationSpeed', 'turretRotationSpeed', 'turretYawLimits', 'pitchLimits', 'gunYawLimits', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'damageAvgPerMinute')
-RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
-RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed')
-RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
-RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
-PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
- 'relativeArmor': RELATIVE_ARMOR_PARAMS,
- 'relativeMobility': RELATIVE_MOBILITY_PARAMS,
- 'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
- 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+ 'maxShotDistance': MENU.TANK_PARAMS_M,
+ 'switchOnTime': MENU.TANK_PARAMS_S,
+ 'switchOffTime': MENU.TANK_PARAMS_S}
+COLORLESS_SCHEME = (text_styles.stats, text_styles.stats, text_styles.stats)
+NO_BONUS_SIMPLIFIED_SCHEME = (text_styles.warning, text_styles.warning, text_styles.warning)
+NO_BONUS_BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.stats)
+SIMPLIFIED_SCHEME = (text_styles.critical, text_styles.warning, text_styles.statInfo)
+BASE_SCHEME = (text_styles.error, text_styles.stats, text_styles.bonusAppliedText)
+SITUATIONAL_SCHEME = (text_styles.critical, text_styles.warning, text_styles.bonusPreviewText)
 VEHICLE_PARAMS = tuple(chain(*[ PARAMS_GROUPS[param] for param in RELATIVE_PARAMS ]))
 ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicleChassis: ('maxLoad', 'rotationSpeed', 'weight'),
@@ -79,9 +74,9 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicle: VEHICLE_PARAMS,
  ITEM_TYPES.equipment: {artefacts.Artillery: ('damage', 'piercingPower', 'caliber', 'shotsNumberRange', 'areaRadius', 'artDelayRange'),
                         artefacts.Bomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
- ITEM_TYPES.shell: ('caliber', 'piercingPower', 'damage', 'explosionRadius'),
+ ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'explosionRadius'),
  ITEM_TYPES.optionalDevice: ('weight',),
- ITEM_TYPES.vehicleGun: ('caliber', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'avgPiercingPower', 'avgDamage', 'dispertionRadius', 'aimingTime', 'maxShotDistance', 'weight')}
+ ITEM_TYPES.vehicleGun: ('caliber', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'avgPiercingPower', 'avgDamageList', 'dispertionRadius', 'aimingTime', 'maxShotDistance', 'weight')}
 
 def measureUnitsForParameter(paramName):
     return i18n.makeString(MEASURE_UNITS[paramName])
@@ -99,8 +94,12 @@ def isDiffEnoughToDisplay(value):
     return abs(int(value)) > 0
 
 
-def getParameterIconPath(parameter):
-    return RES_ICONS.MAPS_ICONS_VEHPARAMS + '/%s.png' % parameter
+def getParameterSmallIconPath(parameter):
+    return RES_ICONS.MAPS_ICONS_VEHPARAMS_SMALL + '/%s.png' % parameter
+
+
+def getParameterBigIconPath(parameter):
+    return RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG + '/%s.png' % parameter
 
 
 def formatModuleParamName(paramName):
@@ -119,10 +118,6 @@ def formatVehicleParamName(paramName, showMeasureUnit=True):
         if showMeasureUnit:
             builder.addStyledText(text_styles.standard, MEASURE_UNITS.get(paramName, ''))
         return builder.render()
-
-
-def formatCompatibles(name, collection):
-    return ', '.join([ (text_styles.neutral(c) if c == name else text_styles.main(c)) for c in collection ])
 
 
 def getRelativeDiffParams(comparator):
@@ -152,10 +147,9 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'clipFireRate': _niceListFormat,
  'aimingTime': _niceRangeFormat,
  'shotDispersionAngle': _niceFormat,
- 'damageAvgPerMinute': _niceFormat,
  'avgDamagePerMinute': _niceFormat,
  'relativeArmor': _integralFormat,
- 'damageAvg': _niceFormat,
+ 'avgDamage': _niceFormat,
  'maxHealth': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
@@ -187,11 +181,37 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'shellReloadingTime': _niceRangeFormat,
  'reloadMagazineTime': _niceRangeFormat,
  'avgPiercingPower': _listFormat,
- 'avgDamage': _listFormat,
+ 'avgDamageList': _listFormat,
  'dispertionRadius': _niceRangeFormat,
  'invisibilityStillFactor': _niceListFormat,
- 'invisibilityMovingFactor': _niceListFormat}
-_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight', 'vehicleWeight', 'invisibilityStillFactor', 'invisibilityMovingFactor')
+ 'invisibilityMovingFactor': _niceListFormat,
+ 'switchOnTime': _niceFormat,
+ 'switchOffTime': _niceFormat}
+
+def _deltaWrapper(fn):
+
+    def wrapped(paramValue):
+        formattedValue = fn(paramValue)
+        if formattedValue == '0':
+            return '~0'
+        return '+%s' % formattedValue if isinstance(paramValue, (int, float)) and paramValue > 0 else formattedValue
+
+    return wrapped
+
+
+def _getDeltaSettings():
+    detlaSettings = {}
+    for paramName, setting in FORMAT_SETTINGS.iteritems():
+        settingCopy = setting.copy()
+        rounder = settingCopy['rounder']
+        settingCopy['rounder'] = _deltaWrapper(rounder)
+        detlaSettings[paramName] = settingCopy
+
+    return detlaSettings
+
+
+DELTA_PARAMS_SETTING = _getDeltaSettings()
+_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight', 'invisibilityStillFactor', 'invisibilityMovingFactor')
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
@@ -200,42 +220,32 @@ def _colorize(paramStr, state, colorScheme):
     return colorScheme[_STATES_INDEX_IN_COLOR_MAP[state[0]]](paramStr)
 
 
-def baseFormatParameter(parameterName, parameterValue):
-    return formatParameter(parameterName, parameterValue)
-
-
 def colorizedFormatParameter(parameter, colorScheme):
     return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme)
 
 
-def simlifiedDeltaParameter(parameter):
-    mainFormatter = SIMPLIFIED_FORMATTERS[1]
+def colorizedFullFormatParameter(parameter, colorScheme):
+    return formatParameter(parameter.name, parameter.value, parameter.state, colorScheme, allowSmartRound=False)
+
+
+def simlifiedDeltaParameter(parameter, isSituational=False):
+    mainFormatter = SIMPLIFIED_SCHEME[1]
     delta = int(parameter.state[1])
     paramStr = formatParameter(parameter.name, parameter.value)
     if delta:
         sign = '-' if delta < 0 else '+'
-        deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, SIMPLIFIED_FORMATTERS)
+        scheme = SITUATIONAL_SCHEME if isSituational else SIMPLIFIED_SCHEME
+        deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, scheme)
         return '(%s) %s' % (deltaStr, mainFormatter(paramStr))
     else:
         return mainFormatter(paramStr)
 
 
-def simplifiedVehicleParameter(parameter):
-    paramStr = formatParameter(parameter.name, parameter.value)
-    if parameter.state[0] == PARAM_STATE.WORSE:
-        return _colorize(paramStr, parameter.state, NO_BONUS_SIMPLIFIED_FORMATTERS)
-    else:
-        mainFormatter = NO_BONUS_SIMPLIFIED_FORMATTERS[1]
-        return mainFormatter(paramStr)
-
-
-def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None):
-    if parameterState is None and isinstance(paramValue, (tuple, list)):
-        parameterState = [None] * len(paramValue)
+def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True):
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
     rounder = settings['rounder']
-    doSmartRound = parameterName in _SMART_ROUND_PARAMS
+    doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
 
     def applyFormat(value, state):
         if doSmartRound:
@@ -248,24 +258,37 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
             paramStr = _colorize(paramStr, state, colorScheme)
         return paramStr
 
-    if isinstance(paramValue, (tuple, list)):
-        if doSmartRound and len(set(paramValue)) == 1:
-            if paramValue[0] > 0:
-                return applyFormat(paramValue[0], parameterState[0])
-            return
-        else:
-            separator = settings['separator']
-            paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
-            return separator.join(paramsList)
-    else:
-        if paramValue != 0:
-            return applyFormat(paramValue, parameterState)
+    if paramValue is None:
         return
-    return
+    else:
+        if isinstance(paramValue, (tuple, list)):
+            if parameterState is None:
+                parameterState = [None] * len(paramValue)
+            if doSmartRound and len(set(paramValue)) == 1:
+                if paramValue[0] > 0:
+                    return applyFormat(paramValue[0], parameterState[0])
+                return
+            else:
+                separator = settings['separator']
+                paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
+                return separator.join(paramsList)
+        else:
+            if paramValue != 0:
+                return applyFormat(paramValue, parameterState)
+            return
+        return
+
+
+def formatParameterDelta(pInfo, deltaScheme=BASE_SCHEME, formatSettings=DELTA_PARAMS_SETTING):
+    """
+    Gets formatted parameter delta value if parameter has diff, else return None
+    """
+    diff = pInfo.getParamDiff()
+    return formatParameter(pInfo.name, diff, pInfo.state, deltaScheme, formatSettings, allowSmartRound=False) if diff else None
 
 
 def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
-    if isinstance(descriptor, vehicles.VehicleDescr):
+    if vehicles.isVehicleDescr(descriptor):
         compactDescr = descriptor.type.compactDescr
     else:
         compactDescr = descriptor['compactDescr']
@@ -281,11 +304,55 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
             continue
         paramValue = parameters.get(paramName)
         if paramValue:
-            fmtValue = baseFormatParameter(paramName, paramValue)
+            fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
-                params.append((paramName, baseFormatParameter(paramName, paramValue)))
+                params.append((paramName, formatParameter(paramName, paramValue)))
 
     return params
+
+
+_ICON_LIB_PATH = '../maps/icons/vehParams/tooltips'
+
+def getBonusIcon(bonusId):
+    if bonusId.find('Rammer') >= 0:
+        iconStr = 'rammer'
+    else:
+        iconStr = bonusId.split('_class')[0]
+    return _ICON_LIB_PATH + '/bonuses/%s.png' % iconStr
+
+
+def getPenaltyIcon(penaltyId):
+    return _ICON_LIB_PATH + '/penalties/%s.png' % penaltyId
+
+
+def packSituationalIcon(text, icon):
+    return '<nobr>'.join((text, icon))
+
+
+def getGroupPenaltyIcon(param, comparator):
+    if hasGroupPenalties(param.name, comparator):
+        return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE
+    else:
+        return ''
+
+
+def getAllParametersTitles():
+    result = []
+    for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
+        data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
+        data['titleText'] = formatVehicleParamName(groupName)
+        data['isEnabled'] = True
+        data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+        result.append(data)
+        for paramName in PARAMS_GROUPS[groupName]:
+            data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName)
+            data['iconSource'] = getParameterSmallIconPath(paramName)
+            data['titleText'] = formatVehicleParamName(paramName)
+            data['isEnabled'] = False
+            data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+            result.append(data)
+
+    return result
 
 
 def _cutDigits(value):

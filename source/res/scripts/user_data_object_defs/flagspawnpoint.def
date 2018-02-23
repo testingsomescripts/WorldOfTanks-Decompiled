@@ -1,4 +1,4 @@
-<flagspawnpoint.def>
+<FlagSpawnPoint.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <team>
@@ -16,4 +16,4 @@
       <Editable>	true	</Editable>
     </firstSpawnDelay>
   </Properties>
-</flagspawnpoint.def>
+</FlagSpawnPoint.def>

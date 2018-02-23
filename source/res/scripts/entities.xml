@@ -56,7 +56,13 @@
     <AccountSurrogate></AccountSurrogate>
     <ClubBucket></ClubBucket>
     <RankedMatchmaker></RankedMatchmaker>
+    <RandomBattleMatchmaker></RandomBattleMatchmaker>
+    <RandomBattleMatchmakerOld></RandomBattleMatchmakerOld>
+    <CompanyMatchmaker></CompanyMatchmaker>
     <SandboxMgr></SandboxMgr>
     <SingletonLock></SingletonLock>
+    <ExternalBattleMgr></ExternalBattleMgr>
+    <ExternalUnitMgr></ExternalUnitMgr>
+    <ExternalUnitQueue></ExternalUnitQueue>
   </ServerOnlyEntities>
 </entities.xml>

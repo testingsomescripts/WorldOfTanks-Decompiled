@@ -1,4 +1,4 @@
-<f71_amx_30_prototype.xml>
+<F71_AMX_30_prototype.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -328,7 +328,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -579,7 +578,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1237,4 +1235,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f71_amx_30_prototype.xml>
+</F71_AMX_30_prototype.xml>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/tutorial/control/functional.py
 import re
 import BigWorld
+from helpers import dependency
 from tutorial.control import TutorialProxyHolder, game_vars
 from tutorial.control.context import GlobalStorage
 from tutorial.data import chapter
@@ -145,6 +146,33 @@ class FunctionalBonusReceivedCondition(FunctionalCondition):
             return
 
 
+class FunctionalServiceCondition(FunctionalCondition):
+
+    def isConditionOk(self, condition):
+        """
+        Service condition checks the service's availability by calling its 'isEnabled' method.
+        Service should be defined by its interface class name and optional path to it.
+        NOTICE: it works with our dependency injection functionality, so make sure that
+        you've registered your service properly!
+        :param condition: given service condition
+        :return: validation result
+        """
+        serviceClass = condition.getServiceClass()
+        if serviceClass is None:
+            LOG_ERROR('Service cannot be loaded!', condition.getID(), condition.getPath())
+            return False
+        else:
+            service = dependency.instance(serviceClass)
+            if not hasattr(service, 'isEnabled'):
+                LOG_ERROR('Service does not implement isEnabled method!', service)
+                return False
+            result = service.isEnabled()
+            if condition.isPositiveState():
+                return result
+            return not result
+            return
+
+
 _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.GLOBAL_FLAG: FunctionalGlobalFlagCondition,
  CONDITION_TYPE.WINDOW_ON_SCENE: FunctionalWindowOnSceneCondition,
@@ -153,7 +181,8 @@ _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
  CONDITION_TYPE.EFFECT_TRIGGERED: FunctionalEffectTriggeredCondition,
  CONDITION_TYPE.GAME_ITEM_SIMPLE_STATE: FunctionalGameItemSimpleStateCondition,
  CONDITION_TYPE.GAME_ITEM_RELATE_STATE: FunctionalGameItemRelateStateCondition,
- CONDITION_TYPE.BONUS_RECEIVED: FunctionalBonusReceivedCondition}
+ CONDITION_TYPE.BONUS_RECEIVED: FunctionalBonusReceivedCondition,
+ CONDITION_TYPE.SERVICE: FunctionalServiceCondition}
 
 class FunctionalConditions(TutorialProxyHolder):
 

@@ -1,4 +1,4 @@
-<accounteditor.def>
+<AccountEditor.def>
   <BaseMethods>
     <onAccountPropertiesChanged>
       <Arg>	INT32	</Arg>
@@ -11,4 +11,4 @@
       <Arg>	PYTHON	</Arg>
     </receiveProperties>
   </BaseMethods>
-</accounteditor.def>
+</AccountEditor.def>

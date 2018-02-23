@@ -1,4 +1,4 @@
-<spawnpoint.def>
+<SpawnPoint.def>
   <Domain>	BASE	</Domain>
   <Properties>
     <team>
@@ -31,4 +31,4 @@
       <Editable>	true	</Editable>
     </spawnMode>
   </Properties>
-</spawnpoint.def>
+</SpawnPoint.def>

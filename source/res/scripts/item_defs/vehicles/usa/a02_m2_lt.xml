@@ -1,4 +1,4 @@
-<a02_m2_lt.xml>
+<A02_M2_lt.xml>
   <crew>
     <commander></commander>
     <gunner>	loader	</gunner>
@@ -191,7 +191,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -434,7 +433,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1017,4 +1015,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a02_m2_lt.xml>
+</A02_M2_lt.xml>

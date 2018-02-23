@@ -1,4 +1,4 @@
-<ch22_113.xml>
+<Ch22_113.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -174,7 +174,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -700,4 +699,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</ch22_113.xml>
+</Ch22_113.xml>

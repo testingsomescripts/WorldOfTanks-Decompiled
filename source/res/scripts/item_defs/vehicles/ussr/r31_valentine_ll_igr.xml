@@ -1,4 +1,4 @@
-<r31_valentine_ll_igr.xml>
+<R31_Valentine_LL_IGR.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -206,7 +206,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -395,4 +394,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r31_valentine_ll_igr.xml>
+</R31_Valentine_LL_IGR.xml>

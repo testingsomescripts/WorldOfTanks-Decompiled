@@ -1,4 +1,4 @@
-<benchmarklocation.def>
+<BenchmarkLocation.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <order>
@@ -6,4 +6,4 @@
       <Editable>	True	</Editable>
     </order>
   </Properties>
-</benchmarklocation.def>
+</BenchmarkLocation.def>

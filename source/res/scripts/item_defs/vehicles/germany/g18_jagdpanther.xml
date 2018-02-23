@@ -1,4 +1,4 @@
-<g18_jagdpanther.xml>
+<G18_JagdPanther.xml>
   <crew>
     <commander></commander>
     <radioman></radioman>
@@ -448,7 +448,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -818,7 +817,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1202,4 +1200,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customizationNation>	germany	</customizationNation>
-</g18_jagdpanther.xml>
+</G18_JagdPanther.xml>

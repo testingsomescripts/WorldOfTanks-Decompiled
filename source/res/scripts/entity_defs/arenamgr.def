@@ -1,14 +1,6 @@
-<arenamgr.def>
+<ArenaMgr.def>
   <Properties></Properties>
   <BaseMethods>
-    <onArenaCreated>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-    </onArenaCreated>
     <createArena>
       <Arg>	ARRAY	  <of>	INT32	</of>
       </Arg>
@@ -46,25 +38,14 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
     </updateArenaCellappID>
-    <enqueue>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	PYTHON	</Arg>
+    <askForArenaTypes>
       <Arg>	INT32	</Arg>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	UINT8	</Arg>
-    </enqueue>
-    <dequeue>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT8	</Arg>
-    </dequeue>
-    <dequeueFromAll>
-      <Arg>	MAILBOX	</Arg>
-    </dequeueFromAll>
-    <createArenaFromQueue></createArenaFromQueue>
-    <askForArenaType>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT64	</Arg>
-    </askForArenaType>
+      <Arg>	ARRAY	  <of>	PYTHON	</of>
+      </Arg>
+      <ReturnValues>
+        <Arg>	ARRAY	  <of>	PYTHON	</of>
+        </Arg>
+      </ReturnValues>
+    </askForArenaTypes>
   </BaseMethods>
-</arenamgr.def>
+</ArenaMgr.def>

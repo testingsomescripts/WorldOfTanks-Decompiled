@@ -1,4 +1,4 @@
-<a97_m41_bulldog.xml>
+<A97_M41_Bulldog.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -305,7 +305,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -537,7 +536,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1199,4 +1197,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a97_m41_bulldog.xml>
+</A97_M41_Bulldog.xml>

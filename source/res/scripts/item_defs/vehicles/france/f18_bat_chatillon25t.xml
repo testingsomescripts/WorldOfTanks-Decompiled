@@ -1,6 +1,7 @@
-<f18_bat_chatillon25t.xml>
+<F18_Bat_Chatillon25t.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
@@ -190,7 +191,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -532,4 +532,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f18_bat_chatillon25t.xml>
+</F18_Bat_Chatillon25t.xml>

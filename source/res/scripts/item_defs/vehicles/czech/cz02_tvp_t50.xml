@@ -1,4 +1,4 @@
-<cz02_tvp_t50.xml>
+<Cz02_TVP_T50.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -398,7 +398,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -732,7 +731,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1338,4 +1336,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</cz02_tvp_t50.xml>
+</Cz02_TVP_T50.xml>

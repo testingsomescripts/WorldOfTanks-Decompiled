@@ -1,25 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 import BigWorld
-from helpers import i18n
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.ARENAS import ARENAS
-from gui.server_events import g_eventsCache
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import LoadViewEvent
 from gui.shared.ClanCache import g_clanCache
+from gui.shared.events import LoadViewEvent
 from gui.shared.fortifications import isStartingScriptDone
 from gui.shared.utils.functions import makeTooltip
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from helpers import i18n, dependency
 from predefined_hosts import g_preDefinedHosts
+from skeletons.gui.server_events import IEventsCache
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
@@ -27,14 +28,14 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def selectFight(self, actionName):
         battle_selector_items.getItems().select(actionName)
 
-    def getTooltipData(self, itemData):
+    def getTooltipData(self, itemData, itemIsDisabled):
         if itemData is None:
             return ''
-        elif itemData == PREBATTLE_ACTION_NAME.RANDOM_QUEUE:
+        elif itemData == PREBATTLE_ACTION_NAME.RANDOM:
             return TOOLTIPS.BATTLETYPES_STANDART
-        elif itemData == PREBATTLE_ACTION_NAME.UNIT:
+        elif itemData == PREBATTLE_ACTION_NAME.E_SPORT:
             return TOOLTIPS.BATTLETYPES_UNIT
-        elif itemData == PREBATTLE_ACTION_NAME.COMPANY:
+        elif itemData == PREBATTLE_ACTION_NAME.COMPANIES_LIST:
             return self.__getCompanyAvailabilityData()
         else:
             if itemData == PREBATTLE_ACTION_NAME.FORT:
@@ -46,10 +47,15 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                     return '#tooltips:fortification/disabled/no_fort'
                 else:
                     return TOOLTIPS.BATTLETYPES_FORTIFICATION
+            elif itemData == PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST:
+                if not itemIsDisabled:
+                    return TOOLTIPS.BATTLETYPES_STRONGHOLDS
+                else:
+                    return TOOLTIPS.HEADER_BUTTONS_FORTS_TURNEDOFF
             else:
-                if itemData == PREBATTLE_ACTION_NAME.TRAINING:
+                if itemData == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
                     return TOOLTIPS.BATTLETYPES_TRAINING
-                if itemData == PREBATTLE_ACTION_NAME.SPEC_BATTLE:
+                if itemData == PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST:
                     return TOOLTIPS.BATTLETYPES_SPEC
                 if itemData == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL:
                     return TOOLTIPS.BATTLETYPES_BATTLETUTORIAL
@@ -80,7 +86,7 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
     def __getCompanyAvailabilityData(self):
         tooltipData = TOOLTIPS.BATTLETYPES_COMPANY
-        battle = g_eventsCache.getCompanyBattles()
+        battle = self.eventsCache.getCompanyBattles()
         header = i18n.makeString(tooltipData + '/header')
         body = i18n.makeString(tooltipData + '/body')
         serversList = []

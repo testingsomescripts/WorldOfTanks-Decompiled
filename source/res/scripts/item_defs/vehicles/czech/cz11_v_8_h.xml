@@ -1,4 +1,4 @@
-<cz11_v_8_h.xml>
+<Cz11_V_8_H.xml>
   <crew>
     <commander></commander>
     <gunner>	loader	</gunner>
@@ -197,7 +197,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -463,7 +462,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1091,4 +1089,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</cz11_v_8_h.xml>
+</Cz11_V_8_H.xml>

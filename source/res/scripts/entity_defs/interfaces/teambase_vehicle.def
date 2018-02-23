@@ -1,4 +1,4 @@
-<teambase_vehicle.def>
+<TeamBase_Vehicle.def>
   <TempProperties>
     <_teamBase></_teamBase>
   </TempProperties>
@@ -13,4 +13,4 @@
       <Arg>	BOOL	</Arg>
     </teamBase_onCaptured>
   </CellMethods>
-</teambase_vehicle.def>
+</TeamBase_Vehicle.def>

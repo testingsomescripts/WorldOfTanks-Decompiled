@@ -1,6 +1,7 @@
-<r86_ltp.xml>
+<R86_LTP.xml>
   <crew>
     <commander>	gunner
+
 			radioman	</commander>
     <driver></driver>
     <loader></loader>
@@ -176,7 +177,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -619,4 +619,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r86_ltp.xml>
+</R86_LTP.xml>

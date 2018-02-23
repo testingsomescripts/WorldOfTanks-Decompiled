@@ -15,5 +15,23 @@
         <loop>	True	</loop>
       </arrow>
     </hint>
+    <hint>	ShopTradeInHint	  <item-id>	ShopTradeIn	</item-id>
+      <text>	_(#tutorial:tradeIn/shop)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <service>	ITradeInController	  <path>	skeletons.gui.game_control	</path>
+        </service>
+      </condition>
+    </hint>
+    <hint>	VehCompareConfigHint	  <item-id>	VehCompareConfig	</item-id>
+      <text>	_(#veh_compare:vehConf/confAvailable)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+    </hint>
   </hints>
 </once-only-hints.xml>

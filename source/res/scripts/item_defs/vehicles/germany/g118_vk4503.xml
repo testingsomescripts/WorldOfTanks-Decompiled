@@ -1,4 +1,4 @@
-<g118_vk4503.xml>
+<G118_VK4503.xml>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -275,7 +275,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -734,4 +733,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g118_vk4503.xml>
+</G118_VK4503.xml>

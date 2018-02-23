@@ -1,4 +1,4 @@
-<avatar.def>
+<Avatar.def>
   <Implements>
     <Interface>	Chat	</Interface>
     <Interface>	PlayerMessenger_chat2	</Interface>
@@ -6,7 +6,7 @@
     <Interface>	InvitationsClient	</Interface>
     <Interface>	AccountAuthTokenProviderClient	</Interface>
     <Interface>	AvatarClientProxy	</Interface>
-    <Interface>	BattleFeedback	</Interface>
+    <Interface>	AvatarObserver	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -119,6 +119,10 @@
       <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
+    <heatmapLoggingFlags>
+      <Type>	UINT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </heatmapLoggingFlags>
     <accountDBIDOnCell>
       <Type>	DB_ID	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -189,6 +193,7 @@
       <Arg>	FLOAT32	</Arg>
     </updateVehicleGunReloadTime>
     <updateVehicleAmmo>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
@@ -199,6 +204,7 @@
       <Arg>	VECTOR3	</Arg>
     </onSwitchViewpoint>
     <updateVehicleOptionalDeviceStatus>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
     </updateVehicleOptionalDeviceStatus>
@@ -209,6 +215,7 @@
       <Arg>	FLOAT32	</Arg>
     </updateVehicleMiscStatus>
     <updateVehicleSetting>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
     </updateVehicleSetting>
@@ -228,6 +235,7 @@
       <Arg>	STRING	</Arg>
     </redrawVehicleOnRespawn>
     <updateGunMarker>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -245,6 +253,7 @@
       <Arg>	UINT32	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
     </showOwnVehicleHitDirection>
     <showVehicleDamageInfo>
       <Arg>	OBJECT_ID	</Arg>
@@ -374,6 +383,15 @@
     <syncVehicleAttrs>
       <Arg>	VEHICLE_SYNC_ATTRS	</Arg>
     </syncVehicleAttrs>
+    <onFrictionWithVehicle>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
+    </onFrictionWithVehicle>
+    <onCollisionWithVehicle>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </onCollisionWithVehicle>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -415,7 +433,15 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
     </receiveVisibilityUpdate>
+    <receiveVisibilityLists>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+    </receiveVisibilityLists>
     <receivePositionsFromArena>
       <Arg>	BOOL	</Arg>
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
@@ -488,10 +514,11 @@
       <Arg>	VECTOR2	</Arg>
     </setEquipmentApplicationPoint>
     <sendFinalStats></sendFinalStats>
-    <switchViewpoint>
+    <switchViewPointOrBindToVehicle>
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	BOOL	</Arg>
-    </switchViewpoint>
+      <Arg>	OBJECT_ID	</Arg>
+    </switchViewPointOrBindToVehicle>
     <grantRagePoints>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
@@ -660,4 +687,4 @@
     </logStreamCorruption>
     <sendFinalStats></sendFinalStats>
   </BaseMethods>
-</avatar.def>
+</Avatar.def>

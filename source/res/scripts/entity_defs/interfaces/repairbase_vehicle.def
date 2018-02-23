@@ -1,4 +1,4 @@
-<repairbase_vehicle.def>
+<RepairBase_Vehicle.def>
   <TempProperties>
     <_repairBase></_repairBase>
   </TempProperties>
@@ -9,4 +9,4 @@
       <Arg>	FLOAT32	</Arg>
     </repairBase_onAction>
   </CellMethods>
-</repairbase_vehicle.def>
+</RepairBase_Vehicle.def>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/app_loader/interfaces.py
+from constants import ARENA_GUI_TYPE
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 
 class IAppFactory(object):
@@ -22,6 +23,9 @@ class IAppFactory(object):
     def createLobby(self):
         pass
 
+    def reloadLobbyPackages(self):
+        pass
+
     def destroyLobby(self):
         pass
 
@@ -31,13 +35,16 @@ class IAppFactory(object):
     def hideLobby(self):
         pass
 
+    def showBattle(self):
+        pass
+
+    def hideBattle(self):
+        pass
+
     def createBattle(self, arenaGuiType):
         pass
 
     def destroyBattle(self):
-        pass
-
-    def createLogitech(self):
         pass
 
     def destroy(self):
@@ -67,10 +74,13 @@ class IAppFactory(object):
     def goToLobby(self, appNS):
         pass
 
-    def goToBattleLoading(self, appNS, arenaGuiType):
+    def loadBattlePage(self, appNS, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         pass
 
-    def goToBattle(self, appNS, arenaGuiType):
+    def goToBattleLoading(self, appNS):
+        pass
+
+    def goToBattlePage(self, appNS):
         pass
 
     def showDisconnectDialog(self, appNS, description):

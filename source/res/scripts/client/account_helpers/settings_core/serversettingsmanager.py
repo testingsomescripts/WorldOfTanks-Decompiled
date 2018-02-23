@@ -3,12 +3,13 @@
 import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants
-from account_helpers.settings_core.SettingsCache import g_settingsCache
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCache
 
 class SETTINGS_SECTIONS(CONST_CONTAINER):
     GAME = 'GAME'
@@ -40,6 +41,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
 
 
 class ServerSettingsManager(object):
+    settingsCache = dependency.descriptor(ISettingsCache)
     GAME = settings_constants.GAME
     GRAPHICS = settings_constants.GRAPHICS
     SOUND = settings_constants.SOUND
@@ -76,8 +78,9 @@ class ServerSettingsManager(object):
                                        GAME.MINIMAP_DRAW_RANGE: 8,
                                        GAME.INCREASED_ZOOM: 9,
                                        GAME.SNIPER_MODE_BY_SHIFT: 10,
-                                       GAME.SIMPLIFIED_TTC: 11,
-                                       GAME.CAROUSEL_TYPE: 12}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
+                                       GAME.CAROUSEL_TYPE: 12,
+                                       GAME.DOUBLE_CAROUSEL_TYPE: 13,
+                                       GAME.VEHICLE_CAROUSEL_STATS: 14}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GRAPHICS.FPS_PERFOMANCER: 0,
                                   GAME.LENS_EFFECT: 1}, offsets={}),
@@ -137,11 +140,11 @@ class ServerSettingsManager(object):
                                            'level_10': 29}, offsets={}),
      SETTINGS_SECTIONS.CAROUSEL_FILTER_2: Section(masks={'premium': 0,
                                            'elite': 1,
-                                           'hideRented': 2,
+                                           'rented': 2,
                                            'igr': 3,
                                            'favorite': 5,
                                            'bonus': 6,
-                                           'hideEvent': 7}, offsets={}),
+                                           'event': 7}, offsets={}),
      SETTINGS_SECTIONS.FALLOUT_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                    'germany': 1,
                                                    'usa': 2,
@@ -168,12 +171,12 @@ class ServerSettingsManager(object):
                                                    'level_10': 29}, offsets={}),
      SETTINGS_SECTIONS.FALLOUT_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
                                                    'elite': 1,
-                                                   'hideRented': 2,
+                                                   'rented': 2,
                                                    'igr': 3,
                                                    'gameMode': 4,
                                                    'favorite': 5,
                                                    'bonus': 6,
-                                                   'hideEvent': 7}, offsets={}),
+                                                   'event': 7}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
@@ -193,7 +196,9 @@ class ServerSettingsManager(object):
                                   TUTORIAL.FIRE_EXTINGUISHER_USED: 10,
                                   TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED: 11}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
-                                         'CustomizationSlotsHint': 1}, offsets={}),
+                                         'CustomizationSlotsHint': 1,
+                                         'ShopTradeInHint': 2,
+                                         'VehCompareConfigHint': 3}, offsets={}),
      SETTINGS_SECTIONS.FEEDBACK: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                   DAMAGE_INDICATOR.PRESETS: 1,
                                   DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -215,7 +220,13 @@ class ServerSettingsManager(object):
                                   BATTLE_EVENTS.BASE_CAPTURE: 20,
                                   BATTLE_EVENTS.ENEMY_CRITICAL_HIT: 21,
                                   BATTLE_EVENTS.EVENT_NAME: 22,
-                                  BATTLE_EVENTS.VEHICLE_INFO: 23}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768)}),
+                                  BATTLE_EVENTS.VEHICLE_INFO: 23,
+                                  BATTLE_EVENTS.ENEMY_WORLD_COLLISION: 24,
+                                  DAMAGE_INDICATOR.DYNAMIC_INDICATOR: 25,
+                                  BATTLE_EVENTS.RECEIVED_DAMAGE: 26,
+                                  BATTLE_EVENTS.RECEIVED_CRITS: 27}, offsets={DAMAGE_LOG.SHOW_DETAILS: Offset(8, 768),
+                                  DAMAGE_LOG.SHOW_EVENT_TYPES: Offset(28, 805306368),
+                                  DAMAGE_LOG.EVENT_POSITIONS: Offset(30, 3221225472L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1: Section(masks={'hasNew': 15}, offsets={'item_1': Offset(0, 36863),
                                                         'item_2': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
@@ -261,7 +272,7 @@ class ServerSettingsManager(object):
         storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
          'number': number}
         settingsKey = 'AIM_%(number)d' % {'number': number}
-        storedValue = g_settingsCache.getSectionSettings(storageKey, None)
+        storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[settingsKey].masks
         offsets = self.SECTIONS[settingsKey].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
@@ -299,7 +310,7 @@ class ServerSettingsManager(object):
                 settingsKey = 'AIM_%(number)d' % {'number': number}
                 storageKey = 'AIM_%(section)s_%(number)d' % {'section': section.upper(),
                  'number': number}
-                storingValue = storedValue = g_settingsCache.getSetting(storageKey)
+                storingValue = storedValue = self.settingsCache.getSetting(storageKey)
                 masks = self.SECTIONS[settingsKey].masks
                 offsets = self.SECTIONS[settingsKey].offsets
                 storingValue = self._mapValues(value, storingValue, masks, offsets)
@@ -313,13 +324,13 @@ class ServerSettingsManager(object):
         storingValue = self._buildAimSettings(settings)
         if not storingValue:
             return
-        g_settingsCache.setSettings(storingValue)
+        self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying AIM server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getMarkersSetting(self, section, key, default=None):
         storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
-        storedValue = g_settingsCache.getSectionSettings(storageKey, None)
+        storedValue = self.settingsCache.getSectionSettings(storageKey, None)
         masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
         offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
@@ -328,7 +339,7 @@ class ServerSettingsManager(object):
         settingToServer = {}
         for section, options in settings.iteritems():
             storageKey = 'MARKERS_%(section)s' % {'section': section.upper()}
-            storingValue = storedValue = g_settingsCache.getSetting(storageKey)
+            storingValue = storedValue = self.settingsCache.getSetting(storageKey)
             masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
             offsets = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].offsets
             storingValue = self._mapValues(options, storingValue, masks, offsets)
@@ -342,20 +353,20 @@ class ServerSettingsManager(object):
         storingValue = self._buildMarkersSettings(settings)
         if not storingValue:
             return
-        g_settingsCache.setSettings(storingValue)
+        self.settingsCache.setSettings(storingValue)
         LOG_DEBUG('Applying MARKER server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getVersion(self):
-        return g_settingsCache.getVersion()
+        return self.settingsCache.getVersion()
 
     def setSettings(self, settings):
-        g_settingsCache.setSettings(settings)
+        self.settingsCache.setSettings(settings)
         LOG_DEBUG('Applying server settings: ', settings)
         self._core.onSettingsChanged(settings)
 
     def getSetting(self, key, default=None):
-        return g_settingsCache.getSetting(key, default)
+        return self.settingsCache.getSetting(key, default)
 
     def getSection(self, section, defaults=None):
         result = {}
@@ -389,19 +400,19 @@ class ServerSettingsManager(object):
         self.setSettings(settingToServer)
 
     def getSectionSettings(self, section, key, default=None):
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         masks = self.SECTIONS[section].masks
         offsets = self.SECTIONS[section].offsets
         return self._extractValue(key, storedValue, default, masks, offsets) if storedValue is not None else default
 
     def setSectionSettings(self, section, settings):
         storedSettings = self.getSection(section)
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         storingValue = self._buildSectionSettings(section, settings)
         if storedValue == storingValue:
             return
         else:
-            g_settingsCache.setSectionSettings(section, storingValue)
+            self.settingsCache.setSectionSettings(section, storingValue)
             settingsDiff = {}
             for k, v in settings.iteritems():
                 sV = storedSettings.get(k)
@@ -413,7 +424,7 @@ class ServerSettingsManager(object):
             return
 
     def _buildSectionSettings(self, section, settings):
-        storedValue = g_settingsCache.getSectionSettings(section, None)
+        storedValue = self.settingsCache.getSectionSettings(section, None)
         storingValue = storedValue if storedValue is not None else 0
         sectionMasks = self.SECTIONS[section]
         masks = sectionMasks.masks
@@ -447,19 +458,19 @@ class ServerSettingsManager(object):
     @async
     @process
     def _updateToVersion(self, callback=None):
-        currentVersion = g_settingsCache.getVersion()
+        currentVersion = self.settingsCache.getVersion()
         data = {'gameData': {},
          'gameExtData': {},
          'gameplayData': {},
          'controlsData': {},
          'aimData': {},
          'markersData': {},
-         'keyboardData': {},
          'graphicsData': {},
          'marksOnGun': {},
          'fallout': {},
          'carousel_filter': {},
          'feedbackData': {},
+         'onceOnlyHints': {},
          'clear': {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
@@ -494,9 +505,6 @@ class ServerSettingsManager(object):
         markersData = data.get('markersData', {})
         if markersData:
             settings.update(self._buildMarkersSettings(markersData))
-        keyboardData = data.get('keyboardData', {})
-        if keyboardData:
-            settings.update(keyboardData)
         marksOnGun = data.get('marksOnGun', {})
         if marksOnGun:
             settings[SETTINGS_SECTIONS.MARKS_ON_GUN] = self._buildSectionSettings(SETTINGS_SECTIONS.MARKS_ON_GUN, marksOnGun)
@@ -509,6 +517,10 @@ class ServerSettingsManager(object):
         feedbackData = data.get('feedbackData', {})
         if feedbackData:
             settings[SETTINGS_SECTIONS.FEEDBACK] = self._buildSectionSettings(SETTINGS_SECTIONS.FEEDBACK, feedbackData)
+        onceOnlyHints = data.get('onceOnlyHints', {})
+        clearOnceOnlyHints = clear.get('onceOnlyHints', 0)
+        if onceOnlyHints or clearOnceOnlyHints:
+            settings[SETTINGS_SECTIONS.ONCE_ONLY_HINTS] = self._buildSectionSettings(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, onceOnlyHints) ^ clearOnceOnlyHints
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

@@ -1,4 +1,4 @@
-<prebattle.def>
+<Prebattle.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
   </Implements>
@@ -162,4 +162,4 @@
       <Arg>	UINT8	</Arg>
     </smartDestroy>
   </BaseMethods>
-</prebattle.def>
+</Prebattle.def>

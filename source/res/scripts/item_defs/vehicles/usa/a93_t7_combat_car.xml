@@ -1,4 +1,4 @@
-<a93_t7_combat_car.xml>
+<A93_T7_Combat_Car.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -170,7 +170,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -375,4 +374,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a93_t7_combat_car.xml>
+</A93_T7_Combat_Car.xml>

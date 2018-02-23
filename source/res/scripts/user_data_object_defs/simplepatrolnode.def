@@ -1,4 +1,4 @@
-<simplepatrolnode.def>
+<SimplePatrolNode.def>
   <Domain>	BASE	</Domain>
   <Properties>
     <pathID>
@@ -10,4 +10,4 @@
       <Editable>	true	</Editable>
     </pointNumber>
   </Properties>
-</simplepatrolnode.def>
+</SimplePatrolNode.def>

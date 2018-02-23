@@ -56,3 +56,11 @@ def getAccountDatabaseID():
 
 def isLongDisconnectedFromCenter():
     return getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False)
+
+
+def getAccountHelpersConfig(manager):
+    """ Configures services for package gui.
+    :param manager: helpers.dependency.DependencyManager.
+    """
+    from account_helpers import settings_core
+    manager.install(settings_core.getSettingsCoreConfig)

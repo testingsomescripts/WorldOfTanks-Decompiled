@@ -1,6 +1,7 @@
-<a19_t2_lt.xml>
+<A19_T2_lt.xml>
   <crew>
     <commander>	gunner
+
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -191,7 +192,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -486,4 +486,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a19_t2_lt.xml>
+</A19_T2_lt.xml>

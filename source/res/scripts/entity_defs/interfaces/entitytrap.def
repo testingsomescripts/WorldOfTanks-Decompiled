@@ -1,4 +1,4 @@
-<entitytrap.def>
+<EntityTrap.def>
   <Properties>
     <arenaBase>
       <Type>	MAILBOX	</Type>
@@ -30,4 +30,4 @@
   <BaseMethods>
     <smartDestroy></smartDestroy>
   </BaseMethods>
-</entitytrap.def>
+</EntityTrap.def>

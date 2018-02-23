@@ -1,7 +1,7 @@
-<interclustersender.def>
+<InterclusterSender.def>
   <BaseMethods>
     <acknowledgeInterclusterRequest>
       <Arg>	INT64	</Arg>
     </acknowledgeInterclusterRequest>
   </BaseMethods>
-</interclustersender.def>
+</InterclusterSender.def>

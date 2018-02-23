@@ -1,4 +1,4 @@
-<pillboxbotspawnpoint.def>
+<PillboxBotSpawnPoint.def>
   <Domain>	BASE	</Domain>
   <Properties>
     <team>
@@ -14,4 +14,4 @@
       <Editable>	true	</Editable>
     </botName>
   </Properties>
-</pillboxbotspawnpoint.def>
+</PillboxBotSpawnPoint.def>

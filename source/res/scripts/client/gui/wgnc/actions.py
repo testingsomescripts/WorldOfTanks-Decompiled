@@ -3,10 +3,12 @@
 import BigWorld
 from adisp import process
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING, LOG_DEBUG
-from gui.game_control import getBrowserCtrl
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.events import g_wgncEvents
 from gui.wgnc.settings import WGNC_GUI_TYPE
+from gui.wgnc.common import WebHandlersContainer
+from helpers import dependency
+from skeletons.gui.game_control import IBrowserController, IPromoController
 
 @ReprInjector.simple(('_name', 'name'))
 class _Action(object):
@@ -62,29 +64,39 @@ class _OpenBrowser(_Action):
 
 
 @ReprInjector.withParent()
-class OpenInternalBrowser(_OpenBrowser):
-    __slots__ = ('_browserID',)
+class OpenInternalBrowser(_OpenBrowser, WebHandlersContainer):
+    __slots__ = ('_browserID', '_size', '_showRefresh', '_webHandlerName')
+    browserCtrl = dependency.descriptor(IBrowserController)
 
-    def __init__(self, name, url):
+    def __init__(self, name, url, size=None, showRefresh=True, webHandlerName=None):
         super(OpenInternalBrowser, self).__init__(name, url)
         self._browserID = None
+        self._size = size
+        self._showRefresh = showRefresh
+        self._webHandlerName = webHandlerName
         return
 
     def invoke(self, _, actor=None):
-        ctrl = getBrowserCtrl()
-        if ctrl:
-            if actor:
-                title = actor.getTopic()
-            else:
-                title = None
-            self.__doInvoke(ctrl, title)
+        if actor:
+            title = actor.getTopic()
         else:
-            LOG_ERROR('Browser controller is not found')
+            title = None
+        self._doInvoke(title)
         return
 
     @process
-    def __doInvoke(self, ctrl, title):
-        self._browserID = yield ctrl.load(self._url, browserID=self._browserID, title=title)
+    def _doInvoke(self, title):
+        self._browserID = yield self.browserCtrl.load(self._url, browserID=self._browserID, title=title, browserSize=self._size, showActionBtn=self._showRefresh, handlers=self.getWebHandler(self._webHandlerName))
+
+
+@ReprInjector.withParent()
+class OpenPromoBrowser(OpenInternalBrowser):
+    __slots__ = ()
+    promoCtrl = dependency.descriptor(IPromoController)
+
+    @process
+    def _doInvoke(self, title):
+        self.promoCtrl.showPromo(self._url, title)
 
 
 @ReprInjector.withParent()

@@ -31,7 +31,7 @@ import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG
 
 def async(func):
     """
@@ -119,8 +119,14 @@ def await_deferred(d):
         except:
             promise.set_exception(*sys.exc_info())
 
-    d.addCallback(callback)
-    d.addErrback(errback)
+    futureCallback = getattr(d, 'addCallback', None)
+    if futureCallback is not None:
+        futureCallback(callback)
+        futureErrback = getattr(d, 'addErrback', None)
+        if futureErrback is not None:
+            futureErrback(errback)
+    else:
+        callback(d)
     return promise.get_future()
 
 
@@ -248,7 +254,8 @@ class _Future(object):
     def set_timeout(self, timeout):
         assert self.__timerID is None
         assert timeout >= 0
-        self.__timerID = BigWorld.addTimer(self.__expire, timeout)
+        if not self.__result_set:
+            self.__timerID = BigWorld.addTimer(self.__expire, timeout)
         return
 
     def __cancel_timeout(self):
@@ -411,7 +418,8 @@ class _AsyncExecutor(object):
         try:
             future = next(*args)
             future.then(self.__resume)
-            self.__promise.set_cancel_handler(future.cancel)
+            handler = getattr(future, 'cancel', None)
+            self.__promise.set_cancel_handler(handler)
         except AsyncReturn as r:
             self.__promise.set_value(r.value)
         except StopIteration:

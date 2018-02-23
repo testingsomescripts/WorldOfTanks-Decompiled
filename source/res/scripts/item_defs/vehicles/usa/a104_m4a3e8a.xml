@@ -1,4 +1,4 @@
-<a104_m4a3e8a.xml>
+<A104_M4A3E8A.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -400,7 +400,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -598,4 +597,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a104_m4a3e8a.xml>
+</A104_M4A3E8A.xml>

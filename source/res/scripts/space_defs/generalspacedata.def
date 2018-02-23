@@ -1,4 +1,4 @@
-<generalspacedata.def>
+<GeneralSpaceData.def>
   <Implements>
     <Interface>	SpaceRecording	</Interface>
   </Implements>
@@ -19,4 +19,4 @@
       <Exposed></Exposed>
     </itemsVisibilityMask>
   </Properties>
-</generalspacedata.def>
+</GeneralSpaceData.def>
