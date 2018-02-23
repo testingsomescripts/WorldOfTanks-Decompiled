@@ -13,7 +13,7 @@ from helpers import dependency
 from helpers import getLanguageCode
 from skeletons.connection_mgr import IConnectionManager
 
-class _STATUS:
+class _STATUS(object):
     OK = 0
     HTTP_SERVER_ERROR = 1
     WEB_BROWSER_ERROR = 2
@@ -68,6 +68,7 @@ class WebBridge(object):
         from Manager import SOCIAL_NETWORKS
         self.__preferences['login_type'] = socialNetwork or SOCIAL_NETWORKS.WGNI
         self.connectionMgr.initiateConnection(self.__loginParams, '', self.__preferences['server_name'])
+        self.connectionMgr.setLastLogin(self.__loginParams['login'])
 
     def __getWgniParams(self, isExternal, isRegistration):
         params = {'game': 'wot',

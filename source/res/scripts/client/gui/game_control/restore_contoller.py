@@ -6,7 +6,6 @@ from operator import itemgetter
 import BigWorld
 import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
@@ -39,9 +38,6 @@ class RestoreController(IRestoreController, Notifiable):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
-        """
-        RestoreController send event onRestoreChangeNotify on restore left time change
-        """
         super(RestoreController, self).__init__()
         self.__eventManager = Event.EventManager()
         self.__restoreNotifyTimeCallback = None
@@ -53,7 +49,6 @@ class RestoreController(IRestoreController, Notifiable):
         self.__waitNextUpdate = False
         self.onRestoreChangeNotify = Event.Event(self.__eventManager)
         self.onTankmenBufferUpdated = Event.Event(self.__eventManager)
-        LOG_DEBUG('PATCH FOR WOTD-91767 IS APPLIED')
         return
 
     def init(self):
@@ -89,12 +84,6 @@ class RestoreController(IRestoreController, Notifiable):
         return self.__tankmenList
 
     def getTankmenBeingDeleted(self, newTankmenCount=1):
-        """
-          returns tankmen which will be deleted from buffer in case it will be overflowed (maximum
-          buffer size is exceeded) after insertion in it specified number of tankmen
-        :param newTankmenCount: number of tankmen being added to buffer
-        :return: list of tankmen which will be deleted from buffer
-        """
         result = []
         tankmenCountToDelete = len(self.__tankmenList) + newTankmenCount - self.__maxTankmenBufferLength
         if tankmenCountToDelete > 0:
@@ -102,14 +91,6 @@ class RestoreController(IRestoreController, Notifiable):
         return result
 
     def getTankmenDeletedBySelling(self, vehicle):
-        """
-        returns tankmen which would be deleted from buffer and added to it after
-        vehicle sell operation:
-        :param vehicle: vehicle being sold
-        :return:
-               - list of tankmen which will be added to buffer
-               - list of tankmen which will be deleted from buffer in case if buffer is overflowed
-        """
         newTankmen = [ tankman for _, tankman in vehicle.crew if tankman is not None and tankman.isRestorable() ]
         return (newTankmen, self.getTankmenBeingDeleted(len(newTankmen)))
 
