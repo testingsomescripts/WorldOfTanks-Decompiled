@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/QuestsSeasonAwardsWindow.py
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 from helpers.i18n import makeString as _ms
@@ -15,7 +16,7 @@ class QuestsSeasonAwardsWindow(QuestsSeasonAwardsWindowMeta):
 
     def __init__(self, ctx = None):
         super(QuestsSeasonAwardsWindow, self).__init__()
-        raise 'questsType' in ctx or AssertionError
+        assert 'questsType' in ctx
         self.__questsType = ctx['questsType']
 
     def onWindowClose(self):

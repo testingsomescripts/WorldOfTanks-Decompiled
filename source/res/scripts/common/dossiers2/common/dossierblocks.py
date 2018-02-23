@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBlocks.py
 import struct
 import weakref
@@ -73,11 +74,11 @@ class StaticDossierBlockDescr(object):
 
     def updateDossierCompDescr(self, dossierCompDescrArray, offset, size):
         if size == 0:
-            if not self.__isExpanded:
-                raise AssertionError
-                compDescrArray = array('c', struct.pack(self.__format, *self.__getValuesForPacking()))
-                return (dossierCompDescrArray[:offset] + compDescrArray + dossierCompDescrArray[offset:], self.__blockSize)
-            self.__isExpanded and struct.pack_into(self.__format, dossierCompDescrArray, offset, *self.__getValuesForPacking())
+            assert self.__isExpanded
+            compDescrArray = array('c', struct.pack(self.__format, *self.__getValuesForPacking()))
+            return (dossierCompDescrArray[:offset] + compDescrArray + dossierCompDescrArray[offset:], self.__blockSize)
+        if self.__isExpanded:
+            struct.pack_into(self.__format, dossierCompDescrArray, offset, *self.__getValuesForPacking())
             return (dossierCompDescrArray, self.__blockSize)
         for record in self.__changed:
             packing = self.__packing[record]
@@ -433,7 +434,7 @@ class BinarySetDossierBlockDescr(object):
         return bool(self.__unpackedData[byteNum] & bitMask)
 
     def __findSizeDiff(self, value):
-        raise value in self.__valueToPosition or AssertionError('The value should be present in the set value list')
+        assert value in self.__valueToPosition, 'The value should be present in the set value list'
         byteNum, bitMask = self.__valueToPosition[value]
         sizeRequired = byteNum + 1
         packedDataSize = len(self.__unpackedData)

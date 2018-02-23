@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FlockExotic.py
 import BigWorld
 import math
@@ -48,7 +49,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         CallbackDelayer.destroy(self)
 
     def name(self):
-        return 'FlockExotic'
+        pass
 
     def __loadModels(self, prereqs):
         try:

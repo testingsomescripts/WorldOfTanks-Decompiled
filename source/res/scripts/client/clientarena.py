@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientArena.py
 import Math
 import BigWorld, ResMgr
@@ -97,10 +98,10 @@ class ClientArena(object):
 
     def updatePositions(self, indices, positions):
         self.__positions.clear()
-        lenPos = indices and len(positions)
-        lenInd = len(indices)
-        if not lenPos == 2 * lenInd:
-            raise AssertionError
+        if indices:
+            lenPos = len(positions)
+            lenInd = len(indices)
+            assert lenPos == 2 * lenInd
             indexToId = self.__vehicleIndexToId
             for i in xrange(0, lenInd):
                 if indices[i] in indexToId:

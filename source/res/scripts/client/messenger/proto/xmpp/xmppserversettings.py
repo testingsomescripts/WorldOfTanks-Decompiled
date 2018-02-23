@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/XmppServerSettings.py
 import types
 from debug_utils import LOG_ERROR
@@ -121,7 +122,7 @@ class XmppServerSettings(IProtoSettings):
     def getFullJID(self, databaseID = None):
         if databaseID is None:
             databaseID = getPlayerDatabaseID()
-        raise databaseID or AssertionError("Player's databaseID can not be empty")
+        assert databaseID, "Player's databaseID can not be empty"
         jid = ContactJID()
         jid.setNode(databaseID)
         jid.setDomain(self.domain)

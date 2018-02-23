@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortCreateDirectionWindow.py
 from fortified_regions import g_cache as g_fortCache
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta

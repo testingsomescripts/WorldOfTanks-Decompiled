@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientFortifiedRegion.py
 import struct
 import itertools
@@ -260,8 +261,6 @@ class ClientFortifiedRegion(FortifiedRegionBase):
             if dbID in building.attachedPlayers:
                 return building.typeID
 
-        return 0
-
     def getTransportationLevel(self):
         base = self.getBuilding(FORT_BUILDING_TYPE.MILITARY_BASE)
         return fortified_regions.g_cache.transportLevels[base.level]
@@ -411,7 +410,6 @@ class ClientFortifiedRegion(FortifiedRegionBase):
         start, finish = self.getDefencePeriod()
         if start and finish:
             return '%s - %s' % (BigWorld.wg_getShortTimeFormat(start), BigWorld.wg_getShortTimeFormat(finish))
-        return ''
 
     def isOnDefenceHour(self):
         if not self.isDefenceHourEnabled():
@@ -629,7 +627,7 @@ class ClientFortifiedRegion(FortifiedRegionBase):
     def _unpackFortBattleUnit(self, unpacking):
         result = FortifiedRegionBase._unpackFortBattleUnit(self, unpacking)
         try:
-            battleID, = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
+            battleID = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
             self.onFortBattleUnitReceived(battleID)
         except struct.error as e:
             LOG_ERROR(e)

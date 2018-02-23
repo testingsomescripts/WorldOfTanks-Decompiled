@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/FileList.py
 import os
 from Tkinter import *
@@ -13,10 +14,10 @@ class FileList:
         self.vars = {}
 
     def open(self, filename, action = None):
-        if not filename:
-            raise AssertionError
-            filename = self.canonize(filename)
-            os.path.isdir(filename) and tkMessageBox.showerror('File Error', '%r is a directory.' % (filename,), master=self.root)
+        assert filename
+        filename = self.canonize(filename)
+        if os.path.isdir(filename):
+            tkMessageBox.showerror('File Error', '%r is a directory.' % (filename,), master=self.root)
             return None
         else:
             key = os.path.normcase(filename)
@@ -43,8 +44,6 @@ class FileList:
             reply = edit.close()
             if reply == 'cancel':
                 break
-
-        return 'break'
 
     def unregister_maybe_terminate(self, edit):
         try:

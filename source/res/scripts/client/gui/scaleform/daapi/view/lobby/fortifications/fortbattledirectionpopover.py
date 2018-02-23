@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBattleDirectionPopover.py
 import operator
 import sys
@@ -145,7 +146,6 @@ class FortBattleDirectionPopover(FortBattleDirectionPopoverMeta, FortViewHelper)
                 return text_styles.standard(i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_BEFOREBATTLE) + ' ')
             inBattleText = ' ' + i18n.makeString(FORTIFICATIONS.FORTCLANBATTLELIST_RENDERCURRENTTIME_ISBATTLE)
             return text_styles.error(icons.swords() + inBattleText)
-        return ''
 
     def __invalidateCallbackHandler(self):
         self._prepareAndSetData()

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/ArtyHitMarker.py
 from helpers.CallbackDelayer import CallbackDelayer
 from AvatarInputHandler.control_modes import _SuperGunMarker, _SPGFlashGunMarker

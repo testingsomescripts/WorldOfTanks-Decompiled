@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodies.py
 from WeakMethod import WeakMethod
 from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES

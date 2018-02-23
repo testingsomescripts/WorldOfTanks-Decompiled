@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPLog.py
 import sys
 import Settings
@@ -10,9 +11,9 @@ def LOG_VOIP_INT(msg, *kargs):
     global g_useVivoxlog
     if g_useVivoxlog is None:
         checkUseVivoxLog()
-    if not g_useVivoxlog is not None:
-        raise AssertionError
-        g_useVivoxlog and _writeLog(msg, kargs)
+    assert g_useVivoxlog is not None
+    if g_useVivoxlog:
+        _writeLog(msg, kargs)
     elif kargs:
         LOG_VOIP(msg, kargs)
     else:

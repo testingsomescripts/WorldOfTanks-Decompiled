@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/DebugView.py
 import BigWorld
 import GUI
@@ -427,8 +428,8 @@ class DebugViewItem():
         self._guiValue.verticalAnchor = 'TOP'
 
     def __destroyGUI(self):
-        raise self._guiName.parent is None or AssertionError
-        raise self._guiValue.parent is None or AssertionError
+        assert self._guiName.parent is None
+        assert self._guiValue.parent is None
         GUI.delRoot(self._guiName)
         self._guiName = None
         GUI.delRoot(self._guiValue)

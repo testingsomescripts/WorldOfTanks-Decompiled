@@ -1,8 +1,12 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/AwardController.py
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
 import ArenaType
+import potapov_quests
+from potapov_quests import PQ_BRANCH
+import gui.awards.event_dispatcher as shared_events
 from goodies.goodie_constants import GOODIE_TARGET_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
@@ -10,26 +14,22 @@ from gui.goodies.GoodiesCache import g_goodiesCache
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.prb_control.storage import prequeue_storage_getter
 from gui.shared.economics import getPremiumCostActionPrc
-import potapov_quests
-from potapov_quests import PQ_BRANCH
-from shared_utils import findFirst
-import gui.awards.event_dispatcher as shared_events
 from constants import EVENT_TYPE, QUEUE_TYPE
 from helpers import i18n
 from chat_shared import SYS_MESSAGE_TYPE
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR
-from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from messenger.proto.events import g_messengerEvents
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
+from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-from gui.server_events import events_dispatcher as quests_events
-from gui.server_events import g_eventsCache
+from gui.server_events import g_eventsCache, events_dispatcher as quests_events
 from gui.game_control.controllers import Controller
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.gui_items.Tankman import Tankman
@@ -61,7 +61,8 @@ class AwardController(Controller, GlobalListener):
          QuestBoosterAwardHandler(self),
          BoosterAfterBattleAwardHandler(self),
          GoldFishHandler(self),
-         FalloutVehiclesBuyHandler(self)]
+         FalloutVehiclesBuyHandler(self),
+         TelecomHandler(self)]
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
 
@@ -644,3 +645,23 @@ class GoldFishHandler(AwardHandler):
     def _showAward(self, ctx):
         if isGoldFishActionActive() and isTimeToShowGoldFishPromo():
             g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GOLD_FISH_WINDOW))
+
+
+class TelecomHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(TelecomHandler, self).__init__(SYS_MESSAGE_TYPE.telecomOrderCreated.index(), awardCtrl)
+
+    @staticmethod
+    def __getVehileDesrs(data):
+        return [ vehicles_core.getVehicleType(vehDesr).compactDescr for vehDesr in data['data']['vehicles'] ]
+
+    def _showAward(self, ctx):
+        data = ctx[1].data
+        hasCrew = TelecomReceivedInvoiceFormatter.invoiceHasCrew(data)
+        hasBrotherhood = TelecomReceivedInvoiceFormatter.invoiceHasBrotherhood(data)
+        vehicleDesrs = self.__getVehileDesrs(data)
+        if vehicleDesrs:
+            shared_events.showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood)
+        else:
+            LOG_ERROR("Can't show telecom award window!")

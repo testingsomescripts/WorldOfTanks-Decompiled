@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/QuestsControl.py
 from collections import namedtuple
 from account_helpers.AccountSettings import AccountSettings, IGR_PROMO

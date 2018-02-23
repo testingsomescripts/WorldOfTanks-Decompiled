@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileUtils.py
 import BigWorld
 from debug_utils import LOG_ERROR
@@ -385,11 +386,11 @@ class ProfileUtils(object):
             return ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
-    def getEfficiencyPercent(dividend, delimiter):
+    def getEfficiencyPercent(dividend, delimiter, unavailableValue = UNAVAILABLE_VALUE):
         if delimiter != 0:
             return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL
         else:
-            return ProfileUtils.UNAVAILABLE_VALUE
+            return unavailableValue
 
     @staticmethod
     def packLditItemData(text, description, tooltip, icon, tooltipData = None):

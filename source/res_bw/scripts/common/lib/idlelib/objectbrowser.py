@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ObjectBrowser.py
 from idlelib.TreeWidget import TreeItem, TreeNode, ScrolledCanvas
 from repr import Repr
@@ -81,7 +82,7 @@ class ClassTreeItem(ObjectTreeItem):
 class AtomicObjectTreeItem(ObjectTreeItem):
 
     def IsExpandable(self):
-        return 0
+        pass
 
 
 class SequenceTreeItem(ObjectTreeItem):

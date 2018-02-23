@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/CyberSportSendInvitesWindow.py
 from adisp import process
 from gui import SystemMessages
@@ -11,7 +12,7 @@ class CyberSportSendInvitesWindow(SendInvitesWindow, ClubListener):
 
     def __init__(self, ctx):
         super(CyberSportSendInvitesWindow, self).__init__(ctx)
-        raise 'clubDbID' in ctx or AssertionError
+        assert 'clubDbID' in ctx
         self.__clubDbID = ctx['clubDbID']
         self.__foundUsersCache = {}
 

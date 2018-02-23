@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/FortifiedRegionBase.py
 import time
 import struct
@@ -1058,7 +1059,7 @@ class FortifiedRegionBase(OpsUnpacker):
         fmt = '<%dq' % lenFavorites
         self.favorites = set(struct.unpack_from(fmt, packed, offset))
         offset += struct.calcsize(fmt)
-        raise offset == len(packed) or AssertionError
+        assert offset == len(packed)
 
     def _unpackBuilding(self, buildingCompactDescr, buildTypeID):
         building = BuildingDescr(buildingCompactDescr)
@@ -1485,9 +1486,9 @@ class FortifiedRegionBase(OpsUnpacker):
     def _changeOrderCount(self, consumableTypeID, level, delta):
         LOG_OGNICK('Fort(id=%d)._changeOrderCount' % self.dbID, consumableTypeID, level, delta)
         count = self.orders.get(consumableTypeID, (0, 0))[0] + delta
-        if not count >= 0:
-            raise AssertionError
-            self.orders[consumableTypeID] = count and (count, level)
+        assert count >= 0
+        if count:
+            self.orders[consumableTypeID] = (count, level)
         else:
             self.orders.pop(consumableTypeID, None)
         self.storeOp(FORT_OP.CHANGE_ORDER_COUNT, consumableTypeID, level, delta)
@@ -1820,7 +1821,7 @@ class FortifiedRegionBase(OpsUnpacker):
         self.storeOp(FORT_OP.SET_ENEMY_READY_FOR_BATTLE, battleID, isReady)
 
     def _unpackFortBattleUnit(self, unpacking):
-        battleID, = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
+        battleID = struct.unpack_from(self.FORMAT_FORT_BATTLE_UNIT_HEADER, unpacking)
         unit = UnitBase()
         unpacking = unit.unpack(unpacking[self.SIZE_FORT_BATTLE_UNIT_HEADER:])
         self.battleUnits[battleID] = unit.pack()

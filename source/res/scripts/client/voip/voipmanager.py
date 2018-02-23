@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPManager.py
 import BigWorld
 import Event
@@ -145,18 +146,18 @@ class VOIPManager(VOIPHandler):
 
     def initialize(self, domain):
         LOG_VOIP_INT('VOIPManager.Initialize')
-        if not self.__initialized is False:
-            raise AssertionError
-            self.__voipDomain = domain
-            self.__testDomain = 'sip:confctl-2@' + self.__voipDomain.partition('www.')[2]
-            LOG_VOIP_INT("voip_domain: '%s'" % self.__voipDomain)
-            LOG_VOIP_INT("test_domain: '%s'" % self.__testDomain)
-            self.__fsm.update(self)
-            logLevel = 0
-            section = Settings.g_instance.userPrefs
-            if section.has_key('development'):
-                section = section['development']
-                logLevel = section.has_key('vivoxLogLevel') and section['vivoxLogLevel'].asInt
+        assert self.__initialized is False
+        self.__voipDomain = domain
+        self.__testDomain = 'sip:confctl-2@' + self.__voipDomain.partition('www.')[2]
+        LOG_VOIP_INT("voip_domain: '%s'" % self.__voipDomain)
+        LOG_VOIP_INT("test_domain: '%s'" % self.__testDomain)
+        self.__fsm.update(self)
+        logLevel = 0
+        section = Settings.g_instance.userPrefs
+        if section.has_key('development'):
+            section = section['development']
+            if section.has_key('vivoxLogLevel'):
+                logLevel = section['vivoxLogLevel'].asInt
         vinit = {KEY_SERVER: 'http://%s/api2' % self.__voipDomain,
          KEY_MIN_PORT: '0',
          KEY_MAX_PORT: '0',
@@ -291,7 +292,7 @@ class VOIPManager(VOIPHandler):
 
     def __muteParticipantForMe(self, dbid, mute):
         LOG_VOIP_INT('VOIPManager.MuteParticipantForMe: %d, %s' % (dbid, str(mute)))
-        raise dbid in self.__channelUsers or AssertionError
+        assert dbid in self.__channelUsers
         self.__channelUsers[dbid]['muted'] = mute
         uri = self.__channelUsers[dbid]['uri']
         cmd = {KEY_COMMAND: CMD_SET_PARTICIPANT_MUTE,
@@ -367,10 +368,10 @@ class VOIPManager(VOIPHandler):
             LOG_VOIP_INT('---------------------------')
 
     def onVoipDestroyed(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
 
     def onCaptureDevicesArrived(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
         captureDevicesCount = int(data[KEY_COUNT])
         self.__captureDevices = []
         for i in xrange(captureDevicesCount):
@@ -380,16 +381,16 @@ class VOIPManager(VOIPHandler):
         self.OnCaptureDevicesUpdated()
 
     def onSetCaptureDevice(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
 
     def onSetLocalSpeakerVolume(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
 
     def onSetLocalMicVolume(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
 
     def onMuteLocalMic(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
 
     def onLoginStateChange(self, data):
         returnCode = int(data[KEY_RETURN_CODE])
@@ -414,15 +415,15 @@ class VOIPManager(VOIPHandler):
                 self.onFailedToConnect()
 
     def onSessionAdded(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
-        raise not self.__channelUsers or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
+        assert not self.__channelUsers
         self.__currentChannel = data[KEY_URI]
         self.__setVolume()
         self.__fsm.update(self)
         self.onJoinedChannel(data)
 
     def onSessionRemoved(self, data):
-        raise int(data[KEY_RETURN_CODE]) == CODE_SUCCESS or AssertionError
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
         for dbid in self.__channelUsers.keys():
             self.onPlayerSpeaking(dbid, False)
 
@@ -443,37 +444,37 @@ class VOIPManager(VOIPHandler):
             self.__clearUser()
 
     def onParticipantAdded(self, data):
-        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
-            raise AssertionError
-            uri = data[KEY_PARTICIPANT_URI]
-            dbid, _ = self.__extractDBIDFromURI(uri)
-            if dbid == -1:
-                return
-            self.__channelUsers[dbid] = {'talking': False,
-             'uri': uri,
-             'muted': False}
-            user = self.usersStorage.getUser(dbid)
-            user and user.isMuted() and self.__muteParticipantForMe(dbid, True)
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
+        uri = data[KEY_PARTICIPANT_URI]
+        dbid, _ = self.__extractDBIDFromURI(uri)
+        if dbid == -1:
+            return
+        self.__channelUsers[dbid] = {'talking': False,
+         'uri': uri,
+         'muted': False}
+        user = self.usersStorage.getUser(dbid)
+        if user and user.isMuted():
+            self.__muteParticipantForMe(dbid, True)
 
     def onParticipantRemoved(self, data):
-        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
-            raise AssertionError
-            uri = data[KEY_PARTICIPANT_URI]
-            dbid, _ = self.__extractDBIDFromURI(uri)
-            del dbid in self.__channelUsers and self.__channelUsers[dbid]
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
+        uri = data[KEY_PARTICIPANT_URI]
+        dbid, _ = self.__extractDBIDFromURI(uri)
+        if dbid in self.__channelUsers:
+            del self.__channelUsers[dbid]
         self.onPlayerSpeaking(dbid, False)
 
     def onParticipantUpdated(self, data):
-        if not int(data[KEY_RETURN_CODE]) == CODE_SUCCESS:
-            raise AssertionError
-            uri = data[KEY_PARTICIPANT_URI]
-            dbid, participantLogin = self.__extractDBIDFromURI(uri)
-            if dbid == -1:
-                return
-            talking = int(data[KEY_IS_SPEAKING])
-            channelUser = self.__channelUsers[dbid]
-            if dbid in self.__channelUsers:
-                channelUser['talking'] = channelUser['talking'] != talking and talking
+        assert int(data[KEY_RETURN_CODE]) == CODE_SUCCESS
+        uri = data[KEY_PARTICIPANT_URI]
+        dbid, participantLogin = self.__extractDBIDFromURI(uri)
+        if dbid == -1:
+            return
+        talking = int(data[KEY_IS_SPEAKING])
+        channelUser = self.__channelUsers[dbid]
+        if dbid in self.__channelUsers:
+            if channelUser['talking'] != talking:
+                channelUser['talking'] = talking
                 self.__muffleMasterVolume() if self.__isAnyoneTalking() else self.__restoreMasterVolume()
         self.onPlayerSpeaking(dbid, talking)
 

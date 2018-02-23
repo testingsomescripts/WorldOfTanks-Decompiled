@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
@@ -59,7 +60,7 @@ class RequestCriteria(object):
         return True
 
     def __or__(self, other):
-        raise isinstance(other, RequestCriteria) or AssertionError
+        assert isinstance(other, RequestCriteria)
         return RequestCriteria(*(self._conditions + other.getConditions()))
 
     def __invert__(self):

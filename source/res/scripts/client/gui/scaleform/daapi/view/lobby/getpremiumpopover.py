@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/GetPremiumPopover.py
 import BigWorld
 from gui.LobbyContext import g_lobbyContext
@@ -25,7 +26,8 @@ class GetPremiumPopover(GetPremiumPopoverMeta):
         return
 
     def onActionBtnClick(self, clientUniqueID):
-        event_dispatcher.showPremiumWindow(g_lobbyContext.getArenaUniqueIDByClientID(clientUniqueID))
+        event_dispatcher.showPremiumWindow(arenaUniqueID=g_lobbyContext.getArenaUniqueIDByClientID(clientUniqueID), premiumBonusesDiff={'xpDiff': self.__context.xpDiff,
+         'creditDiff': self.__context.creditsDiff})
         self.destroy()
 
     def __makeVO(self, data):

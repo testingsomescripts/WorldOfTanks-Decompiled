@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/ToolTip.py
 import BigWorld
 import GUI
@@ -175,7 +176,7 @@ class ToolTipManager(object):
         self.infoAreaBottom = 0
         self.infoAreaRight = 0
         self.showToolTipCallback = None
-        raise ToolTipManager.instance == None or AssertionError
+        assert ToolTipManager.instance == None
         ToolTipManager.instance = self
         return
 

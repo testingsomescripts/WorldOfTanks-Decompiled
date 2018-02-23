@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Bloom.py
 """
 This Module implements some utility functions to help manipulate and 

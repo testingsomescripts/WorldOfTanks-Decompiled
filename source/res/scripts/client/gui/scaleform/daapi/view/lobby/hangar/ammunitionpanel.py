@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
@@ -181,8 +182,6 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         for idx, item in enumerate(seq):
             if item['isSelected']:
                 return idx
-
-        return -1
 
     def _getInstallReason(self, module, vehicle, reason, slotIdx = None):
         _, installReason = module.mayInstall(vehicle, slotIdx)

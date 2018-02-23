@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MechEngineerAchievement.py
 from dossiers2.custom.helpers import getMechanicEngineerRequirements
 from abstract import NationSpecificAchievement
@@ -11,7 +12,7 @@ class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
         HasVehiclesList.__init__(self)
 
     def getVehiclesListTitle(self):
-        return 'vehiclesToResearch'
+        pass
 
     def isActive(self):
         return not len(self.getVehiclesData())

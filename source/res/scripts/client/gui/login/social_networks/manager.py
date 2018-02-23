@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/social_networks/Manager.py
 import BigWorld
 from gui import GUI_SETTINGS
@@ -34,6 +35,8 @@ class Manager(CredentialsLoginManager):
         return
 
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
+        authMethod = CONNECTION_METHOD.TOKEN
+        serverName = self._getHost(authMethod, serverName)
         self._preferences['session'] = BigWorld.wg_cpsalt(self._preferences['session'])
         self._preferences['remember_user'] = rememberUser
         self._preferences['login_type'] = socialNetworkName
@@ -41,7 +44,7 @@ class Manager(CredentialsLoginManager):
         loginParams = {'login': self._preferences['login'],
          'session': self._preferences['session'],
          'temporary': str(int(not rememberUser)),
-         'auth_method': CONNECTION_METHOD.TOKEN,
+         'auth_method': authMethod,
          'requested_for': 'wot',
          'ip': '127.0.0.1'}
         return self.__webBridge.initiateLogin(loginParams, socialNetworkName != SOCIAL_NETWORKS.WGNI, isRegistration)

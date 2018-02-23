@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/DocXMLRPCServer.py
 """Self documenting XML-RPC Server.
 
@@ -154,7 +155,7 @@ class XMLRPCDocGenerator:
                 else:
                     method = method_info
             else:
-                raise 0 or AssertionError('Could not find method in self.functions and no instance installed')
+                assert 0, 'Could not find method in self.functions and no instance installed'
             methods[method_name] = method
 
         documenter = ServerHTMLDoc()

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/PlayerCtxStorage.py
 import types
 import Event
@@ -36,12 +37,10 @@ class PlayerCtxStorage(SimpleCachedStorage):
     def getClanAbbrev(self):
         if self.__clanInfo:
             return self.__clanInfo.abbrev
-        return ''
 
     def getClanRole(self):
         if self.__clanInfo:
             return self.__clanInfo.role
-        return 0
 
     def setClanInfo(self, clanInfo):
         self.__clanInfo = clanInfo

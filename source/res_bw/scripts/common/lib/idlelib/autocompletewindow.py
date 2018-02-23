@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoCompleteWindow.py
 """
 An auto-completion window for IDLE, used by the AutoComplete extension
@@ -254,12 +255,12 @@ class AutoCompleteWindow:
                 if keysym == 'Prior':
                     newsel = max(0, cursel - jump)
                 else:
-                    raise keysym == 'Next' or AssertionError
+                    assert keysym == 'Next'
                     newsel = min(len(self.completions) - 1, cursel + jump)
             elif keysym == 'Up':
                 newsel = max(0, cursel - 1)
             else:
-                raise keysym == 'Down' or AssertionError
+                assert keysym == 'Down'
                 newsel = min(len(self.completions) - 1, cursel + 1)
             self.listbox.select_clear(cursel)
             self.listbox.select_set(newsel)

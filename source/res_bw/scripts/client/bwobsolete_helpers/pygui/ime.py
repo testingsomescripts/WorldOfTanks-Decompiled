@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/IME.py
 import BigWorld
 import GUI
@@ -109,13 +110,13 @@ class CompositionWindow(object):
         if len(BigWorld.ime.composition) == 0:
             self.comp.visible = False
             return False
-        if not len(BigWorld.ime.compositionAttr) == len(BigWorld.ime.composition):
-            raise AssertionError
-            for name, comp in self.comp.children:
-                if name not in ('cursor', 'text'):
-                    self.comp.delChild(comp)
+        assert len(BigWorld.ime.compositionAttr) == len(BigWorld.ime.composition)
+        for name, comp in self.comp.children:
+            if name not in ('cursor', 'text'):
+                self.comp.delChild(comp)
 
-            BigWorld.ime.language == 'KOREAN' and self._populateKorean(fontName)
+        if BigWorld.ime.language == 'KOREAN':
+            self._populateKorean(fontName)
         else:
             self._populateChineseJapanese(fontName)
         self.comp.visible = True
@@ -126,7 +127,7 @@ class CompositionWindow(object):
         self.comp.text.font = fontName
         self.comp.text.text = ''
         compBlocks = _compositionStringBlocks()
-        raise len(compBlocks) > 0 or AssertionError
+        assert len(compBlocks) > 0
         self._firstTargetConvertedBlock = -1
         fullWidth = 0
         idx = 0

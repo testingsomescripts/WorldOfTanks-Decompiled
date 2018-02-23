@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyMainWindow.py
 import BigWorld
 from constants import PREBATTLE_TYPE
@@ -36,7 +37,7 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, GlobalListener):
         return pInfo.isInSlot
 
     def getIntroViewAlias(self):
-        return ''
+        pass
 
     def getPrbType(self):
         return PREBATTLE_TYPE.NONE

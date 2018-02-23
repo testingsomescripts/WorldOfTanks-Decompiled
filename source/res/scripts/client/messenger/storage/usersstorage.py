@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/UsersStorage.py
 from collections import deque, defaultdict
 import types
@@ -258,4 +259,4 @@ class UsersStorage(RevCachedStorage):
         return result
 
     def _getServerRevKey(self):
-        return 'USERS_STORAGE_REV'
+        pass

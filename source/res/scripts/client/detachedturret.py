@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DetachedTurret.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -272,9 +273,9 @@ class VehicleEnterTimer(object):
             return vehicle
 
     def __startCallback(self):
-        if not self.__callbackId is None:
-            raise AssertionError
-            self.__callbackId = self.__time < self.__maxTime and BigWorld.callback(self.__timeOut, self.__onCallback)
+        assert self.__callbackId is None
+        if self.__time < self.__maxTime:
+            self.__callbackId = BigWorld.callback(self.__timeOut, self.__onCallback)
         else:
             self._onTimedOutTick()
         return

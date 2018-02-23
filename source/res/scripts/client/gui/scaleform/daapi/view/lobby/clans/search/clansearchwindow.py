@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchWindow.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -240,7 +241,6 @@ class _ClanSearchDataProvider(SortableDAAPIDataProvider, ClanEmblemsHelper):
     def getSelectedIdx(self):
         if self.__selectedID in self.__mapping:
             return self.__mapping[self.__selectedID]
-        return -1
 
     def setSelectedID(self, id):
         self.__selectedID = id

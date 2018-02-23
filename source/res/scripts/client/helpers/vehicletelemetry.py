@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/VehicleTelemetry.py
 import cPickle
 import zlib
@@ -12,7 +13,7 @@ from physics_shared import G
 class VehicleTelemetry:
 
     def __init__(self, avatar):
-        raise avatar is not None or AssertionError
+        assert avatar is not None
         self.avatar = avatar
         self.dynamicsLog = None
         self.dynamicsLogKey = None
@@ -81,7 +82,7 @@ class VehicleTelemetry:
             self.closeDynamicsLog()
         name = VehicleTelemetry.NAME_DELIMITER.join((self.logName, key))
         self.logPath = os.path.join(VehicleTelemetry.DYNAMICS_LOG_DIR, name)
-        raise not os.path.exists(self.logPath) or AssertionError
+        assert not os.path.exists(self.logPath)
         self.dynamicsLog = open(self.logPath, 'w')
         self.refTime = refTime
         self.refDist = refDist

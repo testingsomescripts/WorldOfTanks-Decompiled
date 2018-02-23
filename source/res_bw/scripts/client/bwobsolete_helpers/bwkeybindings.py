@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/BWKeyBindings.py
 """
 Utility methods for managing keybindings
@@ -69,9 +70,9 @@ class BWActionHandler(object):
         entityClass = self.__class__
         self.actionFunctions = {}
         for name, function in entityClass.__dict__.items():
-            actionNames = hasattr(function, '_BWKeyBindingActionNames') and function._BWKeyBindingActionNames
-            if not callable(function):
-                raise AssertionError
+            if hasattr(function, '_BWKeyBindingActionNames'):
+                actionNames = function._BWKeyBindingActionNames
+                assert callable(function)
                 function = getattr(self, name)
                 for actionName, args, kargs in actionNames:
                     self.actionFunctions[actionName] = partial(getattr(self, name), *args, **kargs)
@@ -280,10 +281,10 @@ class _ActionBinding:
         self.defaultBindings = self.bindings
 
     def addPreferenceKeyBindings(self, preferenceBindings):
-        if not self.actionName == preferenceBindings.actionName:
-            raise AssertionError
-            newBindings = sorted(preferenceBindings.getBindings())
-            self.bindings = newBindings != sorted(self.defaultBindings) and tuple(newBindings)
+        assert self.actionName == preferenceBindings.actionName
+        newBindings = sorted(preferenceBindings.getBindings())
+        if newBindings != sorted(self.defaultBindings):
+            self.bindings = tuple(newBindings)
 
     def writePreferenceKeyBindings(self, dataSection):
         if sorted(self.bindings) != sorted(self.defaultBindings):
@@ -297,11 +298,11 @@ class _ActionBinding:
                 newDataSection.writeStrings('keys', (bindingString.strip(),))
 
     def addBinding(self, binding):
-        raise binding not in self.bindings or AssertionError
+        assert binding not in self.bindings
         self.bindings += (tuple(binding),)
 
     def removeBinding(self, binding):
-        raise binding in self.bindings or AssertionError
+        assert binding in self.bindings
         newBindings = list(self.bindings)
         newBindings.remove(binding)
         self.bindings = tuple(newBindings)

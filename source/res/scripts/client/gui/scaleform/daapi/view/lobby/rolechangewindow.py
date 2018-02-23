@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
 from helpers.i18n import makeString
@@ -46,7 +47,6 @@ def _isRoleSlotTaken(tankmen, vehicle, role):
 def _getTooltipHeader(tankmenCountWithSameRole, isAvailable):
     if tankmenCountWithSameRole > 0 and isAvailable:
         return makeString(TOOLTIPS.ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER)
-    return ''
 
 
 def _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, role, selectedVehicle):

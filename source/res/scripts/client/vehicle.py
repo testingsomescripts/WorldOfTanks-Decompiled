@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vehicle.py
 import BigWorld, Math
 import weakref, random
@@ -148,7 +149,7 @@ class Vehicle(BigWorld.Entity):
             del _g_respawnCache[self.id]
         self.__stopExtras()
         BigWorld.player().vehicle_onLeaveWorld(self)
-        raise not self.isStarted or AssertionError
+        assert not self.isStarted
         return
 
     def showShooting(self, burstCount, isPredictedShot = False):
@@ -421,34 +422,34 @@ class Vehicle(BigWorld.Entity):
         return self.filter.speedInfo.value[0]
 
     def startVisual(self):
-        if not not self.isStarted:
-            raise AssertionError
-            avatar = BigWorld.player()
-            self.appearance.preStart(self.typeDescriptor)
-            self.appearance.start(self, self.__prereqs)
-            self.__prereqs = None
-            self.appearance.changeEngineMode(self.engineMode)
-            self.appearance.onVehicleHealthChanged()
-            if self.isPlayer:
-                if self.isAlive():
-                    self.appearance.setupGunMatrixTargets(avatar.gunRotator)
-            if hasattr(self.filter, 'allowStrafeCompensation'):
-                self.filter.allowStrafeCompensation = not self.isPlayer
-            self.isStarted = True
-            self.set_publicStateModifiers()
-            self.set_damageStickers()
-            g_sessionProvider.getFeedback().startVehicleVisual(self.proxy, True)
-            if not self.isAlive():
-                self.__onVehicleDeath(True)
-            if self.isTurretMarkedForDetachment:
-                self.confirmTurretDetachment()
-            self.__startWGPhysics()
-            nationId = self is BigWorld.player().getVehicleAttached() and self.typeDescriptor.type.id[0]
+        assert not self.isStarted
+        avatar = BigWorld.player()
+        self.appearance.preStart(self.typeDescriptor)
+        self.appearance.start(self, self.__prereqs)
+        self.__prereqs = None
+        self.appearance.changeEngineMode(self.engineMode)
+        self.appearance.onVehicleHealthChanged()
+        if self.isPlayer:
+            if self.isAlive():
+                self.appearance.setupGunMatrixTargets(avatar.gunRotator)
+        if hasattr(self.filter, 'allowStrafeCompensation'):
+            self.filter.allowStrafeCompensation = not self.isPlayer
+        self.isStarted = True
+        self.set_publicStateModifiers()
+        self.set_damageStickers()
+        g_sessionProvider.getFeedback().startVehicleVisual(self.proxy, True)
+        if not self.isAlive():
+            self.__onVehicleDeath(True)
+        if self.isTurretMarkedForDetachment:
+            self.confirmTurretDetachment()
+        self.__startWGPhysics()
+        if self is BigWorld.player().getVehicleAttached():
+            nationId = self.typeDescriptor.type.id[0]
             SoundGroups.g_instance.soundModes.setCurrentNation(nations.NAMES[nationId])
         return
 
     def stopVisual(self):
-        raise self.isStarted or AssertionError
+        assert self.isStarted
         self.__stopExtras()
         g_sessionProvider.getFeedback().stopVehicleVisual(self.id, self.isPlayer)
         self.appearance.destroy()

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
 import Event
 from InterfaceScaleManager import InterfaceScaleManager

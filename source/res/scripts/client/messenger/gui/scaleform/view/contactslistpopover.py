@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/ContactsListPopover.py
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import random
 import BigWorld
@@ -199,7 +200,7 @@ class _CurrentVehicle():
         if self.isPresent():
             state, stateLvl = self.item.getState()
             if state == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY:
-                rentLeftStr = getTimeLeftStr('#menu:vehicle/igrRentLeft/%s', self.item.rentInfo.timeLeft)
+                rentLeftStr = getTimeLeftStr('#menu:vehicle/igrRentLeft/%s', self.item.rentInfo.getTimeLeft())
                 icon = icons.premiumIgrBig()
                 if self.item.isRented:
                     message = i18n.makeString('#menu:currentVehicleStatus/' + state, icon=icon, time=rentLeftStr)

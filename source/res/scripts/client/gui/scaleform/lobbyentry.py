@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/LobbyEntry.py
 from gui.Scaleform.framework.managers.CacheManager import CacheManager
 from gui.Scaleform.framework.managers.TutorialManager import TutorialManager

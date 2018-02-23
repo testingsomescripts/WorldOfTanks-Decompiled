@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/ResetTimeTriggeredParticles.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import *
@@ -27,7 +28,6 @@ class ResetTimeTriggeredParticles(ParticleSubSystem):
 
     def go(self, effect, actor, source, target, **kargs):
         self.subSystemIterate(actor, source, target, self.resetTimeTrigger)
-        return 0.0
 
 
 s_sectionProcessors['ResetTimeTriggeredParticles'] = ResetTimeTriggeredParticles

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/SwarmTargets.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import ParticleSubSystem
@@ -77,7 +78,7 @@ class SwarmTargets(ParticleSubSystem):
             return 0
 
     def duration(self, actor, source, target):
-        return 0.0
+        pass
 
 
 s_sectionProcessors['SwarmTargets'] = SwarmTargets

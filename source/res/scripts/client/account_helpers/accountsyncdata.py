@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
 import cPickle
 import BigWorld
@@ -45,7 +46,7 @@ class AccountSyncData(object):
         self.__savePersistentCache()
         if account is not None:
             oldName = self.__persistentCache.getAccountName()
-            raise oldName is None or oldName == account.name or AssertionError
+            assert oldName is None or oldName == account.name
             self.__persistentCache.setAccountName(account.name)
             self.__syncController = SyncController(account, self.__sendSyncRequest, self.__onSyncResponse, self.__onSyncComplete)
         return

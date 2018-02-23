@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PPTranslationProperty.py
 from FX.Event import Event
 from FX.Event import IMMEDIATE_EVENT
@@ -31,10 +32,10 @@ class PPTranslationProperty(Event):
         return duration
 
     def stop(self, actor, source, target):
-        return 0.0
+        pass
 
     def duration(self, actor, source, target):
-        return 0.0
+        pass
 
     def eventTiming(self):
         return IMMEDIATE_EVENT

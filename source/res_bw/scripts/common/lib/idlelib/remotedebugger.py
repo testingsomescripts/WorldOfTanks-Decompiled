@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/RemoteDebugger.py
 """Support for remote Python debugging.
 
@@ -43,7 +44,7 @@ def wrap_info(info):
         return
     else:
         traceback = info[2]
-        raise isinstance(traceback, types.TracebackType) or AssertionError
+        assert isinstance(traceback, types.TracebackType)
         traceback_id = id(traceback)
         tracebacktable[traceback_id] = traceback
         modified_info = (info[0], info[1], traceback_id)
@@ -342,4 +343,4 @@ def close_subprocess_debugger(rpcclt):
 
 def restart_subprocess_debugger(rpcclt):
     idb_adap_oid_ret = rpcclt.remotecall('exec', 'start_the_debugger', (gui_adap_oid,), {})
-    raise idb_adap_oid_ret == idb_adap_oid or AssertionError('Idb restarted with different oid')
+    assert idb_adap_oid_ret == idb_adap_oid, 'Idb restarted with different oid'

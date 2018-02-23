@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/BaseRallyRoomView.py
 import account_helpers
 from CurrentVehicle import g_currentVehicle
@@ -63,7 +64,8 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
 
     @process
     def canBeClosed(self, callback):
-        ctx = unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=FUNCTIONAL_FLAG.SWITCH, entityType=self.unitFunctional.getEntityType())
+        flags = FUNCTIONAL_FLAG.SWITCH if self.unitFunctional.canSwitchToIntro() else FUNCTIONAL_FLAG.UNDEFINED
+        ctx = unit_ctx.LeaveUnitCtx(waitingID='prebattle/leave', flags=flags, entityType=self.unitFunctional.getEntityType())
         meta = self.unitFunctional.getConfirmDialogMeta(ctx)
         if meta:
             isConfirmed = yield DialogsInterface.showDialog(meta)
@@ -209,7 +211,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta, UnitListener):
         return
 
     def _getVehicleSelectorDescription(self):
-        return ''
+        pass
 
     def inviteFriendRequest(self):
         self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'unit',

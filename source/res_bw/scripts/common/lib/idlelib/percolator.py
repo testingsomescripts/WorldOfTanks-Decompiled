@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/Percolator.py
 from idlelib.WidgetRedirector import WidgetRedirector
 from idlelib.Delegator import Delegator
@@ -31,22 +32,22 @@ class Percolator:
         self.top.delete(index1, index2)
 
     def insertfilter(self, filter):
-        raise isinstance(filter, Delegator) or AssertionError
-        raise filter.delegate is None or AssertionError
+        assert isinstance(filter, Delegator)
+        assert filter.delegate is None
         filter.setdelegate(self.top)
         self.top = filter
         return
 
     def removefilter(self, filter):
-        if not isinstance(filter, Delegator):
-            raise AssertionError
-            raise filter.delegate is not None or AssertionError
-            f = self.top
-            self.top = f is filter and filter.delegate
+        assert isinstance(filter, Delegator)
+        assert filter.delegate is not None
+        f = self.top
+        if f is filter:
+            self.top = filter.delegate
             filter.setdelegate(None)
         else:
-            while not (f.delegate is not filter and f is not self.bottom):
-                raise AssertionError
+            while f.delegate is not filter:
+                assert f is not self.bottom
                 f.resetcache()
                 f = f.delegate
 

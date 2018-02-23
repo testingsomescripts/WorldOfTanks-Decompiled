@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/RefSystem.py
 from collections import defaultdict
 from operator import methodcaller, itemgetter
@@ -429,10 +430,8 @@ class _RefItem(object):
 
         elif self.isConfirmedInvite():
             return (3.0, 0)
-        return (1.0, 0)
 
     def getBonusTimeLeftStr(self):
         _, timeLeft = self.getBonus()
         if timeLeft:
             return time_utils.getTillTimeString(timeLeft, MENU.TIME_TIMEVALUE)
-        return ''

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler.ArtyHitMarker import ArtyHitMarker
@@ -380,15 +381,15 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             return
 
     def handleKeyEvent(self, isDown, key, mods, event = None):
-        if not self.__isEnabled:
-            raise AssertionError
-            cmdMap = CommandMapping.g_instance
-            if key == Keys.KEY_LEFTMOUSE and isDown:
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying:
-                    return True
-                shouldClose = self.__activeSelector.processSelection(self.__getDesiredShotPoint())
-                shouldClose and self.turnOff()
+        assert self.__isEnabled
+        cmdMap = CommandMapping.g_instance
+        if key == Keys.KEY_LEFTMOUSE and isDown:
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying:
+                return True
+            shouldClose = self.__activeSelector.processSelection(self.__getDesiredShotPoint())
+            if shouldClose:
+                self.turnOff()
             return True
         elif key == Keys.KEY_RIGHTMOUSE and isDown:
             replayCtrl = BattleReplay.g_replayCtrl
@@ -445,12 +446,12 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
             return False
 
     def handleMouseEvent(self, dx, dy, dz):
-        if not self.__isEnabled:
-            raise AssertionError
-            GUI.mcursor().position = Math.Vector2(0, 0)
-            self.__cam.update(dx, dy, dz)
-            replayCtrl = BattleReplay.g_replayCtrl
-            return replayCtrl.isPlaying and True
+        assert self.__isEnabled
+        GUI.mcursor().position = Math.Vector2(0, 0)
+        self.__cam.update(dx, dy, dz)
+        replayCtrl = BattleReplay.g_replayCtrl
+        if replayCtrl.isPlaying:
+            return True
         self.__activeSelector.processHover(self.__getDesiredShotPoint())
         return True
 
@@ -472,9 +473,9 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
         return self.__aimingMode & mode == mode
 
     def getDesiredShotPoint(self):
-        if not self.__isEnabled:
-            raise AssertionError
-            return self.__aimingMode == 0 and self.__getDesiredShotPoint()
+        assert self.__isEnabled
+        if self.__aimingMode == 0:
+            return self.__getDesiredShotPoint()
         else:
             return None
 
@@ -500,8 +501,8 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
 
     def updateGunMarker(self, pos, dir, size, relaxTime, collData):
         replayCtrl = BattleReplay.g_replayCtrl
-        if not (replayCtrl.isPlaying and self.__isEnabled):
-            raise AssertionError
+        if replayCtrl.isPlaying:
+            assert self.__isEnabled
             self.__activeSelector.processReplayHover()
 
     def turnOff(self, sendStopEquipment = True):
@@ -536,7 +537,6 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
 
     def __tick(self):
         self.__activeSelector.processHover(self.__getDesiredShotPoint())
-        return 0.0
 
 
 def activateMapCase(equipmentID, deactivateCallback):

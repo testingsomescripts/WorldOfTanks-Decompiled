@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubSummaryView.py
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.cyberSport.ClubProfileWindow import ClubPage
@@ -102,7 +103,6 @@ def _getLastBattleText(battlesCount, globalStats):
     lastBattleDate = text_styles.main(BigWorld.wg_getShortDateFormat(globalStats.getLastBattleTime()))
     if battlesCount > 0:
         return text_styles.standard(_ms(CYBERSPORT.STATICFORMATIONSUMMARYVIEW_LASTBATTLE, date=lastBattleDate))
-    return ''
 
 
 def _getVehiclesList(totalStats):

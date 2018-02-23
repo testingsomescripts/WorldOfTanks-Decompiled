@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TutorialManager.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -107,10 +108,10 @@ class TutorialManager(TutorialManagerMeta):
     def _validate(self, componentID):
         if not self._isEnabled or self._config is None:
             return False
-        elif not self._isCreated():
-            raise AssertionError('TutorialManager must be initialised')
-            component = self._config.getItem(componentID)
-            component is None and LOG_DEBUG('Component is not found', componentID)
+        assert self._isCreated(), 'TutorialManager must be initialised'
+        component = self._config.getItem(componentID)
+        if component is None:
+            LOG_DEBUG('Component is not found', componentID)
             return False
         else:
             return True

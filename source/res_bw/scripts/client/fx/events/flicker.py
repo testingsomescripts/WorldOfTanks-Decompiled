@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/Flicker.py
 from FX.Event import Event
 from FX import s_sectionProcessors
@@ -48,7 +49,6 @@ class Flicker(Event):
         self.lightFlicker.addOp(_add, _r1, _r1, offset)
         self.lightFlicker.addOp(_mul, _r0, self.colour, _r1)
         actor.shader = self.lightFlicker
-        return 0.0
 
     def stop(self, actor, source, target):
         actor.colour = self.colour
@@ -57,7 +57,7 @@ class Flicker(Event):
         return 0.0
 
     def duration(self, actor, source, target):
-        return 0.0
+        pass
 
     def eventTiming(self):
         return IMMEDIATE_EVENT

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/ChainView.py
 from _PostProcessing import debug as _debug
 from _PostProcessing import chain

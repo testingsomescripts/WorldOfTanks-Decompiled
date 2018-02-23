@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/TreeWidget.py
 import os
 from Tkinter import *
@@ -108,7 +109,6 @@ class TreeNode:
         else:
             self.expand()
         self.item.OnDoubleClick()
-        return 'break'
 
     def expand(self, event = None):
         if not self.item._IsExpandable():
@@ -316,7 +316,7 @@ class TreeItem:
 
     def IsExpandable(self):
         """Return whether there are subitems."""
-        return 1
+        pass
 
     def _GetSubList(self):
         """Do not override!  Called by TreeNode."""
@@ -425,23 +425,18 @@ class ScrolledCanvas:
 
     def page_up(self, event):
         self.canvas.yview_scroll(-1, 'page')
-        return 'break'
 
     def page_down(self, event):
         self.canvas.yview_scroll(1, 'page')
-        return 'break'
 
     def unit_up(self, event):
         self.canvas.yview_scroll(-1, 'unit')
-        return 'break'
 
     def unit_down(self, event):
         self.canvas.yview_scroll(1, 'unit')
-        return 'break'
 
     def zoom_height(self, event):
         ZoomHeight.zoom_height(self.master)
-        return 'break'
 
 
 def test():

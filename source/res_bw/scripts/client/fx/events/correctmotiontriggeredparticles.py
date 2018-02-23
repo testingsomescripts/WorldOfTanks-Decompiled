@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/CorrectMotionTriggeredParticles.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import *
@@ -39,7 +40,6 @@ class CorrectMotionTriggeredParticle(ParticleSubSystem):
         self.subSystemIterate(actor, source, target, self.buildActionList)
         self.resetMotionTriggerFlag(self.actions)
         BigWorld.callback(0.001, lambda : self.resetMotionTriggerFlag(self.actions))
-        return 0.0
 
 
 s_sectionProcessors['CorrectMotionTriggeredParticle'] = CorrectMotionTriggeredParticle

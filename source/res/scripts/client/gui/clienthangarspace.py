@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
 from collections import namedtuple
 import functools
@@ -283,6 +284,9 @@ class ClientHangarSpace():
     def handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
             self.__isMouseDown = event.isKeyDown()
+            if self.__isMouseDown:
+                from gui.shared.utils.HangarSpace import g_hangarSpace
+                g_hangarSpace.leftButtonClicked()
         return False
 
     def handleMouseEventGlobal(self, event):
@@ -406,7 +410,6 @@ class ClientHangarSpace():
     def getSpaceType(self, isPremium):
         if isPremium:
             return 'premium'
-        return 'basic'
 
     def __destroy(self):
         LOG_DEBUG('Hangar successfully destroyed.')

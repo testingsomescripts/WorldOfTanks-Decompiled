@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/PreQueueFactory.py
 import inspect
 from constants import QUEUE_TYPE
@@ -74,9 +75,9 @@ class PreQueueFactory(ControlFactory):
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.PREQUEUE:
             return self._createDefaultFunctional(ctx)
         ctx.removeFlags(_FLAG.PRE_QUEUE_BITMASK)
-        clazz = queueType in _SUPPORTED_QUEUES and _SUPPORTED_QUEUES[queueType]
-        if not inspect.isclass(clazz):
-            raise AssertionError('Class is not found, checks settings')
+        if queueType in _SUPPORTED_QUEUES:
+            clazz = _SUPPORTED_QUEUES[queueType]
+            assert inspect.isclass(clazz), 'Class is not found, checks settings'
             created = clazz()
             ctx.addFlags(created.getFunctionalFlags())
         else:

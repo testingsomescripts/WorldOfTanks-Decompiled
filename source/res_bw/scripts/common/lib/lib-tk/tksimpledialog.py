@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/tkSimpleDialog.py
 """Dialog boxes
 
@@ -105,7 +106,7 @@ class Dialog(Toplevel):
         This method is called automatically to validate the data before the
         dialog is destroyed. By default, it always validates OK.
         """
-        return 1
+        pass
 
     def apply(self):
         """process the data

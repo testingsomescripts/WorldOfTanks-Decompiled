@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/OutputWindow.py
 from Tkinter import *
 from idlelib.EditorWindow import EditorWindow
@@ -17,10 +18,10 @@ class OutputWindow(EditorWindow):
         self.text.bind('<<goto-file-line>>', self.goto_file_line)
 
     def ispythonsource(self, filename):
-        return 0
+        pass
 
     def short_title(self):
-        return 'Output'
+        pass
 
     def maybesave(self):
         if self.get_saved():

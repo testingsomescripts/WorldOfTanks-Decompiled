@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/GarbageCollectionDebug.py
 """
 This is an example of how to disable/enable garbage collection, and how to

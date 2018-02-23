@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/BaseTimedCustomizationInterface.py
 import time
 from abc import abstractmethod, ABCMeta
@@ -205,7 +206,7 @@ class BaseTimedCustomizationInterface(CustomizationInterface):
 
     def __handleRentalPackageChange(self, index):
         item = self._rentalPackageDP.selectedPackage
-        raise item is not None and item.get('cost') > -1 or AssertionError
+        assert item is not None and item.get('cost') > -1
         self._itemsDP.setDefaultCost(item.get('cost'), item.get('defCost'), item.get('isGold'), item.get('isIGR'), item.get('periodDays'))
         self._itemsDP.refresh()
         return

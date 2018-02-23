@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/VideoCamera.py
 import math
 import time
@@ -285,7 +286,7 @@ class VideoCamera(CallbackDelayer, TimeDeltaMeter):
         return
 
     def getReasonsAffectCameraDirectly(self):
-        return ()
+        pass
 
     def applyImpulse(self, position, impulse, reason = 1):
         pass

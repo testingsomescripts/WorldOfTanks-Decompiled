@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeXPWindow.py
 import BigWorld
 from gui import SystemMessages, game_control
@@ -140,4 +141,3 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
         actionRate = g_itemsCache.items.shop.freeXPConversionWithDiscount
         if rate != actionRate and actionRate > 0:
             return 'statsText'
-        return 'alertText'

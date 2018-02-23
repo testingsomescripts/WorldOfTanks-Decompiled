@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsParams.py
 import BigWorld
 from account_helpers.settings_core import settings_constants, options

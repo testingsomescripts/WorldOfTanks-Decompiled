@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/ClubListener.py
 from debug_utils import LOG_ERROR
 from gui.clubs.club_helpers import MyClubListener

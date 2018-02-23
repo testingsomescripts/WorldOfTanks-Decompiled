@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
 from collections import namedtuple
 import ResMgr
@@ -189,53 +190,53 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
-    if not maxTeamsInArena is not None:
-        raise AssertionError
-        cfg.update(__readWinPoints(section))
-        cfg.update(__readGameplayPoints(section))
-        cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
-        cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
-        cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
-        if IS_CLIENT or IS_WEB:
-            if raiseIfMissing or __hasKey('description', section, defaultXml):
-                cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
-            if raiseIfMissing or __hasKey('minimap', section, defaultXml):
-                cfg['minimap'] = __readString('minimap', section, defaultXml)
-            if raiseIfMissing or __hasKey('music', section, defaultXml):
-                cfg['music'] = __readString('music', section, defaultXml)
-            if raiseIfMissing or __hasKey('loadingMusic', section, defaultXml):
-                cfg['loadingMusic'] = __readString('loadingMusic', section, defaultXml)
-            if raiseIfMissing or __hasKey('ambientSound', section, defaultXml):
-                cfg['ambientSound'] = __readString('ambientSound', section, defaultXml)
-            if __hasKey('battleVictoryMusic', section, defaultXml):
-                cfg['battleVictoryMusic'] = __readString('battleVictoryMusic', section, defaultXml)
-            if __hasKey('battleLoseMusic', section, defaultXml):
-                cfg['battleLoseMusic'] = __readString('battleLoseMusic', section, defaultXml)
-            if __hasKey('battleDrawMusic', section, defaultXml):
-                cfg['battleDrawMusic'] = __readString('battleDrawMusic', section, defaultXml)
-            if raiseIfMissing or __hasKey('battleCountdownTimerSound', section, defaultXml):
-                cfg['battleCountdownTimerSound'] = __readString('battleCountdownTimerSound', section, defaultXml)
-            if raiseIfMissing or section.has_key('mapActivities'):
-                cfg['mapActivitiesSection'] = section['mapActivities']
-            if section.has_key('soundRemapping'):
-                cfg['soundRemapping'] = section['soundRemapping']
-        if IS_CLIENT or IS_BOT:
-            cfg['controlPoints'] = __readControlPoints(section)
-            cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
-            cfg['botPoints'] = __readBotPoints(section)
-        if __hasKey('gasAttack', section, defaultXml):
-            gasAttackSection = section['gasAttack']
-            cfg['gasAttackSettings'] = __readGasAttackSettings(gasAttackSection['gameplaySettings'])
-            if IS_CLIENT:
-                from battleground import gas_attack
-                cfg['gasAttackVisual'] = gas_attack.GasAttackMapSettings.fromSection(gasAttackSection['visualSettings'])
-        elif raiseIfMissing:
-            cfg['gasAttackSettings'] = None
-            cfg['gasAttackVisual'] = None
-        if not IS_CLIENT:
-            if raiseIfMissing or __hasKey('battleScenario', section, defaultXml):
-                cfg['battleScenarios'] = __readBattleScenarios(section['battleScenario'])
-            cfg['waypoints'] = (raiseIfMissing or __hasKey('waypoints', section, defaultXml)) and __readString('waypoints', section, defaultXml)
+    assert maxTeamsInArena is not None
+    cfg.update(__readWinPoints(section))
+    cfg.update(__readGameplayPoints(section))
+    cfg['teamBasePositions'] = __readTeamBasePositions(section, maxTeamsInArena)
+    cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
+    cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
+    if IS_CLIENT or IS_WEB:
+        if raiseIfMissing or __hasKey('description', section, defaultXml):
+            cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
+        if raiseIfMissing or __hasKey('minimap', section, defaultXml):
+            cfg['minimap'] = __readString('minimap', section, defaultXml)
+        if raiseIfMissing or __hasKey('music', section, defaultXml):
+            cfg['music'] = __readString('music', section, defaultXml)
+        if raiseIfMissing or __hasKey('loadingMusic', section, defaultXml):
+            cfg['loadingMusic'] = __readString('loadingMusic', section, defaultXml)
+        if raiseIfMissing or __hasKey('ambientSound', section, defaultXml):
+            cfg['ambientSound'] = __readString('ambientSound', section, defaultXml)
+        if __hasKey('battleVictoryMusic', section, defaultXml):
+            cfg['battleVictoryMusic'] = __readString('battleVictoryMusic', section, defaultXml)
+        if __hasKey('battleLoseMusic', section, defaultXml):
+            cfg['battleLoseMusic'] = __readString('battleLoseMusic', section, defaultXml)
+        if __hasKey('battleDrawMusic', section, defaultXml):
+            cfg['battleDrawMusic'] = __readString('battleDrawMusic', section, defaultXml)
+        if raiseIfMissing or __hasKey('battleCountdownTimerSound', section, defaultXml):
+            cfg['battleCountdownTimerSound'] = __readString('battleCountdownTimerSound', section, defaultXml)
+        if raiseIfMissing or section.has_key('mapActivities'):
+            cfg['mapActivitiesSection'] = section['mapActivities']
+        if section.has_key('soundRemapping'):
+            cfg['soundRemapping'] = section['soundRemapping']
+    if IS_CLIENT or IS_BOT:
+        cfg['controlPoints'] = __readControlPoints(section)
+        cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
+        cfg['botPoints'] = __readBotPoints(section)
+    if __hasKey('gasAttack', section, defaultXml):
+        gasAttackSection = section['gasAttack']
+        cfg['gasAttackSettings'] = __readGasAttackSettings(gasAttackSection['gameplaySettings'])
+        if IS_CLIENT:
+            from battleground import gas_attack
+            cfg['gasAttackVisual'] = gas_attack.GasAttackMapSettings.fromSection(gasAttackSection['visualSettings'])
+    elif raiseIfMissing:
+        cfg['gasAttackSettings'] = None
+        cfg['gasAttackVisual'] = None
+    if not IS_CLIENT:
+        if raiseIfMissing or __hasKey('battleScenario', section, defaultXml):
+            cfg['battleScenarios'] = __readBattleScenarios(section['battleScenario'])
+        if raiseIfMissing or __hasKey('waypoints', section, defaultXml):
+            cfg['waypoints'] = __readString('waypoints', section, defaultXml)
     return cfg
 
 

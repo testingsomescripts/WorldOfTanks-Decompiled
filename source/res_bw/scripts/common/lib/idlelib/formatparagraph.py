@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/FormatParagraph.py
 """Extension to format a paragraph or selection to a max width.
 

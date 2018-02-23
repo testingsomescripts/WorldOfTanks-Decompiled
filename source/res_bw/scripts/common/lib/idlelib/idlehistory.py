@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/IdleHistory.py
 """Implement Idle Shell history mechanism with History class"""
 from idlelib.configHandler import idleConf
@@ -32,12 +33,10 @@ class History:
     def history_next(self, event):
         """Fetch later statement; start with ealiest if cyclic."""
         self.fetch(reverse=False)
-        return 'break'
 
     def history_prev(self, event):
         """Fetch earlier statement; start with most recent."""
         self.fetch(reverse=True)
-        return 'break'
 
     def fetch(self, reverse):
         """Fetch statememt and replace current line in text widget.

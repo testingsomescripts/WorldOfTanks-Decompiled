@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_helpers/MsgProcessor.py
 from debug_utils import LOG_VLK_DEV, LOG_OGNICK_DEV
 from ops_pack import OpsPacker, OpsUnpacker, initOpsFormatDef

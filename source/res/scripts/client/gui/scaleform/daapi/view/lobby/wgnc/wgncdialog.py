@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/wgnc/WGNCDialog.py
 from gui.Scaleform.daapi.view.meta.WGNCDialogMeta import WGNCDialogMeta
 from gui.wgnc import g_wgncProvider
@@ -6,7 +7,7 @@ class WGNCDialog(WGNCDialogMeta):
 
     def __init__(self, ctx = None):
         super(WGNCDialog, self).__init__()
-        raise ctx or AssertionError('Context can be defined')
+        assert ctx, 'Context can be defined'
         self.__notID = ctx['notID']
         self.__target = ctx['target']
 

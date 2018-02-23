@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Flock.py
 from AvatarInputHandler import mathUtils
 import BigWorld
@@ -218,7 +219,7 @@ class Flock(BigWorld.Entity, FlockLike):
         pass
 
     def name(self):
-        return 'Flock'
+        pass
 
     def __setupFlyAroundCenter(self):
         self.__decisionStrategy = self.__doAroundCenterFly

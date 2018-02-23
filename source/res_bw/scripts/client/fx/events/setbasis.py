@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/SetBasis.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import *
@@ -29,8 +30,6 @@ class SetBasis(ParticleSubSystem):
             del self.worldPos
         except:
             WARNING_MSG('No basis was passed into the argument list', self, actor, source, target, kargs)
-
-        return 0.0
 
 
 s_sectionProcessors['SetBasis'] = SetBasis

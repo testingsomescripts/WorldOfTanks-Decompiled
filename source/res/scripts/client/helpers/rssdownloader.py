@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/RSSDownloader.py
 import threading
 import helpers
@@ -31,9 +32,9 @@ class RSSDownloader:
         return
 
     def download(self, callback, url):
-        if not callback is not None:
-            raise AssertionError
-            self.__thread is not None and LOG_WARNING('Rss downloading in progress, skipping')
+        assert callback is not None
+        if self.__thread is not None:
+            LOG_WARNING('Rss downloading in progress, skipping')
             return
         else:
             if self.__thread is not None:

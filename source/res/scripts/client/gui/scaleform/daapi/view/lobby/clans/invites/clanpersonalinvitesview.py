@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanPersonalInvitesView.py
 import BigWorld
 from gui.clans import formatters
@@ -12,6 +13,7 @@ from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.events import CoolDownEvent
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.formatters import text_styles
 from gui.shared.view_helpers import CooldownHelper
 from gui.shared.utils import getPlayerDatabaseID
 from helpers.i18n import makeString as _ms
@@ -136,7 +138,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
         self.as_setDeclineAllSelectedInvitesStateS(_ms(CLANS.CLANPERSONALINVITESWINDOW_DECLINESELECTED, count=count), False if count == 0 or self._paginator.isInProgress() else True)
 
     def _getSecondSortFields(self):
-        return ('createdAt',)
+        pass
 
     def _makeHeaders(self):
         return [self._packHeaderColumnData('clanName', CLANS.CLANPERSONALINVITESWINDOW_TABLE_CLANNAME, 233, CLANS.CLANPERSONALINVITESWINDOW_TOOLTIPS_TABLE_INVITES_CLANNAME, textAlign='left', enabled=True),
@@ -248,6 +250,14 @@ class PersonalInvitesDataProvider(ClanInvitesAbstractDataProvider):
          'messageTooltip': self._makeTooltip(body=item.getComment() if isValueAvailable(getter=item.getComment) else str()),
          'actions': self.__buildActionsSection(item.getStatus())}
         return outcome
+
+    def _makeRequestTooltip(self, status, date, user = None):
+        if status == CLAN_INVITE_STATES.ACCEPTED:
+            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITEACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_BYUSER)), text_styles.stats(user))
+        if status == CLAN_INVITE_STATES.DECLINED or status == CLAN_INVITE_STATES.DECLINED_RESENT:
+            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITEDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_BYUSER)), text_styles.stats(user))
+        if status == CLAN_INVITE_STATES.ACTIVE or status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT:
+            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_INVITESENT)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_INVITE_SENDER)), text_styles.stats(user))
 
     def __buildActionsSection(self, inviteStatus):
         acceptButtonEnabled = False

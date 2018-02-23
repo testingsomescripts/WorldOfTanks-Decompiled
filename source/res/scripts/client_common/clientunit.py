@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnit.py
 import struct
 from collections import namedtuple
@@ -246,7 +247,7 @@ class ClientUnit(UnitBase):
     def _unpackPlayer(self, packedOps):
         accountDBID, hasPlayer = 0, False
         try:
-            accountDBID, = struct.unpack_from(PLAYER_ID_CHR, packedOps)
+            accountDBID = struct.unpack_from(PLAYER_ID_CHR, packedOps)
             filtered = dict(filter(lambda item: item[1].get('role', 0) & UNIT_ROLE.INVITED == 0, self._players.iteritems()))
             hasPlayer = accountDBID in filtered
         except struct.error as e:
@@ -295,7 +296,7 @@ class ClientUnit(UnitBase):
     def _unpackVehicleDict(self, packedOps):
         nextOps = UnitBase._unpackVehicleDict(self, packedOps)
         try:
-            accountDBID, = struct.unpack_from(PLAYER_ID_CHR, packedOps, offset=VEH_LEN_SIZE)
+            accountDBID = struct.unpack_from(PLAYER_ID_CHR, packedOps, offset=VEH_LEN_SIZE)
             self.onUnitPlayerVehDictChanged(accountDBID)
         except struct.error as e:
             LOG_ERROR(e)

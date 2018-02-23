@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import Event
 from WebBrowser import WebBrowser
@@ -57,32 +58,32 @@ class BrowserController(Controller):
         if browserID not in self.__browsers:
             texture = self._BROWSER_TEXTURE if isDefault else self._ALT_BROWSER_TEXTURE
             app = g_appLoader.getApp()
-            if not app:
-                raise AssertionError('Application can not be None')
-                self.__browsers[browserID] = WebBrowser(browserID, app, texture, size, url)
-                self.onBrowserAdded(browserID)
-            ctx = {'url': url,
-             'title': title,
-             'showActionBtn': showActionBtn,
-             'showWaiting': showWaiting,
-             'browserID': browserID,
-             'size': size,
-             'isDefault': isDefault,
-             'isAsync': isAsync,
-             'showCloseBtn': showCloseBtn}
+            assert app, 'Application can not be None'
+            self.__browsers[browserID] = WebBrowser(browserID, app, texture, size, url)
+            self.onBrowserAdded(browserID)
+        ctx = {'url': url,
+         'title': title,
+         'showActionBtn': showActionBtn,
+         'showWaiting': showWaiting,
+         'browserID': browserID,
+         'size': size,
+         'isDefault': isDefault,
+         'isAsync': isAsync,
+         'showCloseBtn': showCloseBtn}
 
-            def browserCallback(*args):
-                self.__clearCallback(browserID)
+        def browserCallback(*args):
+            self.__clearCallback(browserID)
+            self.__showBrowser(browserID, ctx)
+
+        def browserAsyncCallback(url, isLoaded):
+            self.__clearCallback(browserID)
+            if isLoaded:
                 self.__showBrowser(browserID, ctx)
+            else:
+                LOG_WARNING('Browser async request url was not loaded!', url)
 
-            def browserAsyncCallback(url, isLoaded):
-                self.__clearCallback(browserID)
-                if isLoaded:
-                    self.__showBrowser(browserID, ctx)
-                else:
-                    LOG_WARNING('Browser async request url was not loaded!', url)
-
-            self.__browsersCallbacks[browserID] = isAsync and (None, browserCallback)
+        if isAsync:
+            self.__browsersCallbacks[browserID] = (None, browserCallback)
             self.__browsers[browserID].onLoadEnd += browserAsyncCallback
         else:
             self.__browsersCallbacks[browserID] = (browserCallback, None)

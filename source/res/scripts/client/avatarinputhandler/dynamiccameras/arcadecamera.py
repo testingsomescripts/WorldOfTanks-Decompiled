@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArcadeCamera.py
 from collections import namedtuple
 import BigWorld
@@ -174,7 +175,6 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__onChangeControlMode = None
         self.__cam = None
         self.__aim = None
-        self._writeUserPreferences()
         self.__aimingSystem.destroy()
         self.__aimingSystem = None
         return
@@ -657,7 +657,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__inputInertia = _InputInertia(self.__cfg['fovMultMinMaxDist'], 0.0)
         return
 
-    def _writeUserPreferences(self):
+    def writeUserPreferences(self):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
             ds.write(Settings.KEY_CONTROL_MODE, '')

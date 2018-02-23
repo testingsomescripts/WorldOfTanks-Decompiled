@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Tix.py
 from Tkinter import *
 from Tkinter import _flatten, _cnfmerge, _default_root

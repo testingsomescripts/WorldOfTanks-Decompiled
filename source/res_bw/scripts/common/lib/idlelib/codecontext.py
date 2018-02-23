@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/CodeContext.py
 """CodeContext - Extension to display the block context above the edit window
 
@@ -98,7 +99,7 @@ class CodeContext:
         data and the indent level at the top of the region inspected.
         
         """
-        raise stopline > 0 or AssertionError
+        assert stopline > 0
         lines = []
         lastindent = INFINITY
         for linenum in xrange(new_topvisible, stopline - 1, -1):

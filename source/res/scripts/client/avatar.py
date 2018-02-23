@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Avatar.py
 import cPickle
 import zlib
@@ -610,7 +611,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                         if newVoIPState:
                             message = makeString(MESSENGER.CLIENT_DYNSQUAD_ENABLEVOIP)
                         else:
-                            message = makeString(MESSENGER.CLIENT_DYNSQUAD_DISABLEVOIP, hotkey='ALT+Q')
+                            message = makeString(MESSENGER.CLIENT_DYNSQUAD_DISABLEVOIP, hotkey='G')
                         MessengerEntry.g_instance.gui.addClientMessage(g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': message}))
                     return True
                 if cmdMap.isFired(CommandMapping.CMD_VEHICLE_MARKERS_SHOW_INFO, key):
@@ -783,7 +784,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             return
 
     def prerequisites(self):
-        return ()
+        pass
 
     def initSpace(self):
         if not self.__isSpaceInitialized:
@@ -1072,7 +1073,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
                     elif flags & VHF.IS_ANY_PIERCING_MASK:
                         sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
                 else:
-                    raise flags & VHF.ATTACK_IS_DIRECT_PROJECTILE or AssertionError
+                    assert flags & VHF.ATTACK_IS_DIRECT_PROJECTILE
                     if flags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
                         if flags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
                             sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
@@ -1591,32 +1592,32 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager):
             return (speed, rspeed)
 
     def getOwnVehicleShotDispersionAngle(self, turretRotationSpeed, withShot = 0):
-        if not self.vehicleTypeDescriptor is not None:
-            raise AssertionError
-            descr = self.vehicleTypeDescriptor
-            aimingStartTime, aimingStartFactor, multFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime = self.__aimingInfo
-            vehicleSpeed, vehicleRSpeed = self.getOwnVehicleSpeeds(True)
-            vehicleMovementFactor = vehicleSpeed * chassisShotDispersionFactorsMovement
-            vehicleMovementFactor *= vehicleMovementFactor
-            vehicleRotationFactor = vehicleRSpeed * chassisShotDispersionFactorsRotation
-            vehicleRotationFactor *= vehicleRotationFactor
-            turretRotationFactor = turretRotationSpeed * gunShotDispersionFactorsTurretRotation
-            turretRotationFactor *= turretRotationFactor
-            if withShot == 0:
-                shotFactor = 0.0
-            elif withShot == 1:
-                shotFactor = descr.gun['shotDispersionFactors']['afterShot']
-            else:
-                shotFactor = descr.gun['shotDispersionFactors']['afterShotInBurst']
-            shotFactor *= shotFactor
-            idealFactor = vehicleMovementFactor + vehicleRotationFactor + turretRotationFactor + shotFactor
-            idealFactor *= descr.miscAttrs['additiveShotDispersionFactor'] ** 2
-            idealFactor = multFactor * math.sqrt(1.0 + idealFactor)
-            currTime = BigWorld.time()
-            aimingFactor = aimingStartFactor * math.exp((aimingStartTime - currTime) / aimingTime)
-            aim = self.inputHandler.aim
-            isGunReload = False
-            isGunReload = aim is not None and aim.isGunReload()
+        assert self.vehicleTypeDescriptor is not None
+        descr = self.vehicleTypeDescriptor
+        aimingStartTime, aimingStartFactor, multFactor, gunShotDispersionFactorsTurretRotation, chassisShotDispersionFactorsMovement, chassisShotDispersionFactorsRotation, aimingTime = self.__aimingInfo
+        vehicleSpeed, vehicleRSpeed = self.getOwnVehicleSpeeds(True)
+        vehicleMovementFactor = vehicleSpeed * chassisShotDispersionFactorsMovement
+        vehicleMovementFactor *= vehicleMovementFactor
+        vehicleRotationFactor = vehicleRSpeed * chassisShotDispersionFactorsRotation
+        vehicleRotationFactor *= vehicleRotationFactor
+        turretRotationFactor = turretRotationSpeed * gunShotDispersionFactorsTurretRotation
+        turretRotationFactor *= turretRotationFactor
+        if withShot == 0:
+            shotFactor = 0.0
+        elif withShot == 1:
+            shotFactor = descr.gun['shotDispersionFactors']['afterShot']
+        else:
+            shotFactor = descr.gun['shotDispersionFactors']['afterShotInBurst']
+        shotFactor *= shotFactor
+        idealFactor = vehicleMovementFactor + vehicleRotationFactor + turretRotationFactor + shotFactor
+        idealFactor *= descr.miscAttrs['additiveShotDispersionFactor'] ** 2
+        idealFactor = multFactor * math.sqrt(1.0 + idealFactor)
+        currTime = BigWorld.time()
+        aimingFactor = aimingStartFactor * math.exp((aimingStartTime - currTime) / aimingTime)
+        aim = self.inputHandler.aim
+        isGunReload = False
+        if aim is not None:
+            isGunReload = aim.isGunReload()
         if aimingFactor < idealFactor:
             aimingFactor = idealFactor
             self.__aimingInfo[0] = currTime

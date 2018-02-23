@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/FunctionalCollection.py
 from debug_utils import LOG_ERROR
 from gui.prb_control.items import FunctionalState, PlayerDecorator, SelectResult

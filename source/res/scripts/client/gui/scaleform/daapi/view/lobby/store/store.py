@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/Store.py
 import MusicController
 from CurrentVehicle import g_currentVehicle
@@ -89,7 +90,7 @@ class Store(LobbySubView, StoreMeta):
         self.as_setNationsS(self.__nations)
 
     def getName(self):
-        return ''
+        pass
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         self._table = viewPy

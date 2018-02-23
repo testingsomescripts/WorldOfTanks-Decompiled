@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/MENU.py
 from debug_utils import LOG_WARNING
 
@@ -244,6 +245,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_UNAVAILABLE = '#menu:tankCarousel/vehicleStates/unavailable'
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOQUEUE = '#menu:tankCarousel/vehicleStates/unsuitableToQueue'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_ONLY = '#menu:tankCarousel/vehicleStates/fallout_only'
+    TANKCAROUSEL_VEHICLESTATES_DEALISOVER = '#menu:tankCarousel/vehicleStates/dealIsOver'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -270,6 +272,7 @@ class MENU(object):
     STORE_VEHICLESTATES_FALLOUT_BROKEN = '#menu:store/vehicleStates/fallout_broken'
     STORE_VEHICLESTATES_UNSUITABLETOQUEUE = '#menu:store/vehicleStates/unsuitableToQueue'
     STORE_VEHICLESTATES_FALLOUT_ONLY = '#menu:store/vehicleStates/fallout_only'
+    STORE_VEHICLESTATES_DEALISOVER = '#menu:store/vehicleStates/dealIsOver'
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
@@ -295,6 +298,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_FALLOUT_REQUIRED = '#menu:currentVehicleStatus/fallout_required'
     CURRENTVEHICLESTATUS_FALLOUT_BROKEN = '#menu:currentVehicleStatus/fallout_broken'
     CURRENTVEHICLESTATUS_FALLOUT_ONLY = '#menu:currentVehicleStatus/fallout_only'
+    CURRENTVEHICLESTATUS_DEALISOVER = '#menu:currentVehicleStatus/dealIsOver'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -1401,6 +1405,13 @@ class MENU(object):
     AWARDWINDOW_PERSONALDISCOUNTAWARD_ADDITIONAL_EXPERIENCE_RENT = '#menu:awardWindow/personalDiscountAward/additional/experience/rent'
     AWARDWINDOW_PERSONALDISCOUNTAWARD_REWARDTEXT = '#menu:awardWindow/personalDiscountAward/rewardText'
     AWARDWINDOW_PERSONALDISCOUNTAWARD_ACTIVATEBTN_LABEL = '#menu:awardWindow/personalDiscountAward/activateBtn/label'
+    AWARDWINDOW_TELECOMAWARD_HEADER = '#menu:awardWindow/telecomAward/header'
+    AWARDWINDOW_TELECOMAWARD_DESCRIPTION = '#menu:awardWindow/telecomAward/description'
+    AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHBROTHERHOOD = '#menu:awardWindow/telecomAward/description/withBrotherhood'
+    AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHOUTCREW = '#menu:awardWindow/telecomAward/description/withoutCrew'
+    AWARDWINDOW_TELECOMAWARD_VEHICLES = '#menu:awardWindow/telecomAward/vehicles'
+    AWARDWINDOW_TELECOMAWARD_SUBDESCRIPTION = '#menu:awardWindow/telecomAward/subdescription'
+    AWARDWINDOW_TELECOMAWARD_BUTTON_LABEL = '#menu:awardWindow/telecomAward/button/label'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1868,17 +1879,18 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_BUYSLOT,
      TANKCAROUSEL_VEHICLESTATES_UNAVAILABLE,
      TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOQUEUE,
-     TANKCAROUSEL_VEHICLESTATES_FALLOUT_ONLY)
-    SHOP_TABLE_HEADER_COUNT_ENUM = (SHOP_TABLE_HEADER_COUNT_VEHICLE,
-     SHOP_TABLE_HEADER_COUNT_MODULE,
-     SHOP_TABLE_HEADER_COUNT_SHELL,
-     SHOP_TABLE_HEADER_COUNT_OPTIONALDEVICE,
-     SHOP_TABLE_HEADER_COUNT_EQUIPMENT)
+     TANKCAROUSEL_VEHICLESTATES_FALLOUT_ONLY,
+     TANKCAROUSEL_VEHICLESTATES_DEALISOVER)
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM = (FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN,
      FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED)
+    SHOP_TABLE_HEADER_COUNT_ENUM = (SHOP_TABLE_HEADER_COUNT_VEHICLE,
+     SHOP_TABLE_HEADER_COUNT_MODULE,
+     SHOP_TABLE_HEADER_COUNT_SHELL,
+     SHOP_TABLE_HEADER_COUNT_OPTIONALDEVICE,
+     SHOP_TABLE_HEADER_COUNT_EQUIPMENT)
     TANKMEN_ENUM = (TANKMEN_LIGHTTANK,
      TANKMEN_MEDIUMTANK,
      TANKMEN_HEAVYTANK,
@@ -1887,10 +1899,6 @@ class MENU(object):
      TANKMEN_LOCKREASON_INBATTLE,
      TANKMEN_LOCKREASON_PREBATTLE,
      TANKMEN_LOCKREASON_BROKEN)
-    PROFILE_STATS_BLOCKS_ENUM = (PROFILE_STATS_BLOCKS_COMMON,
-     PROFILE_STATS_BLOCKS_BATTLEEFFECT,
-     PROFILE_STATS_BLOCKS_CREDITS,
-     PROFILE_STATS_BLOCKS_STUDYING)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
      LOADING_BATTLETYPES_DESC_2,
@@ -1906,6 +1914,10 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_10,
      LOADING_BATTLETYPES_DESC_11,
      LOADING_BATTLETYPES_DESC_12)
+    PROFILE_STATS_BLOCKS_ENUM = (PROFILE_STATS_BLOCKS_COMMON,
+     PROFILE_STATS_BLOCKS_BATTLEEFFECT,
+     PROFILE_STATS_BLOCKS_CREDITS,
+     PROFILE_STATS_BLOCKS_STUDYING)
     VEHICLEINFO_PARAMS_ENUM = (VEHICLEINFO_PARAMS_MAXHEALTH,
      VEHICLEINFO_PARAMS_WEIGHT,
      VEHICLEINFO_PARAMS_ENGINEPOWER,
@@ -2218,16 +2230,16 @@ class MENU(object):
         return outcome
 
     @staticmethod
-    def shop_table_header_count(key):
-        outcome = '#menu:shop/table/header/count/%s' % key
-        if outcome not in MENU.SHOP_TABLE_HEADER_COUNT_ENUM:
+    def finalstatistic_commonstats_resultlabel(key):
+        outcome = '#menu:finalStatistic/commonStats/resultlabel/%s' % key
+        if outcome not in MENU.FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
     @staticmethod
-    def finalstatistic_commonstats_resultlabel(key):
-        outcome = '#menu:finalStatistic/commonStats/resultlabel/%s' % key
-        if outcome not in MENU.FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENUM:
+    def shop_table_header_count(key):
+        outcome = '#menu:shop/table/header/count/%s' % key
+        if outcome not in MENU.SHOP_TABLE_HEADER_COUNT_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
@@ -2239,16 +2251,16 @@ class MENU(object):
         return outcome
 
     @staticmethod
-    def profile_stats_blocks(key):
-        outcome = '#menu:profile/stats/blocks/%s' % key
-        if outcome not in MENU.PROFILE_STATS_BLOCKS_ENUM:
+    def loading_battletypes_desc(key):
+        outcome = '#menu:loading/battleTypes/desc/%s' % key
+        if outcome not in MENU.LOADING_BATTLETYPES_DESC_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 
     @staticmethod
-    def loading_battletypes_desc(key):
-        outcome = '#menu:loading/battleTypes/desc/%s' % key
-        if outcome not in MENU.LOADING_BATTLETYPES_DESC_ENUM:
+    def profile_stats_blocks(key):
+        outcome = '#menu:profile/stats/blocks/%s' % key
+        if outcome not in MENU.PROFILE_STATS_BLOCKS_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

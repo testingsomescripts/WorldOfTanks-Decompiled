@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/AbstractRallyWindow.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.rally import NavigationStack
@@ -57,7 +58,7 @@ class AbstractRallyWindow(AbstractRallyWindowMeta):
         return
 
     def getNavigationKey(self):
-        return 'BaseRallyMainWindow'
+        pass
 
     def getFlashAliases(self):
         return []

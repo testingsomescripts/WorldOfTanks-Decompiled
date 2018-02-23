@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/fortifications/FortOrder.py
 from FortifiedRegionBase import FORT_EVENT_TYPE
 from constants import FORT_ORDER_TYPE, FORT_ORDER_TYPE_NAMES
@@ -155,7 +156,6 @@ class FortOrder(object):
     def getOperationDescription(self):
         if self.isConsumable:
             return i18n.makeString('#fortifications:fortConsumableOrder/descr/%d' % self.orderID)
-        return ''
 
     def getUserType(self):
         i18nKey = 'battleConsumable' if self.isConsumable else 'consumable'

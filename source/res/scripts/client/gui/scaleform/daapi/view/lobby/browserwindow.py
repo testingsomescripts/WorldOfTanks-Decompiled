@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BrowserWindow.py
 from gui import game_control
 from gui.game_control.gc_constants import BROWSER
@@ -20,7 +21,7 @@ class BrowserWindow(BrowserMeta):
         self.__browserID = ctx.get('browserID')
         self.__showCloseBtn = ctx.get('showCloseBtn', False)
         self.__browser = game_control.g_instance.browser.getBrowser(self.__browserID)
-        raise self.__browser is not None or AssertionError('Cannot find browser for browser window')
+        assert self.__browser is not None, 'Cannot find browser for browser window'
         self.__size = ctx.get('size', BROWSER.SIZE)
         self.__isDefault = ctx.get('isDefault', True)
         self.__isAsync = ctx.get('isAsync', False)

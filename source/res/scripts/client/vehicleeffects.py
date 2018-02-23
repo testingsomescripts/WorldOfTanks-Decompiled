@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VehicleEffects.py
 from collections import namedtuple
 import BigWorld
@@ -351,7 +352,7 @@ class ExhaustEffectsDescriptor(object):
                 effects = effects.split()
                 if not effects:
                     effects.append('')
-                raise len(rpm) == len(effects) or AssertionError('rpm size differs from effects')
+                assert len(rpm) == len(effects), 'rpm size differs from effects'
                 self.tables.append(RangeTable(rpm, effects))
 
         except Exception as exp:

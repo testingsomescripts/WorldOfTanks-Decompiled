@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/BattleReplay.py
 import base64
 import os
@@ -451,24 +452,24 @@ class BattleReplay():
         self.__replayCtrl.resetArenaPeriod()
 
     def setArenaPeriod(self, period, length):
-        if not self.isRecording:
-            raise AssertionError
-            period = period == constants.ARENA_PERIOD.AFTERBATTLE and constants.ARENA_PERIOD.BATTLE
+        assert self.isRecording
+        if period == constants.ARENA_PERIOD.AFTERBATTLE:
+            period = constants.ARENA_PERIOD.BATTLE
         self.__replayCtrl.arenaPeriod = period
         self.__replayCtrl.arenaLength = length
 
     def getArenaPeriod(self):
-        if not self.isPlaying:
-            raise AssertionError
-            ret = self.__replayCtrl.arenaPeriod
-            ret = ret not in (constants.ARENA_PERIOD.IDLE,
-             constants.ARENA_PERIOD.WAITING,
-             constants.ARENA_PERIOD.PREBATTLE,
-             constants.ARENA_PERIOD.BATTLE) and constants.ARENA_PERIOD.WAITING
+        assert self.isPlaying
+        ret = self.__replayCtrl.arenaPeriod
+        if ret not in (constants.ARENA_PERIOD.IDLE,
+         constants.ARENA_PERIOD.WAITING,
+         constants.ARENA_PERIOD.PREBATTLE,
+         constants.ARENA_PERIOD.BATTLE):
+            ret = constants.ARENA_PERIOD.WAITING
         return ret
 
     def getArenaLength(self):
-        raise self.isPlaying or AssertionError
+        assert self.isPlaying
         return self.__replayCtrl.arenaLength
 
     def setPlayerVehicleID(self, vehicleID):

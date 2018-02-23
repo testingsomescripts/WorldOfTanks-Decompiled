@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/MiniclientDescriptionWindow.py
 import os
 from gui import GUI_SETTINGS

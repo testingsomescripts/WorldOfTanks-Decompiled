@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/TankExpertAchievement.py
 from dossiers2.custom.helpers import getTankExpertRequirements
 from abstract import NationSpecificAchievement
@@ -16,7 +17,7 @@ class TankExpertAchievement(HasVehiclesList, NationSpecificAchievement):
         return self.__achieved
 
     def getVehiclesListTitle(self):
-        return 'vehiclesToKill'
+        pass
 
     def _readLevelUpValue(self, dossier):
         return len(self.getVehiclesData())

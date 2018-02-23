@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientChat.py
 import cPickle
 import zlib
@@ -20,7 +21,7 @@ class ClientChat(object):
     __actionHandlers = {CHAT_ACTIONS.receiveInvite.index(): '_ClientChat__onReceiveInvite'}
 
     def __init__(self):
-        raise isinstance(self, BigWorld.Entity) or AssertionError
+        assert isinstance(self, BigWorld.Entity)
         self.__chatActionCallbacks = {}
         self._idGen = SequenceIDGenerator()
 

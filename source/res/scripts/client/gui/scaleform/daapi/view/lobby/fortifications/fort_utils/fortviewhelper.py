@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/FortViewHelper.py
 import calendar
 import BigWorld
@@ -73,22 +74,22 @@ class FortViewHelper(FortListener):
 
     @classmethod
     def getBuildingUIDbyID(cls, buildingID):
-        raise isinstance(buildingID, int) or AssertionError('getBuildingUIDbyID requires INT, got %s' % str(buildingID))
+        assert isinstance(buildingID, int), 'getBuildingUIDbyID requires INT, got %s' % str(buildingID)
         return cls.UI_BUILDINGS_BIND.get(buildingID, cls.FORT_UNKNOWN)
 
     @classmethod
     def getBuildingIDbyUID(cls, buildingUID):
-        raise isinstance(buildingUID, str) or AssertionError('getBuildingUIDbyID requires STR, got %s' % str(buildingUID))
+        assert isinstance(buildingUID, str), 'getBuildingUIDbyID requires STR, got %s' % str(buildingUID)
         return findFirst(lambda k: cls.UI_BUILDINGS_BIND[k] == buildingUID, cls.UI_BUILDINGS_BIND)
 
     @classmethod
     def getOrderUIDbyID(cls, orderID):
-        raise isinstance(orderID, int) or AssertionError('getOrderUIDbyID requires INT, got %s' % str(orderID))
+        assert isinstance(orderID, int), 'getOrderUIDbyID requires INT, got %s' % str(orderID)
         return cls.UI_ORDERS_BIND.get(orderID, cls.FORT_UNKNOWN)
 
     @classmethod
     def getOrderIDbyUID(cls, orderUID):
-        raise isinstance(orderUID, str) or AssertionError('getOrderIDbyUID requires STR, got %s' % str(orderUID))
+        assert isinstance(orderUID, str), 'getOrderIDbyUID requires STR, got %s' % str(orderUID)
         return findFirst(lambda k: cls.UI_ORDERS_BIND[k] == orderUID, cls.UI_ORDERS_BIND)
 
     def _getBaseFortificationData(self):

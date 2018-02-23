@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/RandomDelay.py
 from FX.Event import Event
 from FX import s_sectionProcessors

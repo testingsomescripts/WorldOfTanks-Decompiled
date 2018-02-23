@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/mixins/HasVehicleList.py
 from collections import namedtuple
 from gui import nationCompareByIndex
@@ -15,7 +16,7 @@ class HasVehiclesList(object):
         return map(lambda i: i._asdict(), sorted(result, self.__sortFunc))
 
     def getVehiclesListTitle(self):
-        return 'vehicles'
+        pass
 
     def _getVehiclesDescrsList(self):
         raise NotImplemented

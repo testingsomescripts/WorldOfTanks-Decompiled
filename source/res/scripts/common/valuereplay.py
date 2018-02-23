@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ValueReplay.py
 import struct
 
@@ -9,7 +10,7 @@ class ValueReplayConnector(object):
     __slots__ = ('_battleResultsStruct', '_battleResults')
 
     def __init__(self, battleResultsStruct, battleResults):
-        raise len(battleResultsStruct) <= 1048575 or AssertionError
+        assert len(battleResultsStruct) <= 1048575
         self._battleResultsStruct = battleResultsStruct
         self._battleResults = battleResults
 
@@ -101,18 +102,18 @@ class ValueReplay:
     LAST = 15
 
     def __init__(self, connector, recordName, startRecordName = None, replay = None):
-        if not (startRecordName is None) ^ (replay is None):
-            raise AssertionError
-            raise recordName in connector or AssertionError
-            raise connector is not None or AssertionError
-            self.__connector = connector
-            self.__recordName = recordName
-            self.__overiddenValues = {}
-            self.__packed = replay
-            self.__replay = [] if replay is None else self.unpack()
-            self.__appliedValues = set([ self.parseStepCompDescr(step)[1] for step in self.__replay ] if self.__replay else [])
-            self.__tags = {}
-            return startRecordName is None and None
+        assert (startRecordName is None) ^ (replay is None)
+        assert recordName in connector
+        assert connector is not None
+        self.__connector = connector
+        self.__recordName = recordName
+        self.__overiddenValues = {}
+        self.__packed = replay
+        self.__replay = [] if replay is None else self.unpack()
+        self.__appliedValues = set([ self.parseStepCompDescr(step)[1] for step in self.__replay ] if self.__replay else [])
+        self.__tags = {}
+        if startRecordName is None:
+            return
         else:
             self.__setInitial(startRecordName)
             return

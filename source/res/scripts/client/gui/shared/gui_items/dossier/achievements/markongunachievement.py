@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/MarkOnGunAchievement.py
 from helpers import i18n
 import BigWorld
@@ -39,7 +40,6 @@ class MarkOnGunAchievement(RegularAchievement):
     def getI18nValue(self):
         if self.__damageRating > 0:
             return makeHtmlString('html_templates:lobby/tooltips/achievements', 'marksOnGun', {'count': BigWorld.wg_getNiceNumberFormat(self.__damageRating)})
-        return ''
 
     def _getActualName(self):
         return '%s%d' % (self._name, self._value)

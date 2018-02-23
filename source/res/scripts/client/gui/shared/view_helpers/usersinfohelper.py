@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/UsersInfoHelper.py
 from collections import defaultdict
 from debug_utils import LOG_DEBUG
@@ -97,19 +98,16 @@ class UsersInfoHelper(object):
         userName = self.getUserName(userDbID)
         if userName:
             return formatter(userName)
-        return ''
 
     def getGuiUserFullName(self, userDbID, isClan = True, isRegion = True, formatter = lambda v: v):
         userFullName = self.getUserFullName(userDbID, isClan=isClan, isRegion=isRegion)
         if userFullName:
             return formatter(userFullName)
-        return ''
 
     def getGuiUserRating(self, userDbID, formatter = lambda v: v):
         userRating = self.getUserRating(userDbID)
         if userRating != '0':
             return formatter(shared_fmts.getGlobalRatingFmt(userRating))
-        return '-1'
 
     def syncUsersInfo(self):
         if len(self._invalid['names']):

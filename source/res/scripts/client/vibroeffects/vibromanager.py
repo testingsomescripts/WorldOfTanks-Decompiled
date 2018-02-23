@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/VibroManager.py
 import copy
 from EffectsSettings import EffectsSettings
