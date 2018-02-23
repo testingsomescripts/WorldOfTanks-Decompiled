@@ -32,16 +32,17 @@ def notifyBattleResultsPosted(arenaUniqueID):
     g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, {'arenaUniqueID': arenaUniqueID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo):
+def showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo, questsProgress):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ctx={'rankedResultsVO': rankedResultsVO,
      'vehicle': vehicle,
-     'rankInfo': rankInfo}), EVENT_BUS_SCOPE.LOBBY)
+     'rankInfo': rankInfo,
+     'questsProgress': questsProgress}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedAwardWindow(rankID, showNext=True, vehicle=None):
+def showRankedAwardWindow(rankID, vehicle=None, awards=None):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'rankID': rankID,
-     'showNext': showNext,
-     'vehicle': vehicle}), EVENT_BUS_SCOPE.LOBBY)
+     'vehicle': vehicle,
+     'awards': awards}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedPrimeTimeWindow():

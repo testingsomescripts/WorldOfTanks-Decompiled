@@ -176,6 +176,39 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	WG Fest Paint	</name>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	276	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.30	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_20	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	primers	</name>
     <priceGroup>	historical paint	</priceGroup>
     <userString>	#vehicle_customization:repaint/color_group_03	</userString>
@@ -200,8 +233,8 @@
     <paint>
       <id>	275	</id>
       <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
-      <color>	95 44 44 255	</color>
-      <gloss>	0.509	</gloss>
+      <color>	80 48 48 255	</color>
+      <gloss>	0.4	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/primer_marmot	</userString>
       <season>	ALL	</season>
@@ -264,6 +297,32 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.203	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_19	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Rostelecom Paint	</name>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	277	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
+      <color>	73 87 95 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_21	</userString>
       <season>	ALL	</season>
       <historical>	false	</historical>
     </paint>
