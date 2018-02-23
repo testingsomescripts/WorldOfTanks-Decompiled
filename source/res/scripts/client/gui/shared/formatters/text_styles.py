@@ -55,6 +55,10 @@ def standard(text):
     return _formatText('standardText', text)
 
 
+def locked(text):
+    return _formatText('lockedText', text)
+
+
 def main(text):
     return _formatText('mainText', text)
 
@@ -87,12 +91,12 @@ def middleTitle(text):
     return _formatText('middleTitle', text)
 
 
+def middleTitleLocked(text):
+    return _formatText('middleTitleLocked', text)
+
+
 def middleBonusTitle(text):
     return _formatText('middleBonusTitle', text)
-
-
-def tankParamsSubtitle(text):
-    return _formatText('tankParamsSubtitle', text)
 
 
 def highTitle(text):
@@ -129,6 +133,10 @@ def superPromoTitle(text):
 
 def bonusLocalText(text):
     return _formatText('bonusLocalText', text)
+
+
+def bonusLocalInfoTipText(text):
+    return _formatText('bonusLocalInfoTipText', text)
 
 
 def bonusAppliedText(text):
@@ -195,6 +203,10 @@ def counter(text):
     return _formatText('counterText', text)
 
 
+def boosterText(text):
+    return _formatText('boosterText', text)
+
+
 def counterLabelText(text):
     return _formatText('counterLabelText', text)
 
@@ -242,10 +254,6 @@ def vehicleName(text):
 
 def premiumVehicleName(text):
     return _formatText('premiumVehicleName', text)
-
-
-def superPromoTitle(text):
-    return _formatText('superPromoTitle', text)
 
 
 def highlightText(text):

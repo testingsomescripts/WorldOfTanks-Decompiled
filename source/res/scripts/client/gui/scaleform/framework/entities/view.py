@@ -24,6 +24,19 @@ class ViewKey(_ViewKey):
     def __repr__(self):
         return '{}[alias={}, name={}]'.format(self.__class__.__name__, self.alias, self.name)
 
+    def __eq__(self, other):
+        return self.name == other.name and self.alias == other.alias if isinstance(other, ViewKey) else False
+
+
+class ViewKeyDynamic(ViewKey):
+    """
+    View key matcher based on alias only. Used for matching keys
+    with dynamically generated names (like dialogs).
+    """
+
+    def __eq__(self, other):
+        return self.alias == other.alias if isinstance(other, ViewKey) else False
+
 
 class _ViewSoundsManager(object):
     """
@@ -318,6 +331,9 @@ class View(AbstractViewMeta):
         :param alias: view alias represented by string.
         """
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
+
+    def delaySwitchTo(self, viewAlias, freezeCbk, unfreezeCbk):
+        return False
 
     def _populate(self):
         super(View, self)._populate()

@@ -5,6 +5,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from gui.shared.money import Money
 from items import vehicles, EQUIPMENT_TYPES, ItemsPrices
+from items.components.c11n_constants import DecalType
 import nations
 
 class ShopDataParser(object):
@@ -28,13 +29,43 @@ class ShopDataParser(object):
          GUI_ITEM_TYPE.SHELL: vehicles.g_cache.shells,
          GUI_ITEM_TYPE.EQUIPMENT: wrapper('getEquipments'),
          GUI_ITEM_TYPE.BATTLE_BOOSTER: wrapper('getBattleBoosters'),
-         GUI_ITEM_TYPE.OPTIONALDEVICE: wrapper('getOptionalDevices')}
+         GUI_ITEM_TYPE.OPTIONALDEVICE: wrapper('getOptionalDevices'),
+         GUI_ITEM_TYPE.PAINT: wrapper('getPaints'),
+         GUI_ITEM_TYPE.CAMOUFLAGE: wrapper('getCamouflages'),
+         GUI_ITEM_TYPE.MODIFICATION: wrapper('getModifications'),
+         GUI_ITEM_TYPE.DECAL: wrapper('getDecals'),
+         GUI_ITEM_TYPE.EMBLEM: wrapper('getEmblems'),
+         GUI_ITEM_TYPE.INSCRIPTION: wrapper('getInscriptions'),
+         GUI_ITEM_TYPE.STYLE: wrapper('getStyles')}
         self.data = data or {}
 
     def __del__(self):
         self.__modulesGetters.clear()
         self.__modulesGetters = None
         return
+
+    def getPaints(self, _):
+        return vehicles.g_cache.customization20().paints
+
+    def getCamouflages(self, _):
+        return vehicles.g_cache.customization20().camouflages
+
+    def getModifications(self, _):
+        return vehicles.g_cache.customization20().modifications
+
+    def getDecals(self, _):
+        return vehicles.g_cache.customization20().decals
+
+    def getEmblems(self, _):
+        decals = vehicles.g_cache.customization20().decals
+        return {intCD:decal for intCD, decal in decals.iteritems() if decal.type == DecalType.EMBLEM}
+
+    def getInscriptions(self, _):
+        decals = vehicles.g_cache.customization20().decals
+        return {intCD:decal for intCD, decal in decals.iteritems() if decal.type == DecalType.INSCRIPTION}
+
+    def getStyles(self, _):
+        return vehicles.g_cache.customization20().styles
 
     def getEquipments(self, nationID):
         allEquipments = vehicles.g_cache.equipments()
@@ -49,15 +80,10 @@ class ShopDataParser(object):
         return self.__filterByNationAndEqType(allOptDevices, params.OptionalDeviceParams, nationID)
 
     def getItemsIterator(self, nationID=None, itemTypeID=None):
-        hiddenInShop = self.data.get('notInShopItems', [])
-        sellForGold = self.data.get('vehiclesToSellForGold', [])
         prices = self.getPrices()
         for intCD in self.__getListOfCompDescrs(nationID, itemTypeID):
             if intCD in prices:
-                yield (intCD,
-                 Money.makeFromMoneyTuple(prices[intCD]),
-                 intCD in hiddenInShop,
-                 intCD in sellForGold)
+                yield intCD
 
     def getPrices(self):
         return self.data.get('itemPrices', ItemsPrices())
@@ -87,9 +113,12 @@ class ShopDataParser(object):
         return self.getPrices().get(intCD, ())
 
     def __getListOfCompDescrs(self, nationID=None, itemTypeID=None):
-        itemTypes = [itemTypeID]
         if itemTypeID is None:
             itemTypes = self.__modulesGetters.keys()
+        elif not isinstance(itemTypeID, list):
+            itemTypes = [itemTypeID]
+        else:
+            itemTypes = itemTypeID
         itemNations = [nationID]
         if nationID is None:
             itemNations = nations.INDICES.values()

@@ -48,6 +48,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         self.__cleanUp()
         return
 
+    def getEventID(self):
+        return self.__eventID
+
     def changeLeaderboard(self, leaderboardID):
         """
         Clean up current leaderboard and get data for new
@@ -95,20 +98,13 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         """
         Move to my place
         """
-        myPage = self.__myInfo.pageNumber
-        if self.__leaderboardData.pageNumber != myPage:
-            self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
-        else:
-            self.__scrollToRank(self.MY_RANK)
+        self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
 
     def showNextAward(self, visible):
-        stripesLen = len(self.__stripes['tableDP'])
-        if stripesLen > 0:
-            if visible:
-                stripesID = self.__stripes['tableDP'][1]['id']
-            else:
-                stripesID = self.__stripes['tableDP'][0]['id']
-            self.__awardGroup.setActiveRewardGroup(stripesID)
+        stripes = self.__stripes
+        if stripes and stripes['tableDP']:
+            groupID = stripes['tableDP'][1 if visible else 0]['id']
+            self.__awardGroup.setActiveRewardGroup(groupID)
 
     def playerClick(self, playerID):
         """
@@ -184,7 +180,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
     def __updateStatus(self):
         event = self.__eventData
         playerState = self.__playerState
-        top = self.__top
         myInfo = self.__myInfo
         state = playerState.getPlayerState() if playerState else None
         canJoin = playerState.getCanJoin() if playerState else True
@@ -238,8 +233,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             titleTooltip = makeParameterTooltipVO(method, amount, parameter)
         playerName = getattr(BigWorld.player(), 'name', '')
         playerName = getFullName(playerName, myInfo.fullData.getClanTag(), myInfo.fullData.getClanColor())
+        myPosition = self.__myInfo.rank
         self.as_setStatusVisibleS(visible)
-        self.as_setMyPlaceVisibleS(not visible and top is not None)
+        self.as_setMyPlaceVisibleS(not visible and myPosition is not None)
         if visible:
             p1 = myInfo.fullData.getP1()
             p2 = myInfo.fullData.getP2()
@@ -334,13 +330,19 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
                 self.__updatePage()
                 self.__scrollToRank(rank)
                 enabledAncors = []
-                for categoryIdx in range(self.MIN_CATEGORY, self.MAX_CATEGORY):
+                for categoryIdx in range(self.MIN_CATEGORY, self.MAX_CATEGORY + 1):
                     if categoryIdx in self.__rewardCategories:
                         enable = self.__rewardCategories[categoryIdx].get('page_number') is not None
                         self.__awardGroup.as_setEnabledS(categoryIdx - 1, enable)
-                        enabledAncors.append(enable)
+                    else:
+                        enable = False
+                    enabledAncors.append(enable)
 
-                self.__awardGroup.as_setDataS([ idx < len(enabledAncors) for idx in range(self.MAX_AWARD_GROUPS) ])
+                group = []
+                for idx in range(self.MAX_AWARD_GROUPS + 1):
+                    group.append(enabledAncors[idx])
+
+                self.__awardGroup.as_setDataS(group)
                 self.__awardGroup.as_setTooltipsS(makeAwardGroupDataTooltipVO(self.__rewardCategories, enabledAncors))
                 self.as_setMyPlaceTooltipS(makeTooltip(TOOLTIPS.ELEN_ANCOR_MYPOSITION_HEADER, TOOLTIPS.ELEN_ANCOR_MYPOSITION_BODY))
             else:
@@ -373,10 +375,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__fetchLeaderboardPageData(1, self.TOP_POSITION_RANK)
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS:
-            view.setData(self.__eventData, self.changeLeaderboard, self.__leaderboardID)
-        elif view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS:
-            view.setOpener(self)
+        if view.settings.alias in (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS):
+            if view.caller == 'excel':
+                view.setData(self.__eventData, self.changeLeaderboard, self.__leaderboardID)
 
     def __updateHeader(self):
         event = self.__eventData
@@ -393,7 +394,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             recalculationInterval = leaderboard.getRecalculationInterval()
             interval = int(recalculationInterval / ONE_MINUTE)
             status = text_styles.main(formatUpdateTime(recalculationTS))
-            statusTooltip = _ms(EVENT_BOARDS.SUMMARY_STATUS_TOOLTIP, interval=interval)
+            statusTooltip = _ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval)
         else:
             status = None
             statusTooltip = None
@@ -413,13 +414,13 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
 
     def __scrollToRank(self, rank):
         if rank == self.TOP_POSITION_RANK:
-            self.as_setScrollPosS(0)
+            self.as_setScrollPosS(0, False)
             categoryNumber = self.__getCategoryByRank(self.__leaderboardData.excelItems[0].getRank())
         elif rank == self.MY_RANK:
-            self.as_setScrollPosS(self.__getMyPosition())
+            self.as_setScrollPosS(self.__getMyPosition(), True)
             categoryNumber = self.__getCategoryByRank(self.__myInfo.rank)
         else:
-            self.as_setScrollPosS(self.__getPositionByRank(rank))
+            self.as_setScrollPosS(self.__getPositionByRank(rank), False)
             categoryNumber = self.__getCategoryByRank(rank)
         if self.MIN_CATEGORY < categoryNumber <= self.MAX_CATEGORY - 1:
             self.__awardGroup.setActiveRewardGroup(categoryNumber)

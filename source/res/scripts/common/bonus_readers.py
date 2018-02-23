@@ -6,6 +6,7 @@ import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
+from items.new_year_types import NATIONAL_SETTINGS_IDS_BY_NAME, TOY_TYPES_IDS_BY_NAME
 from constants import EVENT_TYPE, DOSSIER_TYPE, IS_DEVELOPMENT
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -131,6 +132,22 @@ def __readBonus_vehicle(bonus, _name, section):
     return
 
 
+def __readBonus_ny18Toy(bonus, _name, section):
+    if section.has_key('setting'):
+        settingID = NATIONAL_SETTINGS_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPES_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault('ny18Toys', []).append((settingID, typeID, rank))
+
+
 def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
     lst = []
     for subsection in section.values():
@@ -197,38 +214,16 @@ def __readBonus_rent(bonus, _name, section):
 def __readBonus_customizations(bonus, _name, section):
     lst = []
     for subsection in section.values():
-        custData = {'isPermanent': subsection.readBool('isPermanent', False),
-         'value': subsection.readInt('value', 0),
+        custData = {'value': subsection.readInt('value', 0),
          'custType': subsection.readString('custType', ''),
-         'id': (subsection.readInt('nationID', -1), subsection.readInt('innationID', -1))}
+         'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
         elif subsection.has_key('boundToCurrentVehicle'):
             custData['boundToCurrentVehicle'] = True
-        if custData['custType'] == 'emblems':
-            custData['id'] = custData['id'][1]
-        isValid, reason = validateCustomizationItem(custData)
+        isValid, item = validateCustomizationItem(custData)
         if not isValid:
-            raise Exception(reason)
-        if 'boundToCurrentVehicle' in custData:
-            customization = vehicles.g_cache.customization
-            if custData['custType'] == 'camouflages':
-                nationID, innationID = custData['id']
-                descr = customization(nationID)['camouflages'][innationID]
-                if descr['allow'] or descr['deny']:
-                    raise Exception('Unsupported camouflage because allow and deny tags %s, %s, %s' % (custData, descr['allow'], descr['deny']))
-            elif custData['custType'] == 'inscriptions':
-                nationID, innationID = custData['id']
-                groupName = customization(nationID)['inscriptions'][innationID][0]
-                allow, deny = customization(nationID)['inscriptionGroups'][groupName][3:5]
-                if allow or deny:
-                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
-            elif custData['custType'] == 'emblems':
-                innationID = custData['id']
-                groups, emblems, _ = vehicles.g_cache.playerEmblems()
-                allow, deny = groups[emblems[innationID][0]][4:6]
-                if allow or deny:
-                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
+            raise Exception(item)
         lst.append(custData)
 
     bonus['customizations'] = lst
@@ -305,7 +300,7 @@ def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isO
     if probabilityAttr is None:
         probability = 0
     else:
-        probability = probabilityAttr.asInt / 100.0
+        probability = round(probabilityAttr.asFloat, 2) / 100.0
     if not 0 <= probability <= 100:
         raise Exception('Probability is out of range: {}'.format(probability))
     if isOneOf:
@@ -382,7 +377,8 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'vehicle': __readBonus_vehicle,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
- 'customizations': __readBonus_customizations}
+ 'customizations': __readBonus_customizations,
+ 'ny18Toy': __readBonus_ny18Toy}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -429,6 +425,9 @@ def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
                     bonus['name'] = sub.readString('', '').strip()
                 continue
             elif name == 'probability':
+                continue
+            elif name == 'compensation':
+                bonus['compensation'] = sub.readBool('', False)
                 continue
             elif name not in bonusReaders:
                 raise Exception('Bonus not in bonus readers {}'.format(name))

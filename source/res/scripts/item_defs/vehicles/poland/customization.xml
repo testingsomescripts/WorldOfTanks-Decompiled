@@ -101,6 +101,32 @@
         </inscription>
       </inscriptions>
     </poland>
+    <WGChrisEvent1718_poland>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <priceFactor>	0.0	</priceFactor>
+      <notInShop>	true	</notInShop>
+      <nations>	poland	</nations>
+      <inscriptions>
+        <inscription>
+          <id>	901	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_162.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_162	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	902	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_166.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_166	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	903	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_170.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_170	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </WGChrisEvent1718_poland>
   </inscriptions>
   <insigniaOnGun>
     <insignia>
@@ -149,10 +175,10 @@
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
-        <c0>	255 255 255 0	</c0>
-        <c1>	73 49 29 0	</c1>
-        <c2>	234 208 171 255	</c2>
-        <c3>	136 140 86 255	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	181 160 128 255	</c2>
+        <c3>	113 113 72 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -166,10 +192,10 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	255 255 255 0	</c0>
-        <c1>	73 49 29 0	</c1>
-        <c2>	255 255 255 0	</c2>
-        <c3>	224 224 224 255	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	180 180 180 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -183,10 +209,10 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	255 255 255 0	</c0>
-        <c1>	73 49 29 0	</c1>
-        <c2>	106 111 83 255	</c2>
-        <c3>	58 64 53 255	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	101 102 79 255	</c2>
+        <c3>	61 63 48 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -200,10 +226,10 @@
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
       <colors>
-        <c0>	83 83 83 199	</c0>
-        <c1>	0 0 0 223	</c1>
-        <c2>	177 177 177 223	</c2>
-        <c3>	255 255 255 230	</c3>
+        <c0>	81 78 66 255	</c0>
+        <c1>	38 35 25 255	</c1>
+        <c2>	130 128 117 255	</c2>
+        <c3>	169 169 167 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -218,10 +244,10 @@
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
       <colors>
-        <c0>	157 108 34 178	</c0>
-        <c1>	226 210 154 173	</c1>
-        <c2>	0 0 0 223	</c2>
-        <c3>	61 86 35 174	</c3>
+        <c0>	111 87 45 255	</c0>
+        <c1>	138 128 93 255	</c1>
+        <c2>	38 35 25 255	</c2>
+        <c3>	72 78 45 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -236,10 +262,10 @@
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
       <colors>
-        <c0>	196 126 34 219	</c0>
-        <c1>	232 210 145 223	</c1>
-        <c2>	0 0 0 223	</c2>
-        <c3>	113 89 57 235	</c3>
+        <c0>	139 100 43 255	</c0>
+        <c1>	159 144 101 255	</c1>
+        <c2>	38 35 25 255	</c2>
+        <c3>	98 82 55 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -254,10 +280,10 @@
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
       <colors>
-        <c0>	32 35 43 219	</c0>
-        <c1>	101 74 50 209	</c1>
-        <c2>	164 164 164 142	</c2>
-        <c3>	255 255 255 146	</c3>
+        <c0>	55 54 47 255	</c0>
+        <c1>	90 74 51 255	</c1>
+        <c2>	120 117 107 255	</c2>
+        <c3>	158 155 159 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -272,10 +298,10 @@
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
       <colors>
-        <c0>	138 90 68 219	</c0>
-        <c1>	203 135 67 223	</c1>
-        <c2>	202 169 123 223	</c2>
-        <c3>	112 67 46 0	</c3>
+        <c0>	109 81 60 255	</c0>
+        <c1>	144 105 60 255	</c1>
+        <c2>	143 123 89 255	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -290,10 +316,10 @@
       <kind>	winter	</kind>
       <group>	IGRwinter	</group>
       <colors>
-        <c0>	43 33 23 199	</c0>
-        <c1>	101 74 50 223	</c1>
-        <c2>	181 153 89 223	</c2>
-        <c3>	221 201 153 230	</c3>
+        <c0>	62 54 38 255	</c0>
+        <c1>	90 74 51 255	</c1>
+        <c2>	132 115 71 255	</c2>
+        <c3>	156 142 107 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -308,10 +334,10 @@
       <kind>	summer	</kind>
       <group>	IGRsummer	</group>
       <colors>
-        <c0>	52 78 41 178	</c0>
-        <c1>	108 72 19 173	</c1>
-        <c2>	39 40 30 223	</c2>
-        <c3>	207 196 150 174	</c3>
+        <c0>	68 75 48 255	</c0>
+        <c1>	90 72 50 255	</c1>
+        <c2>	58 56 41 255	</c2>
+        <c3>	131 123 92 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -326,10 +352,10 @@
       <kind>	desert	</kind>
       <group>	IGRdesert	</group>
       <colors>
-        <c0>	33 27 22 219	</c0>
-        <c1>	153 116 60 223	</c1>
-        <c2>	198 166 117 223	</c2>
-        <c3>	112 67 46 235	</c3>
+        <c0>	56 50 36 255	</c0>
+        <c1>	117 95 56 255	</c1>
+        <c2>	141 122 86 255	</c2>
+        <c3>	97 69 48 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -344,10 +370,10 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	100 13 0 174	</c0>
-        <c1>	201 136 48 113	</c1>
-        <c2>	21 30 15 210	</c2>
-        <c3>	186 147 12 0	</c3>
+        <c0>	83 46 30 255	</c0>
+        <c1>	111 90 51 255	</c1>
+        <c2>	44 45 30 255	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -362,8 +388,8 @@
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
-        <c0>	36 70 21 117	</c0>
-        <c1>	255 255 255 146	</c1>
+        <c0>	67 72 44 0	</c0>
+        <c1>	170 170 170 255	</c1>
         <c2>	0 0 0 0	</c2>
         <c3>	0 0 0 0	</c3>
       </colors>
@@ -380,10 +406,10 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	109 119 77 174	</c0>
-        <c1>	0 13 0 164	</c1>
-        <c2>	21 30 15 0	</c2>
-        <c3>	186 147 12 0	</c3>
+        <c0>	91 92 62 255	</c0>
+        <c1>	40 41 27 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -398,10 +424,10 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	60 99 1 174	</c0>
-        <c1>	164 217 38 116	</c1>
-        <c2>	4 21 5 210	</c2>
-        <c3>	201 192 133 153	</c3>
+        <c0>	71 84 31 255	</c0>
+        <c1>	102 112 48 255	</c1>
+        <c2>	42 47 29 255	</c2>
+        <c3>	131 123 86 255	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -416,10 +442,10 @@
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
-        <c0>	255 255 255 225	</c0>
-        <c1>	21 26 30 0	</c1>
-        <c2>	235 253 254 0	</c2>
-        <c3>	226 233 241 0	</c3>
+        <c0>	191 191 191 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -434,10 +460,10 @@
       <group>	desert	</group>
       <kind>	desert	</kind>
       <colors>
-        <c0>	164 126 74 255	</c0>
-        <c1>	85 21 22 0	</c1>
-        <c2>	207 175 128 0	</c2>
-        <c3>	241 139 48 0	</c3>
+        <c0>	130 105 65 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
@@ -452,14 +478,50 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	111 81 36 255	</c0>
-        <c1>	50 54 31 255	</c1>
-        <c2>	4 21 5 0	</c2>
-        <c3>	201 192 133 0	</c3>
+        <c0>	101 80 39 255	</c0>
+        <c1>	54 55 34 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling></tiling>
       <deny>	Pl03_PzV_Poland	</deny>
       <notInShop>	true	</notInShop>
     </summer_camo>
+    <Clan_camuflage_04_winter>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
+      <id>	160	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	47 71 88 255	</c0>
+        <c1>	155 152 156 255	</c1>
+        <c2>	42 45 44 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </Clan_camuflage_04_winter>
+    <Clan_camuflage_04_desert>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
+      <id>	159	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	93 75 31 255	</c0>
+        <c1>	131 120 64 255	</c1>
+        <c2>	54 47 28 255	</c2>
+        <c3>	155 154 156 255	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </Clan_camuflage_04_desert>
   </camouflages>
 </customization.xml>

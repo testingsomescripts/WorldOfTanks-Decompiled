@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BadgesPage.py
+from collections import defaultdict
 import BigWorld
+import operator
 from gui import SystemMessages
 from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
@@ -59,20 +61,45 @@ class BadgesPage(BadgesPageMeta):
     def __updateBadges(self):
         receivedBadgesData = []
         notReceivedBadgesData = []
-        for badge in sorted(self.itemsCache.items.getBadges().itervalues()):
+        selected, badges = self.__preprocessBadges()
+        if selected is not None:
+            self.as_setSelectedBadgeImgS(selected.getSmallIcon())
+        for badge in badges:
             badgeVO = _makeBadgeVO(badge)
             if badge.isAchieved:
                 receivedBadgesData.append(badgeVO)
-                if badgeVO['selected']:
-                    self.as_setSelectedBadgeImgS(settings.getBadgeIconPath(settings.BADGES_ICONS.X48, badgeVO['id']))
             notReceivedBadgesData.append(badgeVO)
 
         self.as_setReceivedBadgesS({'badgesData': receivedBadgesData})
         self.as_setNotReceivedBadgesS({'title': text_styles.highTitle(BADGE.BADGESPAGE_BODY_UNCOLLECTED_TITLE),
          'badgesData': notReceivedBadgesData})
+        return
 
     @decorators.process('updating')
     def __selectBadges(self, badges=None):
         result = yield BadgesSelector(badges).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+    def __preprocessBadges(self):
+        selected = None
+        result = []
+        cache = defaultdict(list)
+        for badge in self.itemsCache.items.getBadges().itervalues():
+            if badge.isSelected:
+                selected = badge
+            if badge.isObsolete() and not badge.isAchieved:
+                continue
+            if badge.isCollapsible():
+                cache[badge.group].append(badge)
+                continue
+            result.append(badge)
+
+        for badges in cache.itervalues():
+            byClass = sorted(badges, key=operator.methodcaller('getBadgeClass'), reverse=True)
+            for badge in byClass:
+                result.append(badge)
+                if badge.isAchieved:
+                    break
+
+        return (selected, sorted(result))

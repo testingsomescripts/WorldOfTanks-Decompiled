@@ -129,7 +129,9 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'spgAlternativeAimingCameraEnabled': False,
  'tokenShopAvailabilityURL': '',
  'tokenShopAPIKey': '',
- 'personalMissions': {}}
+ 'personalMissions': {},
+ 'adventCalendarBaseURL': '',
+ 'rankedBattles': {}}
 
 class GuiSettings(object):
 

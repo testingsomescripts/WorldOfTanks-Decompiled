@@ -7,7 +7,8 @@ import gui
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles
@@ -19,7 +20,7 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from helpers import dependency
 from helpers.i18n import makeString
-from items import vehicles
+from items.components.c11n_constants import SeasonType
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
@@ -361,13 +362,7 @@ class HangarContext(ToolTipContext):
         self._historicalBattleID = historicalBattleID
         return self.itemsCache.items.getItemByCD(int(intCD))
 
-    def buildItemMultiTurret(self, intCD, slotIdx=0, intCD2=-1):
-        self._slotIdx = int(slotIdx)
-        self._vehicle = self.getVehicle()
-        self._historicalBattleID = -1
-        return (self.itemsCache.items.getItemByCD(int(intCD)), self.itemsCache.items.getItemByCD(int(intCD2)))
-
-    def getStatusConfiguration(self, item, position=0):
+    def getStatusConfiguration(self, item):
         value = super(HangarContext, self).getStatusConfiguration(item)
         inventoryCheck = item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         isInInventory = inventoryCheck and item.isInInventory
@@ -415,6 +410,21 @@ class TankmanHangarContext(HangarContext):
 
     def buildItem(self, invID):
         return self.itemsCache.items.getTankman(int(invID))
+
+
+class SeasonsHangarContext(HangarContext):
+
+    def buildItem(self, season):
+        seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_SUMMER
+        if season == SeasonType.WINTER:
+            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_WINTER
+        elif season == SeasonType.DESERT:
+            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_DESERT
+        elif season == SeasonType.EVENT:
+            pass
+        return {'seasonImage': seasonImage,
+         'header': TOOLTIPS.seasonHeader(SEASONS_CONSTANTS.SEASONS[season]),
+         'body': TOOLTIPS.seasonBody(SEASONS_CONSTANTS.SEASONS[season])}
 
 
 class TechTreeContext(ShopContext):
@@ -649,34 +659,6 @@ class ClanProfileFortBuildingContext(ToolTipContext):
         super(ClanProfileFortBuildingContext, self).__init__(TOOLTIP_COMPONENT.CLAN_PROFILE, fieldsToExclude)
 
 
-class CustomizationContext(ToolTipContext):
-    """ Customization class for tool tip context
-    """
-
-    def __init__(self, fieldsToExclude=None):
-        super(CustomizationContext, self).__init__(TOOLTIP_COMPONENT.CUSTOMIZATION, fieldsToExclude)
-
-    def buildItem(self, nationId, itemId, customizationType):
-        if customizationType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
-            result = vehicles.g_cache.customization(nationId)['camouflages'][itemId]
-        elif customizationType == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            emblemGroups, emblems, _ = vehicles.g_cache.playerEmblems()
-            emblem = emblems[itemId]
-            allow, deny = emblemGroups.get(emblem[0])[4:]
-            result = list(emblem)
-            result.extend([allow, deny])
-        elif customizationType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            customizationData = vehicles.g_cache.customization(nationId)
-            inscriptionGroups = customizationData.get('inscriptionGroups', {})
-            inscription = customizationData.get('inscriptions', {}).get(itemId)
-            allow, deny = inscriptionGroups.get(inscription[0])[3:]
-            result = list(inscription)
-            result.extend([allow, deny])
-        else:
-            result = None
-        return result
-
-
 class ContactContext(ToolTipContext):
     """ Contact class for tool tip context
     """
@@ -800,4 +782,22 @@ class InventoryBattleBoosterContext(ShopBattleBoosterContext):
     def getStatusConfiguration(self, item):
         value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
         value.checkBuying = False
+        return value
+
+
+class NewYearAwardsResultContext(ProfileContext):
+    """ Profile class for tool tip context
+    """
+
+    def __init__(self, fieldsToExclude=None):
+        super(NewYearAwardsResultContext, self).__init__(fieldsToExclude)
+        self._component = TOOLTIP_COMPONENT.NY_REWARDS
+
+    def buildItem(self, block, name, value=0, customData=None):
+        factory = factories.getAchievementFactory((block, name))
+        return factory.create(value=value) if factory is not None else None
+
+    def getParamsConfiguration(self, item):
+        value = super(ProfileContext, self).getParamsConfiguration(item)
+        value.checkAchievementExistence = False
         return value

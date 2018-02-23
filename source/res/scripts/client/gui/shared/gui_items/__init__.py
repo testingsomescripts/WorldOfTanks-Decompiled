@@ -5,7 +5,7 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
 from gui.shared.money import Currency
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -20,6 +20,15 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     OPTIONALDEVICE = GUI_ITEM_TYPE_INDICES['optionalDevice']
     SHELL = GUI_ITEM_TYPE_INDICES['shell']
     EQUIPMENT = GUI_ITEM_TYPE_INDICES['equipment']
+    CUSTOMIZATION = GUI_ITEM_TYPE_INDICES['customizationItem']
+    PAINT = GUI_ITEM_TYPE_INDICES['paint']
+    CAMOUFLAGE = GUI_ITEM_TYPE_INDICES['camouflage']
+    MODIFICATION = GUI_ITEM_TYPE_INDICES['modification']
+    DECAL = GUI_ITEM_TYPE_INDICES['decal']
+    EMBLEM = GUI_ITEM_TYPE_INDICES['emblem']
+    INSCRIPTION = GUI_ITEM_TYPE_INDICES['inscription']
+    OUTFIT = GUI_ITEM_TYPE_INDICES['outfit']
+    STYLE = GUI_ITEM_TYPE_INDICES['style']
     COMMON = tuple(ITEM_TYPE_INDICES.keys())
     BATTLE_BOOSTER = GUI_ITEM_TYPE_INDICES['battleBooster']
     ARTEFACTS = (EQUIPMENT, OPTIONALDEVICE, BATTLE_BOOSTER)
@@ -41,6 +50,12 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      CHASSIS,
      RADIO)
     VEHICLE_COMPONENTS = VEHICLE_MODULES + ARTEFACTS + (SHELL,)
+    CUSTOMIZATIONS = (PAINT,
+     CAMOUFLAGE,
+     MODIFICATION,
+     EMBLEM,
+     INSCRIPTION,
+     STYLE)
 
 
 def _formatMoneyError(currency):
@@ -139,7 +154,7 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
     return ItemsCollection()
 
 
-def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0, onlySpecificTurretPID=False):
+def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
     """
     Returns all suitable items for given @vehicle.
     
@@ -180,19 +195,13 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0, onlySpecificTur
         descriptorsList = [ eq for eq in eqs.itervalues() if eq.equipmentType == EQUIPMENT_TYPES.battleBoosters and eq.checkCompatibilityWithVehicle(vehDescr)[0] ]
     elif itemTypeId == vehicles._GUN:
         current = [vehDescr.gun.compactDescr]
-        if onlySpecificTurretPID:
-            for turret in vehDescr.type.turrets[turretPID]:
+        for gun in vehDescr.turret.guns:
+            descriptorsList.append(gun)
+
+        for turret in vehDescr.type.turrets[turretPID]:
+            if turret is not vehDescr.turret:
                 for gun in turret.guns:
                     descriptorsList.append(gun)
-
-        else:
-            for gun in vehDescr.turret.guns:
-                descriptorsList.append(gun)
-
-            for turret in vehDescr.type.turrets[turretPID]:
-                if turret is not vehDescr.turret:
-                    for gun in turret.guns:
-                        descriptorsList.append(gun)
 
     elif itemTypeId == vehicles._SHELL:
         for shot in vehDescr.gun.shots:

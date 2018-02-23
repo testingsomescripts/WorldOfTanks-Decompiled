@@ -3,13 +3,11 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
-import Math
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, PERSONAL_QUEST_FREE_TOKEN_NAME
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -19,7 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money
@@ -29,14 +27,24 @@ from helpers import getLocalizedData, i18n
 from helpers import time_utils
 from items import vehicles, tankmen
 from shared_utils import makeTupleByDict
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
-from halloween_shared import SUPPLY_DROP_LEVELS, SUPPLY_DROP_TOKEN_PREFIX, HALLOWEEN_QUEST_PREFIX, HALLOWEEN_MARATHON_QUEST_PREFIX
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 
 def _getAchievement(block, record, value):
-    factory = getAchievementFactory((block, record))
-    return factory.create(value=value)
+    if block == ACHIEVEMENT_BLOCK.RARE:
+        record = value
+        value = 0
+    try:
+        achieve = getAchievementFactory((block, record)).create(value=value)
+        if achieve.isAvailableInQuest():
+            return achieve
+    except Exception:
+        LOG_ERROR('There is error while getting bonus dossier record name')
+        LOG_CURRENT_EXCEPTION()
+
+    return None
 
 
 def _isAchievement(block):
@@ -327,6 +335,9 @@ class FreeTokensBonus(TokensBonus):
     def format(self):
         return makeHtmlString('html_templates:lobby/quests/bonuses', self._name, {'value': self.formatValue()})
 
+    def areTokensPawned(self):
+        return self.getContext()['areTokensPawned']
+
 
 class CompletionTokensBonus(TokensBonus):
 
@@ -490,49 +501,6 @@ class GoodiesBonus(SimpleBonus):
          'specialArgs': [booster.boosterID]}
 
 
-class SupplyDropBonus(TokensBonus):
-
-    def format(self):
-        from gui.shared.tooltips.quests import _StringTokenBonusFormatter
-        dropLevel = self.__getDropLevel()
-        text = makeHtmlString('html_templates:lobby/quests/{}'.format('bonuses'), 'halloween2017_drop_' + str(dropLevel))
-        otherTokens = _StringTokenBonusFormatter().format(self)
-        for t in otherTokens:
-            text = text + ', ' + t
-
-        return text
-
-    def tier(self):
-        return self.__getDropLevel()
-
-    def getList(self):
-        dropLevel = self.__getDropLevel()
-        return [{'value': '',
-          'itemSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
-          'valueAtLeft': False,
-          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
-
-    def hasIconFormat(self):
-        return True
-
-    def isVisualOnly(self):
-        return True
-
-    def isShowInGUI(self):
-        return True
-
-    def getCarouselList(self, isReceived=False, isChristmasFormat=False):
-        dropLevel = self.__getDropLevel()
-        return [{'counter': '',
-          'imgSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
-          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
-
-    def __getDropLevel(self):
-        for id, _ in self._value.iteritems():
-            if id.startswith(SUPPLY_DROP_TOKEN_PREFIX):
-                return int(id[len(SUPPLY_DROP_TOKEN_PREFIX):])
-
-
 class VehiclesBonus(SimpleBonus):
     DEFAULT_CREW_LVL = 50
 
@@ -617,7 +585,10 @@ class VehiclesBonus(SimpleBonus):
 
     @classmethod
     def getTmanRoleLevel(cls, vehInfo):
-        return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0)) if 'noCrew' not in vehInfo else None
+        if 'noCrew' not in vehInfo:
+            if 'crewLvl' in vehInfo:
+                return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
+        return None
 
     @staticmethod
     def getRentDays(vehInfo):
@@ -737,13 +708,9 @@ class DossierBonus(SimpleBonus):
         result = []
         for (block, record), value in self.getRecords().iteritems():
             if filterFunc(block):
-                if block == ACHIEVEMENT_BLOCK.RARE:
-                    continue
-                try:
-                    result.append(_getAchievement(block, record, value))
-                except Exception:
-                    LOG_ERROR('There is error while getting bonus dossier record name')
-                    LOG_CURRENT_EXCEPTION()
+                achieve = _getAchievement(block, record, value)
+                if achieve is not None:
+                    result.append(achieve)
 
         return result
 
@@ -856,62 +823,28 @@ class RefSystemTankmenBonus(TankmenBonus):
 
 
 class CustomizationsBonus(SimpleBonus):
-    INFOTIP_ARGS_ORDER = ('type', 'id', 'nationId', 'value', 'isPermanent', 'boundVehicle', 'boundToCurrentVehicle')
+    c11n = dependency.descriptor(ICustomizationService)
+    INFOTIP_ARGS_ORDER = ('intCD', 'value', 'boundVehicle', 'boundToCurrentVehicle')
 
-    def _makeTextureUrl(self, width, height, texture, colors, armorColor):
-        if not texture:
-            return ''
-        weights = Math.Vector4((colors[0] >> 24) / 255.0, (colors[1] >> 24) / 255.0, (colors[2] >> 24) / 255.0, (colors[3] >> 24) / 255.0)
-        return 'img://camouflage,{0:d},{1:d},"{2:>s}",{3[0]:d},{3[1]:d},{3[2]:d},{3[3]:d},{4[0]:n},{4[1]:n},{4[2]:n},{4[3]:n},{5:d}'.format(width, height, texture, colors, weights, armorColor)
-
-    def getList(self, defaultSize=67):
+    def getList(self):
         result = []
-        for item in self.getCustomizations():
-            itemType = item.get('custType')
-            itemId = item.get('id', (-1, -1))
-            boundVehicle = item.get('vehTypeCompDescr', None)
-            boundToCurrentVehicle = item.get('boundToCurrentVehicle', False)
-            nationId = 0
-            texture = ''
-            if itemType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE:
-                customization = vehicles.g_cache.customization(itemId[0])
-                camouflages = customization.get('camouflages', {})
-                camouflage = camouflages.get(itemId[1], None)
-                if camouflage:
-                    armorColor = customization.get('armorColor', 0)
-                    texture = self._makeTextureUrl(defaultSize, defaultSize, camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor)
-                    nationId, itemId = itemId
-            elif itemType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
-                _, emblems, _ = vehicles.g_cache.playerEmblems()
-                emblem = emblems.get(itemId, None)
-                if emblem:
-                    texture = emblem[2]
-            elif itemType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE:
-                customization = vehicles.g_cache.customization(itemId[0])
-                inscriptions = customization.get(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, {})
-                inscription = inscriptions.get(itemId[1], None)
-                if inscription:
-                    texture = inscription[2]
-                    nationId, itemId = itemId
-            if texture.startswith('gui'):
-                texture = texture.replace('gui', '..', 1)
-            isPermanent = item.get('isPermanent', False)
-            value = item.get('value', 0)
+        for itemData in self.getCustomizations():
+            itemTypeName = itemData.get('custType')
+            itemID = itemData.get('id')
+            boundVehicle = itemData.get('vehTypeCompDescr')
+            boundToCurrentVehicle = itemData.get('boundToCurrentVehicle', False)
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+            item = self.c11n.getItemByID(itemTypeID, itemID)
+            value = itemData.get('value', 0)
             valueStr = None
-            if not isPermanent:
-                value *= time_utils.ONE_DAY
-            elif value > 1:
+            if value > 1:
                 valueStr = text_styles.main(i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
-            res = {'id': itemId,
-             'type': CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(itemType),
-             'nationId': nationId,
-             'texture': texture,
-             'isPermanent': isPermanent,
+            result.append({'intCD': item.intCD,
+             'texture': item.icon,
              'value': value,
              'valueStr': valueStr,
              'boundVehicle': boundVehicle,
-             'boundToCurrentVehicle': boundToCurrentVehicle}
-            result.append(res)
+             'boundToCurrentVehicle': boundToCurrentVehicle})
 
         return result
 
@@ -920,9 +853,13 @@ class CustomizationsBonus(SimpleBonus):
 
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
-        for item, data in zip(self.getCustomizations(), self.getList(defaultSize=128)):
+        for item, data in zip(self.getCustomizations(), self.getList()):
+            itemTypeName = item.get('custType')
+            itemID = item.get('id')
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+            c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
             count = item.get('value', 1)
-            itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, item.get('custType')),
+            itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
              'label': text_styles.hightlight('x{}'.format(count)),
              'align': TEXT_ALIGN.RIGHT}
             itemData.update(self.__itemTooltip(data, isReceived=False))
@@ -936,7 +873,7 @@ class CustomizationsBonus(SimpleBonus):
 
     def __itemTooltip(self, data, isReceived):
         return {'isSpecial': True,
-         'specialAlias': TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM,
+         'specialAlias': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM,
          'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ] + [isReceived]}
 
 
@@ -980,6 +917,12 @@ class BoxBonus(SimpleBonus):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
+class NYToyBonuses(SimpleBonus):
+
+    def formatValue(self):
+        pass
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -1002,8 +945,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
             _ET.TOKEN_QUEST: BattleTokensBonus,
             _ET.PERSONAL_QUEST: BattleTokensBonus,
             _ET.PERSONAL_MISSION: personalMissionsTokensFactory,
-            _ET.ELEN_QUEST: BattleTokensBonus,
-            'halloween2017': SupplyDropBonus},
+            _ET.ELEN_QUEST: BattleTokensBonus},
  'dossier': {'default': DossierBonus,
              _ET.PERSONAL_MISSION: PersonalMissionDossierBonus},
  'tankmen': {'default': TankmenBonus,
@@ -1013,7 +955,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus}
+ 'badgesGroup': BadgesGroupBonus,
+ 'ny18Toys': NYToyBonuses}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 
@@ -1060,9 +1003,6 @@ def getBonuses(quest, name, value, isCompensation=False):
     key = [name, questType]
     ctx = {}
     if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
-        qID = quest.getID()
-        if qID.startswith(HALLOWEEN_QUEST_PREFIX) or qID.startswith(HALLOWEEN_MARATHON_QUEST_PREFIX):
-            return [SupplyDropBonus('halloween2017', value, isCompensation)]
         parentsName = quest.getParentsName()
         for n, v in value.iteritems():
             if n in parentsName:
@@ -1072,7 +1012,8 @@ def getBonuses(quest, name, value, isCompensation=False):
 
     elif questType == _ET.PERSONAL_MISSION:
         ctx.update({'operationID': quest.getOperationID(),
-         'chainID': quest.getChainID()})
+         'chainID': quest.getChainID(),
+         'areTokensPawned': False})
     return _initFromTree(key, name, value, isCompensation, ctx)
 
 

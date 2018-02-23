@@ -95,9 +95,7 @@
       <unrecoverable></unrecoverable>
       <siegeMode></siegeMode>
       <lockCrew></lockCrew>
-      <multi_turret></multi_turret>
-      <leviathan></leviathan>
-      <cannot_be_researched></cannot_be_researched>
+      <lockOutfit></lockOutfit>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -110,6 +108,7 @@
     <description>	#item_types:turret/desc	</description>
     <tags>
       <cannotDetach></cannotDetach>
+      <gunCarriage></gunCarriage>
     </tags>
   </vehicleTurret>
   <vehicleGun>
@@ -181,4 +180,17 @@
       <notForSale></notForSale>
     </tags>
   </equipment>
+  <customizationItem>
+    <userString>	#item_types:customizationItem/name	</userString>
+    <description>	#item_types:customizationItem/name	</description>
+    <tags>
+      <notInShop></notInShop>
+      <vehicleBound></vehicleBound>
+      <locked></locked>
+      <levelBasedPrice></levelBasedPrice>
+      <IGR></IGR>
+      <premiumIGR></premiumIGR>
+      <rare></rare>
+    </tags>
+  </customizationItem>
 </item_types.xml>

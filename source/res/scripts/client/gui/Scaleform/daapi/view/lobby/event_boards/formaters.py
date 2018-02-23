@@ -40,14 +40,14 @@ def formatOkTextWithIcon(text):
 
 
 def formatVehicleNameWithTypeIcon(vehicle, path):
-    icon = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type), 16, 16, -3, 0)
+    icon = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isPremium))
     level = int2roman(vehicle.level)
     key = 'vehicle_prem' if vehicle.isPremium else 'vehicle'
-    return makeHtmlString(path, key, {'msg': '{}{}{}'.format(level, icon, vehicle.userName)})
+    return makeHtmlString(path, key, {'msg': '{} {}{}'.format(level, icon, vehicle.userName)})
 
 
 def formatVehicleNationAndTypeIcon(vehicle, path):
-    iconType = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type))
+    iconType = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isPremium))
     iconNation = icons.makeImageTag(RES_ICONS.getFilterNation(vehicle.nationName), width=26, height=16)
     level = int2roman(vehicle.level)
     return makeHtmlString(path, 'vehicle', {'msg': '{}{}{}'.format(iconNation, iconType, level)})
@@ -57,8 +57,13 @@ def getNationEmblemIcon(nation):
     return RES_ICONS.getNationEmblemIcon(nation) if nation in nations.AVAILABLE_NAMES else None
 
 
-def getNationBigFlagIcon(nation):
-    return RES_ICONS.getEventBoardNationFlagIcon(nation) if nation in nations.AVAILABLE_NAMES else None
+def getNationBigFlagIcon(nation, forVehicle):
+    if nation in nations.AVAILABLE_NAMES:
+        if forVehicle:
+            return RES_ICONS.getEventBoardNationTankFlagIcon(nation)
+        return RES_ICONS.getEventBoardNationFlagIcon(nation)
+    else:
+        return None
 
 
 def getNationText(nation):

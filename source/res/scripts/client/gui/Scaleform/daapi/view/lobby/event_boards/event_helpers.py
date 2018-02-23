@@ -18,7 +18,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.server_events.bonuses import getEventBoardsBonusObj
 from gui.event_boards import event_boards_timer
-from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, PLAYER_STATE_REASON as _psr, EVENT_STATE as _es, EVENT_DATE_TYPE, AWARD_IMG_BY_EVENT_ID
+from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, PLAYER_STATE_REASON as _psr, EVENT_STATE as _es, EVENT_DATE_TYPE
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -26,6 +26,8 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vos import makeCantJoinReasonTextVO, makeParameterTooltipVO, makePrimeTimesTooltipVO
 from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatVehicleNameWithTypeIcon, getNationEmblemIcon, getNationBigFlagIcon, getNationText, vehicleTypeText, formatTimeToEnd, formatErrorTextWithIcon, formatOkTextWithIcon, formatTimeAndDate, formatUpdateTime, formatAllertTextWithIcon, formatAttentionTextWithIcon, timeEndStyle
 from gui import GUI_NATIONS
+from helpers.time_utils import ONE_MINUTE
+LEVELS_RANGE = range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)
 
 class _Task(object):
 
@@ -60,7 +62,7 @@ class _ObjectiveTask(_Task):
 
 
 class _SelectionTask(_Task):
-    selectionWithCardinality = (_cm.SUMSEQN, _cm.SUMN)
+    selectionWithCardinality = (_cm.SUMSEQN, _cm.SUMN, _cm.SUMMSEQN)
 
     def getInfo(self):
         event = self._event
@@ -68,7 +70,9 @@ class _SelectionTask(_Task):
         result = _ms(EVENT_BOARDS.task_selection(method))
         if method in self.selectionWithCardinality:
             cardinality = event.getCardinality()
-            result = result % {'cardinality': str(cardinality)}
+            distance = event.getDistance()
+            result = result % {'cardinality': str(cardinality),
+             'distance': str(distance)}
         return text_styles.main(result)
 
     def getTooltip(self):
@@ -77,7 +81,9 @@ class _SelectionTask(_Task):
         result = _ms(TOOLTIPS.elen_task_selection(method))
         if method in self.selectionWithCardinality:
             cardinality = event.getCardinality()
-            result = result % {'cardinality': str(cardinality)}
+            distance = event.getDistance()
+            result = result % {'cardinality': str(cardinality),
+             'distance': str(distance)}
         return makeTooltip(body=result)
 
 
@@ -102,9 +108,9 @@ class _EventTypeTask(_Task):
             result = TOOLTIPS.elen_task_eventtype_full(eventType) if full else _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType), classes=types)
         elif eventType == _et.LEVEL:
             levelList = limits.getVehiclesLevels()
-            full = set(range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)) == set(limits.getVehiclesLevels())
+            full = set(LEVELS_RANGE) == set(limits.getVehiclesLevels())
             levels = ', '.join([ int2roman(value) for value in levelList ])
-            result = TOOLTIPS.elen_task_eventtype_full(eventType) if full else _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType), classes=levels)
+            result = TOOLTIPS.elen_task_eventtype_full(eventType) if full else _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType), levels=levels)
         else:
             result = _ms(TOOLTIPS.elen_task_eventtype_notfull(eventType))
         return makeTooltip(body=result)
@@ -135,7 +141,7 @@ class _BattleTypeCondition(_Condition):
         return text_styles.main('{0}. {1}'.format(cType, squadInfo))
 
     def getTooltip(self):
-        return makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_RANDOM)
+        return makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_RANDOM) if self._event.getBattleType() == ARENA_GUI_TYPE.RANDOM else makeTooltip(body=TOOLTIPS.ELEN_CONDITION_BATTLETYPE_NOTRANDOM)
 
 
 class _PrimeTimeCondition(_Condition):
@@ -180,7 +186,7 @@ class _VehiclesCondition(_Condition):
                     availableVehicle = vehicle
                     available += 1
 
-        singleVehicle = allCount is 1 or available is 1
+        singleVehicle = allCount is 1
         vehicleMissing = available is 0
         if singleVehicle:
             vehicle = availableVehicle or items.getItemByCD(vehicles[0])
@@ -253,11 +259,11 @@ class _TopLeaderboard(object):
 
     def __getDecoration(self):
         if self.__eventType == _et.NATION:
-            return getNationBigFlagIcon(self.__value)
+            return getNationBigFlagIcon(self.__value, False)
         elif self.__eventType == _et.VEHICLE:
             items = self.itemsCache.items
             vehicle = items.getItemByCD(self.__value)
-            return getNationBigFlagIcon(vehicle.nationName)
+            return getNationBigFlagIcon(vehicle.nationName, True)
         else:
             return None
 
@@ -288,8 +294,14 @@ class _TopLeaderboard(object):
             return getNationEmblemIcon(self.__value)
         elif self.__eventType == _et.CLASS:
             return RES_ICONS.getEventBoardVehicleClass(self.__value)
+        elif self.__eventType == _et.LEVEL:
+            return RES_ICONS.getEventBoardVehicleLevel(self.__value)
+        elif self.__eventType == _et.VEHICLE:
+            vehicle = self.itemsCache.items.getItemByCD(self.__value)
+            name = vehicle.name.split(':', 1)[-1].lower()
+            return RES_ICONS.getEventBoardTank(name)
         else:
-            return RES_ICONS.getEventBoardVehicleLevel(self.__value) if self.__eventType == _et.LEVEL else None
+            return None
 
     def __getRaitingType(self):
         parameter = self._event.getObjectiveParameter()
@@ -300,6 +312,11 @@ class _TopLeaderboard(object):
         return reward.getRewardCategoryNumber(self._top.getMyPosition())
 
     def __getMyPosititon(self):
+        event = self._event
+        top = self._top
+        finished = event.isFinished()
+        if finished and top.getBattlesCount() > 0:
+            return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTPARTICIPATED))
         if self.__notFull:
             return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTFULL))
         return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTINTOP)) if self.__notInTop else '{} {}'.format(_ms(EVENT_BOARDS.TOP_POSITION), self._top.getMyPosition())
@@ -375,12 +392,12 @@ class EventInfo(object):
          'description3Tooltip': self._vehiclesCondition.getTooltip(),
          'buttonVisible': bool(len(self._event.getLimits().getVehiclesWhiteList()) > 1)}
 
-    def getAwardInfo(self, eventID):
+    def getAwardInfo(self):
         return {'title': text_styles.highTitle(_ms(EVENT_BOARDS.BLOCK_AWARD)),
          'label': _ms(EVENT_BOARDS.BUTTON_AWARDS),
          'buttonTooltip': makeTooltip(EVENT_BOARDS.BUTTON_AWARDS, EVENT_BOARDS.BUTTON_AWARDS_TOOLTIP),
          'iconTooltip': makeTooltip(body=EVENT_BOARDS.TOOLTIP_AWARDICON),
-         'uiIcon': AWARD_IMG_BY_EVENT_ID.get(eventID, AWARD_IMG_BY_EVENT_ID['event_1'])}
+         'uiIcon': self._event.getPromoBonuses()}
 
     def isRegistration(self):
         event = self._event
@@ -404,14 +421,14 @@ class EventInfo(object):
             return result
         if finished or event.getPrimeTimes().isEmpty():
             return result
-        if not isAvailableServer and isAvailableAnyServer:
+        if not isAvailableServer and isAvailableAnyServer and self._playerState.getPlayerState() == _es.JOINED:
             buttons = [ {'label': str(self._lobbyContext.getPeripheryName(int(pt.getServer()), False)),
              'server': pt.getServer(),
              'tooltip': makeTooltip(self._lobbyContext.getPeripheryName(int(pt.getServer()), False), TOOLTIPS.ELEN_BUTTON_SERVER_BODY)} for pt in availableServers ]
             result = {'serverBlock': {'title': title,
                              'buttons': buttons},
              'isUnsuitableServer': True}
-        elif not isAvailableServer:
+        elif not isAvailableServer and self._playerState.getPlayerState() == _es.JOINED:
             primeTime = min(primeTimes, key=lambda pt: pt.timeToActive())
             server = str(self._lobbyContext.getPeripheryName(int(primeTime.getServer()), False))
             description = _ms(EVENT_BOARDS.SERVER_NOSUITABLE_BODY, time=primeTime.getStartLocalTime(), server=server)
@@ -435,13 +452,20 @@ class EventInfo(object):
         started = self._event.isStarted()
         titleTooltip = None
         buttonRegistrationLabel = ''
+        description1Tooltip = ''
+        description2Tooltip = ''
         if event.isFinished() and not anyTops:
             title = text_styles.main(EVENT_BOARDS.STATUS_PARTICIPATE_NOTPARTICIPATED)
         elif self._joined:
             title = text_styles.highTitle(EVENT_BOARDS.STATUS_BESTRESULTS_MANY)
             if self._topMeta:
                 recalculationTS = self._topMeta.getLastLeaderboardRecalculationTS()
-                description1 = text_styles.standard(formatUpdateTime(recalculationTS))
+                if recalculationTS is not None:
+                    description1 = text_styles.standard(formatUpdateTime(recalculationTS))
+                    recalculationInterval = self._topMeta.getRecalculationInterval()
+                    if recalculationInterval is not None:
+                        interval = int(recalculationInterval / ONE_MINUTE)
+                        description1Tooltip = makeTooltip(_ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval))
             if not anyTops:
                 description2 = formatAttentionTextWithIcon(text_styles.neutral(EVENT_BOARDS.STATUS_PARTICIPATE_NEEDMOREBATTLES))
         elif not self._canJoin:
@@ -460,8 +484,8 @@ class EventInfo(object):
                 buttonRegistrationLabel = EVENT_BOARDS.TABLE_SELECTREGISTRATIONBTN
                 registrationTooltip = TOOLTIPS.ELEN_BUTTON_REGISTRATION_NOTSTARTED
         return {'title': title,
-         'description1': text_styles.standard(description1),
-         'description2': text_styles.neutral(description2),
+         'description1': description1,
+         'description2': description2,
          'isRegistrationTop': isRegistrationTop,
          'isRegistration': isRegistration,
          'isRegistrationEnabled': isRegistrationButtonEnabled,
@@ -469,7 +493,9 @@ class EventInfo(object):
          'titleTooltip': titleTooltip,
          'ratingTooltip': makeTooltip(TOOLTIPS.ELEN_BUTTON_RAITING_HEADER, TOOLTIPS.ELEN_BUTTON_RAITING_BODY),
          'isRating': started,
-         'buttonRegistrationLabel': buttonRegistrationLabel}
+         'buttonRegistrationLabel': buttonRegistrationLabel,
+         'description1Tooltip': description1Tooltip,
+         'description2Tooltip': description2Tooltip}
 
     def getPopoverAlias(self):
         return EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS if self._event.getType() == _et.VEHICLE else EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS
@@ -515,7 +541,8 @@ class EventHeader(object):
      _psr.BYBATTLESCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
      _psr.BYBAN: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
      _psr.WASUNREGISTERED: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_LEFTEVENT,
-     _psr.SPECIALACCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN}
+     _psr.SPECIALACCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
+     _psr.VEHICLESMISSING: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN}
 
     def __init__(self, event, playerData):
         self._event = event
@@ -545,11 +572,15 @@ class EventHeader(object):
 
     def getTimerInfo(self):
 
-        def formatToEnd(iconPath, text, dateType):
+        def formatToEnd(iconPath, text, dateType, isEndSoon):
             iconPath = icons.makeImageTag(iconPath)
             timeData = event.getFormattedRemainingTime(dateType)
             text = _ms(text, time=formatTimeToEnd(timeData[0], timeData[1]))
-            return '{} {}'.format(iconPath, timeEndStyle(text))
+            if isEndSoon:
+                formatedText = timeEndStyle(text)
+            else:
+                formatedText = text_styles.vehicleStatusInfoText(text)
+            return '{} {}'.format(iconPath, formatedText)
 
         event = self._event
         sday, smonth, _ = event_boards_timer.getDayMonthYear(event.getStartDate())
@@ -561,19 +592,19 @@ class EventHeader(object):
             result = '{} {}    '.format(icon, text_styles.vehicleStatusInfoText(timePeriod))
             startSoon = event.isStartSoon()
             if startSoon:
-                result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_START, EVENT_DATE_TYPE.START)
-            elif not self._joined and not event.isRegistrationFinished() and not self._stateReasons:
+                result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_START, EVENT_DATE_TYPE.START, startSoon)
+            elif not self._joined and not event.isRegistrationFinished():
                 finishSoon = event.isRegistrationFinishSoon()
                 if finishSoon:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE, finishSoon)
                 else:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE)
-            elif self._joined:
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE, finishSoon)
+            else:
                 endSoon = event.isEndSoon()
                 if endSoon:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END, endSoon)
                 else:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END, endSoon)
         else:
             date = BigWorld.wg_getLongDateFormat(event.getEndDateTs())
             result = text_styles.main(_ms(EVENT_BOARDS.TIME_EVENTFINISHED, date=date))

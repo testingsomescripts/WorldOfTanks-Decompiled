@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'LeviathanPreviewEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -202,6 +202,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
+    SHOW_CONFIRM_CUSTOMIZATION_ITEM_DIALOG = 'showConfirmCustomizationItemDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())
@@ -288,6 +289,8 @@ class LobbySimpleEvent(HasCtxEvent):
     EVENTS_UPDATED = 'questUpdated'
     HIDE_HANGAR = 'hideHangar'
     NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
+    NOTIFY_CURSOR_DRAGGING = 'notifyCursorDragging'
+    NOTIFY_SPACE_MOVED = 'notifySpaceMoved'
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'
@@ -329,6 +332,11 @@ class FightButtonDisablingEvent(LobbySimpleEvent):
 
 class FightButtonEvent(LobbySimpleEvent):
     FIGHT_BUTTON_UPDATE = 'updateFightButton'
+
+
+class FaderEvent(LobbySimpleEvent):
+    FADE_IN = 'fadeIn'
+    FADE_OUT = 'fadeOut'
 
 
 class SkillDropEvent(SharedEvent):
@@ -513,6 +521,8 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
+    NY18_SHOP = 'ny18ShopUrl'
+    NY18_BUY_BOX = 'ny18BoxBaseURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -580,11 +590,7 @@ class VehicleBuyEvent(HasCtxEvent):
     VEHICLE_SELECTED = 'vehicleBuyEvent/vehicleSelected'
 
 
-class LeviathanPreviewEvent(SharedEvent):
-    LEVIATHAN_WINDOW_OPENED = 'LeviathanWindowOpened'
-    LEVIATHAN_WINDOW_CLOSED = 'LeviathanWindowClosed'
-
-
-class SupplyDropEvent(SharedEvent):
-    SUPPLY_DROP_CLICKED = 'SupplyDropClicked'
-    SUPPLY_DROP_LEAVING = 'SupplyDropLeaving'
+class NewYearEvent(HasCtxEvent):
+    CLOSE_LEVEL_UP_VIEW = 'newYear/closeLevelUpView'
+    ON_PLACE_GROUND_LIGHTS = 'newYear/onPlaceGroundLights'
+    ON_REMOVE_GROUND_LIGHTS = 'newYear/onRemoveGroundLights'

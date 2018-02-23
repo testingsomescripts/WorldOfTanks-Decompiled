@@ -4,7 +4,6 @@ import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
-from gui.prb_control.entities.listener import IGlobalListener
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi import LobbySubView
@@ -16,10 +15,12 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.prb_control.entities.listener import IGlobalListener
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -28,8 +29,7 @@ from skeletons.gui.game_control import IFalloutController, IRankedBattlesControl
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
-from halloween_shared import HALLOWEEN_SUPPLY_DROP_SELECTIONID_PREFIX
+from skeletons.new_year import INewYearController
 
 class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
@@ -38,6 +38,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _newYearController = dependency.descriptor(INewYearController)
 
     def __init__(self, _=None):
         LobbySubView.__init__(self, 0)
@@ -58,21 +59,26 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
+        g_hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
-        g_hangarSpace.onRequestOpenWindowsUpdate += self.__processRequestOpenWindowsUpdate
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self._newYearController.onStateChanged += self.__onNYStateChanged
+        self._newYearController.boxStorage.onCountChanged += self.__onBoxesCountChanged
         g_clientUpdateManager.addMoneyCallback(self.onMoneyUpdate)
         g_clientUpdateManager.addCallbacks({})
         self.startGlobalListening()
+        self.as_initNYS(self._newYearController.isAvailable(), self._newYearController.isAvailable(), self._newYearController.boxStorage.count)
         self.__updateAll()
-        self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        selectedHangarEntityId = BigWorld.player().selectedHangarEntityId
+        if selectedHangarEntityId is not None:
+            entity = BigWorld.entities.get(selectedHangarEntityId, None)
+            if entity is not None:
+                self.__on3DObjectSelected(entity)
         self._onPopulateEnd()
-
-    def _onCustomizationShow(self, event):
-        self.as_setVisibleS(not event.ctx)
+        return
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -102,7 +108,6 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         Dispose method should never be called before populate finish. So, we're delaying
         its invoke til populate load is finished.
         """
-        self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -116,9 +121,11 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
-        g_hangarSpace.onRequestOpenWindowsUpdate -= self.__processRequestOpenWindowsUpdate
+        g_hangarSpace.setVehicleSelectable(False)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self._newYearController.onStateChanged -= self.__onNYStateChanged
+        self._newYearController.boxStorage.onCountChanged -= self.__onBoxesCountChanged
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
@@ -126,6 +133,14 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         self.stopGlobalListening()
         LobbySubView._dispose(self)
         return
+
+    def __onNYStateChanged(self, _):
+        available = self._newYearController.isAvailable()
+        self.as_updateNYEnabledS(available)
+        self.as_updateNYAvailableS(available)
+
+    def __onBoxesCountChanged(self, *args):
+        self.as_updateNYBoxCounterS(self._newYearController.boxStorage.count)
 
     def __switchCarousels(self):
         prevCarouselAlias = self.__currentCarouselAlias
@@ -199,10 +214,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         entity.highlight(True)
         itemId = entity.selectionId
         if itemId:
-            if itemId.startswith(HALLOWEEN_SUPPLY_DROP_SELECTIONID_PREFIX):
-                self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.SUPPLYDROP, [itemId])
-            else:
-                self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
+            self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def __fade3DEntityAndHideTT(self, entity):
         entity.highlight(False)
@@ -228,15 +240,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if self.__isCursorOver3dScene:
             self.__highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
-                sound = entity.mouseOverSound
-                if sound is None:
-                    entity.mouseOverSound = SoundGroups.g_instance.getSound2D(entity.mouseOverSoundName)
-                    sound = entity.mouseOverSound
-                if sound is not None:
-                    if sound.isPlaying:
-                        sound.stop()
-                    sound.play()
-        return
+                SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
 
     def __on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
@@ -309,7 +313,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         self.__onEntityChanged()
 
     def onMoneyUpdate(self, *args):
-        self.__updateAmmoPanel()
+        pass
 
     def onRankedUpdate(self):
         self.__updateRankedWidget()
@@ -321,7 +325,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         pass
 
     def __onRankedPrimeStatusUpdate(self, status):
-        if self.prbDispatcher and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
             self.as_setAlertMessageBlockVisibleS(status != PRIME_TIME_STATUS.AVAILABLE)
 
     def __updateAll(self):
@@ -364,7 +368,8 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
         else:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
-        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), state.isCustomizationEnabled(), customizationTooltip)
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled()
+        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), isC11nEnabled, customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
 
     def __onEntityChanged(self):
@@ -381,12 +386,5 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def __onServerSettingChanged(self, diff):
         if 'isRegularQuestEnabled' in diff:
             self.__updateHeader()
-
-    def __processRequestOpenWindowsUpdate(self, stateResponseFunction):
-        containerManager = self.app.containerManager
-        battleResultsWindow = containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BATTLE_RESULTS})
-        missionAwardWindows = containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.MISSION_AWARD_WINDOW})
-        if battleResultsWindow or missionAwardWindows:
-            stateResponseFunction(False)
-            return
-        stateResponseFunction(True)
+        if 'isCustomizationEnabled' in diff:
+            self.__updateState()

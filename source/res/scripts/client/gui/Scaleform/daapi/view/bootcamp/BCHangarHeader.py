@@ -37,8 +37,7 @@ class BCHangarHeader(HangarHeader):
         return {'commonQuestsLabel': '',
          'commonQuestsIcon': RES_ICONS.questsStateIconOutline('available'),
          'commonQuestsTooltip': '',
-         'commonQuestsEnable': True,
-         'commonQuestsUseEventFlag': False}
+         'commonQuestsEnable': True}
 
     def update(self, *args):
         self._personalQuestID = None
@@ -50,11 +49,15 @@ class BCHangarHeader(HangarHeader):
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
-             'isVisible': headerVisible}
+             'isVisible': headerVisible,
+             'isVehicle': True}
             headerVO.update(self.getFakeQuestData())
             headerVO.update(self.getFakeQuestData())
         else:
             headerVO = {'isVisible': False}
+        headerVO.update({'isNYEnabled': False,
+         'isNyActive': False,
+         'isVisible': True})
         self.as_setDataS(headerVO)
         return
 
