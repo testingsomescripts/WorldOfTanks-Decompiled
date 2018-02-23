@@ -1,4 +1,4 @@
-<a107_t1_hmc.xml>
+<A107_T1_HMC.xml>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -204,7 +204,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -432,7 +431,6 @@
       <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -655,6 +653,7 @@
   </turrets0>
   <crew>
     <commander>	gunner
+
 			radioman	</commander>
     <driver></driver>
     <gunner></gunner>
@@ -797,4 +796,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a107_t1_hmc.xml>
+</A107_T1_HMC.xml>

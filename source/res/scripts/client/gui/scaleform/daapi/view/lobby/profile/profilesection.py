@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileSection.py
 from helpers import i18n
-from gui.clubs.ClubsController import g_clubsCtrl
 from gui.Scaleform.daapi.view.meta.ProfileSectionMeta import ProfileSectionMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.LobbyContext import g_lobbyContext
@@ -19,12 +18,20 @@ class ProfileSection(ProfileSectionMeta):
         self._databaseID = args[2]
         self._selectedData = args[3]
         self._seasonID = None
+        self._data = None
+        self._dossier = None
         self.__needUpdate = False
         return
 
     def _populate(self):
         super(ProfileSection, self)._populate()
         self.requestDossier(self._battlesType)
+
+    def _dispose(self):
+        self._data = None
+        self._dossier = None
+        super(ProfileSection, self)._dispose()
+        return
 
     def requestDossier(self, bType):
         self._battlesType = bType
@@ -89,15 +96,19 @@ class ProfileSection(ProfileSectionMeta):
         return None
 
     def _sendAccountData(self, targetData, accountDossier):
-        pass
+        self._data = targetData
+        self._dossier = accountDossier
 
     def setActive(self, value):
         self.__isActive = value
         self.__receiveDossier()
 
     def invokeUpdate(self):
+        self._data = None
+        self._dossier = None
         self.__needUpdate = True
         self.__receiveDossier()
+        return
 
     @property
     def isActive(self):

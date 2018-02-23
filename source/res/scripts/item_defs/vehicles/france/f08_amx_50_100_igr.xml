@@ -1,4 +1,4 @@
-<f08_amx_50_100_igr.xml>
+<F08_AMX_50_100_IGR.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner>	loader	</gunner>
@@ -229,7 +229,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -588,4 +587,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f08_amx_50_100_igr.xml>
+</F08_AMX_50_100_IGR.xml>

@@ -1,4 +1,4 @@
-<r106_kv85_igr.xml>
+<R106_KV85_IGR.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -322,7 +322,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -555,4 +554,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r106_kv85_igr.xml>
+</R106_KV85_IGR.xml>

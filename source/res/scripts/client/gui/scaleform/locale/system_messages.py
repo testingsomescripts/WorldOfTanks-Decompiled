@@ -265,6 +265,11 @@ class SYSTEM_MESSAGES(object):
     ACTIONACHIEVEMENTS_TITLE = '#system_messages:actionAchievements/title'
     TRAINING_ERROR_SWAPTEAMS = '#system_messages:training/error/swapTeams'
     TRAINING_ERROR_DOACTION = '#system_messages:training/error/doAction'
+    TRAINING_ERROR_SELECTOBSERVER = '#system_messages:training/error/selectObserver'
+    TRAINING_ERROR_ADDPLAYER = '#system_messages:training/error/AddPlayer'
+    BATTLESESSION_ERROR_ADDPLAYER = '#system_messages:battlesession/error/AddPlayer'
+    BATTLESESSION_ERROR_ADDOBSERVER = '#system_messages:battlesession/error/AddObserver'
+    BATTLESESSION_ERROR_LIMITS = '#system_messages:battlesession/error/Limits'
     GAMESESSIONCONTROL_KOREA_SESSIONTIME = '#system_messages:gameSessionControl/korea/sessionTime'
     GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT = '#system_messages:gameSessionControl/korea/timeTillMidnight'
     GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT = '#system_messages:gameSessionControl/korea/playTimeLeft'
@@ -434,6 +439,20 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_SELL_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_sell/wallet_not_available'
     VEHICLE_SELL_VEHICLE_SELL_LIMIT = '#system_messages:vehicle_sell/vehicle_sell_limit'
     VEHICLE_SELL_NOT_ENOUGH_SPACE = '#system_messages:vehicle_sell/not_enough_space'
+    VEHICLE_TRADE_IN_SERVER_ERROR = '#system_messages:vehicle_trade_in/server_error'
+    VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN = '#system_messages:vehicle_trade_in/server_error_centerDown'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_trade_in/not_enough_credits'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_GOLD = '#system_messages:vehicle_trade_in/not_enough_gold'
+    VEHICLE_TRADE_IN_INVALID_VEHICLE = '#system_messages:vehicle_trade_in/invalid_vehicle'
+    VEHICLE_TRADE_IN_VEHICLE_NOT_FOUND_IN_INVENTORY = '#system_messages:vehicle_trade_in/vehicle_not_found_in_inventory'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_BE_SOLD = '#system_messages:vehicle_trade_in/vehicle_cannot_be_sold'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_IN = '#system_messages:vehicle_trade_in/vehicle_cannot_trade_in'
+    VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_OFF = '#system_messages:vehicle_trade_in/vehicle_cannot_trade_off'
+    VEHICLE_TRADE_IN_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_trade_in/vehicle_need_repair'
+    VEHICLE_TRADE_IN_VEHICLE_LOCKED = '#system_messages:vehicle_trade_in/vehicle_locked'
+    VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE = '#system_messages:vehicle_trade_in/not_enough_space'
+    VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE = '#system_messages:vehicle_trade_in/wallet_not_available'
+    VEHICLE_TRADE_IN_SUCCESS = '#system_messages:vehicle_trade_in/success'
     VEHICLE_REMOVE_SUCCESS = '#system_messages:vehicle_remove/success'
     VEHICLE_REMOVE_SUCCESS_DISMANTLING = '#system_messages:vehicle_remove/success_dismantling'
     VEHICLE_REMOVE_SERVER_ERROR = '#system_messages:vehicle_remove/server_error'
@@ -448,6 +467,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REMOVE_NOT_ENOUGH_SPACE = '#system_messages:vehicle_remove/not_enough_space'
     VEHICLE_RESTOREDURATION_HOURS = '#system_messages:vehicle/restoreDuration/hours'
     VEHICLE_RESTOREDURATION_DAYS = '#system_messages:vehicle/restoreDuration/days'
+    VEHICLE_RESTORE_FINISHED = '#system_messages:vehicle/restore/finished'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE = '#system_messages:vehicle_tmenxp_accelerator/successFalse'
     VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE = '#system_messages:vehicle_tmenxp_accelerator/successTrue'
     VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE = '#system_messages:vehicle_tmenxp_accelerator/invalid_vehicle'
@@ -873,6 +893,7 @@ class SYSTEM_MESSAGES(object):
     UNIT_ERRORS_WRONG_UNIT_REQUISITES = '#system_messages:unit/errors/WRONG_UNIT_REQUISITES'
     UNIT_ERRORS_REMOVE_PLAYER_FAIL = '#system_messages:unit/errors/REMOVE_PLAYER_FAIL'
     UNIT_ERRORS_GET_VEHICLE_FAIL = '#system_messages:unit/errors/GET_VEHICLE_FAIL'
+    UNIT_ERRORS_ASSIGN_MEMBER_FAIL = '#system_messages:unit/errors/ASSIGN_MEMBER_FAIL'
     UNIT_ERRORS_FAIL_UNIT_METHOD = '#system_messages:unit/errors/FAIL_UNIT_METHOD'
     UNIT_ERRORS_BAD_SLOT_IDX = '#system_messages:unit/errors/BAD_SLOT_IDX'
     UNIT_ERRORS_INSUFFICIENT_ROLE = '#system_messages:unit/errors/INSUFFICIENT_ROLE'
@@ -913,6 +934,8 @@ class SYSTEM_MESSAGES(object):
     UNIT_WARNINGS_WAITING_FOR_JOIN = '#system_messages:unit/warnings/WAITING_FOR_JOIN'
     UNIT_WARNINGS_CLAN_CHANGED = '#system_messages:unit/warnings/CLAN_CHANGED'
     UNIT_WARNINGS_FORT_BATTLE_END = '#system_messages:unit/warnings/FORT_BATTLE_END'
+    UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED = '#system_messages:unit/warnings/STRONGHOLDS_MODE_CHANGED'
+    UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED = '#system_messages:unit/warnings/STRONGHOLDS_DIRECTION_CHANGED'
     UNIT_NOTIFICATION_PLAYEROFFLINE = '#system_messages:unit/notification/playerOffline'
     UNIT_NOTIFICATION_PLAYERONLINE = '#system_messages:unit/notification/playerOnline'
     UNIT_NOTIFICATION_PLAYERADDED = '#system_messages:unit/notification/playerAdded'
@@ -947,7 +970,6 @@ class SYSTEM_MESSAGES(object):
     FORTIFICATION_DIRECTIONCLOSED = '#system_messages:fortification/directionClosed'
     FORTIFICATION_CREATED = '#system_messages:fortification/created'
     FORTIFICATION_ADDORDER = '#system_messages:fortification/addOrder'
-    FORTIFICATION_ACTIVATEORDER = '#system_messages:fortification/activateOrder'
     FORTIFICATION_TRANSPORT = '#system_messages:fortification/transport'
     FORTIFICATION_DEFENCEHOURSET = '#system_messages:fortification/defenceHourSet'
     FORTIFICATION_DEFENCEHOURSET_OFFDAY = '#system_messages:fortification/defenceHourSet/offDay'
@@ -1084,6 +1106,7 @@ class SYSTEM_MESSAGES(object):
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT = '#system_messages:telecom/notifications/vehicleRemoved/comment'
     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleRemoved/subcomment'
     VEHICLECOMPARE_DISABLED = '#system_messages:vehicleCompare/disabled'
+    VEHICLECOMPARE_PREVIEWNOTALLOWED = '#system_messages:vehicleCompare/previewNotAllowed'
     PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION = '#system_messages:prmp/notification/newEncyclopediaRecommendation'
     RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES = '#system_messages:restoreController/hasLimitedRestoreVehicles'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
@@ -1099,6 +1122,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_WRONG_UNIT_REQUISITES,
      UNIT_ERRORS_REMOVE_PLAYER_FAIL,
      UNIT_ERRORS_GET_VEHICLE_FAIL,
+     UNIT_ERRORS_ASSIGN_MEMBER_FAIL,
      UNIT_ERRORS_FAIL_UNIT_METHOD,
      UNIT_ERRORS_BAD_SLOT_IDX,
      UNIT_ERRORS_INSUFFICIENT_ROLE,
@@ -1148,7 +1172,9 @@ class SYSTEM_MESSAGES(object):
      UNIT_WARNINGS_ALREADY_INVITED,
      UNIT_WARNINGS_WAITING_FOR_JOIN,
      UNIT_WARNINGS_CLAN_CHANGED,
-     UNIT_WARNINGS_FORT_BATTLE_END)
+     UNIT_WARNINGS_FORT_BATTLE_END,
+     UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED,
+     UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED)
     UNIT_NOTIFICATION_ENUM = (UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
@@ -1568,6 +1594,11 @@ class SYSTEM_MESSAGES(object):
      ACTIONACHIEVEMENTS_TITLE,
      TRAINING_ERROR_SWAPTEAMS,
      TRAINING_ERROR_DOACTION,
+     TRAINING_ERROR_SELECTOBSERVER,
+     TRAINING_ERROR_ADDPLAYER,
+     BATTLESESSION_ERROR_ADDPLAYER,
+     BATTLESESSION_ERROR_ADDOBSERVER,
+     BATTLESESSION_ERROR_LIMITS,
      GAMESESSIONCONTROL_KOREA_SESSIONTIME,
      GAMESESSIONCONTROL_KOREA_TIMETILLMIDNIGHT,
      GAMESESSIONCONTROL_KOREA_PLAYTIMELEFT,
@@ -1737,6 +1768,20 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_SELL_WALLET_NOT_AVAILABLE,
      VEHICLE_SELL_VEHICLE_SELL_LIMIT,
      VEHICLE_SELL_NOT_ENOUGH_SPACE,
+     VEHICLE_TRADE_IN_SERVER_ERROR,
+     VEHICLE_TRADE_IN_SERVER_ERROR_CENTERDOWN,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_CREDITS,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_GOLD,
+     VEHICLE_TRADE_IN_INVALID_VEHICLE,
+     VEHICLE_TRADE_IN_VEHICLE_NOT_FOUND_IN_INVENTORY,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_BE_SOLD,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_IN,
+     VEHICLE_TRADE_IN_VEHICLE_CANNOT_TRADE_OFF,
+     VEHICLE_TRADE_IN_VEHICLE_NEED_REPAIR,
+     VEHICLE_TRADE_IN_VEHICLE_LOCKED,
+     VEHICLE_TRADE_IN_NOT_ENOUGH_SPACE,
+     VEHICLE_TRADE_IN_WALLET_NOT_AVAILABLE,
+     VEHICLE_TRADE_IN_SUCCESS,
      VEHICLE_REMOVE_SUCCESS,
      VEHICLE_REMOVE_SUCCESS_DISMANTLING,
      VEHICLE_REMOVE_SERVER_ERROR,
@@ -1751,6 +1796,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REMOVE_NOT_ENOUGH_SPACE,
      VEHICLE_RESTOREDURATION_HOURS,
      VEHICLE_RESTOREDURATION_DAYS,
+     VEHICLE_RESTORE_FINISHED,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSFALSE,
      VEHICLE_TMENXP_ACCELERATOR_SUCCESSTRUE,
      VEHICLE_TMENXP_ACCELERATOR_INVALID_VEHICLE,
@@ -2176,6 +2222,7 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERRORS_WRONG_UNIT_REQUISITES,
      UNIT_ERRORS_REMOVE_PLAYER_FAIL,
      UNIT_ERRORS_GET_VEHICLE_FAIL,
+     UNIT_ERRORS_ASSIGN_MEMBER_FAIL,
      UNIT_ERRORS_FAIL_UNIT_METHOD,
      UNIT_ERRORS_BAD_SLOT_IDX,
      UNIT_ERRORS_INSUFFICIENT_ROLE,
@@ -2216,6 +2263,8 @@ class SYSTEM_MESSAGES(object):
      UNIT_WARNINGS_WAITING_FOR_JOIN,
      UNIT_WARNINGS_CLAN_CHANGED,
      UNIT_WARNINGS_FORT_BATTLE_END,
+     UNIT_WARNINGS_STRONGHOLDS_MODE_CHANGED,
+     UNIT_WARNINGS_STRONGHOLDS_DIRECTION_CHANGED,
      UNIT_NOTIFICATION_PLAYEROFFLINE,
      UNIT_NOTIFICATION_PLAYERONLINE,
      UNIT_NOTIFICATION_PLAYERADDED,
@@ -2250,7 +2299,6 @@ class SYSTEM_MESSAGES(object):
      FORTIFICATION_DIRECTIONCLOSED,
      FORTIFICATION_CREATED,
      FORTIFICATION_ADDORDER,
-     FORTIFICATION_ACTIVATEORDER,
      FORTIFICATION_TRANSPORT,
      FORTIFICATION_DEFENCEHOURSET,
      FORTIFICATION_DEFENCEHOURSET_OFFDAY,
@@ -2387,6 +2435,7 @@ class SYSTEM_MESSAGES(object):
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT,
      TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT,
      VEHICLECOMPARE_DISABLED,
+     VEHICLECOMPARE_PREVIEWNOTALLOWED,
      PRMP_NOTIFICATION_NEWENCYCLOPEDIARECOMMENDATION,
      RESTORECONTROLLER_HASLIMITEDRESTOREVEHICLES)
 

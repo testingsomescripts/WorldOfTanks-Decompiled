@@ -1,4 +1,4 @@
-<clusterdismissal.def>
+<ClusterDismissal.def>
   <Properties>
     <bp>
       <Type>	PYTHON	</Type>
@@ -15,4 +15,4 @@
       <Arg>	INT32	</Arg>
     </onCommand>
   </BaseMethods>
-</clusterdismissal.def>
+</ClusterDismissal.def>

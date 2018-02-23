@@ -5,22 +5,25 @@ from collections import defaultdict
 from functools import partial
 import BigWorld
 import Math
-from account_helpers.settings_core import g_settingsCore, settings_constants
+from AvatarInputHandler import aih_constants
+from account_helpers.settings_core import settings_constants
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.battle_control import g_sessionProvider, avatar_getter, minimap_utils, matrix_factory
+from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from ids_generators import SequenceIDGenerator
+from PlayerEvents import g_playerEvents
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
 _FEATURES = settings.ADDITIONAL_FEATURES
+_CTRL_MODE = aih_constants.CTRL_MODE_NAME
 
 class PersonalEntriesPlugin(common.SimplePlugin):
     __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState')
@@ -46,13 +49,13 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self.__isAlive = vInfo.isAlive()
         self.__isObserver = vInfo.isObserver()
         yawLimits = vInfo.vehicleType.turretYawLimits
-        isSPG = vInfo.vehicleType.classTag == 'SPG'
-        if yawLimits is not None and isSPG:
+        if yawLimits is not None and vInfo.isSPG():
             self.__yawLimits = (math.degrees(yawLimits[0]), math.degrees(yawLimits[1]))
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
-        ctrl = g_sessionProvider.shared.feedback
+            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
@@ -60,10 +63,11 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         return
 
     def stop(self):
-        ctrl = g_sessionProvider.shared.vehicleState
+        ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
-        ctrl = g_sessionProvider.shared.feedback
+            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
@@ -82,11 +86,11 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 assert not self.__cameraID, 'One camera is activated at one time'
                 self.__cameraID = entryID
 
-        self.__createViewPointEntry(avatar)
+        self.__updateViewPointEntry(avatar)
         if not self.__isObserver and self.__isAlive:
-            self.__createViewRangeCircle(avatar)
+            self.__updateViewRangeCircle(avatar)
         if not self.__isObserver and not self.__isAlive:
-            self.__createDeadPointEntry(avatar)
+            self.__updateDeadPointEntry()
         return
 
     def updateControlMode(self, mode, vehicleID):
@@ -121,10 +125,8 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             elif self.__viewPointID:
                 self._setActive(self.__viewPointID, False)
             if not self.__isObserver and self._isInPostmortemMode():
-                if self.__deadPointID:
-                    self._setActive(self.__deadPointID, True)
-                else:
-                    self.__createDeadPointEntry(BigWorld.player())
+                self.__updateDeadPointEntry()
+        self.__invalidateMarkup()
 
     def clearCamera(self):
         if self.__cameraID:
@@ -138,7 +140,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self.__hideDirectionLine()
             return
         else:
-            getter = g_settingsCore.getSetting
+            getter = self.settingsCore.getSetting
             if GUI_SETTINGS.showDirectionLine:
                 value = getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
                 if not value:
@@ -178,29 +180,26 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 if value:
                     self.__addDrawRangeCircle()
                 else:
-                    self.__circlesVisibilityState ^= settings.CIRCLE_TYPE.DRAW_RANGE
-                    self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MAX_DRAW_CIRCLE)
+                    self.__removeDrawRangeCircle()
             if settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE in diff:
                 value = diff[settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE]
                 if value:
                     self.__addMaxViewRangeCircle()
                 else:
-                    self.__circlesVisibilityState ^= settings.CIRCLE_TYPE.MAX_VIEW_RANGE
-                    self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MAX_VIEW_CIRCLE)
+                    self.__removeMaxViewRangeCircle()
             if settings_constants.GAME.MINIMAP_VIEW_RANGE in diff:
                 value = diff[settings_constants.GAME.MINIMAP_VIEW_RANGE]
                 if value:
                     self.__addViewRangeCircle()
                 else:
-                    self.__circlesVisibilityState ^= settings.CIRCLE_TYPE.VIEW_RANGE
-                    self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_DYN_CIRCLE)
+                    self.__removeViewRangeCircle()
             self.__updateCirlcesState()
 
     def __createCameraEntries(self, *modes):
         self.__cameraIDs.clear()
         add = self._addEntry
         container = _C_NAME.PERSONAL
-        if 'arcade' in modes:
+        if _CTRL_MODE.ARCADE in modes:
             if self._isInArcadeMode():
                 matrix = matrix_factory.makeArcadeCameraMatrix()
                 active = True
@@ -211,7 +210,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
-        if 'strategic' in modes:
+        if _CTRL_MODE.STRATEGIC in modes:
             if self._isInStrategicMode():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
@@ -222,7 +221,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             entryID = add(name, container, matrix=matrix, active=active, transformProps=settings.TRANSFORM_FLAG.FULL)
             if entryID:
                 yield (entryID, name, active)
-        if 'video' in modes:
+        if _CTRL_MODE.VIDEO in modes:
             if self._isInVideoMode():
                 matrix = matrix_factory.makeDefaultCameraMatrix()
                 active = True
@@ -235,15 +234,25 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 yield (entryID, name, active)
         return
 
-    def __createViewPointEntry(self, avatar):
+    def __updateViewPointEntry(self, avatar):
         ownMatrix = avatar.getOwnVehicleMatrix()
+        if self.__viewPointID:
+            self._setMatrix(self.__viewPointID, ownMatrix)
+            self._setActive(self.__viewPointID, active=self.__isAlive)
+            self._setMatrix(self.__animationID, ownMatrix)
+            self._setActive(self.__animationID, active=self.__isAlive)
+            return
         self.__viewPointID = self._addEntry(_S_NAME.VIEW_POINT, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive)
         transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
         self.__animationID = self._addEntry(_S_NAME.ANIMATION, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive, transformProps=transformProps)
 
-    def __createViewRangeCircle(self, avatar):
+    def __updateViewRangeCircle(self, avatar):
         ownMatrix = avatar.getOwnVehicleMatrix()
+        if self.__circlesID:
+            self._setMatrix(self.__circlesID, ownMatrix)
+            self._setActive(self.__circlesID, self.__isAlive)
+            return
         transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
         self.__circlesVisibilityState = 0
@@ -262,9 +271,73 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
-    def __createDeadPointEntry(self, avatar):
-        ownMatrix = avatar.getOwnVehicleMatrix()
-        self.__deadPointID = self._addEntry(_S_NAME.DEAD_POINT, _C_NAME.PERSONAL, matrix=ownMatrix, active=True)
+    def __updateDeadPointEntry(self):
+        vehicle = BigWorld.entities.get(self.__playerVehicleID)
+        if vehicle is None:
+            LOG_ERROR("Player's vehicle is not found", self.__playerVehicleID)
+            return
+        else:
+            provider = matrix_factory.makeVehicleEntityMPCopy(vehicle)
+            if self.__deadPointID:
+                self._setMatrix(self.__deadPointID, provider)
+                self._setActive(self.__deadPointID, active=True)
+                return
+            self.__deadPointID = self._addEntry(_S_NAME.DEAD_POINT, _C_NAME.PERSONAL, matrix=provider, active=True)
+            return
+
+    def __onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__hideMarkup()
+
+    def __hideMarkup(self):
+        self.__hideDirectionLine()
+        self.__clearYawLimit()
+        if self.__viewPointID:
+            self._setActive(self.__viewPointID, False)
+            self._setActive(self.__animationID, False)
+        if self.__circlesID:
+            self._setActive(self.__circlesID, False)
+
+    def __invalidateMarkup(self):
+        if not self.__isObserver:
+            return
+        elif self._ctrlVehicleID is None or not BigWorld.entities.has_key(self._ctrlVehicleID):
+            self.__hideMarkup()
+            return
+        else:
+            avatar = BigWorld.player()
+            self.__updateViewPointEntry(avatar)
+            self._setActive(self.__viewPointID, True)
+            getter = self.settingsCore.getSetting
+            showDirectionLine = GUI_SETTINGS.showDirectionLine and getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
+            showYawLimit = GUI_SETTINGS.showSectorLines and getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
+            showCircles = getter(settings_constants.GAME.MINIMAP_DRAW_RANGE) or getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE) or getter(settings_constants.GAME.MINIMAP_VIEW_RANGE)
+            self.__showDirectionLine() if showDirectionLine else self.__hideDirectionLine()
+            self.__clearYawLimit()
+            if showYawLimit:
+                vInfo = self._arenaDP.getVehicleInfo(self._ctrlVehicleID)
+                yawLimits = vInfo.vehicleType.turretYawLimits
+                if yawLimits is not None and vInfo.isSPG():
+                    self.__yawLimits = (math.degrees(yawLimits[0]), math.degrees(yawLimits[1]))
+                    self.__setupYawLimit()
+            if showCircles:
+                self.__updateViewRangeCircle(avatar)
+                if getter(settings_constants.GAME.MINIMAP_DRAW_RANGE):
+                    self.__addDrawRangeCircle()
+                else:
+                    self.__removeDrawRangeCircle()
+                if getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE):
+                    self.__addMaxViewRangeCircle()
+                else:
+                    self.__removeMaxViewRangeCircle()
+                if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
+                    self.__addViewRangeCircle()
+                else:
+                    self.__removeViewRangeCircle()
+                self._setActive(self.__circlesID, True)
+            else:
+                self._setActive(self.__circlesID, False)
+            return
 
     def __onPostMortemSwitched(self):
         self.__isAlive = False
@@ -272,7 +345,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self.__clearYawLimit()
         if not self.__isObserver:
             self.__circlesVisibilityState = 0
-            self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_REMOVE_ALL_CIRCLES)
+            if self.__circlesID is not None:
+                self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_REMOVE_ALL_CIRCLES)
+        return
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID == self.__playerVehicleID and self.__animationID:
@@ -288,17 +363,41 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         LOG_DEBUG('Minimap circles state was changed: ', isActive)
 
     def __addDrawRangeCircle(self):
+        if self.__circlesVisibilityState & settings.CIRCLE_TYPE.DRAW_RANGE:
+            return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.DRAW_RANGE
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_DRAW_CIRCLE, settings.CIRCLE_STYLE.COLOR.DRAW_RANGE, settings.CIRCLE_STYLE.ALPHA, AOI.VEHICLE_CIRCULAR_AOI_RADIUS)
 
+    def __removeDrawRangeCircle(self):
+        self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.DRAW_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MAX_DRAW_CIRCLE)
+
     def __addMaxViewRangeCircle(self):
+        if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MAX_VIEW_RANGE:
+            return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MAX_VIEW_RANGE
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_VIEW_CIRCLE, settings.CIRCLE_STYLE.COLOR.MAX_VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MAX_RADIUS)
 
+    def __removeMaxViewRangeCircle(self):
+        self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MAX_VIEW_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_MAX_VIEW_CIRCLE)
+
     def __addViewRangeCircle(self):
+        if self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
+            return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.VIEW_RANGE
-        vehicleAttrs = g_sessionProvider.shared.feedback.getVehicleAttrs()
+        vehicleAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
         self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_DYN_CIRCLE, settings.CIRCLE_STYLE.COLOR.VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, min(vehicleAttrs.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS))
+
+    def __removeViewRangeCircle(self):
+        self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.VIEW_RANGE
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_DEL_DYN_CIRCLE)
+
+    def __removeAllCircles(self):
+        self.__circlesVisibilityState = 0
+        if self.__circlesID is not None:
+            self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_REMOVE_ALL_CIRCLES)
+        return
 
     def __showDirectionLine(self):
         entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
@@ -322,12 +421,13 @@ class PersonalEntriesPlugin(common.SimplePlugin):
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):
-    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration')
+    __slots__ = ('__playerVehicleID', '__isObserver', '__aoiToFarCallbacksIDs', '__destroyCallbacksIDs', '__flags', '__showDestroyEntries', '__isDestroyImmediately', '__destroyDuration', '__isSPG')
 
     def __init__(self, parent):
         super(ArenaVehiclesPlugin, self).__init__(parent, clazz=entries.VehicleEntry)
         self.__playerVehicleID = 0
         self.__isObserver = False
+        self.__isSPG = False
         self.__aoiToFarCallbacksIDs = {}
         self.__destroyCallbacksIDs = {}
         self.__flags = _FEATURES.OFF
@@ -343,13 +443,15 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         vInfo = self._arenaDP.getVehicleInfo()
         self.__playerVehicleID = self._arenaDP.getPlayerVehicleID()
         self.__isObserver = vInfo.isObserver()
+        self.__isSPG = vInfo.isSPG()
         g_eventBus.addListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapVehicleAdded += self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved += self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
-        g_sessionProvider.addArenaCtrl(self)
+        g_playerEvents.onTeamChanged += self.__onTeamChanged
+        self.sessionProvider.addArenaCtrl(self)
         return
 
     def stop(self):
@@ -363,13 +465,14 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if callbackID is not None:
                 BigWorld.cancelCallback(callbackID)
 
-        g_sessionProvider.removeArenaCtrl(self)
+        self.sessionProvider.removeArenaCtrl(self)
         g_eventBus.removeListener(events.GameEvent.SHOW_EXTENDED_INFO, self.__handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
-        ctrl = g_sessionProvider.shared.feedback
+        ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapVehicleAdded -= self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved -= self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
+        g_playerEvents.onTeamChanged -= self.__onTeamChanged
         super(ArenaVehiclesPlugin, self).stop()
         return
 
@@ -380,7 +483,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__switchToVehicle(prevCtrlID)
 
     def setSettings(self):
-        value = g_settingsCore.getSetting(settings_constants.GAME.SHOW_VEH_MODELS_ON_MAP)
+        value = self.settingsCore.getSetting(settings_constants.GAME.SHOW_VEH_MODELS_ON_MAP)
         self.__flags = settings.convertSettingToFeatures(value, self.__flags)
         if _FEATURES.isOn(self.__flags):
             self.__showFeatures(True)
@@ -519,10 +622,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         name = vehicleType.shortNameWithPrefix
         if classTag is not None:
             entry.setVehicleInfo(not guiProps.isFriend, guiProps.name(), classTag, vInfo.isAlive())
-            if not self.__isObserver and isSpotted:
-                animation = entry.getSpottedAnimation(self._entries.itervalues())
-            else:
-                animation = ''
+            animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
             self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
@@ -571,14 +671,17 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__setActive(entry, False)
             return
         else:
+            if self.__isSPG:
+                isSpotted = entry.getLocation() == VEHICLE_LOCATION.UNDEFINED
+            else:
+                isSpotted = True
             self.__setLocationAndMatrix(entry, location, matrix)
             self.__setInAoI(entry, True)
             self.__setActive(entry, True)
-            if not self.__isObserver:
-                animation = entry.getSpottedAnimation(self._entries.itervalues())
-                if animation:
-                    self.__playSpottedSound(entry)
-                    self._invoke(entry.getID(), 'setAnimation', animation)
+            animation = self.__getSpottedAnimation(entry, isSpotted)
+            if animation:
+                self.__playSpottedSound(entry)
+                self._invoke(entry.getID(), 'setAnimation', animation)
             return
 
     def __hideVehicle(self, entry):
@@ -608,6 +711,13 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
         for entry in self._entries.itervalues():
             if entry.wasSpotted() and entry.isAlive():
                 self.__setActive(entry, flag)
+
+    def __getSpottedAnimation(self, entry, isSpotted):
+        if not self.__isObserver and isSpotted:
+            animation = entry.getSpottedAnimation(self._entries.itervalues())
+        else:
+            animation = ''
+        return animation
 
     @staticmethod
     def __playSpottedSound(entry):
@@ -687,6 +797,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if entry.isInAoI():
                 self._invoke(entry.getID(), 'setAnimation', value)
 
+    def __onTeamChanged(self, teamID):
+        self.invalidateArenaInfo()
+
     def __handleShowExtendedInfo(self, event):
         if self._parentObj.isModalViewShown():
             return
@@ -720,13 +833,13 @@ class EquipmentsPlugin(common.IntervalPlugin):
 
     def start(self):
         super(EquipmentsPlugin, self).start()
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
         return
 
     def stop(self):
-        ctrl = g_sessionProvider.shared.equipments
+        ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
         super(EquipmentsPlugin, self).stop()

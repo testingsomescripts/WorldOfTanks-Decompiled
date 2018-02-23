@@ -1,4 +1,4 @@
-<accountglobalmapconnector.def>
+<AccountGlobalMapConnector.def>
   <BaseMethods>
     <accountGlobalMapConnector_callGlobalMapMethod>
       <Arg>	UINT64	</Arg>
@@ -23,4 +23,4 @@
       <Arg>	STRING	</Arg>
     </accountGlobalMapConnector_onSpecBattleEnd>
   </BaseMethods>
-</accountglobalmapconnector.def>
+</AccountGlobalMapConnector.def>

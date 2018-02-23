@@ -3,49 +3,51 @@
 import time
 import account_helpers
 from ConnectionManager import connectionManager
-import constants
-from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui import game_control, GUI_SETTINGS
-from gui.shared import g_itemsCache
-from helpers import i18n
-from gui.SystemMessages import SM_TYPE, BaseSystemMessages
-from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from PlayerEvents import g_playerEvents
 from MemoryCriticalController import g_critMemHandler
-from adisp import process
+from PlayerEvents import g_playerEvents
+from debug_utils import LOG_DEBUG, LOG_ERROR
+from gui import GUI_SETTINGS
+from gui.SystemMessages import SM_TYPE
+from gui.shared import g_itemsCache
+from helpers import i18n, dependency
 from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
+from skeletons.gui.game_control import IEventsNotificationsController, IAOGASController, IGameSessionController
+from skeletons.gui.system_messages import ISystemMessages
+from helpers import getClientLanguage
 KOREA_TIME_TILL_MIDNIGHT = 7200
 
-class SystemMessagesInterface(BaseSystemMessages):
+class SystemMessagesInterface(ISystemMessages):
     __CMD_BLOCK_PREFIX = 'cmd_'
     __PROMO_BLOCK_PREFIX = 'promo_'
+    aogas = dependency.descriptor(IAOGASController)
+    gameSession = dependency.descriptor(IGameSessionController)
+    eventsNotification = dependency.descriptor(IEventsNotificationsController)
 
     def init(self):
         connectionManager.onConnected += self.__onConnected
         self.__expirationShown = False
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
         g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
-        ctrl = game_control.g_instance
-        ctrl.aogas.onNotifyAccount += self.__AOGAS_onNotifyAccount
-        ctrl.gameSession.onClientNotify += self.__gameSession_onClientNotify
-        game_control.getEventsNotificationCtrl().onEventNotificationsChanged += self.__onReceiveEventNotification
+        self.aogas.onNotifyAccount += self.__AOGAS_onNotifyAccount
+        self.gameSession.onClientNotify += self.__gameSession_onClientNotify
+        self.eventsNotification.onEventNotificationsChanged += self.__onReceiveEventNotification
 
     def destroy(self):
         connectionManager.onConnected -= self.__onConnected
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
         g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
-        ctrl = game_control.g_instance
-        ctrl.aogas.onNotifyAccount -= self.__AOGAS_onNotifyAccount
-        ctrl.gameSession.onClientNotify -= self.__gameSession_onClientNotify
-        game_control.getEventsNotificationCtrl().onEventNotificationsChanged += self.__onReceiveEventNotification
+        self.aogas.onNotifyAccount -= self.__AOGAS_onNotifyAccount
+        self.gameSession.onClientNotify -= self.__gameSession_onClientNotify
+        self.eventsNotification.onEventNotificationsChanged += self.__onReceiveEventNotification
         self.__clearLobbyListeners()
 
     @proto_getter(PROTO_TYPE.BW)
     def proto(self):
         return None
 
-    def pushMessage(self, text, type=SM_TYPE.Information, priority=None):
+    def pushMessage(self, text, type, priority=None):
         if GUI_SETTINGS.isGuiEnabled():
             self.proto.serviceChannel.pushClientSysMessage(text, type, priority=priority)
         else:
@@ -98,16 +100,10 @@ class SystemMessagesInterface(BaseSystemMessages):
 
     def __gameSession_onClientNotify(self, sessionDuration, timeTillMidnight, playTimeLeft):
         LOG_DEBUG('onGameSessionNotification', sessionDuration, timeTillMidnight, playTimeLeft)
-        if constants.IS_KOREA:
+        if getClientLanguage() == 'ko':
             key = '#system_messages:gameSessionControl/korea/{0:>s}'
-            msgList = [i18n.makeString(key.format('sessionTime'), sessionTime=time.strftime('%H:%M', time.gmtime(sessionDuration)))]
-            if not game_control.g_instance.gameSession.isAdult and timeTillMidnight <= KOREA_TIME_TILL_MIDNIGHT:
-                msgList.append(i18n.makeString(key.format('timeTillMidnight'), timeLeft=time.strftime('%H:%M', time.gmtime(timeTillMidnight))))
-            if playTimeLeft is not None:
-                msgList.append(i18n.makeString(key.format('playTimeLeft'), timeLeft=time.strftime('%H:%M', time.gmtime(playTimeLeft))))
-            msgList.append(i18n.makeString(key.format('note')))
+            msgList = [i18n.makeString(key.format('sessionTime'), sessionTime=time.strftime('%H:%M', time.gmtime(sessionDuration))), i18n.makeString(key.format('note'))]
             self.proto.serviceChannel.pushClientSysMessage('\n'.join(msgList), SM_TYPE.Warning)
-        return
 
     def __onReceiveEventNotification(self, added, removed):
         self.__processNotifications(added, 'Begin')

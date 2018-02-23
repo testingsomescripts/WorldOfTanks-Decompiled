@@ -1,4 +1,4 @@
-<transactionuser.def>
+<TransactionUser.def>
   <BaseMethods>
     <onTransactionMessage>
       <Arg>	MAILBOX	</Arg>
@@ -6,4 +6,4 @@
       <Arg>	PYTHON	</Arg>
     </onTransactionMessage>
   </BaseMethods>
-</transactionuser.def>
+</TransactionUser.def>

@@ -1,4 +1,4 @@
-<r47_isu-152.xml>
+<R47_ISU-152.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -357,7 +357,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -616,7 +615,6 @@
       <trackThickness>	0.012	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -888,7 +886,7 @@
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_huge_mb	</effects>
           <camouflage>
             <tiling>	0.76 0.55 0.000000 0.000000	</tiling>
           </camouflage>
@@ -1033,4 +1031,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r47_isu-152.xml>
+</R47_ISU-152.xml>

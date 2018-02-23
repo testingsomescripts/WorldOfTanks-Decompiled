@@ -1,4 +1,4 @@
-<ch23_112.xml>
+<Ch23_112.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -31,7 +31,7 @@
       <armor_3>	120	</armor_3>
       <armor_4>	60	</armor_4>
       <armor_6>	25	</armor_6>
-      <armor_7>	60	</armor_7>
+      <armor_7>	80	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	230	</armor_9>
       <armor_10>	25	</armor_10>
@@ -177,7 +177,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -703,4 +702,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</ch23_112.xml>
+</Ch23_112.xml>

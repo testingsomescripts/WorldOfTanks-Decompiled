@@ -1,4 +1,4 @@
-<a85_t110e3.xml>
+<A85_T110E3.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -365,7 +365,6 @@
       <trackThickness>	0.0317	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -557,4 +556,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a85_t110e3.xml>
+</A85_T110E3.xml>

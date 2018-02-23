@@ -1,17 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/VehicleCompareViewMeta.py
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.meta.VehicleCompareCommonViewMeta import VehicleCompareCommonViewMeta
 
-class VehicleCompareViewMeta(View):
+class VehicleCompareViewMeta(VehicleCompareCommonViewMeta):
     """
     DO NOT MODIFY!
     Generated with yaml.
     __author__ = 'yaml_processor'
-    @extends View
+    @extends VehicleCompareCommonViewMeta
     """
-
-    def closeView(self):
-        self._printOverrideError('closeView')
 
     def onBackClick(self):
         self._printOverrideError('onBackClick')
@@ -33,6 +30,9 @@ class VehicleCompareViewMeta(View):
 
     def onRemoveVehicle(self, index):
         self._printOverrideError('onRemoveVehicle')
+
+    def onRevertVehicle(self, index):
+        self._printOverrideError('onRevertVehicle')
 
     def onRemoveAllVehicles(self):
         self._printOverrideError('onRemoveAllVehicles')

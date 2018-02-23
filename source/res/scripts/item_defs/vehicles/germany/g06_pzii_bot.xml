@@ -1,4 +1,4 @@
-<g06_pzii_bot.xml>
+<G06_PzII_bot.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -195,7 +195,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -521,4 +520,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g06_pzii_bot.xml>
+</G06_PzII_bot.xml>

@@ -1,4 +1,4 @@
-<artilleryequipment.def>
+<ArtilleryEquipment.def>
   <Domain>	BASE	</Domain>
   <Domain>	CLIENT	</Domain>
   <Properties>
@@ -29,4 +29,4 @@
       <Editable>	true	</Editable>
     </maxDist>
   </Properties>
-</artilleryequipment.def>
+</ArtilleryEquipment.def>

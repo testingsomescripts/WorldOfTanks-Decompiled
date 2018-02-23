@@ -19,14 +19,12 @@ class BaseRallyListView(BaseRallyListViewMeta):
     def setData(self, initialData):
         pass
 
-    def canBeClosed(self, callback):
-        callback(True)
-
     def _populate(self):
         super(BaseRallyListView, self)._populate()
         g_messengerEvents.users.onUserActionReceived += self._onUserActionReceived
         self._searchDP = self.getPyDataProvider()
-        self._searchDP.setFlashObject(self.as_getSearchDPS())
+        if self._searchDP:
+            self._searchDP.setFlashObject(self.as_getSearchDPS())
 
     def _dispose(self):
         if self._searchDP is not None:

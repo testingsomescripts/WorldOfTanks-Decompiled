@@ -4,58 +4,18 @@ import BigWorld
 import math
 from collections import namedtuple
 from debug_utils import LOG_WARNING
-from gui.doc_loaders.GraphicsPresetsLoader import GraphicsPresetsLoader
-from shared_utils import CONST_CONTAINER
-from account_helpers.settings_core.settings_constants import GRAPHICS
+from shared_utils import CONST_CONTAINER, findFirst
 import GUI
 MIN_SCREEN_WIDTH = 1024
 MIN_SCREEN_HEIGHT = 768
 MIN_COLOR_DEPTH = 23
-_g_graphSettingsIndices = None
-_g_graphPresets = None
-GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart delayed')
 VideoMode = namedtuple('VideoMode', 'index width height colorDepth label refreshRate')
 WindowSize = namedtuple('WindowSize', 'width height refreshRate')
+BorderlessSize = namedtuple('BorderlessSize', 'behaviour posX posY width height monitor')
 SCALE_PREFIX = ('auto', 'x%d')
 
 class GRAPHICS_SETTINGS(CONST_CONTAINER):
-    RENDER_PIPELINE = 'RENDER_PIPELINE'
-    TEXTURE_QUALITY = 'TEXTURE_QUALITY'
-    DECALS_QUALITY = 'DECALS_QUALITY'
-    OBJECT_LOD = 'OBJECT_LOD'
-    FAR_PLANE = 'FAR_PLANE'
-    TERRAIN_QUALITY = 'TERRAIN_QUALITY'
-    SHADOWS_QUALITY = 'SHADOWS_QUALITY'
-    LIGHTING_QUALITY = 'LIGHTING_QUALITY'
-    SPEEDTREE_QUALITY = 'SPEEDTREE_QUALITY'
-    FLORA_QUALITY = 'FLORA_QUALITY'
-    WATER_QUALITY = 'WATER_QUALITY'
-    EFFECTS_QUALITY = 'EFFECTS_QUALITY'
-    POST_PROCESSING_QUALITY = 'POST_PROCESSING_QUALITY'
-    MOTION_BLUR_QUALITY = 'MOTION_BLUR_QUALITY'
-    SNIPER_MODE_EFFECTS_QUALITY = 'SNIPER_MODE_EFFECTS_QUALITY'
-    VEHICLE_DUST_ENABLED = 'VEHICLE_DUST_ENABLED'
-    SNIPER_MODE_GRASS_ENABLED = 'SNIPER_MODE_GRASS_ENABLED'
-    VEHICLE_TRACES_ENABLED = 'VEHICLE_TRACES_ENABLED'
-    SNIPER_MODE_SWINGING_ENABLED = 'SNIPER_MODE_SWINGING_ENABLED'
-    COLOR_GRADING_TECHNIQUE = 'COLOR_GRADING_TECHNIQUE'
-    SEMITRANSPARENT_LEAVES_ENABLED = 'SEMITRANSPARENT_LEAVES_ENABLED'
-    DRR_AUTOSCALER_ENABLED = GRAPHICS.DRR_AUTOSCALER_ENABLED
-
-
-def __initPresetsData():
-    global _g_graphPresets
-    if _g_graphPresets is None:
-        _g_graphPresets = GraphicsPresetsLoader()
-        _g_graphPresets.load()
-    return
-
-
-def __initGraphicsSettingsData():
-    global _g_graphSettingsIndices
-    if _g_graphSettingsIndices is None:
-        _g_graphSettingsIndices = dict(((data[0], idx) for idx, data in enumerate(BigWorld.graphicsSettings())))
-    return
+    pass
 
 
 class GRAPHICS_SETTINGS_STATUS(CONST_CONTAINER):
@@ -90,11 +50,12 @@ def isVideoModeSuitable(mode):
 
 def getSuitableVideoModes():
     result = []
+    currentVideoMode = BigWorld.videoModeIndex()
     for monitorModes in BigWorld.listVideoModesAllMonitors():
         modes = []
         for mode in monitorModes:
             m = VideoMode(*mode)
-            if isVideoModeSuitable(m):
+            if isVideoModeSuitable(m) or m.index == currentVideoMode:
                 modes.append(m)
 
         result.append(modes)
@@ -118,27 +79,23 @@ def getSuitableWindowSizes():
     return tuple(result)
 
 
+GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
+
 def getGraphicsSetting(settingName):
-    __initGraphicsSettingsData()
-    index = _g_graphSettingsIndices.get(settingName)
-    if index is None:
-        LOG_WARNING('Unknown graphics setting', settingName)
+    setting = BigWorld.graphicSetting(settingName)
+    if setting is None:
         return
     else:
-        return GraphicSetting(*BigWorld.graphicsSettings()[index])
+        return GraphicSetting(*setting)
+        return
 
 
 def getGraphicsPresets(presetIdx=None):
-    __initPresetsData()
-    if presetIdx is not None:
-        return _g_graphPresets.getPreset(presetIdx)
-    else:
-        return [ _g_graphPresets.getPreset(key) for key in _g_graphPresets.getPresetsKeys() ]
+    return BigWorld.getGraphicsPreset(presetIdx) if presetIdx is not None else BigWorld.getGraphicsPresets()
 
 
 def getGraphicsPresetsIndices():
-    __initPresetsData()
-    return dict(((key, idx) for idx, key in enumerate(_g_graphPresets.getPresetsKeys())))
+    return BigWorld.getGraphicsPresetsIndices()
 
 
 def getGraphicSettingImages(settingName):
@@ -188,7 +145,18 @@ class MonitorSettings(object):
 
     @property
     def currentWindowSize(self):
-        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(True)))
+        return WindowSize(*map(int, BigWorld.wg_getCurrentResolution(BigWorld.WindowModeWindowed)))
+
+    @property
+    def borderlessSizes(self):
+        return self.__suitableVideoModes[self.activeMonitor]
+
+    @property
+    def currentBorderlessSize(self):
+        if self.windowMode == BigWorld.WindowModeBorderless:
+            return BorderlessSize(*map(int, BigWorld.getBorderlessParameters()))
+        else:
+            return VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
 
     @property
     def videoModes(self):
@@ -200,32 +168,36 @@ class MonitorSettings(object):
             if videoMode.index == BigWorld.videoModeIndex():
                 return videoMode
 
-        return self.videoModes[0]
+        return findFirst(None, self.videoModes)
 
     def changeMonitor(self, monitorIdx):
         if self.__currentMonitorIdx != monitorIdx:
             self.__monitorChanged = True
         self.__currentMonitorIdx = monitorIdx
-        BigWorld.wg_setActiveMonitorIndex(monitorIdx)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeWindowed)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeBorderless)
+        BigWorld.setActiveMonitorIndex(monitorIdx, BigWorld.WindowModeExclusiveFullscreen)
 
-    def setFullscreen(self, isFullscreen):
-        vm = self.currentVideoMode
-        if vm is not None and isFullscreen != self.isFullscreen:
-            BigWorld.changeVideoMode(vm.index, not isFullscreen)
-        return
+    def setWindowed(self):
+        if self.windowMode != BigWorld.WindowModeWindowed:
+            BigWorld.changeVideoMode(-1, BigWorld.WindowModeWindowed)
 
-    def changeVideoMode(self, videoMode):
-        cvm = self.currentVideoMode
-        if not self.isMonitorChanged and cvm is not None and (videoMode.index != cvm or not self.isFullscreen):
-            BigWorld.changeVideoMode(videoMode.index, False)
-        return
+    def setBorderless(self):
+        if self.windowMode != BigWorld.WindowModeBorderless:
+            BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
 
     def changeWindowSize(self, width, height):
-        if not self.isMonitorChanged and self.isFullscreen:
-            self.setFullscreen(False)
+        if not self.isMonitorChanged and self.windowMode != BigWorld.WindowModeWindowed:
+            self.setWindowed()
         curWindowSize = self.currentWindowSize
         if curWindowSize.width != width or curWindowSize.height != height:
             BigWorld.resizeWindow(width, height)
+
+    def changeBorderlessSize(self, width, height):
+        curBorderlessSize = self.currentBorderlessSize
+        if curBorderlessSize.width != width or curBorderlessSize.height != height:
+            BigWorld.setBorderlessFixedSize(width, height)
+        BigWorld.changeVideoMode(-1, BigWorld.WindowModeBorderless)
 
     def setGlyphCache(self, scale=1):
         textureSize = 1024 * math.ceil(scale)
@@ -234,7 +206,7 @@ class MonitorSettings(object):
 
     @property
     def activeMonitor(self):
-        return BigWorld.wg_getActiveMonitorIndex()
+        return BigWorld.getActiveMonitorIndex(BigWorld.getWindowMode())
 
     @property
     def currentMonitor(self):
@@ -245,18 +217,32 @@ class MonitorSettings(object):
         return self.__monitorChanged
 
     @property
-    def isFullscreen(self):
-        return not BigWorld.isVideoWindowed()
+    def windowMode(self):
+        return BigWorld.getWindowMode()
 
     @property
-    def maxParams(self):
-        maxWidth = maxHeight = 0
-        for monitorModes in self.__suitableVideoModes:
-            for mode in monitorModes:
-                maxWidth = max(maxWidth, mode.width)
-                maxHeight = max(maxHeight, mode.height)
+    def noRestartExclusiveFullscreenMonitorIndex(self):
+        return BigWorld.getExclusiveFullscreenMonitorIndex()
 
-        return (maxWidth, maxHeight)
+    def maxParams(self):
+        maxWdth = 640
+        maxHght = 480
+        vmodes = getSuitableVideoModes()
+        for monitorModes in vmodes:
+            for mode in monitorModes:
+                maxWdth = max(maxWdth, mode.width)
+                maxHght = max(maxHght, mode.height)
+
+        return (maxWdth, maxHght)
+
+    def isFullscreen(self):
+        return BigWorld.getWindowMode() == BigWorld.WindowModeExclusiveFullscreen
+
+    def isWindowed(self):
+        return BigWorld.getWindowMode() == BigWorld.WindowModeWindowed
+
+    def isBorderless(self):
+        return BigWorld.getWindowMode() == BigWorld.WindowModeBorderless
 
 
 g_monitorSettings = MonitorSettings()

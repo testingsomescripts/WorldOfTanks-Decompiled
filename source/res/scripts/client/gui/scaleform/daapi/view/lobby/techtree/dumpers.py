@@ -16,7 +16,7 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.tooltips.formatters import packItemRentActionTooltipData
 from gui.shared.tooltips.formatters import getActionPriceData
-from gui.shared.utils import CLIP_ICON_PATH
+from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from helpers import i18n, html
 __all__ = ('ResearchItemsObjDumper', 'ResearchItemsXMLDumper', 'NationObjDumper', 'NationXMLDumper')
 
@@ -35,7 +35,7 @@ class _BaseDumper(object):
         return {}
 
     @staticmethod
-    def _getRentStatus(item):
+    def _getVehicleStatus(item):
         status = ''
         statusLevel = ''
         if item.isRented and not item.isTelecom:
@@ -51,6 +51,9 @@ class _BaseDumper(object):
         elif item.isRentable and item.isRentAvailable:
             status = i18n.makeString(MENU.CURRENTVEHICLESTATUS_ISRENTABLE)
             statusLevel = Vehicle.VEHICLE_STATE_LEVEL.RENTED
+        elif item.canTradeIn:
+            status = i18n.makeString(MENU.TRADE_IN)
+            statusLevel = Vehicle.VEHICLE_STATE_LEVEL.INFO
         return (status, statusLevel)
 
 
@@ -91,6 +94,8 @@ class ResearchBaseDumper(_BaseDumper):
         else:
             if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun(rootItem.descriptor):
                 extraInfo = CLIP_ICON_PATH
+            elif item.itemTypeID == GUI_ITEM_TYPE.CHASSIS and item.isHydraulicChassis():
+                extraInfo = HYDRAULIC_ICON_PATH
             vClass.update({'name': item.itemTypeName})
         data = {'id': nodeCD,
          'nameString': item.shortUserName,
@@ -179,7 +184,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
         status = statusLevel = ''
         vehicleBtnLabel = ''
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            status, statusLevel = self._getRentStatus(item)
+            status, statusLevel = self._getVehicleStatus(item)
             if item.isInInventory:
                 vehicleBtnLabel = MENU.RESEARCH_LABELS_BUTTON_SHOWINHANGAR
             else:
@@ -282,7 +287,7 @@ class NationObjDumper(_BaseDumper):
         nodeCD = node['id']
         tags = item.tags
         credits, gold = node['GUIPrice']
-        status, statusLevel = self._getRentStatus(item)
+        status, statusLevel = self._getVehicleStatus(item)
         return {'id': nodeCD,
          'state': node['state'],
          'type': item.itemTypeName,

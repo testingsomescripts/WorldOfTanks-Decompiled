@@ -1,4 +1,4 @@
-<clanrequestprocessor.def>
+<ClanRequestProcessor.def>
   <Properties>
     <clanrequest_consumer_tag>
       <Type>	STRING	</Type>
@@ -24,4 +24,4 @@
       <Arg>	STRING	</Arg>
     </onFortReply>
   </BaseMethods>
-</clanrequestprocessor.def>
+</ClanRequestProcessor.def>

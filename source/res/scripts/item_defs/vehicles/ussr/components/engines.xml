@@ -89,6 +89,9 @@
     <ZiS-16_A>	119	</ZiS-16_A>
     <V-12-6V>	120	</V-12-6V>
     <_2xV-16_1000>	121	</_2xV-16_1000>
+    <V-11_700>	122	</V-11_700>
+    <V_12CN>	123	</V_12CN>
+    <V-2IS_R1F>	127	</V-2IS_R1F>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -120,8 +123,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	394	</rpm_min>
-      <rpm_max>	2017	</rpm_max>
+      <rpm_min>	392	</rpm_min>
+      <rpm_max>	2024	</rpm_max>
     </V-2>
     <V-2-34>
       <userString>	#ussr_vehicles:V-2-34	</userString>
@@ -136,8 +139,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </V-2-34>
     <V-2-34A>
       <userString>	#ussr_vehicles:V-2-34	</userString>
@@ -153,8 +156,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </V-2-34A>
     <V-2-34_B>
       <userString>	#ussr_vehicles:V-2-34_B	</userString>
@@ -170,8 +173,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </V-2-34_B>
     <M-17F>
       <userString>	#ussr_vehicles:M-17F	</userString>
@@ -252,8 +255,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-2IS>
     <V-2IS_B>
       <userString>	#ussr_vehicles:V-2IS_B	</userString>
@@ -269,8 +272,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-2IS_B>
     <V-2IS_R>
       <userString>	#ussr_vehicles:V-2IS_R	</userString>
@@ -285,8 +288,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-2IS_R>
     <KZ-V8>
       <userString>	#ussr_vehicles:KZ-V8	</userString>
@@ -301,8 +304,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	380	</rpm_min>
-      <rpm_max>	2057	</rpm_max>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
     </KZ-V8>
     <V-16>
       <userString>	#ussr_vehicles:V-16	</userString>
@@ -317,8 +320,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-16>
     <V-16M>
       <userString>	#ussr_vehicles:V-16M	</userString>
@@ -333,8 +336,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-16M>
     <V-5>
       <userString>	#ussr_vehicles:V-5	</userString>
@@ -349,8 +352,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-5>
     <V-5F>
       <userString>	#ussr_vehicles:V-5F	</userString>
@@ -365,8 +368,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-5F>
     <V-2SN>
       <userString>	#ussr_vehicles:V-2SN	</userString>
@@ -381,8 +384,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2171	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V-2SN>
     <M-17T>
       <userString>	#ussr_vehicles:M-17T	</userString>
@@ -462,8 +465,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </V-2K>
     <V-4>
       <userString>	#ussr_vehicles:V-4	</userString>
@@ -494,8 +497,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-2-34M>
     <MT-5-1>
       <userString>	#ussr_vehicles:MT-5-1	</userString>
@@ -592,8 +595,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	379	</rpm_min>
-      <rpm_max>	2062	</rpm_max>
+      <rpm_min>	370	</rpm_min>
+      <rpm_max>	2088	</rpm_max>
     </V-2-44>
     <V-2-54>
       <userString>	#ussr_vehicles:V-2-54	</userString>
@@ -608,8 +611,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	367	</rpm_min>
-      <rpm_max>	2097	</rpm_max>
+      <rpm_min>	354	</rpm_min>
+      <rpm_max>	2136	</rpm_max>
     </V-2-54>
     <V-2-54A>
       <userString>	#ussr_vehicles:V-2-54A	</userString>
@@ -625,8 +628,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	367	</rpm_min>
-      <rpm_max>	2097	</rpm_max>
+      <rpm_min>	354	</rpm_min>
+      <rpm_max>	2136	</rpm_max>
     </V-2-54A>
     <V-55U>
       <userString>	#ussr_vehicles:V-55U	</userString>
@@ -641,8 +644,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-55U>
     <T-26>
       <userString>	#ussr_vehicles:T-26	</userString>
@@ -706,8 +709,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	356	</rpm_min>
-      <rpm_max>	2131	</rpm_max>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
     </V-54-6>
     <T-26M>
       <userString>	#ussr_vehicles:T-26M	</userString>
@@ -739,9 +742,26 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-11-IS-3>
+    <V-11_700>
+      <userString>	#ussr_vehicles:V-11_700	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55270	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </V-11_700>
     <V-11>
       <userString>	#ussr_vehicles:V-11	</userString>
       <tags>	diesel	</tags>
@@ -755,8 +775,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	361	</rpm_min>
-      <rpm_max>	2114	</rpm_max>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
     </V-11>
     <V-12>
       <userString>	#ussr_vehicles:V-12	</userString>
@@ -772,8 +792,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2171	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V-12>
     <V-12P>
       <userString>	#ussr_vehicles:V-12P	</userString>
@@ -788,8 +808,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-12P>
     <V-12A>
       <userString>	#ussr_vehicles:V-12A	</userString>
@@ -805,9 +825,26 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-12A>
+    <V_12CN>
+      <userString>	#ussr_vehicles:V_12CN	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	750	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </V_12CN>
     <V-12-5>
       <userString>	#ussr_vehicles:V-12-5	</userString>
       <tags>	diesel	</tags>
@@ -821,8 +858,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-12-5>
     <V-12-5A>
       <userString>	#ussr_vehicles:V-12-5A	</userString>
@@ -838,8 +875,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-12-5A>
     <V-12-6>
       <userString>	#ussr_vehicles:V-12-6	</userString>
@@ -854,8 +891,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2171	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V-12-6>
     <V-12-6V>
       <userString>	#ussr_vehicles:V-12-6V	</userString>
@@ -871,8 +908,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2171	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V-12-6V>
     <V-16FN>
       <userString>	#ussr_vehicles:V-16FN	</userString>
@@ -888,8 +925,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2199	</rpm_max>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
     </V-16FN>
     <M-80>
       <userString>	#ussr_vehicles:M-80	</userString>
@@ -954,8 +991,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	323	</rpm_min>
-      <rpm_max>	2228	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
     </V-2KT>
     <AEC3>
       <userString>	#ussr_vehicles:AEC3	</userString>
@@ -1037,8 +1074,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	285	</rpm_min>
-      <rpm_max>	2342	</rpm_max>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </M-50T>
     <M-50T_fallout>
       <userString>	#ussr_vehicles:M-50T_fallout	</userString>
@@ -1054,8 +1091,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	285	</rpm_min>
-      <rpm_max>	2342	</rpm_max>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </M-50T_fallout>
     <Bedford_Twin-Six>
       <userString>	#ussr_vehicles:Bedford_Twin-Six	</userString>
@@ -1104,8 +1141,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-2-54IS>
     <V-2-212>
       <userString>	#ussr_vehicles:V-2-212	</userString>
@@ -1120,8 +1157,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	323	</rpm_min>
-      <rpm_max>	2228	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
     </V-2-212>
     <Continental_W-670_LL>
       <userString>	#ussr_vehicles:Continental_W-670_LL	</userString>
@@ -1155,8 +1192,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	382	</rpm_min>
-      <rpm_max>	2051	</rpm_max>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
     </BD-2>
     <V-5U>
       <userString>	#ussr_vehicles:V-5U	</userString>
@@ -1172,8 +1209,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2074	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </V-5U>
     <TD-30>
       <userString>	#ussr_vehicles:TD-30	</userString>
@@ -1189,8 +1226,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	314	</rpm_min>
-      <rpm_max>	2256	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </TD-30>
     <M-50TD>
       <userString>	#ussr_vehicles:M-50TD	</userString>
@@ -1206,8 +1243,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	304	</rpm_min>
-      <rpm_max>	2285	</rpm_max>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
     </M-50TD>
     <Maybach_HL_120_TRM_A>
       <userString>	#ussr_vehicles:Maybach_HL_120_TRM_A	</userString>
@@ -1240,8 +1277,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </M500>
     <M_40>
       <userString>	#ussr_vehicles:M_40	</userString>
@@ -1256,8 +1293,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	295	</rpm_min>
-      <rpm_max>	2313	</rpm_max>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </M_40>
     <M_40_1200>
       <userString>	#ussr_vehicles:M_40_1200	</userString>
@@ -1273,8 +1310,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </M_40_1200>
     <V-2SNx2>
       <userString>	#ussr_vehicles:V-2SNx2	</userString>
@@ -1289,8 +1326,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </V-2SNx2>
     <D-744>
       <userString>	#ussr_vehicles:D-744	</userString>
@@ -1356,8 +1393,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2074	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </_5TD>
     <V-54K>
       <userString>	#ussr_vehicles:V-54K	</userString>
@@ -1372,8 +1409,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-54K>
     <V-54>
       <userString>	#ussr_vehicles:V-54	</userString>
@@ -1388,8 +1425,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-54>
     <V-54K_T>
       <userString>	#ussr_vehicles:V-54K	</userString>
@@ -1405,8 +1442,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-54K_T>
     <V-55>
       <userString>	#ussr_vehicles:V-55	</userString>
@@ -1422,8 +1459,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2074	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </V-55>
     <V-55_fallout>
       <userString>	#ussr_vehicles:V-55_fallout	</userString>
@@ -1439,8 +1476,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2074	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </V-55_fallout>
     <V-44>
       <userString>	#ussr_vehicles:V-44	</userString>
@@ -1456,8 +1493,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-44>
     <V-44A>
       <userString>	#ussr_vehicles:V-44A	</userString>
@@ -1473,8 +1510,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </V-44A>
     <GAZ-202>
       <userString>	#ussr_vehicles:GAZ-202	</userString>
@@ -1539,8 +1576,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	369	</rpm_min>
-      <rpm_max>	2091	</rpm_max>
+      <rpm_min>	357	</rpm_min>
+      <rpm_max>	2128	</rpm_max>
     </V-12-5U>
     <V-12-5_shortened>
       <userString>	#ussr_vehicles:V-12-5_shortened	</userString>
@@ -1556,8 +1593,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2171	</rpm_max>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
     </V-12-5_shortened>
     <M-80_prem>
       <userString>	#ussr_vehicles:M-80	</userString>
@@ -1590,9 +1627,26 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	386	</rpm_min>
-      <rpm_max>	2039	</rpm_max>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
     </V-2IS_R1>
+    <V-2IS_R1F>
+      <userString>	#ussr_vehicles:V-2IS_RF	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	29000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </V-2IS_R1F>
     <Engine_01_KV>
       <userString>	#ussr_vehicles:V-2K	</userString>
       <tags>	diesel	</tags>
@@ -1607,8 +1661,8 @@
       <maxRegenHealth>	72	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	390	</rpm_min>
-      <rpm_max>	2028	</rpm_max>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2040	</rpm_max>
     </Engine_01_KV>
     <Engine_T-50-2>
       <userString>	#ussr_vehicles:V-4	</userString>
@@ -1641,8 +1695,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2074	</rpm_max>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
     </TD-12>
     <_4TD>
       <userString>	#ussr_vehicles:_4TD	</userString>
@@ -1657,8 +1711,8 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	380	</rpm_min>
-      <rpm_max>	2057	</rpm_max>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
     </_4TD>
     <_2xV-16>
       <userString>	#ussr_vehicles:_2xV-16	</userString>
@@ -1674,8 +1728,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </_2xV-16>
     <_2xV-16_1000>
       <userString>	#ussr_vehicles:_2xV-16_1000	</userString>
@@ -1691,8 +1745,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
     </_2xV-16_1000>
     <V-7>
       <userString>	#ussr_vehicles:V-7	</userString>
@@ -1708,8 +1762,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	323	</rpm_min>
-      <rpm_max>	2228	</rpm_max>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2320	</rpm_max>
     </V-7>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
@@ -1742,8 +1796,8 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-5_IGR>
     <V-2IS_IGR>
       <userString>	#igr_vehicles:V-2IS_IGR	</userString>
@@ -1759,8 +1813,8 @@
       <maxRegenHealth>	95	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	371	</rpm_min>
-      <rpm_max>	2085	</rpm_max>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
     </V-2IS_IGR>
     <V-54-6_IGR>
       <userString>	#igr_vehicles:V-54-6_IGR	</userString>
@@ -1776,8 +1830,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	356	</rpm_min>
-      <rpm_max>	2131	</rpm_max>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
     </V-54-6_IGR>
     <V-2-54IS_IGR>
       <userString>	#igr_vehicles:V-2-54IS_IGR	</userString>
@@ -1793,8 +1847,8 @@
       <maxRegenHealth>	185	</maxRegenHealth>
       <repairCost>	9	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	352	</rpm_min>
-      <rpm_max>	2142	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </V-2-54IS_IGR>
     <M500_IGR>
       <userString>	#igr_vehicles:M500_IGR	</userString>
@@ -1810,8 +1864,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	257	</rpm_min>
-      <rpm_max>	2428	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </M500_IGR>
     <AEC_A190_IGR>
       <userString>	#igr_vehicles:AEC_A190_IGR	</userString>
@@ -1844,8 +1898,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	285	</rpm_min>
-      <rpm_max>	2342	</rpm_max>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
     </M-50T_IGR>
   </shared>
 </engines.xml>

@@ -1,4 +1,4 @@
-<g43_sturer_emil.xml>
+<G43_Sturer_Emil.xml>
   <crew>
     <commander></commander>
     <radioman></radioman>
@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G43_Sturer_Emil/Sturer_Emil_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -37,11 +37,13 @@
       <armor_5>	20	</armor_5>
       <armor_6>	15	</armor_6>
       <armor_7>	15	</armor_7>
-      <armor_8>	10	</armor_8>
+      <armor_8>	0	</armor_8>
       <armor_9>	20	</armor_9>
       <armor_10>	0	</armor_10>
       <armor_11>	35	</armor_11>
+      <armor_12>	10	</armor_12>
       <armor_13>	20	</armor_13>
+      <armor_16>	65	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13425	</weight>
@@ -67,7 +69,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.663232 -0.373449	</turret>
+      <turret>	-0.00246 0.253202 -0.313118	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Hull.model	</collisionModelServer>
@@ -79,21 +81,21 @@
         <rayEnd>	0.648564 0.113896 2.06491	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.20226 0.866446 -2.34721	</rayStart>
-        <rayEnd>	-0.809055 0.793051 -2.34817	</rayEnd>
+        <rayStart>	-1.044 0.836904 -2.3476	</rayStart>
+        <rayEnd>	-0.96732 0.822593 -2.34778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
       <player>
-        <rayStart>	1.20226 0.866446 -2.34721	</rayStart>
-        <rayEnd>	0.809055 0.793051 -2.34817	</rayEnd>
+        <rayStart>	1.04301 0.836721 -2.3476	</rayStart>
+        <rayEnd>	0.968303 0.822776 -2.34778	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
       <inscription>
@@ -101,7 +103,7 @@
         <rayEnd>	0.807011 0.795204 -1.66092	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.78	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
         <rayStart>	-1.20022 0.868618 -1.65996	</rayStart>
@@ -112,6 +114,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G43_Sturer_Emil/Sturer_Emil_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Sturer_Emil>
@@ -150,13 +155,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.46 0.5	</size>
+        <size>	0.46 0.55	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.9	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -165,6 +170,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.434027	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -178,6 +184,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.412966	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -191,6 +198,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.434027	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -204,6 +212,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.412966	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -216,17 +225,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.01294 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.17763 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30369 1.74813	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31839 1.77556	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -239,6 +247,123 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G43_Sturer_Emil/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G43_Sturer_Emil/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/german/G43_Sturer_Emil/track/left.track	</left>
+        <right>	vehicles/german/G43_Sturer_Emil/track/right.track	</right>
+        <segmentLength>	0.145	</segmentLength>
+        <segmentOffset>	0.054	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0996563	</minOffset>
+          <maxOffset>	0.0996563	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0996563	</minOffset>
+          <maxOffset>	0.0996563	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0343	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Sturer_Emil>
     <Chassis_Sturer_Emil_2>
       <userString>	#germany_vehicles:Chassis_Sturer_Emil_2	</userString>
@@ -272,13 +397,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.46 0.5	</size>
+        <size>	0.46 0.55	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.9	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -287,6 +412,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.434027	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -300,6 +426,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.412966	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -313,6 +440,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.434027	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -326,6 +454,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.412966	</radius>
+          <syncAngle>	22.5	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -338,17 +467,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.01294 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.17763 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30369 1.74813	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.31839 1.77556	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -361,6 +489,123 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G43_Sturer_Emil/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G43_Sturer_Emil/track/segment1.model	</segmentModelRight>
+        <left>	vehicles/german/G43_Sturer_Emil/track/left.track	</left>
+        <right>	vehicles/german/G43_Sturer_Emil/track/right.track	</right>
+        <segmentLength>	0.145	</segmentLength>
+        <segmentOffset>	0.054	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0996563	</minOffset>
+          <maxOffset>	0.0996563	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0996563	</minOffset>
+          <maxOffset>	0.0996563	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0343	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.8	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Sturer_Emil_2>
   </chassis>
   <turrets0>
@@ -419,26 +664,26 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/german/G43_Sturer_Emil/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/german/G43_Sturer_Emil/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00300148 0.00377657 3.23717	</rayStart>
-              <rayEnd>	0.111766 -0.396647 3.22259	</rayEnd>
-              <rayUp>	0.094 0.086 3	</rayUp>
+              <rayStart>	-0.00438042 0.0726791 2.35877	</rayStart>
+              <rayEnd>	-0.0444899 0.0865131 2.35616	</rayEnd>
+              <rayUp>	0.108 0.096 5	</rayUp>
               <size>	0.52	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
+            <tiling>	1 0.7 0.000000 0.1	</tiling>
           </camouflage>
         </_105mm_K18_L52_R>
         <_128mm_SF_L61>	shared	  <maxAmmo>	15	</maxAmmo>
@@ -471,26 +716,26 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/german/G43_Sturer_Emil/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/german/G43_Sturer_Emil/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G43_Sturer_Emil/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00275514 0.00998154 4.8285	</rayStart>
-              <rayEnd>	0.393796 -0.0850345 4.82105	</rayEnd>
-              <rayUp>	0.101 0.097 3	</rayUp>
+              <rayStart>	-0.0057097 0.0706347 4.80674	</rayStart>
+              <rayEnd>	-0.0166409 0.112696 4.80606	</rayEnd>
+              <rayUp>	0.104 0.098 5	</rayUp>
               <size>	0.52	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+            <tiling>	0.7 0.7 0.000000 0.1	</tiling>
           </camouflage>
         </_128mm_SF_L61>
       </guns>
@@ -503,10 +748,10 @@
         <collisionModelServer>	vehicles/german/G43_Sturer_Emil/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G43_Sturer_Emil/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.0026 0.528472 0.032607	</gunPosition>
+      <gunPosition>	0.00246 0.777634 0.095418	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.707 0.000 1.000 -0.034 0.000 0.100 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.000 0.000 0.834 0.068 0.800 0.107 0.000 0.100 0.500 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_04	</wwturretRotatorSoundManual>
     </Turret_1_Sturer_Emil>
   </turrets0>
@@ -633,4 +878,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g43_sturer_emil.xml>
+</G43_Sturer_Emil.xml>

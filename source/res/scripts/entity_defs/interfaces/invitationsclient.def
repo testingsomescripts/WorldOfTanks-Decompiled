@@ -1,4 +1,4 @@
-<invitationsclient.def>
+<InvitationsClient.def>
   <ClientMethods>
     <processInvitations>
       <Arg>	PYTHON	</Arg>
@@ -6,4 +6,4 @@
       </VariableLengthHeaderSize>
     </processInvitations>
   </ClientMethods>
-</invitationsclient.def>
+</InvitationsClient.def>

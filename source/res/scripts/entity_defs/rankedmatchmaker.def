@@ -1,4 +1,4 @@
-<rankedmatchmaker.def>
+<RankedMatchmaker.def>
   <Properties>
     <name>
       <Type>	STRING	</Type>
@@ -25,10 +25,5 @@
     <onUnitMgrFailure>
       <Arg>	MAILBOX	</Arg>
     </onUnitMgrFailure>
-    <receiveArenaType>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT32	</Arg>
-    </receiveArenaType>
   </BaseMethods>
-</rankedmatchmaker.def>
+</RankedMatchmaker.def>

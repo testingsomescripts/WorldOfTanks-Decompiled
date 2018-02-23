@@ -1,4 +1,4 @@
-<r105_bt_7a.xml>
+<R105_BT_7A.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -204,7 +204,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -625,4 +624,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r105_bt_7a.xml>
+</R105_BT_7A.xml>

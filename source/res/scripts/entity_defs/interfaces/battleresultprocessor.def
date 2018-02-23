@@ -1,4 +1,4 @@
-<battleresultprocessor.def>
+<BattleResultProcessor.def>
   <BaseMethods>
     <battleResultProcessor_onBattleResultsReceived>
       <Arg>	INT32	</Arg>
@@ -15,4 +15,4 @@
     </battleResultProcessor_onPlayerLeftArena>
   </BaseMethods>
   <ClientMethods></ClientMethods>
-</battleresultprocessor.def>
+</BattleResultProcessor.def>

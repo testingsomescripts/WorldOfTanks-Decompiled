@@ -1,4 +1,4 @@
-<ch01_type59_gold.xml>
+<Ch01_Type59_Gold.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -169,7 +169,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -628,4 +627,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
-</ch01_type59_gold.xml>
+</Ch01_Type59_Gold.xml>

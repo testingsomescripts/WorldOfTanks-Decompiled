@@ -10,5 +10,11 @@ class ProfileTechniqueMeta(ProfileSection):
     @extends ProfileSection
     """
 
+    def setSelectedTableColumn(self, index, sortDirection):
+        self._printOverrideError('setSelectedTableColumn')
+
     def as_responseVehicleDossierS(self, data):
+        """
+        :param data: Represented by ProfileVehicleDossierVO (AS)
+        """
         return self.flashObject.as_responseVehicleDossier(data) if self._isDAAPIInited() else None

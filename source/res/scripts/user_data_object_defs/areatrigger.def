@@ -1,4 +1,4 @@
-<areatrigger.def>
+<AreaTrigger.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <name>
@@ -15,4 +15,4 @@
       <Default>	1.0	</Default>
     </exitInterval>
   </Properties>
-</areatrigger.def>
+</AreaTrigger.def>

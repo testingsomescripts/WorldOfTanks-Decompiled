@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/chat_handlers.py
 from collections import namedtuple
 import weakref
+import BattleReplay
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
+from helpers import dependency
 from messenger.m_constants import BATTLE_CHANNEL, MESSENGER_SCOPE, USER_TAG
 from messenger.proto.bw_chat2 import admin_chat_cmd
 from messenger.proto.bw_chat2 import entities, limits, wrappers, errors
@@ -16,6 +18,7 @@ from messenger.storage import storage_getter
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
 from messenger_common_chat2 import BATTLE_CHAT_COMMANDS
+from skeletons.gui.battle_session import IBattleSessionProvider
 _ActionsCollection = namedtuple('_ActionsCollection', 'initID deInitID onBroadcastID broadcastID')
 
 class _EntityChatHandler(provider.ResponseSeqHandler):
@@ -137,7 +140,8 @@ class _EntityChatHandler(provider.ResponseSeqHandler):
 
     def _onEntityChatInit(self, _, args):
         if self.__isInited:
-            LOG_WARNING('EntityChat already is inited', self)
+            if not BattleReplay.g_replayCtrl.isPlaying:
+                LOG_WARNING('EntityChat already is inited', self)
             return
         self.__isInited = True
         self._doInit(dict(args))
@@ -265,7 +269,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
+            if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return
@@ -274,65 +278,8 @@ class UnitChatHandler(_EntityChatHandler):
         self.__channel = self._removeChannel(self.__channel)
 
 
-class ClubChatHandler(_EntityChatHandler):
-
-    def __init__(self, provider, adminChat):
-        super(ClubChatHandler, self).__init__(provider, adminChat, _ActionsCollection(_ACTIONS.INIT_CLUB_CHAT, _ACTIONS.DEINIT_CLUB_CHAT, _ACTIONS.ON_CLUB_MESSAGE_BROADCAST, _ACTIONS.BROADCAST_CLUB_MESSAGE), wrappers.UnitDataFactory(), limits.UnitLimits())
-        self.__channel = None
-        return
-
-    def getClubChannel(self):
-        return self.__channel
-
-    def leave(self):
-        self.__doRemoveChannel()
-        super(ClubChatHandler, self).leave()
-
-    def clear(self):
-        self.__doRemoveChannel()
-        super(ClubChatHandler, self).clear()
-
-    def registerHandlers(self):
-        super(ClubChatHandler, self).registerHandlers()
-        register = self.provider().registerHandler
-        register(_ACTIONS.UPDATE_CLUB_MEMBERLIST, self._onMembersListUpdated)
-
-    def unregisterHandlers(self):
-        super(ClubChatHandler, self).unregisterHandlers()
-        unregister = self.provider().unregisterHandler
-        unregister(_ACTIONS.UPDATE_CLUB_MEMBERLIST, self._onMembersListUpdated)
-
-    def _doInit(self, args):
-        self.__doCreateChannel()
-
-    def _getChannel(self, message):
-        return self.__channel
-
-    def _getClientIDForCommand(self):
-        return self.__channel.getClientID() if self.__channel else 0
-
-    def _onMembersListUpdated(self, _, args):
-        if not self.__channel:
-            LOG_ERROR('Channel entity is not found, can not update members list', args)
-            return
-        flag, iterator = wrappers.getMembersListDelta(args)
-        if flag == 0:
-            self.__channel.clearMembers()
-            self.__channel.addMembers(iterator)
-        elif flag == -1:
-            self.__channel.removeMembers(iterator)
-        elif flag == 1:
-            self.__channel.addMembers(iterator)
-
-    def __doCreateChannel(self):
-        if not self.__channel:
-            self.__channel = self._addChannel(entities.BWClubChannelEntity())
-
-    def __doRemoveChannel(self):
-        self.__channel = self._removeChannel(self.__channel)
-
-
 class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFactory):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, provider):
         super(BattleChatCommandHandler, self).__init__(provider)
@@ -354,8 +301,7 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
         if scope != MESSENGER_SCOPE.BATTLE:
             return
         else:
-            from gui.battle_control import g_sessionProvider
-            arena = g_sessionProvider.arenaVisitor.getArenaSubscription()
+            arena = self.sessionProvider.arenaVisitor.getArenaSubscription()
             if arena is not None:
                 arena.onVehicleKilled += self.__onVehicleKilled
             return

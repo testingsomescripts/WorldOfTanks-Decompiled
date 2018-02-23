@@ -1,4 +1,4 @@
-<sessiontracker.def>
+<SessionTracker.def>
   <BaseMethods>
     <sessionTracker_processSessionTrackerData>
       <Arg>	MAILBOX	</Arg>
@@ -7,4 +7,4 @@
       <Arg>	STRING	</Arg>
     </sessionTracker_processSessionTrackerData>
   </BaseMethods>
-</sessiontracker.def>
+</SessionTracker.def>

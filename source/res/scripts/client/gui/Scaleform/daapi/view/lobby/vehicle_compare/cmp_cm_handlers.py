@@ -5,9 +5,10 @@ from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehic
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from helpers import dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 class _OPT_IDS(object):
     COPY = 'copy'
@@ -53,7 +54,12 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
             options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
         elif vehicle.isUnlocked:
             items = g_itemsCache.items
-            label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
+            if vehicle.isRestoreAvailable():
+                label = MENU.CONTEXTMENU_RESTORE
+            elif vehicle.canTradeIn:
+                label = MENU.CONTEXTMENU_BUYORTRADEIN
+            else:
+                label = MENU.CONTEXTMENU_BUY
             options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)}))
         else:
             isAvailableToUnlock, _, _ = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)
@@ -62,7 +68,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
         return options
 
     def _manageStartOptions(self, options, vehicle):
-        if not vehicle.isSecret:
+        if vehicle.isPreviewAllowed():
             options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))
 
     def _manageEndOptions(self, options, vehicle):
@@ -78,6 +84,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
 
 
 class VehicleCompareContextMenuHandler(CommonContextMenuHandler):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, cmProxy, ctx=None):
         handlers = {VEHICLE.STATS: 'showVehicleStats',
@@ -85,13 +92,13 @@ class VehicleCompareContextMenuHandler(CommonContextMenuHandler):
         super(VehicleCompareContextMenuHandler, self).__init__(cmProxy, ctx, handlers)
 
     def copyComparedVehicle(self):
-        getVehicleComparisonBasketCtrl().cloneVehicle(self.__itemIndexInBasket)
+        self.comparisonBasket.cloneVehicle(self.__itemIndexInBasket)
 
     def _manageStartOptions(self, options, vehicle):
-        options.append(self._makeItem(_OPT_IDS.COPY, VEH_COMPARE.MENU_CLONEFORCOMPARE, {'enabled': not getVehicleComparisonBasketCtrl().isFull()}))
+        options.append(self._makeItem(_OPT_IDS.COPY, VEH_COMPARE.MENU_CLONEFORCOMPARE, {'enabled': not self.comparisonBasket.isFull()}))
         if vehicle.isInInventory:
             options.append(self._makeItem(VEHICLE.SELECT, VEH_COMPARE.VEHICLECOMPAREVIEW_TOHANGAR))
-        else:
+        elif vehicle.isPreviewAllowed():
             options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))
 
     def _manageEndOptions(self, options, vehicle):

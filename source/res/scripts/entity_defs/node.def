@@ -1,4 +1,4 @@
-<node.def>
+<Node.def>
   <Properties>
     <baseappID>
       <Type>	INT32	</Type>
@@ -69,4 +69,4 @@
       <Arg>	BOOL	</Arg>
     </removeUnitMgr>
   </BaseMethods>
-</node.def>
+</Node.def>

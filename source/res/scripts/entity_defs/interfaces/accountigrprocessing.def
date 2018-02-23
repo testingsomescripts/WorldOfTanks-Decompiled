@@ -1,4 +1,4 @@
-<accountigrprocessing.def>
+<AccountIGRProcessing.def>
   <BaseMethods>
     <accountIGR_processIGRData>
       <Arg>	MAILBOX	</Arg>
@@ -6,4 +6,4 @@
       <Arg>	PYTHON	</Arg>
     </accountIGR_processIGRData>
   </BaseMethods>
-</accountigrprocessing.def>
+</AccountIGRProcessing.def>

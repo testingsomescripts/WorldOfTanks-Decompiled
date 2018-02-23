@@ -1,4 +1,4 @@
-<baseappchatmanager.def>
+<BaseAppChatManager.def>
   <Properties></Properties>
   <BaseMethods>
     <receiveMemebersDelta>
@@ -34,4 +34,4 @@
       <Arg>	STRING	</Arg>
     </createPrivateChannel>
   </BaseMethods>
-</baseappchatmanager.def>
+</BaseAppChatManager.def>

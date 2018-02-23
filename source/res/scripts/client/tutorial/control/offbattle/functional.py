@@ -6,20 +6,53 @@ import MusicControllerWWISE
 import ResMgr
 from adisp import process
 from constants import QUEUE_TYPE
-from gui.prb_control.context import pre_queue_ctx, PrebattleAction
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
-from helpers.i18n import makeString as _ms
-from gui.game_control import getBrowserCtrl
+from debug_utils import LOG_DEBUG
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
+from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx, DequeueCtx
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IBrowserController
 from tutorial.control import TutorialProxyHolder
 from tutorial.control.context import GLOBAL_VAR, GlobalStorage
 from tutorial.control.functional import FunctionalEffect
-from tutorial.control.offbattle.context import OffbattleBonusesRequester
 from tutorial.control.offbattle.context import OffBattleClientCtx
+from tutorial.control.offbattle.context import OffbattleBonusesRequester
 from tutorial.control.offbattle.context import getBattleDescriptor
 from tutorial.gui import GUI_EFFECT_NAME
 from tutorial.logger import LOG_ERROR, LOG_WARNING
 from tutorial.settings import PLAYER_XP_LEVEL
+
+class FunctionalEnterModeEffect(FunctionalEffect):
+
+    def __init__(self, effect):
+        super(FunctionalEnterModeEffect, self).__init__(effect)
+        self.__stillRunning = False
+
+    def triggerEffect(self):
+        dispatcher = g_prbLoader.getDispatcher()
+        if dispatcher is not None:
+            self._doEffect(dispatcher)
+        else:
+            LOG_WARNING('Prebattle dispatcher is not defined')
+            self._tutorial.refuse()
+        return
+
+    @process
+    def _doEffect(self, dispatcher):
+        self.__stillRunning = True
+        result = yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
+        self.__stillRunning = False
+        if not result:
+            self._tutorial.refuse()
+
+    def isInstantaneous(self):
+        return False
+
+    def isStillRunning(self):
+        return self.__stillRunning
+
 
 class FunctionalEnterQueueEffect(FunctionalEffect):
 
@@ -34,21 +67,17 @@ class FunctionalEnterQueueEffect(FunctionalEffect):
             if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
                 self._doEffect(dispatcher)
             else:
-                self._doSelect(dispatcher)
+                LOG_WARNING('Enter queue effect could not be played from different mode.')
+                self._tutorial.refuse()
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
             self._tutorial.refuse()
         return
 
-    def _doSelect(self, dispatcher):
-        result = dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL))
-        if result:
-            self._doEffect(dispatcher)
-
     @process
     def _doEffect(self, dispatcher):
         self.__stillRunning = True
-        result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.QueueCtx())
+        result = yield dispatcher.sendPrbRequest(QueueCtx())
         self.__stillRunning = False
         if not result:
             self._tutorial.refuse()
@@ -78,7 +107,7 @@ class FunctionalExitQueueEffect(FunctionalEffect):
     @process
     def _doEffect(self, dispatcher):
         self.__stillRunning = True
-        result = yield dispatcher.sendPreQueueRequest(pre_queue_ctx.DequeueCtx())
+        result = yield dispatcher.sendPrbRequest(DequeueCtx())
         self.__stillRunning = False
         if result:
             self._tutorial.getFlags().deactivateFlag(self._effect.getTargetID())
@@ -143,12 +172,13 @@ class FunctionalRequestAllBonusesEffect(FunctionalEffect):
 
 
 class FunctionalOpenInternalBrowser(FunctionalEffect):
+    browserCtrl = dependency.descriptor(IBrowserController)
 
     def triggerEffect(self):
         browserID = self._effect.getTargetID()
-        if getBrowserCtrl().getBrowser(browserID) is None:
+        if self.browserCtrl.getBrowser(browserID) is None:
             pageDir = urllib.quote(ResMgr.resolveToAbsolutePath('gui/html/video_tutorial/'))
-            getBrowserCtrl().load(url='file:///{0}'.format('{pageDir}/index_{lang}.html'.format(pageDir=pageDir, lang=_ms('#settings:LANGUAGE_CODE'))), title=_ms('#miniclient:tutorial/video/title'), showCloseBtn=True, showActionBtn=False, browserSize=(780, 470), browserID=browserID)(lambda success: True)
+            self.browserCtrl.load(url='file:///{0}'.format('{pageDir}/index_{lang}.html'.format(pageDir=pageDir, lang=_ms('#settings:LANGUAGE_CODE'))), title=_ms('#miniclient:tutorial/video/title'), showCloseBtn=True, showActionBtn=False, browserSize=(780, 470), browserID=browserID)(lambda success: True)
         return
 
 
@@ -191,7 +221,11 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
             self._cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
-            dispatcher.doLeaveAction(pre_queue_ctx.LeavePreQueueCtx(flags=FUNCTIONAL_FLAG.BATTLE_TUTORIAL))
+            state = dispatcher.getFunctionalState()
+            if state.isInPreQueue(QUEUE_TYPE.TUTORIAL):
+                self._doEffect(dispatcher)
+            else:
+                LOG_DEBUG('Refuse training is called from non-mode.')
         else:
             LOG_WARNING('Prebattle dispatcher is not defined')
         self._cache.setAfterBattle(False).write()
@@ -203,3 +237,7 @@ class FunctionalRefuseTrainingEffect(FunctionalEffect):
 
     def isInstantaneous(self):
         return False
+
+    @process
+    def _doEffect(self, dispatcher):
+        yield dispatcher.doLeaveAction(LeavePrbAction())

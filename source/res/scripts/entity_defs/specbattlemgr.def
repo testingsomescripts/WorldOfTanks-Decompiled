@@ -1,4 +1,4 @@
-<specbattlemgr.def>
+<SpecBattleMgr.def>
   <Properties>
     <bp>
       <Type>	PYTHON	</Type>
@@ -79,4 +79,4 @@
       <Arg>	BOOL	</Arg>
     </setDevMode>
   </BaseMethods>
-</specbattlemgr.def>
+</SpecBattleMgr.def>

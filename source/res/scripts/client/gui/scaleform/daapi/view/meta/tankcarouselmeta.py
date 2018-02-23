@@ -54,3 +54,6 @@ class TankCarouselMeta(BaseDAAPIComponent):
 
     def as_blinkCounterS(self):
         return self.flashObject.as_blinkCounter() if self._isDAAPIInited() else None
+
+    def as_setSmallDoubleCarouselS(self, value):
+        return self.flashObject.as_setSmallDoubleCarousel(value) if self._isDAAPIInited() else None

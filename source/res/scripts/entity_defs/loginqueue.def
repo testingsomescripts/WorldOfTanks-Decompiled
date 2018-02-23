@@ -1,4 +1,4 @@
-<loginqueue.def>
+<LoginQueue.def>
   <Properties></Properties>
   <BaseMethods>
     <enqueue>
@@ -9,4 +9,4 @@
       <Arg>	OBJECT_ID	</Arg>
     </dequeue>
   </BaseMethods>
-</loginqueue.def>
+</LoginQueue.def>

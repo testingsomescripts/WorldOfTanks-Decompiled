@@ -1,4 +1,4 @@
-<webprebattlemgr.def>
+<WebPrebattleMgr.def>
   <Properties>
     <consumer_tag>
       <Type>	STRING	</Type>
@@ -28,4 +28,4 @@
       <Arg>	PYTHON	</Arg>
     </notifyWeb>
   </BaseMethods>
-</webprebattlemgr.def>
+</WebPrebattleMgr.def>

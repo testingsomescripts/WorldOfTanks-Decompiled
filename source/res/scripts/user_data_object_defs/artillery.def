@@ -1,4 +1,4 @@
-<artillery.def>
+<Artillery.def>
   <Domain>	BASE	</Domain>
   <Properties>
     <yaw>
@@ -68,4 +68,4 @@
       <Editable>	true	</Editable>
     </maxDist>
   </Properties>
-</artillery.def>
+</Artillery.def>

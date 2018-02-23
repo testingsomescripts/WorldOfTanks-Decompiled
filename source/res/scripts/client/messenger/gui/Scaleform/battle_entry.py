@@ -3,16 +3,16 @@
 import weakref
 import BigWorld
 import Keys
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger import g_settings
 from messenger.formatters.users_messages import getUserActionReceivedMessage
-from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter
-from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE
-from messenger.m_constants import MESSENGER_COMMAND_TYPE
-from messenger.gui.interfaces import IGUIEntry
 from messenger.gui.Scaleform import channels, FILL_COLORS
+from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter
+from messenger.gui.interfaces import IGUIEntry
+from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE
+from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
@@ -24,7 +24,6 @@ class BattleEntry(IGUIEntry):
         self.__initialized = 0
         self.__channelsCtrl = None
         self.__view = lambda : None
-        self.__enableRecord = True
         return
 
     @storage_getter('channels')
@@ -49,8 +48,18 @@ class BattleEntry(IGUIEntry):
                 view.enableToSendMessage()
             return
 
-    def enableRecord(self, enable):
-        self.__enableRecord = enable
+    def init(self):
+        super(BattleEntry, self).init()
+        addListener = g_eventBus.addListener
+        addListener(ChannelManagementEvent.REGISTER_BATTLE, self.__handleRegisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
+        addListener(ChannelManagementEvent.UNREGISTER_BATTLE, self.__handleUnregisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def clear(self):
+        removeListener = g_eventBus.removeListener
+        removeListener(ChannelManagementEvent.REGISTER_BATTLE, self.__handleRegisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
+        removeListener(ChannelManagementEvent.UNREGISTER_BATTLE, self.__handleUnregisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__view = lambda : None
+        super(BattleEntry, self).clear()
 
     def show(self):
         g_messengerEvents.channels.onMessageReceived += self.__me_onMessageReceived
@@ -64,12 +73,10 @@ class BattleEntry(IGUIEntry):
         self.__focused = False
         addListener = g_eventBus.addListener
         addListener(MessengerEvent.BATTLE_CHANNEL_CTRL_INITED, self.__handleChannelControllerInited, scope=EVENT_BUS_SCOPE.BATTLE)
-        addListener(ChannelManagementEvent.REGISTER_BATTLE, self.__handleRegisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
-        addListener(ChannelManagementEvent.UNREGISTER_BATTLE, self.__handleUnregisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
         self.__channelsCtrl = channels.BattleControllers()
         self.__channelsCtrl.init()
 
-    def close(self, _):
+    def close(self, nextScope):
         g_messengerEvents.channels.onMessageReceived -= self.__me_onMessageReceived
         g_messengerEvents.channels.onCommandReceived -= self.__me_onCommandReceived
         g_messengerEvents.users.onUserActionReceived -= self.__me_onUserActionReceived
@@ -85,9 +92,8 @@ class BattleEntry(IGUIEntry):
             self.__channelsCtrl = None
         removeListener = g_eventBus.removeListener
         removeListener(MessengerEvent.BATTLE_CHANNEL_CTRL_INITED, self.__handleChannelControllerInited, scope=EVENT_BUS_SCOPE.BATTLE)
-        removeListener(ChannelManagementEvent.REGISTER_BATTLE, self.__handleRegisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
-        removeListener(ChannelManagementEvent.UNREGISTER_BATTLE, self.__handleUnregisterBattleView, scope=EVENT_BUS_SCOPE.BATTLE)
-        self.__view = lambda : None
+        if nextScope != MESSENGER_SCOPE.BATTLE:
+            self.__view = lambda : None
         return
 
     def addClientMessage(self, message, isCurrentPlayer=False):
@@ -199,18 +205,12 @@ class BattleEntry(IGUIEntry):
             controller = self.__channelsCtrl.getController(channel.getClientID())
             if controller is None or not controller.isEnabled():
                 return
-            import BattleReplay
-            if BattleReplay.g_replayCtrl.isRecording and not self.__enableRecord:
-                BattleReplay.g_replayCtrl.skipMessage()
             controller.addMessage(message)
         return
 
     def __me_onCommandReceived(self, command):
         controller = self.__channelsCtrl.getController(command.getClientID())
         if controller:
-            import BattleReplay
-            if BattleReplay.g_replayCtrl.isRecording and (not self.__enableRecord or command.getCommandType() == MESSENGER_COMMAND_TYPE.ADMIN):
-                BattleReplay.g_replayCtrl.skipMessage()
             controller.addCommand(command)
         else:
             LOG_ERROR('Controller not found', command)

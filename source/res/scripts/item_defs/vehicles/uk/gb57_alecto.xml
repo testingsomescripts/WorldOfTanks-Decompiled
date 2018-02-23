@@ -1,4 +1,4 @@
-<gb57_alecto.xml>
+<GB57_Alecto.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -206,7 +206,6 @@
       <drivingWheels>	WD_L0 W_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -318,7 +317,6 @@
       <drivingWheels>	WD_L0 W_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -666,4 +664,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb57_alecto.xml>
+</GB57_Alecto.xml>

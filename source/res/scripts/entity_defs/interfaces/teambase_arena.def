@@ -1,4 +1,4 @@
-<teambase_arena.def>
+<TeamBase_Arena.def>
   <BaseMethods>
     <teamBase_receivePoints>
       <Arg>	UINT8	</Arg>
@@ -11,4 +11,4 @@
       <Arg>	UINT8	</Arg>
     </teamBase_onCaptured>
   </BaseMethods>
-</teambase_arena.def>
+</TeamBase_Arena.def>

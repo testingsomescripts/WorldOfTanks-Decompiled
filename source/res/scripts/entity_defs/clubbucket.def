@@ -1,4 +1,4 @@
-<clubbucket.def>
+<ClubBucket.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
   </Implements>
@@ -54,4 +54,4 @@
       <Arg>	DB_ID	</Arg>
     </onArenaFinished>
   </BaseMethods>
-</clubbucket.def>
+</ClubBucket.def>

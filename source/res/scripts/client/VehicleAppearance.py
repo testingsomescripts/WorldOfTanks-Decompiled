@@ -7,7 +7,7 @@ import time
 from functools import partial
 import Math
 from debug_utils import *
-from constants import IS_DEVELOPMENT, VEHICLE_PHYSICS_MODE
+from constants import IS_DEVELOPMENT
 import constants
 from OcclusionDecal import OcclusionDecal
 from ShadowForwardDecal import ShadowForwardDecal
@@ -129,7 +129,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
         self.__periodicTimerID = None
         self.__periodicTimerIDEngine = None
         self.__trailEffects = None
-        self.__exhaustEffects = None
         self.__customEffectManager = None
         self.__leftLightRotMat = None
         self.__rightLightRotMat = None
@@ -274,8 +273,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             self.__filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
         self.__originalFilter = vehicle.filter
         vehicle.filter = self.__filter
-        enableNewPhysics = vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED
-        vehicle.filter.enableNewPhysics(enableNewPhysics)
         if vehicle.isPlayerVehicle:
             vehicle.filter.enableStabilisedMatrix(True)
         self.__createStickers(prereqs)
@@ -338,8 +335,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
             if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
                 period = 0
         self.__stippleCallbackID = BigWorld.callback(period, self.__disableStipple)
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
-            self.__setupTrailParticles()
         return
 
     def startSystems(self):
@@ -428,29 +423,6 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def changeEngineMode(self, mode, forceSwinging=False):
         self.__engineMode = mode
         self.detailedEngineState.setMode(self.__engineMode[0])
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.STANDARD:
-            if forceSwinging:
-                flags = mode[1]
-                prevFlags = self.__swingMoveFlags
-                fashion = self.fashion
-                moveMask = 3
-                rotMask = 12
-                if flags & moveMask ^ prevFlags & moveMask:
-                    swingPeriod = 2.0
-                    if flags & 1:
-                        fashion.accelSwingingDirection = -1
-                    elif flags & 2:
-                        fashion.accelSwingingDirection = 1
-                    else:
-                        fashion.accelSwingingDirection = 0
-                elif not flags & moveMask and flags & rotMask ^ prevFlags & rotMask:
-                    swingPeriod = 1.0
-                    fashion.accelSwingingDirection = 0
-                else:
-                    swingPeriod = 0.0
-                if swingPeriod > fashion.accelSwingingPeriod:
-                    fashion.accelSwingingPeriod = swingPeriod
-                self.__swingMoveFlags = flags
         return None if BattleReplay.isPlaying() and BattleReplay.g_replayCtrl.isTimeWarpInProgress else None
 
     def stopSwinging(self):
@@ -814,7 +786,7 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def updateTracksScroll(self, leftScroll, rightScroll):
         self.__leftTrackScroll = leftScroll
         self.__rightTrackScroll = rightScroll
-        if self.__vehicle is not None and self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED:
+        if self.__vehicle is not None:
             self.customEffectManager.updateTrackScroll(leftScroll, rightScroll)
         return
 
@@ -864,14 +836,8 @@ class VehicleAppearance(CallbackDelayer, ComponentSystem):
     def __updateEffectsLOD(self):
         pass
 
-    def __setupTrailParticles(self):
-        pass
-
     def __updateCurrTerrainMatKinds(self):
-        if self.__vehicle.physicsMode == VEHICLE_PHYSICS_MODE.DETAILED:
-            testPoints = (Math.Matrix(self.__customEffectManager.getTrackCenterNode(0)).translation, Math.Matrix(self.__customEffectManager.getTrackCenterNode(1)).translation, self.__vehicle.position)
-        else:
-            testPoints = (Math.Matrix(self.__trailEffects.getTrackCenterNode(0)).translation, Math.Matrix(self.__trailEffects.getTrackCenterNode(1)).translation, self.__vehicle.position)
+        testPoints = (Math.Matrix(self.__customEffectManager.getTrackCenterNode(0)).translation, Math.Matrix(self.__customEffectManager.getTrackCenterNode(1)).translation, self.__vehicle.position)
         isOnSoftTerrain = False
         for i in xrange(_MATKIND_COUNT):
             testPoint = testPoints[i]
@@ -1492,6 +1458,7 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack=False):
     trackParams = vDesc.chassis['trackParams']
     swingingCfg = vDesc.hull['swinging']
     splineDesc = vDesc.chassis['splineDesc']
+    leveredSuspensionCfg = vDesc.chassis['leveredSuspension']
     pp = tuple((p * m for p, m in zip(swingingCfg['pitchParams'], _PITCH_SWINGING_MODIFIERS)))
     splineLod = 9999
     if splineDesc is not None:
@@ -1508,12 +1475,13 @@ def setupTracksFashion(fashion, vDesc, isCrashedTrack=False):
         for wheel in wheelsCfg['wheels']:
             fashion.addWheel(wheel[0], wheel[2], wheel[1], wheel[3], wheel[4])
 
-        for groundGroup in groundNodesCfg['groups']:
-            nodes = _createWheelsListByTemplate(groundGroup[3], groundGroup[1], groundGroup[2])
-            retValue = not fashion.addGroundNodesGroup(nodes, groundGroup[0], groundGroup[4], groundGroup[5])
+        if leveredSuspensionCfg is None:
+            for groundGroup in groundNodesCfg['groups']:
+                nodes = _createWheelsListByTemplate(groundGroup[3], groundGroup[1], groundGroup[2])
+                retValue = not fashion.addGroundNodesGroup(nodes, groundGroup[0], groundGroup[4], groundGroup[5])
 
-        for groundNode in groundNodesCfg['nodes']:
-            retValue = not fashion.addGroundNode(groundNode[0], groundNode[1], groundNode[2], groundNode[3])
+            for groundNode in groundNodesCfg['nodes']:
+                retValue = not fashion.addGroundNode(groundNode[0], groundNode[1], groundNode[2], groundNode[3])
 
         for suspensionArm in suspensionArmsCfg:
             if suspensionArm[3] is not None and suspensionArm[4] is not None:

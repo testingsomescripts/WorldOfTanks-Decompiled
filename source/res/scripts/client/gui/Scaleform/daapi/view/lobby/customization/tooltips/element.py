@@ -1,23 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/tooltips/element.py
 import BigWorld
-from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.locale.MENU import MENU
 import nations
+from CurrentVehicle import g_currentVehicle
 from constants import IGR_TYPE
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.game_control import getIGRCtrl
-from gui.shared.ItemsCache import g_itemsCache
 from gui import makeHtmlString
-from gui.shared.formatters import text_styles, icons
-from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, formatters as params_formatters
-from gui.shared.tooltips.common import BlocksTooltipData
-from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from helpers.i18n import makeString as _ms
-from nations import NONE_INDEX as ANY_NATION
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
+from gui.shared.ItemsCache import g_itemsCache
+from gui.shared.formatters import text_styles, icons
+from gui.shared.items_parameters import params_helper, formatters as params_formatters
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
+from gui.shared.tooltips import formatters, TOOLTIP_TYPE
+from gui.shared.tooltips.common import BlocksTooltipData
+from helpers import dependency
+from helpers.i18n import makeString as _ms
+from nations import NONE_INDEX as ANY_NATION
+from skeletons.gui.game_control import IIGRController
 
 class STATUS(object):
     NONE = 0
@@ -52,12 +54,7 @@ class SimplifiedStatsBlockConstructor(object):
             value = parameter.value
             if delta > 0:
                 value -= delta
-            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData={'value': value,
-             'delta': delta,
-             'minValue': 0,
-             'markerValue': self.__stockParams[parameter.name],
-             'maxValue': MAX_RELATIVE_VALUE,
-             'useAnim': False}, padding=formatters.packPadding(left=72, top=8)))
+            blocks.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name]), padding=formatters.packPadding(left=72, top=8)))
 
         return blocks
 
@@ -65,6 +62,7 @@ class SimplifiedStatsBlockConstructor(object):
 class ElementTooltip(BlocksTooltipData):
     """Tooltip data provider for the customization elements in customization windows.
     """
+    igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, context):
         super(ElementTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
@@ -101,9 +99,10 @@ class ElementTooltip(BlocksTooltipData):
             data['itemsCount'] = None
         items.append(self._packTitleBlock(data))
         items.append(self._packIconBlock(data))
-        items.append(self._packBonusBlock(data))
-        if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            items.append(self._packConditionBlock(data))
+        if data['bonus_value'] > 0:
+            items.append(self._packBonusBlock(data))
+            if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+                items.append(self._packConditionBlock(data))
         if data['wasBought']:
             items.append(self._packAlreadyHaveBlock(data))
         else:
@@ -247,6 +246,7 @@ class ElementTooltip(BlocksTooltipData):
          'title': self._item.getName(),
          'itemsCount': self._item.numberOfItems,
          'icon': self._item.getTexturePath(),
+         'bonus_value': self._item.qualifier.getValue(),
          'bonus_icon': self._item.qualifier.getIcon42x42(),
          'bonus_title_local': self._item.qualifier.getFormattedValue(),
          'bonus_desc': self._item.qualifier.getExtendedName(),
@@ -308,7 +308,7 @@ class ElementTooltip(BlocksTooltipData):
             wasBought - specifies if item is already bought;
             status - one of the STATUS constants
         """
-        if self._item.getIgrType() == getIGRCtrl().getRoomType():
+        if self._item.getIgrType() == self.igrCtrl.getRoomType():
             buyItems = [{'value': 0,
               'type': BUY_ITEM_TYPE.ALREADY_HAVE_IGR,
               'isSale': False,
@@ -439,9 +439,10 @@ class QuestElementTooltip(ElementTooltip):
         data = self._getItemData()
         items.append(self._packTitleBlock(data))
         items.append(self._packIconBlock(data))
-        items.append(self._packBonusBlock(data))
-        if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            items.append(self._packConditionBlock(data))
+        if data['bonus_value'] > 0:
+            items.append(self._packBonusBlock(data))
+            if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+                items.append(self._packConditionBlock(data))
         items.append(self._packAppliedToVehicles(data))
         items.append(self._packDurationBlock())
         if data['description'] is not None:

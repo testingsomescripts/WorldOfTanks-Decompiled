@@ -1,4 +1,4 @@
-<autobotspawnpoint.def>
+<AutoBotSpawnPoint.def>
   <Domain>	BASE	</Domain>
   <Properties>
     <team>
@@ -22,4 +22,4 @@
       <Editable>	true	</Editable>
     </script>
   </Properties>
-</autobotspawnpoint.def>
+</AutoBotSpawnPoint.def>

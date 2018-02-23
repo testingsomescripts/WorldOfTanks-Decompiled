@@ -1,15 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/GlobalVarsManager.py
 import constants
-from gui.game_control import getRoamingCtrl, getWalletCtrl
-from helpers import getClientOverride
 from gui import GUI_SETTINGS
-from gui.shared import g_itemsCache
-from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
+from gui.shared import g_itemsCache
+from helpers import getClientOverride, dependency
+from skeletons.gui.game_control import IWalletController, ITradeInController
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
+    wallet = dependency.descriptor(IWalletController)
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self):
         super(GlobalVarsManager, self).__init__()
@@ -46,11 +48,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return getClientOverride()
 
     def isRoamingEnabled(self):
-        ctrl = getRoamingCtrl()
-        if ctrl:
-            return ctrl.isEnabled()
-        else:
-            return False
+        return g_lobbyContext.getServerSettings().roaming.isEnabled()
 
     def isInRoaming(self):
         return g_lobbyContext.getServerSettings().roaming.isInRoaming()
@@ -59,9 +57,8 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return g_lobbyContext.getServerSettings().isFortsEnabled()
 
     def isWalletAvailable(self):
-        ctrl = getWalletCtrl()
-        if ctrl:
-            return ctrl.isAvailable
+        if self.wallet:
+            return self.wallet.isAvailable
         else:
             return False
 
@@ -83,3 +80,9 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         else:
             GlobalVarsManager._isLoginLoadInfoRequested = True
             return True
+
+    def isVehicleRestoreEnabled(self):
+        return g_lobbyContext.getServerSettings().isVehicleRestoreEnabled()
+
+    def isTradeInEnabled(self):
+        return self.tradeIn.isEnabled()

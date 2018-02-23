@@ -1,4 +1,4 @@
-<ch03_wz-111.xml>
+<Ch03_WZ-111.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -26,7 +26,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	80	</armor_1>
+      <armor_1>	120	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	120	</armor_3>
       <armor_4>	60	</armor_4>
@@ -104,8 +104,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -190,7 +190,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -364,12 +363,12 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	230	</armor_1>
-        <armor_2>	150	</armor_2>
+        <armor_2>	200	</armor_2>
         <armor_3>	120	</armor_3>
         <armor_4>	60	</armor_4>
         <armor_5>	100	</armor_5>
         <armor_6>	150	</armor_6>
-        <armor_7>	25	</armor_7>
+        <armor_7>	55	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	25	</armor_9>
         <armor_10>	0	</armor_10>
@@ -408,14 +407,14 @@
             </armor_9>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	12.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 5 0.366894 5 0.430556 3 0.569444 3 0.633106 5 1 5	</maxPitch>
@@ -504,7 +503,7 @@
     <detailed>
       <engines>
         <_12150LZ>
-          <smplEnginePower>	549.7862	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
         </_12150LZ>
       </engines>
       <chassis>
@@ -562,4 +561,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</ch03_wz-111.xml>
+</Ch03_WZ-111.xml>

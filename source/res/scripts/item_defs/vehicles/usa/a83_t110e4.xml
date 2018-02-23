@@ -1,4 +1,4 @@
-<a83_t110e4.xml>
+<A83_T110E4.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -190,7 +190,6 @@
       <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -561,4 +560,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a83_t110e4.xml>
+</A83_T110E4.xml>

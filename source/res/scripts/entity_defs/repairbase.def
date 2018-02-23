@@ -1,4 +1,4 @@
-<repairbase.def>
+<RepairBase.def>
   <Implements>
     <Interface>	ControlPoint	</Interface>
   </Implements>
@@ -31,4 +31,4 @@
   <TempProperties>
     <_RepairBase__p></_RepairBase__p>
   </TempProperties>
-</repairbase.def>
+</RepairBase.def>

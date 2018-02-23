@@ -1,4 +1,4 @@
-<clientcommandsport.def>
+<ClientCommandsPort.def>
   <BaseMethods>
     <doCmdStr>
       <Arg>	INT16	</Arg>
@@ -63,4 +63,4 @@
       </VariableLengthHeaderSize>
     </onCmdResponseExt>
   </ClientMethods>
-</clientcommandsport.def>
+</ClientCommandsPort.def>

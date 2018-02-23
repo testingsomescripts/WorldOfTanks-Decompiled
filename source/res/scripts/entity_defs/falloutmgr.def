@@ -1,4 +1,4 @@
-<falloutmgr.def>
+<FalloutMgr.def>
   <Properties></Properties>
   <BaseMethods>
     <onArenaCreated>
@@ -24,4 +24,4 @@
       <Arg>	OBJECT_ID	</Arg>
     </removeArena>
   </BaseMethods>
-</falloutmgr.def>
+</FalloutMgr.def>

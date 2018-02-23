@@ -1,4 +1,4 @@
-<g108_pzkpfwii_ausfd.xml>
+<G108_PzKpfwII_AusfD.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -391,7 +391,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.851393 0.000000	</hullPosition>
@@ -605,4 +604,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g108_pzkpfwii_ausfd.xml>
+</G108_PzKpfwII_AusfD.xml>

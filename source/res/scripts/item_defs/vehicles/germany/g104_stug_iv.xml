@@ -1,4 +1,4 @@
-<g104_stug_iv.xml>
+<G104_Stug_IV.xml>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -225,7 +225,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.990418 0.000000	</hullPosition>
@@ -542,4 +541,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g104_stug_iv.xml>
+</G104_Stug_IV.xml>

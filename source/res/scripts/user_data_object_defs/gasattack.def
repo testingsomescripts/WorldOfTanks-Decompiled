@@ -1,4 +1,4 @@
-<gasattack.def>
+<GasAttack.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <attackLength>
@@ -27,4 +27,4 @@
       <Default>	50	</Default>
     </endRadius>
   </Properties>
-</gasattack.def>
+</GasAttack.def>

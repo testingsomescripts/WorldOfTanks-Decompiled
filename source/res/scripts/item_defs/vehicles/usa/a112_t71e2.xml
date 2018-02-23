@@ -1,4 +1,4 @@
-<a112_t71e2.xml>
+<A112_T71E2.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -346,7 +346,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -563,4 +562,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a112_t71e2.xml>
+</A112_T71E2.xml>

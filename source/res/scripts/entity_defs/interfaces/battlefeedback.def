@@ -1,4 +1,4 @@
-<battlefeedback.def>
+<BattleFeedback.def>
   <CellMethods>
     <battleFeedback_onBattleEvent>
       <Arg>	UINT8	</Arg>
@@ -10,4 +10,4 @@
       <Arg>	UINT8	</Arg>
     </battleFeedback_onDeath>
   </CellMethods>
-</battlefeedback.def>
+</BattleFeedback.def>

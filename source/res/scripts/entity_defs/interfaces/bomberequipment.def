@@ -1,4 +1,4 @@
-<bomberequipment.def>
+<BomberEquipment.def>
   <BaseMethods>
     <bomberEquipment_notifyAllAboutFlyingBomber>
       <Arg>	UINT16	</Arg>
@@ -24,4 +24,4 @@
       <Arg>	PYTHON	</Arg>
     </bomberEquipment_startBomberStrike>
   </BaseMethods>
-</bomberequipment.def>
+</BomberEquipment.def>

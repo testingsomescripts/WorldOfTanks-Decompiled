@@ -1,20 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/EventsWindow.py
 import BigWorld
-from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from account_helpers.settings_core.SettingsCore import g_settingsCore
-from account_helpers.settings_core.settings_constants import TUTORIAL
 import constants
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+from account_helpers.settings_core.settings_constants import TUTORIAL
 from debug_utils import LOG_WARNING
 from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
-from gui.server_events import g_eventsCache, settings as quest_settings, caches
 from gui.Scaleform.daapi.view.meta.QuestsWindowMeta import QuestsWindowMeta
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES as _QA
 from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.server_events import settings as quest_settings, caches
 from gui.shared.ItemsCache import g_itemsCache
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.server_events import IEventsCache
 
 class EventsWindow(QuestsWindowMeta):
+    eventsCache = dependency.descriptor(IEventsCache)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(EventsWindow, self).__init__()
@@ -32,7 +36,7 @@ class EventsWindow(QuestsWindowMeta):
 
     def onTabSelected(self, tabID):
         if tabID == _QA.TAB_PERSONAL_QUESTS:
-            if quest_settings.isNeedToShowPQIntro(g_eventsCache.fallout):
+            if quest_settings.isNeedToShowPQIntro(self.eventsCache.fallout):
                 return self._showWelcomeView()
             if self._navInfo.selectedPQ.tileID is not None:
                 self.showTileChainsView(self._navInfo.selectedPQ.tileID, self._navInfo.selectedPQ.questID)
@@ -40,8 +44,6 @@ class EventsWindow(QuestsWindowMeta):
                 self._showSeasonsView()
         elif tabID == _QA.TAB_COMMON_QUESTS:
             self._showCommonQuestsView(self._navInfo.common.questID)
-        elif tabID == _QA.TAB_LADDER_QUESTS:
-            self._showLadderQuestsView(self._navInfo.common.questID)
         elif tabID == _QA.TAB_BEGINNER_QUESTS:
             self._showBeginnerQuestsView(self._navInfo.tutorial.questID)
         else:
@@ -63,8 +65,6 @@ class EventsWindow(QuestsWindowMeta):
         if g_lobbyContext.getServerSettings().isPotapovQuestEnabled():
             tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_PERSONAL, _QA.TAB_PERSONAL_QUESTS))
         tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_CURRENT, _QA.TAB_COMMON_QUESTS))
-        if g_eventsCache.getQuests(lambda x: x.getType() == constants.EVENT_TYPE.CLUBS_QUEST):
-            tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_LADDER, _QA.TAB_LADDER_QUESTS))
         if self.__isTutorialTabEnabled():
             tabs.append(self.__packTabDataItem(QUESTS.QUESTS_TABS_BEGINNER, _QA.TAB_BEGINNER_QUESTS))
         self.as_initS({'tabs': tabs})
@@ -87,14 +87,12 @@ class EventsWindow(QuestsWindowMeta):
         if eventType is not None:
             if eventID is not None:
                 if eventType == constants.EVENT_TYPE.POTAPOV_QUEST:
-                    pQuest = g_eventsCache.potapov.getQuests()[int(eventID)]
+                    pQuest = self.eventsCache.potapov.getQuests()[int(eventID)]
                     targetQuestTab = events_helpers.getTabAliasByQuestBranchID(pQuest.getQuestBranch())
                     if targetQuestTab == _QA.SEASON_VIEW_TAB_RANDOM:
                         self._navInfo.selectRandomQuest(pQuest.getTileID(), pQuest.getID())
                     else:
                         self._navInfo.selectFalloutQuest(pQuest.getTileID(), pQuest.getID())
-                elif eventType == constants.EVENT_TYPE.CLUBS_QUEST:
-                    self._navInfo.selectLadderQuest(eventID)
                 elif eventType in (constants.EVENT_TYPE.TUTORIAL, constants.EVENT_TYPE.MOTIVE_QUEST):
                     self._navInfo.selectTutorialQuest(eventID)
                 else:
@@ -133,10 +131,6 @@ class EventsWindow(QuestsWindowMeta):
         self._navInfo.selectCommonQuest(questID)
         return self._loadView(_QA.COMMON_QUESTS_VIEW_LINKAGE, _QA.COMMON_QUESTS_VIEW_ALIAS)
 
-    def _showLadderQuestsView(self, questID=None):
-        self._navInfo.selectCommonQuest(questID)
-        return self._loadView(_QA.COMMON_QUESTS_VIEW_LINKAGE, _QA.LADDER_QUESTS_VIEW_ALIAS)
-
     def _showBeginnerQuestsView(self, questID=None):
         self._navInfo.selectTutorialQuest(questID)
         return self._loadView(_QA.BEGINNER_QUESTS_VIEW_LINKAGE, _QA.BEGINNER_QUESTS_VIEW_ALIAS)
@@ -152,7 +146,7 @@ class EventsWindow(QuestsWindowMeta):
             serverSettings = getattr(player, 'serverSettings', {})
             if 'isTutorialEnabled' in serverSettings:
                 isTutorialEnabled = serverSettings['isTutorialEnabled']
-        return g_settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.TUTORIAL, TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED) and isTutorialEnabled
+        return self.settingsCore.serverSettings.getSectionSettings(SETTINGS_SECTIONS.TUTORIAL, TUTORIAL.WAS_QUESTS_TUTORIAL_STARTED) and isTutorialEnabled
 
     def __getChainsViewAlias(self):
         if self._navInfo.selectedPQType == _QA.SEASON_VIEW_TAB_RANDOM:

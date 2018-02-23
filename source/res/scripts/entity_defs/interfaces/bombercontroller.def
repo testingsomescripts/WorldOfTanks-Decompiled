@@ -1,4 +1,4 @@
-<bombercontroller.def>
+<BomberController.def>
   <TempProperties>
     <_bomberController></_bomberController>
   </TempProperties>
@@ -34,4 +34,4 @@
       <Arg>	FLOAT64	</Arg>
     </bomberController_addBomber>
   </CellMethods>
-</bombercontroller.def>
+</BomberController.def>

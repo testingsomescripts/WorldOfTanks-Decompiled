@@ -1,4 +1,4 @@
-<centerstatusreader.def>
+<CenterStatusReader.def>
   <Properties>
     <centersConnectionInfo>
       <Type>	PYTHON	</Type>
@@ -10,4 +10,4 @@
       <Arg>	PYTHON	</Arg>
     </reconnect>
   </BaseMethods>
-</centerstatusreader.def>
+</CenterStatusReader.def>

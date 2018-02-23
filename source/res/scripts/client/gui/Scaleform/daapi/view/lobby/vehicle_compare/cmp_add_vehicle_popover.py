@@ -8,26 +8,30 @@ from gui.Scaleform.daapi.view.meta.VehicleCompareAddVehiclePopoverMeta import Ve
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control import getVehicleComparisonBasketCtrl
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT, getVehicleCriteriaForComparing
 from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getSmallIconPath, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.utils import sortByFields
+from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IVehicleComparisonBasket
 
 def _makeVehicleCmpVO(vehicle):
+    iconFunc = RES_ICONS.maps_icons_vehicletypes_elite if vehicle.isPremium else RES_ICONS.maps_icons_vehicletypes
     return {'dbID': vehicle.intCD,
      'level': vehicle.level,
      'shortUserName': vehicle.shortUserName,
      'smallIconPath': getSmallIconPath(vehicle.name),
      'nationID': vehicle.nationID,
      'type': vehicle.type,
+     'typeIcon': iconFunc(vehicle.type + '.png'),
      'selected': False,
      'inHangar': vehicle.isInInventory}
 
 
 class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, VehicleSelectorBase):
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
     def __init__(self, ctx=None):
         super(VehicleCompareAddVehiclePopover, self).__init__(ctx)
@@ -56,7 +60,7 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
 
     def updateAddButtonLabel(self):
         selectedCount = len(self._vehDP.getSelected())
-        if getVehicleComparisonBasketCtrl().getVehiclesCount() + selectedCount > MAX_VEHICLES_TO_COMPARE_COUNT:
+        if self.comparisonBasket.getVehiclesCount() + selectedCount > MAX_VEHICLES_TO_COMPARE_COUNT:
             tooltip = VEH_COMPARE.ADDVEHPOPOVER_TOOLTIPS_ADDTOCOMPAREDISABLED
             icon = RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON
             isEnabled = False
@@ -73,7 +77,7 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
     def addButtonClicked(self):
         vehicles = self._vehDP.getSelected()
         assert vehicles
-        getVehicleComparisonBasketCtrl().addVehicles(vehicles)
+        self.comparisonBasket.addVehicles(vehicles)
         self.onWindowClose()
 
     def onWindowClose(self):
@@ -87,12 +91,12 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
         self.__initControls()
         self._vehDP = VehiclesDataProvider()
         self._vehDP.setFlashObject(self.as_getTableDPS())
-        getVehicleComparisonBasketCtrl().onSwitchChange += self.onWindowClose
+        self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged
         self.updateData()
         self.updateAddButtonLabel()
 
     def _dispose(self):
-        getVehicleComparisonBasketCtrl().onSwitchChange -= self.onWindowClose
+        self.comparisonBasket.onSwitchChange -= self.__onVehCmpBasketStateChanged
         super(VehicleCompareAddVehiclePopover, self)._dispose()
         self._vehDP.fini()
         self._vehDP = None
@@ -100,6 +104,10 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
 
     def _makeVehicleVOAction(self, vehicle):
         return _makeVehicleCmpVO(vehicle)
+
+    def __onVehCmpBasketStateChanged(self):
+        if not self.comparisonBasket.isEnabled():
+            self.onWindowClose()
 
     def __initControls(self):
         common = {'btnHeight': 34,

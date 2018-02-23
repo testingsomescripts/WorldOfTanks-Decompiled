@@ -122,12 +122,6 @@ class _AppLoader(object):
         self.__appFactory.createLobby()
         self.__updateState()
 
-    def startBattle(self):
-        self.__appFactory.createBattle(self.__ctx.arenaGuiType)
-
-    def startLogitech(self):
-        self.__appFactory.createLogitech()
-
     def changeSpace(self, spaceID):
         self.__ctx.guiSpaceID = spaceID
         return self.__updateState()
@@ -138,11 +132,14 @@ class _AppLoader(object):
     def showLobby(self):
         return self.changeSpace(_SPACE_ID.LOBBY)
 
-    def showBattleLoading(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
+    def createBattle(self, arenaGuiType=ARENA_GUI_TYPE.UNKNOWN):
         self.__ctx.arenaGuiType = arenaGuiType
+        self.__appFactory.createBattle(arenaGuiType)
+
+    def showBattleLoading(self):
         return self.changeSpace(_SPACE_ID.BATTLE_LOADING)
 
-    def showBattle(self):
+    def showBattlePage(self):
         return self.changeSpace(_SPACE_ID.BATTLE)
 
     def destroyBattle(self):
@@ -233,6 +230,7 @@ class _AppLoader(object):
             result = True
             self.onGUISpaceEntered(self.__ctx.guiSpaceID)
         else:
+            LOG_DEBUG('State is updated ctx:', self.__ctx)
             for appNS, appState in self.__getCreatedApps():
                 self.__state.update(self.__ctx)
                 self.__state.updateGUI(self.__appFactory, appNS)

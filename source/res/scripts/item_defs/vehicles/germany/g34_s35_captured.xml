@@ -1,6 +1,7 @@
-<g34_s35_captured.xml>
+<G34_S35_captured.xml>
   <crew>
     <commander>	gunner
+
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -331,7 +332,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -524,4 +524,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g34_s35_captured.xml>
+</G34_S35_captured.xml>

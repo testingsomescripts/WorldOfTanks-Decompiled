@@ -1,4 +1,4 @@
-<r67_m3_ll.xml>
+<R67_M3_LL.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner></gunner>
@@ -205,7 +205,6 @@
       <drivingWheels>	WD_L0 W_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -402,4 +401,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r67_m3_ll.xml>
+</R67_M3_LL.xml>

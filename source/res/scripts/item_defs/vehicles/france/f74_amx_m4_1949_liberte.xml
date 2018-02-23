@@ -1,4 +1,4 @@
-<f74_amx_m4_1949_liberte.xml>
+<F74_AMX_M4_1949_Liberte.xml>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -6,22 +6,22 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	180	</armor_1>
+      <armor_1>	190	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	55	</armor_3>
       <armor_4>	40	</armor_4>
-      <armor_5>	20	</armor_5>
-      <armor_6>	30	</armor_6>
+      <armor_5>	45	</armor_5>
+      <armor_6>	45	</armor_6>
       <armor_7>	150	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	190	</armor_9>
+      <armor_9>	200	</armor_9>
       <armor_10>	65	</armor_10>
-      <armor_11>	20	</armor_11>
+      <armor_11>	45	</armor_11>
       <armor_12>	55	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	36870	</weight>
-    <maxHealth>	1080	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	250	</maxHealth>
       <maxRegenHealth>	200	</maxRegenHealth>
@@ -150,7 +150,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -479,14 +478,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
       <weight>	16000	</weight>
-      <maxHealth>	270	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -604,4 +603,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
-</f74_amx_m4_1949_liberte.xml>
+</F74_AMX_M4_1949_Liberte.xml>

@@ -1,6 +1,7 @@
-<g35_b-1bis_captured.xml>
+<G35_B-1bis_captured.xml>
   <crew>
     <commander>	gunner
+
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -188,7 +189,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -483,4 +483,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g35_b-1bis_captured.xml>
+</G35_B-1bis_captured.xml>

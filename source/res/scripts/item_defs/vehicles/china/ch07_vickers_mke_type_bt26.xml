@@ -1,4 +1,4 @@
-<ch07_vickers_mke_type_bt26.xml>
+<Ch07_Vickers_MkE_Type_BT26.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
@@ -191,7 +191,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -313,7 +312,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -749,4 +747,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</ch07_vickers_mke_type_bt26.xml>
+</Ch07_Vickers_MkE_Type_BT26.xml>

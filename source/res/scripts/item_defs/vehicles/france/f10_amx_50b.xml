@@ -1,4 +1,4 @@
-<f10_amx_50b.xml>
+<F10_AMX_50B.xml>
   <crew>
     <commander>	loader	</commander>
     <gunner>	loader	</gunner>
@@ -223,7 +223,6 @@
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -436,7 +435,7 @@
       <guns>
         <_120mm_SA_46>	shared	  <pitchLimits>
             <minPitch>	0 -11 0.222222 -11 0.285884 -12 0.714116 -12 0.777778 -11 1 -11	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
+            <maxPitch>	0 10 0.424908 10 0.449255 7 0.495491 7 0.507835 6 0.55235 6 0.561146 6 0.583559 10 1 10	</maxPitch>
           </pitchLimits>
           <maxAmmo>	56	</maxAmmo>
           <armor>
@@ -608,4 +607,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f10_amx_50b.xml>
+</F10_AMX_50B.xml>

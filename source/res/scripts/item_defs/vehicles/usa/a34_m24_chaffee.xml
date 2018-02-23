@@ -1,4 +1,4 @@
-<a34_m24_chaffee.xml>
+<A34_M24_Chaffee.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -313,7 +313,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -571,7 +570,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1036,4 +1034,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a34_m24_chaffee.xml>
+</A34_M24_Chaffee.xml>

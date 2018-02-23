@@ -1,38 +1,40 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/ClientHangarSpace.py
-from collections import namedtuple
-import functools
 import copy
-from functools import partial
+import functools
+import json
 import math
 import weakref
-import json
-from AvatarInputHandler.cameras import FovExtended
-import Math
-import ResMgr
+from collections import namedtuple
+from functools import partial
 import Keys
+import MapActivities
+import Math
 import MusicControllerWWISE
-from vehicle_systems.tankStructure import VehiclePartsTuple
-from account_helpers.settings_core import g_settingsCore
+import ResMgr
+import SoundGroups
+import TankHangarShadowProxy
+import VehicleStickers
+import constants
+import items.vehicles
+from AvatarInputHandler import mathUtils
+from AvatarInputHandler.cameras import FovExtended
+from ConnectionManager import connectionManager
+from HangarVehicle import HangarVehicle
+from ModelHitTester import ModelHitTester
+from PlayerEvents import g_playerEvents
 from debug_utils import *
 from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
+from gui import g_keyEventHandlers, g_mouseEventHandlers
 from gui import g_tankActiveCamouflage
-from gui import game_control, g_keyEventHandlers, g_mouseEventHandlers
-import items.vehicles
-import VehicleStickers
-from HangarVehicle import HangarVehicle
-import constants
-from PlayerEvents import g_playerEvents
-from ConnectionManager import connectionManager
-from post_processing import g_postProcessing
-from ModelHitTester import ModelHitTester
-from AvatarInputHandler import mathUtils
-import MapActivities
 from gui.shared.ItemsCache import g_itemsCache, CACHE_SYNC_REASON
-import TankHangarShadowProxy
-import SoundGroups
-from vehicle_systems import camouflages, model_assembler
+from helpers import dependency
+from post_processing import g_postProcessing
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IIGRController
+from vehicle_systems import camouflages
 from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.tankStructure import VehiclePartsTuple
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
@@ -188,6 +190,8 @@ def getSpaceType(isPremium):
 
 
 class ClientHangarSpace():
+    igrCtrl = dependency.descriptor(IIGRController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         self.__spaceId = None
@@ -226,7 +230,7 @@ class ClientHangarSpace():
         spacePath = _DEFAULT_CFG[type]['path']
         LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(type, spacePath))
         visibilityMask = 4294967295L
-        if game_control.g_instance.igr.getRoomType() == constants.IGR_TYPE.PREMIUM:
+        if self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM:
             if _CFG.get(self.__igrHangarPathKey) is not None:
                 spacePath = _CFG[self.__igrHangarPathKey]
         if _EVENT_HANGAR_PATHS.has_key(isPremium):
@@ -446,9 +450,9 @@ class ClientHangarSpace():
         mat.setRotateYPR((yaw, pitch, 0.0))
         self.__cam.source = mat
         self.__cam.pivotMaxDist = dist
-        if g_settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
+        if self.settingsCore.getSetting('dynamicFov') and abs(distConstr[1] - distConstr[0]) > 0.001:
             relativeDist = (dist - distConstr[0]) / (distConstr[1] - distConstr[0])
-            _, minFov, maxFov = g_settingsCore.getSetting('fov')
+            _, minFov, maxFov = self.settingsCore.getSetting('fov')
             fov = mathUtils.lerp(minFov, maxFov, relativeDist)
             BigWorld.callback(0, functools.partial(FovExtended.instance().setFovByAbsoluteValue, math.radians(fov), 0.1))
         return
@@ -591,6 +595,7 @@ class ClientHangarSpace():
 
 class _VehicleAppearance():
     __ROOT_NODE_NAME = 'V'
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, spaceId, vEntityId, hangarSpace):
         self.__isLoaded = False
@@ -608,9 +613,8 @@ class _VehicleAppearance():
         self.__smRemoveCb = None
         self.__hangarSpace = weakref.proxy(hangarSpace)
         self.__removeHangarShadowMap()
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        self.__showMarksOnGun = g_settingsCore.getSetting('showMarksOnGun')
-        g_settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__showMarksOnGun = self.settingsCore.getSetting('showMarksOnGun')
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         return
 
@@ -642,8 +646,7 @@ class _VehicleAppearance():
         if self.__smRemoveCb is not None:
             BigWorld.cancelCallback(self.__smRemoveCb)
             self.__smRemoveCb = None
-        from account_helpers.settings_core.SettingsCore import g_settingsCore
-        g_settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         return
 
@@ -726,6 +729,14 @@ class _VehicleAppearance():
         else:
             self.__fashions = VehiclePartsTuple(None, None, None, None)
         self.updateCamouflage()
+        yaw = self.__vDesc.gun.get('staticTurretYaw', 0.0)
+        pitch = self.__vDesc.gun.get('staticPitch', 0.0)
+        if yaw is None:
+            yaw = 0.0
+        if pitch is None:
+            pitch = 0.0
+        gunMatrix = mathUtils.createRTMatrix(Math.Vector3(yaw, pitch, 0.0), (0.0, 0.0, 0.0))
+        self.__model.node('gun', gunMatrix)
         return self.__model
 
     def __removeHangarShadowMap(self):
@@ -937,6 +948,7 @@ class _VehicleAppearance():
 
         self.__fashions = fashions
         self.__model.setupFashions(self.__fashions)
+        self.__fashions[0].activate()
         return
 
     def updateCamouflage(self, camouflageID=None):

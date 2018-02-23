@@ -1,4 +1,4 @@
-<g114_rheinmetall_skorpian.xml>
+<G114_Rheinmetall_Skorpian.xml>
   <crew>
     <commander>	loader	</commander>
     <radioman></radioman>
@@ -190,7 +190,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -484,7 +483,7 @@
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
-          <effects>	shot_large_mb	</effects>
+          <effects>	shot_largeext_mb	</effects>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
@@ -598,4 +597,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
-</g114_rheinmetall_skorpian.xml>
+</G114_Rheinmetall_Skorpian.xml>

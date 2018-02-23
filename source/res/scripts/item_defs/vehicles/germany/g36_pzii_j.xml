@@ -1,4 +1,4 @@
-<g36_pzii_j.xml>
+<G36_PzII_J.xml>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -173,7 +173,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -551,4 +550,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g36_pzii_j.xml>
+</G36_PzII_J.xml>

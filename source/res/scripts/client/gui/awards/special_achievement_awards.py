@@ -2,9 +2,10 @@
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
 import constants
+from adisp import process
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.goodies.Booster import _BOOSTER_DESCRIPTION_LOCALE
+from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
 from gui.shared import g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
@@ -182,18 +183,24 @@ class FalloutAwardWindow(AwardAbstract):
 
     def handleBodyButton(self):
         if self._isMaxLvl:
-            from gui.prb_control.context import PrebattleAction
+            from gui.prb_control.entities.base.ctx import PrbAction
             from gui.prb_control.dispatcher import g_prbLoader
             from gui.prb_control.settings import PREBATTLE_ACTION_NAME
             dispatcher = g_prbLoader.getDispatcher()
             if dispatcher is not None:
-                dispatcher.doSelectAction(PrebattleAction(PREBATTLE_ACTION_NAME.FALLOUT))
+                self.__doSelect(dispatcher)
             else:
                 LOG_ERROR('Prebattle dispatcher is not defined')
         else:
             from gui.server_events.events_dispatcher import showEventsWindow
             showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
         return
+
+    @process
+    def __doSelect(self, dispatcher):
+        from gui.prb_control.entities.base.ctx import PrbAction
+        from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.FALLOUT))
 
 
 class ClanJoinAward(AwardAbstract):

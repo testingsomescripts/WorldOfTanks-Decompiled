@@ -1,6 +1,6 @@
-<yychatmgr.def>
+<YYChatMgr.def>
   <Implements>
     <Interface>	ChatProvider_chat2	</Interface>
   </Implements>
   <BaseMethods></BaseMethods>
-</yychatmgr.def>
+</YYChatMgr.def>

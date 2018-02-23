@@ -1,4 +1,4 @@
-<chat.def>
+<Chat.def>
   <BaseMethods>
     <joinChatChannel>
       <Arg>	OBJECT_ID	</Arg>
@@ -65,4 +65,4 @@
       </VariableLengthHeaderSize>
     </onChatAction>
   </ClientMethods>
-</chat.def>
+</Chat.def>

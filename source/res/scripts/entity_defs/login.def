@@ -1,4 +1,4 @@
-<login.def>
+<Login.def>
   <Properties>
     <accountDBID_s>
       <Type>	STRING	</Type>
@@ -30,4 +30,4 @@
       <Arg>	MAILBOX	</Arg>
     </onAccountClientReleased>
   </BaseMethods>
-</login.def>
+</Login.def>

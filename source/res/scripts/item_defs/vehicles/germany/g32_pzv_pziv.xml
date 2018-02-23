@@ -1,4 +1,4 @@
-<g32_pzv_pziv.xml>
+<G32_PzV_PzIV.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -193,7 +193,6 @@
       <drivingWheels>	WD_L0 WD_L2	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -635,4 +634,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g32_pzv_pziv.xml>
+</G32_PzV_PzIV.xml>

@@ -1,4 +1,4 @@
-<f65_fcm_50t.xml>
+<F65_FCM_50t.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -187,7 +187,6 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -540,4 +539,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</f65_fcm_50t.xml>
+</F65_FCM_50t.xml>

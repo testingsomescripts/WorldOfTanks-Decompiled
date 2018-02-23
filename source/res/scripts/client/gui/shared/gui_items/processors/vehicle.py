@@ -1,24 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/vehicle.py
-import BigWorld
 import AccountCommands
+import BigWorld
+from AccountCommands import VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from adisp import process, async
 from debug_utils import LOG_DEBUG
-from AccountCommands import VEHICLE_SETTINGS_FLAG
-from gui.LobbyContext import g_lobbyContext
-from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.game_control import getRestoreController
-from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
-from helpers import time_utils
-from helpers.i18n import makeString
-from shared_utils import findFirst
 from gui import SystemMessages
+from gui.LobbyContext import g_lobbyContext
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import g_itemsCache
-from gui.shared.formatters import formatPrice, formatGoldPrice
+from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
+from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
 from gui.shared.money import Money, ZERO_MONEY, Currency
+from helpers import time_utils, dependency
+from helpers.i18n import makeString
+from shared_utils import findFirst
+from skeletons.gui.game_control import IRestoreController
 
 def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if crewType != -1:
@@ -109,7 +109,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
             msg = 'vehicle_buy/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_buy/server_error_centerDown'
         else:
             msg = 'vehicle_buy/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_buy/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -173,7 +173,7 @@ class VehicleRenter(VehicleReceiveProcessor):
             msg = 'vehicle_rent/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_rent/server_error_centerDown'
         else:
             msg = 'vehicle_rent/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_rent/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -230,7 +230,7 @@ class VehicleRestoreProcessor(VehicleBuyer):
             msg = 'vehicle_restore/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_restore/server_error_centerDown'
         else:
             msg = 'vehicle_restore/%s' % errStr
-        return makeI18nError(msg, vehName=self.item.userName)
+        return makeI18nError(msg, defaultSysMsgKey='vehicle_restore/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         """
@@ -258,6 +258,75 @@ class VehicleRestoreProcessor(VehicleBuyer):
         BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
+class VehicleTradeInProcessor(VehicleBuyer):
+
+    def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
+        """
+        Processor for vehicle buying
+        :param vehicle: <Vehicle>
+        :param vehicleToTradeOff: <Vehicle>
+        :param buySlot: <bool> flag if need to buy slot
+        :param buyShell: <bool> flag if need to buy shells
+        :param crewType: <int> int flag, mean crew skill type
+        """
+        self.itemToTradeOff = vehicleToTradeOff
+        super(VehicleTradeInProcessor, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
+
+    def _getPluginsList(self):
+        """
+        Gets plugins collection
+        :return: <tuple(ProcessorPlugin, ...)>
+        """
+        barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, self.itemToTradeOff.crew))
+        return (plugins.VehicleValidator(self.itemToTradeOff, setAll=True),
+         plugins.VehicleTradeInValidator(self.item, self.itemToTradeOff),
+         plugins.VehicleSellValidator(self.itemToTradeOff),
+         plugins.MoneyValidator(self.price),
+         plugins.BarracksSlotsValidator(barracksBerthsNeeded))
+
+    def _getPrice(self):
+        """
+        Gets common buy price with shells, slot, crew
+        :return: <Money>
+        """
+        return super(VehicleTradeInProcessor, self)._getPrice() - self.itemToTradeOff.tradeOffPrice
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        """
+        :param code: <int> server response code
+        :param errStr: <str> string error reason
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> error message
+        """
+        if not errStr:
+            msg = 'vehicle_trade_in/server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'vehicle_trade_in/server_error_centerDown'
+        else:
+            msg = 'vehicle_trade_in/%s' % errStr
+        return makeI18nError(msg, vehName=self.item.userName, defaultSysMsgKey='vehicle_trade_in/server_error', tradeOffVehName=self.itemToTradeOff.userName)
+
+    def _successHandler(self, code, ctx=None):
+        """
+        :param code: <int> server response code
+        :param ctx: <obj> localization context
+        :return: <ResultMsg> success message
+        """
+        return makeI18nSuccess('vehicle_trade_in/success', vehName=self.item.userName, tradeOffVehName=self.itemToTradeOff.userName, price=formatPrice(self.price), type=self._getSysMsgType())
+
+    def _getSysMsgType(self):
+        """
+        :return: <str> system message type
+        """
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+
+    def _request(self, callback):
+        """
+        Sends trade-in vehicle request to server
+        :param callback: <function>
+        """
+        LOG_DEBUG('Make request to trade-in vehicle', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
+        BigWorld.player().shop.tradeInVehicle(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
+
+
 class VehicleSlotBuyer(Processor):
 
     def __init__(self, showConfirm=True, showWarning=True):
@@ -269,12 +338,12 @@ class VehicleSlotBuyer(Processor):
             ctx = {}
         else:
             confirmationType = 'buySlotConfirmation'
-            ctx = {'gold': slotCost.gold}
+            ctx = {'goldCost': text_styles.concatStylesWithSpace(text_styles.gold(str(slotCost.gold)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))}
         super(VehicleSlotBuyer, self).__init__((plugins.MessageInformator('buySlotNotEnoughCredits', activeHandler=lambda : not plugins.MoneyValidator(slotCost).validate().success, isEnabled=showWarning), plugins.MessageConfirmator(confirmationType, isEnabled=showConfirm, ctx=ctx), plugins.MoneyValidator(slotCost)))
         return
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_slot_buy/%s' % errStr) if len(errStr) else makeI18nError('vehicle_slot_buy/server_error')
+        return makeI18nError('vehicle_slot_buy/%s' % errStr, defaultSysMsgKey='vehicle_slot_buy/server_error')
 
     def _successHandler(self, code, ctx=None):
         price = self.__getSlotPrice()
@@ -299,6 +368,7 @@ class VehicleSlotBuyer(Processor):
 
 
 class VehicleSeller(ItemProcessor):
+    restore = dependency.descriptor(IRestoreController)
 
     def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
         self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
@@ -306,7 +376,7 @@ class VehicleSeller(ItemProcessor):
         bufferOverflowCtx = {}
         isBufferOverflowed = False
         if isCrewDismiss:
-            tankmenGoingToBuffer, deletedTankmen = getRestoreController().getTankmenDeletedBySelling(vehicle)
+            tankmenGoingToBuffer, deletedTankmen = self.restore.getTankmenDeletedBySelling(vehicle)
             countOfDeleted = len(deletedTankmen)
             if countOfDeleted > 0:
                 isBufferOverflowed = True
@@ -333,15 +403,12 @@ class VehicleSeller(ItemProcessor):
         self.isRemovedAfterRent = vehicle.isRented
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if len(errStr):
-            localKey = 'vehicle_sell/%s'
-            if self.isRemovedAfterRent:
-                localKey = 'vehicle_remove/%s'
-            return makeI18nError(localKey % errStr, vehName=self.vehicle.userName)
-        localKey = 'vehicle_sell/server_error'
+        localKey = 'vehicle_sell/%s'
+        defaultKey = 'vehicle_sell/server_error'
         if self.isRemovedAfterRent:
-            localKey = 'vehicle_remove/server_error'
-        return makeI18nError(localKey, vehName=self.vehicle.userName)
+            localKey = 'vehicle_remove/%s'
+            defaultKey = 'vehicle_remove/server_error'
+        return makeI18nError(localKey % errStr, defaultSysMsgKey=defaultKey, vehName=self.vehicle.userName)
 
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
@@ -436,7 +503,7 @@ class VehicleTmenXPAccelerator(VehicleSettingsProcessor):
         super(VehicleTmenXPAccelerator, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.XP_TO_TMAN, value, (plugins.MessageConfirmator('xpToTmenCheckbox', isEnabled=value),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, vehName=self.item.userName) if len(errStr) else makeI18nError('vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
+        return makeI18nError('vehicle_tmenxp_accelerator/%s' % errStr, defaultSysMsgKey='vehicle_tmenxp_accelerator/server_error', vehName=self.item.userName)
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_tmenxp_accelerator/success' + str(self._value), vehName=self.item.userName, type=SM_TYPE.Information)
@@ -518,7 +585,7 @@ class VehicleLayoutProcessor(Processor):
             msg = 'server_error' if code != AccountCommands.RES_CENTER_DISCONNECTED else 'server_error_centerDown'
         else:
             msg = errStr
-        return makeI18nError('layout_apply/%s' % msg, vehName=self.vehicle.userName, type=SM_TYPE.Error)
+        return makeI18nError('layout_apply/%s' % msg, defaultSysMsgKey='layout_apply/server_error', vehName=self.vehicle.userName, type=SM_TYPE.Error)
 
     def getShellsLayoutPrice(self):
         """
@@ -577,10 +644,8 @@ class VehicleRepairer(ItemProcessor):
         BigWorld.player().inventory.repair(self.item.invID, lambda code: self._response(code, callback))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if len(errStr):
-            needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
-            return makeI18nError('vehicle_repair/%s' % errStr, vehName=self.item.userName, needed=formatPrice(needed))
-        return makeI18nError('vehicle_repair/server_error', vehName=self.item.userName)
+        needed = Money(credits=self._repairCost.credits - g_itemsCache.items.stats.credits)
+        return makeI18nError('vehicle_repair/%s' % errStr, defaultSysMsgKey='vehicle_repair/server_error', vehName=self.item.userName, needed=formatPrice(needed))
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('vehicle_repair/success', vehName=self.item.userName, money=formatPrice(self._repairCost), type=SM_TYPE.Repair)
@@ -592,7 +657,7 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
     defaultLayout = []
     for shell in vehicle.shells:
         if shell.defaultCount > shell.inventoryCount:
-            SystemMessages.g_instance.pushI18nMessage('#system_messages:charge/inventory_error', type=SystemMessages.SM_TYPE.Warning)
+            SystemMessages.pushI18nMessage('#system_messages:charge/inventory_error', vehicle=vehicle.userName, type=SystemMessages.SM_TYPE.Warning)
             yield lambda callback: callback(None)
             break
         defaultLayout.extend(shell.defaultLayoutValue)
@@ -600,10 +665,10 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
         result = yield VehicleLayoutProcessor(vehicle, defaultLayout).request()
         if result and result.auxData:
             for m in result.auxData:
-                SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
         if result and len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if callback is not None:
             callback(True)
             return

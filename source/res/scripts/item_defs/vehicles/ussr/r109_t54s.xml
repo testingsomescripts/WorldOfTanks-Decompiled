@@ -1,4 +1,4 @@
-<r109_t54s.xml>
+<R109_T54S.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -362,7 +362,6 @@
       <trackThickness>	0.02	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -646,7 +645,6 @@
       <trackThickness>	0.02	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -994,4 +992,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r109_t54s.xml>
+</R109_T54S.xml>

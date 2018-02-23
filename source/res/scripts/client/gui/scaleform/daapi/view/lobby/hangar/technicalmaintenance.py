@@ -4,6 +4,7 @@ from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.locale.MENU import MENU
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
@@ -145,7 +146,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                  'tableName': shell.getShortInfo(vehicle, True),
                  'maxAmmo': vehicle.gun.maxAmmo,
                  'userCredits': money.toDict(),
-                 'actionPriceData': action})
+                 'actionPriceData': action,
+                 'desc': MENU.SHELLLISTITEMRENDERER_REPLACE})
 
         self.as_setDataS(data)
         return
@@ -185,10 +187,13 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
             price = module.altPrice
             defaultPrice = module.defaultAltPrice
+            inventoryCount = module.inventoryCount
             index = None
             if module in selectedItems:
                 index = selectedItems.index(module)
                 priceCurrency = currencies[index] or Currency.CREDITS
+                if inventoryCount and module not in installedItems:
+                    inventoryCount -= 1
             else:
                 priceCurrency = module.getBuyPriceCurrency()
             action = None
@@ -205,7 +210,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'index': index,
              'inventoryCount': module.inventoryCount,
              'vehicleCount': len(module.getInstalledVehicles(inventoryVehicles)),
-             'count': module.inventoryCount,
+             'count': inventoryCount,
              'fits': fits,
              'goldEqsForCredits': goldEqsForCredits,
              'userCredits': money.toDict(),
@@ -225,7 +230,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         if vehicle.isBroken:
             result = yield VehicleRepairer(vehicle).request()
             if result and len(result.userMsg):
-                SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def fillVehicle(self, needRepair, needAmmo, needEquipment, isPopulate, isUnload, isOrderChanged, shells, equipment):
         shellsLayout = []
@@ -287,10 +292,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         result = yield VehicleLayoutProcessor(vehicle, shellsLayout, eqsLayout).request()
         if result and result.auxData:
             for m in result.auxData:
-                SystemMessages.g_instance.pushI18nMessage(m.userMsg, type=m.sysMsgType)
+                SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
         if result and len(result.userMsg):
-            SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.destroy()
 
     def __seveCurrentLayout(self, **kwargs):

@@ -1,4 +1,4 @@
-<vehicledetector.def>
+<VehicleDetector.def>
   <TempProperties>
     <_vehicleDetector></_vehicleDetector>
   </TempProperties>
@@ -13,4 +13,4 @@
       <Arg>	UINT16	</Arg>
     </vehicleDetector_removeVehicleDetector>
   </CellMethods>
-</vehicledetector.def>
+</VehicleDetector.def>

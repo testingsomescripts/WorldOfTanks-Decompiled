@@ -1,4 +1,4 @@
-<accountclan.def>
+<AccountClan.def>
   <BaseMethods>
     <accountClan_createClan>
       <Arg>	MAILBOX	</Arg>
@@ -22,4 +22,4 @@
       <Arg>	UINT32	</Arg>
     </accountClan_enterLeaveClan>
   </BaseMethods>
-</accountclan.def>
+</AccountClan.def>

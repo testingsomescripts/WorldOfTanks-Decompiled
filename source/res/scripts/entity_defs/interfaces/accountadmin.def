@@ -1,4 +1,4 @@
-<accountadmin.def>
+<AccountAdmin.def>
   <BaseMethods>
     <accountAdmin_addRemoveRareAchievements>
       <Arg>	MAILBOX	</Arg>
@@ -165,4 +165,4 @@
       <Arg>	UINT32	</Arg>
     </accountAdmin_wipe>
   </BaseMethods>
-</accountadmin.def>
+</AccountAdmin.def>

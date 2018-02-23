@@ -225,6 +225,7 @@ class Source(object):
         elif FORT_QUEST_SUFFIX in id:
             raise Exception('Quest must not contain "stronghold" in its id.')
         tOption = curTime > time.gmtime()
+        showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.POTAPOV_QUEST,))
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
          'serverOnly': questSection.readBool('serverOnly', False),
@@ -239,6 +240,7 @@ class Source(object):
          'gStartTime': gStartTime,
          'gFinishTime': gFinishTime,
          'disableGui': questSection.readBool('disableGui', False),
+         'showCongrats': showCongrats,
          'requiredToken': requiredToken,
          'Toption': None if not tOption else startTime,
          'priority': questSection.readInt('priority', 0),

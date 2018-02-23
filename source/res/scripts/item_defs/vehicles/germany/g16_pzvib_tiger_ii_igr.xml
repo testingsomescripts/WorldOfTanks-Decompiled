@@ -1,4 +1,4 @@
-<g16_pzvib_tiger_ii_igr.xml>
+<G16_PzVIB_Tiger_II_IGR.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -409,7 +409,6 @@
       <trackThickness>	-0.0288	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -640,4 +639,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g16_pzvib_tiger_ii_igr.xml>
+</G16_PzVIB_Tiger_II_IGR.xml>

@@ -36,6 +36,7 @@ class INVITES(object):
     INVITES_TEXT_UNIT = '#invites:invites/text/UNIT'
     INVITES_TEXT_SORTIE = '#invites:invites/text/SORTIE'
     INVITES_TEXT_FORT_BATTLE = '#invites:invites/text/FORT_BATTLE'
+    INVITES_TEXT_EXTERNAL = '#invites:invites/text/EXTERNAL'
     INVITES_TEXT_CLUBS = '#invites:invites/text/CLUBS'
     INVITES_TEXT_FORT_OFFENCE = '#invites:invites/text/fort/offence'
     INVITES_TEXT_FORT_DEFENCE = '#invites:invites/text/fort/defence'
@@ -81,10 +82,16 @@ class INVITES(object):
     INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT = '#invites:invites/note/change_and_leave/TOURNAMENT'
     INVITES_NOTE_LEAVE_SORTIE = '#invites:invites/note/leave/SORTIE'
     INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE = '#invites:invites/note/change_and_leave/SORTIE'
+    INVITES_NOTE_LEAVE_FORT_COMMON = '#invites:invites/note/leave/FORT_COMMON'
+    INVITES_NOTE_CHANGE_AND_LEAVE_FORT_COMMON = '#invites:invites/note/change_and_leave/FORT_COMMON'
+    INVITES_NOTE_LEAVE_E_SPORT_COMMON = '#invites:invites/note/leave/E_SPORT_COMMON'
+    INVITES_NOTE_CHANGE_AND_LEAVE_E_SPORT_COMMON = '#invites:invites/note/change_and_leave/E_SPORT_COMMON'
     INVITES_NOTE_LEAVE_FORT_BATTLE = '#invites:invites/note/leave/FORT_BATTLE'
     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE = '#invites:invites/note/change_and_leave/FORT_BATTLE'
     INVITES_NOTE_LEAVE_CLUBS = '#invites:invites/note/leave/CLUBS'
     INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS = '#invites:invites/note/change_and_leave/CLUBS'
+    INVITES_NOTE_LEAVE_EXTERNAL = '#invites:invites/note/leave/EXTERNAL'
+    INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL = '#invites:invites/note/change_and_leave/EXTERNAL'
     INVITES_NOTE_LEAVE_RANDOMS = '#invites:invites/note/leave/RANDOMS'
     INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS = '#invites:invites/note/change_and_leave/RANDOMS'
     INVITES_NOTE_LEAVE_EVENT = '#invites:invites/note/leave/EVENT'
@@ -115,10 +122,12 @@ class INVITES(object):
     CLANS_STATE_APP_ACTIVE = '#invites:clans/state/app/active'
     CLANS_STATE_APP_ACCEPTED = '#invites:clans/state/app/accepted'
     CLANS_STATE_APP_DECLINED = '#invites:clans/state/app/declined'
+    CLANS_STATE_APP_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/app/error/inClanEnterCooldown'
     CLANS_STATE_INVITE_ACTIVE = '#invites:clans/state/invite/active'
     CLANS_STATE_INVITE_ACCEPTED = '#invites:clans/state/invite/accepted'
     CLANS_STATE_INVITE_DECLINED = '#invites:clans/state/invite/declined'
     CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/invite/error/inClanEnterCooldown'
+    STRONGHOLD_INVITE_SENDINVITETOUSERNAME = '#invites:stronghold/invite/sendInviteToUsername'
     INVITES_TEXT_ENUM = (INVITES_TEXT_CREATORNAME,
      INVITES_TEXT_SQUAD,
      INVITES_TEXT_EVENT,
@@ -130,6 +139,7 @@ class INVITES(object):
      INVITES_TEXT_UNIT,
      INVITES_TEXT_SORTIE,
      INVITES_TEXT_FORT_BATTLE,
+     INVITES_TEXT_EXTERNAL,
      INVITES_TEXT_CLUBS,
      INVITES_TEXT_FORT_OFFENCE,
      INVITES_TEXT_FORT_DEFENCE,
@@ -149,8 +159,11 @@ class INVITES(object):
      INVITES_NOTE_LEAVE_CLAN,
      INVITES_NOTE_LEAVE_TOURNAMENT,
      INVITES_NOTE_LEAVE_SORTIE,
+     INVITES_NOTE_LEAVE_FORT_COMMON,
+     INVITES_NOTE_LEAVE_E_SPORT_COMMON,
      INVITES_NOTE_LEAVE_FORT_BATTLE,
      INVITES_NOTE_LEAVE_CLUBS,
+     INVITES_NOTE_LEAVE_EXTERNAL,
      INVITES_NOTE_LEAVE_RANDOMS,
      INVITES_NOTE_LEAVE_EVENT,
      INVITES_NOTE_LEAVE_SANDBOX)
@@ -163,8 +176,11 @@ class INVITES(object):
      INVITES_NOTE_CHANGE_AND_LEAVE_CLAN,
      INVITES_NOTE_CHANGE_AND_LEAVE_TOURNAMENT,
      INVITES_NOTE_CHANGE_AND_LEAVE_SORTIE,
+     INVITES_NOTE_CHANGE_AND_LEAVE_FORT_COMMON,
+     INVITES_NOTE_CHANGE_AND_LEAVE_E_SPORT_COMMON,
      INVITES_NOTE_CHANGE_AND_LEAVE_FORT_BATTLE,
      INVITES_NOTE_CHANGE_AND_LEAVE_CLUBS,
+     INVITES_NOTE_CHANGE_AND_LEAVE_EXTERNAL,
      INVITES_NOTE_CHANGE_AND_LEAVE_RANDOMS,
      INVITES_NOTE_CHANGE_AND_LEAVE_EVENT_BATTLES,
      INVITES_NOTE_CHANGE_AND_LEAVE_SANDBOX)

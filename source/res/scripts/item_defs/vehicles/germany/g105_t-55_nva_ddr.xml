@@ -1,4 +1,4 @@
-<g105_t-55_nva_ddr.xml>
+<G105_T-55_NVA_DDR.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -173,7 +173,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.921023 0.000000	</hullPosition>
@@ -589,4 +588,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customizationNation>	ussr	</customizationNation>
-</g105_t-55_nva_ddr.xml>
+</G105_T-55_NVA_DDR.xml>

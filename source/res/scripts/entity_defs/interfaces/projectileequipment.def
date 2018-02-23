@@ -1,4 +1,4 @@
-<projectileequipment.def>
+<ProjectileEquipment.def>
   <BaseMethods>
     <projectileEquipment_notifyTeamAboutHittingArea>
       <Arg>	UINT16	</Arg>
@@ -8,4 +8,4 @@
       <Arg>	FLOAT64	</Arg>
     </projectileEquipment_notifyTeamAboutHittingArea>
   </BaseMethods>
-</projectileequipment.def>
+</ProjectileEquipment.def>

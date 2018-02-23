@@ -1,4 +1,4 @@
-<a102_t28_concept.xml>
+<A102_T28_concept.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -358,7 +358,6 @@
       </splineDesc>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 1.0812 0.000000	</hullPosition>
@@ -559,4 +558,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a102_t28_concept.xml>
+</A102_T28_concept.xml>

@@ -23,7 +23,7 @@ from account_shared import NotificationItem, readClientServerVersion
 from OfflineMapCreator import g_offlineMapCreator
 from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ClientFortMgr import ClientFortMgr
-from gui import game_control
+from gui.LobbyContext import g_lobbyContext
 from gui.wgnc import g_wgncProvider
 from gui.shared.ClanCache import g_clanCache
 from ClientSelectableObject import ClientSelectableObject
@@ -735,7 +735,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def prb_ready(self, vehInvID, callback):
         if events.isPlayerEntityChanging:
             return
-        self._doCmdInt3(AccountCommands.CMD_PRB_READY, vehInvID, 0, 0, lambda requestID, resultID, errorStr: callback(resultID))
+        self._doCmdInt3(AccountCommands.CMD_PRB_READY, vehInvID, 0, 0, lambda requestID, resultID, errorStr: callback(resultID, errorStr))
 
     def prb_notReady(self, state, callback):
         if events.isPlayerEntityChanging:
@@ -745,7 +745,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def prb_assign(self, playerID, roster, callback):
         if events.isPlayerEntityChanging:
             return
-        self._doCmdInt3(AccountCommands.CMD_PRB_ASSIGN, playerID, roster, 0, lambda requestID, resultID, errorStr: callback(resultID))
+        self._doCmdInt3(AccountCommands.CMD_PRB_ASSIGN, playerID, roster, 0, lambda requestID, resultID, errorStr: callback(resultID, errorStr))
 
     def prb_swapTeams(self, callback):
         if events.isPlayerEntityChanging:
@@ -856,7 +856,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         return
 
     def logUXEvents(self, intArr):
-        if not game_control.g_instance.needLogUXEvents:
+        if not g_lobbyContext.needLogUXEvents:
             return
         else:
             self._doCmdIntArr(AccountCommands.CMD_LOG_CLIENT_UX_EVENTS, intArr, None)

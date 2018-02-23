@@ -1,4 +1,4 @@
-<projectilecontroller.def>
+<ProjectileController.def>
   <TempProperties>
     <_projectileController></_projectileController>
   </TempProperties>
@@ -9,7 +9,7 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      <Arg>	ARRAY	  <of>	MAILBOX	</of>
       </Arg>
       <Arg>	TUPLE	  <of>	FLOAT32	</of>
         <size>	2	</size>
@@ -25,4 +25,4 @@
       <Arg>	FLOAT64	</Arg>
     </projectileController_takeOverProjectile>
   </CellMethods>
-</projectilecontroller.def>
+</ProjectileController.def>

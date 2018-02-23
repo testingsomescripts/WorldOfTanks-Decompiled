@@ -1,4 +1,4 @@
-<g05_stug_40_ausfg_igr.xml>
+<G05_StuG_40_AusfG_IGR.xml>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -369,7 +369,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -555,4 +554,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g05_stug_40_ausfg_igr.xml>
+</G05_StuG_40_AusfG_IGR.xml>

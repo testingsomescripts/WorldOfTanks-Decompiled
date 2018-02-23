@@ -27,11 +27,12 @@ MODULES = (ITEM_TYPES.vehicle,
  ITEM_TYPES.vehicleTurret,
  ITEM_TYPES.vehicleGun,
  ITEM_TYPES.shell)
-PrecachedShell = namedtuple('PrecachedShell', 'guns avgParams')
-PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations avgParams')
+PrecachedShell = namedtuple('PrecachedShell', 'guns params')
+PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
+PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic')
 
-class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles avgParams turretsByVehicles')):
+class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles params turretsByVehicles')):
 
     @property
     def clipVehiclesNames(self):
@@ -70,10 +71,11 @@ class _ParamsCache(object):
         self.__init = False
         try:
             self.__xmlItems = self.__readXMLItems()
-            self.__precachOptionalDevices()
-            self.__precachGuns()
-            self.__precachShells()
-            self.__precachEquipments()
+            self.__precacheOptionalDevices()
+            self.__precacheGuns()
+            self.__precacheShells()
+            self.__precacheEquipments()
+            self.__precacheChassis()
             self.__cacheVehiclesWithoutCamouflage()
         except Exception:
             LOG_CURRENT_EXCEPTION()
@@ -87,6 +89,9 @@ class _ParamsCache(object):
 
     def getGunReloadingSystemType(self, itemCD, vehicleCD=None):
         return self.getPrecachedParameters(itemCD).getReloadingType(vehicleCD)
+
+    def isChassisHydraulic(self, itemCD):
+        return self.getPrecachedParameters(itemCD).isHydraulic
 
     def getSimplifiedCoefficients(self):
         return self.__simplifiedParamsCoefficients
@@ -110,7 +115,7 @@ class _ParamsCache(object):
 
         return result
 
-    def getCompatibleBonuses(self, vehicleDescr):
+    def getCompatibleArtefacts(self, vehicleDescr):
         compatibles = []
         for itemsList in self.__xmlItems[nations.NONE_INDEX].values():
             for item in itemsList:
@@ -152,7 +157,7 @@ class _ParamsCache(object):
         else:
             return self.__xmlItems.get(nationIdx, {}).get(typeIdx, list())
 
-    def __precachEquipments(self):
+    def __precacheEquipments(self):
         self.__cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.equipment] = {}
         equipments = self.__getItems(ITEM_TYPES.equipment, nations.NONE_INDEX)
         for eqpDescr in equipments:
@@ -163,9 +168,9 @@ class _ParamsCache(object):
                 nation, id = vDescr.type.id
                 equipmentNations.add(nation)
 
-            self.__cache[nations.NONE_INDEX][ITEM_TYPES.equipment][eqpDescr.compactDescr] = PrecachedEquipment(nations=equipmentNations, avgParams=getEquipmentParameters(eqpDescr))
+            self.__cache[nations.NONE_INDEX][ITEM_TYPES.equipment][eqpDescr.compactDescr] = PrecachedEquipment(nations=equipmentNations, params=getEquipmentParameters(eqpDescr))
 
-    def __precachOptionalDevices(self):
+    def __precacheOptionalDevices(self):
         self.__cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.optionalDevice] = {}
         optDevs = self.__getItems(ITEM_TYPES.optionalDevice, nations.NONE_INDEX)
         for deviceDescr in optDevs:
@@ -182,7 +187,7 @@ class _ParamsCache(object):
 
             self.__cache[nations.NONE_INDEX][ITEM_TYPES.optionalDevice][deviceDescr.compactDescr] = PrecachedOptionalDevice(weight=(wmin, wmax), nations=deviceNations)
 
-    def __precachGuns(self):
+    def __precacheGuns(self):
         for nationIdx in nations.INDICES.itervalues():
             self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.vehicleGun] = {}
             vcls = self.__getItems(ITEM_TYPES.vehicle, nationIdx)
@@ -205,9 +210,9 @@ class _ParamsCache(object):
                                     if gun['clip'][0] > 1:
                                         clipVehiclesList.add(vDescr.type.compactDescr)
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, avgParams=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
-    def __precachShells(self):
+    def __precacheShells(self):
         for nationIdx in nations.INDICES.values():
             self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.shell] = {}
             guns = self.__getItems(ITEM_TYPES.vehicleGun, nationIdx)
@@ -223,7 +228,22 @@ class _ParamsCache(object):
                                     gNames.append(gDescr['userString'])
                                     descriptors.append(shot)
 
-                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), avgParams=calcShellParams(descriptors))
+                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), params=calcShellParams(descriptors))
+
+    def __precacheChassis(self):
+        for nationIdx in nations.INDICES.itervalues():
+            self.__cache.setdefault(nationIdx, {})[ITEM_TYPES.vehicleChassis] = {}
+            chassis = self.__getItems(ITEM_TYPES.vehicleChassis, nationIdx)
+            vcls = self.__getItems(ITEM_TYPES.vehicle, nationIdx)
+            siegeVcls = filter(lambda vDescr: vDescr.hasSiegeMode, vcls)
+            for chs in chassis:
+                isHydraulic = False
+                for vDescr in siegeVcls:
+                    for vChs in vDescr.type.chassis:
+                        if chs['compactDescr'] == vChs['compactDescr']:
+                            isHydraulic = True
+
+                self.__cache[nationIdx][ITEM_TYPES.vehicleChassis][chs['compactDescr']] = PrecachedChassis(isHydraulic=isHydraulic)
 
     def __cacheVehiclesWithoutCamouflage(self):
         for nationID in nations.INDICES.itervalues():

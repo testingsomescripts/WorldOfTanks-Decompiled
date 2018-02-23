@@ -1,4 +1,4 @@
-<offlineflag.def>
+<OfflineFlag.def>
   <Volatile></Volatile>
   <Properties>
     <flagID>
@@ -6,4 +6,4 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </flagID>
   </Properties>
-</offlineflag.def>
+</OfflineFlag.def>

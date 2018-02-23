@@ -1,4 +1,4 @@
-<botpoint.def>
+<BotPoint.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <index>
@@ -6,4 +6,4 @@
       <Editable>	true	</Editable>
     </index>
   </Properties>
-</botpoint.def>
+</BotPoint.def>

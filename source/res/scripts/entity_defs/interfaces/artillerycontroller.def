@@ -1,4 +1,4 @@
-<artillerycontroller.def>
+<ArtilleryController.def>
   <CellMethods>
     <artilleryController_addArtilleryPreparation>
       <Arg>	ATTACKER_INFO	</Arg>
@@ -52,4 +52,4 @@
       <Arg>	FLOAT64	</Arg>
     </artilleryController_addArtillery>
   </CellMethods>
-</artillerycontroller.def>
+</ArtilleryController.def>

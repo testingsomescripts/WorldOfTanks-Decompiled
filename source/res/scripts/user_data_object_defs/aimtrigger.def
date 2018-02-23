@@ -1,4 +1,4 @@
-<aimtrigger.def>
+<AimTrigger.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <name>
@@ -15,4 +15,4 @@
       <Editable>	False	</Editable>
     </radius>
   </Properties>
-</aimtrigger.def>
+</AimTrigger.def>

@@ -6,17 +6,20 @@ from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.formatters import TimeFormatter
-from notification.NotificationLayoutView import NotificationLayoutView
 from notification import NotificationMVC
+from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE, NOTIFICATION_GROUP
 from gui.shared.formatters import icons
 from helpers.i18n import makeString as _ms
 
-class NotificationListView(NotificationsListMeta, NotificationLayoutView):
+class NotificationListView(NotificationsListMeta, BaseNotificationView):
     """
     Represents notifications center popover.
     Contains tabs with lists of grouped messages.
     Listens notifications events and updates GUI.
+    
+    WARNING! This class uses ids mapping! It means that all ids coming outside should be maped with special method
+    from base class.
     """
 
     def __init__(self, _):
@@ -30,7 +33,7 @@ class NotificationListView(NotificationsListMeta, NotificationLayoutView):
         Is called from AS on message button click.
         Calls action processing.
         """
-        NotificationMVC.g_instance.handleAction(typeID, entityID, action)
+        NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
 
     def onGroupChange(self, groupIdx):
         """
@@ -119,7 +122,7 @@ class NotificationListView(NotificationsListMeta, NotificationLayoutView):
         Gets list of messages VO for current tab
         Selects a group of messages from all available
         """
-        return map(lambda item: item.getListVO(), filter(lambda item: item.getGroup() == self.__currentGroup, self._model.collection.getListIterator()))
+        return map(self.__getListVO, filter(lambda item: item.getGroup() == self.__currentGroup, self._model.collection.getListIterator()))
 
     def __getEmptyListMsg(self, hasMessages):
         """
@@ -137,7 +140,7 @@ class NotificationListView(NotificationsListMeta, NotificationLayoutView):
         if notification.isAlert():
             NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
         if notification.getGroup() == self.__currentGroup:
-            self.as_appendMessageS(notification.getListVO())
+            self.as_appendMessageS(self.__getListVO(notification))
         elif notification.getGroup() == NOTIFICATION_GROUP.INVITE:
             self.__currentGroup = NOTIFICATION_GROUP.INVITE
             self.__setNotificationList()
@@ -155,7 +158,7 @@ class NotificationListView(NotificationsListMeta, NotificationLayoutView):
             if notification.isOrderChanged():
                 self.__setNotificationList()
             else:
-                self.as_updateMessageS(notification.getListVO())
+                self.as_updateMessageS(self.__getListVO(notification))
         elif notification.getGroup() == NOTIFICATION_GROUP.INVITE:
             self.__currentGroup = NOTIFICATION_GROUP.INVITE
             self.__setNotificationList()
@@ -177,3 +180,7 @@ class NotificationListView(NotificationsListMeta, NotificationLayoutView):
     def __makeTabItemVO(self, label, tooltip):
         return {'label': label,
          'tooltip': tooltip}
+
+    def __getListVO(self, notificaton):
+        flashId = self._getFlashID(notificaton.getID())
+        return notificaton.getListVO(flashId)

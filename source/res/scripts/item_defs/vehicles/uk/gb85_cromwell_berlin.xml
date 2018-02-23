@@ -1,4 +1,4 @@
-<gb85_cromwell_berlin.xml>
+<GB85_Cromwell_Berlin.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -419,7 +419,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -620,4 +619,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb85_cromwell_berlin.xml>
+</GB85_Cromwell_Berlin.xml>

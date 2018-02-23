@@ -1,6 +1,7 @@
-<gb76_mk_vic.xml>
+<GB76_Mk_VIC.xml>
   <crew>
     <commander>	radioman
+
 			loader	</commander>
     <gunner></gunner>
     <driver></driver>
@@ -174,7 +175,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -386,4 +386,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</gb76_mk_vic.xml>
+</GB76_Mk_VIC.xml>

@@ -1,4 +1,4 @@
-<patrolnode.def>
+<PatrolNode.def>
   <Domain>	CELL	</Domain>
   <Properties>
     <patrolLinks>
@@ -34,4 +34,4 @@
       </Widget>
     </radius>
   </Properties>
-</patrolnode.def>
+</PatrolNode.def>

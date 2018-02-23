@@ -1,4 +1,4 @@
-<a05_m4_sherman_igr.xml>
+<A05_M4_Sherman_IGR.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -327,7 +327,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
@@ -543,4 +542,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a05_m4_sherman_igr.xml>
+</A05_M4_Sherman_IGR.xml>

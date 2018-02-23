@@ -12,16 +12,20 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.StoreComponentMeta import StoreComponentMeta
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
-from gui.game_control import g_instance, getVehicleComparisonBasketCtrl
 from gui.shared import events, EVENT_BUS_SCOPE, g_itemsCache, event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.game_control import IVehicleComparisonBasket, IRentalsController, IRestoreController, ITradeInController
 
 class StoreComponent(LobbySubView, StoreComponentMeta):
     _DATA_PROVIDER = 'dataProvider'
+    comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    rentals = dependency.descriptor(IRentalsController)
+    restore = dependency.descriptor(IRestoreController)
+    tradeIn = dependency.descriptor(ITradeInController)
 
     def __init__(self, _=None):
         super(StoreComponent, self).__init__()
@@ -58,7 +62,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
             return
 
     def onAddVehToCompare(self, itemCD):
-        getVehicleComparisonBasketCtrl().addVehicle(int(itemCD))
+        self.comparisonBasket.addVehicle(int(itemCD))
 
     def requestFilterData(self, filterType):
         """
@@ -75,12 +79,11 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         super(StoreComponent, self)._populate()
         self.__setNations()
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdate})
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange += self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
+        self.comparisonBasket.onChange += self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange += self.__onVehCompareBasketSwitchChange
         g_itemsCache.onSyncCompleted += self._update
-        g_instance.rentals.onRentChangeNotify += self._onTableUpdate
-        g_instance.restore.onRestoreChangeNotify += self._onTableUpdate
+        self.rentals.onRentChangeNotify += self._onTableUpdate
+        self.restore.onRestoreChangeNotify += self._onTableUpdate
         self.__populateFilters()
 
     def _dispose(self):
@@ -100,11 +103,10 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.__clearSubFilter()
         self._table = None
         g_itemsCache.onSyncCompleted -= self._update
-        g_instance.rentals.onRentChangeNotify -= self._onTableUpdate
-        g_instance.restore.onRestoreChangeNotify -= self._onTableUpdate
-        comparisonBasket = getVehicleComparisonBasketCtrl()
-        comparisonBasket.onChange -= self.__onVehCompareBasketChanged
-        comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
+        self.rentals.onRentChangeNotify -= self._onTableUpdate
+        self.restore.onRestoreChangeNotify -= self._onTableUpdate
+        self.comparisonBasket.onChange -= self.__onVehCompareBasketChanged
+        self.comparisonBasket.onSwitchChange -= self.__onVehCompareBasketSwitchChange
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
@@ -113,7 +115,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
 
     def _update(self, *args):
         self.as_updateS()
-        self.as_setVehicleCompareAvailableS(getVehicleComparisonBasketCtrl().isEnabled())
+        self.as_setVehicleCompareAvailableS(self.comparisonBasket.isEnabled())
 
     def _getTabClass(self, type):
         """
@@ -185,6 +187,9 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
     def _isVehicleRestoreEnabled(self):
         return g_lobbyContext.getServerSettings().isVehicleRestoreEnabled()
 
+    def _isTradeInEnabled(self):
+        return self.tradeIn.isEnabled()
+
     def __populateFilters(self):
         """
         Set filters and subfilters init data into Flash,
@@ -197,19 +202,23 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         nation, itemType = self.__getCurrentFilter()
         if not self._isVehicleRestoreEnabled() and itemType == STORE_CONSTANTS.RESTORE_VEHICLE:
             itemType = STORE_CONSTANTS.VEHICLE
+        if not self._isTradeInEnabled() and itemType == STORE_CONSTANTS.TRADE_IN_VEHICLE:
+            itemType = STORE_CONSTANTS.VEHICLE
         tabType = itemType
         if tabType == STORE_CONSTANTS.RESTORE_VEHICLE:
             tabType = STORE_CONSTANTS.VEHICLE
+        elif tabType == STORE_CONSTANTS.TRADE_IN_VEHICLE:
+            tabType = STORE_CONSTANTS.VEHICLE
         self.__filterHash = {'language': nation,
-         'type': tabType}
+         'tabType': tabType,
+         'fittingType': itemType}
         if itemType in (STORE_CONSTANTS.MODULE, STORE_CONSTANTS.SHELL):
             preservedFilters = AccountSettings.getFilter('%s_%s' % (self.getName(), itemType))
             vehicleCD = preservedFilters['vehicleCD']
             if vehicleCD > 0 or filterVehicle is None:
                 filterVehicle = vehicleCD
         self.__subFilter = {'current': filterVehicle,
-         self._DATA_PROVIDER: [],
-         'vehicleObtainingTypes': self._getObtainingVehicleSubFilterData()}
+         self._DATA_PROVIDER: []}
         vehicles.sort(reverse=True)
         for v in vehicles:
             filterElement = {'id': str(v.intCD),
@@ -222,9 +231,6 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         self.__updateFilterOptions(itemType)
         self.as_completeInitS()
         return
-
-    def _getObtainingVehicleSubFilterData(self):
-        return None
 
     def __onInventoryUpdate(self, *args):
         """

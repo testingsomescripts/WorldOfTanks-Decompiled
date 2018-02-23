@@ -1,4 +1,4 @@
-<detachedturret.def>
+<DetachedTurret.def>
   <LoDLevels>
     <level>	100	  <hyst>	4	</hyst>
       <label>	NEAR	</label>
@@ -97,4 +97,4 @@
   <BaseMethods>
     <smartDestroy></smartDestroy>
   </BaseMethods>
-</detachedturret.def>
+</DetachedTurret.def>

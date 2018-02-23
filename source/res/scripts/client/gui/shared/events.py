@@ -27,6 +27,7 @@ class HasCtxEvent(SharedEvent):
 
 
 class AppLifeCycleEvent(SharedEvent):
+    CREATING = 'app/creating'
     INITIALIZING = 'app/initializing'
     INITIALIZED = 'app/initialized'
     DESTROYED = 'app/destroyed'
@@ -58,6 +59,7 @@ class GameEvent(HasCtxEvent):
     GUI_VISIBILITY = 'game/guiVisibility'
     MARKERS_2D_VISIBILITY = 'game/markers2DVisibility'
     CROSSHAIR_VISIBILITY = 'game/crosshairVisibility'
+    GUN_MARKER_VISIBILITY = 'game/gunMarkerVisibility'
     CROSSHAIR_VIEW = 'game/crosshairView'
     FULL_STATS = 'game/fullStats'
     SHOW_CURSOR = 'game/showCursor'
@@ -65,6 +67,10 @@ class GameEvent(HasCtxEvent):
     NEXT_PLAYERS_PANEL_MODE = 'game/nextPlayersPanelMode'
     PLAYING_TIME_ON_ARENA = 'game/playingTimeOnArena'
     CHANGE_APP_RESOLUTION = 'game/changeAppResolution'
+    BATTLE_LOADING = 'game/battleLoading'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(GameEvent, self).__init__(eventType, ctx)
 
 
 class GUICommonEvent(SharedEvent):
@@ -181,6 +187,13 @@ class LoginEventEx(LoginEvent):
         self.showAutoLoginBtn = showAutoLoginBtn
 
 
+class RenameWindowEvent(HasCtxEvent):
+    RENAME_WINDOW = 'renameWindow'
+
+    def __init__(self, eventType, ctx):
+        super(RenameWindowEvent, self).__init__(eventType=eventType, ctx=ctx)
+
+
 class HideWindowEvent(HasCtxEvent):
     HIDE_COMPANY_WINDOW = 'hideCompanyWindow'
     HIDE_BATTLE_RESULT_WINDOW = 'hideBattleResultsWindow'
@@ -206,6 +219,7 @@ class LobbySimpleEvent(HasCtxEvent):
     NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
+    BATTLE_RESULTS_POSTED = 'battleResultsPosted'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -257,8 +271,9 @@ class CoolDownEvent(SharedEvent):
     FORTIFICATION = 'fortificationCoolDown'
     BW_CHAT2 = 'bwChat2CoolDown'
     XMPP = 'xmppCoolDown'
-    CLUB = 'club'
+    BATTLE = 'battleCoolDown'
     CLAN = 'clan'
+    STRONGHOLD = 'stronghold'
 
     def __init__(self, eventType=None, requestID=0, coolDown=5.0):
         super(CoolDownEvent, self).__init__(eventType)
@@ -296,7 +311,6 @@ class TutorialEvent(SharedEvent):
 
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
-    PRB_CHANNEL_CTRL_REQUEST_DESTROY = 'prbChannelCtrlRequestDestroy'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
     LAZY_CHANNEL_CTRL_INITED = 'lazyChannelCtrlInited'
     LAZY_CHANNEL_CTRL_DESTROYED = 'lazyChannelCtrlDestroyed'
@@ -364,6 +378,13 @@ class CSVehicleSelectEvent(HasCtxEvent):
         super(CSVehicleSelectEvent, self).__init__(eventType, ctx)
 
 
+class CSReserveSelectEvent(HasCtxEvent):
+    RESERVE_SELECTED = 'reserveSelected'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(CSReserveSelectEvent, self).__init__(eventType, ctx)
+
+
 class CSRosterSlotSettingsWindow(HasCtxEvent):
     APPLY_SLOT_SETTINGS = 'applySlotSettings'
 
@@ -402,6 +423,16 @@ class FortOrderEvent(HasCtxEvent):
         super(FortOrderEvent, self).__init__(eventType, ctx)
 
 
+class StrongholdEvent(HasCtxEvent):
+    STRONGHOLD_ACTIVATED = 'strongholdActivated'
+    STRONGHOLD_DEACTIVATED = 'strongholdDeactivated'
+    STRONGHOLD_DATA_UNAVAILABLE = 'strongholdDataUnavailable'
+    STRONGHOLD_ON_TIMER = 'strongholdOnTimer'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(StrongholdEvent, self).__init__(eventType, ctx)
+
+
 class OpenLinkEvent(SharedEvent):
     SPECIFIED = 'openSpecifiedURL'
     REGISTRATION = 'openRegistrationURL'
@@ -413,8 +444,6 @@ class OpenLinkEvent(SharedEvent):
     FORT_DESC = 'fortDescription'
     CLAN_SEARCH = 'clanSearch'
     CLAN_CREATE = 'clanCreate'
-    CLUB_SETTINGS = 'clubSettings'
-    CLUB_HELP = 'clubHelp'
     MEDKIT_HELP = 'medkitHelp'
     REPAIRKITHELP_HELP = 'repairkitHelp'
     FIRE_EXTINGUISHERHELP_HELP = 'fireExtinguisherHelp'
@@ -473,3 +502,21 @@ class WGNCShowItemEvent(SharedEvent):
 
     def getTarget(self):
         return self.__target
+
+
+class MarkersManagerEvent(SharedEvent):
+    MARKERS_CREATED = 'markersCreated'
+
+    def __init__(self, eventType=None, markersManager=None):
+        super(MarkersManagerEvent, self).__init__(eventType)
+        self.__markersManager = markersManager
+
+    def getMarkersManager(self):
+        return self.__markersManager
+
+
+class VehicleBuyEvent(HasCtxEvent):
+    VEHICLE_SELECTED = 'vehicleSelected'
+
+    def __init__(self, eventType=None, ctx=None):
+        super(VehicleBuyEvent, self).__init__(eventType, ctx)

@@ -1,4 +1,4 @@
-<resourcepoint.def>
+<ResourcePoint.def>
   <Domain>	CLIENT	</Domain>
   <Properties>
     <radius>
@@ -57,4 +57,4 @@
       <Editable>	true	</Editable>
     </pointEffect>
   </Properties>
-</resourcepoint.def>
+</ResourcePoint.def>

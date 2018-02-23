@@ -1,4 +1,4 @@
-<antibotstatslogger.def>
+<AntibotStatsLogger.def>
   <Properties></Properties>
   <BaseMethods>
     <collectStucks>
@@ -11,4 +11,4 @@
       <Arg>	PYTHON	</Arg>
     </collectAutoAimBattles>
   </BaseMethods>
-</antibotstatslogger.def>
+</AntibotStatsLogger.def>

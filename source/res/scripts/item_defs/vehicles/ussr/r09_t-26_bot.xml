@@ -1,4 +1,4 @@
-<r09_t-26_bot.xml>
+<R09_T-26_bot.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -195,7 +195,6 @@
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -523,4 +522,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r09_t-26_bot.xml>
+</R09_T-26_bot.xml>

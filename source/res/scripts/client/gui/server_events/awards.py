@@ -1,17 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/awards.py
-import random
 from collections import namedtuple
 import BigWorld
 import constants
 from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
 import potapov_quests
 from gui.shared.utils.functions import makeTooltip
+from helpers import dependency
 from helpers import i18n
 from shared_utils import findFirst
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
-from gui.server_events import g_eventsCache
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward, packRibbonInfo, MissionAwardAbstract
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -20,9 +19,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import text_styles
 from gui.shared.utils.decorators import process
+from skeletons.gui.server_events import IEventsCache
 
 def _getNextQuestInTileByID(questID):
-    quests = g_eventsCache.potapov.getQuests()
+    eventsCache = dependency.instance(IEventsCache)
+    quests = eventsCache.potapov.getQuests()
     questsInTile = sorted(potapov_quests.g_cache.questListByTileIDChainID(quests[questID].getTileID(), quests[questID].getChainID()))
     try:
         questInd = questsInTile.index(questID)
@@ -258,6 +259,7 @@ class FormattedAward(AwardAbstract):
 
 
 class MotiveQuestAward(FormattedAward):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, motiveQuest, proxyEvent):
         super(MotiveQuestAward, self).__init__()
@@ -291,7 +293,7 @@ class MotiveQuestAward(FormattedAward):
         return self.__quest.getBonuses()
 
     def __getNextMotiveQuest(self):
-        quests = g_eventsCache.getMotiveQuests(lambda q: q.isAvailable() and not q.isCompleted())
+        quests = self.eventsCache.getMotiveQuests(lambda q: q.isAvailable() and not q.isCompleted())
         sortedQuests = sorted(quests.values(), key=lambda q: q.getPriority())
         nextQuest = findFirst(None, sortedQuests)
         for quest in sortedQuests:

@@ -48,6 +48,7 @@ class WAITING(object):
     INSTALLEQUIPMENT = '#waiting:installEquipment'
     RESEARCH = '#waiting:research'
     DRAW_RESEARCH_ITEMS = '#waiting:draw_research_items'
+    BROWSER_INIT = '#waiting:browser/init'
     TECHMAINTENANCEEQUIPMENTS = '#waiting:techMaintenanceEquipments'
     TECHMAINTENANCE = '#waiting:techMaintenance'
     VOICECHAT = '#waiting:voiceChat'

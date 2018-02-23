@@ -1,4 +1,4 @@
-<viewpoint.def>
+<Viewpoint.def>
   <Domain>	CELL	</Domain>
   <Properties>
     <arenaBonusMask>
@@ -7,4 +7,4 @@
       <Editable>	true	</Editable>
     </arenaBonusMask>
   </Properties>
-</viewpoint.def>
+</Viewpoint.def>

@@ -1,8 +1,10 @@
-<vehicle.def>
+<Vehicle.def>
   <Implements>
     <Interface>	VehicleAI	</Interface>
     <Interface>	TeamBase_Vehicle	</Interface>
     <Interface>	RepairBase_Vehicle	</Interface>
+    <Interface>	VehicleObserver	</Interface>
+    <Interface>	BattleFeedback	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -35,6 +37,10 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </physicsMode>
+    <siegeState>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </siegeState>
     <gunAnglesPacked>
       <Type>	UINT16	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
@@ -158,6 +164,10 @@
       <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
+    <heatmapLoggingFlags>
+      <Type>	UINT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </heatmapLoggingFlags>
     <state>
       <Type>	UINT8	</Type>
       <Flags>	BASE	</Flags>
@@ -171,6 +181,8 @@
     <p></p>
     <_Vehicle__p></_Vehicle__p>
     <_components></_components>
+    <_battleFeedback></_battleFeedback>
+    <_directVisibility></_directVisibility>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <attrs></attrs>
@@ -218,6 +230,8 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	INT8	</Arg>
+      <Arg>	UINT8	</Arg>
       <DetailDistance>	100	</DetailDistance>
     </onStaticCollision>
     <showRammingEffect>
@@ -367,6 +381,7 @@
     </receiveAttackResults>
     <receiveHitAssistBonus>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	SHOT_ID	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
@@ -470,6 +485,14 @@
     <updateOwnClientRTT>
       <Arg>	FLOAT32	</Arg>
     </updateOwnClientRTT>
+    <receiveVisibilityUpdate>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+    </receiveVisibilityUpdate>
+    <requestVisibilityLists>
+      <Arg>	MAILBOX	</Arg>
+    </requestVisibilityLists>
   </CellMethods>
   <BaseMethods>
     <createCellNearHere>
@@ -490,4 +513,4 @@
       <Arg>	PYTHON	</Arg>
     </logAimMetrics>
   </BaseMethods>
-</vehicle.def>
+</Vehicle.def>

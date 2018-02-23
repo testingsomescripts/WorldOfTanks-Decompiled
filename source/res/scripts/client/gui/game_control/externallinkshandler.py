@@ -4,10 +4,10 @@ import BigWorld
 from adisp import async, process
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import GUI_SETTINGS
-from gui.game_control.controllers import Controller
 from gui.game_control.links import URLMarcos
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
+from skeletons.gui.game_control import IExternalLinksController
 _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.REGISTRATION: '_handleOpenRegistrationURL',
  OpenLinkEvent.RECOVERY_PASSWORD: '_handleOpenRecoveryPasswordURL',
@@ -18,7 +18,6 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.FORT_DESC: '_handleFortDescription',
  OpenLinkEvent.CLAN_SEARCH: '_handleClanSearch',
  OpenLinkEvent.CLAN_CREATE: '_handleClanCreate',
- OpenLinkEvent.CLUB_SETTINGS: '_handleClubSettings',
  OpenLinkEvent.INVIETES_MANAGEMENT: '_handleInvitesManagementURL',
  OpenLinkEvent.GLOBAL_MAP_SUMMARY: '_handleGmSummaryURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO_SUMMARY: '_handleGmPromoSummaryURL',
@@ -26,10 +25,10 @@ _LISTENERS = {OpenLinkEvent.SPECIFIED: '_handleSpecifiedURL',
  OpenLinkEvent.GLOBAL_MAP_PROMO: '_handleGmPromoURL',
  OpenLinkEvent.PREM_SHOP: '_handleOpenPremShopURL'}
 
-class ExternalLinksHandler(Controller):
+class ExternalLinksHandler(IExternalLinksController):
 
-    def __init__(self, proxy):
-        super(ExternalLinksHandler, self).__init__(proxy)
+    def __init__(self):
+        super(ExternalLinksHandler, self).__init__()
         self.__urlMarcos = None
         return
 
@@ -115,9 +114,6 @@ class ExternalLinksHandler(Controller):
 
     def _handleClanCreate(self, _):
         self.__openParsedUrl('clanCreate')
-
-    def _handleClubSettings(self, _):
-        self.__openParsedUrl('clubSettings')
 
     def _handleInvitesManagementURL(self, _):
         self.__openParsedUrl('invitesManagementURL')

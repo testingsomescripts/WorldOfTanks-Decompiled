@@ -1,4 +1,4 @@
-<r96_object_430.xml>
+<R96_Object_430.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -310,7 +310,6 @@
       <trackThickness>	-0.0123	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -546,4 +545,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r96_object_430.xml>
+</R96_Object_430.xml>

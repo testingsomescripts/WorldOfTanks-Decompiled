@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clans/clan_helpers.py
 from datetime import datetime
+from collections import namedtuple
 from adisp import async, process
 import Event
 from client_request_lib.exceptions import ResponseCodes
-from gui import SystemMessages
+from gui import SystemMessages, GUI_SETTINGS
+from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import icons, text_styles
+from helpers import dependency
 from helpers import i18n
-from gui.awards.event_dispatcher import showClanJoinAward
 from helpers.local_cache import FileLocalCache
 from gui.shared.utils import sortByFields
-from collections import namedtuple
-from debug_utils import LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui.LobbyContext import g_lobbyContext
 from gui.clans import interfaces, items, formatters
 from gui.clans.contexts import SearchClansCtx, GetRecommendedClansCtx, AccountInvitesCtx, ClanRatingsCtx
 from gui.clans.contexts import ClansInfoCtx, AcceptInviteCtx, DeclineInviteCtx, DeclineInvitesCtx
@@ -26,6 +28,8 @@ from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import time_utils
 from shared_utils import CONST_CONTAINER
+from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.clans import IClanController
 _RequestData = namedtuple('_RequestData', ['pattern',
  'offset',
  'count',
@@ -41,7 +45,7 @@ def showClanInviteSystemMsg(userName, isSuccess, code):
         if code == ResponseCodes.ACCOUNT_ALREADY_INVITED:
             error = 'clans/request/errors/Account already invited'
         if code == ResponseCodes.ACCOUNT_ALREADY_IN_CLAN:
-            error = 'clans/request/errors/Account is in clan already'
+            error = 'clans/request/errors/user is in clan already'
         msg = formatters.getInviteNotSentSysMsg(userName, error)
         msgType = SystemMessages.SM_TYPE.Error
     SystemMessages.pushMessage(msg, msgType)
@@ -56,12 +60,13 @@ def showAcceptClanInviteDialog(clanName, clanAbbrev, callback):
      'clanExit': text_styles.standard(i18n.makeString(DIALOGS.CLANCONFIRMJOINING_MESSAGE_CLANEXIT))}), callback)
 
 
-class ClanListener(interfaces.IClanListener):
+def isInClanEnterCooldown(clanCooldownTill):
+    return time_utils.getCurrentTimestamp() - clanCooldownTill <= 0
 
-    @property
-    def clansCtrl(self):
-        from gui.clans.clan_controller import g_clanCtrl
-        return g_clanCtrl
+
+class ClanListener(interfaces.IClanListener):
+    clansCtrl = dependency.descriptor(IClanController)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def startClanListening(self):
         self.clansCtrl.addListener(self)
@@ -235,8 +240,8 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
         self._request(isReset=True, sort=sort)
         return
 
-    def refresh(self):
-        sort = self.__lastSort
+    def refresh(self, *args, **kwargs):
+        sort = kwargs.get('sort') or self.__lastSort
         self.__invitesCache = []
         self.__lastStatus = False
         self.__allInvitesCached = False
@@ -472,8 +477,8 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         self._request(isReset=True, sort=sort)
         return
 
-    def refresh(self):
-        sort = self.__lastSort
+    def refresh(self, *args, **kwargs):
+        sort = kwargs.get('sort') or self.__lastSort
         self.__invitesCache = []
         self.__lastStatus = False
         self.__allInvitesCached = False
@@ -493,12 +498,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
             clanTag = clanInfo.getTag()
             result = yield showAcceptClanInviteDialog(clanName, clanTag)
             if result:
-
-                def __acceptedResponseCallback(result):
-                    if result.isSuccess():
-                        showClanJoinAward(clanTag, clanName, clanInfo.getDbID())
-
-                self.__sendADRequest(AcceptInviteCtx(inviteID), CLAN_INVITE_STATES.ACCEPTED, __acceptedResponseCallback)
+                self.__sendADRequest(AcceptInviteCtx(inviteID), CLAN_INVITE_STATES.ACCEPTED, lambda result: None)
         else:
             LOG_WARNING("Couldn't find invite by id = " + str(inviteID))
 
@@ -563,6 +563,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         ctx = AccountInvitesCtx(accountDbID=self.__accountDbID, offset=offset, limit=count, statuses=self.__statuses, getTotalCount=isReset)
         result = yield self._requester.sendRequest(ctx, allowDelay=True)
         invites = ctx.getDataObj(result.data)
+        success = result.isSuccess()
         self.__lastStatus = result.isSuccess()
         if isReset:
             self.__totalCount = ctx.getTotalCount(result.data)
@@ -573,10 +574,18 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
+                if result.isSuccess():
+                    clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
+                else:
+                    clanRatings = {}
+                    success = False
                 ctx = ClansInfoCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
+                if result.isSuccess():
+                    clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
+                else:
+                    clanInfo = {}
+                    success = False
                 for item in clanInfo.itervalues():
                     self.getUserName(item.getLeaderDbID())
 
@@ -590,7 +599,12 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                     temp.add(item.getDbID())
                     self.__senderNameMapping[senderID] = temp
 
-                self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
+                if success:
+                    self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
+                else:
+                    self.__invitesCache = []
+                    self.__lastStatus = False
+                    self.revertOffset()
             else:
                 self.__invitesCache = []
         else:
@@ -714,3 +728,35 @@ class CachedValue(object):
 
     def _now(self):
         return time_utils.getTimestampFromUTC(datetime.utcnow().timetuple())
+
+
+def isStrongholdsEnabled():
+    try:
+        settings = g_lobbyContext.getServerSettings()
+        return settings.isStrongholdsEnabled()
+    except:
+        return False
+
+
+def getStrongholdUrl(urlName):
+    try:
+        return _getWgshHost() + GUI_SETTINGS.stronghold.get(urlName)
+    except (AttributeError, TypeError):
+        LOG_CURRENT_EXCEPTION()
+        return None
+
+    return None
+
+
+def getStrongholdClanCardUrl(clanDBID):
+    return getStrongholdUrl('clanCardUrl') + str(clanDBID)
+
+
+def _getWgshHost():
+    try:
+        return g_lobbyContext.getServerSettings().stronghold.wgshHostUrl
+    except AttributeError:
+        LOG_CURRENT_EXCEPTION()
+        return None
+
+    return None

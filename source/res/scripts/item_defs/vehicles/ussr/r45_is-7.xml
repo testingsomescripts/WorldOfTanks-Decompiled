@@ -1,4 +1,4 @@
-<r45_is-7.xml>
+<R45_IS-7.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -508,7 +508,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <hullPosition>	0.000000 0.896721 0.000000	</hullPosition>
@@ -730,4 +729,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r45_is-7.xml>
+</R45_IS-7.xml>

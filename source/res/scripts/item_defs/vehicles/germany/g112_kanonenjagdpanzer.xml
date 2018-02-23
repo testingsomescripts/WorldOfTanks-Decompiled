@@ -1,4 +1,4 @@
-<g112_kanonenjagdpanzer.xml>
+<G112_KanonenJagdPanzer.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -351,7 +351,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -543,4 +542,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g112_kanonenjagdpanzer.xml>
+</G112_KanonenJagdPanzer.xml>

@@ -1,4 +1,4 @@
-<g99_rhb_waffentrager.xml>
+<G99_RhB_Waffentrager.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -181,7 +181,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -544,7 +543,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -1122,4 +1120,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</g99_rhb_waffentrager.xml>
+</G99_RhB_Waffentrager.xml>

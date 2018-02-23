@@ -1,4 +1,4 @@
-<r98_t44_85.xml>
+<R98_T44_85.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -170,7 +170,6 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	mediumTankDust	</dust>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -402,4 +401,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r98_t44_85.xml>
+</R98_T44_85.xml>

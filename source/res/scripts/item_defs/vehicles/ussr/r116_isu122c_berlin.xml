@@ -1,4 +1,4 @@
-<r116_isu122c_berlin.xml>
+<R116_ISU122C_Berlin.xml>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -355,7 +355,6 @@
       <trackThickness>	-0.0278	</trackThickness>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -538,4 +537,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</r116_isu122c_berlin.xml>
+</R116_ISU122C_Berlin.xml>

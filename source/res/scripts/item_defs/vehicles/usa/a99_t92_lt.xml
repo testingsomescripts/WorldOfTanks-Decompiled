@@ -1,4 +1,4 @@
-<a99_t92_lt.xml>
+<A99_T92_LT.xml>
   <crew>
     <commander>	radioman	</commander>
     <driver></driver>
@@ -196,7 +196,6 @@
       <drivingWheels>	WD_L0 W_L3	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	smallTankDust	</dust>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -500,4 +499,4 @@
     <distanceFactor>	1	</distanceFactor>
     <volumeFactor>	1	</volumeFactor>
   </horns>
-</a99_t92_lt.xml>
+</A99_T92_LT.xml>

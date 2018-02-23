@@ -1,4 +1,4 @@
-<a63_m46_patton_kr.xml>
+<A63_M46_Patton_KR.xml>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -347,7 +347,6 @@
       </trackNodes>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <dust>	largeTankDust	</dust>
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
@@ -380,7 +379,7 @@
       <price>	21800	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_2>	101.6	</armor_2>
+        <armor_2>	127	</armor_2>
         <armor_3>	76.2	</armor_3>
         <armor_4>	76.2	</armor_4>
         <armor_5>	25.4	</armor_5>
@@ -389,7 +388,7 @@
         <armor_8>	0	</armor_8>
         <armor_9>	25.4	</armor_9>
         <armor_10>	76.2	</armor_10>
-        <armor_11>	85.7	</armor_11>
+        <armor_11>	111.1	</armor_11>
         <armor_12>	76.2	</armor_12>
         <armor_13>	88.9	</armor_13>
         <armor_14>	41.3	</armor_14>
@@ -423,13 +422,13 @@
             <maxPitch>	0 10 0.339116 10 0.402778 6 0.597222 6 0.660884 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_3>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <gun>	35	</gun>
           </armor>
@@ -546,4 +545,4 @@
     <volumeFactor>	1	</volumeFactor>
   </horns>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
-</a63_m46_patton_kr.xml>
+</A63_M46_Patton_KR.xml>

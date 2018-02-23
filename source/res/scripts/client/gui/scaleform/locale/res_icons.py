@@ -17,6 +17,8 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLELOADING_TIPS = '../maps/icons/battleLoading/tips'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS = '../maps/icons/tankmen/icons/barracks'
     MAPS_ICONS_VEHPARAMS = '../maps/icons/vehParams'
+    MAPS_ICONS_VEHPARAMS_BIG = '../maps/icons/vehParams/big'
+    MAPS_ICONS_VEHPARAMS_SMALL = '../maps/icons/vehParams/small'
     MAPS_ICONS_ARTEFACT_ADDSLOT = '../maps/icons/artefact/addSlot.png'
     MAPS_ICONS_ARTEFACT_AFTERBURNING = '../maps/icons/artefact/afterburning.png'
     MAPS_ICONS_ARTEFACT_AIMINGSTABILIZER = '../maps/icons/artefact/aimingStabilizer.png'
@@ -85,6 +87,8 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_18 = '../maps/icons/battleTypes/18.png'
     MAPS_ICONS_BATTLETYPES_19 = '../maps/icons/battleTypes/19.png'
     MAPS_ICONS_BATTLETYPES_2 = '../maps/icons/battleTypes/2.png'
+    MAPS_ICONS_BATTLETYPES_20 = '../maps/icons/battleTypes/20.png'
+    MAPS_ICONS_BATTLETYPES_21 = '../maps/icons/battleTypes/21.png'
     MAPS_ICONS_BATTLETYPES_3 = '../maps/icons/battleTypes/3.png'
     MAPS_ICONS_BATTLETYPES_4 = '../maps/icons/battleTypes/4.png'
     MAPS_ICONS_BATTLETYPES_5 = '../maps/icons/battleTypes/5.png'
@@ -115,7 +119,6 @@ class RES_ICONS(object):
     MAPS_ICONS_BOOSTERS_BOOSTER_XP_SMALL_BW = '../maps/icons/boosters/booster_xp_small_bw.png'
     MAPS_ICONS_BOOSTERS_BOOSTER_XP_TT_BIG = '../maps/icons/boosters/booster_xp_tt_big.png'
     MAPS_ICONS_BOOSTERS_NOINFOBG = '../maps/icons/boosters/noInfoBg.png'
-    MAPS_ICONS_BUTTONS_ALERTICON = '../maps/icons/buttons/alertIcon.png'
     MAPS_ICONS_BUTTONS_BOOKMARK = '../maps/icons/buttons/bookmark.png'
     MAPS_ICONS_BUTTONS_CALENDAR = '../maps/icons/buttons/calendar.png'
     MAPS_ICONS_BUTTONS_CHECKMARK = '../maps/icons/buttons/checkmark.png'
@@ -131,34 +134,47 @@ class RES_ICONS(object):
     MAPS_ICONS_BUTTONS_FILTER = '../maps/icons/buttons/filter.png'
     MAPS_ICONS_BUTTONS_FOOTHOLD = '../maps/icons/buttons/foothold.png'
     MAPS_ICONS_BUTTONS_GOLD_EXCHANGING = '../maps/icons/buttons/gold_exchanging.png'
+    MAPS_ICONS_BUTTONS_HORN = '../maps/icons/buttons/Horn.png'
     MAPS_ICONS_BUTTONS_ICONDESTROY = '../maps/icons/buttons/iconDestroy.png'
+    MAPS_ICONS_BUTTONS_ICONDOWN = '../maps/icons/buttons/iconDown.png'
+    MAPS_ICONS_BUTTONS_ICONUP = '../maps/icons/buttons/iconUp.png'
     MAPS_ICONS_BUTTONS_ICONUPGRADE = '../maps/icons/buttons/iconUpgrade.png'
     MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_LEFT = '../maps/icons/buttons/icon_arrow_formation_left.png'
     MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_LEFT_DOUBLE = '../maps/icons/buttons/icon_arrow_formation_left_double.png'
     MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_RIGHT = '../maps/icons/buttons/icon_arrow_formation_right.png'
     MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_RIGHT_DOUBLE = '../maps/icons/buttons/icon_arrow_formation_right_double.png'
     MAPS_ICONS_BUTTONS_ICON_BUTTON_ARROW = '../maps/icons/buttons/icon_button_arrow.png'
+    MAPS_ICONS_BUTTONS_ICON_CHANNELS_HIDE_SYMBOLS = '../maps/icons/buttons/icon_channels_hide_symbols.png'
+    MAPS_ICONS_BUTTONS_ICON_CHANNELS_SHOW_SYMBOLS_097 = '../maps/icons/buttons/icon_channels_show_symbols_097.png'
     MAPS_ICONS_BUTTONS_ICON_TABLE_COMPARISON_CHECKMARK = '../maps/icons/buttons/icon_table_comparison_checkmark.png'
     MAPS_ICONS_BUTTONS_ICON_TABLE_COMPARISON_INHANGAR = '../maps/icons/buttons/icon_table_comparison_inhangar.png'
     MAPS_ICONS_BUTTONS_LEVEL_UP = '../maps/icons/buttons/level_up.png'
     MAPS_ICONS_BUTTONS_MAINMENU = '../maps/icons/buttons/mainMenu.png'
     MAPS_ICONS_BUTTONS_MAITENANCE = '../maps/icons/buttons/maitenance.png'
     MAPS_ICONS_BUTTONS_NEXTPAGE = '../maps/icons/buttons/nextPage.png'
+    MAPS_ICONS_BUTTONS_PAUSE = '../maps/icons/buttons/pause.png'
+    MAPS_ICONS_BUTTONS_PLAY = '../maps/icons/buttons/play.png'
+    MAPS_ICONS_BUTTONS_PLAYERS = '../maps/icons/buttons/Players.png'
     MAPS_ICONS_BUTTONS_PREMIUM = '../maps/icons/buttons/premium.png'
     MAPS_ICONS_BUTTONS_PREVIOUSPAGE = '../maps/icons/buttons/previousPage.png'
     MAPS_ICONS_BUTTONS_REFILL_ACCOUNT = '../maps/icons/buttons/refill_account.png'
+    MAPS_ICONS_BUTTONS_REFRESH = '../maps/icons/buttons/refresh.png'
     MAPS_ICONS_BUTTONS_REMOVE = '../maps/icons/buttons/remove.png'
     MAPS_ICONS_BUTTONS_REMOVEGOLD = '../maps/icons/buttons/removeGold.png'
     MAPS_ICONS_BUTTONS_SEARCH = '../maps/icons/buttons/search.png'
     MAPS_ICONS_BUTTONS_SETTINGS = '../maps/icons/buttons/settings.png'
     MAPS_ICONS_BUTTONS_SMALLATTACKICON = '../maps/icons/buttons/smallAttackIcon.png'
     MAPS_ICONS_BUTTONS_SOUND = '../maps/icons/buttons/sound.png'
+    MAPS_ICONS_BUTTONS_SPEAKER_SMALL = '../maps/icons/buttons/speaker_small.png'
+    MAPS_ICONS_BUTTONS_SPEAKER_SUB = '../maps/icons/buttons/speaker_sub.png'
     MAPS_ICONS_BUTTONS_SWAP = '../maps/icons/buttons/swap.png'
     MAPS_ICONS_BUTTONS_TANK_ICO = '../maps/icons/buttons/Tank-ico.png'
     MAPS_ICONS_BUTTONS_TANKMAN_SKILLS_DROP = '../maps/icons/buttons/tankman_skills_drop.png'
+    MAPS_ICONS_BUTTONS_TIMER = '../maps/icons/buttons/Timer.png'
     MAPS_ICONS_BUTTONS_TRANSPORTING = '../maps/icons/buttons/transporting.png'
     MAPS_ICONS_BUTTONS_TRANSPORTINGARROW = '../maps/icons/buttons/transportingArrow.png'
     MAPS_ICONS_BUTTONS_TUNING = '../maps/icons/buttons/tuning.png'
+    MAPS_ICONS_BUTTONS_VEHICLE_FILTER = '../maps/icons/buttons/Vehicle-Filter.png'
     MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN = '../maps/icons/buttons/vehicleCompareBtn.png'
     MAPS_ICONS_CLANS_CLAN_CARD_HEADER = '../maps/icons/clans/clan_card_header.png'
     MAPS_ICONS_CLANS_DEFAULT_CLAN_ICON128X128 = '../maps/icons/clans/default_clan_icon128x128.png'
@@ -176,6 +192,7 @@ class RES_ICONS(object):
     MAPS_ICONS_ELITEWINDOW_SPG = '../maps/icons/elitewindow/SPG.png'
     MAPS_ICONS_EVENTINFOPANEL_FALLOUTFLAGSEVENT = '../maps/icons/eventInfoPanel/falloutFlagsEvent.png'
     MAPS_ICONS_EVENTINFOPANEL_FALLOUTRESOURCEPOINTSEVENT = '../maps/icons/eventInfoPanel/falloutResourcePointsEvent.png'
+    MAPS_ICONS_FILTERS_DOUBLE_CAROUSEL = '../maps/icons/filters/double_carousel.png'
     MAPS_ICONS_FILTERS_EMPTY = '../maps/icons/filters/empty.png'
     MAPS_ICONS_FILTERS_PRESENCE = '../maps/icons/filters/presence.png'
     MAPS_ICONS_FORMATION_CLAN = '../maps/icons/formation/clan.png'
@@ -264,18 +281,22 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_BGBATTLERESULTICONDRAW_1 = '../maps/icons/library/BgBattleResultIconDraw-1.png'
     MAPS_ICONS_LIBRARY_BGBATTLERESULTICONVICTORY_1 = '../maps/icons/library/BgBattleResultIconVictory-1.png'
     MAPS_ICONS_LIBRARY_BGPOLL_1 = '../maps/icons/library/BgPoll-1.png'
+    MAPS_ICONS_LIBRARY_BONUS_X = '../maps/icons/library/bonus_x.png'
     MAPS_ICONS_LIBRARY_BONUS_X2 = '../maps/icons/library/bonus_x2.png'
     MAPS_ICONS_LIBRARY_BONUS_X3 = '../maps/icons/library/bonus_x3.png'
     MAPS_ICONS_LIBRARY_BONUS_X5 = '../maps/icons/library/bonus_x5.png'
     MAPS_ICONS_LIBRARY_BOOKMARKICON = '../maps/icons/library/bookmarkIcon.png'
     MAPS_ICONS_LIBRARY_CLANBATTLERESULTICON_1 = '../maps/icons/library/ClanBattleResultIcon-1.png'
     MAPS_ICONS_LIBRARY_CLANINVITEICON_1 = '../maps/icons/library/clanInviteIcon-1.png'
+    MAPS_ICONS_LIBRARY_CLOCK = '../maps/icons/library/clock.png'
     MAPS_ICONS_LIBRARY_CLUBINVITEICON_1 = '../maps/icons/library/clubInviteIcon-1.png'
     MAPS_ICONS_LIBRARY_CLUBSINVITEICON_1 = '../maps/icons/library/clubsInviteIcon-1.png'
     MAPS_ICONS_LIBRARY_COMMANDERICON = '../maps/icons/library/commanderIcon.png'
     MAPS_ICONS_LIBRARY_COMPANYINVITEICON_1 = '../maps/icons/library/companyInviteIcon-1.png'
     MAPS_ICONS_LIBRARY_COMPLETE = '../maps/icons/library/complete.png'
     MAPS_ICONS_LIBRARY_COMPLETEDINDICATOR = '../maps/icons/library/completedIndicator.png'
+    MAPS_ICONS_LIBRARY_COUNTER_1 = '../maps/icons/library/counter_1.png'
+    MAPS_ICONS_LIBRARY_COUNTER_2 = '../maps/icons/library/counter_2.png'
     MAPS_ICONS_LIBRARY_CREDITSICON_1 = '../maps/icons/library/CreditsIcon-1.png'
     MAPS_ICONS_LIBRARY_CREDITSICON_2 = '../maps/icons/library/CreditsIcon-2.png'
     MAPS_ICONS_LIBRARY_CREDITSICON_3 = '../maps/icons/library/CreditsIcon-3.png'
@@ -296,12 +317,19 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_EVENTICON_1 = '../maps/icons/library/EventIcon-1.png'
     MAPS_ICONS_LIBRARY_EVENTICONBG_1 = '../maps/icons/library/EventIconBg-1.png'
     MAPS_ICONS_LIBRARY_EVENTINVITEICON_1 = '../maps/icons/library/eventInviteIcon-1.png'
+    MAPS_ICONS_LIBRARY_EXTERNALINVITEICON_1 = '../maps/icons/library/externalInviteIcon-1.png'
     MAPS_ICONS_LIBRARY_FALLOUTVEHICLESALL = '../maps/icons/library/falloutVehiclesAll.png'
     MAPS_ICONS_LIBRARY_FAVORITE = '../maps/icons/library/favorite.png'
+    MAPS_ICONS_LIBRARY_FAVORITE_MEDIUM = '../maps/icons/library/favorite_medium.png'
     MAPS_ICONS_LIBRARY_FAVORITE_SMALL = '../maps/icons/library/favorite_small.png'
     MAPS_ICONS_LIBRARY_FLAKE = '../maps/icons/library/flake.png'
+    MAPS_ICONS_LIBRARY_FORTBATTLEDEFEATBG_1 = '../maps/icons/library/FortBattleDefeatBg-1.png'
     MAPS_ICONS_LIBRARY_FORTBATTLEDEFENCEINVITEICON_1 = '../maps/icons/library/fortBattleDefenceInviteIcon-1.png'
+    MAPS_ICONS_LIBRARY_FORTBATTLEDRAWBG_1 = '../maps/icons/library/FortBattleDrawBg-1.png'
     MAPS_ICONS_LIBRARY_FORTBATTLEOFFENCEINVITEICON_1 = '../maps/icons/library/fortBattleOffenceInviteIcon-1.png'
+    MAPS_ICONS_LIBRARY_FORTBATTLERESULT_1 = '../maps/icons/library/FortBattleResult-1.png'
+    MAPS_ICONS_LIBRARY_FORTBATTLEVICTORYBG_1 = '../maps/icons/library/FortBattleVictoryBg-1.png'
+    MAPS_ICONS_LIBRARY_FORTRESOURCE_1 = '../maps/icons/library/FortResource-1.png'
     MAPS_ICONS_LIBRARY_FREEXPICON_1 = '../maps/icons/library/FreeXpIcon-1.png'
     MAPS_ICONS_LIBRARY_FREEXPICON_2 = '../maps/icons/library/FreeXpIcon-2.png'
     MAPS_ICONS_LIBRARY_FREEXPICON = '../maps/icons/library/FreeXpIcon.png'
@@ -326,10 +354,13 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_GOLDICONBIG = '../maps/icons/library/goldIconBig.png'
     MAPS_ICONS_LIBRARY_GOLDICONINACTIVE_2 = '../maps/icons/library/GoldIconInactive-2.png'
     MAPS_ICONS_LIBRARY_GOLDSTARICON_1 = '../maps/icons/library/GoldStarIcon-1.png'
+    MAPS_ICONS_LIBRARY_ICON_1 = '../maps/icons/library/icon_1.png'
+    MAPS_ICONS_LIBRARY_ICON_2 = '../maps/icons/library/icon_2.png'
     MAPS_ICONS_LIBRARY_ICON_ALERT_32X32 = '../maps/icons/library/icon_alert_32x32.png'
     MAPS_ICONS_LIBRARY_ICON_BUTTON_LIST = '../maps/icons/library/icon_button_list.png'
     MAPS_ICONS_LIBRARY_IGRLOGO = '../maps/icons/library/igrLogo.png'
     MAPS_ICONS_LIBRARY_IGR_32X13 = '../maps/icons/library/igr_32x13.png'
+    MAPS_ICONS_LIBRARY_INFO = '../maps/icons/library/info.png'
     MAPS_ICONS_LIBRARY_INFORMATIONICON_1 = '../maps/icons/library/InformationIcon-1.png'
     MAPS_ICONS_LIBRARY_INFORMATIONICON = '../maps/icons/library/InformationIcon.png'
     MAPS_ICONS_LIBRARY_INPROGRESSICON = '../maps/icons/library/inProgressIcon.png'
@@ -338,6 +369,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_LOCKED = '../maps/icons/library/locked.png'
     MAPS_ICONS_LIBRARY_MESSAGEICON_1 = '../maps/icons/library/MessageIcon-1.png'
     MAPS_ICONS_LIBRARY_MULTYXP = '../maps/icons/library/multyXp.png'
+    MAPS_ICONS_LIBRARY_NEW = '../maps/icons/library/new.png'
     MAPS_ICONS_LIBRARY_NORMALXPICON = '../maps/icons/library/NormalXpIcon.png'
     MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16 = '../maps/icons/library/notif_filters_gift_16x16.png'
     MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16 = '../maps/icons/library/notif_filters_information_16x16.png'
@@ -357,12 +389,16 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_PREMIUM_BIG = '../maps/icons/library/premium_big.png'
     MAPS_ICONS_LIBRARY_PREMIUM_IGR_BIG = '../maps/icons/library/premium_igr_big.png'
     MAPS_ICONS_LIBRARY_PREMIUM_IGR_ICO = '../maps/icons/library/premium_igr_ico.png'
+    MAPS_ICONS_LIBRARY_PREMIUM_IGR_SMALL = '../maps/icons/library/premium_igr_small.png'
     MAPS_ICONS_LIBRARY_PREMIUM_SMALL = '../maps/icons/library/premium_small.png'
     MAPS_ICONS_LIBRARY_PREM_CHECKBOX = '../maps/icons/library/prem_checkbox.png'
     MAPS_ICONS_LIBRARY_PREM_SMALL_ICON = '../maps/icons/library/prem_small_icon.png'
     MAPS_ICONS_LIBRARY_QUEST_ICON = '../maps/icons/library/quest_icon.png'
     MAPS_ICONS_LIBRARY_REDNOTAVAILABLE = '../maps/icons/library/redNotAvailable.png'
     MAPS_ICONS_LIBRARY_REFERRALINVITEICON_1 = '../maps/icons/library/ReferralInviteIcon-1.png'
+    MAPS_ICONS_LIBRARY_RESERVEACTIVATED_1 = '../maps/icons/library/ReserveActivated-1.png'
+    MAPS_ICONS_LIBRARY_SALLYRESULT_1 = '../maps/icons/library/SallyResult-1.png'
+    MAPS_ICONS_LIBRARY_SALLYRESULTBG_1 = '../maps/icons/library/SallyResultBg-1.png'
     MAPS_ICONS_LIBRARY_SEND = '../maps/icons/library/send.png'
     MAPS_ICONS_LIBRARY_SERVERALERT = '../maps/icons/library/serverAlert.png'
     MAPS_ICONS_LIBRARY_SERVERREBOOTCANCELLEDICON_1 = '../maps/icons/library/ServerRebootCancelledIcon-1.png'
@@ -397,6 +433,49 @@ class RES_ICONS(object):
     MAPS_ICONS_LOBBY_FALLOUTBATTLESELECTORBG = '../maps/icons/lobby/falloutBattleSelectorBG.png'
     MAPS_ICONS_LOBBY_ICON_PREMSHOP = '../maps/icons/lobby/icon_premshop.png'
     MAPS_ICONS_LOBBY_REPORT_BUG_BACKGROUND = '../maps/icons/lobby/report-bug-background.png'
+    MAPS_ICONS_MAP_00_TANK_TUTORIAL = '../maps/icons/map/00_tank_tutorial.png'
+    MAPS_ICONS_MAP_01_KARELIA = '../maps/icons/map/01_karelia.png'
+    MAPS_ICONS_MAP_02_MALINOVKA = '../maps/icons/map/02_malinovka.png'
+    MAPS_ICONS_MAP_04_HIMMELSDORF = '../maps/icons/map/04_himmelsdorf.png'
+    MAPS_ICONS_MAP_05_PROHOROVKA = '../maps/icons/map/05_prohorovka.png'
+    MAPS_ICONS_MAP_06_ENSK = '../maps/icons/map/06_ensk.png'
+    MAPS_ICONS_MAP_07_LAKEVILLE = '../maps/icons/map/07_lakeville.png'
+    MAPS_ICONS_MAP_08_RUINBERG = '../maps/icons/map/08_ruinberg.png'
+    MAPS_ICONS_MAP_100_THEPIT = '../maps/icons/map/100_thepit.png'
+    MAPS_ICONS_MAP_101_DDAY = '../maps/icons/map/101_dday.png'
+    MAPS_ICONS_MAP_103_RUINBERG_WINTER = '../maps/icons/map/103_ruinberg_winter.png'
+    MAPS_ICONS_MAP_10_HILLS = '../maps/icons/map/10_hills.png'
+    MAPS_ICONS_MAP_112_EIFFEL_TOWER_CTF = '../maps/icons/map/112_eiffel_tower_ctf.png'
+    MAPS_ICONS_MAP_114_CZECH = '../maps/icons/map/114_czech.png'
+    MAPS_ICONS_MAP_11_MUROVANKA = '../maps/icons/map/11_murovanka.png'
+    MAPS_ICONS_MAP_13_ERLENBERG = '../maps/icons/map/13_erlenberg.png'
+    MAPS_ICONS_MAP_14_SIEGFRIED_LINE = '../maps/icons/map/14_siegfried_line.png'
+    MAPS_ICONS_MAP_17_MUNCHEN = '../maps/icons/map/17_munchen.png'
+    MAPS_ICONS_MAP_18_CLIFF = '../maps/icons/map/18_cliff.png'
+    MAPS_ICONS_MAP_19_MONASTERY = '../maps/icons/map/19_monastery.png'
+    MAPS_ICONS_MAP_22_SLOUGH = '../maps/icons/map/22_slough.png'
+    MAPS_ICONS_MAP_23_WESTFELD = '../maps/icons/map/23_westfeld.png'
+    MAPS_ICONS_MAP_28_DESERT = '../maps/icons/map/28_desert.png'
+    MAPS_ICONS_MAP_29_EL_HALLOUF = '../maps/icons/map/29_el_hallouf.png'
+    MAPS_ICONS_MAP_31_AIRFIELD = '../maps/icons/map/31_airfield.png'
+    MAPS_ICONS_MAP_33_FJORD = '../maps/icons/map/33_fjord.png'
+    MAPS_ICONS_MAP_34_REDSHIRE = '../maps/icons/map/34_redshire.png'
+    MAPS_ICONS_MAP_35_STEPPES = '../maps/icons/map/35_steppes.png'
+    MAPS_ICONS_MAP_36_FISHING_BAY = '../maps/icons/map/36_fishing_bay.png'
+    MAPS_ICONS_MAP_37_CAUCASUS = '../maps/icons/map/37_caucasus.png'
+    MAPS_ICONS_MAP_38_MANNERHEIM_LINE = '../maps/icons/map/38_mannerheim_line.png'
+    MAPS_ICONS_MAP_44_NORTH_AMERICA = '../maps/icons/map/44_north_america.png'
+    MAPS_ICONS_MAP_45_NORTH_AMERICA = '../maps/icons/map/45_north_america.png'
+    MAPS_ICONS_MAP_47_CANADA_A = '../maps/icons/map/47_canada_a.png'
+    MAPS_ICONS_MAP_59_ASIA_GREAT_WALL = '../maps/icons/map/59_asia_great_wall.png'
+    MAPS_ICONS_MAP_63_TUNDRA = '../maps/icons/map/63_tundra.png'
+    MAPS_ICONS_MAP_73_ASIA_KOREA = '../maps/icons/map/73_asia_korea.png'
+    MAPS_ICONS_MAP_83_KHARKIV = '../maps/icons/map/83_kharkiv.png'
+    MAPS_ICONS_MAP_84_WINTER = '../maps/icons/map/84_winter.png'
+    MAPS_ICONS_MAP_86_HIMMELSDORF_WINTER = '../maps/icons/map/86_himmelsdorf_winter.png'
+    MAPS_ICONS_MAP_92_STALINGRAD = '../maps/icons/map/92_stalingrad.png'
+    MAPS_ICONS_MAP_95_LOST_CITY = '../maps/icons/map/95_lost_city.png'
+    MAPS_ICONS_MAP_96_PROHOROVKA_DEFENSE = '../maps/icons/map/96_prohorovka_defense.png'
     MAPS_ICONS_MESSENGER_CONTACTCONFIRMNEEDED = '../maps/icons/messenger/contactConfirmNeeded.png'
     MAPS_ICONS_MESSENGER_CONTACTIGNORED = '../maps/icons/messenger/contactIgnored.png'
     MAPS_ICONS_MESSENGER_CONTACTMSGSOFF = '../maps/icons/messenger/contactMsgsOff.png'
@@ -429,6 +508,7 @@ class RES_ICONS(object):
     MAPS_ICONS_MODULES_DISMANTLEDEVICE = '../maps/icons/modules/dismantleDevice.png'
     MAPS_ICONS_MODULES_ENGINE = '../maps/icons/modules/engine.png'
     MAPS_ICONS_MODULES_GUN = '../maps/icons/modules/gun.png'
+    MAPS_ICONS_MODULES_HYDRAULICCHASSISICON = '../maps/icons/modules/hydraulicChassisIcon.png'
     MAPS_ICONS_MODULES_MAGAZINEGUNICON = '../maps/icons/modules/magazineGunIcon.png'
     MAPS_ICONS_MODULES_RADIO = '../maps/icons/modules/radio.png'
     MAPS_ICONS_MODULES_TOWER = '../maps/icons/modules/tower.png'
@@ -452,12 +532,14 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_AWARDS_BACKGROUND = '../maps/icons/quests/awards_background.png'
     MAPS_ICONS_QUESTS_CLASSICFALLOUTAWARDBACK = '../maps/icons/quests/classicFalloutAwardBack.png'
     MAPS_ICONS_QUESTS_HTAWARDBACK = '../maps/icons/quests/HTAwardBack.png'
+    MAPS_ICONS_QUESTS_ICON_BATTLE_MISSIONS_PRIZE_TOKEN = '../maps/icons/quests/icon_battle_missions_prize_token.png'
     MAPS_ICONS_QUESTS_INBATTLEHINT = '../maps/icons/quests/inBattleHint.png'
     MAPS_ICONS_QUESTS_LTAWARDBACK = '../maps/icons/quests/LTAwardBack.png'
     MAPS_ICONS_QUESTS_MTAWARDBACK = '../maps/icons/quests/MTAwardBack.png'
     MAPS_ICONS_QUESTS_MULTITEAMFALLOUTAWARDBACK = '../maps/icons/quests/multiteamFalloutAwardBack.png'
     MAPS_ICONS_QUESTS_PROMOSCREEN = '../maps/icons/quests/promoscreen.png'
     MAPS_ICONS_QUESTS_PROMOSCREEN_FALLOUT = '../maps/icons/quests/promoscreen_fallout.png'
+    MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER = '../maps/icons/quests/questTooltipHeader.png'
     MAPS_ICONS_QUESTS_SEASONSVIEWBG = '../maps/icons/quests/seasonsViewBg.png'
     MAPS_ICONS_QUESTS_SPGAWARDBACK = '../maps/icons/quests/SPGAwardBack.png'
     MAPS_ICONS_QUESTS_TANKMANFEMALEGRAY = '../maps/icons/quests/tankmanFemaleGray.png'
@@ -476,9 +558,16 @@ class RES_ICONS(object):
     MAPS_ICONS_REFERRAL_TANKMANMALE = '../maps/icons/referral/tankmanMale.png'
     MAPS_ICONS_SETTINGS_ACOUSTICS = '../maps/icons/settings/acoustics.png'
     MAPS_ICONS_SETTINGS_COMMANDER_SIXTHSENSE = '../maps/icons/settings/commander_sixthSense.png'
+    MAPS_ICONS_SETTINGS_DEFENDBASETOOLTIP = '../maps/icons/settings/defendBaseTooltip.png'
+    MAPS_ICONS_SETTINGS_FOLLOWMETOOLTIP = '../maps/icons/settings/followMeTooltip.png'
     MAPS_ICONS_SETTINGS_HEADPHONES = '../maps/icons/settings/headphones.png'
     MAPS_ICONS_SETTINGS_LAPTOP = '../maps/icons/settings/laptop.png'
     MAPS_ICONS_SETTINGS_MINIMAPCIRCLESTOOLTIP = '../maps/icons/settings/minimapCirclesTooltip.png'
+    MAPS_ICONS_SETTINGS_NEEDHELPTOOLTIP = '../maps/icons/settings/needHelpTooltip.png'
+    MAPS_ICONS_SETTINGS_RESETTOOLTIP = '../maps/icons/settings/resetTooltip.png'
+    MAPS_ICONS_SETTINGS_STOPICONTOOLTIP = '../maps/icons/settings/stopIconTooltip.png'
+    MAPS_ICONS_SETTINGS_SUPPORTTOOLTIP = '../maps/icons/settings/supportTooltip.png'
+    MAPS_ICONS_SETTINGS_TURNBACKTOOLTIP = '../maps/icons/settings/turnBackTooltip.png'
     MAPS_ICONS_SHELL_ARMOR_PIERCING = '../maps/icons/shell/ARMOR_PIERCING.png'
     MAPS_ICONS_SHELL_ARMOR_PIERCING_CR = '../maps/icons/shell/ARMOR_PIERCING_CR.png'
     MAPS_ICONS_SHELL_ARMOR_PIERCING_HE = '../maps/icons/shell/ARMOR_PIERCING_HE.png'
@@ -500,7 +589,9 @@ class RES_ICONS(object):
     MAPS_ICONS_STATISTIC_RATING24 = '../maps/icons/statistic/rating24.png'
     MAPS_ICONS_STATISTIC_RATIO = '../maps/icons/statistic/ratio.png'
     MAPS_ICONS_STATISTIC_WINS24 = '../maps/icons/statistic/wins24.png'
+    MAPS_ICONS_STATISTIC_WINS24_GRAY = '../maps/icons/statistic/wins24_gray.png'
     MAPS_ICONS_TOOLTIP_ASSIST = '../maps/icons/tooltip/assist.png'
+    MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL = '../maps/icons/tooltip/asterisk_optional.png'
     MAPS_ICONS_TOOLTIP_COMPLEX_EQUIPMENT = '../maps/icons/tooltip/complex_equipment.png'
     MAPS_ICONS_TOOLTIP_CRITS = '../maps/icons/tooltip/crits.png'
     MAPS_ICONS_TOOLTIP_DAMAGE = '../maps/icons/tooltip/damage.png'
@@ -517,35 +608,7 @@ class RES_ICONS(object):
     MAPS_ICONS_VEHICLETYPES_LIGHTTANK = '../maps/icons/vehicleTypes/lightTank.png'
     MAPS_ICONS_VEHICLETYPES_MEDIUMTANK = '../maps/icons/vehicleTypes/mediumTank.png'
     MAPS_ICONS_VEHICLETYPES_SPG = '../maps/icons/vehicleTypes/SPG.png'
-    MAPS_ICONS_VEHPARAMS_AIMINGTIME = '../maps/icons/vehParams/aimingTime.png'
-    MAPS_ICONS_VEHPARAMS_CHASSISROTATIONSPEED = '../maps/icons/vehParams/chassisRotationSpeed.png'
-    MAPS_ICONS_VEHPARAMS_CIRCULARVISIONRADIUS = '../maps/icons/vehParams/circularVisionRadius.png'
-    MAPS_ICONS_VEHPARAMS_CLIPFIRERATE = '../maps/icons/vehParams/clipFireRate.png'
-    MAPS_ICONS_VEHPARAMS_DAMAGE = '../maps/icons/vehParams/damage.png'
-    MAPS_ICONS_VEHPARAMS_DAMAGEAVGPERMINUTE = '../maps/icons/vehParams/damageAvgPerMinute.png'
-    MAPS_ICONS_VEHPARAMS_ENGINEPOWER = '../maps/icons/vehParams/enginePower.png'
-    MAPS_ICONS_VEHPARAMS_ENGINEPOWERPERTON = '../maps/icons/vehParams/enginePowerPerTon.png'
-    MAPS_ICONS_VEHPARAMS_GUNROTATIONSPEED = '../maps/icons/vehParams/gunRotationSpeed.png'
-    MAPS_ICONS_VEHPARAMS_GUNYAWLIMITS = '../maps/icons/vehParams/gunYawLimits.png'
-    MAPS_ICONS_VEHPARAMS_HULLARMOR = '../maps/icons/vehParams/hullArmor.png'
     MAPS_ICONS_VEHPARAMS_ICON_DECREASE = '../maps/icons/vehParams/icon_decrease.png'
-    MAPS_ICONS_VEHPARAMS_ICON_INCREASE = '../maps/icons/vehParams/icon_increase.png'
-    MAPS_ICONS_VEHPARAMS_INVISFIREPENALTY = '../maps/icons/vehParams/invisFirePenalty.png'
-    MAPS_ICONS_VEHPARAMS_INVISIBILITY = '../maps/icons/vehParams/invisibility.png'
-    MAPS_ICONS_VEHPARAMS_INVISIBILITYMOVINGFACTOR = '../maps/icons/vehParams/invisibilityMovingFactor.png'
-    MAPS_ICONS_VEHPARAMS_INVISIBILITYSTILLFACTOR = '../maps/icons/vehParams/invisibilityStillFactor.png'
-    MAPS_ICONS_VEHPARAMS_MAXHEALTH = '../maps/icons/vehParams/maxHealth.png'
-    MAPS_ICONS_VEHPARAMS_PIERCINGPOWER = '../maps/icons/vehParams/piercingPower.png'
-    MAPS_ICONS_VEHPARAMS_PITCHLIMITS = '../maps/icons/vehParams/pitchLimits.png'
-    MAPS_ICONS_VEHPARAMS_RADIODISTANCE = '../maps/icons/vehParams/radioDistance.png'
-    MAPS_ICONS_VEHPARAMS_RELOADTIME = '../maps/icons/vehParams/reloadTime.png'
-    MAPS_ICONS_VEHPARAMS_RELOADTIMESECS = '../maps/icons/vehParams/reloadTimeSecs.png'
-    MAPS_ICONS_VEHPARAMS_SHOTDISPERSIONANGLE = '../maps/icons/vehParams/shotDispersionAngle.png'
-    MAPS_ICONS_VEHPARAMS_SPEEDLIMITS = '../maps/icons/vehParams/speedLimits.png'
-    MAPS_ICONS_VEHPARAMS_TURRETARMOR = '../maps/icons/vehParams/turretArmor.png'
-    MAPS_ICONS_VEHPARAMS_TURRETROTATIONSPEED = '../maps/icons/vehParams/turretRotationSpeed.png'
-    MAPS_ICONS_VEHPARAMS_TURRETYAWLIMITS = '../maps/icons/vehParams/turretYawLimits.png'
-    MAPS_ICONS_VEHPARAMS_VEHICLEWEIGHT = '../maps/icons/vehParams/vehicleWeight.png'
     MAPS_ICONS_WINDOWS_FALLOUT_CONGRATULATIONS_BG = '../maps/icons/windows/fallout_congratulations_bg.png'
     MAPS_ICONS_WINDOWS_MINICLIENT_SQUAD_WINDOW_BACKGROUND = '../maps/icons/windows/miniclient_squad_window_background.png'
     MAPS_ICONS_WINDOWS_SWITCH_PERIPHERY_WINDOW_BG = '../maps/icons/windows/switch_periphery_window_bg.png'
@@ -636,35 +699,37 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLELOADING_TIPS_TIP95 = '../maps/icons/battleLoading/tips/tip95.png'
     MAPS_ICONS_BATTLELOADING_TIPS_TIP99 = '../maps/icons/battleLoading/tips/tip99.png'
     MAPS_ICONS_BATTLETYPES_40X40_BATTLETEACHING = '../maps/icons/battleTypes/40x40/battleTeaching.png'
-    MAPS_ICONS_BATTLETYPES_40X40_COMPANYLIST = '../maps/icons/battleTypes/40x40/companyList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_COMPANIESLIST = '../maps/icons/battleTypes/40x40/companiesList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_ESPORT = '../maps/icons/battleTypes/40x40/eSport.png'
     MAPS_ICONS_BATTLETYPES_40X40_EVENT = '../maps/icons/battleTypes/40x40/event.png'
     MAPS_ICONS_BATTLETYPES_40X40_EVENTSQUAD = '../maps/icons/battleTypes/40x40/eventSquad.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT = '../maps/icons/battleTypes/40x40/fallout.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_CLASSIC = '../maps/icons/battleTypes/40x40/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/40x40/fallout_multiteam.png'
+    MAPS_ICONS_BATTLETYPES_40X40_FORT = '../maps/icons/battleTypes/40x40/fort.png'
     MAPS_ICONS_BATTLETYPES_40X40_HISTORICAL = '../maps/icons/battleTypes/40x40/historical.png'
-    MAPS_ICONS_BATTLETYPES_40X40_JOINRANDOMQUEUE = '../maps/icons/battleTypes/40x40/joinRandomQueue.png'
-    MAPS_ICONS_BATTLETYPES_40X40_SORTIE = '../maps/icons/battleTypes/40x40/sortie.png'
-    MAPS_ICONS_BATTLETYPES_40X40_SPECBATTLELIST = '../maps/icons/battleTypes/40x40/specBattleList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_RANDOM = '../maps/icons/battleTypes/40x40/random.png'
+    MAPS_ICONS_BATTLETYPES_40X40_SPECBATTLESLIST = '../maps/icons/battleTypes/40x40/specBattlesList.png'
     MAPS_ICONS_BATTLETYPES_40X40_SQUAD = '../maps/icons/battleTypes/40x40/squad.png'
-    MAPS_ICONS_BATTLETYPES_40X40_TRAININGLIST = '../maps/icons/battleTypes/40x40/trainingList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_STRONGHOLDSBATTLESLIST = '../maps/icons/battleTypes/40x40/strongholdsBattlesList.png'
+    MAPS_ICONS_BATTLETYPES_40X40_TRAININGSLIST = '../maps/icons/battleTypes/40x40/trainingsList.png'
     MAPS_ICONS_BATTLETYPES_40X40_TUTORIAL = '../maps/icons/battleTypes/40x40/tutorial.png'
-    MAPS_ICONS_BATTLETYPES_40X40_UNIT = '../maps/icons/battleTypes/40x40/unit.png'
     MAPS_ICONS_BATTLETYPES_64X64_BATTLETEACHING = '../maps/icons/battleTypes/64x64/battleTeaching.png'
-    MAPS_ICONS_BATTLETYPES_64X64_COMPANYLIST = '../maps/icons/battleTypes/64x64/companyList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_COMPANIESLIST = '../maps/icons/battleTypes/64x64/companiesList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_ESPORT = '../maps/icons/battleTypes/64x64/eSport.png'
     MAPS_ICONS_BATTLETYPES_64X64_EVENT = '../maps/icons/battleTypes/64x64/event.png'
     MAPS_ICONS_BATTLETYPES_64X64_EVENTSQUAD = '../maps/icons/battleTypes/64x64/eventSquad.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT = '../maps/icons/battleTypes/64x64/fallout.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_CLASSIC = '../maps/icons/battleTypes/64x64/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/64x64/fallout_multiteam.png'
+    MAPS_ICONS_BATTLETYPES_64X64_FORT = '../maps/icons/battleTypes/64x64/fort.png'
     MAPS_ICONS_BATTLETYPES_64X64_HISTORICAL = '../maps/icons/battleTypes/64x64/historical.png'
-    MAPS_ICONS_BATTLETYPES_64X64_JOINRANDOMQUEUE = '../maps/icons/battleTypes/64x64/joinRandomQueue.png'
-    MAPS_ICONS_BATTLETYPES_64X64_SORTIE = '../maps/icons/battleTypes/64x64/sortie.png'
-    MAPS_ICONS_BATTLETYPES_64X64_SPECBATTLELIST = '../maps/icons/battleTypes/64x64/specBattleList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_RANDOM = '../maps/icons/battleTypes/64x64/random.png'
+    MAPS_ICONS_BATTLETYPES_64X64_SPECBATTLESLIST = '../maps/icons/battleTypes/64x64/specBattlesList.png'
     MAPS_ICONS_BATTLETYPES_64X64_SQUAD = '../maps/icons/battleTypes/64x64/squad.png'
-    MAPS_ICONS_BATTLETYPES_64X64_TRAININGLIST = '../maps/icons/battleTypes/64x64/trainingList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_STRONGHOLDSBATTLESLIST = '../maps/icons/battleTypes/64x64/strongholdsBattlesList.png'
+    MAPS_ICONS_BATTLETYPES_64X64_TRAININGSLIST = '../maps/icons/battleTypes/64x64/trainingsList.png'
     MAPS_ICONS_BATTLETYPES_64X64_TUTORIAL = '../maps/icons/battleTypes/64x64/tutorial.png'
-    MAPS_ICONS_BATTLETYPES_64X64_UNIT = '../maps/icons/battleTypes/64x64/unit.png'
     MAPS_ICONS_BUTTONS_SOCIAL_FACEBOOK = '../maps/icons/buttons/social/facebook.png'
     MAPS_ICONS_BUTTONS_SOCIAL_GOOGLE = '../maps/icons/buttons/social/google.png'
     MAPS_ICONS_BUTTONS_SOCIAL_NAVER = '../maps/icons/buttons/social/naver.png'
@@ -682,6 +747,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_FRAG = '../maps/icons/buttons/tab_sort_button/frag.png'
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_HEALTH = '../maps/icons/buttons/tab_sort_button/health.png'
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL = '../maps/icons/buttons/tab_sort_button/level.png'
+    MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL_6_8 = '../maps/icons/buttons/tab_sort_button/level_6_8.png'
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_MEDAL = '../maps/icons/buttons/tab_sort_button/medal.png'
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_NOTAVAILABLE = '../maps/icons/buttons/tab_sort_button/notAvailable.png'
     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK = '../maps/icons/buttons/tab_sort_button/ok.png'
@@ -767,6 +833,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_BONUSES_TANKMENXP = '../maps/icons/library/bonuses/tankmenXP.png'
     MAPS_ICONS_LIBRARY_BONUSES_TANKWOMEN = '../maps/icons/library/bonuses/tankwomen.png'
     MAPS_ICONS_LIBRARY_BONUSES_TOKENS = '../maps/icons/library/bonuses/tokens.png'
+    MAPS_ICONS_LIBRARY_BONUSES_VEHICLEDISCOUNT = '../maps/icons/library/bonuses/vehicleDiscount.png'
     MAPS_ICONS_LIBRARY_BONUSES_VEHICLES = '../maps/icons/library/bonuses/vehicles.png'
     MAPS_ICONS_LIBRARY_BONUSES_VEHICLES_RENT = '../maps/icons/library/bonuses/vehicles_rent.png'
     MAPS_ICONS_LIBRARY_CRITS_AMMOBAYCRITICALSMALL = '../maps/icons/library/crits/ammoBayCriticalSmall.png'
@@ -794,10 +861,8 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CYBERSPORT_CLOCKICON = '../maps/icons/library/cybersport/clockIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ICONDOWN = '../maps/icons/library/cybersport/iconDown.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ICONUP = '../maps/icons/library/cybersport/iconUp.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDERICON = '../maps/icons/library/cybersport/ladderIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_LOCKICON = '../maps/icons/library/cybersport/lockIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_NOTAVAILABLEICON = '../maps/icons/library/cybersport/notAvailableIcon.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_RANKEDICON = '../maps/icons/library/cybersport/rankedIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_REFRESHICON = '../maps/icons/library/cybersport/refreshIcon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_RIBBON = '../maps/icons/library/cybersport/ribbon.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_TANKICON = '../maps/icons/library/cybersport/tankIcon.png'
@@ -857,14 +922,23 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_FORTIFICATION_PROMRES_ICON4POSTBATTLE_TRANSP = '../maps/icons/library/fortification/promres-icon4postbattle_transp.png'
     MAPS_ICONS_LIBRARY_FORTIFICATION_RESERVE_INPROGRESS_24 = '../maps/icons/library/fortification/reserve_inprogress_24.png'
     MAPS_ICONS_LIBRARY_FORTIFICATION_USSR_T62A = '../maps/icons/library/fortification/ussr-T62A.png'
+    MAPS_ICONS_LIBRARY_MARKSONGUN_MARK_1 = '../maps/icons/library/marksOnGun/mark_1.png'
+    MAPS_ICONS_LIBRARY_MARKSONGUN_MARK_2 = '../maps/icons/library/marksOnGun/mark_2.png'
+    MAPS_ICONS_LIBRARY_MARKSONGUN_MARK_3 = '../maps/icons/library/marksOnGun/mark_3.png'
+    MAPS_ICONS_LIBRARY_OUTLINE_BEGINNER = '../maps/icons/library/outline/beginner.png'
     MAPS_ICONS_LIBRARY_OUTLINE_PLUS = '../maps/icons/library/outline/plus.png'
+    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE = '../maps/icons/library/outline/quests_all_done.png'
     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE = '../maps/icons/library/outline/quests_available.png'
     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED = '../maps/icons/library/outline/quests_disabled.png'
     MAPS_ICONS_LIBRARY_OUTLINE_REWARD = '../maps/icons/library/outline/reward.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1 = '../maps/icons/library/proficiency/class_icons_1.png'
+    MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1_SMALL = '../maps/icons/library/proficiency/class_icons_1_small.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_2 = '../maps/icons/library/proficiency/class_icons_2.png'
+    MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_2_SMALL = '../maps/icons/library/proficiency/class_icons_2_small.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_3 = '../maps/icons/library/proficiency/class_icons_3.png'
+    MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_3_SMALL = '../maps/icons/library/proficiency/class_icons_3_small.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_4 = '../maps/icons/library/proficiency/class_icons_4.png'
+    MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_4_SMALL = '../maps/icons/library/proficiency/class_icons_4_small.png'
     MAPS_ICONS_LIBRARY_STORE_CONDITION_OFF = '../maps/icons/library/store/condition_off.png'
     MAPS_ICONS_LIBRARY_STORE_CONDITION_ON = '../maps/icons/library/store/condition_on.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_BUSY = '../maps/icons/library/userStatus/busy.png'
@@ -877,6 +951,141 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_USERSTATUS_WOTG = '../maps/icons/library/userStatus/wotg.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_WOWP = '../maps/icons/library/userStatus/wowp.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_WOWS = '../maps/icons/library/userStatus/wows.png'
+    MAPS_ICONS_MAP_BATTLELOADING_00_TANK_TUTORIAL = '../maps/icons/map/battleLoading/00_tank_tutorial.png'
+    MAPS_ICONS_MAP_BATTLELOADING_01_KARELIA = '../maps/icons/map/battleLoading/01_karelia.png'
+    MAPS_ICONS_MAP_BATTLELOADING_02_MALINOVKA = '../maps/icons/map/battleLoading/02_malinovka.png'
+    MAPS_ICONS_MAP_BATTLELOADING_04_HIMMELSDORF = '../maps/icons/map/battleLoading/04_himmelsdorf.png'
+    MAPS_ICONS_MAP_BATTLELOADING_05_PROHOROVKA = '../maps/icons/map/battleLoading/05_prohorovka.png'
+    MAPS_ICONS_MAP_BATTLELOADING_06_ENSK = '../maps/icons/map/battleLoading/06_ensk.png'
+    MAPS_ICONS_MAP_BATTLELOADING_07_LAKEVILLE = '../maps/icons/map/battleLoading/07_lakeville.png'
+    MAPS_ICONS_MAP_BATTLELOADING_08_RUINBERG = '../maps/icons/map/battleLoading/08_ruinberg.png'
+    MAPS_ICONS_MAP_BATTLELOADING_100_THEPIT = '../maps/icons/map/battleLoading/100_thepit.png'
+    MAPS_ICONS_MAP_BATTLELOADING_101_DDAY = '../maps/icons/map/battleLoading/101_dday.png'
+    MAPS_ICONS_MAP_BATTLELOADING_103_RUINBERG_WINTER = '../maps/icons/map/battleLoading/103_ruinberg_winter.png'
+    MAPS_ICONS_MAP_BATTLELOADING_10_HILLS = '../maps/icons/map/battleLoading/10_hills.png'
+    MAPS_ICONS_MAP_BATTLELOADING_112_EIFFEL_TOWER_CTF = '../maps/icons/map/battleLoading/112_eiffel_tower_ctf.png'
+    MAPS_ICONS_MAP_BATTLELOADING_114_CZECH = '../maps/icons/map/battleLoading/114_czech.png'
+    MAPS_ICONS_MAP_BATTLELOADING_11_MUROVANKA = '../maps/icons/map/battleLoading/11_murovanka.png'
+    MAPS_ICONS_MAP_BATTLELOADING_13_ERLENBERG = '../maps/icons/map/battleLoading/13_erlenberg.png'
+    MAPS_ICONS_MAP_BATTLELOADING_14_SIEGFRIED_LINE = '../maps/icons/map/battleLoading/14_siegfried_line.png'
+    MAPS_ICONS_MAP_BATTLELOADING_17_MUNCHEN = '../maps/icons/map/battleLoading/17_munchen.png'
+    MAPS_ICONS_MAP_BATTLELOADING_18_CLIFF = '../maps/icons/map/battleLoading/18_cliff.png'
+    MAPS_ICONS_MAP_BATTLELOADING_19_MONASTERY = '../maps/icons/map/battleLoading/19_monastery.png'
+    MAPS_ICONS_MAP_BATTLELOADING_22_SLOUGH = '../maps/icons/map/battleLoading/22_slough.png'
+    MAPS_ICONS_MAP_BATTLELOADING_23_WESTFELD = '../maps/icons/map/battleLoading/23_westfeld.png'
+    MAPS_ICONS_MAP_BATTLELOADING_28_DESERT = '../maps/icons/map/battleLoading/28_desert.png'
+    MAPS_ICONS_MAP_BATTLELOADING_29_EL_HALLOUF = '../maps/icons/map/battleLoading/29_el_hallouf.png'
+    MAPS_ICONS_MAP_BATTLELOADING_31_AIRFIELD = '../maps/icons/map/battleLoading/31_airfield.png'
+    MAPS_ICONS_MAP_BATTLELOADING_33_FJORD = '../maps/icons/map/battleLoading/33_fjord.png'
+    MAPS_ICONS_MAP_BATTLELOADING_34_REDSHIRE = '../maps/icons/map/battleLoading/34_Redshire.png'
+    MAPS_ICONS_MAP_BATTLELOADING_35_STEPPES = '../maps/icons/map/battleLoading/35_steppes.png'
+    MAPS_ICONS_MAP_BATTLELOADING_36_FISHING_BAY = '../maps/icons/map/battleLoading/36_fishing_bay.png'
+    MAPS_ICONS_MAP_BATTLELOADING_37_CAUCASUS = '../maps/icons/map/battleLoading/37_caucasus.png'
+    MAPS_ICONS_MAP_BATTLELOADING_38_MANNERHEIM_LINE = '../maps/icons/map/battleLoading/38_mannerheim_line.png'
+    MAPS_ICONS_MAP_BATTLELOADING_44_NORTH_AMERICA = '../maps/icons/map/battleLoading/44_north_america.png'
+    MAPS_ICONS_MAP_BATTLELOADING_45_NORTH_AMERICA = '../maps/icons/map/battleLoading/45_north_america.png'
+    MAPS_ICONS_MAP_BATTLELOADING_47_CANADA_A = '../maps/icons/map/battleLoading/47_canada_a.png'
+    MAPS_ICONS_MAP_BATTLELOADING_59_ASIA_GREAT_WALL = '../maps/icons/map/battleLoading/59_asia_great_wall.png'
+    MAPS_ICONS_MAP_BATTLELOADING_63_TUNDRA = '../maps/icons/map/battleLoading/63_tundra.png'
+    MAPS_ICONS_MAP_BATTLELOADING_73_ASIA_KOREA = '../maps/icons/map/battleLoading/73_Asia_Korea.png'
+    MAPS_ICONS_MAP_BATTLELOADING_83_KHARKIV = '../maps/icons/map/battleLoading/83_kharkiv.png'
+    MAPS_ICONS_MAP_BATTLELOADING_84_WINTER = '../maps/icons/map/battleLoading/84_winter.png'
+    MAPS_ICONS_MAP_BATTLELOADING_86_HIMMELSDORF_WINTER = '../maps/icons/map/battleLoading/86_himmelsdorf_winter.png'
+    MAPS_ICONS_MAP_BATTLELOADING_92_STALINGRAD = '../maps/icons/map/battleLoading/92_stalingrad.png'
+    MAPS_ICONS_MAP_BATTLELOADING_95_LOST_CITY = '../maps/icons/map/battleLoading/95_lost_city.png'
+    MAPS_ICONS_MAP_BATTLELOADING_96_PROHOROVKA_DEFENSE = '../maps/icons/map/battleLoading/96_prohorovka_defense.png'
+    MAPS_ICONS_MAP_BATTLELOADING_NOIMAGE = '../maps/icons/map/battleLoading/noImage.png'
+    MAPS_ICONS_MAP_ENTRY_00_CAMERA_WITH_DIRECTION = '../maps/icons/map/entry/00_camera_with_direction.png'
+    MAPS_ICONS_MAP_ENTRY_01_SHOT_SECTOR_LINE = '../maps/icons/map/entry/01_shot_sector_line.png'
+    MAPS_ICONS_MAP_SMALL_00_TANK_TUTORIAL = '../maps/icons/map/small/00_tank_tutorial.png'
+    MAPS_ICONS_MAP_SMALL_01_KARELIA = '../maps/icons/map/small/01_karelia.png'
+    MAPS_ICONS_MAP_SMALL_02_MALINOVKA = '../maps/icons/map/small/02_malinovka.png'
+    MAPS_ICONS_MAP_SMALL_04_HIMMELSDORF = '../maps/icons/map/small/04_himmelsdorf.png'
+    MAPS_ICONS_MAP_SMALL_05_PROHOROVKA = '../maps/icons/map/small/05_prohorovka.png'
+    MAPS_ICONS_MAP_SMALL_06_ENSK = '../maps/icons/map/small/06_ensk.png'
+    MAPS_ICONS_MAP_SMALL_07_LAKEVILLE = '../maps/icons/map/small/07_lakeville.png'
+    MAPS_ICONS_MAP_SMALL_08_RUINBERG = '../maps/icons/map/small/08_ruinberg.png'
+    MAPS_ICONS_MAP_SMALL_100_THEPIT = '../maps/icons/map/small/100_thepit.png'
+    MAPS_ICONS_MAP_SMALL_101_DDAY = '../maps/icons/map/small/101_dday.png'
+    MAPS_ICONS_MAP_SMALL_103_RUINBERG_WINTER = '../maps/icons/map/small/103_ruinberg_winter.png'
+    MAPS_ICONS_MAP_SMALL_10_HILLS = '../maps/icons/map/small/10_hills.png'
+    MAPS_ICONS_MAP_SMALL_112_EIFFEL_TOWER_CTF = '../maps/icons/map/small/112_eiffel_tower_ctf.png'
+    MAPS_ICONS_MAP_SMALL_114_CZECH = '../maps/icons/map/small/114_czech.png'
+    MAPS_ICONS_MAP_SMALL_11_MUROVANKA = '../maps/icons/map/small/11_murovanka.png'
+    MAPS_ICONS_MAP_SMALL_13_ERLENBERG = '../maps/icons/map/small/13_erlenberg.png'
+    MAPS_ICONS_MAP_SMALL_14_SIEGFRIED_LINE = '../maps/icons/map/small/14_siegfried_line.png'
+    MAPS_ICONS_MAP_SMALL_17_MUNCHEN = '../maps/icons/map/small/17_munchen.png'
+    MAPS_ICONS_MAP_SMALL_18_CLIFF = '../maps/icons/map/small/18_cliff.png'
+    MAPS_ICONS_MAP_SMALL_19_MONASTERY = '../maps/icons/map/small/19_monastery.png'
+    MAPS_ICONS_MAP_SMALL_22_SLOUGH = '../maps/icons/map/small/22_slough.png'
+    MAPS_ICONS_MAP_SMALL_23_WESTFELD = '../maps/icons/map/small/23_westfeld.png'
+    MAPS_ICONS_MAP_SMALL_28_DESERT = '../maps/icons/map/small/28_desert.png'
+    MAPS_ICONS_MAP_SMALL_29_EL_HALLOUF = '../maps/icons/map/small/29_el_hallouf.png'
+    MAPS_ICONS_MAP_SMALL_31_AIRFIELD = '../maps/icons/map/small/31_airfield.png'
+    MAPS_ICONS_MAP_SMALL_33_FJORD = '../maps/icons/map/small/33_fjord.png'
+    MAPS_ICONS_MAP_SMALL_34_REDSHIRE = '../maps/icons/map/small/34_Redshire.png'
+    MAPS_ICONS_MAP_SMALL_35_STEPPES = '../maps/icons/map/small/35_steppes.png'
+    MAPS_ICONS_MAP_SMALL_36_FISHING_BAY = '../maps/icons/map/small/36_fishing_bay.png'
+    MAPS_ICONS_MAP_SMALL_37_CAUCASUS = '../maps/icons/map/small/37_caucasus.png'
+    MAPS_ICONS_MAP_SMALL_38_MANNERHEIM_LINE = '../maps/icons/map/small/38_mannerheim_line.png'
+    MAPS_ICONS_MAP_SMALL_44_NORTH_AMERICA = '../maps/icons/map/small/44_north_america.png'
+    MAPS_ICONS_MAP_SMALL_45_NORTH_AMERICA = '../maps/icons/map/small/45_north_america.png'
+    MAPS_ICONS_MAP_SMALL_47_CANADA_A = '../maps/icons/map/small/47_canada_a.png'
+    MAPS_ICONS_MAP_SMALL_59_ASIA_GREAT_WALL = '../maps/icons/map/small/59_asia_great_wall.png'
+    MAPS_ICONS_MAP_SMALL_63_TUNDRA = '../maps/icons/map/small/63_Tundra.png'
+    MAPS_ICONS_MAP_SMALL_73_ASIA_KOREA = '../maps/icons/map/small/73_asia_korea.png'
+    MAPS_ICONS_MAP_SMALL_83_KHARKIV = '../maps/icons/map/small/83_kharkiv.png'
+    MAPS_ICONS_MAP_SMALL_84_WINTER = '../maps/icons/map/small/84_winter.png'
+    MAPS_ICONS_MAP_SMALL_86_HIMMELSDORF_WINTER = '../maps/icons/map/small/86_himmelsdorf_winter.png'
+    MAPS_ICONS_MAP_SMALL_92_STALINGRAD = '../maps/icons/map/small/92_stalingrad.png'
+    MAPS_ICONS_MAP_SMALL_95_LOST_CITY = '../maps/icons/map/small/95_lost_city.png'
+    MAPS_ICONS_MAP_SMALL_96_PROHOROVKA_DEFENSE = '../maps/icons/map/small/96_prohorovka_defense.png'
+    MAPS_ICONS_MAP_SMALL_NOIMAGE = '../maps/icons/map/small/noImage.png'
+    MAPS_ICONS_MAP_STATS_00_TANK_TUTORIAL = '../maps/icons/map/stats/00_tank_tutorial.png'
+    MAPS_ICONS_MAP_STATS_01_KARELIA = '../maps/icons/map/stats/01_karelia.png'
+    MAPS_ICONS_MAP_STATS_02_MALINOVKA = '../maps/icons/map/stats/02_malinovka.png'
+    MAPS_ICONS_MAP_STATS_04_HIMMELSDORF = '../maps/icons/map/stats/04_himmelsdorf.png'
+    MAPS_ICONS_MAP_STATS_05_PROHOROVKA = '../maps/icons/map/stats/05_prohorovka.png'
+    MAPS_ICONS_MAP_STATS_06_ENSK = '../maps/icons/map/stats/06_ensk.png'
+    MAPS_ICONS_MAP_STATS_07_LAKEVILLE = '../maps/icons/map/stats/07_lakeville.png'
+    MAPS_ICONS_MAP_STATS_08_RUINBERG = '../maps/icons/map/stats/08_ruinberg.png'
+    MAPS_ICONS_MAP_STATS_100_THEPIT = '../maps/icons/map/stats/100_thepit.png'
+    MAPS_ICONS_MAP_STATS_101_DDAY = '../maps/icons/map/stats/101_dday.png'
+    MAPS_ICONS_MAP_STATS_103_RUINBERG_WINTER = '../maps/icons/map/stats/103_ruinberg_winter.png'
+    MAPS_ICONS_MAP_STATS_10_HILLS = '../maps/icons/map/stats/10_hills.png'
+    MAPS_ICONS_MAP_STATS_112_EIFFEL_TOWER_CTF = '../maps/icons/map/stats/112_eiffel_tower_ctf.png'
+    MAPS_ICONS_MAP_STATS_114_CZECH = '../maps/icons/map/stats/114_czech.png'
+    MAPS_ICONS_MAP_STATS_11_MUROVANKA = '../maps/icons/map/stats/11_murovanka.png'
+    MAPS_ICONS_MAP_STATS_13_ERLENBERG = '../maps/icons/map/stats/13_erlenberg.png'
+    MAPS_ICONS_MAP_STATS_14_SIEGFRIED_LINE = '../maps/icons/map/stats/14_siegfried_line.png'
+    MAPS_ICONS_MAP_STATS_17_MUNCHEN = '../maps/icons/map/stats/17_munchen.png'
+    MAPS_ICONS_MAP_STATS_18_CLIFF = '../maps/icons/map/stats/18_cliff.png'
+    MAPS_ICONS_MAP_STATS_19_MONASTERY = '../maps/icons/map/stats/19_monastery.png'
+    MAPS_ICONS_MAP_STATS_22_SLOUGH = '../maps/icons/map/stats/22_slough.png'
+    MAPS_ICONS_MAP_STATS_23_WESTFELD = '../maps/icons/map/stats/23_westfeld.png'
+    MAPS_ICONS_MAP_STATS_28_DESERT = '../maps/icons/map/stats/28_desert.png'
+    MAPS_ICONS_MAP_STATS_29_EL_HALLOUF = '../maps/icons/map/stats/29_el_hallouf.png'
+    MAPS_ICONS_MAP_STATS_31_AIRFIELD = '../maps/icons/map/stats/31_airfield.png'
+    MAPS_ICONS_MAP_STATS_33_FJORD = '../maps/icons/map/stats/33_fjord.png'
+    MAPS_ICONS_MAP_STATS_34_REDSHIRE = '../maps/icons/map/stats/34_Redshire.png'
+    MAPS_ICONS_MAP_STATS_35_STEPPES = '../maps/icons/map/stats/35_steppes.png'
+    MAPS_ICONS_MAP_STATS_36_FISHING_BAY = '../maps/icons/map/stats/36_fishing_bay.png'
+    MAPS_ICONS_MAP_STATS_37_CAUCASUS = '../maps/icons/map/stats/37_caucasus.png'
+    MAPS_ICONS_MAP_STATS_38_MANNERHEIM_LINE = '../maps/icons/map/stats/38_mannerheim_line.png'
+    MAPS_ICONS_MAP_STATS_44_NORTH_AMERICA = '../maps/icons/map/stats/44_north_america.png'
+    MAPS_ICONS_MAP_STATS_45_NORTH_AMERICA = '../maps/icons/map/stats/45_north_america.png'
+    MAPS_ICONS_MAP_STATS_47_CANADA_A = '../maps/icons/map/stats/47_canada_a.png'
+    MAPS_ICONS_MAP_STATS_59_ASIA_GREAT_WALL = '../maps/icons/map/stats/59_asia_great_wall.png'
+    MAPS_ICONS_MAP_STATS_63_TUNDRA = '../maps/icons/map/stats/63_tundra.png'
+    MAPS_ICONS_MAP_STATS_73_ASIA_KOREA = '../maps/icons/map/stats/73_Asia_Korea.png'
+    MAPS_ICONS_MAP_STATS_83_KHARKIV = '../maps/icons/map/stats/83_kharkiv.png'
+    MAPS_ICONS_MAP_STATS_84_WINTER = '../maps/icons/map/stats/84_winter.png'
+    MAPS_ICONS_MAP_STATS_86_HIMMELSDORF_WINTER = '../maps/icons/map/stats/86_himmelsdorf_winter.png'
+    MAPS_ICONS_MAP_STATS_92_STALINGRAD = '../maps/icons/map/stats/92_stalingrad.png'
+    MAPS_ICONS_MAP_STATS_95_LOST_CITY = '../maps/icons/map/stats/95_lost_city.png'
+    MAPS_ICONS_MAP_STATS_96_PROHOROVKA_DEFENSE = '../maps/icons/map/stats/96_prohorovka_defense.png'
+    MAPS_ICONS_MAP_STATS_NOIMAGE = '../maps/icons/map/stats/noImage.png'
+    MAPS_ICONS_MAP_STATS_OVERLAY = '../maps/icons/map/stats/overlay.png'
     MAPS_ICONS_MESSENGER_ICONS_ALLDOWN = '../maps/icons/messenger/icons/allDown.png'
     MAPS_ICONS_MESSENGER_ICONS_ALLUP = '../maps/icons/messenger/icons/allUp.png'
     MAPS_ICONS_MESSENGER_ICONS_DOUBLE_LEFT_ARROW_ICON = '../maps/icons/messenger/icons/double-left-arrow-icon.png'
@@ -959,18 +1168,22 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_TILES_TILE_1_1_COLOR_UP = '../maps/icons/quests/tiles/tile_1_1_color_up.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_1_GRAY_OVER = '../maps/icons/quests/tiles/tile_1_1_gray_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_1_GRAY_UP = '../maps/icons/quests/tiles/tile_1_1_gray_up.png'
+    MAPS_ICONS_QUESTS_TILES_TILE_1_1_TOOLTIP = '../maps/icons/quests/tiles/tile_1_1_tooltip.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_2_COLOR_OVER = '../maps/icons/quests/tiles/tile_1_2_color_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_2_COLOR_UP = '../maps/icons/quests/tiles/tile_1_2_color_up.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_2_GRAY_OVER = '../maps/icons/quests/tiles/tile_1_2_gray_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_2_GRAY_UP = '../maps/icons/quests/tiles/tile_1_2_gray_up.png'
+    MAPS_ICONS_QUESTS_TILES_TILE_1_2_TOOLTIP = '../maps/icons/quests/tiles/tile_1_2_tooltip.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_3_COLOR_OVER = '../maps/icons/quests/tiles/tile_1_3_color_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_3_COLOR_UP = '../maps/icons/quests/tiles/tile_1_3_color_up.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_3_GRAY_OVER = '../maps/icons/quests/tiles/tile_1_3_gray_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_3_GRAY_UP = '../maps/icons/quests/tiles/tile_1_3_gray_up.png'
+    MAPS_ICONS_QUESTS_TILES_TILE_1_3_TOOLTIP = '../maps/icons/quests/tiles/tile_1_3_tooltip.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_4_COLOR_OVER = '../maps/icons/quests/tiles/tile_1_4_color_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_4_COLOR_UP = '../maps/icons/quests/tiles/tile_1_4_color_up.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_4_GRAY_OVER = '../maps/icons/quests/tiles/tile_1_4_gray_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_1_4_GRAY_UP = '../maps/icons/quests/tiles/tile_1_4_gray_up.png'
+    MAPS_ICONS_QUESTS_TILES_TILE_1_4_TOOLTIP = '../maps/icons/quests/tiles/tile_1_4_tooltip.png'
     MAPS_ICONS_QUESTS_TILES_TILE_2_5_COLOR_OVER = '../maps/icons/quests/tiles/tile_2_5_color_over.png'
     MAPS_ICONS_QUESTS_TILES_TILE_2_5_COLOR_UP = '../maps/icons/quests/tiles/tile_2_5_color_up.png'
     MAPS_ICONS_QUESTS_TILES_TILE_2_5_GRAY_OVER = '../maps/icons/quests/tiles/tile_2_5_gray_over.png'
@@ -1028,6 +1241,60 @@ class RES_ICONS(object):
     MAPS_ICONS_VEHICLETYPES_RED_LIGHTTANK = '../maps/icons/vehicleTypes/red/lightTank.png'
     MAPS_ICONS_VEHICLETYPES_RED_MEDIUMTANK = '../maps/icons/vehicleTypes/red/mediumTank.png'
     MAPS_ICONS_VEHICLETYPES_RED_SPG = '../maps/icons/vehicleTypes/red/spg.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AIMINGTIME = '../maps/icons/vehParams/big/aimingTime.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGE = '../maps/icons/vehParams/big/avgDamage.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGEPERMINUTE = '../maps/icons/vehParams/big/avgDamagePerMinute.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGPIERCINGPOWER = '../maps/icons/vehParams/big/avgPiercingPower.png'
+    MAPS_ICONS_VEHPARAMS_BIG_CHASSISROTATIONSPEED = '../maps/icons/vehParams/big/chassisRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_BIG_CIRCULARVISIONRADIUS = '../maps/icons/vehParams/big/circularVisionRadius.png'
+    MAPS_ICONS_VEHPARAMS_BIG_CLIPFIRERATE = '../maps/icons/vehParams/big/clipFireRate.png'
+    MAPS_ICONS_VEHPARAMS_BIG_ENGINEPOWER = '../maps/icons/vehParams/big/enginePower.png'
+    MAPS_ICONS_VEHPARAMS_BIG_ENGINEPOWERPERTON = '../maps/icons/vehParams/big/enginePowerPerTon.png'
+    MAPS_ICONS_VEHPARAMS_BIG_GUNROTATIONSPEED = '../maps/icons/vehParams/big/gunRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_BIG_GUNYAWLIMITS = '../maps/icons/vehParams/big/gunYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_HULLARMOR = '../maps/icons/vehParams/big/hullArmor.png'
+    MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYMOVINGFACTOR = '../maps/icons/vehParams/big/invisibilityMovingFactor.png'
+    MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR = '../maps/icons/vehParams/big/invisibilityStillFactor.png'
+    MAPS_ICONS_VEHPARAMS_BIG_MAXHEALTH = '../maps/icons/vehParams/big/maxHealth.png'
+    MAPS_ICONS_VEHPARAMS_BIG_PITCHLIMITS = '../maps/icons/vehParams/big/pitchLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_RADIODISTANCE = '../maps/icons/vehParams/big/radioDistance.png'
+    MAPS_ICONS_VEHPARAMS_BIG_RELOADTIME = '../maps/icons/vehParams/big/reloadTime.png'
+    MAPS_ICONS_VEHPARAMS_BIG_RELOADTIMESECS = '../maps/icons/vehParams/big/reloadTimeSecs.png'
+    MAPS_ICONS_VEHPARAMS_BIG_SHOTDISPERSIONANGLE = '../maps/icons/vehParams/big/shotDispersionAngle.png'
+    MAPS_ICONS_VEHPARAMS_BIG_SPEEDLIMITS = '../maps/icons/vehParams/big/speedLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_SWITCHOFFTIME = '../maps/icons/vehParams/big/switchOffTime.png'
+    MAPS_ICONS_VEHPARAMS_BIG_SWITCHONTIME = '../maps/icons/vehParams/big/switchOnTime.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETARMOR = '../maps/icons/vehParams/big/turretArmor.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETROTATIONSPEED = '../maps/icons/vehParams/big/turretRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETYAWLIMITS = '../maps/icons/vehParams/big/turretYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_VEHICLEWEIGHT = '../maps/icons/vehParams/big/vehicleWeight.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AIMINGTIME = '../maps/icons/vehParams/small/aimingTime.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGE = '../maps/icons/vehParams/small/avgDamage.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGEPERMINUTE = '../maps/icons/vehParams/small/avgDamagePerMinute.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGPIERCINGPOWER = '../maps/icons/vehParams/small/avgPiercingPower.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_CHASSISROTATIONSPEED = '../maps/icons/vehParams/small/chassisRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_CIRCULARVISIONRADIUS = '../maps/icons/vehParams/small/circularVisionRadius.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_CLIPFIRERATE = '../maps/icons/vehParams/small/clipFireRate.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_ENGINEPOWER = '../maps/icons/vehParams/small/enginePower.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_ENGINEPOWERPERTON = '../maps/icons/vehParams/small/enginePowerPerTon.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_GUNROTATIONSPEED = '../maps/icons/vehParams/small/gunRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_GUNYAWLIMITS = '../maps/icons/vehParams/small/gunYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_HULLARMOR = '../maps/icons/vehParams/small/hullArmor.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_INVISIBILITYMOVINGFACTOR = '../maps/icons/vehParams/small/invisibilityMovingFactor.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_INVISIBILITYSTILLFACTOR = '../maps/icons/vehParams/small/invisibilityStillFactor.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_MAXHEALTH = '../maps/icons/vehParams/small/maxHealth.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_PITCHLIMITS = '../maps/icons/vehParams/small/pitchLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_RADIODISTANCE = '../maps/icons/vehParams/small/radioDistance.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIME = '../maps/icons/vehParams/small/reloadTime.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIMESECS = '../maps/icons/vehParams/small/reloadTimeSecs.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_SHOTDISPERSIONANGLE = '../maps/icons/vehParams/small/shotDispersionAngle.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_SPEEDLIMITS = '../maps/icons/vehParams/small/speedLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_SWITCHOFFTIME = '../maps/icons/vehParams/small/switchOffTime.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_SWITCHONTIME = '../maps/icons/vehParams/small/switchOnTime.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETARMOR = '../maps/icons/vehParams/small/turretArmor.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETROTATIONSPEED = '../maps/icons/vehParams/small/turretRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETYAWLIMITS = '../maps/icons/vehParams/small/turretYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_VEHICLEWEIGHT = '../maps/icons/vehParams/small/vehicleWeight.png'
     MAPS_ICONS_WINDOWS_GOLDFISH_GOLDFISHBG = '../maps/icons/windows/goldFish/goldFishBg.png'
     MAPS_ICONS_WINDOWS_PREM_ICON_PREM180_98 = '../maps/icons/windows/prem/icon_prem180_98.png'
     MAPS_ICONS_WINDOWS_PREM_ICON_PREM1_98 = '../maps/icons/windows/prem/icon_prem1_98.png'
@@ -1062,15 +1329,6 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CYBERSPORT_EMBLEMS_STUB_24X24 = '../maps/icons/library/cybersport/emblems/stub_24x24.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_EMBLEMS_STUB_32X32 = '../maps/icons/library/cybersport/emblems/stub_32x32.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_EMBLEMS_STUB_64X64 = '../maps/icons/library/cybersport/emblems/stub_64x64.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_0 = '../maps/icons/library/cybersport/leagueRibbons/0.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_1 = '../maps/icons/library/cybersport/leagueRibbons/1.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_2 = '../maps/icons/library/cybersport/leagueRibbons/2.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_3 = '../maps/icons/library/cybersport/leagueRibbons/3.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_4 = '../maps/icons/library/cybersport/leagueRibbons/4.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_5 = '../maps/icons/library/cybersport/leagueRibbons/5.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_6 = '../maps/icons/library/cybersport/leagueRibbons/6.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_NO_LADDER = '../maps/icons/library/cybersport/leagueRibbons/no_ladder.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LEAGUERIBBONS_UNRANKED = '../maps/icons/library/cybersport/leagueRibbons/unranked.png'
     MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_ARMOR = '../maps/icons/library/efficiency/48x48/armor.png'
     MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_CAPTURE = '../maps/icons/library/efficiency/48x48/capture.png'
     MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DAMAGE = '../maps/icons/library/efficiency/48x48/damage.png'
@@ -1106,6 +1364,26 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOTG = '../maps/icons/library/userStatus/small/wotg.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOWP = '../maps/icons/library/userStatus/small/wowp.png'
     MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOWS = '../maps/icons/library/userStatus/small/wows.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_MOB = '../maps/icons/messenger/status/24x24/chat_icon_mob.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_UNKNOWN = '../maps/icons/messenger/status/24x24/chat_icon_unknown.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_BUSY = '../maps/icons/messenger/status/24x24/chat_icon_user_is_busy.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_BUSY_VIOLET = '../maps/icons/messenger/status/24x24/chat_icon_user_is_busy_violet.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_ONLINE = '../maps/icons/messenger/status/24x24/chat_icon_user_is_online.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WEB = '../maps/icons/messenger/status/24x24/chat_icon_web.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOTB = '../maps/icons/messenger/status/24x24/chat_icon_wotb.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOTG = '../maps/icons/messenger/status/24x24/chat_icon_wotg.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOWP = '../maps/icons/messenger/status/24x24/chat_icon_wowp.png'
+    MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOWS = '../maps/icons/messenger/status/24x24/chat_icon_wows.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_MOB = '../maps/icons/messenger/status/48x48/chat_icon_mob.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_UNKNOWN = '../maps/icons/messenger/status/48x48/chat_icon_unknown.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_BUSY = '../maps/icons/messenger/status/48x48/chat_icon_user_is_busy.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_BUSY_VIOLET = '../maps/icons/messenger/status/48x48/chat_icon_user_is_busy_violet.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_ONLINE = '../maps/icons/messenger/status/48x48/chat_icon_user_is_online.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WEB = '../maps/icons/messenger/status/48x48/chat_icon_web.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOTB = '../maps/icons/messenger/status/48x48/chat_icon_wotb.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOTG = '../maps/icons/messenger/status/48x48/chat_icon_wotg.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOWP = '../maps/icons/messenger/status/48x48/chat_icon_wowp.png'
+    MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOWS = '../maps/icons/messenger/status/48x48/chat_icon_wows.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_CHINA_1 = '../maps/icons/tankmen/icons/barracks/china-1.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_CHINA_10 = '../maps/icons/tankmen/icons/barracks/china-10.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_CHINA_11 = '../maps/icons/tankmen/icons/barracks/china-11.png'
@@ -1206,6 +1484,9 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_3 = '../maps/icons/tankmen/icons/barracks/france-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_30 = '../maps/icons/tankmen/icons/barracks/france-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_31 = '../maps/icons/tankmen/icons/barracks/france-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_32 = '../maps/icons/tankmen/icons/barracks/france-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_33 = '../maps/icons/tankmen/icons/barracks/france-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_34 = '../maps/icons/tankmen/icons/barracks/france-34.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_4 = '../maps/icons/tankmen/icons/barracks/france-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_5 = '../maps/icons/tankmen/icons/barracks/france-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_6 = '../maps/icons/tankmen/icons/barracks/france-6.png'
@@ -1343,6 +1624,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_3 = '../maps/icons/tankmen/icons/barracks/sweden-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_30 = '../maps/icons/tankmen/icons/barracks/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_31 = '../maps/icons/tankmen/icons/barracks/sweden-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_32 = '../maps/icons/tankmen/icons/barracks/sweden-32.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_4 = '../maps/icons/tankmen/icons/barracks/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_5 = '../maps/icons/tankmen/icons/barracks/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_6 = '../maps/icons/tankmen/icons/barracks/sweden-6.png'
@@ -1356,6 +1638,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_13 = '../maps/icons/tankmen/icons/barracks/sweden-female-13.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_14 = '../maps/icons/tankmen/icons/barracks/sweden-female-14.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_15 = '../maps/icons/tankmen/icons/barracks/sweden-female-15.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_16 = '../maps/icons/tankmen/icons/barracks/sweden-female-16.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_2 = '../maps/icons/tankmen/icons/barracks/sweden-female-2.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_3 = '../maps/icons/tankmen/icons/barracks/sweden-female-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_4 = '../maps/icons/tankmen/icons/barracks/sweden-female-4.png'
@@ -1637,6 +1920,9 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_3 = '../maps/icons/tankmen/icons/big/france-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_30 = '../maps/icons/tankmen/icons/big/france-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_31 = '../maps/icons/tankmen/icons/big/france-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_32 = '../maps/icons/tankmen/icons/big/france-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_33 = '../maps/icons/tankmen/icons/big/france-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_34 = '../maps/icons/tankmen/icons/big/france-34.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_4 = '../maps/icons/tankmen/icons/big/france-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_5 = '../maps/icons/tankmen/icons/big/france-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_FRANCE_6 = '../maps/icons/tankmen/icons/big/france-6.png'
@@ -1774,6 +2060,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_3 = '../maps/icons/tankmen/icons/big/sweden-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_30 = '../maps/icons/tankmen/icons/big/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_31 = '../maps/icons/tankmen/icons/big/sweden-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_32 = '../maps/icons/tankmen/icons/big/sweden-32.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_4 = '../maps/icons/tankmen/icons/big/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_5 = '../maps/icons/tankmen/icons/big/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_6 = '../maps/icons/tankmen/icons/big/sweden-6.png'
@@ -1787,6 +2074,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_13 = '../maps/icons/tankmen/icons/big/sweden-female-13.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_14 = '../maps/icons/tankmen/icons/big/sweden-female-14.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_15 = '../maps/icons/tankmen/icons/big/sweden-female-15.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_16 = '../maps/icons/tankmen/icons/big/sweden-female-16.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_2 = '../maps/icons/tankmen/icons/big/sweden-female-2.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_3 = '../maps/icons/tankmen/icons/big/sweden-female-3.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_FEMALE_4 = '../maps/icons/tankmen/icons/big/sweden-female-4.png'
@@ -2068,6 +2356,9 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_3 = '../maps/icons/tankmen/icons/small/france-3.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_30 = '../maps/icons/tankmen/icons/small/france-30.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_31 = '../maps/icons/tankmen/icons/small/france-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_32 = '../maps/icons/tankmen/icons/small/france-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_33 = '../maps/icons/tankmen/icons/small/france-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_34 = '../maps/icons/tankmen/icons/small/france-34.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_4 = '../maps/icons/tankmen/icons/small/france-4.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_5 = '../maps/icons/tankmen/icons/small/france-5.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_FRANCE_6 = '../maps/icons/tankmen/icons/small/france-6.png'
@@ -2206,6 +2497,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_3 = '../maps/icons/tankmen/icons/small/sweden-3.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_30 = '../maps/icons/tankmen/icons/small/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_31 = '../maps/icons/tankmen/icons/small/sweden-31.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_32 = '../maps/icons/tankmen/icons/small/sweden-32.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_4 = '../maps/icons/tankmen/icons/small/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_5 = '../maps/icons/tankmen/icons/small/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_6 = '../maps/icons/tankmen/icons/small/sweden-6.png'
@@ -2219,6 +2511,7 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_13 = '../maps/icons/tankmen/icons/small/sweden-female-13.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_14 = '../maps/icons/tankmen/icons/small/sweden-female-14.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_15 = '../maps/icons/tankmen/icons/small/sweden-female-15.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_16 = '../maps/icons/tankmen/icons/small/sweden-female-16.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_2 = '../maps/icons/tankmen/icons/small/sweden-female-2.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_3 = '../maps/icons/tankmen/icons/small/sweden-female-3.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_FEMALE_4 = '../maps/icons/tankmen/icons/small/sweden-female-4.png'
@@ -2402,6 +2695,41 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_FEMALE_7 = '../maps/icons/tankmen/icons/small/ussr-female-7.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_FEMALE_8 = '../maps/icons/tankmen/icons/small/ussr-female-8.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_FEMALE_9 = '../maps/icons/tankmen/icons/small/ussr-female-9.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_BROTHERHOOD = '../maps/icons/vehParams/tooltips/bonuses/brotherhood.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_BUCHTY = '../maps/icons/vehParams/tooltips/bonuses/buchty.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_CAMOUFLAGE = '../maps/icons/vehParams/tooltips/bonuses/camouflage.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_CAMOUFLAGENET = '../maps/icons/vehParams/tooltips/bonuses/camouflageNet.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_CHOCOLATE = '../maps/icons/vehParams/tooltips/bonuses/chocolate.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_COATEDOPTICS = '../maps/icons/vehParams/tooltips/bonuses/coatedOptics.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_COCACOLA = '../maps/icons/vehParams/tooltips/bonuses/cocacola.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_COMMANDER_EAGLEEYE = '../maps/icons/vehParams/tooltips/bonuses/commander_eagleEye.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_DRIVER_BADROADSKING = '../maps/icons/vehParams/tooltips/bonuses/driver_badRoadsKing.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_DRIVER_VIRTUOSO = '../maps/icons/vehParams/tooltips/bonuses/driver_virtuoso.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_ENHANCEDAIMDRIVES = '../maps/icons/vehParams/tooltips/bonuses/enhancedAimDrives.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_GASOLINE100 = '../maps/icons/vehParams/tooltips/bonuses/gasoline100.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_GASOLINE105 = '../maps/icons/vehParams/tooltips/bonuses/gasoline105.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_GROUSERS = '../maps/icons/vehParams/tooltips/bonuses/grousers.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_HOTCOFFEE = '../maps/icons/vehParams/tooltips/bonuses/hotCoffee.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_IMPROVEDVENTILATION = '../maps/icons/vehParams/tooltips/bonuses/improvedVentilation.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_LENDLEASEOIL = '../maps/icons/vehParams/tooltips/bonuses/lendLeaseOil.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_QUALITYOIL = '../maps/icons/vehParams/tooltips/bonuses/qualityOil.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RADIOMAN_FINDER = '../maps/icons/vehParams/tooltips/bonuses/radioman_finder.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RADIOMAN_INVENTOR = '../maps/icons/vehParams/tooltips/bonuses/radioman_inventor.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RAMMER = '../maps/icons/vehParams/tooltips/bonuses/rammer.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION = '../maps/icons/vehParams/tooltips/bonuses/ration.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION_CHINA = '../maps/icons/vehParams/tooltips/bonuses/ration_china.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION_CZECH = '../maps/icons/vehParams/tooltips/bonuses/ration_czech.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION_JAPAN = '../maps/icons/vehParams/tooltips/bonuses/ration_japan.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION_SWEDEN = '../maps/icons/vehParams/tooltips/bonuses/ration_sweden.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_RATION_UK = '../maps/icons/vehParams/tooltips/bonuses/ration_uk.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_REMOVEDRPMLIMITER = '../maps/icons/vehParams/tooltips/bonuses/removedRpmLimiter.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_STEREOSCOPE = '../maps/icons/vehParams/tooltips/bonuses/stereoscope.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_ALL = '../maps/icons/vehParams/tooltips/penalties/all.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_COMMANDER = '../maps/icons/vehParams/tooltips/penalties/commander.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_DRIVER = '../maps/icons/vehParams/tooltips/penalties/driver.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_GUNNER = '../maps/icons/vehParams/tooltips/penalties/gunner.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_LOADER = '../maps/icons/vehParams/tooltips/penalties/loader.png'
+    MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_RADIOMAN = '../maps/icons/vehParams/tooltips/penalties/radioman.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_BG_1A = '../maps/icons/library/cybersport/animation/bg/1a.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_BG_1B = '../maps/icons/library/cybersport/animation/bg/1b.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_BG_1C = '../maps/icons/library/cybersport/animation/bg/1c.png'
@@ -2480,110 +2808,7 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_LOGO_4 = '../maps/icons/library/cybersport/animation/logo/4.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_LOGO_5 = '../maps/icons/library/cybersport/animation/logo/5.png'
     MAPS_ICONS_LIBRARY_CYBERSPORT_ANIMATION_LOGO_6 = '../maps/icons/library/cybersport/animation/logo/6.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_1A = '../maps/icons/library/cybersport/ladder/128/1A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_1B = '../maps/icons/library/cybersport/ladder/128/1B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_1C = '../maps/icons/library/cybersport/ladder/128/1C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_1D = '../maps/icons/library/cybersport/ladder/128/1D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_2A = '../maps/icons/library/cybersport/ladder/128/2A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_2B = '../maps/icons/library/cybersport/ladder/128/2B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_2C = '../maps/icons/library/cybersport/ladder/128/2C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_2D = '../maps/icons/library/cybersport/ladder/128/2D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_3A = '../maps/icons/library/cybersport/ladder/128/3A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_3B = '../maps/icons/library/cybersport/ladder/128/3B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_3C = '../maps/icons/library/cybersport/ladder/128/3C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_3D = '../maps/icons/library/cybersport/ladder/128/3D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_4A = '../maps/icons/library/cybersport/ladder/128/4A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_4B = '../maps/icons/library/cybersport/ladder/128/4B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_4C = '../maps/icons/library/cybersport/ladder/128/4C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_4D = '../maps/icons/library/cybersport/ladder/128/4D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_5A = '../maps/icons/library/cybersport/ladder/128/5A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_5B = '../maps/icons/library/cybersport/ladder/128/5B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_5C = '../maps/icons/library/cybersport/ladder/128/5C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_5D = '../maps/icons/library/cybersport/ladder/128/5D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_6A = '../maps/icons/library/cybersport/ladder/128/6A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_6B = '../maps/icons/library/cybersport/ladder/128/6B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_6C = '../maps/icons/library/cybersport/ladder/128/6C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_6D = '../maps/icons/library/cybersport/ladder/128/6D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_128_NO_LADDER = '../maps/icons/library/cybersport/ladder/128/no_ladder.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_1A = '../maps/icons/library/cybersport/ladder/16/1A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_1B = '../maps/icons/library/cybersport/ladder/16/1B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_1C = '../maps/icons/library/cybersport/ladder/16/1C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_1D = '../maps/icons/library/cybersport/ladder/16/1D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_2A = '../maps/icons/library/cybersport/ladder/16/2A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_2B = '../maps/icons/library/cybersport/ladder/16/2B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_2C = '../maps/icons/library/cybersport/ladder/16/2C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_2D = '../maps/icons/library/cybersport/ladder/16/2D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_3A = '../maps/icons/library/cybersport/ladder/16/3A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_3B = '../maps/icons/library/cybersport/ladder/16/3B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_3C = '../maps/icons/library/cybersport/ladder/16/3C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_3D = '../maps/icons/library/cybersport/ladder/16/3D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_4A = '../maps/icons/library/cybersport/ladder/16/4A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_4B = '../maps/icons/library/cybersport/ladder/16/4B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_4C = '../maps/icons/library/cybersport/ladder/16/4C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_4D = '../maps/icons/library/cybersport/ladder/16/4D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_5A = '../maps/icons/library/cybersport/ladder/16/5A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_5B = '../maps/icons/library/cybersport/ladder/16/5B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_5C = '../maps/icons/library/cybersport/ladder/16/5C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_5D = '../maps/icons/library/cybersport/ladder/16/5D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_6A = '../maps/icons/library/cybersport/ladder/16/6A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_6B = '../maps/icons/library/cybersport/ladder/16/6B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_6C = '../maps/icons/library/cybersport/ladder/16/6C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_6D = '../maps/icons/library/cybersport/ladder/16/6D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_16_NO_LADDER = '../maps/icons/library/cybersport/ladder/16/no_ladder.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_100 = '../maps/icons/library/cybersport/ladder/256/100.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_1A = '../maps/icons/library/cybersport/ladder/256/1A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_1B = '../maps/icons/library/cybersport/ladder/256/1B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_1C = '../maps/icons/library/cybersport/ladder/256/1C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_1D = '../maps/icons/library/cybersport/ladder/256/1D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_2A = '../maps/icons/library/cybersport/ladder/256/2A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_2B = '../maps/icons/library/cybersport/ladder/256/2B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_2C = '../maps/icons/library/cybersport/ladder/256/2C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_2D = '../maps/icons/library/cybersport/ladder/256/2D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_3A = '../maps/icons/library/cybersport/ladder/256/3A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_3B = '../maps/icons/library/cybersport/ladder/256/3B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_3C = '../maps/icons/library/cybersport/ladder/256/3C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_3D = '../maps/icons/library/cybersport/ladder/256/3D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_4A = '../maps/icons/library/cybersport/ladder/256/4A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_4B = '../maps/icons/library/cybersport/ladder/256/4B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_4C = '../maps/icons/library/cybersport/ladder/256/4C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_4D = '../maps/icons/library/cybersport/ladder/256/4D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_5A = '../maps/icons/library/cybersport/ladder/256/5A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_5B = '../maps/icons/library/cybersport/ladder/256/5B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_5C = '../maps/icons/library/cybersport/ladder/256/5C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_5D = '../maps/icons/library/cybersport/ladder/256/5D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_6A = '../maps/icons/library/cybersport/ladder/256/6A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_6B = '../maps/icons/library/cybersport/ladder/256/6B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_6C = '../maps/icons/library/cybersport/ladder/256/6C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_6D = '../maps/icons/library/cybersport/ladder/256/6D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_EMPTY = '../maps/icons/library/cybersport/ladder/256/empty.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_256_NO_LADDER = '../maps/icons/library/cybersport/ladder/256/no_ladder.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_1A = '../maps/icons/library/cybersport/ladder/64/1A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_1B = '../maps/icons/library/cybersport/ladder/64/1B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_1C = '../maps/icons/library/cybersport/ladder/64/1C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_1D = '../maps/icons/library/cybersport/ladder/64/1D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_2A = '../maps/icons/library/cybersport/ladder/64/2A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_2B = '../maps/icons/library/cybersport/ladder/64/2B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_2C = '../maps/icons/library/cybersport/ladder/64/2C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_2D = '../maps/icons/library/cybersport/ladder/64/2D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_3A = '../maps/icons/library/cybersport/ladder/64/3A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_3B = '../maps/icons/library/cybersport/ladder/64/3B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_3C = '../maps/icons/library/cybersport/ladder/64/3C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_3D = '../maps/icons/library/cybersport/ladder/64/3D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_4A = '../maps/icons/library/cybersport/ladder/64/4A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_4B = '../maps/icons/library/cybersport/ladder/64/4B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_4C = '../maps/icons/library/cybersport/ladder/64/4C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_4D = '../maps/icons/library/cybersport/ladder/64/4D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_5A = '../maps/icons/library/cybersport/ladder/64/5A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_5B = '../maps/icons/library/cybersport/ladder/64/5B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_5C = '../maps/icons/library/cybersport/ladder/64/5C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_5D = '../maps/icons/library/cybersport/ladder/64/5D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_6A = '../maps/icons/library/cybersport/ladder/64/6A.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_6B = '../maps/icons/library/cybersport/ladder/64/6B.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_6C = '../maps/icons/library/cybersport/ladder/64/6C.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_6D = '../maps/icons/library/cybersport/ladder/64/6D.png'
-    MAPS_ICONS_LIBRARY_CYBERSPORT_LADDER_64_NO_LADDER = '../maps/icons/library/cybersport/ladder/64/no_ladder.png'
-    MAPS_ICONS_BUTTONS_ENUM = (MAPS_ICONS_BUTTONS_ALERTICON,
-     MAPS_ICONS_BUTTONS_BOOKMARK,
+    MAPS_ICONS_BUTTONS_ENUM = (MAPS_ICONS_BUTTONS_BOOKMARK,
      MAPS_ICONS_BUTTONS_CALENDAR,
      MAPS_ICONS_BUTTONS_CHECKMARK,
      MAPS_ICONS_BUTTONS_CLAN_LIST,
@@ -2598,34 +2823,47 @@ class RES_ICONS(object):
      MAPS_ICONS_BUTTONS_FILTER,
      MAPS_ICONS_BUTTONS_FOOTHOLD,
      MAPS_ICONS_BUTTONS_GOLD_EXCHANGING,
+     MAPS_ICONS_BUTTONS_HORN,
      MAPS_ICONS_BUTTONS_ICONDESTROY,
+     MAPS_ICONS_BUTTONS_ICONDOWN,
+     MAPS_ICONS_BUTTONS_ICONUP,
      MAPS_ICONS_BUTTONS_ICONUPGRADE,
      MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_LEFT,
      MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_LEFT_DOUBLE,
      MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_RIGHT,
      MAPS_ICONS_BUTTONS_ICON_ARROW_FORMATION_RIGHT_DOUBLE,
      MAPS_ICONS_BUTTONS_ICON_BUTTON_ARROW,
+     MAPS_ICONS_BUTTONS_ICON_CHANNELS_HIDE_SYMBOLS,
+     MAPS_ICONS_BUTTONS_ICON_CHANNELS_SHOW_SYMBOLS_097,
      MAPS_ICONS_BUTTONS_ICON_TABLE_COMPARISON_CHECKMARK,
      MAPS_ICONS_BUTTONS_ICON_TABLE_COMPARISON_INHANGAR,
      MAPS_ICONS_BUTTONS_LEVEL_UP,
      MAPS_ICONS_BUTTONS_MAINMENU,
      MAPS_ICONS_BUTTONS_MAITENANCE,
      MAPS_ICONS_BUTTONS_NEXTPAGE,
+     MAPS_ICONS_BUTTONS_PAUSE,
+     MAPS_ICONS_BUTTONS_PLAY,
+     MAPS_ICONS_BUTTONS_PLAYERS,
      MAPS_ICONS_BUTTONS_PREMIUM,
      MAPS_ICONS_BUTTONS_PREVIOUSPAGE,
      MAPS_ICONS_BUTTONS_REFILL_ACCOUNT,
+     MAPS_ICONS_BUTTONS_REFRESH,
      MAPS_ICONS_BUTTONS_REMOVE,
      MAPS_ICONS_BUTTONS_REMOVEGOLD,
      MAPS_ICONS_BUTTONS_SEARCH,
      MAPS_ICONS_BUTTONS_SETTINGS,
      MAPS_ICONS_BUTTONS_SMALLATTACKICON,
      MAPS_ICONS_BUTTONS_SOUND,
+     MAPS_ICONS_BUTTONS_SPEAKER_SMALL,
+     MAPS_ICONS_BUTTONS_SPEAKER_SUB,
      MAPS_ICONS_BUTTONS_SWAP,
      MAPS_ICONS_BUTTONS_TANK_ICO,
      MAPS_ICONS_BUTTONS_TANKMAN_SKILLS_DROP,
+     MAPS_ICONS_BUTTONS_TIMER,
      MAPS_ICONS_BUTTONS_TRANSPORTING,
      MAPS_ICONS_BUTTONS_TRANSPORTINGARROW,
      MAPS_ICONS_BUTTONS_TUNING,
+     MAPS_ICONS_BUTTONS_VEHICLE_FILTER,
      MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN,
      MAPS_ICONS_BUTTONS_SOCIAL_FACEBOOK,
      MAPS_ICONS_BUTTONS_SOCIAL_GOOGLE,
@@ -2644,6 +2882,7 @@ class RES_ICONS(object):
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_FRAG,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_HEALTH,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL,
+     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL_6_8,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_MEDAL,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_NOTAVAILABLE,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK,
@@ -2668,18 +2907,22 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_TILES_TILE_1_1_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_1_GRAY_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_1_GRAY_UP,
+     MAPS_ICONS_QUESTS_TILES_TILE_1_1_TOOLTIP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_2_COLOR_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_2_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_2_GRAY_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_2_GRAY_UP,
+     MAPS_ICONS_QUESTS_TILES_TILE_1_2_TOOLTIP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_3_COLOR_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_3_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_3_GRAY_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_3_GRAY_UP,
+     MAPS_ICONS_QUESTS_TILES_TILE_1_3_TOOLTIP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_4_COLOR_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_4_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_4_GRAY_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_4_GRAY_UP,
+     MAPS_ICONS_QUESTS_TILES_TILE_1_4_TOOLTIP,
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_COLOR_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_GRAY_OVER,
@@ -2694,6 +2937,51 @@ class RES_ICONS(object):
      MAPS_ICONS_ORDERS_SMALL_REQUISITION,
      MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE,
      MAPS_ICONS_ORDERS_SMALL_TACTICALTRAINING)
+    MAPS_ICONS_VEHICLETYPES_ENUM = (MAPS_ICONS_VEHICLETYPES_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_SPG,
+     MAPS_ICONS_VEHICLETYPES_BIG_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_BIG_AT_SPG_ELITE,
+     MAPS_ICONS_VEHICLETYPES_BIG_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_BIG_HEAVYTANK_ELITE,
+     MAPS_ICONS_VEHICLETYPES_BIG_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_BIG_LIGHTTANK_ELITE,
+     MAPS_ICONS_VEHICLETYPES_BIG_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_BIG_MEDIUMTANK_ELITE,
+     MAPS_ICONS_VEHICLETYPES_BIG_SPG,
+     MAPS_ICONS_VEHICLETYPES_BIG_SPG_ELITE,
+     MAPS_ICONS_VEHICLETYPES_ELITE_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_ELITE_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_ELITE_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_ELITE_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_ELITE_SPG,
+     MAPS_ICONS_VEHICLETYPES_GOLD_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_GOLD_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_GOLD_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_GOLD_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_GOLD_SPG,
+     MAPS_ICONS_VEHICLETYPES_GREEN_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_GREEN_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_GREEN_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_GREEN_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_GREEN_SPG,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_INACTIVE_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_INACTIVE_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_INACTIVE_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_INACTIVE_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_INACTIVE_SPG,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_OUTLINE_SPG,
+     MAPS_ICONS_VEHICLETYPES_RED_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_RED_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_RED_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_RED_MEDIUMTANK,
+     MAPS_ICONS_VEHICLETYPES_RED_SPG)
     MAPS_ICONS_VEHICLETYPES_ELITE_ENUM = (MAPS_ICONS_VEHICLETYPES_ELITE_AT_SPG,
      MAPS_ICONS_VEHICLETYPES_ELITE_HEAVYTANK,
      MAPS_ICONS_VEHICLETYPES_ELITE_LIGHTTANK,
@@ -2861,6 +3149,9 @@ class RES_ICONS(object):
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_3,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_30,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_31,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_32,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_33,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_34,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_4,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_5,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_FRANCE_6,
@@ -2998,6 +3289,7 @@ class RES_ICONS(object):
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_3,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_30,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_31,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_32,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_4,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_5,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_6,
@@ -3011,6 +3303,7 @@ class RES_ICONS(object):
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_13,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_14,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_15,
+     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_16,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_2,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_3,
      MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_FEMALE_4,
@@ -3216,9 +3509,13 @@ class RES_ICONS(object):
      MAPS_ICONS_BUTTONS_SOCIAL_COLOR_WGNI,
      MAPS_ICONS_BUTTONS_SOCIAL_COLOR_YAHOO)
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_ENUM = (MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1,
+     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1_SMALL,
      MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_2,
+     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_2_SMALL,
      MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_3,
-     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_4)
+     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_3_SMALL,
+     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_4,
+     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_4_SMALL)
     MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_ENUM = (MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_BUSY,
      MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_BUSYBLIND,
      MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_MOB,
@@ -3260,6 +3557,7 @@ class RES_ICONS(object):
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_FRAG,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_HEALTH,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL,
+     MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL_6_8,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_MEDAL,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_NOTAVAILABLE,
      MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_OK,
@@ -3310,6 +3608,7 @@ class RES_ICONS(object):
      MAPS_ICONS_LIBRARY_BONUSES_TANKMENXP,
      MAPS_ICONS_LIBRARY_BONUSES_TANKWOMEN,
      MAPS_ICONS_LIBRARY_BONUSES_TOKENS,
+     MAPS_ICONS_LIBRARY_BONUSES_VEHICLEDISCOUNT,
      MAPS_ICONS_LIBRARY_BONUSES_VEHICLES,
      MAPS_ICONS_LIBRARY_BONUSES_VEHICLES_RENT)
     MAPS_ICONS_LIBRARY_BONUSES_PREMIUM_ALL_ENUM = (MAPS_ICONS_LIBRARY_BONUSES_PREMIUM_1,
@@ -3318,7 +3617,205 @@ class RES_ICONS(object):
      MAPS_ICONS_LIBRARY_BONUSES_PREMIUM_30,
      MAPS_ICONS_LIBRARY_BONUSES_PREMIUM_360,
      MAPS_ICONS_LIBRARY_BONUSES_PREMIUM_7)
-    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_ENUM = (MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED)
+    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_ENUM = (MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE, MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED)
+    MAPS_ICONS_MESSENGER_STATUS_ALL_CHAT_ICON_ALL_ENUM = (MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_MOB,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_UNKNOWN,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_BUSY,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_BUSY_VIOLET,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_ONLINE,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WEB,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOTB,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOTG,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOWP,
+     MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_WOWS,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_MOB,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_UNKNOWN,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_BUSY,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_BUSY_VIOLET,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_USER_IS_ONLINE,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WEB,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOTB,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOTG,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOWP,
+     MAPS_ICONS_MESSENGER_STATUS_48X48_CHAT_ICON_WOWS)
+    MAPS_ICONS_MAP_ALL_ENUM = (MAPS_ICONS_MAP_00_TANK_TUTORIAL,
+     MAPS_ICONS_MAP_01_KARELIA,
+     MAPS_ICONS_MAP_02_MALINOVKA,
+     MAPS_ICONS_MAP_04_HIMMELSDORF,
+     MAPS_ICONS_MAP_05_PROHOROVKA,
+     MAPS_ICONS_MAP_06_ENSK,
+     MAPS_ICONS_MAP_07_LAKEVILLE,
+     MAPS_ICONS_MAP_08_RUINBERG,
+     MAPS_ICONS_MAP_100_THEPIT,
+     MAPS_ICONS_MAP_101_DDAY,
+     MAPS_ICONS_MAP_103_RUINBERG_WINTER,
+     MAPS_ICONS_MAP_10_HILLS,
+     MAPS_ICONS_MAP_112_EIFFEL_TOWER_CTF,
+     MAPS_ICONS_MAP_114_CZECH,
+     MAPS_ICONS_MAP_11_MUROVANKA,
+     MAPS_ICONS_MAP_13_ERLENBERG,
+     MAPS_ICONS_MAP_14_SIEGFRIED_LINE,
+     MAPS_ICONS_MAP_17_MUNCHEN,
+     MAPS_ICONS_MAP_18_CLIFF,
+     MAPS_ICONS_MAP_19_MONASTERY,
+     MAPS_ICONS_MAP_22_SLOUGH,
+     MAPS_ICONS_MAP_23_WESTFELD,
+     MAPS_ICONS_MAP_28_DESERT,
+     MAPS_ICONS_MAP_29_EL_HALLOUF,
+     MAPS_ICONS_MAP_31_AIRFIELD,
+     MAPS_ICONS_MAP_33_FJORD,
+     MAPS_ICONS_MAP_34_REDSHIRE,
+     MAPS_ICONS_MAP_35_STEPPES,
+     MAPS_ICONS_MAP_36_FISHING_BAY,
+     MAPS_ICONS_MAP_37_CAUCASUS,
+     MAPS_ICONS_MAP_38_MANNERHEIM_LINE,
+     MAPS_ICONS_MAP_44_NORTH_AMERICA,
+     MAPS_ICONS_MAP_45_NORTH_AMERICA,
+     MAPS_ICONS_MAP_47_CANADA_A,
+     MAPS_ICONS_MAP_59_ASIA_GREAT_WALL,
+     MAPS_ICONS_MAP_63_TUNDRA,
+     MAPS_ICONS_MAP_73_ASIA_KOREA,
+     MAPS_ICONS_MAP_83_KHARKIV,
+     MAPS_ICONS_MAP_84_WINTER,
+     MAPS_ICONS_MAP_86_HIMMELSDORF_WINTER,
+     MAPS_ICONS_MAP_92_STALINGRAD,
+     MAPS_ICONS_MAP_95_LOST_CITY,
+     MAPS_ICONS_MAP_96_PROHOROVKA_DEFENSE,
+     MAPS_ICONS_MAP_BATTLELOADING_00_TANK_TUTORIAL,
+     MAPS_ICONS_MAP_BATTLELOADING_01_KARELIA,
+     MAPS_ICONS_MAP_BATTLELOADING_02_MALINOVKA,
+     MAPS_ICONS_MAP_BATTLELOADING_04_HIMMELSDORF,
+     MAPS_ICONS_MAP_BATTLELOADING_05_PROHOROVKA,
+     MAPS_ICONS_MAP_BATTLELOADING_06_ENSK,
+     MAPS_ICONS_MAP_BATTLELOADING_07_LAKEVILLE,
+     MAPS_ICONS_MAP_BATTLELOADING_08_RUINBERG,
+     MAPS_ICONS_MAP_BATTLELOADING_100_THEPIT,
+     MAPS_ICONS_MAP_BATTLELOADING_101_DDAY,
+     MAPS_ICONS_MAP_BATTLELOADING_103_RUINBERG_WINTER,
+     MAPS_ICONS_MAP_BATTLELOADING_10_HILLS,
+     MAPS_ICONS_MAP_BATTLELOADING_112_EIFFEL_TOWER_CTF,
+     MAPS_ICONS_MAP_BATTLELOADING_114_CZECH,
+     MAPS_ICONS_MAP_BATTLELOADING_11_MUROVANKA,
+     MAPS_ICONS_MAP_BATTLELOADING_13_ERLENBERG,
+     MAPS_ICONS_MAP_BATTLELOADING_14_SIEGFRIED_LINE,
+     MAPS_ICONS_MAP_BATTLELOADING_17_MUNCHEN,
+     MAPS_ICONS_MAP_BATTLELOADING_18_CLIFF,
+     MAPS_ICONS_MAP_BATTLELOADING_19_MONASTERY,
+     MAPS_ICONS_MAP_BATTLELOADING_22_SLOUGH,
+     MAPS_ICONS_MAP_BATTLELOADING_23_WESTFELD,
+     MAPS_ICONS_MAP_BATTLELOADING_28_DESERT,
+     MAPS_ICONS_MAP_BATTLELOADING_29_EL_HALLOUF,
+     MAPS_ICONS_MAP_BATTLELOADING_31_AIRFIELD,
+     MAPS_ICONS_MAP_BATTLELOADING_33_FJORD,
+     MAPS_ICONS_MAP_BATTLELOADING_34_REDSHIRE,
+     MAPS_ICONS_MAP_BATTLELOADING_35_STEPPES,
+     MAPS_ICONS_MAP_BATTLELOADING_36_FISHING_BAY,
+     MAPS_ICONS_MAP_BATTLELOADING_37_CAUCASUS,
+     MAPS_ICONS_MAP_BATTLELOADING_38_MANNERHEIM_LINE,
+     MAPS_ICONS_MAP_BATTLELOADING_44_NORTH_AMERICA,
+     MAPS_ICONS_MAP_BATTLELOADING_45_NORTH_AMERICA,
+     MAPS_ICONS_MAP_BATTLELOADING_47_CANADA_A,
+     MAPS_ICONS_MAP_BATTLELOADING_59_ASIA_GREAT_WALL,
+     MAPS_ICONS_MAP_BATTLELOADING_63_TUNDRA,
+     MAPS_ICONS_MAP_BATTLELOADING_73_ASIA_KOREA,
+     MAPS_ICONS_MAP_BATTLELOADING_83_KHARKIV,
+     MAPS_ICONS_MAP_BATTLELOADING_84_WINTER,
+     MAPS_ICONS_MAP_BATTLELOADING_86_HIMMELSDORF_WINTER,
+     MAPS_ICONS_MAP_BATTLELOADING_92_STALINGRAD,
+     MAPS_ICONS_MAP_BATTLELOADING_95_LOST_CITY,
+     MAPS_ICONS_MAP_BATTLELOADING_96_PROHOROVKA_DEFENSE,
+     MAPS_ICONS_MAP_BATTLELOADING_NOIMAGE,
+     MAPS_ICONS_MAP_ENTRY_00_CAMERA_WITH_DIRECTION,
+     MAPS_ICONS_MAP_ENTRY_01_SHOT_SECTOR_LINE,
+     MAPS_ICONS_MAP_SMALL_00_TANK_TUTORIAL,
+     MAPS_ICONS_MAP_SMALL_01_KARELIA,
+     MAPS_ICONS_MAP_SMALL_02_MALINOVKA,
+     MAPS_ICONS_MAP_SMALL_04_HIMMELSDORF,
+     MAPS_ICONS_MAP_SMALL_05_PROHOROVKA,
+     MAPS_ICONS_MAP_SMALL_06_ENSK,
+     MAPS_ICONS_MAP_SMALL_07_LAKEVILLE,
+     MAPS_ICONS_MAP_SMALL_08_RUINBERG,
+     MAPS_ICONS_MAP_SMALL_100_THEPIT,
+     MAPS_ICONS_MAP_SMALL_101_DDAY,
+     MAPS_ICONS_MAP_SMALL_103_RUINBERG_WINTER,
+     MAPS_ICONS_MAP_SMALL_10_HILLS,
+     MAPS_ICONS_MAP_SMALL_112_EIFFEL_TOWER_CTF,
+     MAPS_ICONS_MAP_SMALL_114_CZECH,
+     MAPS_ICONS_MAP_SMALL_11_MUROVANKA,
+     MAPS_ICONS_MAP_SMALL_13_ERLENBERG,
+     MAPS_ICONS_MAP_SMALL_14_SIEGFRIED_LINE,
+     MAPS_ICONS_MAP_SMALL_17_MUNCHEN,
+     MAPS_ICONS_MAP_SMALL_18_CLIFF,
+     MAPS_ICONS_MAP_SMALL_19_MONASTERY,
+     MAPS_ICONS_MAP_SMALL_22_SLOUGH,
+     MAPS_ICONS_MAP_SMALL_23_WESTFELD,
+     MAPS_ICONS_MAP_SMALL_28_DESERT,
+     MAPS_ICONS_MAP_SMALL_29_EL_HALLOUF,
+     MAPS_ICONS_MAP_SMALL_31_AIRFIELD,
+     MAPS_ICONS_MAP_SMALL_33_FJORD,
+     MAPS_ICONS_MAP_SMALL_34_REDSHIRE,
+     MAPS_ICONS_MAP_SMALL_35_STEPPES,
+     MAPS_ICONS_MAP_SMALL_36_FISHING_BAY,
+     MAPS_ICONS_MAP_SMALL_37_CAUCASUS,
+     MAPS_ICONS_MAP_SMALL_38_MANNERHEIM_LINE,
+     MAPS_ICONS_MAP_SMALL_44_NORTH_AMERICA,
+     MAPS_ICONS_MAP_SMALL_45_NORTH_AMERICA,
+     MAPS_ICONS_MAP_SMALL_47_CANADA_A,
+     MAPS_ICONS_MAP_SMALL_59_ASIA_GREAT_WALL,
+     MAPS_ICONS_MAP_SMALL_63_TUNDRA,
+     MAPS_ICONS_MAP_SMALL_73_ASIA_KOREA,
+     MAPS_ICONS_MAP_SMALL_83_KHARKIV,
+     MAPS_ICONS_MAP_SMALL_84_WINTER,
+     MAPS_ICONS_MAP_SMALL_86_HIMMELSDORF_WINTER,
+     MAPS_ICONS_MAP_SMALL_92_STALINGRAD,
+     MAPS_ICONS_MAP_SMALL_95_LOST_CITY,
+     MAPS_ICONS_MAP_SMALL_96_PROHOROVKA_DEFENSE,
+     MAPS_ICONS_MAP_SMALL_NOIMAGE,
+     MAPS_ICONS_MAP_STATS_00_TANK_TUTORIAL,
+     MAPS_ICONS_MAP_STATS_01_KARELIA,
+     MAPS_ICONS_MAP_STATS_02_MALINOVKA,
+     MAPS_ICONS_MAP_STATS_04_HIMMELSDORF,
+     MAPS_ICONS_MAP_STATS_05_PROHOROVKA,
+     MAPS_ICONS_MAP_STATS_06_ENSK,
+     MAPS_ICONS_MAP_STATS_07_LAKEVILLE,
+     MAPS_ICONS_MAP_STATS_08_RUINBERG,
+     MAPS_ICONS_MAP_STATS_100_THEPIT,
+     MAPS_ICONS_MAP_STATS_101_DDAY,
+     MAPS_ICONS_MAP_STATS_103_RUINBERG_WINTER,
+     MAPS_ICONS_MAP_STATS_10_HILLS,
+     MAPS_ICONS_MAP_STATS_112_EIFFEL_TOWER_CTF,
+     MAPS_ICONS_MAP_STATS_114_CZECH,
+     MAPS_ICONS_MAP_STATS_11_MUROVANKA,
+     MAPS_ICONS_MAP_STATS_13_ERLENBERG,
+     MAPS_ICONS_MAP_STATS_14_SIEGFRIED_LINE,
+     MAPS_ICONS_MAP_STATS_17_MUNCHEN,
+     MAPS_ICONS_MAP_STATS_18_CLIFF,
+     MAPS_ICONS_MAP_STATS_19_MONASTERY,
+     MAPS_ICONS_MAP_STATS_22_SLOUGH,
+     MAPS_ICONS_MAP_STATS_23_WESTFELD,
+     MAPS_ICONS_MAP_STATS_28_DESERT,
+     MAPS_ICONS_MAP_STATS_29_EL_HALLOUF,
+     MAPS_ICONS_MAP_STATS_31_AIRFIELD,
+     MAPS_ICONS_MAP_STATS_33_FJORD,
+     MAPS_ICONS_MAP_STATS_34_REDSHIRE,
+     MAPS_ICONS_MAP_STATS_35_STEPPES,
+     MAPS_ICONS_MAP_STATS_36_FISHING_BAY,
+     MAPS_ICONS_MAP_STATS_37_CAUCASUS,
+     MAPS_ICONS_MAP_STATS_38_MANNERHEIM_LINE,
+     MAPS_ICONS_MAP_STATS_44_NORTH_AMERICA,
+     MAPS_ICONS_MAP_STATS_45_NORTH_AMERICA,
+     MAPS_ICONS_MAP_STATS_47_CANADA_A,
+     MAPS_ICONS_MAP_STATS_59_ASIA_GREAT_WALL,
+     MAPS_ICONS_MAP_STATS_63_TUNDRA,
+     MAPS_ICONS_MAP_STATS_73_ASIA_KOREA,
+     MAPS_ICONS_MAP_STATS_83_KHARKIV,
+     MAPS_ICONS_MAP_STATS_84_WINTER,
+     MAPS_ICONS_MAP_STATS_86_HIMMELSDORF_WINTER,
+     MAPS_ICONS_MAP_STATS_92_STALINGRAD,
+     MAPS_ICONS_MAP_STATS_95_LOST_CITY,
+     MAPS_ICONS_MAP_STATS_96_PROHOROVKA_DEFENSE,
+     MAPS_ICONS_MAP_STATS_NOIMAGE,
+     MAPS_ICONS_MAP_STATS_OVERLAY)
 
     @classmethod
     def maps_icons_buttons(cls, key0):
@@ -3342,6 +3839,15 @@ class RES_ICONS(object):
     def maps_icons_orders_small(cls, key0):
         outcome = '../maps/icons/orders/small/{}'.format(key0)
         if outcome not in cls.MAPS_ICONS_ORDERS_SMALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def maps_icons_vehicletypes(cls, key0):
+        outcome = '../maps/icons/vehicleTypes/{}'.format(key0)
+        if outcome not in cls.MAPS_ICONS_VEHICLETYPES_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:
@@ -3495,6 +4001,24 @@ class RES_ICONS(object):
     def questsStateIconOutline(cls, state):
         outcome = '../maps/icons/library/outline/quests_{}.png'.format(state)
         if outcome not in cls.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getContactStatusIcon(cls, size, value):
+        outcome = '../maps/icons/messenger/status/{}/chat_icon_{}.png'.format(size, value)
+        if outcome not in cls.MAPS_ICONS_MESSENGER_STATUS_ALL_CHAT_ICON_ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getMapPath(cls, geometryName):
+        outcome = '../maps/icons/map/{}.png'.format(geometryName)
+        if outcome not in cls.MAPS_ICONS_MAP_ALL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

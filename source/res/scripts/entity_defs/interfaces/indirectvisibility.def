@@ -1,4 +1,4 @@
-<indirectvisibility.def>
+<IndirectVisibility.def>
   <TempProperties>
     <_indirectVisibility></_indirectVisibility>
   </TempProperties>
@@ -63,4 +63,4 @@
       <Arg>	BOOL	</Arg>
     </indirectVisibility_updateCarriedFlag>
   </CellMethods>
-</indirectvisibility.def>
+</IndirectVisibility.def>

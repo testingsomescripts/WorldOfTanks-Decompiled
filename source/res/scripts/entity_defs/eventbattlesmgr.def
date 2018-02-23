@@ -1,4 +1,4 @@
-<eventbattlesmgr.def>
+<EventBattlesMgr.def>
   <Properties></Properties>
   <BaseMethods>
     <onArenaCreated>
@@ -25,4 +25,4 @@
       <Arg>	OBJECT_ID	</Arg>
     </removeArena>
   </BaseMethods>
-</eventbattlesmgr.def>
+</EventBattlesMgr.def>
