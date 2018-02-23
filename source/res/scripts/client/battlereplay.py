@@ -15,12 +15,11 @@ import constants
 import Keys
 import Event
 import AreaDestructibles
+from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
-from debug_utils import *
-from ConnectionManager import connectionManager
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from constants import ARENA_PERIOD
@@ -28,7 +27,10 @@ from gui.Scaleform.framework.ViewTypes import TOP_WINDOW
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.lobby_context import ILobbyContext
+import TriggersManager
 
 def _isVideoCameraCtrl(mode):
     from AvatarInputHandler.control_modes import VideoCameraControlMode
@@ -69,6 +71,8 @@ class BattleReplay():
     currentTime = property(lambda self: self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME))
     warpTime = property(lambda self: self.__warpTime)
     rewind = property(lambda self: self.__rewind)
+    isAutoRecordingEnabled = property(lambda self: self.__isAutoRecordingEnabled)
+    arenaInfo = property(lambda self: json.loads(self.__replayCtrl.getArenaInfoStr()))
 
     def resetUpdateGunOnTimeWarp(self):
         self.__updateGunOnTimeWarp = False
@@ -77,6 +81,8 @@ class BattleReplay():
     isBattleSimulation = property(lambda self: self.__isBattleSimulation)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -95,6 +101,7 @@ class BattleReplay():
         self.__replayCtrl.cruiseModeCallback = self.onSetCruiseMode
         self.__replayCtrl.equipmentIdCallback = self.onSetEquipmentId
         self.__replayCtrl.warpFinishedCallback = self.__onTimeWarpFinished
+        self.__replayCtrl.sniperModeCallback = self.onSniperModeChanged
         self.__isAutoRecordingEnabled = False
         self.__quitAfterStop = False
         self.__isPlayingPlayList = False
@@ -130,7 +137,7 @@ class BattleReplay():
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
         self.onStopped = Event.Event()
-        if IS_DEVELOPMENT:
+        if constants.IS_DEVELOPMENT:
             try:
                 import development.replay_override
             except:
@@ -142,16 +149,18 @@ class BattleReplay():
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
+        g_playerEvents.onBootcampAccountMigrationComplete += self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
 
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
+        g_playerEvents.onBootcampAccountMigrationComplete -= self.__onBootcampAccountMigrationComplete
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
 
     def destroy(self):
-        self.stop()
+        self.stop(isDestroyed=True)
         self.onCommandReceived.clear()
         self.onCommandReceived = None
         self.onAmmoSettingChanged.clear()
@@ -222,9 +231,8 @@ class BattleReplay():
         if self.isRecording:
             self.stop()
         import SafeUnpickler
-        import cPickle
         unpickler = SafeUnpickler.SafeUnpickler()
-        cPickle.loads = unpickler.loads
+        pickle.loads = unpickler.loads
         if fileName is not None and fileName.rfind('.wotreplaylist') != -1:
             self.__playList = []
             self.__isPlayingPlayList = True
@@ -254,7 +262,7 @@ class BattleReplay():
             return False
             return
 
-    def stop(self, rewindToTime=None, delete=False):
+    def stop(self, rewindToTime=None, delete=False, isDestroyed=False):
         if not self.isPlaying and not self.isRecording:
             return False
         else:
@@ -266,15 +274,15 @@ class BattleReplay():
             if wasPlaying:
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
-                if not isOffline:
-                    connectionManager.onDisconnected += self.__showLoginPage
+                if not isOffline and not isDestroyed:
+                    self.connectionMgr.onDisconnected += self.__showLoginPage
                 BigWorld.clearEntitiesAndSpaces()
                 BigWorld.disconnect()
                 if self.__quitAfterStop:
                     BigWorld.quit()
-                elif isOffline:
+                elif isOffline and not isDestroyed:
                     self.__showLoginPage()
-            return
+            return True
 
     def autoStartBattleReplay(self):
         fileName = self.__replayCtrl.getAutoStartFileName()
@@ -294,6 +302,8 @@ class BattleReplay():
         elif self.isTimeWarpInProgress:
             return True
         elif key == Keys.KEY_F1:
+            if not isRepeat and not isDown:
+                self.__showInfoMessages()
             return True
         elif not self.isClientReady:
             return False
@@ -586,21 +596,27 @@ class BattleReplay():
                  'battleType': arena.bonusType,
                  'clientVersionFromExe': clientVersionFromExe,
                  'clientVersionFromXml': clientVersionFromXml,
-                 'serverName': connectionManager.serverUserName,
+                 'serverName': self.connectionMgr.serverUserName,
                  'regionCode': constants.AUTH_REALM,
                  'serverSettings': self.__serverSettings,
                  'hasMods': self.__replayCtrl.hasMods}
+                if self.isRecording and BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
+                    from bootcamp.Bootcamp import g_bootcamp
+                    arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
             else:
-                self.__showInfoMessage('replayControlsHelp1')
-                self.__showInfoMessage('replayControlsHelp2')
-                self.__showInfoMessage('replayControlsHelp3')
+                self.__showInfoMessages()
                 if self.replayTimeout > 0:
                     LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
                     BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
             return
+
+    def __showInfoMessages(self):
+        self.__showInfoMessage('replayControlsHelp1')
+        self.__showInfoMessage('replayControlsHelp2')
+        self.__showInfoMessage('replayControlsHelp3')
 
     def __getArenaVehiclesInfo(self):
         vehicles = {}
@@ -623,11 +639,10 @@ class BattleReplay():
                 self.__serverSettings = json.loads(self.__replayCtrl.getArenaInfoStr()).get('serverSettings')
             except:
                 LOG_WARNING('There is problem while unpacking server settings from replay')
-                if IS_DEVELOPMENT:
+                if constants.IS_DEVELOPMENT:
                     LOG_CURRENT_EXCEPTION()
 
-            from gui.LobbyContext import g_lobbyContext
-            g_lobbyContext.setServerSettings(self.__serverSettings)
+            self.lobbyContext.setServerSettings(self.__serverSettings)
 
     def onCommonSwfLoaded(self):
         self.__enableTimeWarp = False
@@ -647,7 +662,7 @@ class BattleReplay():
             return
         self.__isMenuShowed = False
         from gui import DialogsInterface
-        DialogsInterface.showI18nInfoDialog('replayStopped', self.__setStopDelay)
+        DialogsInterface.showI18nConfirmDialog('replayStopped', self.__replayFinishedDlgCallback)
         self.__isFinished = True
         self.setPlaybackSpeedIdx(0)
 
@@ -684,25 +699,20 @@ class BattleReplay():
     def __onAmmoButtonPressed(self, idx):
         self.onAmmoSettingChanged(idx)
 
-    def onLockTarget(self, lock, playVoiceNotifications=True):
-        player = BigWorld.player()
+    def onSniperModeChanged(self, enable):
+        if self.isPlaying:
+            if enable:
+                TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.SNIPER_MODE)
+            else:
+                TriggersManager.g_manager.deactivateTrigger(TriggersManager.TRIGGER_TYPE.SNIPER_MODE)
+        elif self.isRecording:
+            self.__replayCtrl.onSniperMode(enable)
+
+    def onLockTarget(self, lock, playVoiceNotifications):
         if not isPlayerAvatar():
             return
-        import SoundGroups
         if self.isPlaying:
-            if lock == 1:
-                SoundGroups.g_instance.playSound2D('ui_target_locked')
-            elif lock == 0:
-                SoundGroups.g_instance.playSound2D('ui_target_unlocked')
-            else:
-                SoundGroups.g_instance.playSound2D('ui_target_lost')
-            if playVoiceNotifications:
-                if lock == 1:
-                    player.soundNotifications.play('target_captured')
-                elif lock == 0:
-                    player.soundNotifications.play('target_unlocked')
-                else:
-                    player.soundNotifications.play('target_lost')
+            BigWorld.player().onLockTarget(lock, playVoiceNotifications)
         elif self.isRecording:
             self.__replayCtrl.onLockTarget(lock, playVoiceNotifications)
 
@@ -795,7 +805,7 @@ class BattleReplay():
 
     def __showLoginPage(self):
         g_appLoader.showLogin()
-        connectionManager.onDisconnected -= self.__showLoginPage
+        self.connectionMgr.onDisconnected -= self.__showLoginPage
 
     def setArenaStatisticsStr(self, arenaUniqueStr):
         self.__replayCtrl.setArenaStatisticsStr(arenaUniqueStr)
@@ -812,7 +822,7 @@ class BattleReplay():
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'fortResourceReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
@@ -872,9 +882,10 @@ class BattleReplay():
         if app is not None:
             topWindowContainer = app.containerManager.getContainer(TOP_WINDOW)
             if topWindowContainer is not None:
-                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'})
+                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'}) or topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'bootcampSimpleDialog'})
                 if pyView is not None:
                     topWindowContainer.remove(pyView)
+                    pyView.destroy()
         return
 
     def __enableInGameEffects(self, enable):
@@ -885,6 +896,9 @@ class BattleReplay():
 
     def setSetting(self, key, value):
         self.__settings.write(key, base64.b64encode(pickle.dumps(value)))
+        diff = {key: value}
+        LOG_DEBUG('Applying REPLAY settings: ', diff)
+        self.settingsCore.onSettingsChanged(diff)
 
     def isFinished(self):
         if self.isPlaying or g_replayCtrl.isTimeWarpInProgress:
@@ -929,8 +943,14 @@ class BattleReplay():
             arcadeMode.showGunMarker(True)
         return
 
-    def __setStopDelay(self, *args):
-        BigWorld.callback(0.0, self.stop)
+    def __replayFinishedDlgCallback(self, shouldExit):
+        """
+        Callback for Dialog 'Replay is Finished'
+        :param shouldExit: If true, user pressed 'OK',
+                           false - 'Decline' or 'Close' button
+        """
+        if shouldExit:
+            BigWorld.callback(0.0, self.stop)
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:
@@ -942,6 +962,10 @@ class BattleReplay():
             if self.__arenaPeriod == period and period == ARENA_PERIOD.BATTLE:
                 self.resetArenaPeriod()
         self.__arenaPeriod = period
+
+    def __onBootcampAccountMigrationComplete(self):
+        if self.isRecording:
+            self.stop(delete=True)
 
     def setDataCallback(self, name, callback):
         eventHandler = self.__replayCtrl.getCallbackHandler(name)

@@ -2,12 +2,13 @@
 # Embedded file name: scripts/client/helpers/ServerSettings.py
 import types
 from collections import namedtuple
+import copy
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.shared.utils.decorators import ReprInjector
-from shared_utils import makeTupleByDict
+from shared_utils import makeTupleByDict, updateDict
 _CLAN_EMBLEMS_SIZE_MAPPING = {16: 'clan_emblems_16',
  32: 'clan_emblems_small',
  64: 'clan_emblems_big',
@@ -89,6 +90,16 @@ class _FileServerSettings(object):
         assert isinstance(langID, types.StringType), 'given langID type must be string'
         return self.__getUrl('rare_achievements_texts', langID)
 
+    def getMissionsTokenImageUrl(self, tokenID, size):
+        return self.__getUrl('missions_token_image', size, tokenID)
+
+    def getMissionsTokenDescrsUrl(self, langID):
+        assert isinstance(langID, types.StringType), 'given langID type must be string'
+        return self.__getUrl('missions_token_descrs', langID)
+
+    def getMissionsDecorationUrl(self, decorationID, size):
+        return self.__getUrl('missions_decoration', size, decorationID)
+
     def __getUrl(self, urlKey, *args):
         try:
             return self.__urls[urlKey] % args
@@ -167,11 +178,69 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'm
         return cls(False, False)
 
 
+_BwRankedBattles = namedtuple('_BwRankedBattles', ('rblbHostUrl',))
+_BwRankedBattles.__new__.__defaults__ = (None,)
+
+class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
+ 'peripheryIDs',
+ 'winnerRankChanges',
+ 'loserRankChanges',
+ 'minXP',
+ 'unburnableRanks',
+ 'unburnableStepRanks',
+ 'unburnableVehRanks',
+ 'unburnableVehStepRanks',
+ 'minLevel',
+ 'maxLevel',
+ 'accRanks',
+ 'accSteps',
+ 'vehRanks',
+ 'vehSteps',
+ 'cycleFinishSeconds',
+ 'primeTimes',
+ 'seasons',
+ 'cycleTimes',
+ 'accLadderPts',
+ 'vehLadderPts',
+ 'clientBadgeIDs'])):
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(filter(lambda (k, v): k in allowedFields, data.iteritems()))
+        return self._replace(**dataToUpdate)
+
+
+_RankedBattlesConfig.__new__.__defaults__ = (False,
+ {},
+ (),
+ (),
+ 0,
+ {},
+ {},
+ {},
+ {},
+ 0,
+ 0,
+ (),
+ (),
+ (),
+ (),
+ 0,
+ {},
+ {},
+ (),
+ (),
+ (),
+ ())
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
         self.onServerSettingsChange = Event()
-        self.__serverSettings = serverSettings if serverSettings else {}
+        self.__serverSettings = copy.deepcopy(serverSettings) if serverSettings else {}
         if 'roaming' in self.__serverSettings:
             roamingSettings = self.__serverSettings['roaming']
             self.__roamingSettings = RoamingSettings(roamingSettings[0], roamingSettings[1], [ _ServerInfo(*s) for s in roamingSettings[2] ])
@@ -203,13 +272,23 @@ class ServerSettings(object):
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
         else:
             self.__strongholdSettings = _StrongholdSettings.defaults()
+        if 'rankedBattles' in self.__serverSettings:
+            self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
+        else:
+            self.__bwRankedBattles = _BwRankedBattles()
+        if 'ranked_config' in self.__serverSettings:
+            self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
+        else:
+            self.__rankedBattlesSettings = _RankedBattlesConfig()
 
     def update(self, serverSettingsDiff):
-        self.__serverSettings.update(serverSettingsDiff)
+        self.__serverSettings = updateDict(self.__serverSettings, serverSettingsDiff)
         if 'clanProfile' in serverSettingsDiff:
             self.__updateClanProfile(serverSettingsDiff)
         if 'spgRedesignFeatures' in self.__serverSettings:
             self.__spgRedesignFeatures = makeTupleByDict(_SpgRedesignFeatures, self.__serverSettings['spgRedesignFeatures'])
+        if 'ranked_config' in serverSettingsDiff:
+            self.__updateRanked(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -246,6 +325,14 @@ class ServerSettings(object):
     def stronghold(self):
         return self.__strongholdSettings
 
+    @property
+    def bwRankedBattles(self):
+        return self.__bwRankedBattles
+
+    @property
+    def rankedBattles(self):
+        return self.__rankedBattlesSettings
+
     def isPotapovQuestEnabled(self):
         return self.isFalloutQuestEnabled() or self.isRegularQuestEnabled()
 
@@ -261,38 +348,31 @@ class ServerSettings(object):
     def isBuyPotapovQuestSlotEnabled(self):
         return self.__getGlobalSetting('isBuyPotapovQuestSlotEnabled', False)
 
-    def isFortsEnabled(self):
-        return self.__getGlobalSetting('isFortsEnabled', True)
-
     def isStrongholdsEnabled(self):
-        return self.__getGlobalSetting('isStrongholdsEnabled', True)
+        settings = self.__getGlobalSetting('strongholdSettings', {'isStrongholdsEnabled': False})
+        return settings.get('isStrongholdsEnabled', False)
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 
     def isTutorialEnabled(self):
-        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
+        return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED) and not self.isBootcampEnabled()
 
     def isSandboxEnabled(self):
         return self.__getGlobalSetting('isSandboxEnabled', False)
 
+    def isBootcampEnabled(self):
+        return self.__getGlobalSetting('isBootcampEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
+        if self.isBootcampEnabled():
+            from bootcamp.Bootcamp import g_bootcamp
+            if g_bootcamp.isRunning():
+                return False
         return True
 
-    def getForbiddenFortDefenseHours(self):
-        return self.__getGlobalSetting('forbiddenFortDefenseHours', tuple())
-
-    def getForbiddenSortieHours(self):
-        return self.__getGlobalSetting('forbiddenSortieHours', tuple())
-
-    def getForbiddenSortiePeripheryIDs(self):
-        return self.__getGlobalSetting('forbiddenSortiePeripheryIDs', tuple())
-
-    def getForbiddenRatedBattles(self):
-        return self.__getGlobalSetting('forbiddenRatedBattles', {})
-
-    def isSPGForbiddenInSquads(self):
-        return self.__getGlobalSetting('forbidSPGinSquads', False)
+    def getMaxSPGinSquads(self):
+        return self.__getGlobalSetting('maxSPGinSquads', 0)
 
     def getRandomMapsForDemonstrator(self):
         return self.__getGlobalSetting('randomMapsForDemonstrator', {})
@@ -331,3 +411,6 @@ class ServerSettings(object):
     def __updateClanProfile(self, targetSettings):
         cProfile = targetSettings['clanProfile']
         self.__clanProfile = _ClanProfile(cProfile.get('isEnabled', False), cProfile.get('gateUrl', ''), cProfile.get('type', 'gateway'))
+
+    def __updateRanked(self, targetSettings):
+        self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])

@@ -15,21 +15,24 @@ from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYP
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
-from gui.server_events.CompanyBattleController import CompanyBattleController
 from gui.server_events.PQController import RandomPQController, FalloutPQController
-from gui.server_events.event_items import CompanyBattles
 from gui.server_events.event_items import EventBattles, createQuest, createAction, FalloutConfig, MotiveQuest
+from gui.server_events.formatters import isMarathon, getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE
+from gui.server_events.prefetcher import Prefetcher
 from gui.shared import events
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
 from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
+from helpers import dependency
 from helpers import isPlayerAccount
 from items import getTypeOfCompactDescr
 from potapov_quests import _POTAPOV_QUEST_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
 from shared_utils import makeTupleByDict
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 QUEUE_TYPE_TO_ARENA_BONUS_TYPE = {QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_BONUS_TYPE.FALLOUT_CLASSIC,
  QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_BONUS_TYPE.FALLOUT_MULTITEAM}
 
@@ -76,10 +79,10 @@ class _PotapovComposer(object):
 class EventsCache(IEventsCache):
     USER_QUESTS = (EVENT_TYPE.BATTLE_QUEST,
      EVENT_TYPE.TOKEN_QUEST,
-     EVENT_TYPE.FORT_QUEST,
      EVENT_TYPE.PERSONAL_QUEST,
      EVENT_TYPE.POTAPOV_QUEST)
     SYSTEM_QUESTS = (EVENT_TYPE.REF_SYSTEM_QUEST,)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self.__waitForSync = False
@@ -87,39 +90,44 @@ class EventsCache(IEventsCache):
         self.__cache = defaultdict(dict)
         self.__potapovHidden = {}
         self.__actionsCache = defaultdict(lambda : defaultdict(dict))
+        self.__actions2quests = {}
+        self.__quests2actions = {}
         self.__questsDossierBonuses = defaultdict(set)
+        self.__compensations = {}
         self.__random = RandomPQController()
         self.__fallout = FalloutPQController()
         self.__potapovComposer = _PotapovComposer(self.__random, self.__fallout)
         self.__questsProgress = QuestsProgressRequester()
-        self.__companies = CompanyBattleController(self)
         self.__em = EventManager()
+        self.__prefetcher = Prefetcher(self)
         self.onSyncStarted = Event(self.__em)
         self.onSyncCompleted = Event(self.__em)
         self.onSelectedQuestsChanged = Event(self.__em)
         self.onSlotsCountChanged = Event(self.__em)
         self.onProgressUpdated = Event(self.__em)
+        self.onEventsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
         return
 
     def init(self):
         self.__random.init()
         self.__fallout.init()
+        self.__prefetcher.init()
 
     def fini(self):
         self.__fallout.fini()
         self.__random.fini()
+        self.__prefetcher.fini()
         self.__em.clear()
+        self.__compensations.clear()
         self.__clearInvalidateCallback()
 
     def start(self):
-        self.__companies.start()
         self.__lockedQuestIds = BigWorld.player().potapovQuestsLock
         g_playerEvents.onPQLocksChanged += self.__onLockedQuestsChanged
 
     def stop(self):
         g_playerEvents.onPQLocksChanged -= self.__onLockedQuestsChanged
-        self.__companies.stop()
 
     def clear(self):
         self.stop()
@@ -154,8 +162,8 @@ class EventsCache(IEventsCache):
         return self.__potapovComposer
 
     @property
-    def companies(self):
-        return self.__companies
+    def prefetcher(self):
+        return self.__prefetcher
 
     def getLockedQuestTypes(self):
         questIDs = set()
@@ -174,9 +182,6 @@ class EventsCache(IEventsCache):
     @async
     @process
     def update(self, diff=None, callback=None):
-        if diff is not None:
-            if diff.get('eventsData', {}).get(EVENT_CLIENT_DATA.INGAME_EVENTS):
-                self.__companies.setNotificators()
         yield self.falloutQuestsProgress.request()
         yield self.randomQuestsProgress.request()
         yield self.__questsProgress.request()
@@ -189,7 +194,7 @@ class EventsCache(IEventsCache):
             callback(*args)
 
         if diff is not None:
-            isQPUpdated = 'quests' in diff
+            isQPUpdated = 'quests' in diff or 'tokens' in diff
             isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
             isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
             hasVehicleUnlocks = False
@@ -215,6 +220,31 @@ class EventsCache(IEventsCache):
             return not q.isHidden() and filterFunc(q)
 
         return self._getQuests(userFilterFunc)
+
+    def getActiveQuests(self, filterFunc=None):
+        """ Get active subset of events.
+        """
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return q.getFinishTimeLeft() and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getAdvisableQuests(self, filterFunc=None):
+        """ Get subset of quests that may be notified as new.
+        """
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isAvailable()[0]:
+                return False
+            elif q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(q.getID()):
+                return False
+            else:
+                return filterFunc(q)
+
+        return self.getActiveQuests(userFilterFunc)
 
     def getMotiveQuests(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
@@ -245,6 +275,14 @@ class EventsCache(IEventsCache):
 
         return self._getQuests(hiddenFilterFunc)
 
+    def getRankedQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def rankedFilterFunc(q):
+            return q.getType() == EVENT_TYPE.RANKED_QUEST and filterFunc(q)
+
+        return self._getQuests(rankedFilterFunc)
+
     def getAllQuests(self, filterFunc=None, includePotapovQuests=False):
         return self._getQuests(filterFunc, includePotapovQuests)
 
@@ -255,6 +293,12 @@ class EventsCache(IEventsCache):
             return filterFunc(q) and q.getType() != EVENT_TYPE.GROUP
 
         return self._getActions(userFilterFunc)
+
+    def getActionEntities(self):
+        return self.__getActionsEntitiesData()
+
+    def getAnnouncedActions(self):
+        return self.__getAnnouncedActions()
 
     def getEventBattles(self):
         battles = self.__getEventBattles()
@@ -270,15 +314,18 @@ class EventsCache(IEventsCache):
     def isGasAttackEnabled(self):
         return len(self.__getGasAttack()) > 0
 
-    def getEventVehicles(self):
-        from gui.shared import g_itemsCache
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def getEventVehicles(self, itemsCache=None):
         result = []
-        for v in self.getEventBattles().vehicles:
-            item = g_itemsCache.items.getItemByCD(v)
-            if item.isInInventory:
-                result.append(item)
+        if itemsCache is None:
+            return result
+        else:
+            for v in self.getEventBattles().vehicles:
+                item = itemsCache.items.getItemByCD(v)
+                if item.isInInventory:
+                    result.append(item)
 
-        return sorted(result)
+            return sorted(result)
 
     def getEvents(self, filterFunc=None):
         svrEvents = self.getQuests(filterFunc)
@@ -291,18 +338,30 @@ class EventsCache(IEventsCache):
     def getFutureEvents(self):
         return self.getEvents(lambda q: q.getStartTimeLeft() > 0)
 
-    def getCompanyBattles(self):
-        battle = self.__getCompanyBattlesData()
-        startTime = battle.get('startTime', 0.0)
-        finishTime = battle.get('finishTime', 0.0)
-        return CompanyBattles(startTime=None if startTime is None else float(startTime), finishTime=None if finishTime is None else float(finishTime), peripheryIDs=battle.get('peripheryIDs', set()))
-
     def isFalloutEnabled(self):
         return bool(self.__getFallout().get('enabled', False))
 
     def getFalloutConfig(self, queueType):
         arenaBonusType = QUEUE_TYPE_TO_ARENA_BONUS_TYPE.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
         return makeTupleByDict(FalloutConfig, self.__getFallout().get(arenaBonusType, {}))
+
+    def getAffectedAction(self, item):
+        """Get action which affects on given item
+        """
+        actionEntities = self.getActionEntities()
+        if actionEntities:
+            entities = actionEntities[aei.ENTITIES_SECTION_NAME]
+            actions = actionEntities[aei.ACTIONS_SECTION_NAME]
+            steps = actionEntities[aei.STEPS_SECTION_NAME]
+            if item in entities:
+                entity = entities[item]
+                actionNameIdx = entity[aei.ACTION_NAME_IDX]
+                actionName = actions[actionNameIdx]
+                stepNameIdx = entity[aei.ACTION_STEP_IDX]
+                actionStep = steps[stepNameIdx]
+                intersectedActions = entity[aei.AFFECTED_ACTIONS_IDX]
+                return [actionName, actionStep, intersectedActions]
+        return []
 
     def getItemAction(self, item, isBuying=True, forCredits=False):
         result = []
@@ -398,15 +457,23 @@ class EventsCache(IEventsCache):
 
         return result
 
+    def getCompensation(self, tokenID):
+        """
+        Gets bonuses compensation instead of token
+        """
+        return self.__compensations.get(tokenID)
+
     def _getQuests(self, filterFunc=None, includePotapovQuests=False):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
         for qID, q in self.__getCommonQuestsIterator():
+            if qID in self.__quests2actions:
+                q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
                 groups[qID] = q
                 continue
-            if q.getDestroyingTimeLeft() <= 0:
+            if q.getFinishTimeLeft() <= 0:
                 continue
             if not filterFunc(q):
                 continue
@@ -454,6 +521,8 @@ class EventsCache(IEventsCache):
             if 'id' in aData:
                 a = self._makeAction(aData['id'], aData)
                 actionID = a.getID()
+                if actionID in self.__actions2quests:
+                    a.linkedQuests = self.__actions2quests[actionID]
                 if a.getType() == EVENT_TYPE.GROUP:
                     groups[actionID] = a
                     continue
@@ -588,16 +657,54 @@ class EventsCache(IEventsCache):
         if invalidateTimeLeft != sys.maxint:
             self.__loadInvalidateCallback(invalidateTimeLeft)
         self.__waitForSync = False
+        self.__prefetcher.ask()
+        self.__syncActionsWithQuests()
+        self.__invalidateCompensations()
         self.onSyncCompleted()
         callback(True)
         from gui.shared import g_eventBus
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.EVENTS_UPDATED))
         return
 
+    def __invalidateCompensations(self):
+        """
+        Store hidden quests compensations for marathons quest to improve performance
+        """
+        self.__compensations.clear()
+        for q in self.getHiddenQuests(lambda q: isMarathon(q.getGroupID())).itervalues():
+            self.__compensations.update(q.getCompensation())
+
     def __clearQuestsItemsCache(self):
         for qID, q in self._getQuests().iteritems():
             q.accountReqs.clearItemsCache()
             q.vehicleReqs.clearItemsCache()
+
+    def __syncActionsWithQuests(self):
+        """After invalidation of EventsCache, we should sync links between Actions and BattleQuests
+        """
+        self.__actions2quests.clear()
+        self.__quests2actions.clear()
+        quests = self.__cache['quests']
+        actions = [ item for item in self.__cache['actions'] ]
+        self.__actions2quests = {k:[] for k in actions}
+        for questID, questData in quests.iteritems():
+            groupId = questData.getGroupID()
+            linkedActionID = getLinkedActionID(groupId, actions)
+            if linkedActionID is not None:
+                self.__actions2quests[linkedActionID].append(questID)
+
+        self.__convertQuests2actions()
+        return
+
+    def __convertQuests2actions(self):
+        """from dict {action: [connected quests]} create reverted dict {quest: [connected actions]}
+        :return:
+        """
+        for action, quests in self.__actions2quests.iteritems():
+            for quest in quests:
+                if quest in self.__quests2actions:
+                    self.__quests2actions[quest].append(action)
+                self.__quests2actions[quest] = [action]
 
     @classmethod
     def __getEventsData(cls, eventsTypeName):
@@ -615,23 +722,23 @@ class EventsCache(IEventsCache):
     def __getQuestsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.QUEST)
 
-    def __getFortQuestsData(self):
-        return self.__getEventsData(EVENT_CLIENT_DATA.FORT_QUEST)
-
     def __getPersonalQuestsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.PERSONAL_QUEST)
 
     def __getActionsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.ACTION)
 
+    def __getActionsEntitiesData(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.ACTION_ENTITIES)
+
+    def __getAnnouncedActions(self):
+        return self.__getEventsData(EVENT_CLIENT_DATA.ANNOUNCED_ACTION_DATA)
+
     def __getIngameEventsData(self):
         return self.__getEventsData(EVENT_CLIENT_DATA.INGAME_EVENTS)
 
     def __getEventBattles(self):
         return self.__getIngameEventsData().get('eventBattles', {})
-
-    def __getCompanyBattlesData(self):
-        return self.__getIngameEventsData().get('eventCompanies', {})
 
     def __getUnitRestrictions(self):
         return self.__getUnitData().get('restrictions', {})
@@ -650,7 +757,6 @@ class EventsCache(IEventsCache):
 
     def __getCommonQuestsIterator(self):
         questsData = self.__getQuestsData()
-        questsData.update(self.__getFortQuestsData())
         questsData.update(self.__getPersonalQuestsData())
         questsData.update(self.__getPotapovHiddenQuests())
         for qID, qData in questsData.iteritems():

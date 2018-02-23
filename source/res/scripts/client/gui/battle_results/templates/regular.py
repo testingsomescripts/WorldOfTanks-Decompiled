@@ -58,13 +58,15 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'regionNameStr': '',
  'playerVehicles': [],
  'playerVehicleNames': [],
+ 'playerVehicleTypeIcons': [],
  'falloutMode': '',
  'overtime': {},
  'totalFortResourceStr': '',
  'totalInfluenceStr': '',
  'timeStats': [],
  'clientArenaIdx': 0,
- 'uiVisibility': 0})
+ 'uiVisibility': 0,
+ 'rank': None})
 _CLAN_COMMON_VO_META = base.PropertyMeta((('clanDBID', -1, 'clanDBID'), ('clanAbbrev', '', 'clanAbbrev')))
 _CLAN_COMMON_VO_META.bind(common.ClanInfoBlock)
 CLANS_COMMON_VO_META = base.PropertyMeta((('allies', common.ClanInfoBlock(field='allies'), 'allies'), ('enemies', common.ClanInfoBlock(field='enemies'), 'enemies')))
@@ -110,7 +112,8 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(9, personal.PersonalVehicleNamesBlock(ba
 REGULAR_COMMON_STATS_BLOCK.addComponent(10, personal.PersonalVehiclesBlock(base.ListMeta(), 'playerVehicles', _RECORD.PERSONAL))
 REGULAR_COMMON_STATS_BLOCK.addComponent(11, _TIME_STATS_BLOCK.clone())
 REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaIdx'))
-REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibility'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(13, personal.PersonalVehicleTypeIconsBlock(base.ListMeta(), 'playerVehicleTypeIcons'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.TeamsUiVisibility('uiVisibility'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'hasGetPremBtn': False,
  'getPremVO': {},
@@ -281,7 +284,11 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('squadID', 0, 'squadIndex'),
  ('isOwnSquad', False, 'isPersonalSquad'),
  ('statValues', vehicles.AllRegularVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'),
- ('resourceCount', 0, 'fortResource')))
+ ('resourceCount', 0, 'fortResource'),
+ ('rank', 0, 'rank'),
+ ('rankIcon', '', 'rankIcon'),
+ ('badge', 0, 'badge'),
+ ('badgeIcon', '', 'badgeIcon')))
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],
  'team2': []})

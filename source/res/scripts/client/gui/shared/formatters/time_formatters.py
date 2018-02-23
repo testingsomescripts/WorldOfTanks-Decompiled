@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
+import time
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
 
@@ -8,6 +9,15 @@ def defaultFormatter(key, countType, count, ctx=None):
     kwargs = ctx.copy() if ctx else {}
     kwargs[countType] = count
     return i18n.makeString((key % countType), **kwargs)
+
+
+def formatDate(dateFormat, timestamp):
+    """
+    @param dateFormat: can be string of format or localization key
+    @param timestamp: timestamp
+    @return: formated date as string
+    """
+    return time.strftime(i18n.makeString(dateFormat), time_utils.getTimeStructInLocal(timestamp))
 
 
 def formatTime(timeLeft, divisor, timeStyle=None):
@@ -72,8 +82,10 @@ class RentLeftFormatter(object):
     def getRentLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
         if self.__rentInfo.getTimeLeft() > 0:
             resultStr = self.getRentTimeLeftStr(localization, timeStyle, ctx, formatter)
-        else:
+        elif self.__rentInfo.battlesLeft:
             resultStr = self.getRentBattlesLeftStr(localization, formatter)
+        else:
+            resultStr = self.getRentWinsLeftStr(localization, formatter)
         return resultStr
 
     def getRentTimeLeftStr(self, localization=None, timeStyle=None, ctx=None, formatter=None):
@@ -91,3 +103,11 @@ class RentLeftFormatter(object):
             formatter = defaultFormatter
         battlesLeft = self.__rentInfo.battlesLeft
         return formatter(localization, 'battles', battlesLeft) if battlesLeft > 0 else ''
+
+    def getRentWinsLeftStr(self, localization=None, formatter=None):
+        if localization is None:
+            localization = self.__localizationRootKey
+        if formatter is None:
+            formatter = defaultFormatter
+        winsLeft = self.__rentInfo.winsLeft
+        return formatter(localization, 'wins', winsLeft) if winsLeft > 0 else ''

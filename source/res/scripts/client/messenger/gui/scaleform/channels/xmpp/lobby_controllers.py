@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/xmpp/lobby_controllers.py
 import BigWorld
-from debug_utils import LOG_DEBUG
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from gui.shared.utils import backoff
@@ -58,8 +57,8 @@ class _ChannelController(LobbyLayout):
         return self._mBuilder.setGuiType(dbID).setRole(message.accountRole).setAffiliation(message.accountAffiliation).setName(dbID, message.accountName).setTime(message.sentAt).setText(message.body).build()
 
     def _onConnectStateChanged(self, _):
-        if self._view:
-            self._view.as_setJoinedS(self.isJoined())
+        for view in self._views:
+            view.as_setJoinedS(self.isJoined())
 
     def _onMembersListChanged(self):
         self._refreshMembersDP()
@@ -139,8 +138,7 @@ class ChatSessionController(_ChannelController):
                 uid = makeContactJID(user.getID())
             member = self._channel.getMember(uid)
             if member is not None:
-                presence = user.getItem().getPresence()
-                member.update(status=presence)
+                member.update(status=user.isOnline())
         return
 
 

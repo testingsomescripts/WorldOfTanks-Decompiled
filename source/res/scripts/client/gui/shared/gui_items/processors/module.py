@@ -4,17 +4,28 @@ import BigWorld
 import AccountCommands
 from gui import makeHtmlString
 from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
-from debug_utils import LOG_DEBUG
-from gui.SystemMessages import SM_TYPE
-from gui.shared import g_itemsCache
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from debug_utils import LOG_DEBUG, LOG_UNEXPECTED
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
-from gui.shared.formatters import formatPrice
-from gui.shared.money import Money
+from gui.shared.formatters import formatPrice, icons, getBWFormatter
+from gui.shared.money import Money, Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui.shared.utils.requesters.ItemsRequester import ItemsRequester
-from helpers import i18n
+from helpers import i18n, dependency
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
+
+def _getIconHtmlTagForCurrency(currency):
+    getter = getattr(icons, currency)
+    if getter:
+        return getter()
+    LOG_UNEXPECTED('Could not fetch an icon getter for the following currency', currency)
+
+
+def _formatCurrencyValue(currency, value):
+    formatter = getBWFormatter(currency)
+    return formatter(value)
+
 
 class ModuleProcessor(ItemProcessor):
     """
@@ -22,7 +33,8 @@ class ModuleProcessor(ItemProcessor):
     """
     ITEMS_MSG_PREFIXES = {GUI_ITEM_TYPE.SHELL: 'shell',
      GUI_ITEM_TYPE.EQUIPMENT: 'artefact',
-     GUI_ITEM_TYPE.OPTIONALDEVICE: 'artefact'}
+     GUI_ITEM_TYPE.OPTIONALDEVICE: 'artefact',
+     GUI_ITEM_TYPE.BATTLE_BOOSTER: 'battleBooster'}
     DEFAULT_PREFIX = 'module'
 
     def __init__(self, item, opType, plugs=tuple()):
@@ -91,38 +103,95 @@ class ModuleBuyer(ModuleTradeProcessor):
     Module buyer
     """
 
-    def __init__(self, item, count, buyForCredits):
+    def __init__(self, item, count, currency):
         """
         Ctor.
         
         @param item: module to install
         @param count: buying count
-        @param buyForCredits: buy gold item for credits
+        @param currency: currency to be used for buying
         """
         super(ModuleBuyer, self).__init__(item, count, 'buy')
-        self.buyForCredits = buyForCredits
-        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()),))
+        self._currency, self._itemPrice = self._getItemCurrencyAndPrice(currency)
+        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()), plugins.ModuleConfigValidator(item)))
 
-    def _isItemBuyingForCredits(self):
-        if self.buyForCredits:
-            shop = g_itemsCache.items.shop
-            if self.item.itemTypeID == GUI_ITEM_TYPE.SHELL and shop.isEnabledBuyingGoldShellsForCredits:
+    def _getItemCurrencyAndPrice(self, currency):
+        """
+        Determine item price in the given currency by item's alternative and original prices.
+        
+        :param currency: a currency in that the price should be, see Currency enum.
+        :return: an instance of tuple(currency, Money)
+        """
+        price = self.item.altPrice or self.item.buyPrice
+        return (currency, Money.makeFrom(currency, price.get(currency)))
+
+    def _getOpPrice(self):
+        """
+        Gets money required to buy the specified amount of items.
+        
+        :return: an instance of Money
+        """
+        return self.count * self._itemPrice
+
+    @classmethod
+    def isItemBuyingAvailableForCurrency(cls, item, currency):
+        """
+        Determines if it is allowed to by the given item for the given currency.
+        
+        :param item: item to be bought
+        :param currency: price currency
+        
+        :return: True if the item can be bought for the given currency; otherwise false.
+        """
+        shop = cls.itemsCache.items.shop
+        originalCurrency = item.buyPrice.getCurrency()
+        if currency == originalCurrency:
+            return True
+        if item.itemTypeID == GUI_ITEM_TYPE.SHELL:
+            if originalCurrency == Currency.GOLD and currency == Currency.CREDITS and shop.isEnabledBuyingGoldShellsForCredits:
                 return True
-            if self.item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and shop.isEnabledBuyingGoldEqsForCredits:
+        elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT and originalCurrency == Currency.GOLD and currency == Currency.CREDITS:
+            if shop.isEnabledBuyingGoldEqsForCredits:
                 return True
         return False
 
-    def _getOpPrice(self):
-        price = self.item.altPrice or self.item.buyPrice
-        return self.count * Money(credits=price.credits) if self.buyForCredits else self.count * Money(gold=price.gold)
+    @classmethod
+    def getItemCurrencyAndPrice(cls, item, desiredCurrency):
+        """
+        Determines price and currency to by the given item. If the item can be bought for the given (desired) currency,
+        the method returns a price in this currency. Otherwise the original currency is used to determine the price.
+        
+        The price is calculated based on the item alternative and original prices. If an alternative price is defined,
+        it is used to obtain the cost in the desired (or original) currency. Otherwise, the original (default) price
+        is used.
+        
+        :param item: item to be bought
+        :param desiredCurrency: preferred currency
+        
+        :return: an instance of tuple(currency, Money)
+        """
+        altPrice = item.altPrice
+        buyPrice = item.buyPrice
+        originalCurrency = buyPrice.getCurrency()
+        if altPrice:
+            if altPrice.isSet(desiredCurrency):
+                if cls.isItemBuyingAvailableForCurrency(item, desiredCurrency):
+                    return (desiredCurrency, Money.makeFrom(desiredCurrency, altPrice.get(desiredCurrency)))
+            elif altPrice.isSet(originalCurrency):
+                return (originalCurrency, Money.makeFrom(originalCurrency, altPrice.get(originalCurrency)))
+        return (originalCurrency, buyPrice)
+
+    def _getSysMsgType(self):
+        return CURRENCY_TO_SM_TYPE.get(self._currency, SM_TYPE.PurchaseForCredits)
 
     def _successHandler(self, code, ctx=None):
-        sysMsgType = SM_TYPE.PurchaseForCredits if self.buyForCredits else SM_TYPE.PurchaseForGold
-        return makeI18nSuccess(self._formMessage('success'), type=sysMsgType, **self._getMsgCtx())
+        return makeI18nSuccess(self._formMessage('success'), type=self._getSysMsgType(), **self._getMsgCtx())
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy module', self.item, self.count, self._isItemBuyingForCredits())
-        BigWorld.player().shop.buy(self.item.itemTypeID, self.item.nationID, self.item.intCD, self.count, int(self._isItemBuyingForCredits()), lambda code: self._response(code, callback))
+        LOG_DEBUG('Make server request to buy {} module(s) {} for currency {} (item price - {})'.format(self.count, self.item, self._currency, self._itemPrice))
+        originalCurrency = self.item.buyPrice.getCurrency()
+        goldForCredits = originalCurrency == Currency.GOLD and self._currency == Currency.CREDITS and self.isItemBuyingAvailableForCurrency(self.item, self._currency)
+        BigWorld.player().shop.buy(self.item.itemTypeID, self.item.nationID, self.item.intCD, self.count, int(goldForCredits), lambda code: self._response(code, callback))
 
 
 class ModuleSeller(ModuleTradeProcessor):
@@ -155,7 +224,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Root modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple()):
+    def __init__(self, vehicle, item, itemType, slotIdx, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
         """
         Ctor.
         
@@ -173,7 +242,7 @@ class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         addPlugins = []
         if install:
-            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+            addPlugins += (plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             addPlugins += (plugins.CompatibilityRemoveValidator(vehicle, item),)
         self.install = install
@@ -193,29 +262,29 @@ class OptDeviceInstaller(ModuleInstallProcessor):
     Vehicle opt devices installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install=True, isUseGold=False, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, install=True, isUseGold=False, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
         @param vehicle: vehicle
         @param item: module to install
         @param slotIdx: vehicle equipment slot index to install
-        @param install: flag to designated process
+        @param install: true if device is being installed, false if being demounted
         @param conflictedEqs: conflicted items
         """
-        super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs)
-        self.cost = g_itemsCache.items.shop.paidRemovalCost
-        defaultCost = g_itemsCache.items.shop.defaults.paidRemovalCost
+        super(OptDeviceInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.OPTIONALDEVICE,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
+        self.cost = self.itemsCache.items.shop.paidRemovalCost
+        defaultCost = self.itemsCache.items.shop.defaults.paidRemovalCost
         action = None
         if self.cost != defaultCost:
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, Money(gold=self.cost), Money(gold=defaultCost))
         addPlugins = []
         if install:
-            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator('removeConfirmationNotRemovableGold', ctx={'name': item.userName,
               'price': self.cost,
-              'action': action}, isEnabled=not item.isRemovable and isUseGold), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, isEnabled=not item.isRemovable and not isUseGold))
+              'action': action}, isEnabled=not item.isRemovable and isUseGold and not skipConfirm), plugins.DestroyDeviceConfirmator('removeConfirmationNotRemovable', itemName=item.userName, isEnabled=not item.isRemovable and not isUseGold and not skipConfirm))
         self.addPlugins(addPlugins)
         self.useGold = isUseGold
         return
@@ -240,7 +309,7 @@ class EquipmentInstaller(ModuleInstallProcessor):
     Vehicle equipment installer.
     """
 
-    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -250,7 +319,7 @@ class EquipmentInstaller(ModuleInstallProcessor):
         @param install: flag to designated process
         @param conflictedEqs: conflicted items
         """
-        super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs)
+        super(EquipmentInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.EQUIPMENT,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
 
     def _successHandler(self, code, ctx=None):
         item = self.item if self.install else None
@@ -261,7 +330,10 @@ class EquipmentInstaller(ModuleInstallProcessor):
         itemCD = self.item.intCD if self.install else 0
         newEqsLayout = map(lambda item: item.intCD if item is not None else 0, self.vehicle.eqs)
         newEqsLayout[self.slotIdx] = itemCD
+        battleBoosterCD = 0 if self.vehicle.battleBooster is None else self.vehicle.battleBooster.intCD
+        newEqsLayout.append(battleBoosterCD)
         BigWorld.player().inventory.equipEquipments(self.vehicle.invID, newEqsLayout, lambda code: self._response(code, callback))
+        return
 
 
 class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
@@ -269,7 +341,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
     Vehicle other modules installer.
     """
 
-    def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple()):
+    def __init__(self, vehicle, item, itemType, install=True, conflictedEqs=None, plugs=tuple(), skipConfirm=False):
         """
         Ctor.
         
@@ -285,7 +357,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         ModuleProcessor.__init__(self, item=item, opType=opType, plugs=plugs)
         VehicleItemProcessor.__init__(self, vehicle=vehicle, module=item, allowableTypes=itemType)
         if install:
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         self.install = install
 
     def _getMsgCtx(self):
@@ -296,7 +368,7 @@ class CommonModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):
         additionalMessages = []
         removedItems = []
         for eqKd in ctx.get('incompatibleEqs', []):
-            item = g_itemsCache.items.getItemByCD(eqKd)
+            item = self.itemsCache.items.getItemByCD(eqKd)
             removedItems.append(item.name)
 
         if removedItems:
@@ -310,7 +382,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
     Vehicle turret installer.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs=None):
+    def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -318,7 +390,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
         @param item: equipment to install
         @param conflictedEqs: conflicted items
         """
-        super(TurretInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.TURRET,), True, conflictedEqs)
+        super(TurretInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.TURRET,), True, conflictedEqs, skipConfirm=skipConfirm)
         self.gunCD = 0
         mayInstallCurrent = item.mayInstall(vehicle, gunCD=self.gunCD)
         if not mayInstallCurrent[0]:
@@ -327,7 +399,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
 
     def _findAvailableGun(self, vehicle, item):
         for gun in item.descriptor['guns']:
-            gunItem = g_itemsCache.items.getItemByCD(gun['compactDescr'])
+            gunItem = self.itemsCache.items.getItemByCD(gun['compactDescr'])
             if gunItem.isInInventory:
                 mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
                 if mayInstall[0]:
@@ -339,7 +411,7 @@ class TurretInstaller(CommonModuleInstallProcessor):
 
     def _successHandler(self, code, ctx=None):
         if self.gunCD:
-            gun = g_itemsCache.items.getItemByCD(self.gunCD)
+            gun = self.itemsCache.items.getItemByCD(self.gunCD)
             return makeI18nSuccess(self._formMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())
         return super(TurretInstaller, self)._successHandler(code, ctx)
 
@@ -368,7 +440,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
     Vehicle rest modules installer: sheels, fuel tanks, etc.
     """
 
-    def __init__(self, vehicle, item, conflictedEqs=None):
+    def __init__(self, vehicle, item, conflictedEqs=None, skipConfirm=False):
         """
         Ctor.
         
@@ -381,7 +453,7 @@ class OtherModuleInstaller(CommonModuleInstallProcessor):
          GUI_ITEM_TYPE.ENGINE,
          GUI_ITEM_TYPE.FUEL_TANK,
          GUI_ITEM_TYPE.RADIO,
-         GUI_ITEM_TYPE.SHELL), True, conflictedEqs)
+         GUI_ITEM_TYPE.SHELL), True, conflictedEqs, skipConfirm=skipConfirm)
         self.addPlugin(plugins.CompatibilityInstallValidator(vehicle, item, 0))
 
     def _request(self, callback):
@@ -394,20 +466,21 @@ class PreviewVehicleModuleInstaller(OtherModuleInstaller):
      GUI_ITEM_TYPE.CHASSIS: 'chassis',
      GUI_ITEM_TYPE.ENGINE: 'engine',
      GUI_ITEM_TYPE.RADIO: 'radio'}
+    itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def _request(self, callback):
         itemTypeID = self.item.itemTypeID
         moduleName = self.OTHER_PREVIEW_MODULES[itemTypeID]
-        cls = ItemsRequester.ITEM_TYPES_MAPPING[itemTypeID]
         self.vehicle.descriptor.installComponent(self.item.intCD)
         itemDescr = getattr(self.vehicle.descriptor, moduleName)
-        setattr(self.vehicle, moduleName, cls(itemDescr['compactDescr'], descriptor=itemDescr))
+        module = self.itemsFactory.createGuiItem(itemTypeID, itemDescr['compactDescr'], descriptor=itemDescr)
+        setattr(self.vehicle, moduleName, module)
         callback(makeSuccess())
 
 
 class BuyAndInstallItemProcessor(ModuleBuyer):
 
-    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None):
+    def __init__(self, vehicle, item, slotIdx, gunCompDescr, conflictedEqs=None, skipConfirm=False):
         self.__vehInvID = vehicle.inventoryID
         self.__slotIdx = int(slotIdx)
         self.__gunCompDescr = gunCompDescr
@@ -417,24 +490,37 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         if conflictedEqs:
             self.__makeConflictMsg("', '".join([ eq.userName for eq in conflictedEqs ]))
         self.__mayInstall, installReason = item.mayInstall(vehicle, slotIdx)
-        super(BuyAndInstallItemProcessor, self).__init__(item, 1, True)
+        super(BuyAndInstallItemProcessor, self).__init__(item, 1, Currency.CREDITS)
         self.addPlugins([plugins.ModuleValidator(item)])
         if self.__mayInstall:
             self.addPlugins([plugins.VehicleValidator(vehicle, True, prop={'isBroken': True,
               'isLocked': True}), plugins.CompatibilityInstallValidator(vehicle, item, slotIdx), plugins.ModuleBuyerConfirmator('confirmBuyAndInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,
               'conflictedEqs': conflictMsg,
-              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice().credits)})])
+              'currencyIcon': _getIconHtmlTagForCurrency(self._currency),
+              'value': _formatCurrencyValue(self._currency, self._getOpPrice().get(self._currency))}, isEnabled=not skipConfirm)])
             if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable))
-            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs)))
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
+            self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,
               'typeString': self.item.userType,
-              'credits': BigWorld.wg_getIntegralFormat(self._getOpPrice().credits),
-              'reason': self.__makeInstallReasonMsg(installReason)})])
+              Currency.CREDITS: BigWorld.wg_getIntegralFormat(self._getOpPrice().credits),
+              'reason': self.__makeInstallReasonMsg(installReason)}, isEnabled=not skipConfirm)])
+
+    def _getItemCurrencyAndPrice(self, currency):
+        """
+        Determines the item price and currency based on alternative and original coast. Note that by default
+        the method tries to determine the coast in credits. If the item price is not defined in credits (or the item
+        can not be bought for credits right now), the method returns the coast in the original currency.
+        
+        :param currency: the preferred currency, Currency.CREDITS by default, see class constructor.
+        
+        :return: an instance of tuple(currency, Money)
+        """
+        return self.getItemCurrencyAndPrice(self.item, currency)
 
     def __makeConflictMsg(self, conflictedText):
         attrs = {'conflicted': conflictedText}
@@ -455,14 +541,13 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
                 auxData = [makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, **self._getMsgCtx())]
             elif self.item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 if self.__gunCompDescr:
-                    gun = g_itemsCache.items.getItemByCD(self.__gunCompDescr)
+                    gun = self.itemsCache.items.getItemByCD(self.__gunCompDescr)
                     auxData = [makeI18nSuccess(self._formApplyMessage('success_gun_change'), type=SM_TYPE.Information, gun=gun.userName, **self._getMsgCtx())]
                 else:
                     auxData = self.__getAdditionalMessages(ctx)
             else:
                 auxData = self.__getAdditionalMessages(ctx)
-            sysMsgType = SM_TYPE.PurchaseForCredits if self.buyForCredits else SM_TYPE.PurchaseForGold
-            return makeI18nSuccess(self._formMessage('success'), auxData=auxData, type=sysMsgType, **self._getMsgCtx())
+            return makeI18nSuccess(self._formMessage('success'), auxData=auxData, type=self._getSysMsgType(), **self._getMsgCtx())
         else:
             return super(BuyAndInstallItemProcessor, self)._successHandler(code, ctx)
 
@@ -471,7 +556,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
         removedItems = []
         if ctx:
             for eqKd in ctx.get('incompatibleEqs', []):
-                item = g_itemsCache.items.getItemByCD(eqKd)
+                item = self.itemsCache.items.getItemByCD(eqKd)
                 removedItems.append(item.name)
 
         if removedItems:
@@ -486,24 +571,24 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
 
     def _request(self, callback):
         if self.__mayInstall:
-            LOG_DEBUG('Make server request to buyAndInstallModule module', self.__vehInvID, self.item.intCD, self.__slotIdx, self.__gunCompDescr)
+            LOG_DEBUG('Make server request to buyAndInstallModule module', self.__vehInvID, self.item.intCD, self.__slotIdx, self.__gunCompDescr, self._currency)
             BigWorld.player().shop.buyAndEquipItem(self.__vehInvID, self.item.intCD, self.__slotIdx, False, self.__gunCompDescr, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
         else:
             super(BuyAndInstallItemProcessor, self)._request(callback)
 
 
-def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseGold=False, conflictedEqs=None):
+def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseGold=False, conflictedEqs=None, skipConfirm=False):
     """
     Select proper installer by type
     """
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-        return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs)
+        return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
     elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-        return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseGold, conflictedEqs)
+        return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseGold, conflictedEqs, skipConfirm)
     elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
-        return TurretInstaller(vehicle, newComponentItem, conflictedEqs)
+        return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
     else:
-        return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+        return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
 
 
 def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):

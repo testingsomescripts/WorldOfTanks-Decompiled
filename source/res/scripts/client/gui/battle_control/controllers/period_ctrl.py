@@ -3,13 +3,14 @@
 import weakref
 import BattleReplay
 import BigWorld
-from ConnectionManager import connectionManager
 from constants import ARENA_PERIOD as _PERIOD
 from gui.battle_control import event_dispatcher
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 import SoundGroups
+from helpers import dependency
+from skeletons.connection_mgr import IConnectionManager
 _COUNTDOWN_HIDE_SPEED = 1.5
 _START_NOTIFICATION_TIME = 5.0
 
@@ -125,6 +126,8 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
             self._switcherUI.setLargeMode()
             self._switcherState = 0
         if self._cdState in COUNTDOWN_STATE.VISIBLE:
+            if self._arenaVisitor is not None:
+                self._preBattleTimerUI.showStateMessage = self._arenaVisitor.showTimerStateMessage()
             self._preBattleTimerUI.setCountdown(self._cdState, self._countdown)
             self._battleTimerUI.setState(self._cdState)
             if self._battleCtx is not None:
@@ -316,6 +319,7 @@ class ArenaPeriodRecorder(ArenaPeriodController):
     battle to the replay file.
     """
     __slots__ = ('__recorder',)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self):
         super(ArenaPeriodRecorder, self).__init__()
@@ -325,7 +329,7 @@ class ArenaPeriodRecorder(ArenaPeriodController):
     def startControl(self, battleCtx, arenaVisitor):
         if not arenaVisitor.gui.isTutorialBattle():
             ctrl = BattleReplay.g_replayCtrl
-            connectionManager.onDisconnected += self.__onDisconnected
+            self.connectionMgr.onDisconnected += self.__onDisconnected
             ctrl.onStopped += self.__onReplayStopped
             self.__recorder = ctrl.setArenaPeriod
         else:
@@ -334,7 +338,7 @@ class ArenaPeriodRecorder(ArenaPeriodController):
         return
 
     def stopControl(self):
-        connectionManager.onDisconnected -= self.__onDisconnected
+        self.connectionMgr.onDisconnected -= self.__onDisconnected
         BattleReplay.g_replayCtrl.onStopped -= self.__onReplayStopped
         self.__recorder = None
         super(ArenaPeriodRecorder, self).stopControl()
@@ -398,9 +402,7 @@ class ArenaPeriodPlayer(ArenaPeriodController):
         return
 
     def _updateCountdown(self, timeLeft):
-        if self.__replay is not None and not self.__replay.isTimeWarpInProgress:
-            super(ArenaPeriodPlayer, self)._updateCountdown(timeLeft)
-        return
+        super(ArenaPeriodPlayer, self)._updateCountdown(timeLeft)
 
     def _updateSound(self, timeLeft):
         if timeLeft and not self.__replay.playbackSpeed == 0:

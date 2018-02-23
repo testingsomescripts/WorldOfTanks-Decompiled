@@ -12,10 +12,6 @@ class PROFILE(object):
     PROFILE_SUMMARY_NEXTAWARDS_TOOLTIP = '#profile:profile/summary/nextAwards/tooltip'
     PROFILE_TABS_TOOLTIP_SUMMARY = '#profile:profile/tabs/tooltip/summary'
     PROFILE_PARAMS_TOOLTIP_AVGRECEIVEDDAMAGE = '#profile:profile/params/tooltip/avgReceivedDamage'
-    PROFILE_PARAMS_TOOLTIP_STUNNUMBER = '#profile:profile/params/tooltip/stunNumber'
-    PROFILE_PARAMS_TOOLTIP_AVGSTUNNUMBER = '#profile:profile/params/tooltip/avgStunNumber'
-    PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE = '#profile:profile/params/tooltip/assistedStunDamage'
-    PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE = '#profile:profile/params/tooltip/avgAssistedStunDamage'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGRECEIVEDDAMAGE = '#profile:profile/params/tooltip/dif/fallout/avgReceivedDamage'
     PROFILE_PARAMS_TOOLTIP_CAPTUREPOINTS = '#profile:profile/params/tooltip/capturePoints'
     PROFILE_PARAMS_TOOLTIP_DROPPEDCAPTUREPOINTS = '#profile:profile/params/tooltip/droppedCapturePoints'
@@ -36,6 +32,10 @@ class PROFILE(object):
     PROFILE_TABS_TOOLTIP_STATISTICS = '#profile:profile/tabs/tooltip/statistics'
     PROFILE_TABS_TOOLTIP_TECHNIQUE = '#profile:profile/tabs/tooltip/technique'
     PROFILE_TABS_TOOLTIP_FORMATIONS = '#profile:profile/tabs/tooltip/formations'
+    PROFILE_PARAMS_TOOLTIP_STUNNUMBER = '#profile:profile/params/tooltip/stunNumber'
+    PROFILE_PARAMS_TOOLTIP_ASSISTEDSTUNDAMAGE = '#profile:profile/params/tooltip/assistedStunDamage'
+    PROFILE_PARAMS_TOOLTIP_AVGSTUNNUMBER = '#profile:profile/params/tooltip/avgStunNumber'
+    PROFILE_PARAMS_TOOLTIP_AVGASSISTEDSTUNDAMAGE = '#profile:profile/params/tooltip/avgAssistedStunDamage'
     SECTION_TECHNIQUE_TABBTN_STATISTIC_TOOLTIP = '#profile:section/technique/tabBtn/statistic/tooltip'
     SECTION_TECHNIQUE_TABBTN_AWARDS_TOOLTIP = '#profile:section/technique/tabBtn/awards/tooltip'
     SECTION_AWARDS_DROPDOWN_TOOLTIP = '#profile:section/awards/dropdown/tooltip'
@@ -48,6 +48,9 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT = '#profile:profile/params/tooltip/dif/fort/battlesCount'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_BATTLESCOUNT = '#profile:profile/params/tooltip/dif/fallout/battlesCount'
     PROFILE_PARAMS_TOOLTIP_WINS = '#profile:profile/params/tooltip/wins'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS = '#profile:profile/params/tooltip/ranked/avgPoints'
+    PROFILE_PARAMS_TOOLTIP_RANKED_POINTS = '#profile:profile/params/tooltip/ranked/points'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS = '#profile:profile/params/tooltip/ranked/avgFrags'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_WINS = '#profile:profile/params/tooltip/dif/fallout/wins'
     PROFILE_PARAMS_TOOLTIP_ACHIEVEMENTSCOUNT = '#profile:profile/params/tooltip/achievementsCount'
     PROFILE_PARAMS_TOOLTIP_USEDTECHNICS = '#profile:profile/params/tooltip/usedTechnics'
@@ -101,8 +104,6 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_FORTBATTLESWINS = '#profile:profile/params/tooltip/fortBattlesWins'
     PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES = '#profile:profile/params/tooltip/fortSorties/avgResources'
     PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES = '#profile:profile/params/tooltip/fortSorties/totalResources'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES = '#profile:profile/params/tooltip/fortBattles/totalResources'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES = '#profile:profile/params/tooltip/fortBattles/maxResources'
     PROFILE_PARAMS_TOOLTIP_FORTBATTLES_DEFENCES = '#profile:profile/params/tooltip/fortBattles/defences'
     PROFILE_PARAMS_TOOLTIP_FORTBATTLES_ATTACKS = '#profile:profile/params/tooltip/fortBattles/attacks'
     SECTION_FORMATIONS_TOOLTIP_FORT_BATTLES = '#profile:section/formations/tooltip/fort/battles'
@@ -177,6 +178,7 @@ class PROFILE(object):
     SECTION_STATISTICS_HEADERTEXT_HISTORICAL = '#profile:section/statistics/headerText/historical'
     SECTION_STATISTICS_HEADERTEXT_FORTIFICATIONS = '#profile:section/statistics/headerText/fortifications'
     SECTION_STATISTICS_HEADERTEXT_CLAN = '#profile:section/statistics/headerText/clan'
+    SECTION_STATISTICS_HEADERTEXT_RANKED = '#profile:section/statistics/headerText/ranked'
     SECTION_STATISTICS_CHARTS_BYTYPELABEL = '#profile:section/statistics/charts/byTypeLabel'
     SECTION_STATISTICS_CHARTS_BYNATIONLABEL = '#profile:section/statistics/charts/byNationLabel'
     SECTION_STATISTICS_CHARTS_BYLEVELLABEL = '#profile:section/statistics/charts/byLevelLabel'
@@ -189,8 +191,6 @@ class PROFILE(object):
     SECTION_STATISTICS_SCORES_FORTBATTLES_DEFENCES = '#profile:section/statistics/scores/fortBattles/defences'
     SECTION_STATISTICS_SCORES_FORTSORTIES_AVGRESOURCES = '#profile:section/statistics/scores/fortSorties/AvgResources'
     SECTION_STATISTICS_SCORES_FORTSORTIES_TOTALRESOURCES = '#profile:section/statistics/scores/fortSorties/totalResources'
-    SECTION_STATISTICS_SCORES_FORTBATTLES_TOTALRESOURCES = '#profile:section/statistics/scores/fortBattles/totalResources'
-    SECTION_STATISTICS_SCORES_FORTBATTLES_MAXRESOURCES = '#profile:section/statistics/scores/fortBattles/maxResources'
     SECTION_STATISTICS_SCORES_TOTALWINS = '#profile:section/statistics/scores/totalWins'
     SECTION_STATISTICS_SCORES_FORTBATTLESTOTALWINS = '#profile:section/statistics/scores/fortBattlesTotalWins'
     SECTION_STATISTICS_SCORES_FORTSORTIETOTALWINS = '#profile:section/statistics/scores/fortSortieTotalWins'
@@ -222,6 +222,9 @@ class PROFILE(object):
     SECTION_STATISTICS_SCORES_FORT_SORTIEWINSEFFICIENCY = '#profile:section/statistics/scores/fort/sortieWinsEfficiency'
     SECTION_STATISTICS_SCORES_FORT_RESOURCE = '#profile:section/statistics/scores/fort/resource'
     SECTION_STATISTICS_SCORES_CLAN_SUMMARYDAMAGECOEFFICIENT = '#profile:section/statistics/scores/clan/summaryDamageCoefficient'
+    SECTION_STATISTICS_SCORES_RANKED_AVGFRAGS = '#profile:section/statistics/scores/ranked/avgFrags'
+    SECTION_STATISTICS_SCORES_RANKED_POINTS = '#profile:section/statistics/scores/ranked/points'
+    SECTION_STATISTICS_SCORES_RANKED_AVGPOINTS = '#profile:section/statistics/scores/ranked/avgPoints'
     SECTION_STATISTICS_DETAILED_KILLED = '#profile:section/statistics/detailed/killed'
     SECTION_STATISTICS_DETAILED_DESTROYED = '#profile:section/statistics/detailed/destroyed'
     SECTION_STATISTICS_DETAILED_DESTRUCTIONCOEFFICIENT = '#profile:section/statistics/detailed/destructionCoefficient'
@@ -265,6 +268,7 @@ class PROFILE(object):
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FALLOUT = '#profile:section/technique/emptyScreenLabel/battleType/fallout'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_HISTORICAL = '#profile:section/technique/emptyScreenLabel/battleType/historical'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP = '#profile:section/technique/emptyScreenLabel/battleType/globalMap'
+    SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_RANKED = '#profile:section/technique/emptyScreenLabel/battleType/ranked'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES = '#profile:section/technique/emptyScreenLabel/battleType/fortSorties'
     SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES = '#profile:section/technique/emptyScreenLabel/battleType/fortBattles'
     SECTION_TECHNIQUE_TITLE = '#profile:section/technique/title'
@@ -373,7 +377,6 @@ class PROFILE(object):
     PROFILE_DROPDOWN_EXISTENCE = '#profile:profile/dropdown/existence'
     PROFILE_DROPDOWN_LABELS_ALL = '#profile:profile/dropdown/labels/all'
     PROFILE_DROPDOWN_LABELS_RANDOM = '#profile:profile/dropdown/labels/random'
-    PROFILE_DROPDOWN_LABELS_COMPANY = '#profile:profile/dropdown/labels/company'
     PROFILE_DROPDOWN_LABELS_CLAN = '#profile:profile/dropdown/labels/clan'
     PROFILE_DROPDOWN_LABELS_TEAM = '#profile:profile/dropdown/labels/team'
     PROFILE_DROPDOWN_LABELS_STATICTEAM = '#profile:profile/dropdown/labels/staticTeam'
@@ -383,9 +386,19 @@ class PROFILE(object):
     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS = '#profile:profile/dropdown/labels/fortifications'
     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES = '#profile:profile/dropdown/labels/fortifications/battles'
     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES = '#profile:profile/dropdown/labels/fortifications/sorties'
+    PROFILE_DROPDOWN_LABELS_RANKED = '#profile:profile/dropdown/labels/ranked'
     PROFILE_SEASONSDROPDOWN_ALL = '#profile:profile/seasonsdropdown/all'
     PROFILE_SEASONSDROPDOWN_CURRENT = '#profile:profile/seasonsdropdown/current'
     PROFILE_SEASONSDROPDOWN_SPECIFIC = '#profile:profile/seasonsdropdown/specific'
+    PROFILE_RANKED_SEASONSDROPDOWN_ALL = '#profile:profile/ranked/seasonsdropdown/all'
+    PROFILE_RANKED_SEASONSDROPDOWN_CURRENT = '#profile:profile/ranked/seasonsdropdown/current'
+    PROFILE_RANKED_SEASONSDROPDOWN_PREVIOUS = '#profile:profile/ranked/seasonsdropdown/previous'
+    PROFILE_PARAMS_TOOLTIP_RANKED_POINTS_HEADER = '#profile:profile/params/tooltip/ranked/points/header'
+    PROFILE_PARAMS_TOOLTIP_RANKED_POINTS_BODY = '#profile:profile/params/tooltip/ranked/points/body'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS_HEADER = '#profile:profile/params/tooltip/ranked/avgPoints/header'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS_BODY = '#profile:profile/params/tooltip/ranked/avgPoints/body'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS_HEADER = '#profile:profile/params/tooltip/ranked/avgFrags/header'
+    PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS_BODY = '#profile:profile/params/tooltip/ranked/avgFrags/body'
     PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT_HEADER = '#profile:profile/params/tooltip/battlesCount/header'
     PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT_BODY = '#profile:profile/params/tooltip/battlesCount/body'
     PROFILE_PARAMS_TOOLTIP_DIF_FORT_BATTLESCOUNT_HEADER = '#profile:profile/params/tooltip/dif/fort/battlesCount/header'
@@ -410,12 +423,16 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MARKOFMASTERYDISABLED_BODY = '#profile:profile/params/tooltip/markOfMasteryDisabled/body'
     PROFILE_PARAMS_TOOLTIP_MAXDESTROYED_HEADER = '#profile:profile/params/tooltip/maxDestroyed/header'
     PROFILE_PARAMS_TOOLTIP_MAXDESTROYED_BODY = '#profile:profile/params/tooltip/maxDestroyed/body'
+    PROFILE_PARAMS_TOOLTIP_MAXDESTROYED_VEHICLE_HEADER = '#profile:profile/params/tooltip/maxDestroyed/vehicle/header'
+    PROFILE_PARAMS_TOOLTIP_MAXDESTROYED_VEHICLE_BODY = '#profile:profile/params/tooltip/maxDestroyed/vehicle/body'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED_HEADER = '#profile:profile/params/tooltip/dif/fallout/maxDestroyed/header'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED_BODY = '#profile:profile/params/tooltip/dif/fallout/maxDestroyed/body'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED_VEHICLE_HEADER = '#profile:profile/params/tooltip/dif/fallout/maxDestroyed/vehicle/header'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDESTROYED_VEHICLE_BODY = '#profile:profile/params/tooltip/dif/fallout/maxDestroyed/vehicle/body'
     PROFILE_PARAMS_TOOLTIP_MAXEXP_HEADER = '#profile:profile/params/tooltip/maxExp/header'
     PROFILE_PARAMS_TOOLTIP_MAXEXP_BODY = '#profile:profile/params/tooltip/maxExp/body'
+    PROFILE_PARAMS_TOOLTIP_MAXEXP_VEHICLE_HEADER = '#profile:profile/params/tooltip/maxExp/vehicle/header'
+    PROFILE_PARAMS_TOOLTIP_MAXEXP_VEHICLE_BODY = '#profile:profile/params/tooltip/maxExp/vehicle/body'
     PROFILE_PARAMS_TOOLTIP_MAXEXPDISABLED_HEADER = '#profile:profile/params/tooltip/maxExpDisabled/header'
     PROFILE_PARAMS_TOOLTIP_MAXEXPDISABLED_BODY = '#profile:profile/params/tooltip/maxExpDisabled/body'
     PROFILE_PARAMS_TOOLTIP_MAXWINPOINTS_HEADER = '#profile:profile/params/tooltip/maxWinPoints/header'
@@ -426,10 +443,6 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_FORTSORTIES_AVGRESOURCES_BODY = '#profile:profile/params/tooltip/fortSorties/avgResources/body'
     PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES_HEADER = '#profile:profile/params/tooltip/fortSorties/totalResources/header'
     PROFILE_PARAMS_TOOLTIP_FORTSORTIES_TOTALRESOURCES_BODY = '#profile:profile/params/tooltip/fortSorties/totalResources/body'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES_HEADER = '#profile:profile/params/tooltip/fortBattles/totalResources/header'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_TOTALRESOURCES_BODY = '#profile:profile/params/tooltip/fortBattles/totalResources/body'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES_HEADER = '#profile:profile/params/tooltip/fortBattles/maxResources/header'
-    PROFILE_PARAMS_TOOLTIP_FORTBATTLES_MAXRESOURCES_BODY = '#profile:profile/params/tooltip/fortBattles/maxResources/body'
     PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT_HEADER = '#profile:profile/params/tooltip/avgEx/short/header'
     PROFILE_PARAMS_TOOLTIP_AVGEX_SHORT_BODY = '#profile:profile/params/tooltip/avgEx/short/body'
     PROFILE_PARAMS_TOOLTIP_AVGDAMAGE_HEADER = '#profile:profile/params/tooltip/avgDamage/header'
@@ -502,6 +515,8 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_AVGDESTROYEDVEHICLES_VEHICLE_BODY = '#profile:profile/params/tooltip/dif/fallout/avgDestroyedVehicles/vehicle/body'
     PROFILE_PARAMS_TOOLTIP_MAXDAMAGE_HEADER = '#profile:profile/params/tooltip/maxDamage/header'
     PROFILE_PARAMS_TOOLTIP_MAXDAMAGE_BODY = '#profile:profile/params/tooltip/maxDamage/body'
+    PROFILE_PARAMS_TOOLTIP_MAXDAMAGE_VEHICLE_HEADER = '#profile:profile/params/tooltip/maxDamage/vehicle/header'
+    PROFILE_PARAMS_TOOLTIP_MAXDAMAGE_VEHICLE_BODY = '#profile:profile/params/tooltip/maxDamage/vehicle/body'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDAMAGE_HEADER = '#profile:profile/params/tooltip/dif/fallout/maxDamage/header'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDAMAGE_BODY = '#profile:profile/params/tooltip/dif/fallout/maxDamage/body'
     PROFILE_PARAMS_TOOLTIP_DIF_FALLOUT_MAXDAMAGE_VEHICLE_HEADER = '#profile:profile/params/tooltip/dif/fallout/maxDamage/vehicle/header'
@@ -538,7 +553,6 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_CLAN_SUMMARYDAMAGECOEFFICIENT_BODY = '#profile:profile/params/tooltip/clan/summaryDamageCoefficient/body'
     PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
      PROFILE_DROPDOWN_LABELS_RANDOM,
-     PROFILE_DROPDOWN_LABELS_COMPANY,
      PROFILE_DROPDOWN_LABELS_CLAN,
      PROFILE_DROPDOWN_LABELS_TEAM,
      PROFILE_DROPDOWN_LABELS_STATICTEAM,
@@ -547,12 +561,23 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_FALLOUT,
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS,
      PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_BATTLES,
-     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES)
+     PROFILE_DROPDOWN_LABELS_FORTIFICATIONS_SORTIES,
+     PROFILE_DROPDOWN_LABELS_RANKED)
+    PROFILE_RANKED_SEASONSDROPDOWN_ENUM = (PROFILE_RANKED_SEASONSDROPDOWN_ALL, PROFILE_RANKED_SEASONSDROPDOWN_CURRENT, PROFILE_RANKED_SEASONSDROPDOWN_PREVIOUS)
 
     @classmethod
     def profile_dropdown_labels(cls, key0):
         outcome = '#profile:profile/dropdown/labels/{}'.format(key0)
         if outcome not in cls.PROFILE_DROPDOWN_LABELS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def get_ranked_season_lbl(cls, season):
+        outcome = '#profile:profile/ranked/seasonsdropdown/{}'.format(season)
+        if outcome not in cls.PROFILE_RANKED_SEASONSDROPDOWN_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

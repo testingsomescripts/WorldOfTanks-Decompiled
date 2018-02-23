@@ -12,8 +12,9 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getBtnCompareData
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
+from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import events, EVENT_BUS_SCOPE
-from gui.shared import g_itemsCache, event_dispatcher as shared_events
+from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.sounds.ambients import LobbySubViewEnv
@@ -33,19 +34,20 @@ class Research(ResearchMeta):
     """
     __sound_env__ = LobbySubViewEnv
 
-    def __init__(self, ctx=None):
+    def __init__(self, ctx=None, skipConfirm=False):
         if USE_XML_DUMPING and IS_DEVELOPMENT:
             dumper = dumpers.ResearchItemsXMLDumper()
         else:
             dumper = dumpers.ResearchItemsObjDumper()
         super(Research, self).__init__(ResearchItemsData(dumper))
         self._resolveLoadCtx(ctx=ctx)
+        self._skipConfirm = skipConfirm
 
     def __del__(self):
         LOG_DEBUG('ResearchPage deleted')
 
     def goToVehicleView(self, itemCD):
-        vehicle = g_itemsCache.items.getItemByCD(int(itemCD))
+        vehicle = self.itemsCache.items.getItemByCD(int(itemCD))
         if vehicle:
             if vehicle.isPreviewAllowed():
                 shared_events.showVehiclePreview(int(itemCD), self.alias)
@@ -88,7 +90,7 @@ class Research(ResearchMeta):
         """
         Overridden method of the class ResearchViewMeta.request4Unlock.
         """
-        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(itemCD), int(parentID), int(unlockIdx), int(xpCost))
+        ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(itemCD), int(parentID), int(unlockIdx), int(xpCost), skipConfirm=self._skipConfirm)
 
     def request4Buy(self, itemCD):
         """
@@ -96,14 +98,14 @@ class Research(ResearchMeta):
         """
         itemCD = int(itemCD)
         if getTypeOfCompactDescr(itemCD) == GUI_ITEM_TYPE.VEHICLE:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD, skipConfirm=self._skipConfirm)
         else:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, itemCD, self._data.getRootCD())
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_AND_INSTALL_ITEM, itemCD, self._data.getRootCD(), skipConfirm=self._skipConfirm)
 
     def request4Restore(self, itemCD):
         itemCD = int(itemCD)
         if getTypeOfCompactDescr(itemCD) == GUI_ITEM_TYPE.VEHICLE:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD, skipConfirm=self._skipConfirm)
 
     def goToTechTree(self, nation):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -117,7 +119,7 @@ class Research(ResearchMeta):
         Updates compare add icon status of nodes if change status of comparison basket fullness.
         """
         super(Research, self).invalidateVehCompare()
-        self.as_setRootNodeVehCompareDataS(getBtnCompareData(g_itemsCache.items.getItemByCD(self._data.getRootCD())))
+        self.as_setRootNodeVehCompareDataS(getBtnCompareData(self.itemsCache.items.getItemByCD(self._data.getRootCD())))
 
     def invalidateUnlocks(self, unlocks):
         """
@@ -155,7 +157,7 @@ class Research(ResearchMeta):
         """
         Overridden method of the class ResearchView.invalidateFreeXP.
         """
-        self.as_setFreeXPS(g_itemsCache.items.stats.actualFreeXP)
+        self.as_setFreeXPS(self.itemsCache.items.stats.actualFreeXP)
         super(Research, self).invalidateFreeXP()
 
     def invalidateRent(self, vehicles):
@@ -188,6 +190,7 @@ class Research(ResearchMeta):
 
     def _populate(self):
         super(Research, self)._populate()
+        self.as_setXpInfoLinkageS(self._getExperienceInfoLinkage())
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
         self.setupContextHints(self.__getContextHintsID())
 
@@ -204,11 +207,14 @@ class Research(ResearchMeta):
         SelectedNation.select(self._data.getNationID())
         return
 
+    def _getExperienceInfoLinkage(self):
+        return RESEARCH_ALIASES.EXPERIENCE_INFO
+
     def __getContextHintsID(self):
         rootCD = self._data.getRootCD()
         hasParents = len(g_techTreeDP.getTopLevel(rootCD))
         hasChildren = len(g_techTreeDP.getNextLevel(rootCD))
-        vehicle = g_itemsCache.items.getItemByCD(rootCD)
+        vehicle = self.itemsCache.items.getItemByCD(rootCD)
         if hasParents and hasChildren:
             return RESEARCH_HINT_ID.BASE
         elif hasParents:

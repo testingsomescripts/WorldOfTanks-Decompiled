@@ -3,21 +3,12 @@
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
 class BaseBattleLoadingMeta(BaseDAAPIComponent):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseDAAPIComponent
-    """
 
     def as_setProgressS(self, value):
         return self.flashObject.as_setProgress(value) if self._isDAAPIInited() else None
 
     def as_setMapIconS(self, source):
         return self.flashObject.as_setMapIcon(source) if self._isDAAPIInited() else None
-
-    def as_setPlayerDataS(self, playerVehicleID, prebattleID):
-        return self.flashObject.as_setPlayerData(playerVehicleID, prebattleID) if self._isDAAPIInited() else None
 
     def as_setEventInfoPanelDataS(self, data):
         """

@@ -3,12 +3,6 @@
 from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
 
 class SettingsWindowMeta(AbstractWindowView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends AbstractWindowView
-    """
 
     def applySettings(self, settings, isCloseWnd):
         self._printOverrideError('applySettings')
@@ -40,7 +34,7 @@ class SettingsWindowMeta(AbstractWindowView):
     def onTabSelected(self, tabId):
         self._printOverrideError('onTabSelected')
 
-    def onCounterTargetVisited(self, itemName):
+    def onCounterTargetVisited(self, viewId, subViewId, controlId):
         self._printOverrideError('onCounterTargetVisited')
 
     def autodetectAcousticType(self):
@@ -53,6 +47,9 @@ class SettingsWindowMeta(AbstractWindowView):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
     def as_setCaptureDevicesS(self, captureDeviceIdx, devicesData):
+        """
+        :param devicesData: Represented by DataProvider (AS)
+        """
         return self.flashObject.as_setCaptureDevices(captureDeviceIdx, devicesData) if self._isDAAPIInited() else None
 
     def as_onVibroManagerConnectS(self, isConnect):
@@ -76,8 +73,11 @@ class SettingsWindowMeta(AbstractWindowView):
     def as_isPresetAppliedS(self):
         return self.flashObject.as_isPresetApplied() if self._isDAAPIInited() else None
 
-    def as_setCountersDataS(self, tabsList):
-        return self.flashObject.as_setCountersData(tabsList) if self._isDAAPIInited() else None
+    def as_setCountersDataS(self, countersData):
+        """
+        :param countersData: Represented by Vector.<SettingsNewCountersVo> (AS)
+        """
+        return self.flashObject.as_setCountersData(countersData) if self._isDAAPIInited() else None
 
     def as_onSoundSpeakersPresetApplyS(self, isApply):
         return self.flashObject.as_onSoundSpeakersPresetApply(isApply) if self._isDAAPIInited() else None

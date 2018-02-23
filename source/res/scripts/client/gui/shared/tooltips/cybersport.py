@@ -1,7 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/cybersport.py
-import BigWorld
-from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.ActionButtonStateVO import ActionButtonStateVO
@@ -9,11 +7,14 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.shared import g_itemsCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE
+from helpers import dependency
 from helpers import i18n
+from skeletons.gui.shared import IItemsCache
 
 class CybersportToolTipData(ToolTipBaseData):
+    """Cyber sport class for tool tip context."""
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(CybersportToolTipData, self).__init__(context, TOOLTIP_TYPE.CYBER_SPORT)
@@ -23,7 +24,7 @@ class CybersportSelectedVehicleToolTipData(CybersportToolTipData):
 
     def getDisplayableData(self, intCD):
         if intCD is not None:
-            vehicle = g_itemsCache.items.getItemByCD(int(intCD))
+            vehicle = self.itemsCache.items.getItemByCD(int(intCD))
             return vo_converters.makeVehicleVO(vehicle)
         else:
             super(CybersportSelectedVehicleToolTipData, self).getDisplayableData(intCD)
@@ -32,48 +33,48 @@ class CybersportSelectedVehicleToolTipData(CybersportToolTipData):
 
 class CybersportSlotToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            return vo_converters.getUnitRosterData(entity, unitIdx, int(index))
+            return vo_converters.getUnitRosterData(entity, unitMgrID, int(index))
         else:
-            super(CybersportSlotToolTipData, self).getDisplayableData(index, unitIdx)
+            super(CybersportSlotToolTipData, self).getDisplayableData(index, unitMgrID)
             return
 
 
 class CybersportSlotSelectedToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            _, unit = entity.getUnit(unitIdx)
+            _, unit = entity.getUnit(unitMgrID)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
-                vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
+                vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle, entity.getRosterSettings().getLevelsRange())
-        return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitIdx)
+        return super(CybersportSlotSelectedToolTipData, self).getDisplayableData(index, unitMgrID)
 
 
 class SquadSlotSelectedToolTipData(CybersportToolTipData):
 
-    def getDisplayableData(self, index, unitIdx=None):
-        if unitIdx is not None:
-            unitIdx = int(unitIdx)
+    def getDisplayableData(self, index, unitMgrID=None):
+        if unitMgrID is not None:
+            unitMgrID = int(unitMgrID)
         dispatcher = g_prbLoader.getDispatcher()
         if dispatcher is not None:
             entity = dispatcher.getEntity()
-            _, unit = entity.getUnit(unitIdx)
+            _, unit = entity.getUnit(unitMgrID)
             accountDBID = unit.getMembers()[index]['accountDBID']
             vehicles = unit.getVehicles()[accountDBID]
             if vehicles:
-                vehicle = g_itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
+                vehicle = self.itemsCache.items.getItemByCD(vehicles[0].vehTypeCompDescr)
                 return vo_converters.makeVehicleVO(vehicle)
         super(SquadSlotSelectedToolTipData, self).getDisplayableData()
         return

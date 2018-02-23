@@ -3,12 +3,6 @@
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyRoomView import BaseRallyRoomView
 
 class FortClanBattleRoomMeta(BaseRallyRoomView):
-    """
-    DO NOT MODIFY!
-    Generated with yaml.
-    __author__ = 'yaml_processor'
-    @extends BaseRallyRoomView
-    """
 
     def onTimerAlert(self):
         self._printOverrideError('onTimerAlert')
@@ -31,6 +25,9 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
     def as_updateReadyStatusS(self, mineValue, enemyValue):
         return self.flashObject.as_updateReadyStatus(mineValue, enemyValue) if self._isDAAPIInited() else None
 
+    def as_updateReadyDirectionsS(self, value):
+        return self.flashObject.as_updateReadyDirections(value) if self._isDAAPIInited() else None
+
     def as_setConfigureButtonStateS(self, data):
         """
         :param data: Represented by ActionButtonVO (AS)
@@ -43,16 +40,13 @@ class FortClanBattleRoomMeta(BaseRallyRoomView):
         """
         return self.flashObject.as_setTimerDelta(data) if self._isDAAPIInited() else None
 
-    def as_updateDirectionsS(self, data):
-        """
-        :param data: Represented by ConnectedDirectionsVO (AS)
-        """
-        return self.flashObject.as_updateDirections(data) if self._isDAAPIInited() else None
-
     def as_setDirectionS(self, value, animationNotAvailable):
         return self.flashObject.as_setDirection(value, animationNotAvailable) if self._isDAAPIInited() else None
 
     def as_setReservesEnabledS(self, data):
+        """
+        :param data: Represented by Array (AS)
+        """
         return self.flashObject.as_setReservesEnabled(data) if self._isDAAPIInited() else None
 
     def as_setReservesDataS(self, reservesData):

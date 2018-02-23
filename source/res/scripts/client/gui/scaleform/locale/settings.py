@@ -7,6 +7,13 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class SETTINGS(object):
+    SOUNDS_SPEAKERS_SIDES = '#settings:sounds/speakers/sides'
+    SOUNDS_SPEAKERS_FRONT = '#settings:sounds/speakers/front'
+    SOUNDS_SPEAKERS_BACK = '#settings:sounds/speakers/back'
+    SOUNDS_SPEAKERS_SIDELONG = '#settings:sounds/speakers/sidelong'
+    SOUNDS_SPEAKERS_CENTER = '#settings:sounds/speakers/center'
+    SOUNDS_SPEAKERS_SUB = '#settings:sounds/speakers/sub'
+    SOUNDS_SPEAKERS_OPTIONALSUB = '#settings:sounds/speakers/optionalsub'
     LANGUAGE_CODE = '#settings:LANGUAGE_CODE'
     WINDOWTITLE = '#settings:windowTitle'
     TITLE = '#settings:title'
@@ -297,6 +304,12 @@ class SETTINGS(object):
     SOUNDS_SPEAKERS_SUB_BODY = '#settings:sounds/speakers/sub/body'
     SOUNDS_SPEAKERS_OPTIONALSUB_HEADER = '#settings:sounds/speakers/optionalsub/header'
     SOUNDS_SPEAKERS_OPTIONALSUB_BODY = '#settings:sounds/speakers/optionalsub/body'
+    SOUNDS_ALTVOICE_DEFAULT_HEADER = '#settings:sounds/altVoice/default/header'
+    SOUNDS_ALTVOICE_DEFAULT_BODY = '#settings:sounds/altVoice/default/body'
+    SOUNDS_ALTVOICE_NATIONALDEFAULT_HEADER = '#settings:sounds/altVoice/NationalDefault/header'
+    SOUNDS_ALTVOICE_NATIONALDEFAULT_BODY = '#settings:sounds/altVoice/NationalDefault/body'
+    SOUNDS_SIXTHSENSE_HEADER = '#settings:sounds/sixthSense/header'
+    SOUNDS_SIXTHSENSE_BODY = '#settings:sounds/sixthSense/body'
     SOUNDS_SOUNDDEVICE_LAPTOP_HEADER = '#settings:sounds/soundDevice/laptop/header'
     SOUNDS_SOUNDDEVICE_LAPTOP_BODY = '#settings:sounds/soundDevice/laptop/body'
     SOUND_SOUNDMODES_DEFAULT = '#settings:sound/soundModes/default'
@@ -502,7 +515,7 @@ class SETTINGS(object):
     CANCEL_BUTTON = '#settings:cancel_button'
     APPLY_BUTTON = '#settings:apply_button'
     DEFAULTBTN = '#settings:defaultBtn'
-    ALTERNATIVEVOICES_FIELDSET_HEADER = '#settings:alternativeVoices/fieldset/header'
+    ALTERNATIVEVOICES_LABELS = '#settings:alternativeVoices/labels'
     ALTERNATIVEVOICES_LABELS_VOICEBATTLE = '#settings:alternativeVoices/labels/voiceBattle'
     OTHERSETTINGS_FIELDSET_HEADER = '#settings:otherSettings/fieldset/header'
     OTHERSETTINGS_LABELS_BULB = '#settings:otherSettings/labels/bulb'
@@ -524,6 +537,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEDONE = '#settings:feedback/tab/damageLogPanel/damageDone'
     FEEDBACK_TAB_DAMAGELOGPANEL_BLOCKEDDAMAGE = '#settings:feedback/tab/damageLogPanel/blockedDamage'
     FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEASSIST = '#settings:feedback/tab/damageLogPanel/damageAssist'
+    FEEDBACK_TAB_DAMAGELOGPANEL_ASSISTSTUN = '#settings:feedback/tab/damageLogPanel/assistStun'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILSLABEL = '#settings:feedback/tab/damageLogPanel/detailsLabel'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_ALWAYS = '#settings:feedback/tab/damageLogPanel/details/always'
     FEEDBACK_TAB_DAMAGELOGPANEL_DETAILS_BYALT = '#settings:feedback/tab/damageLogPanel/details/byAlt'
@@ -557,6 +571,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_WORLDCOLLISION = '#settings:feedback/tab/battleEvents/checkbox/WorldCollision'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_RECEIVEDDAMAGE = '#settings:feedback/tab/battleEvents/checkbox/ReceivedDamage'
     FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_RECEIVEDCRITS = '#settings:feedback/tab/battleEvents/checkbox/ReceivedCrits'
+    FEEDBACK_TAB_BATTLEEVENTS_CHECKBOX_ASSISTSTUN = '#settings:feedback/tab/battleEvents/checkbox/AssistStun'
     FEEDBACK_TAB_BATTLEEVENTS_INFO = '#settings:feedback/tab/battleEvents/info'
     FEEDBACK_TAB_BATTLEEVENTS_RECEIVEDDAMAGE = '#settings:feedback/tab/battleEvents/receivedDamage'
     FEEDBACK_TAB_DAMAGEINDICATOR = '#settings:feedback/tab/damageIndicator'
@@ -584,6 +599,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_RIBBONS_BURNVALUE = '#settings:feedback/tab/ribbons/burnValue'
     FEEDBACK_TAB_RIBBONS_ASSISTTRACKVALUE = '#settings:feedback/tab/ribbons/assistTrackValue'
     FEEDBACK_TAB_RIBBONS_VISIBLEITEMSCOUNT = '#settings:feedback/tab/ribbons/visibleItemsCount'
+    FEEDBACK_TAB_RIBBONS_ASSISTSTUN = '#settings:feedback/tab/ribbons/assistStun'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE1 = '#settings:feedback/tab/damageLogPanel/total/value1'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE2 = '#settings:feedback/tab/damageLogPanel/total/value2'
     FEEDBACK_TAB_DAMAGELOGPANEL_TOTAL_VALUE3 = '#settings:feedback/tab/damageLogPanel/total/value3'
@@ -599,6 +615,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYDAMAGE = '#settings:feedback/tab/damageLogPanel/summaryDamage'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYBLOCK = '#settings:feedback/tab/damageLogPanel/summaryBlock'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSIST = '#settings:feedback/tab/damageLogPanel/summaryAssist'
+    FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSISTSTUN = '#settings:feedback/tab/damageLogPanel/summaryAssistStun'
     GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
      GRAPHICSSETTINGSOPTIONS_FORWARD,
      GRAPHICSSETTINGSOPTIONS_ON,

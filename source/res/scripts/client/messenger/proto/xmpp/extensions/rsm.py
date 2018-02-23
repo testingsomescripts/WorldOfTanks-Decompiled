@@ -6,7 +6,7 @@ from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS
 
 class ResultSet(PyExtension):
-    __slots__ = '_converter'
+    __slots__ = ('_converter',)
 
     def __init__(self, converter=int):
         super(ResultSet, self).__init__(_TAG.SET)
@@ -29,12 +29,12 @@ class ResultSet(PyExtension):
         else:
             count = 0
         tag = findFirst(None, pyGlooxTag.filterXPath(self.getXPath(suffix='first')))
-        if tag:
+        if tag and tag.getCData():
             first = self._converter(tag.getCData())
         else:
             first = None
         tag = findFirst(None, pyGlooxTag.filterXPath(self.getXPath(suffix='last')))
-        if tag:
+        if tag and tag.getCData():
             last = self._converter(tag.getCData())
         else:
             last = None
@@ -42,6 +42,7 @@ class ResultSet(PyExtension):
 
 
 class RqResultSet(ResultSet):
+    __slots__ = ()
 
     def __init__(self, max=0, after=None, before=None):
         super(RqResultSet, self).__init__()

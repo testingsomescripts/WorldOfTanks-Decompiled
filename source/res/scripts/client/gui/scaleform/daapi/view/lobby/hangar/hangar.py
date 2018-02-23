@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 import BigWorld
-import SoundGroups
 from CurrentVehicle import g_currentVehicle
-from PlayerEvents import g_playerEvents
+from constants import QUEUE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
 from gui.Scaleform.framework import ViewTypes
@@ -16,51 +14,51 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.shared import g_itemsCache, events, EVENT_BUS_SCOPE
-from gui.shared.ItemsCache import CACHE_SYNC_REASON
+from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IFalloutController
+from skeletons.gui.game_control import IFalloutController, IRankedBattlesController
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.shared import IItemsCache
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 
-class Hangar(LobbySubView, HangarMeta, IGlobalListener):
+class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
+    rankedController = dependency.descriptor(IRankedBattlesController)
+    itemsCache = dependency.descriptor(IItemsCache)
     falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, _=None):
-        LobbySubView.__init__(self, 0)
+        LobbySelectableView.__init__(self, 0)
         self.__isCursorOver3dScene = False
         self.__selected3DEntity = None
         self.__currentCarouselAlias = None
         return
 
     def _populate(self):
-        LobbySubView._populate(self)
-        g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
-        g_playerEvents.onBattleResultsReceived += self.onFittingUpdate
+        self._onPopulateStarted()
+        LobbySelectableView._populate(self)
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.falloutCtrl.onSettingsChanged += self.__onFalloutSettingsChanged
-        g_itemsCache.onSyncCompleted += self.onCacheResync
-        g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
-        g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
-        g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
+        self.itemsCache.onSyncCompleted += self.onCacheResync
+        self.rankedController.onUpdated += self.onRankedUpdate
+        self.rankedController.onPrimeTimeStatusUpdated += self.__onRankedPrimeStatusUpdate
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
-        g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
-         'stats.gold': self.onMoneyUpdate,
-         'stats.vehicleSellsLeft': self.onFittingUpdate,
-         'stats.slots': self.onFittingUpdate,
-         'goodies': self.onFittingUpdate})
+        g_clientUpdateManager.addMoneyCallback(self.onMoneyUpdate)
+        g_clientUpdateManager.addCallbacks({})
         self.startGlobalListening()
         self.__updateAll()
         self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
-        self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self._onPopulateEnd()
 
     def _onCustomizationShow(self, event):
         self.as_setVisibleS(not event.ctx)
@@ -94,25 +92,22 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         its invoke til populate load is finished.
         """
         self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
-        self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
-        g_itemsCache.onSyncCompleted -= self.onCacheResync
+        self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.itemsCache.onSyncCompleted -= self.onCacheResync
         g_clientUpdateManager.removeObjectCallbacks(self)
-        g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
-        g_playerEvents.onBattleResultsReceived -= self.onFittingUpdate
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.falloutCtrl.onSettingsChanged -= self.__onFalloutSettingsChanged
-        g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
-        g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
-        g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
+        self.rankedController.onUpdated -= self.onRankedUpdate
+        self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
         self.closeHelpLayout()
         self.stopGlobalListening()
-        LobbySubView._dispose(self)
+        LobbySelectableView._dispose(self)
         return
 
     def __switchCarousels(self):
@@ -120,6 +115,9 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if self.falloutCtrl.isSelected():
             linkage = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL_UI
             newCarouselAlias = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL
+        elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
+            newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
         else:
             linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
             newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
@@ -135,22 +133,19 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if self.paramsPanel:
             self.paramsPanel.update()
 
-    def __updateCarouselVehicles(self, vehicles=None):
-        if self.tankCarousel is not None:
-            self.tankCarousel.updateVehicles(vehicles)
-        return
-
-    def __updateCarouselParams(self):
-        if self.tankCarousel is not None:
-            self.tankCarousel.updateParams()
-        return
-
-    def __updateResearchPanel(self):
+    def __updateVehicleInResearchPanel(self):
         if self.researchPanel is not None:
             self.researchPanel.onCurrentVehicleChanged()
         return
 
+    def __updateNavigationInResearchPanel(self):
+        if self.prbDispatcher is not None and self.researchPanel is not None:
+            self.researchPanel.setNavigationEnabled(not self.prbDispatcher.getFunctionalState().isNavigationDisabled())
+        return
+
     def __updateHeader(self):
+        if not self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.headerComponent:
+            self.as_setDefaultHeaderS(True)
         if self.headerComponent is not None:
             self.headerComponent.update()
         return
@@ -160,50 +155,39 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
             self.crewPanel.updateTankmen()
         return
 
-    def __highlight3DEntityAndShowTT(self, entity):
-        entity.highlight(True)
+    def __updateRankedWidget(self):
+        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
+            self.as_setDefaultHeaderS(False)
+        if self.rankedWidget is not None:
+            vehicle = g_currentVehicle.item
+            ranks = self.rankedController.getAllRanksChain(vehicle)
+            currentRank = self.rankedController.getCurrentRank(vehicle)
+            lastRank = self.rankedController.getLastRank(vehicle)
+            self.rankedWidget.update(ranks, currentRank, lastRank)
+        return
+
+    def __updateAlertMessage(self):
+        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+            status, _ = self.rankedController.getPrimeTimeStatus()
+            self.as_setAlertMessageBlockVisibleS(status != PRIME_TIME_STATUS.AVAILABLE)
+        else:
+            self.as_setAlertMessageBlockVisibleS(False)
+
+    def _highlight3DEntityAndShowTT(self, entity):
+        LobbySelectableView._highlight3DEntityAndShowTT(self, entity)
         itemId = entity.selectionId
         if len(itemId) > 0:
             self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
-    def __fade3DEntityAndHideTT(self, entity):
-        entity.highlight(False)
+    def _fade3DEntityAndHideTT(self, entity):
+        LobbySelectableView._fade3DEntityAndHideTT(self, entity)
         self.as_hide3DSceneTooltipS()
 
     def __onWaitingShown(self, event):
         self.closeHelpLayout()
 
-    def __onNotifyCursorOver3dScene(self, event):
-        self.__isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
-        if self.__selected3DEntity is not None:
-            if self.__isCursorOver3dScene:
-                self.__highlight3DEntityAndShowTT(self.__selected3DEntity)
-            else:
-                self.__fade3DEntityAndHideTT(self.__selected3DEntity)
-        return
-
-    def __on3DObjectSelected(self, entity):
-        self.__selected3DEntity = entity
-        if self.__isCursorOver3dScene:
-            self.__highlight3DEntityAndShowTT(entity)
-            if entity.mouseOverSoundName:
-                SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
-
-    def __on3DObjectUnSelected(self, entity):
-        self.__selected3DEntity = None
-        if self.__isCursorOver3dScene:
-            self.__fade3DEntityAndHideTT(entity)
-        return
-
-    def __on3DObjectClicked(self):
-        if self.__isCursorOver3dScene:
-            if self.__selected3DEntity is not None:
-                self.__selected3DEntity.onClicked()
-        return
-
-    @property
-    def tankCarousel(self):
-        return self.getComponent(self.__currentCarouselAlias)
+    def __handleFightButtonUpdated(self, _):
+        self.__updateNavigationInResearchPanel()
 
     @property
     def ammoPanel(self):
@@ -225,16 +209,20 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def headerComponent(self):
         return self.getComponent(HANGAR_ALIASES.HEADER)
 
+    @property
+    def rankedWidget(self):
+        return self.getComponent(HANGAR_ALIASES.RANKED_WIDGET)
+
+    @property
+    def alertMessage(self):
+        return self.getComponent(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK)
+
     def onCacheResync(self, reason, diff):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.__updateAll()
             return
         else:
-            if reason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-                self.__updateCarouselParams()
-                self.__updateCarouselEnabled()
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
-                self.__updateCarouselVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
                 self.__updateAmmoPanel()
             return
 
@@ -256,27 +244,34 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def onDequeued(self, queueType, *args):
         self.__onEntityChanged()
 
-    def __onVehicleBecomeElite(self, vehTypeCompDescr):
-        self.__updateCarouselVehicles([vehTypeCompDescr])
-
-    def onFittingUpdate(self, *args):
-        self.__updateCarouselParams()
-
     def onMoneyUpdate(self, *args):
         self.__updateAmmoPanel()
-        self.__updateCarouselParams()
+
+    def onRankedUpdate(self):
+        self.__updateRankedWidget()
+
+    def _onPopulateStarted(self):
+        pass
+
+    def _onPopulateEnd(self):
+        pass
+
+    def __onRankedPrimeStatusUpdate(self, status):
+        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+            self.as_setAlertMessageBlockVisibleS(status != PRIME_TIME_STATUS.AVAILABLE)
 
     def __updateAll(self):
         Waiting.show('updateVehicle')
         self.__switchCarousels()
         self.__updateState()
         self.__updateAmmoPanel()
-        self.__updateCarouselVehicles()
-        self.__updateCarouselParams()
         self.__updateParams()
-        self.__updateResearchPanel()
+        self.__updateVehicleInResearchPanel()
+        self.__updateNavigationInResearchPanel()
         self.__updateHeader()
         self.__updateCrew()
+        self.__updateRankedWidget()
+        self.__updateAlertMessage()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -284,25 +279,23 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         self.__updateState()
         self.__updateAmmoPanel()
         self.__updateParams()
-        self.__updateResearchPanel()
+        self.__updateVehicleInResearchPanel()
         self.__updateHeader()
         self.__updateCrew()
-        self.__updateCarouselParams()
+        self.__updateRankedWidget()
         Waiting.hide('updateVehicle')
 
     def __onIgrTypeChanged(self, *args):
-        self.__updateResearchPanel()
+        self.__updateVehicleInResearchPanel()
         self.__updateHeader()
         self.__updateParams()
 
     def __onFalloutSettingsChanged(self):
         self.__switchCarousels()
-        self.__updateCarouselVehicles()
 
     def __updateState(self):
         state = g_currentVehicle.getViewState()
         self.as_setCrewEnabledS(state.isCrewOpsEnabled())
-        self.__updateCarouselEnabled()
         if state.isOnlyForEventBattles():
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
         else:
@@ -310,14 +303,13 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), state.isCustomizationEnabled(), customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
 
-    def __updateCarouselEnabled(self):
-        state = g_currentVehicle.getViewState()
-        self.as_setCarouselEnabledS(not state.isLocked())
-
     def __onEntityChanged(self):
         self.__updateState()
         self.__updateAmmoPanel()
+        self.__updateRankedWidget()
+        self.__updateAlertMessage()
+        self.__updateNavigationInResearchPanel()
+        self.__updateHeader()
 
     def __onVehicleClientStateChanged(self, vehicles):
-        self.__updateCarouselVehicles(vehicles)
         self.__updateAmmoPanel()

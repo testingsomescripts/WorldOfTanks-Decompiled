@@ -5,6 +5,8 @@ from constants import QUEUE_TYPE, PREBATTLE_TYPE_NAMES, ARENA_GUI_TYPE, PREBATTL
 from gui.prb_control.settings import makePrebattleSettings, VEHICLE_MAX_LEVEL
 from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
+from skeletons.gui.game_control import IBootcampController
+from skeletons.gui.lobby_context import ILobbyContext
 
 def isInRandomQueue():
     return getattr(BigWorld.player(), 'isInRandomQueue', False)
@@ -12,6 +14,10 @@ def isInRandomQueue():
 
 def isInTutorialQueue():
     return getattr(BigWorld.player(), 'isInTutorialQueue', False)
+
+
+def isInBootcampQueue():
+    return getattr(BigWorld.player(), 'isInBootcampQueue', False)
 
 
 def isInEventBattlesQueue():
@@ -30,6 +36,15 @@ def isInSandboxQueue():
     return getattr(BigWorld.player(), 'isInSandboxQueue', False)
 
 
+def isInRankedQueue():
+    return getattr(BigWorld.player(), 'isInRankedQueue', False)
+
+
+@dependency.replace_none_kwargs(bootcampController=IBootcampController)
+def isInBootcampAccount(bootcampController=None):
+    return bootcampController is not None and bootcampController.isInBootcampAccount()
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -42,6 +57,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.FALLOUT_MULTITEAM
     elif isInTutorialQueue():
         queueType = QUEUE_TYPE.TUTORIAL
+    elif isInBootcampQueue():
+        queueType = QUEUE_TYPE.BOOTCAMP
     elif isInSandboxQueue():
         queueType = QUEUE_TYPE.SANDBOX
     return queueType
@@ -124,12 +141,12 @@ def getPrebattleTypeName(prbType=None):
 
 _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.TRAINING: ARENA_GUI_TYPE.TRAINING,
- PREBATTLE_TYPE.COMPANY: ARENA_GUI_TYPE.COMPANY,
  PREBATTLE_TYPE.EVENT: ARENA_GUI_TYPE.EVENT_BATTLES}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
  QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_GUI_TYPE.FALLOUT_CLASSIC,
- QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM}
+ QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM,
+ QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:
@@ -197,12 +214,15 @@ def getPrebattleLocalizedData(extraData=None):
     return led
 
 
-def getCreatorFullName():
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def getCreatorFullName(lobbyContext=None):
     settings = getPrebattleSettings()
     creatorName = settings['creator']
     clanAbbrev = settings['creatorClanAbbrev']
-    from gui.LobbyContext import g_lobbyContext
-    creatorRegion = g_lobbyContext.getRegionCode(settings['creatorDBID'])
+    if lobbyContext is not None:
+        creatorRegion = lobbyContext.getRegionCode(settings['creatorDBID'])
+    else:
+        creatorRegion = None
     if clanAbbrev:
         fullName = '{0:>s}[{1:>s}]'.format(creatorName, clanAbbrev)
     else:
@@ -216,10 +236,6 @@ def areSpecBattlesHidden():
     return not getattr(BigWorld.player(), 'prebattleAutoInvites', None)
 
 
-def isCompany(settings=None):
-    return getPrebattleType(settings=settings) == PREBATTLE_TYPE.COMPANY
-
-
 def isTraining(settings=None):
     return getPrebattleType(settings=settings) == PREBATTLE_TYPE.TRAINING
 
@@ -228,9 +244,9 @@ def isBattleSession(settings=None):
     return getPrebattleType(settings=settings) in (PREBATTLE_TYPE.TOURNAMENT, PREBATTLE_TYPE.CLAN)
 
 
-def isParentControlActivated():
-    gameSession = dependency.instance(IGameSessionController)
-    return gameSession.isParentControlActive and not isTraining()
+@dependency.replace_none_kwargs(gameSession=IGameSessionController)
+def isParentControlActivated(gameSession=None):
+    return gameSession is not None and gameSession.isParentControlActive and not isTraining()
 
 
 def getClientUnitMgr():
@@ -241,10 +257,6 @@ def getUnitMgrID():
     return getattr(getClientUnitMgr(), 'id', None)
 
 
-def getUnitIdx():
-    return getattr(getClientUnitMgr(), 'unitIdx', 0)
-
-
 def getBattleID():
     return getattr(getClientUnitMgr(), 'battleID', 0)
 
@@ -253,7 +265,7 @@ def getClientUnitBrowser():
     return getattr(BigWorld.player(), 'unitBrowser', None)
 
 
-def getUnit(unitIdx, safe=False):
+def getUnit(safe=False):
     unitMgr = getClientUnitMgr()
     if not unitMgr:
         if not safe:
@@ -262,8 +274,8 @@ def getUnit(unitIdx, safe=False):
     else:
         unit = None
         try:
-            unit = unitMgr.units[unitIdx]
-        except KeyError:
+            unit = unitMgr.unit
+        except AttributeError:
             if not safe:
                 raise ValueError('Unit not found')
 
@@ -271,7 +283,7 @@ def getUnit(unitIdx, safe=False):
 
 
 def hasModalEntity():
-    return getClientPrebattle() or getUnitIdx()
+    return getClientPrebattle() or getUnit()
 
 
 def getTrainingBattleRoundLimits(accountAttrs):

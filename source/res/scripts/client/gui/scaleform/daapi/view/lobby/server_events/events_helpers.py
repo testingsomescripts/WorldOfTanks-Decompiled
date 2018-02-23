@@ -12,7 +12,6 @@ from constants import EVENT_TYPE
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui import makeHtmlString
-from gui.LobbyContext import g_lobbyContext
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -21,7 +20,6 @@ from gui.server_events import formatters, conditions, settings as quest_settings
 from gui.server_events.bonuses import getTutorialBonusObj
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.modifiers import ACTION_MODIFIER_TYPE
-from gui.shared import g_itemsCache
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.processors import quests as quests_proc
@@ -31,7 +29,9 @@ from helpers import i18n, int2roman, time_utils, dependency
 from potapov_quests import PQ_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 _AWARDS_PER_PAGE = 3
 _AWARDS_PER_SINGLE_PAGE = 4
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
@@ -70,6 +70,7 @@ class EVENT_STATUS(CONST_CONTAINER):
 
 class _EventInfo(object):
     NO_BONUS_COUNT = -1
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, event):
         self.event = event
@@ -449,8 +450,8 @@ class _QuestInfo(_EventInfo):
                     if groupBy is not None and groupByKey is not None:
                         name, names = ('', '')
                         if groupBy == 'vehicle':
-                            name = g_itemsCache.items.getItemByCD(groupByKey).shortUserName
-                            names = [ g_itemsCache.items.getItemByCD(intCD).shortUserName for intCD, _, __ in nearestProgs ]
+                            name = self.itemsCache.items.getItemByCD(groupByKey).shortUserName
+                            names = [ self.itemsCache.items.getItemByCD(intCD).shortUserName for intCD, _, __ in nearestProgs ]
                         elif groupBy == 'nation':
                             name = i18n.makeString('#menu:nations/%s' % groupByKey)
                             names = [ i18n.makeString('#menu:nations/%s' % n) for n, _, __ in nearestProgs ]
@@ -720,10 +721,11 @@ def getTutorialEventsDescriptor():
     return getQuestsDescriptor()
 
 
-def getTutorialQuestsBoosters():
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def getTutorialQuestsBoosters(itemsCache=None):
     result = defaultdict(list)
     descriptor = getTutorialEventsDescriptor()
-    completed = g_itemsCache.items.stats.tutorialsCompleted
+    completed = itemsCache.items.stats.tutorialsCompleted
     if descriptor is not None:
         for chapter in descriptor:
             if not chapter.isBonusReceived(completed) and chapter.getChapterStatus(descriptor, completed) == EVENT_STATUS.NONE:
@@ -738,10 +740,10 @@ def getTutorialQuestsBoosters():
     return result
 
 
-def getBoosterQuests():
-    eventsCache = dependency.instance(IEventsCache)
-    hasTopVehicle = len(g_itemsCache.items.getVehicles(FALLOUT_QUESTS_CRITERIA.TOP_VEHICLE))
-    isFalloutQuestEnabled = g_lobbyContext.getServerSettings().isFalloutQuestEnabled()
+@dependency.replace_none_kwargs(eventsCache=IEventsCache, itemsCache=IItemsCache, lobbyContext=ILobbyContext)
+def getBoosterQuests(eventsCache=None, itemsCache=None, lobbyContext=None):
+    hasTopVehicle = len(itemsCache.items.getVehicles(FALLOUT_QUESTS_CRITERIA.TOP_VEHICLE))
+    isFalloutQuestEnabled = lobbyContext.getServerSettings().isFalloutQuestEnabled()
     return eventsCache.getAllQuests(lambda q: q.isAvailable()[0] and not q.isCompleted() and len(q.getBonuses('goodies')) and not (q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getPQType().branch == PQ_BRANCH.FALLOUT and (not isFalloutQuestEnabled or not hasTopVehicle)), includePotapovQuests=True)
 
 
@@ -856,8 +858,5 @@ def questsSortFunc(a, b):
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:
         return res
-    res = cmp(a.getType() == constants.EVENT_TYPE.FORT_QUEST, a.getType() == constants.EVENT_TYPE.FORT_QUEST)
-    if res:
-        return -res
     res = cmp(a.getPriority(), b.getPriority())
     return res if res else cmp(a.getUserName(), b.getUserName())
