@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/config.py
 """distutils.command.config
 
@@ -126,7 +126,7 @@ class config(Command):
             except OSError:
                 pass
 
-    def try_cpp(self, body = None, headers = None, include_dirs = None, lang = 'c'):
+    def try_cpp(self, body=None, headers=None, include_dirs=None, lang='c'):
         """Construct a source file from 'body' (a string containing lines
         of C/C++ code) and 'headers' (a list of header files to include)
         and run it through the preprocessor.  Return true if the
@@ -144,7 +144,7 @@ class config(Command):
         self._clean()
         return ok
 
-    def search_cpp(self, pattern, body = None, headers = None, include_dirs = None, lang = 'c'):
+    def search_cpp(self, pattern, body=None, headers=None, include_dirs=None, lang='c'):
         """Construct a source file (just like 'try_cpp()'), run it through
         the preprocessor, and return true if any line of the output matches
         'pattern'.  'pattern' should either be a compiled regex object or a
@@ -170,7 +170,7 @@ class config(Command):
         self._clean()
         return match
 
-    def try_compile(self, body, headers = None, include_dirs = None, lang = 'c'):
+    def try_compile(self, body, headers=None, include_dirs=None, lang='c'):
         """Try to compile a source file built from 'body' and 'headers'.
         Return true on success, false otherwise.
         """
@@ -186,7 +186,7 @@ class config(Command):
         self._clean()
         return ok
 
-    def try_link(self, body, headers = None, include_dirs = None, libraries = None, library_dirs = None, lang = 'c'):
+    def try_link(self, body, headers=None, include_dirs=None, libraries=None, library_dirs=None, lang='c'):
         """Try to compile and link a source file, built from 'body' and
         'headers', to executable form.  Return true on success, false
         otherwise.
@@ -203,7 +203,7 @@ class config(Command):
         self._clean()
         return ok
 
-    def try_run(self, body, headers = None, include_dirs = None, libraries = None, library_dirs = None, lang = 'c'):
+    def try_run(self, body, headers=None, include_dirs=None, libraries=None, library_dirs=None, lang='c'):
         """Try to compile, link to an executable, and run a program
         built from 'body' and 'headers'.  Return true on success, false
         otherwise.
@@ -221,7 +221,7 @@ class config(Command):
         self._clean()
         return ok
 
-    def check_func(self, func, headers = None, include_dirs = None, libraries = None, library_dirs = None, decl = 0, call = 0):
+    def check_func(self, func, headers=None, include_dirs=None, libraries=None, library_dirs=None, decl=0, call=0):
         """Determine if function 'func' is available by constructing a
         source file that refers to 'func', and compiles and links it.
         If everything succeeds, returns true; otherwise returns false.
@@ -248,7 +248,7 @@ class config(Command):
         body = '\n'.join(body) + '\n'
         return self.try_link(body, headers, include_dirs, libraries, library_dirs)
 
-    def check_lib(self, library, library_dirs = None, headers = None, include_dirs = None, other_libraries = []):
+    def check_lib(self, library, library_dirs=None, headers=None, include_dirs=None, other_libraries=[]):
         """Determine if 'library' is available to be linked against,
         without actually checking that any particular symbols are provided
         by it.  'headers' will be used in constructing the source file to
@@ -260,7 +260,7 @@ class config(Command):
         self._check_compiler()
         return self.try_link('int main (void) { }', headers, include_dirs, [library] + other_libraries, library_dirs)
 
-    def check_header(self, header, include_dirs = None, library_dirs = None, lang = 'c'):
+    def check_header(self, header, include_dirs=None, library_dirs=None, lang='c'):
         """Determine if the system header file named by 'header_file'
         exists and can be found by the preprocessor; return true if so,
         false otherwise.
@@ -268,7 +268,7 @@ class config(Command):
         return self.try_cpp(body='/* No body */', headers=[header], include_dirs=include_dirs)
 
 
-def dump_file(filename, head = None):
+def dump_file(filename, head=None):
     """Dumps a file content into log.info.
     
     If head is not None, will be dumped before the file content.

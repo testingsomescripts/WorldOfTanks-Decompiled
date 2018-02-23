@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_searchengine.py
 """Test functions and SearchEngine class in SearchEngine.py."""
 import re
@@ -278,11 +278,9 @@ class ForwardBackwardTest(unittest.TestCase):
 
     def make_search(self, func):
 
-        def search(pat, line, col, wrap, ok = 0):
+        def search(pat, line, col, wrap, ok=0):
             res = func(self.text, pat, line, col, wrap, ok)
-            if res:
-                return (res[0], res[1].span())
-            return res
+            return (res[0], res[1].span()) if res else res
 
         return search
 

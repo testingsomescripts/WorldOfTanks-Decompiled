@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/encoders.py
 """Encodings and related functions."""
 __all__ = ['encode_7or8bit',
@@ -18,9 +18,7 @@ def _bencode(s):
         return s
     hasnewline = s[-1] == '\n'
     value = base64.encodestring(s)
-    if not hasnewline and value[-1] == '\n':
-        return value[:-1]
-    return value
+    return value[:-1] if not hasnewline and value[-1] == '\n' else value
 
 
 def encode_base64(msg):

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/numbers.py
 """Abstract Base Classes (ABCs) for numbers, according to PEP 3141.
 
@@ -244,7 +245,7 @@ class Real(Complex):
     @property
     def imag(self):
         """Real numbers have no imaginary component."""
-        return 0
+        pass
 
     def conjugate(self):
         """Conjugate is a no-op for Reals."""
@@ -290,7 +291,7 @@ class Integral(Rational):
         return long(self)
 
     @abstractmethod
-    def __pow__(self, exponent, modulus = None):
+    def __pow__(self, exponent, modulus=None):
         """self ** exponent % modulus, but maybe faster.
         
         Accept the modulus argument if you want to support the
@@ -367,7 +368,7 @@ class Integral(Rational):
     @property
     def denominator(self):
         """Integers have a denominator of 1."""
-        return 1
+        pass
 
 
 Integral.register(int)

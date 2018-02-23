@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/headers.py
 """Manage HTTP Response Headers
 
@@ -9,7 +10,7 @@ from types import ListType, TupleType
 import re
 tspecials = re.compile('[ \\(\\)<>@,;:\\\\"/\\[\\]\\?=]')
 
-def _formatparam(param, value = None, quote = 1):
+def _formatparam(param, value=None, quote=1):
     """Convenience function to format and return a key=value pair.
     
     This will quote the value if needed or if quote is true.
@@ -78,7 +79,7 @@ class Headers:
         name = name.lower()
         return [ kv[1] for kv in self._headers if kv[0].lower() == name ]
 
-    def get(self, name, default = None):
+    def get(self, name, default=None):
         """Get the first header value for 'name', or return 'default'"""
         name = name.lower()
         for k, v in self._headers:
@@ -160,8 +161,7 @@ class Headers:
         for k, v in _params.items():
             if v is None:
                 parts.append(k.replace('_', '-'))
-            else:
-                parts.append(_formatparam(k.replace('_', '-'), v))
+            parts.append(_formatparam(k.replace('_', '-'), v))
 
         self._headers.append((_name, '; '.join(parts)))
         return

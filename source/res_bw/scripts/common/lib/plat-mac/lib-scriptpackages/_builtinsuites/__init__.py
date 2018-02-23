@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/lib-scriptpackages/_builtinSuites/__init__.py
 """
 Manually generated suite used as base class for StdSuites Required and Standard

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/formatter.py
 """Generic output formatting.
 
@@ -33,7 +33,7 @@ class NullFormatter:
     
     """
 
-    def __init__(self, writer = None):
+    def __init__(self, writer=None):
         if writer is None:
             writer = NullWriter()
         self.writer = writer
@@ -48,7 +48,7 @@ class NullFormatter:
     def add_hor_rule(self, *args, **kw):
         pass
 
-    def add_label_data(self, format, counter, blankline = None):
+    def add_label_data(self, format, counter, blankline=None):
         pass
 
     def add_flowing_data(self, data):
@@ -84,10 +84,10 @@ class NullFormatter:
     def push_style(self, *styles):
         pass
 
-    def pop_style(self, n = 1):
+    def pop_style(self, n=1):
         pass
 
-    def assert_line_data(self, flag = 1):
+    def assert_line_data(self, flag=1):
         pass
 
 
@@ -141,7 +141,7 @@ class AbstractFormatter:
         self.hard_break = self.nospace = 1
         self.have_label = self.para_end = self.softspace = self.parskip = 0
 
-    def add_label_data(self, format, counter, blankline = None):
+    def add_label_data(self, format, counter, blankline=None):
         if self.have_label or not self.hard_break:
             self.writer.send_line_break()
         if not self.para_end:
@@ -158,14 +158,13 @@ class AbstractFormatter:
         for c in format:
             if c == '1':
                 label = label + '%d' % counter
-            elif c in 'aA':
+            if c in 'aA':
                 if counter > 0:
                     label = label + self.format_letter(c, counter)
-            elif c in 'iI':
+            if c in 'iI':
                 if counter > 0:
                     label = label + self.format_roman(c, counter)
-            else:
-                label = label + c
+            label = label + c
 
         return label
 
@@ -201,9 +200,7 @@ class AbstractFormatter:
                 label = s + label
             index = index + 1
 
-        if case == 'I':
-            return label.upper()
-        return label
+        return label.upper() if case == 'I' else label
 
     def add_flowing_data(self, data):
         if not data:
@@ -325,11 +322,11 @@ class AbstractFormatter:
 
         self.writer.new_styles(tuple(self.style_stack))
 
-    def pop_style(self, n = 1):
+    def pop_style(self, n=1):
         del self.style_stack[-n:]
         self.writer.new_styles(tuple(self.style_stack))
 
-    def assert_line_data(self, flag = 1):
+    def assert_line_data(self, flag=1):
         self.nospace = self.hard_break = not flag
         self.para_end = self.parskip = self.have_label = 0
 
@@ -434,7 +431,7 @@ class DumbWriter(NullWriter):
     
     """
 
-    def __init__(self, file = None, maxcol = 72):
+    def __init__(self, file=None, maxcol=72):
         self.file = file or sys.stdout
         self.maxcol = maxcol
         NullWriter.__init__(self)
@@ -494,7 +491,7 @@ class DumbWriter(NullWriter):
         self.atbreak = data[-1].isspace()
 
 
-def test(file = None):
+def test(file=None):
     w = DumbWriter()
     f = AbstractFormatter(w)
     if file is not None:
@@ -506,8 +503,7 @@ def test(file = None):
     for line in fp:
         if line == '\n':
             f.end_paragraph(1)
-        else:
-            f.add_flowing_data(line)
+        f.add_flowing_data(line)
 
     f.end_paragraph(0)
     return

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/heapq.py
 """Heap queue algorithm (a.k.a. priority queue).
 
@@ -42,9 +42,7 @@ from itertools import islice, count, imap, izip, tee, chain
 from operator import itemgetter
 
 def cmp_lt(x, y):
-    if hasattr(x, '__lt__'):
-        return x < y
-    return not y <= x
+    return x < y if hasattr(x, '__lt__') else not y <= x
 
 
 def heappush(heap, item):
@@ -264,7 +262,7 @@ def merge(*iterables):
 
 _nsmallest = nsmallest
 
-def nsmallest(n, iterable, key = None):
+def nsmallest(n, iterable, key=None):
     """Find the n smallest elements in a dataset.
     
     Equivalent to:  sorted(iterable, key=key)[:n]
@@ -298,7 +296,7 @@ def nsmallest(n, iterable, key = None):
 
 _nlargest = nlargest
 
-def nlargest(n, iterable, key = None):
+def nlargest(n, iterable, key=None):
     """Find the n largest elements in a dataset.
     
     Equivalent to:  sorted(iterable, key=key, reverse=True)[:n]

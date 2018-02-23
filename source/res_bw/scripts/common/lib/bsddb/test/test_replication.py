@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_replication.py
 """TestCases for distributed transactions.
 """
@@ -89,8 +89,7 @@ class DBReplicationManager(DBReplication):
                  self.site4], j):
                     if v:
                         self.assertTrue(k.get_config(i))
-                    else:
-                        self.assertFalse(k.get_config(i))
+                    self.assertFalse(k.get_config(i))
 
             self.assertNotEqual(self.site.get_eid(), self.site2.get_eid())
             self.assertNotEqual(self.site3.get_eid(), self.site4.get_eid())
@@ -171,8 +170,8 @@ class DBReplicationManager(DBReplication):
         txn.commit()
         import time, os.path
         timeout = time.time() + 10
-        while time.time() < timeout and not os.path.exists(os.path.join(self.homeDirClient, 'test')):
-            time.sleep(0.01)
+        while 1:
+            time.time() < timeout and not os.path.exists(os.path.join(self.homeDirClient, 'test')) and time.sleep(0.01)
 
         self.dbClient = db.DB(self.dbenvClient)
         while True:
@@ -320,8 +319,8 @@ class DBBaseReplication(DBReplication):
         self.basic_rep_threading()
         import time
         timeout = time.time() + 60
-        while time.time() < timeout and not (self.confirmed_master and self.client_startupdone):
-            time.sleep(0.02)
+        while 1:
+            time.time() < timeout and not (self.confirmed_master and self.client_startupdone) and time.sleep(0.02)
 
         self.assertTrue(time.time() < timeout)
         self.dbMaster = db.DB(self.dbenvMaster)
@@ -330,8 +329,8 @@ class DBBaseReplication(DBReplication):
         txn.commit()
         import time, os.path
         timeout = time.time() + 10
-        while time.time() < timeout and not os.path.exists(os.path.join(self.homeDirClient, 'test')):
-            time.sleep(0.01)
+        while 1:
+            time.time() < timeout and not os.path.exists(os.path.join(self.homeDirClient, 'test')) and time.sleep(0.01)
 
         self.dbClient = db.DB(self.dbenvClient)
         while True:

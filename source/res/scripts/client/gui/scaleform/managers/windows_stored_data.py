@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/windows_stored_data.py
 from collections import namedtuple, defaultdict
 import functools
@@ -56,9 +56,9 @@ class stored_window(object):
 
     def __call__(self, clazz):
         if not hasattr(clazz, '__mro__'):
-            raise Exception, 'First argument is not class'
+            raise Exception('First argument is not class')
         if WindowViewMeta not in clazz.__mro__:
-            raise Exception, 'Class must be extends WindowViewMeta'
+            raise Exception('Class must be extends WindowViewMeta')
 
         def wrapPopulate(func):
 
@@ -153,11 +153,9 @@ class UniqueWindowStoredData(WindowStoredData):
 
     def pack(self):
         if not self._uniqueName:
-            return
-        elif self._geometry is None:
-            return
+            return None
         else:
-            return (self._uniqueName,) + self._geometry
+            return None if self._geometry is None else (self._uniqueName,) + self._geometry
 
     def getFindCriteria(self):
         return self._uniqueName
@@ -193,11 +191,9 @@ class CarouselWindowStoredData(WindowStoredData):
 
     def pack(self):
         if not self._clientID:
-            return
-        elif self._geometry is None:
-            return
+            return None
         else:
-            return (self._clientID,) + self._geometry
+            return None if self._geometry is None else (self._clientID,) + self._geometry
 
     def getFindCriteria(self):
         return self._clientID
@@ -244,13 +240,11 @@ class ChannelWindowStoredData(WindowStoredData):
 
     def pack(self):
         if not self._protoType:
-            return
+            return None
         elif not self._channelID:
-            return
-        elif self._geometry is None:
-            return
+            return None
         else:
-            return (self._protoType, self._channelID) + self._geometry
+            return None if self._geometry is None else (self._protoType, self._channelID) + self._geometry
 
     def getFindCriteria(self):
         return (self._protoType, self._channelID)

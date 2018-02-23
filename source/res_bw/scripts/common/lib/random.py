@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/random.py
 """Random variable generators.
 
@@ -98,7 +99,7 @@ class Random(_random.Random):
     """
     VERSION = 3
 
-    def __init__(self, x = None):
+    def __init__(self, x=None):
         """Initialize an instance.
         
         Optional argument x controls seeding, as for Random.seed().
@@ -107,7 +108,7 @@ class Random(_random.Random):
         self.gauss_next = None
         return
 
-    def seed(self, a = None):
+    def seed(self, a=None):
         """Initialize internal state from hashable object.
         
         None or no argument seeds from current time or from an operating
@@ -165,7 +166,7 @@ class Random(_random.Random):
     def __reduce__(self):
         return (self.__class__, (), self.getstate())
 
-    def randrange(self, start, stop = None, step = 1, _int = int, _maxwidth = 1L << BPF):
+    def randrange(self, start, stop=None, step=1, _int=int, _maxwidth=1L << BPF):
         """Choose a random item from range(start, stop[, step]).
         
         This fixes the problem with randint() which includes the
@@ -189,30 +190,28 @@ class Random(_random.Random):
             if width >= _maxwidth:
                 return _int(istart + self._randbelow(width))
             return _int(istart + _int(self.random() * width))
-        if step == 1:
-            raise ValueError, 'empty range for randrange() (%d,%d, %d)' % (istart, istop, width)
-        istep = _int(step)
-        if istep != step:
-            raise ValueError, 'non-integer step for randrange()'
-        if istep > 0:
-            n = (width + istep - 1) // istep
-        elif istep < 0:
-            n = (width + istep + 1) // istep
         else:
-            raise ValueError, 'zero step for randrange()'
-        if n <= 0:
-            raise ValueError, 'empty range for randrange()'
-        if n >= _maxwidth:
-            return istart + istep * self._randbelow(n)
-        else:
-            return istart + istep * _int(self.random() * n)
+            if step == 1:
+                raise ValueError, 'empty range for randrange() (%d,%d, %d)' % (istart, istop, width)
+            istep = _int(step)
+            if istep != step:
+                raise ValueError, 'non-integer step for randrange()'
+            if istep > 0:
+                n = (width + istep - 1) // istep
+            elif istep < 0:
+                n = (width + istep + 1) // istep
+            else:
+                raise ValueError, 'zero step for randrange()'
+            if n <= 0:
+                raise ValueError, 'empty range for randrange()'
+            return istart + istep * self._randbelow(n) if n >= _maxwidth else istart + istep * _int(self.random() * n)
 
     def randint(self, a, b):
         """Return random integer in range [a, b], including both end points.
         """
         return self.randrange(a, b + 1)
 
-    def _randbelow(self, n, _log = _log, _int = int, _maxwidth = 1L << BPF, _Method = _MethodType, _BuiltinMethod = _BuiltinMethodType):
+    def _randbelow(self, n, _log=_log, _int=int, _maxwidth=1L << BPF, _Method=_MethodType, _BuiltinMethod=_BuiltinMethodType):
         """Return a random int in the range [0,n)
         
         Handles the case where n has more bits than returned
@@ -239,7 +238,7 @@ class Random(_random.Random):
         """Choose a random element from a non-empty sequence."""
         return seq[int(self.random() * len(seq))]
 
-    def shuffle(self, x, random = None):
+    def shuffle(self, x, random=None):
         """x, random=random.random -> shuffle list x in place; return None.
         
         Optional arg random is a 0-argument function returning a random
@@ -311,7 +310,7 @@ class Random(_random.Random):
         """Get a random number in the range [a, b) or [a, b] depending on rounding."""
         return a + (b - a) * self.random()
 
-    def triangular(self, low = 0.0, high = 1.0, mode = None):
+    def triangular(self, low=0.0, high=1.0, mode=None):
         """Triangular distribution.
         
         Continuous distribution bounded by given lower and upper limits,
@@ -448,7 +447,7 @@ class Random(_random.Random):
                 if p > 1.0:
                     if u1 <= x ** (alpha - 1.0):
                         break
-                elif u1 <= _exp(-x):
+                if u1 <= _exp(-x):
                     break
 
             return x * beta
@@ -503,7 +502,7 @@ class Random(_random.Random):
 class WichmannHill(Random):
     VERSION = 1
 
-    def seed(self, a = None):
+    def seed(self, a=None):
         """Initialize internal state from hashable object.
         
         None or no argument seeds from current time or from an operating
@@ -574,7 +573,7 @@ class WichmannHill(Random):
         z = int(z * pow(170, n, 30323)) % 30323
         self._seed = (x, y, z)
 
-    def __whseed(self, x = 0, y = 0, z = 0):
+    def __whseed(self, x=0, y=0, z=0):
         """Set the Wichmann-Hill seed from (x, y, z).
         
         These must be integers in the range [0, 256).
@@ -594,7 +593,7 @@ class WichmannHill(Random):
         self.gauss_next = None
         return
 
-    def whseed(self, a = None):
+    def whseed(self, a=None):
         """Seed from hashable object's hash code.
         
         None or no argument seeds from current time.  It is not guaranteed
@@ -679,7 +678,7 @@ def _test_generator(n, func, args):
      largest)
 
 
-def _test(N = 2000):
+def _test(N=2000):
     _test_generator(N, random, ())
     _test_generator(N, normalvariate, (0.0, 1.0))
     _test_generator(N, lognormvariate, (0.0, 1.0))

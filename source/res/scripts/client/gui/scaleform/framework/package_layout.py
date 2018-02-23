@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -13,7 +13,7 @@ class PackageBusinessHandler(object):
     __counter = SequenceIDGenerator()
     __slots__ = ('_listeners', '_scope', '_app', '_appNS')
 
-    def __init__(self, listeners, appNS = None, scope = None):
+    def __init__(self, listeners, appNS=None, scope=None):
         super(PackageBusinessHandler, self).__init__()
         self._listeners = listeners
         self._scope = scope or EVENT_BUS_SCOPE.GLOBAL
@@ -56,17 +56,11 @@ class PackageBusinessHandler(object):
 
     def findViewByAlias(self, viewType, alias):
         container = self.__getContainer(viewType)
-        if not container:
-            return None
-        else:
-            return container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias})
+        return None if not container else container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias})
 
     def findViewByName(self, viewType, name):
         container = self.__getContainer(viewType)
-        if not container:
-            return None
-        else:
-            return container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: name})
+        return None if not container else container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: name})
 
     def bringViewToFront(self, name):
         manager = self._app.containerManager if self._app else None
@@ -83,9 +77,7 @@ class PackageBusinessHandler(object):
             return None
         else:
             manager = self._app.containerManager
-            if not manager:
-                return None
-            return manager.getContainer(viewType)
+            return None if not manager else manager.getContainer(viewType)
 
 
 class PackageImporter(object):
@@ -119,7 +111,7 @@ class PackageImporter(object):
 
         return
 
-    def unload(self, seq = None):
+    def unload(self, seq=None):
         if seq is None:
             seq = self._handlers.keys()
         isLoaded = self.isPackageLoaded
@@ -144,7 +136,7 @@ class PackageImporter(object):
         try:
             settings = imported.getViewSettings()
         except AttributeError:
-            raise Exception, 'Package {0} does not have method getViewSettings'.format(path)
+            raise Exception('Package {0} does not have method getViewSettings'.format(path))
 
         aliases = g_entitiesFactories.initSettings(settings)
         handlers = imported.getBusinessHandlers()
@@ -154,7 +146,7 @@ class PackageImporter(object):
                 for handler in processed:
                     handler.fini()
 
-                raise Exception, 'Package {0} has invalid business handler {1}'.format(path, handler.__class__.__name__)
+                raise Exception('Package {0} has invalid business handler {1}'.format(path, handler.__class__.__name__))
             handler.init()
             processed.add(handler)
 

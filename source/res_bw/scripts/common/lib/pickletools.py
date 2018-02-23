@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pickletools.py
 """"Executable documentation" for the pickle module.
 
@@ -19,12 +20,12 @@ class ArgumentDescriptor(object):
     __slots__ = ('name', 'n', 'reader', 'doc')
 
     def __init__(self, name, n, reader, doc):
-        raise isinstance(name, str) or AssertionError
+        assert isinstance(name, str)
         self.name = name
-        raise isinstance(n, int) and (n >= 0 or n in (UP_TO_NEWLINE, TAKEN_FROM_ARGUMENT1, TAKEN_FROM_ARGUMENT4)) or AssertionError
+        assert isinstance(n, int) and (n >= 0 or n in (UP_TO_NEWLINE, TAKEN_FROM_ARGUMENT1, TAKEN_FROM_ARGUMENT4))
         self.n = n
         self.reader = reader
-        raise isinstance(doc, str) or AssertionError
+        assert isinstance(doc, str)
         self.doc = doc
 
 
@@ -76,7 +77,7 @@ def read_int4(f):
 
 int4 = ArgumentDescriptor(name='int4', n=4, reader=read_int4, doc="Four-byte signed integer, little-endian, 2's complement.")
 
-def read_stringnl(f, decode = True, stripquotes = True):
+def read_stringnl(f, decode=True, stripquotes=True):
     r"""
     >>> import StringIO
     >>> read_stringnl(StringIO.StringIO("'abcd'\nefg\n"))
@@ -172,10 +173,10 @@ def read_string1(f):
     'abc'
     """
     n = read_uint1(f)
-    if not n >= 0:
-        raise AssertionError
-        data = f.read(n)
-        return len(data) == n and data
+    assert n >= 0
+    data = f.read(n)
+    if len(data) == n:
+        return data
     raise ValueError('expected %d bytes in a string1, but only %d remain' % (n, len(data)))
 
 
@@ -356,15 +357,15 @@ class StackObject(object):
     __slots__ = ('name', 'obtype', 'doc')
 
     def __init__(self, name, obtype, doc):
-        raise isinstance(name, str) or AssertionError
+        assert isinstance(name, str)
         self.name = name
-        raise isinstance(obtype, type) or isinstance(obtype, tuple) or AssertionError
+        assert isinstance(obtype, type) or isinstance(obtype, tuple)
         if isinstance(obtype, tuple):
             for contained in obtype:
-                raise isinstance(contained, type) or AssertionError
+                assert isinstance(contained, type)
 
         self.obtype = obtype
-        raise isinstance(doc, str) or AssertionError
+        assert isinstance(doc, str)
         self.doc = doc
 
     def __repr__(self):
@@ -390,26 +391,26 @@ class OpcodeInfo(object):
     __slots__ = ('name', 'code', 'arg', 'stack_before', 'stack_after', 'proto', 'doc')
 
     def __init__(self, name, code, arg, stack_before, stack_after, proto, doc):
-        raise isinstance(name, str) or AssertionError
+        assert isinstance(name, str)
         self.name = name
-        raise isinstance(code, str) or AssertionError
-        raise len(code) == 1 or AssertionError
+        assert isinstance(code, str)
+        assert len(code) == 1
         self.code = code
-        raise arg is None or isinstance(arg, ArgumentDescriptor) or AssertionError
+        assert arg is None or isinstance(arg, ArgumentDescriptor)
         self.arg = arg
-        raise isinstance(stack_before, list) or AssertionError
+        assert isinstance(stack_before, list)
         for x in stack_before:
-            raise isinstance(x, StackObject) or AssertionError
+            assert isinstance(x, StackObject)
 
         self.stack_before = stack_before
-        raise isinstance(stack_after, list) or AssertionError
+        assert isinstance(stack_after, list)
         for x in stack_after:
-            raise isinstance(x, StackObject) or AssertionError
+            assert isinstance(x, StackObject)
 
         self.stack_after = stack_after
-        raise isinstance(proto, int) and 0 <= proto <= 2 or AssertionError
+        assert isinstance(proto, int) and 0 <= proto <= 2
         self.proto = proto
-        raise isinstance(doc, str) or AssertionError
+        assert isinstance(doc, str)
         self.doc = doc
         return
 
@@ -489,7 +490,7 @@ for d in opcodes:
 
 del d
 
-def assure_pickle_consistency(verbose = False):
+def assure_pickle_consistency(verbose=False):
     import pickle, re
     copy = code2op.copy()
     for name in pickle.__all__:
@@ -509,8 +510,7 @@ def assure_pickle_consistency(verbose = False):
             if d.name != name:
                 raise ValueError("for pickle code %r, pickle.py uses name %r but we're using name %r" % (picklecode, name, d.name))
             del copy[picklecode]
-        else:
-            raise ValueError("pickle.py appears to have a pickle opcode with name %r and code %r, but we don't" % (name, picklecode))
+        raise ValueError("pickle.py appears to have a pickle opcode with name %r and code %r, but we don't" % (name, picklecode))
 
     if copy:
         msg = ["we appear to have pickle opcodes that pickle.py doesn't have:"]
@@ -567,8 +567,8 @@ def genops(pickle):
         else:
             arg = opcode.arg.reader(pickle)
         yield (opcode, arg, pos)
-        if not (code == '.' and opcode.name == 'STOP'):
-            raise AssertionError
+        if code == '.':
+            assert opcode.name == 'STOP'
             break
 
     return
@@ -585,7 +585,7 @@ def optimize(p):
             prevpos = None
         if 'PUT' in opcode.name:
             prevarg, prevpos = arg, pos
-        elif 'GET' in opcode.name:
+        if 'GET' in opcode.name:
             gets.add(arg)
 
     s = []
@@ -599,7 +599,7 @@ def optimize(p):
     return ''.join(s)
 
 
-def dis(pickle, out = None, memo = None, indentlevel = 4):
+def dis(pickle, out=None, memo=None, indentlevel=4):
     """Produce a symbolic disassembly of a pickle.
     
     'pickle' is a file-like object, or string, containing a (at least one)
@@ -649,10 +649,10 @@ def dis(pickle, out = None, memo = None, indentlevel = 4):
         after = opcode.stack_after
         numtopop = len(before)
         markmsg = None
-        raise (markobject in before or opcode.name == 'POP' and stack and stack[-1] is markobject) and (markobject not in after or AssertionError)
-        if markobject in before:
-            if not before[-1] is stackslice:
-                raise AssertionError
+        if markobject in before or opcode.name == 'POP' and stack and stack[-1] is markobject:
+            assert markobject not in after
+            if markobject in before:
+                assert before[-1] is stackslice
             if markstack:
                 markpos = markstack.pop()
                 if markpos is None:
@@ -666,42 +666,42 @@ def dis(pickle, out = None, memo = None, indentlevel = 4):
                 try:
                     numtopop = before.index(markobject)
                 except ValueError:
-                    raise opcode.name == 'POP' or AssertionError
+                    assert opcode.name == 'POP'
                     numtopop = 0
 
             else:
                 errormsg = markmsg = 'no MARK exists on stack'
         if opcode.name in ('PUT', 'BINPUT', 'LONG_BINPUT'):
-            if not arg is not None:
-                raise AssertionError
-                if arg in memo:
-                    errormsg = 'memo key %r already defined' % arg
-                elif not stack:
-                    errormsg = "stack is empty -- can't store into memo"
-                elif stack[-1] is markobject:
-                    errormsg = "can't store markobject in the memo"
-                else:
-                    memo[arg] = stack[-1]
-            elif opcode.name in ('GET', 'BINGET', 'LONG_BINGET') and arg in memo:
-                if not len(after) == 1:
-                    raise AssertionError
-                    after = [memo[arg]]
-                else:
-                    errormsg = 'memo key %r has never been stored into' % arg
-            if arg is not None or markmsg:
-                line += ' ' * (10 - len(opcode.name))
-                if arg is not None:
-                    line += ' ' + repr(arg)
-                if markmsg:
-                    line += ' ' + markmsg
-            print >> out, line
-            if errormsg:
-                raise ValueError(errormsg)
-            if len(stack) < numtopop:
-                raise ValueError('tries to pop %d items from stack with only %d items' % (numtopop, len(stack)))
-            if numtopop:
-                del stack[-numtopop:]
-            raise markobject in after and (markobject not in before or AssertionError)
+            assert arg is not None
+            if arg in memo:
+                errormsg = 'memo key %r already defined' % arg
+            elif not stack:
+                errormsg = "stack is empty -- can't store into memo"
+            elif stack[-1] is markobject:
+                errormsg = "can't store markobject in the memo"
+            else:
+                memo[arg] = stack[-1]
+        elif opcode.name in ('GET', 'BINGET', 'LONG_BINGET'):
+            if arg in memo:
+                assert len(after) == 1
+                after = [memo[arg]]
+            else:
+                errormsg = 'memo key %r has never been stored into' % arg
+        if arg is not None or markmsg:
+            line += ' ' * (10 - len(opcode.name))
+            if arg is not None:
+                line += ' ' + repr(arg)
+            if markmsg:
+                line += ' ' + markmsg
+        print >> out, line
+        if errormsg:
+            raise ValueError(errormsg)
+        if len(stack) < numtopop:
+            raise ValueError('tries to pop %d items from stack with only %d items' % (numtopop, len(stack)))
+        if numtopop:
+            del stack[-numtopop:]
+        if markobject in after:
+            assert markobject not in before
             markstack.append(pos)
         stack.extend(after)
 

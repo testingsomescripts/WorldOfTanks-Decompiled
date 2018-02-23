@@ -72,6 +72,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R106_KV85/KV85_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.96 1.96 0.000000 0.000000	</tiling>
     </camouflage>
@@ -113,13 +114,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	ussr_02	</textureSet>
-        <size>	0.5 0.68	</size>
+        <size>	0.48 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -202,19 +203,17 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-4	</gravity>
         <elasticity>	1500	</elasticity>
-        <damping>	8	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.072	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -222,6 +221,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -230,6 +230,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -238,6 +239,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
         </node>
         <node>
@@ -245,6 +247,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.072	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -252,6 +255,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -260,6 +264,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -268,6 +273,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
         <node>
@@ -302,7 +308,7 @@
         <left>	vehicles/russian/R106_KV85/track/left.track	</left>
         <right>	vehicles/russian/R106_KV85/track/right.track	</right>
         <segmentLength>	0.135	</segmentLength>
-        <segmentOffset>	0.13	</segmentOffset>
+        <segmentOffset>	0.155	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -369,13 +375,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.5 0.69	</size>
+        <size>	0.48 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -458,19 +464,17 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-4	</gravity>
         <elasticity>	1500	</elasticity>
-        <damping>	8	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.072	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -478,6 +482,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -486,6 +491,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -494,6 +500,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
         </node>
         <node>
@@ -501,6 +508,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.072	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -508,6 +516,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -516,6 +525,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -524,6 +534,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.072	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
         <node>
@@ -558,7 +569,7 @@
         <left>	vehicles/russian/R106_KV85/track/left.track	</left>
         <right>	vehicles/russian/R106_KV85/track/right.track	</right>
         <segmentLength>	0.135	</segmentLength>
-        <segmentOffset>	0.13	</segmentOffset>
+        <segmentOffset>	0.155	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -962,7 +973,7 @@
       </unlocks>
     </V-2K>
     <V-2IS>	shared	  <unlocks>
-        <vehicle>	IS	  <cost>	49480	</cost>
+        <vehicle>	R01_IS	  <cost>	49480	</cost>
         </vehicle>
       </unlocks>
     </V-2IS>

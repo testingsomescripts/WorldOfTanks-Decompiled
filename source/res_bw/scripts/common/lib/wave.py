@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wave.py
 """Stuff to parse WAVE files.
 
@@ -241,22 +242,22 @@ class Wave_read:
             import array
             chunk = self._data_chunk
             data = array.array(_array_fmts[self._sampwidth])
-            if not data.itemsize == self._sampwidth:
-                raise AssertionError
-                nitems = nframes * self._nchannels
-                if nitems * self._sampwidth > chunk.chunksize - chunk.size_read:
-                    nitems = (chunk.chunksize - chunk.size_read) / self._sampwidth
-                data.fromfile(chunk.file.file, nitems)
-                chunk.size_read = chunk.size_read + nitems * self._sampwidth
-                chunk = chunk.file
-                chunk.size_read = chunk.size_read + nitems * self._sampwidth
-                data.byteswap()
-                data = data.tostring()
-            else:
-                data = self._data_chunk.read(nframes * self._framesize)
-                if self._sampwidth == 3 and sys.byteorder == 'big':
-                    data = _byteswap3(data)
-            data = self._convert and data and self._convert(data)
+            assert data.itemsize == self._sampwidth
+            nitems = nframes * self._nchannels
+            if nitems * self._sampwidth > chunk.chunksize - chunk.size_read:
+                nitems = (chunk.chunksize - chunk.size_read) / self._sampwidth
+            data.fromfile(chunk.file.file, nitems)
+            chunk.size_read = chunk.size_read + nitems * self._sampwidth
+            chunk = chunk.file
+            chunk.size_read = chunk.size_read + nitems * self._sampwidth
+            data.byteswap()
+            data = data.tostring()
+        else:
+            data = self._data_chunk.read(nframes * self._framesize)
+            if self._sampwidth == 3 and sys.byteorder == 'big':
+                data = _byteswap3(data)
+        if self._convert and data:
+            data = self._convert(data)
         self._soundpos = self._soundpos + len(data) // (self._nchannels * self._sampwidth)
         return data
 
@@ -428,7 +429,7 @@ class Wave_write:
             a = array.array(_array_fmts[self._sampwidth])
             a.fromstring(data)
             data = a
-            raise data.itemsize == self._sampwidth or AssertionError
+            assert data.itemsize == self._sampwidth
             data.byteswap()
             data.tofile(self._file)
             self._datawritten = self._datawritten + len(data) * self._sampwidth
@@ -470,10 +471,10 @@ class Wave_write:
             self._write_header(datasize)
 
     def _write_header(self, initlength):
-        if not not self._headerwritten:
-            raise AssertionError
-            self._file.write('RIFF')
-            self._nframes = self._nframes or initlength / (self._nchannels * self._sampwidth)
+        assert not self._headerwritten
+        self._file.write('RIFF')
+        if not self._nframes:
+            self._nframes = initlength / (self._nchannels * self._sampwidth)
         self._datalength = self._nframes * self._nchannels * self._sampwidth
         self._form_length_pos = self._file.tell()
         self._file.write(struct.pack('<L4s4sLHHLLHH4s', 36 + self._datalength, 'WAVE', 'fmt ', 16, WAVE_FORMAT_PCM, self._nchannels, self._framerate, self._nchannels * self._framerate * self._sampwidth, self._nchannels * self._sampwidth, self._sampwidth * 8, 'data'))
@@ -482,9 +483,9 @@ class Wave_write:
         self._headerwritten = True
 
     def _patchheader(self):
-        if not self._headerwritten:
-            raise AssertionError
-            return self._datawritten == self._datalength and None
+        assert self._headerwritten
+        if self._datawritten == self._datalength:
+            return
         curpos = self._file.tell()
         self._file.seek(self._form_length_pos, 0)
         self._file.write(struct.pack('<L', 36 + self._datawritten))
@@ -494,7 +495,7 @@ class Wave_write:
         self._datalength = self._datawritten
 
 
-def open(f, mode = None):
+def open(f, mode=None):
     if mode is None:
         if hasattr(f, 'mode'):
             mode = f.mode

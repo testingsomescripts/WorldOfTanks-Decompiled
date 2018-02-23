@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/idna.py
 import stringprep, re, codecs
 from unicodedata import ucd_3_2_0 as unicodedata
@@ -88,7 +88,7 @@ def ToUnicode(label):
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         if errors != 'strict':
             raise UnicodeError('unsupported error handling ' + errors)
         if not input:
@@ -105,7 +105,7 @@ class Codec(codecs.Codec):
 
         return ('.'.join(result) + trailing_dot, len(input))
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         if errors != 'strict':
             raise UnicodeError('Unsupported error handling ' + errors)
         if not input:

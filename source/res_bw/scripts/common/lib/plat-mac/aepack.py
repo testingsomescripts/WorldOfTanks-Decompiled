@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aepack.py
 """Tools for use in AppleEvent clients and servers:
 conversion between AE types and python types
@@ -48,7 +49,7 @@ def packkey(ae, key, value):
     ae.AEPutParamDesc(keystr, pack(value))
 
 
-def pack(x, forcetype = None):
+def pack(x, forcetype=None):
     """Pack a python object into an AE descriptor"""
     if forcetype:
         if type(x) is StringType:
@@ -94,13 +95,11 @@ def pack(x, forcetype = None):
         return x.__aepack__()
     elif hasattr(x, 'which'):
         return AE.AECreateDesc('TEXT', x.which)
-    elif hasattr(x, 'want'):
-        return AE.AECreateDesc('TEXT', x.want)
     else:
-        return AE.AECreateDesc('TEXT', repr(x))
+        return AE.AECreateDesc('TEXT', x.want) if hasattr(x, 'want') else AE.AECreateDesc('TEXT', repr(x))
 
 
-def unpack(desc, formodulename = ''):
+def unpack(desc, formodulename=''):
     """Unpack an AE descriptor to a python object"""
     t = desc.type
     if t in unpacker_coercions:
@@ -315,9 +314,7 @@ def mkobject(dict):
             return aetypes.File(seld, fr)
         if want == 'cins':
             return aetypes.InsertionPoint(seld, fr)
-    if want == 'prop' and form == 'prop' and aetypes.IsType(seld):
-        return aetypes.Property(seld.type, fr)
-    return aetypes.ObjectSpecifier(want, form, seld, fr)
+    return aetypes.Property(seld.type, fr) if want == 'prop' and form == 'prop' and aetypes.IsType(seld) else aetypes.ObjectSpecifier(want, form, seld, fr)
 
 
 def mkobjectfrommodule(dict, modulename):
@@ -329,13 +326,13 @@ def mkobjectfrommodule(dict, modulename):
     codenamemapper = module._classdeclarations
     classtype = codenamemapper.get(want, None)
     newobj = mkobject(dict)
-    if not (classtype and issubclass(classtype, ObjectSpecifier)):
-        raise AssertionError
+    if classtype:
+        assert issubclass(classtype, ObjectSpecifier)
         newobj.__class__ = classtype
     return newobj
 
 
-def mktype(typecode, modulename = None):
+def mktype(typecode, modulename=None):
     if modulename:
         module = __import__(modulename)
         codenamemapper = module._classdeclarations

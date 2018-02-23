@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/rexec.py
 """Restricted execution facilities.
 
@@ -132,7 +133,7 @@ class RExec(ihooks._Verbose):
     nok_builtin_names = ('open', 'file', 'reload', '__import__')
     ok_file_types = (imp.C_EXTENSION, imp.PY_SOURCE)
 
-    def __init__(self, hooks = None, verbose = 0):
+    def __init__(self, hooks=None, verbose=0):
         """Returns an instance of the RExec class.
         
         The hooks parameter is an instance of the RHooks class or a subclass
@@ -299,7 +300,7 @@ class RExec(ihooks._Verbose):
         m = self.add_module('__main__')
         execfile(file, m.__dict__)
 
-    def r_import(self, mname, globals = {}, locals = {}, fromlist = []):
+    def r_import(self, mname, globals={}, locals={}, fromlist=[]):
         """Import a module, raising an ImportError exception if the module
         is considered unsafe.
         
@@ -371,7 +372,7 @@ class RExec(ihooks._Verbose):
         sys.stdout = self.save_stdout
         sys.stderr = self.save_stderr
 
-    def s_apply(self, func, args = (), kw = {}):
+    def s_apply(self, func, args=(), kw={}):
         self.save_files()
         try:
             self.set_files()
@@ -466,7 +467,7 @@ class RExec(ihooks._Verbose):
         """
         return self.s_apply(self.r_unload, args)
 
-    def r_open(self, file, mode = 'r', buf = -1):
+    def r_open(self, file, mode='r', buf=-1):
         """Method called when open() is called in the restricted environment.
         
         The arguments are identical to those of the open() function, and a

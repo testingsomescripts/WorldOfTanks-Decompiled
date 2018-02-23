@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/data_providers.py
 import cPickle
 import constants
@@ -205,7 +205,7 @@ class RentalPackageDataProviderBase(DAAPIDataProvider):
         return
 
     @abstractmethod
-    def getRentalPackages(self, refresh = False):
+    def getRentalPackages(self, refresh=False):
         pass
 
     def __getSelectedPackageIndex(self):
@@ -299,7 +299,7 @@ class RentalPackageDataProviderBase(DAAPIDataProvider):
 
 class CamouflageRentalPackageDataProvider(RentalPackageDataProviderBase):
 
-    def getRentalPackages(self, refresh = False):
+    def getRentalPackages(self, refresh=False):
         costs = g_itemsCache.items.shop.camouflageCost
         defaultCosts = g_itemsCache.items.shop.defaults.camouflageCost
         self._onGetPackagesCost(costs, defaultCosts, refresh)
@@ -323,7 +323,7 @@ class CamouflageRentalPackageDataProvider(RentalPackageDataProviderBase):
 
 class EmblemRentalPackageDataProvider(RentalPackageDataProviderBase):
 
-    def getRentalPackages(self, refresh = False):
+    def getRentalPackages(self, refresh=False):
         costs = g_itemsCache.items.shop.playerEmblemCost
         defaultCosts = g_itemsCache.items.shop.defaults.playerEmblemCost
         self._onGetPackagesCost(costs, defaultCosts, refresh)
@@ -331,7 +331,7 @@ class EmblemRentalPackageDataProvider(RentalPackageDataProviderBase):
 
 class InscriptionRentalPackageDataProvider(RentalPackageDataProviderBase):
 
-    def getRentalPackages(self, refresh = False):
+    def getRentalPackages(self, refresh=False):
         costs = g_itemsCache.items.shop.playerInscriptionCost
         defaultCosts = g_itemsCache.items.shop.defaults.playerInscriptionCost
         self._onGetPackagesCost(costs, defaultCosts, refresh)
@@ -482,7 +482,7 @@ class EmblemsDataProvider(BaseCustomizationDataProvider):
         itemInfo['type'] = CUSTOMIZATION_ITEM_TYPE.EMBLEM
         return itemInfo
 
-    def _constructEmblem(self, itemID, groups, emblems, position, isCurrent = False, isInHangar = False, withoutCheck = True):
+    def _constructEmblem(self, itemID, groups, emblems, position, isCurrent=False, isInHangar=False, withoutCheck=True):
         itemInfo = None
         emblem = emblems.get(itemID, None)
         priceFactors = g_itemsCache.items.shop.getEmblemsGroupPriceFactors()
@@ -660,7 +660,7 @@ class InscriptionDataProvider(EmblemsDataProvider):
         itemInfo['type'] = CUSTOMIZATION_ITEM_TYPE.INSCRIPTION
         return itemInfo
 
-    def _constructInscription(self, itemID, groups, inscriptions, isCurrent = False, isInHangar = False, withoutCheck = True):
+    def _constructInscription(self, itemID, groups, inscriptions, isCurrent=False, isInHangar=False, withoutCheck=True):
         itemInfo = None
         inscription = inscriptions.get(itemID, None)
         priceFactors = g_itemsCache.items.shop.getInscriptionsGroupPriceFactors(self.nationID)
@@ -813,7 +813,7 @@ class CamouflagesDataProvider(BaseCustomizationDataProvider):
         return
 
     @classmethod
-    def _makeTextureUrl(cls, width, height, texture, colors, armorColor, lifeCycle = None):
+    def _makeTextureUrl(cls, width, height, texture, colors, armorColor, lifeCycle=None):
         if texture is None or len(texture) == 0:
             return ''
         else:
@@ -829,7 +829,7 @@ class CamouflagesDataProvider(BaseCustomizationDataProvider):
             return 'img://camouflage,{0:d},{1:d},"{2:>s}",{3[0]:d},{3[1]:d},{3[2]:d},{3[3]:d},{4[0]:n},{4[1]:n},{4[2]:n},{4[3]:n},{5:d}'.format(width, height, texture, colors, weights, armorColor)
 
     @classmethod
-    def _makeSmallTextureUrl(cls, texture, colors, armorColor, lifeCycle = None):
+    def _makeSmallTextureUrl(cls, texture, colors, armorColor, lifeCycle=None):
         return CamouflagesDataProvider._makeTextureUrl(67, 67, texture, colors, armorColor, lifeCycle=lifeCycle)
 
     @classmethod
@@ -869,7 +869,7 @@ class CamouflagesDataProvider(BaseCustomizationDataProvider):
              'current': False}
         return camouflageInfo
 
-    def _constructCamouflage(self, cID, groups, camouflages, armorColor, lifeCycle = None, isCurrent = False, isInHangar = False, withoutCheck = True, currVehIntD = None):
+    def _constructCamouflage(self, cID, groups, camouflages, armorColor, lifeCycle=None, isCurrent=False, isInHangar=False, withoutCheck=True, currVehIntD=None):
         camouflageInfo = None
         camouflage = camouflages.get(cID, None)
         hiddenCamos = g_itemsCache.items.shop.getCamouflagesHiddens(self.nationID)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hmac.py
 """HMAC (Keyed-Hashing for Message Authentication) Python module.
 
@@ -18,7 +18,7 @@ class HMAC:
     """
     blocksize = 64
 
-    def __init__(self, key, msg = None, digestmod = None):
+    def __init__(self, key, msg=None, digestmod=None):
         """Create a new HMAC object.
         
         key:       key for the keyed hash object.
@@ -36,7 +36,7 @@ class HMAC:
             if hasattr(digestmod, '__call__'):
                 self.digest_cons = digestmod
             else:
-                self.digest_cons = lambda d = '': digestmod.new(d)
+                self.digest_cons = lambda d='': digestmod.new(d)
             self.outer = self.digest_cons()
             self.inner = self.digest_cons()
             self.digest_size = self.inner.digest_size
@@ -100,7 +100,7 @@ class HMAC:
         return h.hexdigest()
 
 
-def new(key, msg = None, digestmod = None):
+def new(key, msg=None, digestmod=None):
     """Create a new hashing object and return it.
     
     key: The starting key for the hash.

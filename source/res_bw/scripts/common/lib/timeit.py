@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/timeit.py
 """Tool for measuring execution time of small code snippets.
 
@@ -76,7 +77,7 @@ def reindent(src, indent):
 def _template_func(setup, func):
     """Create a timer function. Used if the "statement" is a callable."""
 
-    def inner(_it, _timer, _func = func):
+    def inner(_it, _timer, _func=func):
         setup()
         _t0 = _timer()
         for _i in _it:
@@ -104,7 +105,7 @@ class Timer:
     multi-line string literals.
     """
 
-    def __init__(self, stmt = 'pass', setup = 'pass', timer = default_timer):
+    def __init__(self, stmt='pass', setup='pass', timer=default_timer):
         """Constructor.  See class doc string."""
         self.timer = timer
         ns = {}
@@ -139,7 +140,7 @@ class Timer:
             raise ValueError('stmt is neither a string nor callable')
         return
 
-    def print_exc(self, file = None):
+    def print_exc(self, file=None):
         """Helper to print a traceback from the timed code.
         
         Typical use:
@@ -165,7 +166,7 @@ class Timer:
         traceback.print_exc(file=file)
         return
 
-    def timeit(self, number = default_number):
+    def timeit(self, number=default_number):
         """Time 'number' executions of the main statement.
         
         To be precise, this executes the setup statement once, and
@@ -189,7 +190,7 @@ class Timer:
 
         return timing
 
-    def repeat(self, repeat = default_repeat, number = default_number):
+    def repeat(self, repeat=default_repeat, number=default_number):
         """Call timeit() a few times.
         
         This is a convenience function that calls the timeit()
@@ -217,17 +218,17 @@ class Timer:
         return r
 
 
-def timeit(stmt = 'pass', setup = 'pass', timer = default_timer, number = default_number):
+def timeit(stmt='pass', setup='pass', timer=default_timer, number=default_number):
     """Convenience function to create Timer object and call timeit method."""
     return Timer(stmt, setup, timer).timeit(number)
 
 
-def repeat(stmt = 'pass', setup = 'pass', timer = default_timer, repeat = default_repeat, number = default_number):
+def repeat(stmt='pass', setup='pass', timer=default_timer, repeat=default_repeat, number=default_number):
     """Convenience function to create Timer object and call repeat method."""
     return Timer(stmt, setup, timer).repeat(repeat, number)
 
 
-def main(args = None):
+def main(args=None):
     """Main program, used when run as a script.
     
     The optional argument specifies the command line to be parsed,

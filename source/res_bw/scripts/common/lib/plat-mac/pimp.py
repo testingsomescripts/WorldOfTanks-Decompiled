@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/pimp.py
 """Package Install Manager for Python.
 
@@ -47,7 +48,7 @@ DEFAULT_BUILDDIR = '/tmp'
 DEFAULT_INSTALLDIR = distutils.sysconfig.get_python_lib()
 DEFAULT_PIMPDATABASE_FMT = 'http://www.python.org/packman/version-%s/%s-%s-%s-%s-%s.plist'
 
-def getDefaultDatabase(experimental = False):
+def getDefaultDatabase(experimental=False):
     if experimental:
         status = 'exp'
     else:
@@ -89,8 +90,7 @@ def getDefaultDatabase(experimental = False):
         idx = rel.rfind('.')
         if idx < 0:
             rel = ''
-        else:
-            rel = rel[:idx]
+        rel = rel[:idx]
 
     return url
 
@@ -117,23 +117,21 @@ def _cmd(output, dir, *cmditems):
 class PimpDownloader():
     """Abstract base class - Downloader for archives"""
 
-    def __init__(self, argument, dir = '', watcher = None):
+    def __init__(self, argument, dir='', watcher=None):
         self.argument = argument
         self._dir = dir
         self._watcher = watcher
 
-    def download(self, url, filename, output = None):
+    def download(self, url, filename, output=None):
         return None
 
     def update(self, str):
-        if self._watcher:
-            return self._watcher.update(str)
-        return True
+        return self._watcher.update(str) if self._watcher else True
 
 
 class PimpCurlDownloader(PimpDownloader):
 
-    def download(self, url, filename, output = None):
+    def download(self, url, filename, output=None):
         self.update('Downloading %s...' % url)
         exitstatus = _cmd(output, self._dir, 'curl', '--output', filename, url)
         self.update('Downloading %s: finished' % url)
@@ -142,7 +140,7 @@ class PimpCurlDownloader(PimpDownloader):
 
 class PimpUrllibDownloader(PimpDownloader):
 
-    def download(self, url, filename, output = None):
+    def download(self, url, filename, output=None):
         output = open(filename, 'wb')
         self.update('Downloading %s: opening connection' % url)
         keepgoing = True
@@ -176,7 +174,7 @@ class PimpUnpacker():
     """Abstract base class - Unpacker for archives"""
     _can_rename = False
 
-    def __init__(self, argument, dir = '', renames = [], watcher = None):
+    def __init__(self, argument, dir='', renames=[], watcher=None):
         self.argument = argument
         if renames and not self._can_rename:
             raise RuntimeError, 'This unpacker cannot rename files'
@@ -184,30 +182,27 @@ class PimpUnpacker():
         self._renames = renames
         self._watcher = watcher
 
-    def unpack(self, archive, output = None, package = None):
+    def unpack(self, archive, output=None, package=None):
         return None
 
     def update(self, str):
-        if self._watcher:
-            return self._watcher.update(str)
-        return True
+        return self._watcher.update(str) if self._watcher else True
 
 
 class PimpCommandUnpacker(PimpUnpacker):
     """Unpack archives by calling a Unix utility"""
     _can_rename = False
 
-    def unpack(self, archive, output = None, package = None):
+    def unpack(self, archive, output=None, package=None):
         cmd = self.argument % archive
-        if _cmd(output, self._dir, cmd):
-            return 'unpack command failed'
+        return 'unpack command failed' if _cmd(output, self._dir, cmd) else None
 
 
 class PimpTarUnpacker(PimpUnpacker):
     """Unpack tarfiles using the builtin tarfile module"""
     _can_rename = True
 
-    def unpack(self, archive, output = None, package = None):
+    def unpack(self, archive, output=None, package=None):
         tf = tarfile.open(archive, 'r')
         members = tf.getmembers()
         skip = []
@@ -225,7 +220,7 @@ class PimpTarUnpacker(PimpUnpacker):
                             member.name = newprefix + member.name[len(oldprefix):]
                             print '    ', member.name
                         break
-                    elif oldprefix2 and member.name[:len(oldprefix2)] == oldprefix2:
+                    if oldprefix2 and member.name[:len(oldprefix2)] == oldprefix2:
                         if newprefix is None:
                             skip.append(member)
                         else:
@@ -261,7 +256,7 @@ class PimpPreferences():
     """Container for per-user preferences, such as the database to use
     and where to install packages."""
 
-    def __init__(self, flavorOrder = None, downloadDir = None, buildDir = None, installDir = None, pimpDatabase = None):
+    def __init__(self, flavorOrder=None, downloadDir=None, buildDir=None, installDir=None, pimpDatabase=None):
         if not flavorOrder:
             flavorOrder = DEFAULT_FLAVORORDER
         if not downloadDir:
@@ -281,7 +276,7 @@ class PimpPreferences():
     def setWatcher(self, watcher):
         self.watcher = watcher
 
-    def setInstallDir(self, installDir = None):
+    def setInstallDir(self, installDir=None):
         if installDir:
             self.installLocations = [('--install-lib', installDir),
              ('--install-headers', None),
@@ -335,9 +330,7 @@ class PimpPreferences():
             if right in self.flavorOrder:
                 return cmp(self.flavorOrder.index(left), self.flavorOrder.index(right))
             return -1
-        if right in self.flavorOrder:
-            return 1
-        return cmp(left, right)
+        return 1 if right in self.flavorOrder else cmp(left, right)
 
 
 class PimpDatabase():
@@ -373,7 +366,7 @@ class PimpDatabase():
         self.preferences = None
         return
 
-    def appendURL(self, url, included = 0):
+    def appendURL(self, url, included=0):
         """Append packages from the database with the given URL.
         Only the first database should specify included=0, so the
         global information (maintainer, description) get stored."""
@@ -564,9 +557,7 @@ class PimpPackage():
             return cmp(id(self), id(other))
         if self.name() != other.name():
             return cmp(self.name(), other.name())
-        if self.version() != other.version():
-            return -cmp(self.version(), other.version())
-        return self._db.preferences.compareFlavors(self.flavor(), other.flavor())
+        return -cmp(self.version(), other.version()) if self.version() != other.version() else self._db.preferences.compareFlavors(self.flavor(), other.flavor())
 
     def installed(self):
         """Test wheter the package is installed.
@@ -603,8 +594,6 @@ class PimpPackage():
                 sys.stderr.write('---- Please copy this and mail to %s\n' % self._db._maintainer)
             sys.stderr.write('-------------------------------------\n')
             return ('bad', 'Package install test got exception')
-
-        return ('yes', '')
 
     def prerequisites(self):
         """Return a list of prerequisites for this package.
@@ -644,7 +633,7 @@ class PimpPackage():
 
             return rv
 
-    def downloadPackageOnly(self, output = None):
+    def downloadPackageOnly(self, output=None):
         """Download a single package, if needed.
         
         An MD5 signature is used to determine whether download is needed,
@@ -667,10 +656,8 @@ class PimpPackage():
                 return 'download command failed'
         if not os.path.exists(self.archiveFilename) and not NO_EXECUTE:
             return 'archive not found after download'
-        elif not self._archiveOK():
-            return 'archive does not have correct MD5 checksum'
         else:
-            return
+            return 'archive does not have correct MD5 checksum' if not self._archiveOK() else None
 
     def _archiveOK(self):
         """Test an archive. It should exist and the MD5 checksum should be correct."""
@@ -683,7 +670,7 @@ class PimpPackage():
         checksum = hashlib.md5(data).hexdigest()
         return checksum == self._dict['MD5Sum']
 
-    def unpackPackageOnly(self, output = None):
+    def unpackPackageOnly(self, output=None):
         """Unpack a downloaded package archive."""
         filename = os.path.split(self.archiveFilename)[1]
         for ext, unpackerClass, arg in ARCHIVE_FORMATS:
@@ -695,14 +682,13 @@ class PimpPackage():
         self.basename = filename[:-len(ext)]
         unpacker = unpackerClass(arg, dir=self._db.preferences.buildDir, watcher=self._db.preferences.watcher)
         rv = unpacker.unpack(self.archiveFilename, output=output)
-        if rv:
-            return rv
+        return rv if rv else None
 
-    def installPackageOnly(self, output = None):
+    def installPackageOnly(self, output=None):
         """Default install method, to be overridden by subclasses"""
         return '%s: This package needs to be installed manually (no support for flavor="%s")' % (self.fullname(), self._dict.get(flavor, ''))
 
-    def installSinglePackage(self, output = None):
+    def installSinglePackage(self, output=None):
         """Download, unpack and install a single package.
         
         If output is given it should be a file-like object and it
@@ -713,9 +699,7 @@ class PimpPackage():
         if msg:
             return '%s: download: %s' % (self.fullname(), msg)
         msg = self.unpackPackageOnly(output)
-        if msg:
-            return '%s: unpack: %s' % (self.fullname(), msg)
-        return self.installPackageOnly(output)
+        return '%s: unpack: %s' % (self.fullname(), msg) if msg else self.installPackageOnly(output)
 
     def beforeInstall(self):
         """Bookkeeping before installation: remember what we have in site-packages"""
@@ -768,11 +752,11 @@ class PimpPackage():
 
 class PimpPackage_binary(PimpPackage):
 
-    def unpackPackageOnly(self, output = None):
+    def unpackPackageOnly(self, output=None):
         """We don't unpack binary packages until installing"""
         pass
 
-    def installPackageOnly(self, output = None):
+    def installPackageOnly(self, output=None):
         """Install a single source package.
         
         If output is given it should be a file-like object and it
@@ -815,15 +799,14 @@ class PimpPackage_binary(PimpPackage):
 
 class PimpPackage_source(PimpPackage):
 
-    def unpackPackageOnly(self, output = None):
+    def unpackPackageOnly(self, output=None):
         """Unpack a source package and check that setup.py exists"""
         PimpPackage.unpackPackageOnly(self, output)
         self._buildDirname = os.path.join(self._db.preferences.buildDir, self.basename)
         setupname = os.path.join(self._buildDirname, 'setup.py')
-        if not os.path.exists(setupname) and not NO_EXECUTE:
-            return 'no setup.py found after unpack of archive'
+        return 'no setup.py found after unpack of archive' if not os.path.exists(setupname) and not NO_EXECUTE else None
 
-    def installPackageOnly(self, output = None):
+    def installPackageOnly(self, output=None):
         """Install a single source package.
         
         If output is given it should be a file-like object and it
@@ -866,11 +849,11 @@ class PimpPackage_source(PimpPackage):
 
 class PimpPackage_installer(PimpPackage):
 
-    def unpackPackageOnly(self, output = None):
+    def unpackPackageOnly(self, output=None):
         """We don't unpack dmg packages until installing"""
         pass
 
-    def installPackageOnly(self, output = None):
+    def installPackageOnly(self, output=None):
         """Install a single source package.
         
         If output is given it should be a file-like object and it
@@ -887,9 +870,7 @@ class PimpPackage_installer(PimpPackage):
                 installcmd = installcmd % self.archiveFilename
         else:
             installcmd = 'open "%s"' % self.archiveFilename
-        if _cmd(output, '/tmp', installcmd):
-            return '%s: install command failed (use verbose for details)' % self.fullname()
-        return '%s: downloaded and opened. Install manually and restart Package Manager' % self.archiveFilename
+        return '%s: install command failed (use verbose for details)' % self.fullname() if _cmd(output, '/tmp', installcmd) else '%s: downloaded and opened. Install manually and restart Package Manager' % self.archiveFilename
 
 
 class PimpInstaller():
@@ -910,7 +891,7 @@ class PimpInstaller():
             if package not in self._todo:
                 self._todo.append(package)
 
-    def _prepareInstall(self, package, force = 0, recursive = 1):
+    def _prepareInstall(self, package, force=0, recursive=1):
         """Internal routine, recursive engine for prepareInstall.
         
         Test whether the package is installed and (if not installed
@@ -929,10 +910,9 @@ class PimpInstaller():
         for pkg, descr in prereqs:
             if pkg:
                 self._prepareInstall(pkg, False, recursive)
-            else:
-                self._curmessages.append('Problem with dependency: %s' % descr)
+            self._curmessages.append('Problem with dependency: %s' % descr)
 
-    def prepareInstall(self, package, force = 0, recursive = 1):
+    def prepareInstall(self, package, force=0, recursive=1):
         """Prepare installation of a package.
         
         If the package is already installed and force is false nothing
@@ -1036,16 +1016,15 @@ def _run(mode, verbose, force, args, prefargs, watcher):
                 for m in messages:
                     print '\t', m
 
+            if verbose:
+                output = sys.stdout
             else:
-                if verbose:
-                    output = sys.stdout
-                else:
-                    output = None
-                messages = inst.install(list, output)
-                if messages:
-                    print '%s: Not installed:' % pkgname
-                    for m in messages:
-                        print '\t', m
+                output = None
+            messages = inst.install(list, output)
+            if messages:
+                print '%s: Not installed:' % pkgname
+                for m in messages:
+                    print '\t', m
 
     return
 
@@ -1072,7 +1051,6 @@ def main():
 
         def update(self, msg):
             sys.stderr.write(msg + '\r')
-            return 1
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'slifvdD:Vu:')

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/locale.py
 """ Locale support.
 
@@ -86,7 +86,7 @@ except ImportError:
          'int_frac_digits': 127}
 
 
-    def setlocale(category, value = None):
+    def setlocale(category, value=None):
         """ setlocale(integer,string=None) -> string.
             Activates/queries locale processing.
         """
@@ -137,7 +137,7 @@ def _grouping_intervals(grouping):
     return
 
 
-def _group(s, monetary = False):
+def _group(s, monetary=False):
     conv = localeconv()
     thousands_sep = conv[monetary and 'mon_thousands_sep' or 'thousands_sep']
     grouping = conv[monetary and 'mon_grouping' or 'grouping']
@@ -181,7 +181,7 @@ def _strip_padding(s, amount):
 
 _percent_re = re.compile('%(?:\\((?P<key>.*?)\\))?(?P<modifiers>[-#0-9 +*.hlL]*?)[eEfFgGdiouxXcrs%]')
 
-def format(percent, value, grouping = False, monetary = False, *additional):
+def format(percent, value, grouping=False, monetary=False, *additional):
     """Returns the locale-aware substitution of a %? specifier
     (percent).
     
@@ -193,7 +193,7 @@ def format(percent, value, grouping = False, monetary = False, *additional):
     return _format(percent, value, grouping, monetary, *additional)
 
 
-def _format(percent, value, grouping = False, monetary = False, *additional):
+def _format(percent, value, grouping=False, monetary=False, *additional):
     if additional:
         formatted = percent % ((value,) + additional)
     else:
@@ -216,7 +216,7 @@ def _format(percent, value, grouping = False, monetary = False, *additional):
     return formatted
 
 
-def format_string(f, val, grouping = False):
+def format_string(f, val, grouping=False):
     """Formats a string in the same way that the % formatting would use,
     but takes the current locale into account.
     Grouping is applied if the third parameter is true."""
@@ -227,8 +227,7 @@ def format_string(f, val, grouping = False):
         for perc in percents:
             if perc.group()[-1] == '%':
                 new_val.append('%')
-            else:
-                new_val.append(format(perc.group(), val, grouping))
+            new_val.append(format(perc.group(), val, grouping))
 
     else:
         if not isinstance(val, tuple):
@@ -238,16 +237,15 @@ def format_string(f, val, grouping = False):
         for perc in percents:
             if perc.group()[-1] == '%':
                 new_val.append('%')
-            else:
-                starcount = perc.group('modifiers').count('*')
-                new_val.append(_format(perc.group(), val[i], grouping, False, *val[i + 1:i + 1 + starcount]))
-                i += 1 + starcount
+            starcount = perc.group('modifiers').count('*')
+            new_val.append(_format(perc.group(), val[i], grouping, False, *val[i + 1:i + 1 + starcount]))
+            i += 1 + starcount
 
     val = tuple(new_val)
     return new_f % val
 
 
-def currency(val, symbol = True, grouping = False, international = False):
+def currency(val, symbol=True, grouping=False, international=False):
     """Formats val according to the currency settings
     in the current locale."""
     conv = localeconv()
@@ -286,7 +284,7 @@ def str(val):
     return format('%.12g', val)
 
 
-def atof(string, func = float):
+def atof(string, func=float):
     """Parses a string as a float according to the locale settings."""
     ts = localeconv()['thousands_sep']
     if ts:
@@ -437,7 +435,7 @@ def _build_localename(localetuple):
         return
 
 
-def getdefaultlocale(envvars = ('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
+def getdefaultlocale(envvars=('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
     """ Tries to determine the default locale settings and returns
         them as tuple (language code, encoding).
     
@@ -483,7 +481,7 @@ def getdefaultlocale(envvars = ('LC_ALL', 'LC_CTYPE', 'LANG', 'LANGUAGE')):
     return _parse_localename(localename)
 
 
-def getlocale(category = LC_CTYPE):
+def getlocale(category=LC_CTYPE):
     """ Returns the current setting for the given locale category as
         tuple (language code, encoding).
     
@@ -501,7 +499,7 @@ def getlocale(category = LC_CTYPE):
     return _parse_localename(localename)
 
 
-def setlocale(category, locale = None):
+def setlocale(category, locale=None):
     """ Set the locale for the given category.  The locale can be
         a string, an iterable of two strings (language code and encoding),
         or None.
@@ -517,7 +515,7 @@ def setlocale(category, locale = None):
     return _setlocale(category, locale)
 
 
-def resetlocale(category = LC_ALL):
+def resetlocale(category=LC_ALL):
     """ Sets the locale for category to the default setting.
     
         The default setting is determined by calling
@@ -529,7 +527,7 @@ def resetlocale(category = LC_ALL):
 
 if sys.platform.startswith('win'):
 
-    def getpreferredencoding(do_setlocale = True):
+    def getpreferredencoding(do_setlocale=True):
         """Return the charset that the user is likely using."""
         import _locale
         return _locale._getdefaultlocale()[1]
@@ -540,7 +538,7 @@ else:
         CODESET
     except NameError:
 
-        def getpreferredencoding(do_setlocale = True):
+        def getpreferredencoding(do_setlocale=True):
             """Return the charset that the user is likely using,
             by looking at environment variables."""
             return getdefaultlocale()[1]
@@ -548,7 +546,7 @@ else:
 
     else:
 
-        def getpreferredencoding(do_setlocale = True):
+        def getpreferredencoding(do_setlocale=True):
             """Return the charset that the user is likely using,
             according to the system configuration."""
             if do_setlocale:
@@ -1668,7 +1666,7 @@ def _print_locale():
     """
     categories = {}
 
-    def _init_categories(categories = categories):
+    def _init_categories(categories=categories):
         for k, v in globals().items():
             if k[:3] == 'LC_':
                 categories[k] = v

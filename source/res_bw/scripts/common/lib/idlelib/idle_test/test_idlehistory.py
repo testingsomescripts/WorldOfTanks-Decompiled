@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/idle_test/test_idlehistory.py
 import unittest
 from test.test_support import requires
@@ -86,7 +86,7 @@ class FetchTest(unittest.TestCase):
         cls.root.destroy()
         del cls.root
 
-    def fetch_test(self, reverse, line, prefix, index, bell = False):
+    def fetch_test(self, reverse, line, prefix, index, bell=False):
         History = self.history
         History.fetch(reverse)
         Equal = self.assertEqual

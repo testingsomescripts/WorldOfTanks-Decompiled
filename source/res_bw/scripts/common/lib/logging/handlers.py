@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/logging/handlers.py
 """
 Additional handlers for the logging package for Python. The core package is
@@ -36,7 +36,7 @@ class BaseRotatingHandler(logging.FileHandler):
     or TimedRotatingFileHandler.
     """
 
-    def __init__(self, filename, mode, encoding = None, delay = 0):
+    def __init__(self, filename, mode, encoding=None, delay=0):
         """
         Use the specified filename for streamed logging
         """
@@ -70,7 +70,7 @@ class RotatingFileHandler(BaseRotatingHandler):
     to the next when the current file reaches a certain size.
     """
 
-    def __init__(self, filename, mode = 'a', maxBytes = 0, backupCount = 0, encoding = None, delay = 0):
+    def __init__(self, filename, mode='a', maxBytes=0, backupCount=0, encoding=None, delay=0):
         """
         Open the specified file and use it as the stream for logging.
         
@@ -148,7 +148,7 @@ class TimedRotatingFileHandler(BaseRotatingHandler):
     files are kept - the oldest ones are deleted.
     """
 
-    def __init__(self, filename, when = 'h', interval = 1, backupCount = 0, encoding = None, delay = False, utc = False):
+    def __init__(self, filename, when='h', interval=1, backupCount=0, encoding=None, delay=False, utc=False):
         BaseRotatingHandler.__init__(self, filename, 'a', encoding, delay)
         self.when = when.upper()
         self.backupCount = backupCount
@@ -231,8 +231,7 @@ class TimedRotatingFileHandler(BaseRotatingHandler):
         the method signatures are the same
         """
         t = int(time.time())
-        if t >= self.rolloverAt:
-            return 1
+        return 1 if t >= self.rolloverAt else 0
 
     def getFilesToDelete(self):
         """
@@ -331,7 +330,7 @@ class WatchedFileHandler(logging.FileHandler):
     Schroeder.
     """
 
-    def __init__(self, filename, mode = 'a', encoding = None, delay = 0):
+    def __init__(self, filename, mode='a', encoding=None, delay=0):
         logging.FileHandler.__init__(self, filename, mode, encoding, delay)
         self.dev, self.ino = (-1, -1)
         self._statstream()
@@ -399,7 +398,7 @@ class SocketHandler(logging.Handler):
         self.retryFactor = 2.0
         return
 
-    def makeSocket(self, timeout = 1):
+    def makeSocket(self, timeout=1):
         """
         A factory method which allows subclasses to define the precise
         type of socket they want.
@@ -645,7 +644,7 @@ class SysLogHandler(logging.Handler):
      'ERROR': 'error',
      'CRITICAL': 'critical'}
 
-    def __init__(self, address = ('localhost', SYSLOG_UDP_PORT), facility = LOG_USER, socktype = None):
+    def __init__(self, address=('localhost', SYSLOG_UDP_PORT), facility=LOG_USER, socktype=None):
         """
         Initialize a handler.
         
@@ -772,7 +771,7 @@ class SMTPHandler(logging.Handler):
     A handler class which sends an SMTP email for each logging event.
     """
 
-    def __init__(self, mailhost, fromaddr, toaddrs, subject, credentials = None, secure = None):
+    def __init__(self, mailhost, fromaddr, toaddrs, subject, credentials=None, secure=None):
         """
         Initialize the handler.
         
@@ -860,7 +859,7 @@ class NTEventLogHandler(logging.Handler):
     which contains the message definitions you want to use in the event log.
     """
 
-    def __init__(self, appname, dllname = None, logtype = 'Application'):
+    def __init__(self, appname, dllname=None, logtype='Application'):
         logging.Handler.__init__(self)
         try:
             import win32evtlogutil, win32evtlog
@@ -955,7 +954,7 @@ class HTTPHandler(logging.Handler):
     POST semantics.
     """
 
-    def __init__(self, host, url, method = 'GET'):
+    def __init__(self, host, url, method='GET'):
         """
         Initialize the instance with the host, the request URL, and the method
         ("GET" or "POST")
@@ -1076,7 +1075,7 @@ class MemoryHandler(BufferingHandler):
     is full, or when an event of a certain severity or greater is seen.
     """
 
-    def __init__(self, capacity, flushLevel = logging.ERROR, target = None):
+    def __init__(self, capacity, flushLevel=logging.ERROR, target=None):
         """
         Initialize the handler with the buffer size, the level at which
         flushing should occur and an optional target.

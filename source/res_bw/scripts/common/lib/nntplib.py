@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/nntplib.py
 """An NNTP client class based on RFC 977: Network News Transfer Protocol.
 
@@ -94,7 +95,7 @@ CRLF = '\r\n'
 
 class NNTP():
 
-    def __init__(self, host, port = NNTP_PORT, user = None, password = None, readermode = None, usenetrc = True):
+    def __init__(self, host, port=NNTP_PORT, user=None, password=None, readermode=None, usenetrc=True):
         """Initialize an instance.  Arguments:
         - host: hostname to connect to
         - port: port to connect to (default the standard NNTP port)
@@ -215,7 +216,7 @@ class NNTP():
             raise NNTPProtocolError(resp)
         return resp
 
-    def getlongresp(self, file = None):
+    def getlongresp(self, file=None):
         """Internal: get a response plus following text from the server.
         Raise various errors if the response indicates an error."""
         openedFile = None
@@ -234,8 +235,7 @@ class NNTP():
                     line = line[1:]
                 if file:
                     file.write(line + '\n')
-                else:
-                    list.append(line)
+                list.append(line)
 
         finally:
             if openedFile:
@@ -248,12 +248,12 @@ class NNTP():
         self.putcmd(line)
         return self.getresp()
 
-    def longcmd(self, line, file = None):
+    def longcmd(self, line, file=None):
         """Internal: send a command and get the response plus following text."""
         self.putcmd(line)
         return self.getlongresp(file)
 
-    def newgroups(self, date, time, file = None):
+    def newgroups(self, date, time, file=None):
         """Process a NEWGROUPS command.  Arguments:
         - date: string 'yymmdd' indicating the date
         - time: string 'hhmmss' indicating the time
@@ -262,7 +262,7 @@ class NNTP():
         - list: list of newsgroup names"""
         return self.longcmd('NEWGROUPS ' + date + ' ' + time, file)
 
-    def newnews(self, group, date, time, file = None):
+    def newnews(self, group, date, time, file=None):
         """Process a NEWNEWS command.  Arguments:
         - group: group name or '*'
         - date: string 'yymmdd' indicating the date
@@ -273,7 +273,7 @@ class NNTP():
         cmd = 'NEWNEWS ' + group + ' ' + date + ' ' + time
         return self.longcmd(cmd, file)
 
-    def list(self, file = None):
+    def list(self, file=None):
         """Process a LIST command.  Return:
         - resp: server response if successful
         - list: list of (group, last, first, flag) (strings)"""
@@ -343,7 +343,7 @@ class NNTP():
          last,
          name)
 
-    def help(self, file = None):
+    def help(self, file=None):
         """Process a HELP command.  Returns:
         - resp: server response if successful
         - list: list of strings"""
@@ -385,7 +385,7 @@ class NNTP():
         """Process a LAST command.  No arguments.  Return as for STAT."""
         return self.statcmd('LAST')
 
-    def artcmd(self, line, file = None):
+    def artcmd(self, line, file=None):
         """Internal: process a HEAD, BODY or ARTICLE command."""
         resp, list = self.longcmd(line, file)
         resp, nr, id = self.statparse(resp)
@@ -404,7 +404,7 @@ class NNTP():
         - list: the lines of the article's header"""
         return self.artcmd('HEAD ' + id)
 
-    def body(self, id, file = None):
+    def body(self, id, file=None):
         """Process a BODY command.  Argument:
         - id: article number or message id
         - file: Filename string or file object to store the article in
@@ -431,7 +431,7 @@ class NNTP():
         - resp: server response if successful"""
         return self.shortcmd('SLAVE')
 
-    def xhdr(self, hdr, str, file = None):
+    def xhdr(self, hdr, str, file=None):
         """Process an XHDR command (optional server extension).  Arguments:
         - hdr: the header type (e.g. 'subject')
         - str: an article nr, a message id, or a range nr1-nr2
@@ -448,7 +448,7 @@ class NNTP():
 
         return (resp, lines)
 
-    def xover(self, start, end, file = None):
+    def xover(self, start, end, file=None):
         """Process an XOVER command (optional server extension) Arguments:
         - start: start of range
         - end: end of range
@@ -474,7 +474,7 @@ class NNTP():
 
         return (resp, xover_lines)
 
-    def xgtitle(self, group, file = None):
+    def xgtitle(self, group, file=None):
         """Process an XGTITLE command (optional server extension) Arguments:
         - group: group name wildcard (i.e. news.*)
         Returns:

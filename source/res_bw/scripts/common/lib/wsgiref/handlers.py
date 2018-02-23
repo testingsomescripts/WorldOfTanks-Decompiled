@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/handlers.py
 """Base classes for server/gateway implementations"""
 from types import StringType
@@ -143,7 +144,7 @@ class BaseHandler():
         if 'Content-Length' not in self.headers:
             self.set_content_length()
 
-    def start_response(self, status, headers, exc_info = None):
+    def start_response(self, status, headers, exc_info=None):
         """'start_response()' callable as specified by PEP 333"""
         if exc_info:
             try:
@@ -154,14 +155,14 @@ class BaseHandler():
 
         elif self.headers is not None:
             raise AssertionError('Headers already set!')
-        raise type(status) is StringType or AssertionError('Status must be a string')
-        raise len(status) >= 4 or AssertionError('Status must be at least 4 characters')
-        raise int(status[:3]) or AssertionError('Status message must begin w/3-digit code')
-        raise status[3] == ' ' or AssertionError('Status message must have a space after code')
+        assert type(status) is StringType, 'Status must be a string'
+        assert len(status) >= 4, 'Status must be at least 4 characters'
+        assert int(status[:3]), 'Status message must begin w/3-digit code'
+        assert status[3] == ' ', 'Status message must have a space after code'
         for name, val in headers:
-            raise type(name) is StringType or AssertionError('Header names must be strings')
-            raise type(val) is StringType or AssertionError('Header values must be strings')
-            raise not is_hop_by_hop(name) or AssertionError('Hop-by-hop headers not allowed')
+            assert type(name) is StringType, 'Header names must be strings'
+            assert type(val) is StringType, 'Header values must be strings'
+            assert not is_hop_by_hop(name), 'Hop-by-hop headers not allowed'
 
         self.status = status
         self.headers = self.headers_class(headers)
@@ -181,9 +182,9 @@ class BaseHandler():
 
     def write(self, data):
         """'write()' callable as specified by PEP 333"""
-        if not type(data) is StringType:
-            raise AssertionError('write() argument must be string')
-            raise self.status or AssertionError('write() before start_response()')
+        assert type(data) is StringType, 'write() argument must be string'
+        if not self.status:
+            raise AssertionError('write() before start_response()')
         elif not self.headers_sent:
             self.bytes_sent = len(data)
             self.send_headers()
@@ -331,7 +332,7 @@ class SimpleHandler(BaseHandler):
         )
         handler.run(app)"""
 
-    def __init__(self, stdin, stdout, stderr, environ, multithread = True, multiprocess = False):
+    def __init__(self, stdin, stdout, stderr, environ, multithread=True, multiprocess=False):
         self.stdin = stdin
         self.stdout = stdout
         self.stderr = stderr

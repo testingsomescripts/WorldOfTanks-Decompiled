@@ -1,8 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bisect.py
 """Bisection algorithms."""
 
-def insort_right(a, x, lo = 0, hi = None):
+def insort_right(a, x, lo=0, hi=None):
     """Insert item x in list a, and keep it sorted assuming a is sorted.
     
     If x is already in a, insert it to the right of the rightmost x.
@@ -18,8 +18,7 @@ def insort_right(a, x, lo = 0, hi = None):
         mid = (lo + hi) // 2
         if x < a[mid]:
             hi = mid
-        else:
-            lo = mid + 1
+        lo = mid + 1
 
     a.insert(lo, x)
     return
@@ -27,7 +26,7 @@ def insort_right(a, x, lo = 0, hi = None):
 
 insort = insort_right
 
-def bisect_right(a, x, lo = 0, hi = None):
+def bisect_right(a, x, lo=0, hi=None):
     """Return the index where to insert item x in list a, assuming a is sorted.
     
     The return value i is such that all e in a[:i] have e <= x, and all e in
@@ -45,15 +44,14 @@ def bisect_right(a, x, lo = 0, hi = None):
         mid = (lo + hi) // 2
         if x < a[mid]:
             hi = mid
-        else:
-            lo = mid + 1
+        lo = mid + 1
 
     return lo
 
 
 bisect = bisect_right
 
-def insort_left(a, x, lo = 0, hi = None):
+def insort_left(a, x, lo=0, hi=None):
     """Insert item x in list a, and keep it sorted assuming a is sorted.
     
     If x is already in a, insert it to the left of the leftmost x.
@@ -69,14 +67,13 @@ def insort_left(a, x, lo = 0, hi = None):
         mid = (lo + hi) // 2
         if a[mid] < x:
             lo = mid + 1
-        else:
-            hi = mid
+        hi = mid
 
     a.insert(lo, x)
     return
 
 
-def bisect_left(a, x, lo = 0, hi = None):
+def bisect_left(a, x, lo=0, hi=None):
     """Return the index where to insert item x in list a, assuming a is sorted.
     
     The return value i is such that all e in a[:i] have e < x, and all e in
@@ -94,8 +91,7 @@ def bisect_left(a, x, lo = 0, hi = None):
         mid = (lo + hi) // 2
         if a[mid] < x:
             lo = mid + 1
-        else:
-            hi = mid
+        hi = mid
 
     return lo
 

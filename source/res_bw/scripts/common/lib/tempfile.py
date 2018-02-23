@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tempfile.py
 """Temporary files.
 
@@ -259,7 +260,7 @@ def gettempdir():
     return tempdir
 
 
-def mkstemp(suffix = '', prefix = template, dir = None, text = False):
+def mkstemp(suffix='', prefix=template, dir=None, text=False):
     """User-callable function to create and return a unique temporary
     file.  The return value is a pair (fd, name) where fd is the
     file descriptor returned by os.open, and name is the filename.
@@ -293,7 +294,7 @@ def mkstemp(suffix = '', prefix = template, dir = None, text = False):
     return _mkstemp_inner(dir, prefix, suffix, flags)
 
 
-def mkdtemp(suffix = '', prefix = template, dir = None):
+def mkdtemp(suffix='', prefix=template, dir=None):
     """User-callable function to create and return a unique temporary
     directory.  The return value is the pathname of the directory.
     
@@ -323,7 +324,7 @@ def mkdtemp(suffix = '', prefix = template, dir = None):
     return
 
 
-def mktemp(suffix = '', prefix = template, dir = None):
+def mktemp(suffix='', prefix=template, dir=None):
     """User-callable function to return a unique temporary file name.  The
     file is not created.
     
@@ -356,7 +357,7 @@ class _TemporaryFileWrapper:
     remove the file when it is no longer needed.
     """
 
-    def __init__(self, file, name, delete = True):
+    def __init__(self, file, name, delete=True):
         self.file = file
         self.name = name
         self.close_called = False
@@ -397,7 +398,7 @@ class _TemporaryFileWrapper:
             self.file.__exit__(exc, value, tb)
 
 
-def NamedTemporaryFile(mode = 'w+b', bufsize = -1, suffix = '', prefix = template, dir = None, delete = True):
+def NamedTemporaryFile(mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None, delete=True):
     """Create and return a temporary file.
     Arguments:
     'prefix', 'suffix', 'dir' -- as for mkstemp.
@@ -433,7 +434,7 @@ if _os.name != 'posix' or _os.sys.platform == 'cygwin':
     TemporaryFile = NamedTemporaryFile
 else:
 
-    def TemporaryFile(mode = 'w+b', bufsize = -1, suffix = '', prefix = template, dir = None):
+    def TemporaryFile(mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None):
         """Create and return a temporary file.
         Arguments:
         'prefix', 'suffix', 'dir' -- as for mkstemp.
@@ -468,7 +469,7 @@ class SpooledTemporaryFile:
     """
     _rolled = False
 
-    def __init__(self, max_size = 0, mode = 'w+b', bufsize = -1, suffix = '', prefix = template, dir = None):
+    def __init__(self, max_size=0, mode='w+b', bufsize=-1, suffix='', prefix=template, dir=None):
         self._file = _StringIO()
         self._max_size = max_size
         self._rolled = False

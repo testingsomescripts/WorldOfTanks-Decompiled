@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/cygwinccompiler.py
 """distutils.cygwinccompiler
 
@@ -42,7 +42,7 @@ class CygwinCCompiler(UnixCCompiler):
     shared_lib_format = '%s%s'
     exe_extension = '.exe'
 
-    def __init__(self, verbose = 0, dry_run = 0, force = 0):
+    def __init__(self, verbose=0, dry_run=0, force=0):
         UnixCCompiler.__init__(self, verbose, dry_run, force)
         status, details = check_config_h()
         self.debug_print("Python's GCC status: %s (details: %s)" % (status, details))
@@ -82,7 +82,7 @@ class CygwinCCompiler(UnixCCompiler):
             except DistutilsExecError as msg:
                 raise CompileError, msg
 
-    def link(self, target_desc, objects, output_filename, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link(self, target_desc, objects, output_filename, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         extra_preargs = copy.copy(extra_preargs or [])
         libraries = copy.copy(libraries or [])
         objects = copy.copy(objects or [])
@@ -107,7 +107,7 @@ class CygwinCCompiler(UnixCCompiler):
         UnixCCompiler.link(self, target_desc, objects, output_filename, output_dir, libraries, library_dirs, runtime_library_dirs, None, debug, extra_preargs, extra_postargs, build_temp, target_lang)
         return
 
-    def object_filenames(self, source_filenames, strip_dir = 0, output_dir = ''):
+    def object_filenames(self, source_filenames, strip_dir=0, output_dir=''):
         if output_dir is None:
             output_dir = ''
         obj_names = []
@@ -119,8 +119,7 @@ class CygwinCCompiler(UnixCCompiler):
                 base = os.path.basename(base)
             if ext == '.res' or ext == '.rc':
                 obj_names.append(os.path.join(output_dir, base + ext + self.obj_extension))
-            else:
-                obj_names.append(os.path.join(output_dir, base + self.obj_extension))
+            obj_names.append(os.path.join(output_dir, base + self.obj_extension))
 
         return obj_names
 
@@ -128,7 +127,7 @@ class CygwinCCompiler(UnixCCompiler):
 class Mingw32CCompiler(CygwinCCompiler):
     compiler_type = 'mingw32'
 
-    def __init__(self, verbose = 0, dry_run = 0, force = 0):
+    def __init__(self, verbose=0, dry_run=0, force=0):
         CygwinCCompiler.__init__(self, verbose, dry_run, force)
         if self.ld_version >= '2.13':
             shared_option = '-shared'

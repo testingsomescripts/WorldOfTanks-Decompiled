@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/colorsys.py
 """Conversion functions between RGB and other color systems.
 
@@ -93,9 +93,7 @@ def _v(m1, m2, hue):
         return m1 + (m2 - m1) * hue * 6.0
     if hue < 0.5:
         return m2
-    if hue < TWO_THIRD:
-        return m1 + (m2 - m1) * (TWO_THIRD - hue) * 6.0
-    return m1
+    return m1 + (m2 - m1) * (TWO_THIRD - hue) * 6.0 if hue < TWO_THIRD else m1
 
 
 def rgb_to_hsv(r, g, b):
@@ -137,5 +135,4 @@ def hsv_to_rgb(h, s, v):
         return (p, q, v)
     if i == 4:
         return (t, p, v)
-    if i == 5:
-        return (v, p, q)
+    return (v, p, q) if i == 5 else None

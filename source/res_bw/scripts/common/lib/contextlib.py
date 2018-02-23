@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/contextlib.py
 """Utilities for with-statement contexts.  See PEP 343."""
 import sys
@@ -97,15 +97,17 @@ def nested(*managers):
     vars = []
     exc = (None, None, None)
     try:
-        for mgr in managers:
-            exit = mgr.__exit__
-            enter = mgr.__enter__
-            vars.append(enter())
-            exits.append(exit)
+        try:
+            for mgr in managers:
+                exit = mgr.__exit__
+                enter = mgr.__enter__
+                vars.append(enter())
+                exits.append(exit)
 
-        yield vars
-    except:
-        exc = sys.exc_info()
+            yield vars
+        except:
+            exc = sys.exc_info()
+
     finally:
         while exits:
             exit = exits.pop()

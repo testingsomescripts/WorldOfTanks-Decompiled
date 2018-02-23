@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/linecache.py
 """Cache lines from files.
 
@@ -10,7 +10,7 @@ import sys
 import os
 __all__ = ['getline', 'clearcache', 'checkcache']
 
-def getline(filename, lineno, module_globals = None):
+def getline(filename, lineno, module_globals=None):
     lines = getlines(filename, module_globals)
     if 1 <= lineno <= len(lines):
         return lines[lineno - 1]
@@ -26,7 +26,7 @@ def clearcache():
     cache = {}
 
 
-def getlines(filename, module_globals = None):
+def getlines(filename, module_globals=None):
     """Get the lines for a file from the cache.
     Update the cache if it doesn't contain an entry for this file already."""
     if filename in cache:
@@ -35,7 +35,7 @@ def getlines(filename, module_globals = None):
         return updatecache(filename, module_globals)
 
 
-def checkcache(filename = None):
+def checkcache(filename=None):
     """Discard cache entries that are out of date.
     (This is not checked upon each call!)"""
     if filename is None:
@@ -60,7 +60,7 @@ def checkcache(filename = None):
     return
 
 
-def updatecache(filename, module_globals = None):
+def updatecache(filename, module_globals=None):
     """Update a cache entry and return its list of lines.
     If something's wrong, print a message, discard the cache entry,
     and return an empty list."""

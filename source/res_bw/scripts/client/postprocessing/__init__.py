@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/__init__.py
 """The PostProcessing Module.  This imports all of the c++ _PostProcessing module
 into the PostProcessing namespace.  It allows code to be written in script to
@@ -20,7 +20,7 @@ preChainListeners = []
 chainListeners = []
 g_graphicsSettingListeners = []
 
-def _dataSectionFromFilename(filename, createIfMissing = False):
+def _dataSectionFromFilename(filename, createIfMissing=False):
     """
     This method returns a data section, given a data section
     or a filename
@@ -107,7 +107,7 @@ def load(dataSection):
     return _load(dataSection)
 
 
-def merge(dataSection, addEffectIfMissing = False):
+def merge(dataSection, addEffectIfMissing=False):
     """
     This method loads a chain from XML and merges it with the
     existing chain.  Effects with the same name as any of those
@@ -236,7 +236,7 @@ def debugGui():
     return w
 
 
-def defaultChain(optionIdx = -1):
+def defaultChain(optionIdx=-1):
     """
     Create the default BigWorld PostProcessing chain, for the given
     graphics setting level.  If no graphics setting level is passed in,
@@ -244,7 +244,7 @@ def defaultChain(optionIdx = -1):
     graphics setting registry and used.
     """
     if optionIdx == -1:
-        optionIdx = BigWorld.getGraphicsSetting('POST_PROCESSING')
+        optionIdx = BigWorld.getGraphicsSetting('POST_PROCESSING_QUALITY')
     RenderTargets.clearRenderTargets()
     if optionIdx == 0:
         chain(load('High_Graphics_Setting.ppchain'))

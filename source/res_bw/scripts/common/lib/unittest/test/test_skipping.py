@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_skipping.py
 import unittest
 from .support import LoggingResult
@@ -69,7 +70,6 @@ class Test_TestSkipping(unittest.TestCase):
     def test_skip_class(self):
 
         @unittest.skip('testing')
-
         class Foo(unittest.TestCase):
 
             def test_1(self):
@@ -86,7 +86,6 @@ class Test_TestSkipping(unittest.TestCase):
     def test_skip_non_unittest_class_old_style(self):
 
         @unittest.skip('testing')
-
         class Mixin:
 
             def test_1(self):
@@ -106,7 +105,6 @@ class Test_TestSkipping(unittest.TestCase):
     def test_skip_non_unittest_class_new_style(self):
 
         @unittest.skip('testing')
-
         class Mixin(object):
 
             def test_1(self):

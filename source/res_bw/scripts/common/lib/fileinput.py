@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/fileinput.py
 """Helper class to quickly write a loop over all standard input files.
 
@@ -93,7 +93,7 @@ __all__ = ['input',
 _state = None
 DEFAULT_BUFSIZE = 8192
 
-def input(files = None, inplace = 0, backup = '', bufsize = 0, mode = 'r', openhook = None):
+def input(files=None, inplace=0, backup='', bufsize=0, mode='r', openhook=None):
     """Return an instance of the FileInput class, which can be iterated.
     
     The parameters are passed to the constructor of the FileInput class.
@@ -207,7 +207,7 @@ class FileInput:
     sequential order; random access and readline() cannot be mixed.
     """
 
-    def __init__(self, files = None, inplace = 0, backup = '', bufsize = 0, mode = 'r', openhook = None):
+    def __init__(self, files=None, inplace=0, backup='', bufsize=0, mode='r', openhook=None):
         if isinstance(files, basestring):
             files = (files,)
         else:

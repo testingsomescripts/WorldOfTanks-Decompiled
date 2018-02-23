@@ -105,6 +105,7 @@
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R47_ISU-152/ISU-152_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
     </camouflage>
@@ -145,7 +146,7 @@
         <left>	vehicles/russian/R47_ISU-152/track/left.track	</left>
         <right>	vehicles/russian/R47_ISU-152/track/right.track	</right>
         <segmentLength>	0.156	</segmentLength>
-        <segmentOffset>	0.037	</segmentOffset>
+        <segmentOffset>	0.072	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -162,7 +163,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.7	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <leadingWheelSyncAngle>	25.71428571428571	</leadingWheelSyncAngle>
@@ -244,19 +245,17 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-4	</gravity>
         <elasticity>	1500	</elasticity>
-        <damping>	8	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.05	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -264,6 +263,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -272,6 +272,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -280,6 +281,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
         </node>
         <node>
@@ -287,6 +289,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.05	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -294,6 +297,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.83	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -302,6 +306,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -310,6 +315,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.8	</forwardElastK>
           <backwardElastK>	3	</backwardElastK>
+          <offset>	-0.05	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
         </node>
         <node>
@@ -345,6 +351,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_0	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_0	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.981013 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R47_ISU-152/collision/Chassis.model	</collisionModel>
@@ -355,7 +363,7 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.313290 0.000000 0.000000	</row0>
+            <row0>	4.318720 0.000000 0.000000	</row0>
             <row1>	0.000000 1.471520 0.000000	</row1>
             <row2>	0.000000 0.000000 8.467650	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
@@ -428,7 +436,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large_mb	</effects>
           <camouflage>
-            <tiling>	0.775 0.49 0.000000 0.000000	</tiling>
+            <tiling>	0.76 0.55 0.000000 0.000000	</tiling>
           </camouflage>
         </_152mm_BL-10_IGR>
       </guns>
@@ -445,7 +453,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
       <turretRotatorSoundManual></turretRotatorSoundManual>
-      <wwturretRotatorSoundManual></wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_man_trav_06	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear></turretRotatorSoundGear>
     </ISU-152_01_IGR>
   </turrets0>

@@ -1,6 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/cameras.py
-import BigWorld, Math, ResMgr, Keys
+import BigWorld
+import Math
+import ResMgr
+import Keys
 import math
 from AvatarInputHandler import mathUtils
 
@@ -44,10 +47,10 @@ class ICamera(object):
     def autoUpdate(self):
         pass
 
-    def applyImpulse(self, position, impulse, reason = ImpulseReason.ME_HIT):
+    def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
         pass
 
-    def applyDistantImpulse(self, position, impulseValue, reason = ImpulseReason.ME_HIT):
+    def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
         pass
 
     def getReasonsAffectCameraDirectly(self):
@@ -67,7 +70,7 @@ class FreeCamera:
         self.__cam = None
         return
 
-    def enable(self, camMat = None):
+    def enable(self, camMat=None):
         if camMat is not None:
             self.__cam.set(camMat)
         BigWorld.camera(self.__cam)
@@ -96,10 +99,7 @@ class FreeCamera:
 
 
 def readBool(dataSec, name, defaultVal):
-    if dataSec is None:
-        return defaultVal
-    else:
-        return dataSec.readBool(name, defaultVal)
+    return defaultVal if dataSec is None else dataSec.readBool(name, defaultVal)
 
 
 def readFloat(dataSec, name, minVal, maxVal, defaultVal):
@@ -160,9 +160,7 @@ def isPointOnScreen(point):
         return False
     posInClip = Math.Vector4(point.x, point.y, point.z, 1)
     posInClip = getViewProjectionMatrix().applyV4Point(posInClip)
-    if posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and -1 <= posInClip.y / posInClip.w <= 1:
-        return True
-    return False
+    return posInClip.w != 0 and -1 <= posInClip.x / posInClip.w <= 1 and (True if -1 <= posInClip.y / posInClip.w <= 1 else False)
 
 
 def projectPoint(point):
@@ -186,7 +184,7 @@ def getWorldRayAndPoint(x, y):
     return (ray, wPoint)
 
 
-def getAimMatrix(x, y, fov = None):
+def getAimMatrix(x, y, fov=None):
     if fov is None:
         fov = BigWorld.projection().fov
     near = BigWorld.projection().nearPlane
@@ -272,7 +270,7 @@ class FovExtended(object):
     def resetFov(self):
         self.setFovByMultiplier(1.0)
 
-    def setFovByMultiplier(self, multiplier, rampTime = None):
+    def setFovByMultiplier(self, multiplier, rampTime=None):
         self.__multiplier = multiplier
         if not self.__enabled:
             return
@@ -285,7 +283,7 @@ class FovExtended(object):
                 BigWorld.projection().rampFov(finalFov, rampTime)
             return
 
-    def setFovByAbsoluteValue(self, horizontalFov, rampTime = None):
+    def setFovByAbsoluteValue(self, horizontalFov, rampTime=None):
         multiplier = horizontalFov / self.defaultHorizontalFov
         self.setFovByMultiplier(multiplier, rampTime)
 

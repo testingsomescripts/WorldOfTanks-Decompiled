@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/xmpp/factories.py
 from messenger.gui.Scaleform.channels.xmpp import lobby_controllers
 from messenger.gui.interfaces import IControllerFactory
@@ -24,7 +24,9 @@ class LobbyControllersFactory(IControllerFactory):
 
     def factory(self, channel):
         controller = None
-        msgType = channel.getProtoData().msgType
+        msgType = channel.getMessageType()
         if msgType == MESSAGE_TYPE.CHAT:
             controller = lobby_controllers.ChatChannelController(channel)
+        elif msgType == MESSAGE_TYPE.GROUPCHAT:
+            controller = lobby_controllers.UserRoomController(channel)
         return controller

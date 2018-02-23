@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/records.py
 RECORDS = (('total', 'creationTime', 'p', 'I', 4000000001L),
  ('total', 'lastBattleTime', 'p', 'I', 4000000001L),
@@ -440,6 +440,7 @@ RECORDS = (('total', 'creationTime', 'p', 'I', 4000000001L),
  ('singleAchievements', 'falloutPackOfWolfs', 'p', 'B', 1),
  ('singleAchievements', 'falloutSteelHunter', 'p', 'B', 1),
  ('singleAchievements', 'falloutAlwaysInLine', 'p', 'B', 1),
+ ('singleAchievements', 'moonSphere', 'p', 'B', 1),
  ('achievements', 'beasthunter', 'p', 'H', 60001),
  ('achievements', 'sinai', 'p', 'H', 60001),
  ('achievements', 'mousebane', 'p', 'H', 60001),
@@ -1378,6 +1379,7 @@ RECORD_DB_IDS = {('total', 'creationTime'): 68,
  ('singleAchievements', 'falloutPackOfWolfs'): 753,
  ('singleAchievements', 'falloutSteelHunter'): 754,
  ('singleAchievements', 'falloutAlwaysInLine'): 755,
+ ('singleAchievements', 'moonSphere'): 862,
  ('achievements', 'testartilleryman'): 599,
  ('achievements', 'readyForBattleLT'): 538,
  ('achievements', 'readyForBattleMT'): 539,

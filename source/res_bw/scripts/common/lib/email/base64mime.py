@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/base64mime.py
 """Base64 content transfer encoding per RFCs 2045-2047.
 
@@ -45,7 +45,7 @@ def base64_len(s):
     return n
 
 
-def header_encode(header, charset = 'iso-8859-1', keep_eols = False, maxlinelen = 76, eol = NL):
+def header_encode(header, charset='iso-8859-1', keep_eols=False, maxlinelen=76, eol=NL):
     r"""Encode a single header line with Base64 encoding in a given charset.
     
     Defined in RFC 2045, this Base64 encoding is identical to normal Base64
@@ -91,7 +91,7 @@ def header_encode(header, charset = 'iso-8859-1', keep_eols = False, maxlinelen 
     return joiner.join(lines)
 
 
-def encode(s, binary = True, maxlinelen = 76, eol = NL):
+def encode(s, binary=True, maxlinelen=76, eol=NL):
     r"""Encode a string with base64.
     
     Each line will be wrapped at, at most, maxlinelen characters (defaults to
@@ -123,7 +123,7 @@ def encode(s, binary = True, maxlinelen = 76, eol = NL):
 body_encode = encode
 encodestring = encode
 
-def decode(s, convert_eols = None):
+def decode(s, convert_eols=None):
     r"""Decode a raw base64 string.
     
     If convert_eols is set to a string value, all canonical email linefeeds,
@@ -138,9 +138,7 @@ def decode(s, convert_eols = None):
     if not s:
         return s
     dec = a2b_base64(s)
-    if convert_eols:
-        return dec.replace(CRLF, convert_eols)
-    return dec
+    return dec.replace(CRLF, convert_eols) if convert_eols else dec
 
 
 body_decode = decode

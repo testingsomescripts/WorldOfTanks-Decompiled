@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/traceback.py
 """Extract, format and print information about Python stack traces."""
 import linecache
@@ -18,11 +19,11 @@ __all__ = ['extract_stack',
  'print_tb',
  'tb_lineno']
 
-def _print(file, str = '', terminator = '\n'):
+def _print(file, str='', terminator='\n'):
     file.write(str + terminator)
 
 
-def print_list(extracted_list, file = None):
+def print_list(extracted_list, file=None):
     """Print the list of tuples as returned by extract_tb() or
     extract_stack() as a formatted stack trace to the given file."""
     if file is None:
@@ -55,7 +56,7 @@ def format_list(extracted_list):
     return list
 
 
-def print_tb(tb, limit = None, file = None):
+def print_tb(tb, limit=None, file=None):
     """Print up to 'limit' stack trace entries from the traceback 'tb'.
     
     If 'limit' is omitted or None, all entries are printed.  If 'file'
@@ -86,12 +87,12 @@ def print_tb(tb, limit = None, file = None):
     return
 
 
-def format_tb(tb, limit = None):
+def format_tb(tb, limit=None):
     """A shorthand for 'format_list(extract_tb(tb, limit))'."""
     return format_list(extract_tb(tb, limit))
 
 
-def extract_tb(tb, limit = None):
+def extract_tb(tb, limit=None):
     """Return list of up to limit pre-processed entries from traceback.
     
     This is useful for alternate formatting of stack traces.  If
@@ -129,7 +130,7 @@ def extract_tb(tb, limit = None):
     return list
 
 
-def print_exception(etype, value, tb, limit = None, file = None):
+def print_exception(etype, value, tb, limit=None, file=None):
     """Print exception up to 'limit' stack trace entries from 'tb' to 'file'.
     
     This differs from print_tb() in the following ways: (1) if
@@ -152,7 +153,7 @@ def print_exception(etype, value, tb, limit = None, file = None):
     return
 
 
-def format_exception(etype, value, tb, limit = None):
+def format_exception(etype, value, tb, limit=None):
     """Format a stack trace and the exception information.
     
     The arguments have the same meaning as the corresponding arguments
@@ -239,7 +240,7 @@ def _some_str(value):
     return '<unprintable %s object>' % type(value).__name__
 
 
-def print_exc(limit = None, file = None):
+def print_exc(limit=None, file=None):
     """Shorthand for 'print_exception(sys.exc_type, sys.exc_value, sys.exc_traceback, limit, file)'.
     (In fact, it uses sys.exc_info() to retrieve the same information
     in a thread-safe way.)"""
@@ -254,7 +255,7 @@ def print_exc(limit = None, file = None):
     return
 
 
-def format_exc(limit = None):
+def format_exc(limit=None):
     """Like print_exc() but return a string."""
     try:
         etype, value, tb = sys.exc_info()
@@ -265,7 +266,7 @@ def format_exc(limit = None):
     return
 
 
-def print_last(limit = None, file = None):
+def print_last(limit=None, file=None):
     """This is a shorthand for 'print_exception(sys.last_type,
     sys.last_value, sys.last_traceback, limit, file)'."""
     if not hasattr(sys, 'last_type'):
@@ -276,7 +277,7 @@ def print_last(limit = None, file = None):
     return
 
 
-def print_stack(f = None, limit = None, file = None):
+def print_stack(f=None, limit=None, file=None):
     """Print a stack trace from its invocation point.
     
     The optional 'f' argument can be used to specify an alternate
@@ -293,7 +294,7 @@ def print_stack(f = None, limit = None, file = None):
     return
 
 
-def format_stack(f = None, limit = None):
+def format_stack(f=None, limit=None):
     """Shorthand for 'format_list(extract_stack(f, limit))'."""
     if f is None:
         try:
@@ -304,7 +305,7 @@ def format_stack(f = None, limit = None):
     return format_list(extract_stack(f, limit))
 
 
-def extract_stack(f = None, limit = None):
+def extract_stack(f=None, limit=None):
     """Extract the raw traceback from the current stack frame.
     
     The return value has the same format as for extract_tb().  The

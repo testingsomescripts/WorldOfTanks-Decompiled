@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sysconfig.py
 """Provide access to Python's configuration information.
 
@@ -140,9 +141,7 @@ def _expand_vars(scheme, vars):
 
 
 def _get_default_scheme():
-    if os.name == 'posix':
-        return 'posix_prefix'
-    return os.name
+    return 'posix_prefix' if os.name == 'posix' else os.name
 
 
 def _getuserbase():
@@ -163,12 +162,10 @@ def _getuserbase():
                 if env_base:
                     return env_base
                 return joinuser('~', 'Library', framework, '%d.%d' % sys.version_info[:2])
-        if env_base:
-            return env_base
-        return joinuser('~', '.local')
+        return env_base if env_base else joinuser('~', '.local')
 
 
-def _parse_makefile(filename, vars = None):
+def _parse_makefile(filename, vars=None):
     """Parse a Makefile-style file.
     
     A dictionary containing name/value pairs is returned.  If an
@@ -232,8 +229,7 @@ def _parse_makefile(filename, vars = None):
                             done[name] = value
 
                         del notdone[name]
-            else:
-                del notdone[name]
+            del notdone[name]
 
     for k, v in done.items():
         if isinstance(v, str):
@@ -244,9 +240,7 @@ def _parse_makefile(filename, vars = None):
 
 
 def _get_makefile_filename():
-    if _PYTHON_BUILD:
-        return os.path.join(_PROJECT_BASE, 'Makefile')
-    return os.path.join(get_path('platstdlib'), 'config', 'Makefile')
+    return os.path.join(_PROJECT_BASE, 'Makefile') if _PYTHON_BUILD else os.path.join(get_path('platstdlib'), 'config', 'Makefile')
 
 
 def _generate_posix_vars():
@@ -314,7 +308,7 @@ def _init_non_posix(vars):
     vars['BINDIR'] = os.path.dirname(_safe_realpath(sys.executable))
 
 
-def parse_config_h(fp, vars = None):
+def parse_config_h(fp, vars=None):
     """Parse a config.h-style file.
     
     A dictionary containing name/value pairs is returned.  If an
@@ -339,10 +333,9 @@ def parse_config_h(fp, vars = None):
                 pass
 
             vars[n] = v
-        else:
-            m = undef_rx.match(line)
-            if m:
-                vars[m.group(1)] = 0
+        m = undef_rx.match(line)
+        if m:
+            vars[m.group(1)] = 0
 
     return vars
 
@@ -371,7 +364,7 @@ def get_path_names():
     return _SCHEME_KEYS
 
 
-def get_paths(scheme = _get_default_scheme(), vars = None, expand = True):
+def get_paths(scheme=_get_default_scheme(), vars=None, expand=True):
     """Returns a mapping containing an install scheme.
     
     ``scheme`` is the install scheme name. If not provided, it will
@@ -383,7 +376,7 @@ def get_paths(scheme = _get_default_scheme(), vars = None, expand = True):
         return _INSTALL_SCHEMES[scheme]
 
 
-def get_path(name, scheme = _get_default_scheme(), vars = None, expand = True):
+def get_path(name, scheme=_get_default_scheme(), vars=None, expand=True):
     """Returns a path corresponding to the scheme.
     
     ``scheme`` is the install scheme name.

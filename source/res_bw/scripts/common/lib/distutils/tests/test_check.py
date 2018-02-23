@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_check.py
 """Tests for distutils.command.check."""
 import unittest
@@ -9,7 +9,7 @@ from distutils.errors import DistutilsSetupError
 
 class CheckTestCase(support.LoggingSilencer, support.TempdirManager, unittest.TestCase):
 
-    def _run(self, metadata = None, **options):
+    def _run(self, metadata=None, **options):
         if metadata is None:
             metadata = {}
         pkg_info, dist = self.create_dist(**metadata)

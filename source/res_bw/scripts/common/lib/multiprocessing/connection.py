@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/connection.py
 __all__ = ['Client', 'Listener', 'Pipe']
 import os
@@ -23,7 +24,7 @@ if sys.platform == 'win32':
     default_family = 'AF_PIPE'
     families += ['AF_PIPE']
 
-def _init_timeout(timeout = CONNECTION_TIMEOUT):
+def _init_timeout(timeout=CONNECTION_TIMEOUT):
     return time.time() + timeout
 
 
@@ -67,7 +68,7 @@ class Listener(object):
     connections, or for a Windows named pipe.
     """
 
-    def __init__(self, address = None, family = None, backlog = 1, authkey = None):
+    def __init__(self, address=None, family=None, backlog=1, authkey=None):
         family = family or address and address_type(address) or default_family
         address = address or arbitrary_address(family)
         if family == 'AF_PIPE':
@@ -101,7 +102,7 @@ class Listener(object):
     last_accepted = property(lambda self: self._listener._last_accepted)
 
 
-def Client(address, family = None, authkey = None):
+def Client(address, family=None, authkey=None):
     """
     Returns a connection to the address of a `Listener`
     """
@@ -120,7 +121,7 @@ def Client(address, family = None, authkey = None):
 
 if sys.platform != 'win32':
 
-    def Pipe(duplex = True):
+    def Pipe(duplex=True):
         """
         Returns pair of connection objects at either end of a pipe
         """
@@ -142,7 +143,7 @@ if sys.platform != 'win32':
 else:
     from _multiprocessing import win32
 
-    def Pipe(duplex = True):
+    def Pipe(duplex=True):
         """
         Returns pair of connection objects at either end of a pipe
         """
@@ -174,7 +175,7 @@ class SocketListener(object):
     Representation of a socket which is bound to an address and listening
     """
 
-    def __init__(self, address, family, backlog = 1):
+    def __init__(self, address, family, backlog=1):
         self._socket = socket.socket(getattr(socket, family))
         try:
             self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -253,7 +254,7 @@ if sys.platform == 'win32':
         Representation of a named pipe
         """
 
-        def __init__(self, address, backlog = None):
+        def __init__(self, address, backlog=None):
             self._address = address
             handle = win32.CreateNamedPipe(address, win32.PIPE_ACCESS_DUPLEX, win32.PIPE_TYPE_MESSAGE | win32.PIPE_READMODE_MESSAGE | win32.PIPE_WAIT, win32.PIPE_UNLIMITED_INSTANCES, BUFSIZE, BUFSIZE, win32.NMPWAIT_WAIT_FOREVER, win32.NULL)
             self._handle_queue = [handle]
@@ -310,13 +311,13 @@ FAILURE = '#FAILURE#'
 
 def deliver_challenge(connection, authkey):
     import hmac
-    if not isinstance(authkey, bytes):
-        raise AssertionError
-        message = os.urandom(MESSAGE_LENGTH)
-        connection.send_bytes(CHALLENGE + message)
-        digest = hmac.new(authkey, message).digest()
-        response = connection.recv_bytes(256)
-        response == digest and connection.send_bytes(WELCOME)
+    assert isinstance(authkey, bytes)
+    message = os.urandom(MESSAGE_LENGTH)
+    connection.send_bytes(CHALLENGE + message)
+    digest = hmac.new(authkey, message).digest()
+    response = connection.recv_bytes(256)
+    if response == digest:
+        connection.send_bytes(WELCOME)
     else:
         connection.send_bytes(FAILURE)
         raise AuthenticationError('digest received was wrong')
@@ -324,15 +325,15 @@ def deliver_challenge(connection, authkey):
 
 def answer_challenge(connection, authkey):
     import hmac
-    raise isinstance(authkey, bytes) or AssertionError
+    assert isinstance(authkey, bytes)
     message = connection.recv_bytes(256)
-    if not message[:len(CHALLENGE)] == CHALLENGE:
-        raise AssertionError('message = %r' % message)
-        message = message[len(CHALLENGE):]
-        digest = hmac.new(authkey, message).digest()
-        connection.send_bytes(digest)
-        response = connection.recv_bytes(256)
-        raise response != WELCOME and AuthenticationError('digest sent was rejected')
+    assert message[:len(CHALLENGE)] == CHALLENGE, 'message = %r' % message
+    message = message[len(CHALLENGE):]
+    digest = hmac.new(authkey, message).digest()
+    connection.send_bytes(digest)
+    response = connection.recv_bytes(256)
+    if response != WELCOME:
+        raise AuthenticationError('digest sent was rejected')
 
 
 class ConnectionWrapper(object):
@@ -359,7 +360,7 @@ def _xml_dumps(obj):
 
 
 def _xml_loads(s):
-    (obj,), method = xmlrpclib.loads(s.decode('utf8'))
+    (obj), method = xmlrpclib.loads(s.decode('utf8'))
     return obj
 
 

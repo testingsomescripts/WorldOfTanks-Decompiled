@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/archive_util.py
 """distutils.archive_util
 
@@ -32,9 +32,7 @@ def _get_gid(name):
         except KeyError:
             result = None
 
-        if result is not None:
-            return result[2]
-        return
+        return result[2] if result is not None else None
 
 
 def _get_uid(name):
@@ -47,12 +45,10 @@ def _get_uid(name):
         except KeyError:
             result = None
 
-        if result is not None:
-            return result[2]
-        return
+        return result[2] if result is not None else None
 
 
-def make_tarball(base_name, base_dir, compress = 'gzip', verbose = 0, dry_run = 0, owner = None, group = None):
+def make_tarball(base_name, base_dir, compress='gzip', verbose=0, dry_run=0, owner=None, group=None):
     """Create a (possibly compressed) tar file from all the files under
     'base_dir'.
     
@@ -115,7 +111,7 @@ def make_tarball(base_name, base_dir, compress = 'gzip', verbose = 0, dry_run = 
         return archive_name
 
 
-def make_zipfile(base_name, base_dir, verbose = 0, dry_run = 0):
+def make_zipfile(base_name, base_dir, verbose=0, dry_run=0):
     """Create a zip file from all the files under 'base_dir'.
     
     The output zip file will be named 'base_name' + ".zip".  Uses either the
@@ -177,7 +173,7 @@ def check_archive_formats(formats):
     return None
 
 
-def make_archive(base_name, format, root_dir = None, base_dir = None, verbose = 0, dry_run = 0, owner = None, group = None):
+def make_archive(base_name, format, root_dir=None, base_dir=None, verbose=0, dry_run=0, owner=None, group=None):
     """Create an archive file (eg. zip or tar).
     
     'base_name' is the name of the file to create, minus any format-specific

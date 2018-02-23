@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/msvc9compiler.py
 """distutils.msvc9compiler
 
@@ -170,16 +170,14 @@ def get_build_version():
     i = sys.version.find(prefix)
     if i == -1:
         return 6
-    i = i + len(prefix)
-    s, rest = sys.version[i:].split(' ', 1)
-    majorVersion = int(s[:-2]) - 6
-    minorVersion = int(s[2:3]) / 10.0
-    if majorVersion == 6:
-        minorVersion = 0
-    if majorVersion >= 6:
-        return majorVersion + minorVersion
     else:
-        return None
+        i = i + len(prefix)
+        s, rest = sys.version[i:].split(' ', 1)
+        majorVersion = int(s[:-2]) - 6
+        minorVersion = int(s[2:3]) / 10.0
+        if majorVersion == 6:
+            minorVersion = 0
+        return majorVersion + minorVersion if majorVersion >= 6 else None
 
 
 def normalize_and_reduce_paths(paths):
@@ -251,7 +249,7 @@ def find_vcvarsall(version):
         return
 
 
-def query_vcvarsall(version, arch = 'x86'):
+def query_vcvarsall(version, arch='x86'):
     """Launch vcvarsall.bat and read the settings from its environment
     """
     vcvarsall = find_vcvarsall(version)
@@ -308,7 +306,7 @@ class MSVCCompiler(CCompiler):
     static_lib_format = shared_lib_format = '%s%s'
     exe_extension = '.exe'
 
-    def __init__(self, verbose = 0, dry_run = 0, force = 0):
+    def __init__(self, verbose=0, dry_run=0, force=0):
         CCompiler.__init__(self, verbose, dry_run, force)
         self.__version = VERSION
         self.__root = 'Software\\Microsoft\\VisualStudio'
@@ -318,7 +316,7 @@ class MSVCCompiler(CCompiler):
         self.initialized = False
         return
 
-    def initialize(self, plat_name = None):
+    def initialize(self, plat_name=None):
         assert not self.initialized, "don't init multiple times"
         if plat_name is None:
             plat_name = get_platform()
@@ -394,7 +392,7 @@ class MSVCCompiler(CCompiler):
         self.initialized = True
         return
 
-    def object_filenames(self, source_filenames, strip_dir = 0, output_dir = ''):
+    def object_filenames(self, source_filenames, strip_dir=0, output_dir=''):
         if output_dir is None:
             output_dir = ''
         obj_names = []
@@ -408,14 +406,13 @@ class MSVCCompiler(CCompiler):
                 base = os.path.basename(base)
             if ext in self._rc_extensions:
                 obj_names.append(os.path.join(output_dir, base + self.res_extension))
-            elif ext in self._mc_extensions:
+            if ext in self._mc_extensions:
                 obj_names.append(os.path.join(output_dir, base + self.res_extension))
-            else:
-                obj_names.append(os.path.join(output_dir, base + self.obj_extension))
+            obj_names.append(os.path.join(output_dir, base + self.obj_extension))
 
         return obj_names
 
-    def compile(self, sources, output_dir = None, macros = None, include_dirs = None, debug = 0, extra_preargs = None, extra_postargs = None, depends = None):
+    def compile(self, sources, output_dir=None, macros=None, include_dirs=None, debug=0, extra_preargs=None, extra_postargs=None, depends=None):
         if not self.initialized:
             self.initialize()
         compile_info = self._setup_compile(output_dir, macros, include_dirs, sources, depends, extra_postargs)
@@ -472,7 +469,7 @@ class MSVCCompiler(CCompiler):
 
         return objects
 
-    def create_static_lib(self, objects, output_libname, output_dir = None, debug = 0, target_lang = None):
+    def create_static_lib(self, objects, output_libname, output_dir=None, debug=0, target_lang=None):
         if not self.initialized:
             self.initialize()
         objects, output_dir = self._fix_object_args(objects, output_dir)
@@ -489,7 +486,7 @@ class MSVCCompiler(CCompiler):
         else:
             log.debug('skipping %s (up-to-date)', output_filename)
 
-    def link(self, target_desc, objects, output_filename, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link(self, target_desc, objects, output_filename, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         if not self.initialized:
             self.initialize()
         objects, output_dir = self._fix_object_args(objects, output_dir)
@@ -558,17 +555,14 @@ class MSVCCompiler(CCompiler):
                 temp_manifest = arg.split(':', 1)[1]
                 break
         else:
-            return
+            return None
 
         if target_desc == CCompiler.EXECUTABLE:
             mfid = 1
         else:
             mfid = 2
             temp_manifest = self._remove_visual_c_ref(temp_manifest)
-        if temp_manifest is None:
-            return
-        else:
-            return (temp_manifest, mfid)
+        return None if temp_manifest is None else (temp_manifest, mfid)
 
     def _remove_visual_c_ref(self, manifest_file):
         try:
@@ -606,7 +600,7 @@ class MSVCCompiler(CCompiler):
     def library_option(self, lib):
         return self.library_filename(lib)
 
-    def find_library_file(self, dirs, lib, debug = 0):
+    def find_library_file(self, dirs, lib, debug=0):
         if debug:
             try_names = [lib + '_d', lib]
         else:

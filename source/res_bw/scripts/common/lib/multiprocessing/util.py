@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/util.py
 import os
 import itertools
@@ -76,7 +77,7 @@ def get_logger():
     return _logger
 
 
-def log_to_stderr(level = None):
+def log_to_stderr(level=None):
     """
     Turn on logging and add a handler which prints to stderr
     """
@@ -128,12 +129,12 @@ class Finalize(object):
     Class which supports object finalization using weakrefs
     """
 
-    def __init__(self, obj, callback, args = (), kwargs = None, exitpriority = None):
-        if not (exitpriority is None or type(exitpriority) is int):
-            raise AssertionError
+    def __init__(self, obj, callback, args=(), kwargs=None, exitpriority=None):
+        if not exitpriority is None:
+            assert type(exitpriority) is int
             self._weakref = obj is not None and weakref.ref(obj, self)
         else:
-            raise exitpriority is not None or AssertionError
+            assert exitpriority is not None
         self._callback = callback
         self._args = args
         self._kwargs = kwargs or {}
@@ -142,7 +143,7 @@ class Finalize(object):
         _finalizer_registry[self._key] = self
         return
 
-    def __call__(self, wr = None):
+    def __call__(self, wr=None):
         """
         Run the callback unless it has already been called or cancelled
         """
@@ -200,7 +201,7 @@ class Finalize(object):
             return x + '>'
 
 
-def _run_finalizers(minpriority = None):
+def _run_finalizers(minpriority=None):
     """
     Run all finalizers whose exit priority is not None and at least minpriority
     
@@ -239,7 +240,7 @@ def is_exiting():
 
 _exiting = False
 
-def _exit_function(info = info, debug = debug, _run_finalizers = _run_finalizers, active_children = active_children, current_process = current_process):
+def _exit_function(info=info, debug=debug, _run_finalizers=_run_finalizers, active_children=active_children, current_process=current_process):
     info('process shutting down')
     debug('running all "atexit" finalizers with priority >= 0')
     _run_finalizers(0)

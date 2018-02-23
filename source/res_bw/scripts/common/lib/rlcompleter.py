@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/rlcompleter.py
 """Word completion for GNU readline.
 
@@ -41,7 +42,7 @@ __all__ = ['Completer']
 
 class Completer:
 
-    def __init__(self, namespace = None):
+    def __init__(self, namespace=None):
         """Create a new completer for the command line.
         
         Completer([namespace]) -> completer instance.

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/whichdb.py
 """Guess which db package to use to open a db file."""
 import os
@@ -65,24 +66,22 @@ def whichdb(filename):
     s = s16[0:4]
     if len(s) != 4:
         return ''
-    try:
-        magic, = struct.unpack('=l', s)
-    except struct.error:
-        return ''
-
-    if magic in (324508366, 324508365, 324508367):
-        return 'gdbm'
-    elif magic in (398689, 1628767744):
-        return 'bsddb185'
-    try:
-        magic, = struct.unpack('=l', s16[-4:])
-    except struct.error:
-        return ''
-
-    if magic in (398689, 1628767744):
-        return 'dbhash'
     else:
-        return ''
+        try:
+            magic = struct.unpack('=l', s)
+        except struct.error:
+            return ''
+
+        if magic in (324508366, 324508365, 324508367):
+            return 'gdbm'
+        if magic in (398689, 1628767744):
+            return 'bsddb185'
+        try:
+            magic = struct.unpack('=l', s16[-4:])
+        except struct.error:
+            return ''
+
+        return 'dbhash' if magic in (398689, 1628767744) else ''
 
 
 if __name__ == '__main__':

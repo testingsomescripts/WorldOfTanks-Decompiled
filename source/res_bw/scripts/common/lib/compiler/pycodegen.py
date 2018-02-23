@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/pycodegen.py
 import imp
 import os
@@ -25,7 +25,7 @@ EXCEPT = 2
 TRY_FINALLY = 3
 END_FINALLY = 4
 
-def compileFile(filename, display = 0):
+def compileFile(filename, display=0):
     f = open(filename, 'U')
     buf = f.read()
     f.close()
@@ -40,7 +40,7 @@ def compileFile(filename, display = 0):
         f.close()
 
 
-def compile(source, filename, mode, flags = None, dont_inherit = None):
+def compile(source, filename, mode, flags=None, dont_inherit=None):
     """Replacement for builtin compile() function"""
     if flags is not None or dont_inherit is not None:
         raise RuntimeError, 'not implemented yet'
@@ -99,7 +99,7 @@ class Interactive(AbstractCompileMode):
 class Module(AbstractCompileMode):
     mode = 'exec'
 
-    def compile(self, display = 0):
+    def compile(self, display=0):
         tree = self._get_tree()
         gen = ModuleCodeGenerator(tree)
         if display:
@@ -122,7 +122,7 @@ class Module(AbstractCompileMode):
 class LocalNameFinder():
     """Find local names in scope"""
 
-    def __init__(self, names = ()):
+    def __init__(self, names=()):
         self.names = misc.Set()
         self.globals = misc.Set()
         for name in names:
@@ -201,11 +201,11 @@ class CodeGenerator():
             if feature == 'division':
                 self.graph.setFlag(CO_FUTURE_DIVISION)
                 self._div_op = 'BINARY_TRUE_DIVIDE'
-            elif feature == 'absolute_import':
+            if feature == 'absolute_import':
                 self.graph.setFlag(CO_FUTURE_ABSIMPORT)
-            elif feature == 'with_statement':
+            if feature == 'with_statement':
                 self.graph.setFlag(CO_FUTURE_WITH_STATEMENT)
-            elif feature == 'print_function':
+            if feature == 'print_function':
                 self.graph.setFlag(CO_FUTURE_PRINT_FUNCTION)
 
         return
@@ -295,7 +295,7 @@ class CodeGenerator():
         else:
             self.emit(prefix + '_NAME', name)
 
-    def set_lineno(self, node, force = False):
+    def set_lineno(self, node, force=False):
         """Emit SET_LINENO if necessary.
         
         The instruction is considered necessary if the node has a
@@ -351,7 +351,7 @@ class CodeGenerator():
     def visitLambda(self, node):
         self._visitFuncOrLambda(node, isLambda=1)
 
-    def _visitFuncOrLambda(self, node, isLambda = 0):
+    def _visitFuncOrLambda(self, node, isLambda=0):
         if not isLambda and node.decorators:
             for decorator in node.decorators.nodes:
                 self.visit(decorator)
@@ -765,8 +765,7 @@ class CodeGenerator():
             self.emit('JUMP_FORWARD', end)
             if expr:
                 self.nextBlock(next)
-            else:
-                self.nextBlock()
+            self.nextBlock()
 
         self.emit('END_FINALLY')
         if node.else_:
@@ -863,8 +862,7 @@ class CodeGenerator():
             if alias:
                 self._resolveDots(name)
                 self.storeName(alias)
-            else:
-                self.storeName(mod)
+            self.storeName(mod)
 
         return
 
@@ -888,8 +886,7 @@ class CodeGenerator():
                 self.emit('IMPORT_FROM', name)
                 self._resolveDots(name)
                 self.storeName(alias or name)
-            else:
-                self.emit('IMPORT_FROM', name)
+            self.emit('IMPORT_FROM', name)
 
         self.emit('POP_TOP')
 
@@ -934,7 +931,7 @@ class CodeGenerator():
             print 'warning: unexpected flags:', node.flags
             print node
 
-    def _visitAssSequence(self, node, op = 'UNPACK_SEQUENCE'):
+    def _visitAssSequence(self, node, op='UNPACK_SEQUENCE'):
         if findOp(node) != 'OP_DELETE':
             self.emit(op, len(node.nodes))
         for child in node.nodes:
@@ -1033,8 +1030,7 @@ class CodeGenerator():
             self.visit(arg)
             if isinstance(arg, ast.Keyword):
                 kw = kw + 1
-            else:
-                pos = pos + 1
+            pos = pos + 1
 
         if node.star_args is not None:
             self.visit(node.star_args)
@@ -1046,7 +1042,7 @@ class CodeGenerator():
         self.emit(opcode, kw << 8 | pos)
         return
 
-    def visitPrint(self, node, newline = 0):
+    def visitPrint(self, node, newline=0):
         self.set_lineno(node)
         if node.dest:
             self.visit(node.dest)
@@ -1057,8 +1053,7 @@ class CodeGenerator():
             if node.dest:
                 self.emit('ROT_TWO')
                 self.emit('PRINT_ITEM_TO')
-            else:
-                self.emit('PRINT_ITEM')
+            self.emit('PRINT_ITEM')
 
         if node.dest and not newline:
             self.emit('POP_TOP')
@@ -1080,7 +1075,7 @@ class CodeGenerator():
         self.visit(node.value)
         self.emit('YIELD_VALUE')
 
-    def visitSlice(self, node, aug_flag = None):
+    def visitSlice(self, node, aug_flag=None):
         self.visit(node.expr)
         slice = 0
         if node.lower:
@@ -1106,7 +1101,7 @@ class CodeGenerator():
             print 'weird slice', node.flags
             raise
 
-    def visitSubscript(self, node, aug_flag = None):
+    def visitSubscript(self, node, aug_flag=None):
         self.visit(node.expr)
         for sub in node.subs:
             self.visit(sub)
@@ -1343,8 +1338,7 @@ class AbstractFunctionCode():
         for elt in tup:
             if isinstance(elt, tuple):
                 self.unpackSequence(elt)
-            else:
-                self._nameOp('STORE', elt)
+            self._nameOp('STORE', elt)
 
     unpackTuple = unpackSequence
 
@@ -1429,12 +1423,11 @@ def generateArgList(arglist):
         elt = arglist[i]
         if isinstance(elt, str):
             args.append(elt)
-        elif isinstance(elt, tuple):
+        if isinstance(elt, tuple):
             args.append(TupleArg(i * 2, elt))
             extra.extend(misc.flatten(elt))
             count = count + 1
-        else:
-            raise ValueError, 'unexpect argument type:', elt
+        raise ValueError, 'unexpect argument type:', elt
 
     return (args + extra, count)
 

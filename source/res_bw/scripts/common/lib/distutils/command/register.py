@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/register.py
 """distutils.command.register
 
@@ -121,7 +121,7 @@ class register(PyPIRCCommand):
             choice = raw_input()
             if not choice:
                 choice = '1'
-            elif choice not in choices:
+            if choice not in choices:
                 print 'Please choose one of the four options!'
 
         if choice == '1':
@@ -211,7 +211,7 @@ class register(PyPIRCCommand):
             data['metadata_version'] = '1.1'
         return data
 
-    def post_to_server(self, data, auth = None):
+    def post_to_server(self, data, auth=None):
         """ Post a query to the server, and return a string response.
         """
         if 'name' in data:
@@ -237,8 +237,7 @@ class register(PyPIRCCommand):
         for chunk in chunks:
             if isinstance(chunk, unicode):
                 body.append(chunk.encode('utf-8'))
-            else:
-                body.append(chunk)
+            body.append(chunk)
 
         body = ''.join(body)
         headers = {'Content-type': 'multipart/form-data; boundary=%s; charset=utf-8' % boundary,

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/__init__.py
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from messenger import g_settings
@@ -131,10 +131,8 @@ class LobbyControllers(ControllersCollection):
     def factory(self, channel):
         if channel.getProtoType() == PROTO_TYPE.BW_CHAT2 and not g_settings.server.BW_CHAT2.isEnabled():
             return None
-        elif channel.getProtoType() == PROTO_TYPE.XMPP and not g_settings.server.XMPP.isEnabled():
-            return None
         else:
-            return super(LobbyControllers, self).factory(channel)
+            return None if channel.getProtoType() == PROTO_TYPE.XMPP and not g_settings.server.XMPP.isEnabled() else super(LobbyControllers, self).factory(channel)
 
 
 class BattleControllers(ControllersCollection):

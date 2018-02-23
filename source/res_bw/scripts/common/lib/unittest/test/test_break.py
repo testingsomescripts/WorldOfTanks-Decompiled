@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_break.py
 import gc
 import os
@@ -8,11 +9,8 @@ from cStringIO import StringIO
 import unittest
 
 @unittest.skipUnless(hasattr(os, 'kill'), 'Test requires os.kill')
-
 @unittest.skipIf(sys.platform == 'win32', 'Test cannot run on Windows')
-
 @unittest.skipIf(sys.platform == 'freebsd6', 'Test kills regrtest on freebsd6 if threads have been used')
-
 class TestBreak(unittest.TestCase):
     int_handler = None
 
@@ -46,7 +44,7 @@ class TestBreak(unittest.TestCase):
         for ref in unittest.signals._results:
             if ref is result:
                 break
-            elif ref is not result:
+            if ref is not result:
                 self.fail('odd object in result set')
         else:
             self.fail('result not found')
@@ -235,30 +233,21 @@ class TestBreak(unittest.TestCase):
 
 
 @unittest.skipUnless(hasattr(os, 'kill'), 'Test requires os.kill')
-
 @unittest.skipIf(sys.platform == 'win32', 'Test cannot run on Windows')
-
 @unittest.skipIf(sys.platform == 'freebsd6', 'Test kills regrtest on freebsd6 if threads have been used')
-
 class TestBreakDefaultIntHandler(TestBreak):
     int_handler = signal.default_int_handler
 
 
 @unittest.skipUnless(hasattr(os, 'kill'), 'Test requires os.kill')
-
 @unittest.skipIf(sys.platform == 'win32', 'Test cannot run on Windows')
-
 @unittest.skipIf(sys.platform == 'freebsd6', 'Test kills regrtest on freebsd6 if threads have been used')
-
 class TestBreakSignalIgnored(TestBreak):
     int_handler = signal.SIG_IGN
 
 
 @unittest.skipUnless(hasattr(os, 'kill'), 'Test requires os.kill')
-
 @unittest.skipIf(sys.platform == 'win32', 'Test cannot run on Windows')
-
 @unittest.skipIf(sys.platform == 'freebsd6', 'Test kills regrtest on freebsd6 if threads have been used')
-
 class TestBreakSignalDefault(TestBreak):
     int_handler = signal.SIG_DFL

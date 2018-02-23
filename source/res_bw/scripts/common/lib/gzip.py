@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/gzip.py
 """Functions that read and write gzipped files.
 
@@ -24,7 +24,7 @@ def read32(input):
     return struct.unpack('<I', input.read(4))[0]
 
 
-def open(filename, mode = 'rb', compresslevel = 9):
+def open(filename, mode='rb', compresslevel=9):
     """Shorthand for GzipFile(filename, mode, compresslevel).
     
     The filename argument is required; mode defaults to 'rb'
@@ -42,7 +42,7 @@ class GzipFile(io.BufferedIOBase):
     myfileobj = None
     max_read_chunk = 10485760
 
-    def __init__(self, filename = None, mode = None, compresslevel = 9, fileobj = None, mtime = None):
+    def __init__(self, filename=None, mode=None, compresslevel=9, fileobj=None, mtime=None):
         """Constructor for the GzipFile class.
         
         At least one of fileobj and filename must be given a
@@ -121,9 +121,7 @@ class GzipFile(io.BufferedIOBase):
     def filename(self):
         import warnings
         warnings.warn('use the name attribute', DeprecationWarning, 2)
-        if self.mode == WRITE and self.name[-3:] != '.gz':
-            return self.name + '.gz'
-        return self.name
+        return self.name + '.gz' if self.mode == WRITE and self.name[-3:] != '.gz' else self.name
 
     def __repr__(self):
         s = repr(self.fileobj)
@@ -212,7 +210,7 @@ class GzipFile(io.BufferedIOBase):
             self.offset += len(data)
         return len(data)
 
-    def read(self, size = -1):
+    def read(self, size=-1):
         self._check_closed()
         if self.mode != READ:
             import errno
@@ -250,7 +248,7 @@ class GzipFile(io.BufferedIOBase):
         self.extrasize = len(buf) + self.extrasize
         self.offset -= len(buf)
 
-    def _read(self, size = 1024):
+    def _read(self, size=1024):
         if self.fileobj is None:
             raise EOFError, 'Reached EOF'
         if self._new_member:
@@ -321,7 +319,7 @@ class GzipFile(io.BufferedIOBase):
                 self.myfileobj = None
             return
 
-    def flush(self, zlib_mode = zlib.Z_SYNC_FLUSH):
+    def flush(self, zlib_mode=zlib.Z_SYNC_FLUSH):
         self._check_closed()
         if self.mode == WRITE:
             self.fileobj.write(self.compress.flush(zlib_mode))
@@ -356,7 +354,7 @@ class GzipFile(io.BufferedIOBase):
     def seekable(self):
         return True
 
-    def seek(self, offset, whence = 0):
+    def seek(self, offset, whence=0):
         if whence:
             if whence == 1:
                 offset = self.offset + offset
@@ -380,7 +378,7 @@ class GzipFile(io.BufferedIOBase):
             self.read(count % 1024)
         return self.offset
 
-    def readline(self, size = -1):
+    def readline(self, size=-1):
         if size < 0:
             offset = self.offset - self.extrastart
             i = self.extrabuf.find('\n', offset) + 1

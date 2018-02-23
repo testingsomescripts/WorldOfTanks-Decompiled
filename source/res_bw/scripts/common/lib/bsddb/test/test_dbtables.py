@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_dbtables.py
 import os, re, sys
 if sys.version_info[0] < 3:
@@ -303,10 +303,7 @@ class TableDBTestCase(unittest.TestCase):
          'Access': '0'})
 
         def set_type(type):
-            if type is None:
-                return 'MP3'
-            else:
-                return type
+            return 'MP3' if type is None else type
 
         def increment_access(count):
             return str(int(count) + 1)

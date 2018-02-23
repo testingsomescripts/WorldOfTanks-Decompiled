@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixer_util.py
 """Utility functions, node construction macros, etc."""
 from itertools import islice
@@ -29,7 +29,7 @@ def Assign(target, source):
     return Node(syms.atom, target + [Leaf(token.EQUAL, u'=', prefix=u' ')] + source)
 
 
-def Name(name, prefix = None):
+def Name(name, prefix=None):
     """Return a NAME leaf"""
     return Leaf(token.NAME, name, prefix=prefix)
 
@@ -49,7 +49,7 @@ def Dot():
     return Leaf(token.DOT, u'.')
 
 
-def ArgList(args, lparen = LParen(), rparen = RParen()):
+def ArgList(args, lparen=LParen(), rparen=RParen()):
     """A parenthesised argument list, used by Call()"""
     node = Node(syms.trailer, [lparen.clone(), rparen.clone()])
     if args:
@@ -57,7 +57,7 @@ def ArgList(args, lparen = LParen(), rparen = RParen()):
     return node
 
 
-def Call(func_name, args = None, prefix = None):
+def Call(func_name, args=None, prefix=None):
     """A function call"""
     node = Node(syms.power, [func_name, ArgList(args)])
     if prefix is not None:
@@ -75,7 +75,7 @@ def BlankLine():
     return Leaf(token.NEWLINE, u'')
 
 
-def Number(n, prefix = None):
+def Number(n, prefix=None):
     return Leaf(token.NUMBER, n, prefix=prefix)
 
 
@@ -84,12 +84,12 @@ def Subscript(index_node):
     return Node(syms.trailer, [Leaf(token.LBRACE, u'['), index_node, Leaf(token.RBRACE, u']')])
 
 
-def String(string, prefix = None):
+def String(string, prefix=None):
     """A string leaf"""
     return Leaf(token.STRING, string, prefix=prefix)
 
 
-def ListComp(xp, fp, it, test = None):
+def ListComp(xp, fp, it, test=None):
     """A list comprehension of the form [xp for fp in it if test].
     
     If test is None, the "if test" part is omitted.
@@ -130,9 +130,7 @@ def FromImport(package_name, name_leafs):
 
 def is_tuple(node):
     """Does the node represent a tuple literal?"""
-    if isinstance(node, Node) and node.children == [LParen(), RParen()]:
-        return True
-    return isinstance(node, Node) and len(node.children) == 3 and isinstance(node.children[0], Leaf) and isinstance(node.children[1], Node) and isinstance(node.children[2], Leaf) and node.children[0].value == u'(' and node.children[2].value == u')'
+    return True if isinstance(node, Node) and node.children == [LParen(), RParen()] else isinstance(node, Node) and len(node.children) == 3 and isinstance(node.children[0], Leaf) and isinstance(node.children[1], Node) and isinstance(node.children[2], Leaf) and node.children[0].value == u'(' and node.children[2].value == u')'
 
 
 def is_list(node):
@@ -216,10 +214,8 @@ def is_probably_builtin(node):
         return False
     elif parent.type == syms.expr_stmt and parent.children[0] is node:
         return False
-    elif parent.type == syms.parameters or parent.type == syms.typedargslist and (prev is not None and prev.type == token.COMMA or parent.children[0] is node):
-        return False
     else:
-        return True
+        return False if parent.type == syms.parameters or parent.type == syms.typedargslist and (prev is not None and prev.type == token.COMMA or parent.children[0] is node) else True
 
 
 def find_indentation(node):
@@ -308,7 +304,7 @@ def touch_import(package, name, node):
 
 _def_syms = set([syms.classdef, syms.funcdef])
 
-def find_binding(name, node, package = None):
+def find_binding(name, node, package=None):
     """ Returns the node which binds variable name, otherwise None.
     If optional argument package is supplied, only imports will
     be returned.
@@ -362,13 +358,13 @@ def _find(name, node):
         node = nodes.pop()
         if node.type > 256 and node.type not in _block_syms:
             nodes.extend(node.children)
-        elif node.type == token.NAME and node.value == name:
+        if node.type == token.NAME and node.value == name:
             return node
 
     return None
 
 
-def _is_import_binding(node, name, package = None):
+def _is_import_binding(node, name, package=None):
     """ Will reuturn node if node will import name, or node
     will import * from package.  None is returned otherwise.
     See test cases for examples. """
@@ -379,7 +375,7 @@ def _is_import_binding(node, name, package = None):
                 if child.type == syms.dotted_as_name:
                     if child.children[2].value == name:
                         return node
-                elif child.type == token.NAME and child.value == name:
+                if child.type == token.NAME and child.value == name:
                     return node
 
         elif imp.type == syms.dotted_as_name:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/main.py
 """
 Main program for 2to3.
@@ -29,7 +29,7 @@ class StdoutRefactoringTool(refactor.MultiprocessRefactoringTool):
     where you do not want to replace the input files.
     """
 
-    def __init__(self, fixers, options, explicit, nobackups, show_diffs, input_base_dir = '', output_dir = '', append_suffix = ''):
+    def __init__(self, fixers, options, explicit, nobackups, show_diffs, input_base_dir='', output_dir='', append_suffix=''):
         """
         Args:
             fixers: A list of fixers to import.
@@ -124,7 +124,7 @@ def warn(msg):
     print >> sys.stderr, 'WARNING: %s' % (msg,)
 
 
-def main(fixer_pkg, args = None):
+def main(fixer_pkg, args=None):
     """Main program.
     
     Args:
@@ -193,8 +193,7 @@ def main(fixer_pkg, args = None):
         for fix in options.fix:
             if fix == 'all':
                 all_present = True
-            else:
-                explicit.add(fixer_pkg + '.fix_' + fix)
+            explicit.add(fixer_pkg + '.fix_' + fix)
 
         requested = avail_fixes.union(explicit) if all_present else explicit
     else:

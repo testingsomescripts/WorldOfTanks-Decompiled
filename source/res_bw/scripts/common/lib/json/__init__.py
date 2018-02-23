@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/__init__.py
 r"""JSON (JavaScript Object Notation) <http://json.org> is a subset of
 JavaScript syntax (ECMA-262 3rd edition) used as a lightweight data
@@ -111,7 +111,7 @@ from .decoder import JSONDecoder
 from .encoder import JSONEncoder
 _default_encoder = JSONEncoder(skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, indent=None, separators=None, encoding='utf-8', default=None)
 
-def dump(obj, fp, skipkeys = False, ensure_ascii = True, check_circular = True, allow_nan = True, cls = None, indent = None, separators = None, encoding = 'utf-8', default = None, sort_keys = False, **kw):
+def dump(obj, fp, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw):
     r"""Serialize ``obj`` as a JSON formatted stream to ``fp`` (a
     ``.write()``-supporting file-like object).
     
@@ -173,7 +173,7 @@ def dump(obj, fp, skipkeys = False, ensure_ascii = True, check_circular = True, 
     return
 
 
-def dumps(obj, skipkeys = False, ensure_ascii = True, check_circular = True, allow_nan = True, cls = None, indent = None, separators = None, encoding = 'utf-8', default = None, sort_keys = False, **kw):
+def dumps(obj, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, encoding='utf-8', default=None, sort_keys=False, **kw):
     """Serialize ``obj`` to a JSON formatted ``str``.
     
     If ``skipkeys`` is false then ``dict`` keys that are not basic types
@@ -226,7 +226,7 @@ def dumps(obj, skipkeys = False, ensure_ascii = True, check_circular = True, all
 
 _default_decoder = JSONDecoder(encoding=None, object_hook=None, object_pairs_hook=None)
 
-def load(fp, encoding = None, cls = None, object_hook = None, parse_float = None, parse_int = None, parse_constant = None, object_pairs_hook = None, **kw):
+def load(fp, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw):
     """Deserialize ``fp`` (a ``.read()``-supporting file-like object containing
     a JSON document) to a Python object.
     
@@ -257,7 +257,7 @@ def load(fp, encoding = None, cls = None, object_hook = None, parse_float = None
     return loads(fp.read(), encoding=encoding, cls=cls, object_hook=object_hook, parse_float=parse_float, parse_int=parse_int, parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
 
 
-def loads(s, encoding = None, cls = None, object_hook = None, parse_float = None, parse_int = None, parse_constant = None, object_pairs_hook = None, **kw):
+def loads(s, encoding=None, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw):
     """Deserialize ``s`` (a ``str`` or ``unicode`` instance containing a JSON
     document) to a Python object.
     

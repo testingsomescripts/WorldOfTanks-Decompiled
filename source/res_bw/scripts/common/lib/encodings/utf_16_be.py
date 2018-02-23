@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/utf_16_be.py
 """ Python 'utf-16-be' Codec
 
@@ -11,13 +11,13 @@ Written by Marc-Andre Lemburg (mal@lemburg.com).
 import codecs
 encode = codecs.utf_16_be_encode
 
-def decode(input, errors = 'strict'):
+def decode(input, errors='strict'):
     return codecs.utf_16_be_decode(input, errors, True)
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         return codecs.utf_16_be_encode(input, self.errors)[0]
 
 

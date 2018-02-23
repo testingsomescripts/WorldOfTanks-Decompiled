@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimetypes.py
 """Guess the MIME type of a file.
 
@@ -58,7 +59,7 @@ class MimeTypes:
     URL, and can guess a reasonable extension given a MIME type.
     """
 
-    def __init__(self, filenames = (), strict = True):
+    def __init__(self, filenames=(), strict=True):
         global inited
         if not inited:
             init()
@@ -75,7 +76,7 @@ class MimeTypes:
         for name in filenames:
             self.read(name, strict)
 
-    def add_type(self, type, ext, strict = True):
+    def add_type(self, type, ext, strict=True):
         """Add a mapping between a type and an extension.
         
         When the extension is already known, the new
@@ -92,7 +93,7 @@ class MimeTypes:
         if ext not in exts:
             exts.append(ext)
 
-    def guess_type(self, url, strict = True):
+    def guess_type(self, url, strict=True):
         """Guess the type of a file based on its URL.
         
         Return value is a tuple (type, encoding) where type is None if
@@ -149,7 +150,7 @@ class MimeTypes:
             return (None, encoding)
             return
 
-    def guess_all_extensions(self, type, strict = True):
+    def guess_all_extensions(self, type, strict=True):
         """Guess the extensions for a file based on its MIME type.
         
         Return value is a list of strings giving the possible filename
@@ -169,7 +170,7 @@ class MimeTypes:
 
         return extensions
 
-    def guess_extension(self, type, strict = True):
+    def guess_extension(self, type, strict=True):
         """Guess the extension for a file based on its MIME type.
         
         Return value is a string giving a filename extension,
@@ -183,12 +184,9 @@ class MimeTypes:
         but non-standard types.
         """
         extensions = self.guess_all_extensions(type, strict)
-        if not extensions:
-            return None
-        else:
-            return extensions[0]
+        return None if not extensions else extensions[0]
 
-    def read(self, filename, strict = True):
+    def read(self, filename, strict=True):
         """
         Read a single mime.types-format file, specified by pathname.
         
@@ -199,7 +197,7 @@ class MimeTypes:
         with open(filename) as fp:
             self.readfp(fp, strict)
 
-    def readfp(self, fp, strict = True):
+    def readfp(self, fp, strict=True):
         """
         Read a single mime.types-format file.
         
@@ -223,7 +221,7 @@ class MimeTypes:
             for suff in suffixes:
                 self.add_type(type, '.' + suff, strict)
 
-    def read_windows_registry(self, strict = True):
+    def read_windows_registry(self, strict=True):
         """
         Load the MIME types database from Windows registry.
         
@@ -259,7 +257,7 @@ class MimeTypes:
                     self.add_type(mimetype, subkeyname, strict)
 
 
-def guess_type(url, strict = True):
+def guess_type(url, strict=True):
     """Guess the type of a file based on its URL.
     
     Return value is a tuple (type, encoding) where type is None if the
@@ -283,7 +281,7 @@ def guess_type(url, strict = True):
     return _db.guess_type(url, strict)
 
 
-def guess_all_extensions(type, strict = True):
+def guess_all_extensions(type, strict=True):
     """Guess the extensions for a file based on its MIME type.
     
     Return value is a list of strings giving the possible filename
@@ -301,7 +299,7 @@ def guess_all_extensions(type, strict = True):
     return _db.guess_all_extensions(type, strict)
 
 
-def guess_extension(type, strict = True):
+def guess_extension(type, strict=True):
     """Guess the extension for a file based on its MIME type.
     
     Return value is a string giving a filename extension, including the
@@ -318,7 +316,7 @@ def guess_extension(type, strict = True):
     return _db.guess_extension(type, strict)
 
 
-def add_type(type, ext, strict = True):
+def add_type(type, ext, strict=True):
     """Add a mapping between a type and an extension.
     
     When the extension is already known, the new
@@ -335,7 +333,7 @@ def add_type(type, ext, strict = True):
     return _db.add_type(type, ext, strict)
 
 
-def init(files = None):
+def init(files=None):
     global types_map
     global inited
     global encodings_map
@@ -525,7 +523,7 @@ if __name__ == '__main__':
     import getopt
     USAGE = 'Usage: mimetypes.py [options] type\n\nOptions:\n    --help / -h       -- print this message and exit\n    --lenient / -l    -- additionally search of some common, but non-standard\n                         types.\n    --extension / -e  -- guess extension instead of type\n\nMore than one type argument may be given.\n'
 
-    def usage(code, msg = ''):
+    def usage(code, msg=''):
         print USAGE
         if msg:
             print msg
@@ -542,9 +540,9 @@ if __name__ == '__main__':
     for opt, arg in opts:
         if opt in ('-h', '--help'):
             usage(0)
-        elif opt in ('-l', '--lenient'):
+        if opt in ('-l', '--lenient'):
             strict = 0
-        elif opt in ('-e', '--extension'):
+        if opt in ('-e', '--extension'):
             extension = 1
 
     for gtype in args:
@@ -554,9 +552,7 @@ if __name__ == '__main__':
                 print "I don't know anything about type", gtype
             else:
                 print guess
-        else:
-            guess, encoding = guess_type(gtype, strict)
-            if not guess:
-                print "I don't know anything about type", gtype
-            else:
-                print 'type:', guess, 'encoding:', encoding
+        guess, encoding = guess_type(gtype, strict)
+        if not guess:
+            print "I don't know anything about type", gtype
+        print 'type:', guess, 'encoding:', encoding

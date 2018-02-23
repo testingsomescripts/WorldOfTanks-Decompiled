@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/ic.py
 """IC wrapper module, based on Internet Config 1.3"""
 from warnings import warnpy3k
@@ -40,9 +41,7 @@ _ICOpaqueDataType = type(ICOpaqueData(''))
 def _decode_default(data, key):
     if len(data) == 0:
         return data
-    if ord(data[0]) == len(data) - 1:
-        return data[1:]
-    return ICOpaqueData(data)
+    return data[1:] if ord(data[0]) == len(data) - 1 else ICOpaqueData(data)
 
 
 def _decode_multistr(data, key):
@@ -166,7 +165,7 @@ def _code(data, key):
 
 class IC:
 
-    def __init__(self, signature = 'Pyth', ic = None):
+    def __init__(self, signature='Pyth', ic=None):
         if ic:
             self.ic = ic
         else:
@@ -194,8 +193,6 @@ class IC:
         except icglue.error:
             return 0
 
-        return 1
-
     def __getitem__(self, key):
         attr = self.ic.ICFindPrefHandle(key, self.h)
         return _decode(self.h.data, key)
@@ -204,12 +201,12 @@ class IC:
         value = _code(value, key)
         self.ic.ICSetPref(key, ICattr_no_change, value)
 
-    def launchurl(self, url, hint = ''):
+    def launchurl(self, url, hint=''):
         if url[:6] == 'file:/' and url[6] != '/':
             url = 'file:///' + url[6:]
         self.ic.ICLaunchURL(hint, url, 0, len(url))
 
-    def parseurl(self, data, start = None, end = None, hint = ''):
+    def parseurl(self, data, start=None, end=None, hint=''):
         if start is None:
             selStart = 0
             selEnd = len(data)
@@ -225,7 +222,7 @@ class IC:
             file = file.as_tuple()[2]
         return self.ic.ICMapFilename(file)
 
-    def maptypecreator(self, type, creator, filename = ''):
+    def maptypecreator(self, type, creator, filename=''):
         return self.ic.ICMapTypeCreator(type, creator, filename)
 
     def settypecreator(self, file):
@@ -237,14 +234,14 @@ class IC:
 
 _dft_ic = None
 
-def launchurl(url, hint = ''):
+def launchurl(url, hint=''):
     global _dft_ic
     if _dft_ic is None:
         _dft_ic = IC()
     return _dft_ic.launchurl(url, hint)
 
 
-def parseurl(data, start = None, end = None, hint = ''):
+def parseurl(data, start=None, end=None, hint=''):
     global _dft_ic
     if _dft_ic is None:
         _dft_ic = IC()
@@ -258,7 +255,7 @@ def mapfile(filename):
     return _dft_ic.mapfile(filename)
 
 
-def maptypecreator(type, creator, filename = ''):
+def maptypecreator(type, creator, filename=''):
     global _dft_ic
     if _dft_ic is None:
         _dft_ic = IC()

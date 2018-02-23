@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
 import random
 import BigWorld
@@ -111,10 +111,7 @@ class _CurrentVehicle():
 
     @property
     def item(self):
-        if self.__vehInvID > 0:
-            return g_itemsCache.items.getVehicle(self.__vehInvID)
-        else:
-            return None
+        return g_itemsCache.items.getVehicle(self.__vehInvID) if self.__vehInvID > 0 else None
 
     def isPresent(self):
         return self.item is not None
@@ -161,6 +158,9 @@ class _CurrentVehicle():
     def isOnlyForEventBattles(self):
         return self.item.isOnlyForEventBattles
 
+    def isEvent(self):
+        return self.item.isEvent
+
     def isAlive(self):
         return self.isPresent() and self.item.isAlive
 
@@ -179,12 +179,18 @@ class _CurrentVehicle():
     def isFalloutOnly(self):
         return self.isPresent() and self.item.isFalloutOnly()
 
-    def selectVehicle(self, vehInvID = 0):
+    def selectVehicle(self, vehInvID=0):
         vehicle = g_itemsCache.items.getVehicle(vehInvID)
         if vehicle is None:
             invVehs = g_itemsCache.items.getVehicles(criteria=REQ_CRITERIA.INVENTORY)
+
+            def notEvent(x, y):
+                if x.isOnlyForEventBattles and not y.isOnlyForEventBattles:
+                    return 1
+                return -1 if not x.isOnlyForEventBattles and y.isOnlyForEventBattles else cmp(x, y)
+
             if len(invVehs):
-                vehInvID = sorted(invVehs.itervalues())[0].invID
+                vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
             else:
                 vehInvID = 0
         self.__selectVehicle(vehInvID)

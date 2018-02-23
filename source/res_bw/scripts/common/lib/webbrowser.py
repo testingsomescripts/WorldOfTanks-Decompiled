@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/webbrowser.py
 """Interfaces for launching and remotely controlling Web browsers."""
 import os
@@ -20,7 +21,7 @@ class Error(Exception):
 _browsers = {}
 _tryorder = []
 
-def register(name, klass, instance = None, update_tryorder = 1):
+def register(name, klass, instance=None, update_tryorder=1):
     """Register a browser connector and, optionally, connection."""
     _browsers[name.lower()] = [klass, instance]
     if update_tryorder > 0:
@@ -29,7 +30,7 @@ def register(name, klass, instance = None, update_tryorder = 1):
         _tryorder.insert(0, name)
 
 
-def get(using = None):
+def get(using=None):
     """Return a browser launcher instance appropriate for the environment."""
     if using is not None:
         alternatives = [using]
@@ -42,22 +43,21 @@ def get(using = None):
                 return BackgroundBrowser(browser[:-1])
             else:
                 return GenericBrowser(browser)
-        else:
-            try:
-                command = _browsers[browser.lower()]
-            except KeyError:
-                command = _synthesize(browser)
+        try:
+            command = _browsers[browser.lower()]
+        except KeyError:
+            command = _synthesize(browser)
 
-            if command[1] is not None:
-                return command[1]
-            if command[0] is not None:
-                return command[0]()
+        if command[1] is not None:
+            return command[1]
+        if command[0] is not None:
+            return command[0]()
 
     raise Error('could not locate runnable browser')
     return
 
 
-def open(url, new = 0, autoraise = True):
+def open(url, new=0, autoraise=True):
     for name in _tryorder:
         browser = get(name)
         if browser.open(url, new, autoraise):
@@ -74,7 +74,7 @@ def open_new_tab(url):
     return open(url, 2)
 
 
-def _synthesize(browser, update_tryorder = 1):
+def _synthesize(browser, update_tryorder=1):
     """Attempt to synthesize a controller base on existing controllers.
     
     This is useful to create a controller when a user specifies a path to
@@ -150,11 +150,11 @@ class BaseBrowser(object):
     """Parent class for all browsers. Do not use directly."""
     args = ['%s']
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         self.name = name
         self.basename = name
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         raise NotImplementedError
 
     def open_new(self, url):
@@ -177,7 +177,7 @@ class GenericBrowser(BaseBrowser):
             self.args = name[1:]
         self.basename = os.path.basename(self.name)
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         cmdline = [self.name] + [ arg.replace('%s', url) for arg in self.args ]
         try:
             if sys.platform[:3] == 'win':
@@ -193,7 +193,7 @@ class BackgroundBrowser(GenericBrowser):
     """Class for all browsers which are to be started in the
     background."""
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         cmdline = [self.name] + [ arg.replace('%s', url) for arg in self.args ]
         try:
             if sys.platform[:3] == 'win':
@@ -255,7 +255,7 @@ class UnixBrowser(BaseBrowser):
                 return not p.wait()
             return
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         if new == 0:
             action = self.remote_action
         elif new == 1:
@@ -336,7 +336,7 @@ class Konqueror(BaseBrowser):
     for more information on the Konqueror remote-control interface.
     """
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         if new == 2:
             action = 'newTab'
         else:
@@ -405,9 +405,8 @@ class Grail(BaseBrowser):
             return 0
         s.send(action)
         s.close()
-        return 1
 
-    def open(self, url, new = 0, autoraise = True):
+    def open(self, url, new=0, autoraise=True):
         if new:
             ok = self._remote('LOADNEW ' + url)
         else:
@@ -470,7 +469,7 @@ if sys.platform[:3] == 'win':
 
     class WindowsDefault(BaseBrowser):
 
-        def open(self, url, new = 0, autoraise = True):
+        def open(self, url, new=0, autoraise=True):
             try:
                 os.startfile(url)
             except WindowsError:
@@ -509,23 +508,23 @@ if sys.platform == 'darwin':
         def __init__(self, name):
             self.name = name
 
-        def open(self, url, new = 0, autoraise = True):
-            if not "'" not in url:
-                raise AssertionError
-                if ':' not in url:
-                    url = 'file:' + url
-                new = int(bool(new))
-                if self.name == 'default':
-                    script = 'open location "%s"' % url.replace('"', '%22')
+        def open(self, url, new=0, autoraise=True):
+            assert "'" not in url
+            if ':' not in url:
+                url = 'file:' + url
+            new = int(bool(new))
+            if self.name == 'default':
+                script = 'open location "%s"' % url.replace('"', '%22')
+            else:
+                if self.name == 'OmniWeb':
+                    toWindow = ''
                 else:
-                    if self.name == 'OmniWeb':
-                        toWindow = ''
-                    else:
-                        toWindow = 'toWindow %d' % (new - 1)
-                    cmd = 'OpenURL "%s"' % url.replace('"', '%22')
-                    script = 'tell application "%s"\n                                activate\n                                %s %s\n                            end tell' % (self.name, cmd, toWindow)
-                osapipe = os.popen('osascript', 'w')
-                return osapipe is None and False
+                    toWindow = 'toWindow %d' % (new - 1)
+                cmd = 'OpenURL "%s"' % url.replace('"', '%22')
+                script = 'tell application "%s"\n                                activate\n                                %s %s\n                            end tell' % (self.name, cmd, toWindow)
+            osapipe = os.popen('osascript', 'w')
+            if osapipe is None:
+                return False
             else:
                 osapipe.write(script)
                 rc = osapipe.close()
@@ -537,7 +536,7 @@ if sys.platform == 'darwin':
         def __init__(self, name):
             self._name = name
 
-        def open(self, url, new = 0, autoraise = True):
+        def open(self, url, new=0, autoraise=True):
             if self._name == 'default':
                 script = 'open location "%s"' % url.replace('"', '%22')
             else:
@@ -585,7 +584,7 @@ def main():
     for o, a in opts:
         if o == '-n':
             new_win = 1
-        elif o == '-t':
+        if o == '-t':
             new_win = 2
 
     if len(args) != 1:

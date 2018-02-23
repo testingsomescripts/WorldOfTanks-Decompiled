@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/conv.py
 """Convert graminit.[ch] spit out by pgen to Python code.
 
@@ -66,13 +66,12 @@ class Converter(grammar.Grammar):
             mo = re.match('^#define\\s+(\\w+)\\s+(\\d+)$', line)
             if not mo and line.strip():
                 print "%s(%s): can't parse %s" % (filename, lineno, line.strip())
-            else:
-                symbol, number = mo.groups()
-                number = int(number)
-                assert symbol not in self.symbol2number
-                assert number not in self.number2symbol
-                self.symbol2number[symbol] = number
-                self.number2symbol[number] = symbol
+            symbol, number = mo.groups()
+            number = int(number)
+            assert symbol not in self.symbol2number
+            assert number not in self.number2symbol
+            self.symbol2number[symbol] = number
+            self.number2symbol[number] = symbol
 
         return True
 
@@ -245,7 +244,7 @@ class Converter(grammar.Grammar):
         for ilabel, (type, value) in enumerate(self.labels):
             if type == token.NAME and value is not None:
                 self.keywords[value] = ilabel
-            elif value is None:
+            if value is None:
                 self.tokens[type] = ilabel
 
         return

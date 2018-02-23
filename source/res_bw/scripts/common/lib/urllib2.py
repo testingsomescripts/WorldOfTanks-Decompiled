@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urllib2.py
 """An extensible library for opening URLs using a variety of protocols
 
@@ -89,6 +90,8 @@ import time
 import urlparse
 import bisect
 import warnings
+import weakref
+from functools import partial
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -99,7 +102,7 @@ from urllib import localhost, url2pathname, getproxies, proxy_bypass
 __version__ = sys.version[:3]
 _opener = None
 
-def urlopen(url, data = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+def urlopen(url, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
     global _opener
     if _opener is None:
         _opener = build_opener()
@@ -165,7 +168,7 @@ def request_host(request):
 
 class Request:
 
-    def __init__(self, url, data = None, headers = {}, origin_req_host = None, unverifiable = False):
+    def __init__(self, url, data=None, headers={}, origin_req_host=None, unverifiable=False):
         self.__original = unwrap(url)
         self.__original, self.__fragment = splittag(self.__original)
         self.type = None
@@ -256,7 +259,7 @@ class Request:
     def has_header(self, header_name):
         return header_name in self.headers or header_name in self.unredirected_hdrs
 
-    def get_header(self, header_name, default = None):
+    def get_header(self, header_name, default=None):
         return self.headers.get(header_name, self.unredirected_hdrs.get(header_name, default))
 
     def header_items(self):
@@ -331,7 +334,7 @@ class OpenerDirector:
 
         return
 
-    def open(self, fullurl, data = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+    def open(self, fullurl, data=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         if isinstance(fullurl, basestring):
             req = Request(fullurl, data)
         else:
@@ -353,15 +356,13 @@ class OpenerDirector:
 
         return response
 
-    def _open(self, req, data = None):
+    def _open(self, req, data=None):
         result = self._call_chain(self.handle_open, 'default', 'default_open', req)
         if result:
             return result
         protocol = req.get_type()
         result = self._call_chain(self.handle_open, protocol, protocol + '_open', req)
-        if result:
-            return result
-        return self._call_chain(self.handle_open, 'unknown', 'unknown_open', req)
+        return result if result else self._call_chain(self.handle_open, 'unknown', 'unknown_open', req)
 
     def error(self, proto, *args):
         if proto in ('http', 'https'):
@@ -414,7 +415,7 @@ def build_opener(*handlers):
             if isclass(check):
                 if issubclass(check, klass):
                     skip.add(klass)
-            elif isinstance(check, klass):
+            if isinstance(check, klass):
                 skip.add(klass)
 
     for klass in skip:
@@ -441,9 +442,7 @@ class BaseHandler:
         pass
 
     def __lt__(self, other):
-        if not hasattr(other, 'handler_order'):
-            return True
-        return self.handler_order < other.handler_order
+        return True if not hasattr(other, 'handler_order') else self.handler_order < other.handler_order
 
 
 class HTTPErrorProcessor(BaseHandler):
@@ -596,13 +595,13 @@ def _parse_proxy(proxy):
 class ProxyHandler(BaseHandler):
     handler_order = 100
 
-    def __init__(self, proxies = None):
+    def __init__(self, proxies=None):
         if proxies is None:
             proxies = getproxies()
-        raise hasattr(proxies, 'has_key') or AssertionError('proxies must be a mapping')
+        assert hasattr(proxies, 'has_key'), 'proxies must be a mapping'
         self.proxies = proxies
         for type, url in proxies.items():
-            setattr(self, '%s_open' % type, lambda r, proxy = url, type = type, meth = self.proxy_open: meth(r, proxy, type))
+            setattr(self, '%s_open' % type, lambda r, proxy=url, type=type, meth=self.proxy_open: meth(r, proxy, type))
 
         return
 
@@ -651,7 +650,7 @@ class HTTPPasswordMgr:
 
         return (None, None)
 
-    def reduce_uri(self, uri, default_port = True):
+    def reduce_uri(self, uri, default_port=True):
         """Accept authority or URI and extract only the authority and path."""
         parts = urlparse.urlsplit(uri)
         if parts[1]:
@@ -680,25 +679,20 @@ class HTTPPasswordMgr:
         if base[0] != test[0]:
             return False
         common = posixpath.commonprefix((base[1], test[1]))
-        if len(common) == len(base[1]):
-            return True
-        return False
+        return True if len(common) == len(base[1]) else False
 
 
 class HTTPPasswordMgrWithDefaultRealm(HTTPPasswordMgr):
 
     def find_user_password(self, realm, authuri):
         user, password = HTTPPasswordMgr.find_user_password(self, realm, authuri)
-        if user is not None:
-            return (user, password)
-        else:
-            return HTTPPasswordMgr.find_user_password(self, None, authuri)
+        return (user, password) if user is not None else HTTPPasswordMgr.find_user_password(self, None, authuri)
 
 
 class AbstractBasicAuthHandler:
     rx = re.compile('(?:.*,)*[ \t]*([^ \t]+)[ \t]+realm=(["\']?)([^"\']*)\\2', re.I)
 
-    def __init__(self, password_mgr = None):
+    def __init__(self, password_mgr=None):
         if password_mgr is None:
             password_mgr = HTTPPasswordMgr()
         self.passwd = password_mgr
@@ -776,7 +770,7 @@ def randombytes(n):
 
 class AbstractDigestAuthHandler:
 
-    def __init__(self, passwd = None):
+    def __init__(self, passwd=None):
         if passwd is None:
             passwd = HTTPPasswordMgr()
         self.passwd = passwd
@@ -919,7 +913,7 @@ class ProxyDigestAuthHandler(BaseHandler, AbstractDigestAuthHandler):
 
 class AbstractHTTPHandler(BaseHandler):
 
-    def __init__(self, debuglevel = 0):
+    def __init__(self, debuglevel=0):
         self._debuglevel = debuglevel
 
     def set_http_debuglevel(self, level):
@@ -985,7 +979,10 @@ class AbstractHTTPHandler(BaseHandler):
             except TypeError:
                 r = h.getresponse()
 
-        r.recv = r.read
+        def _read(o, amt=None):
+            return o.read(amt)
+
+        r.recv = partial(_read, weakref.proxy(r))
         fp = socket._fileobject(r, close=True)
         resp = addinfourl(fp, r.msg, req.get_full_url())
         resp.code = r.status
@@ -1013,7 +1010,7 @@ if hasattr(httplib, 'HTTPS'):
 
 class HTTPCookieProcessor(BaseHandler):
 
-    def __init__(self, cookiejar = None):
+    def __init__(self, cookiejar=None):
         import cookielib
         if cookiejar is None:
             cookiejar = cookielib.CookieJar()

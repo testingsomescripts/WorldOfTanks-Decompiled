@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pyclbr.py
 """Parse a Python module and describe its classes and methods.
 
@@ -78,7 +79,7 @@ class Function:
         self.lineno = lineno
 
 
-def readmodule(module, path = None):
+def readmodule(module, path=None):
     """Backwards compatible interface.
     
     Call readmodule_ex() and then only keep Class objects from the
@@ -91,7 +92,7 @@ def readmodule(module, path = None):
     return res
 
 
-def readmodule_ex(module, path = None):
+def readmodule_ex(module, path=None):
     """Read a module file and return a dictionary of classes.
     
     Search for MODULE in PATH and sys.path, read and parse the
@@ -101,7 +102,7 @@ def readmodule_ex(module, path = None):
     return _readmodule(module, path or [])
 
 
-def _readmodule(module, path, inpackage = None):
+def _readmodule(module, path, inpackage=None):
     """Do the hard work for readmodule[_ex].
     
     If INPACKAGE is given, it must be the dotted name of the package in
@@ -152,7 +153,7 @@ def _readmodule(module, path, inpackage = None):
                     while stack and stack[-1][1] >= thisindent:
                         del stack[-1]
 
-                elif token == 'def':
+                if token == 'def':
                     lineno, thisindent = start
                     while stack and stack[-1][1] >= thisindent:
                         del stack[-1]
@@ -167,7 +168,7 @@ def _readmodule(module, path, inpackage = None):
                     else:
                         dict[meth_name] = Function(fullmodule, meth_name, fname, lineno)
                     stack.append((None, thisindent))
-                elif token == 'class':
+                if token == 'class':
                     lineno, thisindent = start
                     while stack and stack[-1][1] >= thisindent:
                         del stack[-1]
@@ -200,13 +201,13 @@ def _readmodule(module, path, inpackage = None):
                                 super = []
                             if token == '(':
                                 level += 1
-                            elif token == ')':
+                            if token == ')':
                                 level -= 1
                                 if level == 0:
                                     break
-                            elif token == ',' and level == 1:
+                            if token == ',' and level == 1:
                                 pass
-                            elif tokentype in (NAME, OP) and level == 1:
+                            if tokentype in (NAME, OP) and level == 1:
                                 super.append(token)
 
                         inherit = names
@@ -214,7 +215,7 @@ def _readmodule(module, path, inpackage = None):
                     if not stack:
                         dict[class_name] = cur_class
                     stack.append((cur_class, thisindent))
-                elif token == 'import' and start[1] == 0:
+                if token == 'import' and start[1] == 0:
                     modules = _getnamelist(g)
                     for mod, _mod2 in modules:
                         try:
@@ -229,7 +230,7 @@ def _readmodule(module, path, inpackage = None):
                         except:
                             pass
 
-                elif token == 'from' and start[1] == 0:
+                if token == 'from' and start[1] == 0:
                     mod, token = _getname(g)
                     if not mod or token != 'import':
                         continue
@@ -242,7 +243,7 @@ def _readmodule(module, path, inpackage = None):
                     for n, n2 in names:
                         if n in d:
                             dict[n2 or n] = d[n]
-                        elif n == '*':
+                        if n == '*':
                             for n in d:
                                 if n[0] != '_':
                                     dict[n] = d[n]
@@ -314,7 +315,7 @@ def _main():
                 if name != '__path__':
                     print '  def', name, lineno
 
-        elif isinstance(obj, Function):
+        if isinstance(obj, Function):
             print 'def', obj.name, obj.lineno
 
 

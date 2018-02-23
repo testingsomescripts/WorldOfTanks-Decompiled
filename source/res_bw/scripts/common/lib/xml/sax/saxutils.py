@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/saxutils.py
 """A library of useful helper classes to the SAX classes, for the
 convenience of application and driver writers.
@@ -20,7 +21,7 @@ def __dict_replace(s, d):
     return s
 
 
-def escape(data, entities = {}):
+def escape(data, entities={}):
     """Escape &, <, and > in a string of data.
     
     You can escape other strings of data by passing a dictionary as
@@ -35,7 +36,7 @@ def escape(data, entities = {}):
     return data
 
 
-def unescape(data, entities = {}):
+def unescape(data, entities={}):
     """Unescape &amp;, &lt;, and &gt; in a string of data.
     
     You can unescape other strings of data by passing a dictionary as
@@ -49,7 +50,7 @@ def unescape(data, entities = {}):
     return data.replace('&amp;', '&')
 
 
-def quoteattr(data, entities = {}):
+def quoteattr(data, entities={}):
     """Escape and quote an attribute value.
     
     Escape &, <, and > in a string of data, then quote it for use as
@@ -103,7 +104,7 @@ def _gettextwriter(out, encoding):
 
 class XMLGenerator(handler.ContentHandler):
 
-    def __init__(self, out = None, encoding = 'iso-8859-1'):
+    def __init__(self, out=None, encoding='iso-8859-1'):
         handler.ContentHandler.__init__(self)
         out = _gettextwriter(out, encoding)
         self._write = out.write
@@ -153,8 +154,7 @@ class XMLGenerator(handler.ContentHandler):
         for prefix, uri in self._undeclared_ns_maps:
             if prefix:
                 self._write(u' xmlns:%s="%s"' % (prefix, uri))
-            else:
-                self._write(u' xmlns="%s"' % uri)
+            self._write(u' xmlns="%s"' % uri)
 
         self._undeclared_ns_maps = []
         for name, value in attrs.items():
@@ -187,7 +187,7 @@ class XMLFilterBase(xmlreader.XMLReader):
     the event stream or the configuration requests as they pass
     through."""
 
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         xmlreader.XMLReader.__init__(self)
         self._parent = parent
 
@@ -277,7 +277,7 @@ class XMLFilterBase(xmlreader.XMLReader):
         self._parent = parent
 
 
-def prepare_input_source(source, base = ''):
+def prepare_input_source(source, base=''):
     """This function takes an InputSource and an optional base URL and
     returns a fully resolved InputSource object ready for reading."""
     if type(source) in _StringTypes:

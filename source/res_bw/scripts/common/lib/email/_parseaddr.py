@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/_parseaddr.py
 """Email address parsing code.
 
@@ -216,10 +216,9 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.LWS + '\n\r':
                 self.pos += 1
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            else:
-                break
+            break
 
     def getaddrlist(self):
         """Parse all addresses.
@@ -231,8 +230,7 @@ class AddrlistClass():
             ad = self.getaddress()
             if ad:
                 result += ad
-            else:
-                result.append(('', ''))
+            result.append(('', ''))
 
         return result
 
@@ -339,21 +337,20 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.LWS:
                 self.pos += 1
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            elif self.field[self.pos] == '[':
+            if self.field[self.pos] == '[':
                 sdlist.append(self.getdomainliteral())
-            elif self.field[self.pos] == '.':
+            if self.field[self.pos] == '.':
                 self.pos += 1
                 sdlist.append('.')
-            elif self.field[self.pos] in self.atomends:
+            if self.field[self.pos] in self.atomends:
                 break
-            else:
-                sdlist.append(self.getatom())
+            sdlist.append(self.getatom())
 
         return EMPTYSTRING.join(sdlist)
 
-    def getdelimited(self, beginchar, endchars, allowcomments = True):
+    def getdelimited(self, beginchar, endchars, allowcomments=True):
         """Parse a header fragment delimited by special characters.
         
         `beginchar' is the start character for the fragment.
@@ -401,7 +398,7 @@ class AddrlistClass():
         """Parse an RFC 2822 domain-literal."""
         return '[%s]' % self.getdelimited('[', ']\r', False)
 
-    def getatom(self, atomends = None):
+    def getatom(self, atomends=None):
         """Parse an RFC 2822 atom.
         
         Optional atomends specifies a different set of end token delimiters
@@ -431,14 +428,13 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.FWS:
                 self.pos += 1
-            elif self.field[self.pos] == '"':
+            if self.field[self.pos] == '"':
                 plist.append(self.getquote())
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            elif self.field[self.pos] in self.phraseends:
+            if self.field[self.pos] in self.phraseends:
                 break
-            else:
-                plist.append(self.getatom(self.phraseends))
+            plist.append(self.getatom(self.phraseends))
 
         return plist
 

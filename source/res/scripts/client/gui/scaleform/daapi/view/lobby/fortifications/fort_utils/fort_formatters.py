@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_utils/fort_formatters.py
 import BigWorld
 from helpers import i18n
@@ -6,7 +6,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.shared.fortifications.settings import FORT_BATTLE_DIVISIONS
 from gui.shared.formatters import icons, text_styles
 
-def getDefRes(value, addIcon = True):
+def getDefRes(value, addIcon=True):
     text = text_styles.defRes(BigWorld.wg_getIntegralFormat(value))
     if addIcon:
         icon = icons.nut()
@@ -15,7 +15,7 @@ def getDefRes(value, addIcon = True):
         return text
 
 
-def getBonusText(strValue, buildingID, textsStyle = None, ctx = None):
+def getBonusText(strValue, buildingID, textsStyle=None, ctx=None):
     ctx = ctx or {}
     textsStyle = textsStyle or (text_styles.neutral, text_styles.main)
     descrStr = i18n.makeString(FORTIFICATIONS.buildings_defresinfo(buildingID), **ctx)
@@ -47,7 +47,7 @@ def getIconLevel(value):
     return '../maps/icons/filters/levels/level_{0}.png'.format(value)
 
 
-def getDivisionIcon(defenderFortLevel, attackerFortLevel, determineAlert = True):
+def getDivisionIcon(defenderFortLevel, attackerFortLevel, determineAlert=True):
     battleDivision = FORT_BATTLE_DIVISIONS.CHAMPION
     if defenderFortLevel >= FORT_BATTLE_DIVISIONS.ABSOLUTE.minFortLevel:
         battleDivision = FORT_BATTLE_DIVISIONS.ABSOLUTE

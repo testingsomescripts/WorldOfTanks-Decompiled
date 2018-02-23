@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/os.py
 r"""OS routines for Mac, NT, or Posix depending on what system we're on.
 
@@ -123,7 +124,7 @@ SEEK_SET = 0
 SEEK_CUR = 1
 SEEK_END = 2
 
-def makedirs(name, mode = 511):
+def makedirs(name, mode=511):
     """makedirs(path [, mode=0777])
     
     Super-mkdir; create a leaf directory and all intermediate ones.
@@ -200,7 +201,7 @@ def renames(old, new):
 
 __all__.extend(['makedirs', 'removedirs', 'renames'])
 
-def walk(top, topdown = True, onerror = None, followlinks = False):
+def walk(top, topdown=True, onerror=None, followlinks=False):
     """Directory tree generator.
     
     For each directory in the directory tree rooted at top (including top
@@ -268,8 +269,7 @@ def walk(top, topdown = True, onerror = None, followlinks = False):
     for name in names:
         if isdir(join(top, name)):
             dirs.append(name)
-        else:
-            nondirs.append(name)
+        nondirs.append(name)
 
     if topdown:
         yield (top, dirs, nondirs)
@@ -351,7 +351,7 @@ __all__.extend(['execl',
  'execvp',
  'execvpe'])
 
-def _execvpe(file, args, env = None):
+def _execvpe(file, args, env=None):
     if env is not None:
         func = execve
         argrest = (args, env)
@@ -446,10 +446,10 @@ else:
             def __contains__(self, key):
                 return key.upper() in self.data
 
-            def get(self, key, failobj = None):
+            def get(self, key, failobj=None):
                 return self.data.get(key.upper(), failobj)
 
-            def update(self, dict = None, **kwargs):
+            def update(self, dict=None, **kwargs):
                 if dict:
                     try:
                         keys = dict.keys()
@@ -480,7 +480,7 @@ else:
                 putenv(key, item)
                 self.data[key] = item
 
-            def update(self, dict = None, **kwargs):
+            def update(self, dict=None, **kwargs):
                 if dict:
                     try:
                         keys = dict.keys()
@@ -520,7 +520,7 @@ else:
 
     environ = _Environ(environ)
 
-def getenv(key, default = None):
+def getenv(key, default=None):
     """Get an environment variable, return None if it doesn't exist.
     The optional second argument can specify an alternate default."""
     return environ.get(key, default)
@@ -554,12 +554,11 @@ if _exists('fork') and not _exists('spawnv') and _exists('execv'):
                 wpid, sts = waitpid(pid, 0)
                 if WIFSTOPPED(sts):
                     continue
-                else:
-                    if WIFSIGNALED(sts):
-                        return -WTERMSIG(sts)
-                    if WIFEXITED(sts):
-                        return WEXITSTATUS(sts)
-                    raise error, 'Not stopped, signaled or exited???'
+                if WIFSIGNALED(sts):
+                    return -WTERMSIG(sts)
+                if WIFEXITED(sts):
+                    return WEXITSTATUS(sts)
+                raise error, 'Not stopped, signaled or exited???'
 
         return
 
@@ -667,7 +666,7 @@ if _exists('spawnvp'):
 if _exists('fork'):
     if not _exists('popen2'):
 
-        def popen2(cmd, mode = 't', bufsize = -1):
+        def popen2(cmd, mode='t', bufsize=-1):
             """Execute the shell command 'cmd' in a sub-process.  On UNIX, 'cmd'
             may be a sequence, in which case arguments will be passed directly to
             the program without shell intervention (as with os.spawnv()).  If 'cmd'
@@ -686,7 +685,7 @@ if _exists('fork'):
         __all__.append('popen2')
     if not _exists('popen3'):
 
-        def popen3(cmd, mode = 't', bufsize = -1):
+        def popen3(cmd, mode='t', bufsize=-1):
             """Execute the shell command 'cmd' in a sub-process.  On UNIX, 'cmd'
             may be a sequence, in which case arguments will be passed directly to
             the program without shell intervention (as with os.spawnv()).  If 'cmd'
@@ -705,7 +704,7 @@ if _exists('fork'):
         __all__.append('popen3')
     if not _exists('popen4'):
 
-        def popen4(cmd, mode = 't', bufsize = -1):
+        def popen4(cmd, mode='t', bufsize=-1):
             """Execute the shell command 'cmd' in a sub-process.  On UNIX, 'cmd'
             may be a sequence, in which case arguments will be passed directly to
             the program without shell intervention (as with os.spawnv()).  If 'cmd'

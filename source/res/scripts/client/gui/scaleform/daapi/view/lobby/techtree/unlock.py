@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/unlock.py
 from collections import namedtuple
 import BigWorld
@@ -27,7 +27,7 @@ def makeCostCtx(vehXP, xpCost):
 
 class UnlockItemConfirmator(plugins.DialogAbstractConfirmator):
 
-    def __init__(self, unlockCtx, costCtx, activeHandler = None, isEnabled = True):
+    def __init__(self, unlockCtx, costCtx, activeHandler=None, isEnabled=True):
         super(UnlockItemConfirmator, self).__init__(activeHandler, isEnabled)
         self._unlockCtx = unlockCtx
         self._costCtx = costCtx
@@ -55,7 +55,7 @@ class UnlockItemConfirmator(plugins.DialogAbstractConfirmator):
 
 class UnlockItemValidator(plugins.SyncValidator):
 
-    def __init__(self, unlockCtx, isEnabled = True):
+    def __init__(self, unlockCtx, isEnabled=True):
         super(UnlockItemValidator, self).__init__(isEnabled)
         self._unlockCtx = unlockCtx
 
@@ -97,14 +97,12 @@ class UnlockItemValidator(plugins.SyncValidator):
         if unlockStats.getVehTotalXP(vehCD) < xpCost:
             LOG_ERROR('XP not enough for unlock', self._unlockCtx)
             return plugins.makeError()
-        if RequestState.inProcess('unlock'):
-            return plugins.makeError('in_processing')
-        return plugins.makeSuccess()
+        return plugins.makeError('in_processing') if RequestState.inProcess('unlock') else plugins.makeSuccess()
 
 
 class UnlockItemProcessor(Processor):
 
-    def __init__(self, vehTypeCD, unlockIdx, plugins = None):
+    def __init__(self, vehTypeCD, unlockIdx, plugins=None):
         if plugins is None:
             plugins = []
         super(UnlockItemProcessor, self).__init__(plugins)
@@ -116,9 +114,7 @@ class UnlockItemProcessor(Processor):
         RequestState.sent('unlock')
         BigWorld.player().stats.unlock(self.vehTypeCD, self.unlockIdx, lambda code: self._response(code, callback))
 
-    def _response(self, code, callback, errStr = '', ctx = None):
+    def _response(self, code, callback, errStr='', ctx=None):
         LOG_DEBUG('Server response', code, errStr, ctx)
         RequestState.received('unlock')
-        if code < 0:
-            return callback(self._errorHandler(code, errStr='server_error', ctx=ctx))
-        return callback(self._successHandler(code, ctx=ctx))
+        return callback(self._errorHandler(code, errStr='server_error', ctx=ctx)) if code < 0 else callback(self._successHandler(code, ctx=ctx))

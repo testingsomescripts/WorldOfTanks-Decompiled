@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_cm_handlers.py
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.locale.MENU import MENU
@@ -20,7 +20,7 @@ class CONTACTS_ACTION_ID(object):
 
 class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(SimpleContactsCMHandler, self).__init__(cmProxy, ctx, {CONTACTS_ACTION_ID.EDIT_GROUP: 'editGroup',
          CONTACTS_ACTION_ID.REMOVE_GROUP: 'removeGroup'})
 
@@ -30,7 +30,7 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def removeGroup(self):
         self.fireEvent(events.ContactsEvent(events.ContactsEvent.REMOVE_GROUP, ctx={'targetGroupName': self.targetGroupName}), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         return [self._makeItem(CONTACTS_ACTION_ID.EDIT_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_EDITGROUP), self._makeItem(CONTACTS_ACTION_ID.REMOVE_GROUP, MESSENGER.MESSENGER_CONTACTS_CONTEXTMENU_REMOVEGROUP)]
 
     def _initFlashValues(self, ctx):
@@ -43,7 +43,7 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 class PlayerContactsCMHandler(BaseUserCMHandler):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(PlayerContactsCMHandler, self).__init__(cmProxy, ctx)
 
     def createContactNote(self):

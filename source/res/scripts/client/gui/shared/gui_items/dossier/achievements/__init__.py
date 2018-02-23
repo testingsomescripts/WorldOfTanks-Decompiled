@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/__init__.py
 from AimerAchievement import AimerAchievement
 from ArmorPiercerAchievement import ArmorPiercerAchievement
@@ -8,6 +8,7 @@ from BruteForceAchievement import BruteForceAchievement
 from ConquerorAchievement import ConquerorAchievement
 from CrucialShotAchievement import CrucialShotAchievement
 from DeathTrackAchievement import DeathTrackAchievement
+from MoonSphereAchievement import MoonSphereAchievement
 from DiehardAchievement import DiehardAchievement
 from FightingReconnaissanceAchievement import FightingReconnaissanceAchievement
 from FireAndSteelAchievement import FireAndSteelAchievement
@@ -63,3 +64,4 @@ from ReadyForBattleALLAchievement import ReadyForBattleALLAchievement
 from Achieved import Achieved
 from StormLordAchievement import StormLordAchievement
 from WinnerLaurelsAchievement import WinnerLaurelsAchievement
+from SauronsEyeAchievement import SauronsEyeAchievement

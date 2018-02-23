@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/difflib.py
 """
 Module difflib -- helpers for computing deltas between objects.
@@ -44,8 +44,7 @@ from functools import reduce
 Match = _namedtuple('Match', 'a b size')
 
 def _calculate_ratio(matches, length):
-    if length:
-        return 2.0 * matches / length
+    return 2.0 * matches / length if length else 1.0
 
 
 class SequenceMatcher():
@@ -155,7 +154,7 @@ class SequenceMatcher():
         Return an upper bound on ratio() very quickly.
     """
 
-    def __init__(self, isjunk = None, a = '', b = '', autojunk = True):
+    def __init__(self, isjunk=None, a='', b='', autojunk=True):
         r"""Construct a SequenceMatcher.
         
         Optional arg isjunk is None (the default), or a one-argument
@@ -342,17 +341,17 @@ class SequenceMatcher():
 
             j2len = newj2len
 
-        while besti > alo and bestj > blo and not isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1]:
-            besti, bestj, bestsize = besti - 1, bestj - 1, bestsize + 1
+        while 1:
+            besti, bestj, bestsize = besti > alo and bestj > blo and not isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1] and besti - 1, bestj - 1, bestsize + 1
 
-        while besti + bestsize < ahi and bestj + bestsize < bhi and not isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize]:
-            bestsize += 1
+        while 1:
+            besti + bestsize < ahi and bestj + bestsize < bhi and not isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize] and bestsize += 1
 
-        while besti > alo and bestj > blo and isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1]:
-            besti, bestj, bestsize = besti - 1, bestj - 1, bestsize + 1
+        while 1:
+            besti, bestj, bestsize = besti > alo and bestj > blo and isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1] and besti - 1, bestj - 1, bestsize + 1
 
-        while besti + bestsize < ahi and bestj + bestsize < bhi and isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize]:
-            bestsize = bestsize + 1
+        while 1:
+            bestsize = besti + bestsize < ahi and bestj + bestsize < bhi and isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize] and bestsize + 1
 
         return Match(besti, bestj, bestsize)
 
@@ -405,10 +404,9 @@ class SequenceMatcher():
             for i2, j2, k2 in matching_blocks:
                 if i1 + k1 == i2 and j1 + k1 == j2:
                     k1 += k2
-                else:
-                    if k1:
-                        non_adjacent.append((i1, j1, k1))
-                    i1, j1, k1 = i2, j2, k2
+                if k1:
+                    non_adjacent.append((i1, j1, k1))
+                i1, j1, k1 = i2, j2, k2
 
             if k1:
                 non_adjacent.append((i1, j1, k1))
@@ -473,7 +471,7 @@ class SequenceMatcher():
 
             return answer
 
-    def get_grouped_opcodes(self, n = 3):
+    def get_grouped_opcodes(self, n=3):
         """ Isolate change clusters by eliminating ranges with no changes.
         
         Return a generator of groups with up to n lines of context.
@@ -594,7 +592,7 @@ class SequenceMatcher():
         return _calculate_ratio(min(la, lb), la + lb)
 
 
-def get_close_matches(word, possibilities, n = 3, cutoff = 0.6):
+def get_close_matches(word, possibilities, n=3, cutoff=0.6):
     """Use SequenceMatcher to return list of the best "good enough" matches.
     
     word is a sequence for which close matches are desired (typically a
@@ -748,7 +746,7 @@ class Differ():
         Compare two sequences of lines; generate the resulting delta.
     """
 
-    def __init__(self, linejunk = None, charjunk = None):
+    def __init__(self, linejunk=None, charjunk=None):
         """
         Construct a text differencer, with optional filters.
         
@@ -882,15 +880,14 @@ class Differ():
                 if tag == 'replace':
                     atags += '^' * la
                     btags += '^' * lb
-                elif tag == 'delete':
+                if tag == 'delete':
                     atags += '-' * la
-                elif tag == 'insert':
+                if tag == 'insert':
                     btags += '+' * lb
-                elif tag == 'equal':
+                if tag == 'equal':
                     atags += ' ' * la
                     btags += ' ' * lb
-                else:
-                    raise ValueError, 'unknown tag %r' % (tag,)
+                raise ValueError, 'unknown tag %r' % (tag,)
 
             for line in self._qformat(aelt, belt, atags, btags):
                 yield line
@@ -945,7 +942,7 @@ class Differ():
 
 import re
 
-def IS_LINE_JUNK(line, pat = re.compile('\\s*#?\\s*$').match):
+def IS_LINE_JUNK(line, pat=re.compile('\\s*#?\\s*$').match):
     r"""
     Return 1 for ignorable line: iff `line` is blank or contains a single '#'.
     
@@ -961,7 +958,7 @@ def IS_LINE_JUNK(line, pat = re.compile('\\s*#?\\s*$').match):
     return pat(line) is not None
 
 
-def IS_CHARACTER_JUNK(ch, ws = ' \t'):
+def IS_CHARACTER_JUNK(ch, ws=' \t'):
     r"""
     Return 1 for ignorable character: iff `ch` is a space or tab.
     
@@ -990,7 +987,7 @@ def _format_range_unified(start, stop):
     return '{},{}'.format(beginning, length)
 
 
-def unified_diff(a, b, fromfile = '', tofile = '', fromfiledate = '', tofiledate = '', n = 3, lineterm = '\n'):
+def unified_diff(a, b, fromfile='', tofile='', fromfiledate='', tofiledate='', n=3, lineterm='\n'):
     """
     Compare two sequences of lines; generate the delta as a unified diff.
     
@@ -1064,12 +1061,10 @@ def _format_range_context(start, stop):
     length = stop - start
     if not length:
         beginning -= 1
-    if length <= 1:
-        return '{}'.format(beginning)
-    return '{},{}'.format(beginning, beginning + length - 1)
+    return '{}'.format(beginning) if length <= 1 else '{},{}'.format(beginning, beginning + length - 1)
 
 
-def context_diff(a, b, fromfile = '', tofile = '', fromfiledate = '', tofiledate = '', n = 3, lineterm = '\n'):
+def context_diff(a, b, fromfile='', tofile='', fromfiledate='', tofiledate='', n=3, lineterm='\n'):
     r"""
     Compare two sequences of lines; generate the delta as a context diff.
     
@@ -1140,7 +1135,7 @@ def context_diff(a, b, fromfile = '', tofile = '', fromfiledate = '', tofiledate
     return
 
 
-def ndiff(a, b, linejunk = None, charjunk = IS_CHARACTER_JUNK):
+def ndiff(a, b, linejunk=None, charjunk=IS_CHARACTER_JUNK):
     r"""
     Compare `a` and `b` (lists of strings); return a `Differ`-style delta.
     
@@ -1177,7 +1172,7 @@ def ndiff(a, b, linejunk = None, charjunk = IS_CHARACTER_JUNK):
     return Differ(linejunk, charjunk).compare(a, b)
 
 
-def _mdiff(fromlines, tolines, context = None, linejunk = None, charjunk = IS_CHARACTER_JUNK):
+def _mdiff(fromlines, tolines, context=None, linejunk=None, charjunk=IS_CHARACTER_JUNK):
     r"""Returns generator yielding marked up from/to side by side differences.
     
     Arguments:
@@ -1214,7 +1209,7 @@ def _mdiff(fromlines, tolines, context = None, linejunk = None, charjunk = IS_CH
     change_re = re.compile('(\\++|\\-+|\\^+)')
     diff_lines_iterator = ndiff(fromlines, tolines, linejunk, charjunk)
 
-    def _make_line(lines, format_key, side, num_lines = [0, 0]):
+    def _make_line(lines, format_key, side, num_lines=[0, 0]):
         """Returns line of text with user's change markup and line formatting.
         
         lines -- list of lines from the ndiff generator to produce a line of
@@ -1245,7 +1240,7 @@ def _mdiff(fromlines, tolines, context = None, linejunk = None, charjunk = IS_CH
                 text, markers = lines.pop(0), lines.pop(0)
                 sub_info = []
 
-                def record_sub_info(match_object, sub_info = sub_info):
+                def record_sub_info(match_object, sub_info=sub_info):
                     sub_info.append([match_object.group(1)[0], match_object.span()])
                     return match_object.group(1)
 
@@ -1331,8 +1326,7 @@ def _mdiff(fromlines, tolines, context = None, linejunk = None, charjunk = IS_CH
 
             if s.startswith('X'):
                 raise StopIteration
-            else:
-                yield (from_line, to_line, True)
+            yield (from_line, to_line, True)
 
         return
 
@@ -1432,7 +1426,7 @@ class HtmlDiff(object):
     _legend = _legend
     _default_prefix = 0
 
-    def __init__(self, tabsize = 8, wrapcolumn = None, linejunk = None, charjunk = IS_CHARACTER_JUNK):
+    def __init__(self, tabsize=8, wrapcolumn=None, linejunk=None, charjunk=IS_CHARACTER_JUNK):
         """HtmlDiff instance initializer
         
         Arguments:
@@ -1448,7 +1442,7 @@ class HtmlDiff(object):
         self._linejunk = linejunk
         self._charjunk = charjunk
 
-    def make_file(self, fromlines, tolines, fromdesc = '', todesc = '', context = False, numlines = 5):
+    def make_file(self, fromlines, tolines, fromdesc='', todesc='', context=False, numlines=5):
         """Returns HTML file of side by side comparison with change highlights
         
         Arguments:
@@ -1512,12 +1506,11 @@ class HtmlDiff(object):
                 i += 1
                 mark = text[i]
                 i += 1
-            elif text[i] == '\x01':
+            if text[i] == '\x01':
                 i += 1
                 mark = ''
-            else:
-                i += 1
-                n += 1
+            i += 1
+            n += 1
 
         line1 = text[:i]
         line2 = text[i:]
@@ -1610,8 +1603,7 @@ class HtmlDiff(object):
                     next_id[i] = ' id="difflib_chg_%s_%d"' % (toprefix, num_chg)
                     num_chg += 1
                     next_href[last] = '<a href="#difflib_chg_%s_%d">n</a>' % (toprefix, num_chg)
-            else:
-                in_change = False
+            in_change = False
 
         if not flaglist:
             flaglist = [False]
@@ -1632,7 +1624,7 @@ class HtmlDiff(object):
          next_href,
          next_id)
 
-    def make_table(self, fromlines, tolines, fromdesc = '', todesc = '', context = False, numlines = 5):
+    def make_table(self, fromlines, tolines, fromdesc='', todesc='', context=False, numlines=5):
         """Returns HTML table of side by side comparison with change highlights
         
         Arguments:
@@ -1665,12 +1657,11 @@ class HtmlDiff(object):
             if flaglist[i] is None:
                 if i > 0:
                     s.append('        </tbody>        \n        <tbody>\n')
-            else:
-                s.append(fmt % (next_id[i],
-                 next_href[i],
-                 fromlist[i],
-                 next_href[i],
-                 tolist[i]))
+            s.append(fmt % (next_id[i],
+             next_href[i],
+             fromlist[i],
+             next_href[i],
+             tolist[i]))
 
         if fromdesc or todesc:
             header_row = '<thead><tr>%s%s%s%s</tr></thead>' % ('<th class="diff_next"><br /></th>',

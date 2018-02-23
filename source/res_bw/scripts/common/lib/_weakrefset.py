@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_weakrefset.py
 from _weakref import ref
 __all__ = ['WeakSet']
@@ -25,10 +26,10 @@ class _IterationGuard(object):
 
 class WeakSet(object):
 
-    def __init__(self, data = None):
+    def __init__(self, data=None):
         self.data = set()
 
-        def _remove(item, selfref = ref(self)):
+        def _remove(item, selfref=ref(self)):
             self = selfref()
             if self is not None:
                 if self._iterating:
@@ -173,15 +174,11 @@ class WeakSet(object):
         return self.data > set((ref(item) for item in other))
 
     def __eq__(self, other):
-        if not isinstance(other, self.__class__):
-            return NotImplemented
-        return self.data == set((ref(item) for item in other))
+        return NotImplemented if not isinstance(other, self.__class__) else self.data == set((ref(item) for item in other))
 
     def __ne__(self, other):
         opposite = self.__eq__(other)
-        if opposite is NotImplemented:
-            return NotImplemented
-        return not opposite
+        return NotImplemented if opposite is NotImplemented else not opposite
 
     def symmetric_difference(self, other):
         newset = self.copy()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_operator.py
 """Fixer for operator functions.
 
@@ -31,10 +31,7 @@ class FixOperator(fixer_base.BaseFix):
 
     def transform(self, node, results):
         method = self._check_method(node, results)
-        if method is not None:
-            return method(node, results)
-        else:
-            return
+        return method(node, results) if method is not None else None
 
     @invocation('operator.contains(%s)')
     def _sequenceIncludes(self, node, results):

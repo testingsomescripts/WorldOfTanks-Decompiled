@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_simplesubclasses.py
 import unittest
 from ctypes import *
@@ -6,9 +6,7 @@ from ctypes import *
 class MyInt(c_int):
 
     def __cmp__(self, other):
-        if type(other) != MyInt:
-            return -1
-        return cmp(self.value, other.value)
+        return -1 if type(other) != MyInt else cmp(self.value, other.value)
 
     def __hash__(self):
         return hash(self.value)

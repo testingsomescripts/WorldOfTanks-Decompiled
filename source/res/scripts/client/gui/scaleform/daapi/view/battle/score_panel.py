@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/score_panel.py
 import itertools
 import win_points
@@ -12,6 +12,7 @@ from gui.battle_control import g_sessionProvider
 from gui.battle_control.arena_info import getArenaType, hasGasAttack
 from gui.battle_control.avatar_getter import getPlayerVehicleID, getPlayerName
 from helpers import i18n
+from gui import makeHtmlString
 _TEAM_PROPS = {'tf_width': 140,
  'tf_padding': 140,
  'y_position': 4}
@@ -25,8 +26,7 @@ def _markerComparator(x1, x2):
     x1Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x1[INDEX_VEHICLE_CLASS], 100)
     x2Index = VEHICLE_BATTLE_TYPES_ORDER_INDICES.get(x2[INDEX_VEHICLE_CLASS], 100)
     res = x1Index - x2Index
-    if res:
-        return res
+    return res if res else 0
 
 
 class _IScorePanel(object):
@@ -37,13 +37,13 @@ class _IScorePanel(object):
     def destroy(self):
         pass
 
-    def clear(self, team = None):
+    def clear(self, team=None):
         pass
 
-    def addFrags(self, team, count = 1):
+    def addFrags(self, team, count=1):
         pass
 
-    def addKilled(self, team, count = 1):
+    def addKilled(self, team, count=1):
         pass
 
     def addVehicle(self, team, vehicleID, vClassName, isAlive):
@@ -84,7 +84,7 @@ class _FragCorrelationPanel(_IScorePanel):
         self.__teamsShortLists = None
         return
 
-    def clear(self, team = None):
+    def clear(self, team=None):
         if team is None:
             self.__teamsDeaths = defaultdict(int)
             self.__teamsShortLists = defaultdict(list)
@@ -93,7 +93,7 @@ class _FragCorrelationPanel(_IScorePanel):
             self.__teamsDeaths[team] = 0
         return
 
-    def addKilled(self, team, count = 1):
+    def addKilled(self, team, count=1):
         self.__teamsDeaths[team] += count
 
     def addVehicle(self, team, vehicleID, vClassName, isAlive):
@@ -106,8 +106,7 @@ class _FragCorrelationPanel(_IScorePanel):
             for teamIdx, score in self.__teamsDeaths.iteritems():
                 if isTeamEnemy(teamIdx):
                     ally += score
-                else:
-                    enemy += score
+                enemy += score
 
             self.__callFlash('updateFrags', [ally, enemy])
 
@@ -147,12 +146,12 @@ class _FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
         g_settingsCore.onSettingsChanged += self.__onSettingsChanged
         arenaType = getArenaType()
         if arenaType is not None:
-            self._maxScore = win_points.g_cache[getArenaType().winPoints].pointsCAP
+            self._maxScore = win_points.g_cache[getArenaType().winPointsSettings].pointsCAP
         self.as_initWarningValue(self.WARNING_RATIO * self._maxScore)
         self._makeData()
         return
 
-    def __onSettingsChanged(self, diff = None):
+    def __onSettingsChanged(self, diff=None):
         self.as_onSettingsChanged()
 
     def destroy(self):
@@ -176,8 +175,7 @@ class _FalloutScorePanel(FalloutScorePanelMeta, _IScorePanel):
                 allyScore += points
                 if vInfoVO.vehicleID == playerVehID:
                     playerScore += points
-            else:
-                enemyScore += points
+            enemyScore += points
 
         self.as_setDataS(self._contextType, self._maxScore, playerScore, allyScore, enemyScore, '', '', {})
 
@@ -213,22 +211,23 @@ class _MultiteamFalloutPanel(_FalloutScorePanel):
             points = viStatsVO.winPoints
             if vInfoVO.team in allyTeams:
                 allyScore += points
+            if vInfoVO.team in teamScores:
+                currentScore = teamScores[vInfoVO.team]
+                totalScore = currentScore + points
             else:
-                if vInfoVO.team in teamScores:
-                    currentScore = teamScores[vInfoVO.team]
-                    totalScore = currentScore + points
-                else:
-                    totalScore = points
-                teamScores[vInfoVO.team] = totalScore
-                if totalScore > enemyScore:
-                    enemyScore = totalScore
-                    squadIndex = teamIds[vInfoVO.team]
-                    enemyName = i18n.makeString(INGAME_GUI.SCOREPANEL_SQUADLBL, sq_number=squadIndex) if squadIndex else vInfoVO.player.name
+                totalScore = points
+            teamScores[vInfoVO.team] = totalScore
+            if totalScore > enemyScore:
+                enemyScore = totalScore
+                squadIndex = teamIds[vInfoVO.team]
+                enemyName = i18n.makeString(INGAME_GUI.SCOREPANEL_SQUADLBL, sq_number=squadIndex) if squadIndex else vInfoVO.player.name
 
         if isSquadPlayer:
             playerName = i18n.makeString(INGAME_GUI.SCOREPANEL_MYSQUADLBL)
         else:
             playerName = getPlayerName()
+            if arenaDP.isTeamKiller(playerVehID):
+                playerName = makeHtmlString('html_templates:battle', 'fallouScorePanelTeamKiller', playerName)
         self.__allyScore = allyScore
         self.__enemyScore = enemyScore
         self.as_setDataS(self._contextType, self._maxScore, 0, allyScore, enemyScore, playerName, enemyName, _TEAM_PROPS)
@@ -244,8 +243,8 @@ class _MultiteamFalloutPanel(_FalloutScorePanel):
         self.as_stopScoreHighlightAnim()
 
 
-def scorePanelFactory(parentUI, isEvent = False, isMutlipleTeams = False):
-    if isEvent:
+def scorePanelFactory(parentUI, isFallout=False, isMutlipleTeams=False):
+    if isFallout:
         if isMutlipleTeams:
             return _MultiteamFalloutPanel(parentUI, 'multi')
         return _FalloutScorePanel(parentUI, 'single')

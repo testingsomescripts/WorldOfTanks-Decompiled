@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/__init__.py
 import BigWorld
 import Math
@@ -34,7 +34,7 @@ class IAimingSystem(object):
         pass
 
 
-def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw = 0.0):
+def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0):
     turretOffset = vehicleTypeDescriptor.chassis['hullPosition'] + vehicleTypeDescriptor.hull['turretPositions'][0]
     turretJointMat = mathUtils.createRTMatrix(Vector3(turretYaw, 0, 0), turretOffset)
     turretJointMat.postMultiply(vehicleMatrix)
@@ -48,15 +48,15 @@ def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch):
     return gunMat
 
 
-def getPlayerTurretMats(turretYaw = 0.0, gunPitch = 0.0):
+def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0):
     player = BigWorld.player()
     vehicleTypeDescriptor = player.vehicleTypeDescriptor
-    vehicleMatrix = player.getOwnVehicleMatrix()
+    vehicleMatrix = player.getOwnVehicleStabilisedMatrix()
     turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw)
     return (turretMat, getGunJointMat(vehicleTypeDescriptor, turretMat, gunPitch))
 
 
-def getPlayerGunMat(turretYaw = 0.0, gunPitch = 0.0):
+def getPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
     return getPlayerTurretMats(turretYaw, gunPitch)[1]
 
 
@@ -70,7 +70,7 @@ def getGunMatrixProvider(vehicleTypeDescriptor, turretMatrixProvider, gunPitchMa
     return MatrixProviders.product(gunPitchMatrixProvider, MatrixProviders.product(mathUtils.createTranslationMatrix(gunOffset), turretMatrixProvider))
 
 
-def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity = False):
+def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity=False):
     turretOffs = vehTypeDescr.hull['turretPositions'][0] + vehTypeDescr.chassis['hullPosition']
     gunOffs = vehTypeDescr.turret['gunPosition']
     speed = vehTypeDescr.shot['speed']
@@ -78,7 +78,7 @@ def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravi
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
 
 
-def getDesiredShotPoint(start, dir, onlyOnGround = False, isStrategicMode = False, terrainOnlyCheck = False):
+def getDesiredShotPoint(start, dir, onlyOnGround=False, isStrategicMode=False, terrainOnlyCheck=False):
     end = start + dir.scale(10000.0)
     if isStrategicMode:
         if terrainOnlyCheck:

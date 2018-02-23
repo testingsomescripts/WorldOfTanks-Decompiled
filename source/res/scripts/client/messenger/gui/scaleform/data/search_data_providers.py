@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/search_data_providers.py
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
@@ -29,7 +29,7 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
     def collection(self):
         return self._list
 
-    def init(self, flashObject, exHandlers = None):
+    def init(self, flashObject, exHandlers=None):
         self.setFlashObject(flashObject)
         self._processor.init()
         if exHandlers is not None and hasattr(exHandlers, '__iter__'):
@@ -63,7 +63,7 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
 
 class SearchChannelsDataProvider(SearchDataProvider):
 
-    def __init__(self, searchProcessor = None):
+    def __init__(self, searchProcessor=None):
         if searchProcessor is None:
             searchProcessor = SearchChannelsProcessor()
         super(SearchChannelsDataProvider, self).__init__(searchProcessor)
@@ -88,7 +88,7 @@ class SearchChannelsDataProvider(SearchDataProvider):
 
 class SearchUsersDataProvider(SearchDataProvider):
 
-    def __init__(self, exclude = None):
+    def __init__(self, exclude=None):
         super(SearchUsersDataProvider, self).__init__(SearchUsersProcessor())
         self._converter = ContactConverter()
         if exclude is not None:
@@ -107,7 +107,7 @@ class SearchUsersDataProvider(SearchDataProvider):
     def emptyItem(self):
         return None
 
-    def init(self, flashObject, exHandlers = None):
+    def init(self, flashObject, exHandlers=None):
         super(SearchUsersDataProvider, self).init(flashObject, exHandlers)
         g_messengerEvents.users.onUserActionReceived += self.__onUserActionReceived
         g_messengerEvents.users.onUserStatusUpdated += self.__onUserStatusUpdated

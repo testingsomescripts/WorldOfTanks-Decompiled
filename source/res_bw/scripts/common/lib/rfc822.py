@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/rfc822.py
 r"""RFC 2822 message manipulation.
 
@@ -83,7 +84,7 @@ _blanklines = ('\r\n', '\n')
 class Message():
     """Represents a single RFC 2822-compliant message."""
 
-    def __init__(self, fp, seekable = 1):
+    def __init__(self, fp, seekable=1):
         """Initialize the class instance and read the headers."""
         if seekable == 1:
             try:
@@ -172,18 +173,17 @@ class Message():
                 lst.append(line)
                 self.dict[headerseen] = line[len(headerseen) + 1:].strip()
                 continue
+            if not self.dict:
+                self.status = 'No headers'
             else:
-                if not self.dict:
-                    self.status = 'No headers'
-                else:
-                    self.status = 'Non-header line where header expected'
-                if unread:
-                    unread(line)
-                elif tell:
-                    self.fp.seek(startofline)
-                else:
-                    self.status = self.status + '; bad seek'
-                break
+                self.status = 'Non-header line where header expected'
+            if unread:
+                unread(line)
+            elif tell:
+                self.fp.seek(startofline)
+            else:
+                self.status = self.status + '; bad seek'
+            break
 
         return
 
@@ -195,10 +195,7 @@ class Message():
         data in RFC 2822-like formats with special header formats.
         """
         i = line.find(':')
-        if i > 0:
-            return line[:i].lower()
-        else:
-            return None
+        return line[:i].lower() if i > 0 else None
 
     def islast(self, line):
         r"""Determine whether a line is a legal end of RFC 2822 headers.
@@ -278,7 +275,7 @@ class Message():
             lst[0] = lst[0][len(name) + 1:]
             return ''.join(lst)
 
-    def getheader(self, name, default = None):
+    def getheader(self, name, default=None):
         """Get the header value for a name.
         
         This is the normal interface: it returns a stripped version of the
@@ -305,11 +302,10 @@ class Message():
                     current = '%s\n %s' % (current, s.strip())
                 else:
                     current = s.strip()
-            else:
-                if have_header:
-                    result.append(current)
-                current = s[s.find(':') + 1:].strip()
-                have_header = 1
+            if have_header:
+                result.append(current)
+            current = s[s.find(':') + 1:].strip()
+            have_header = 1
 
         if have_header:
             result.append(current)
@@ -339,13 +335,12 @@ class Message():
         for h in self.getallmatchingheaders(name):
             if h[0] in ' \t':
                 raw.append(h)
-            else:
-                if raw:
-                    raw.append(', ')
-                i = h.find(':')
-                if i > 0:
-                    addr = h[i + 1:]
-                raw.append(addr)
+            if raw:
+                raw.append(', ')
+            i = h.find(':')
+            if i > 0:
+                addr = h[i + 1:]
+            raw.append(addr)
 
         alladdrs = ''.join(raw)
         a = AddressList(alladdrs)
@@ -420,7 +415,7 @@ class Message():
         for i in reversed(lst):
             del self.headers[i]
 
-    def setdefault(self, name, default = ''):
+    def setdefault(self, name, default=''):
         lowername = name.lower()
         if lowername in self.dict:
             return self.dict[lowername]
@@ -481,10 +476,7 @@ def parseaddr(address):
     """Parse an address into a (realname, mailaddr) tuple."""
     a = AddressList(address)
     lst = a.addresslist
-    if not lst:
-        return (None, None)
-    else:
-        return lst[0]
+    return (None, None) if not lst else lst[0]
 
 
 class AddrlistClass():
@@ -519,10 +511,9 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.LWS + '\n\r':
                 self.pos = self.pos + 1
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            else:
-                break
+            break
 
     def getaddrlist(self):
         """Parse all addresses.
@@ -640,21 +631,20 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.LWS:
                 self.pos += 1
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            elif self.field[self.pos] == '[':
+            if self.field[self.pos] == '[':
                 sdlist.append(self.getdomainliteral())
-            elif self.field[self.pos] == '.':
+            if self.field[self.pos] == '.':
                 self.pos += 1
                 sdlist.append('.')
-            elif self.field[self.pos] in self.atomends:
+            if self.field[self.pos] in self.atomends:
                 break
-            else:
-                sdlist.append(self.getatom())
+            sdlist.append(self.getatom())
 
         return ''.join(sdlist)
 
-    def getdelimited(self, beginchar, endchars, allowcomments = 1):
+    def getdelimited(self, beginchar, endchars, allowcomments=1):
         """Parse a header fragment delimited by special characters.
         
         `beginchar' is the start character for the fragment.  If self is not
@@ -702,7 +692,7 @@ class AddrlistClass():
         """Parse an RFC 2822 domain-literal."""
         return '[%s]' % self.getdelimited('[', ']\r', 0)
 
-    def getatom(self, atomends = None):
+    def getatom(self, atomends=None):
         """Parse an RFC 2822 atom.
         
         Optional atomends specifies a different set of end token delimiters
@@ -732,14 +722,13 @@ class AddrlistClass():
         while self.pos < len(self.field):
             if self.field[self.pos] in self.LWS:
                 self.pos += 1
-            elif self.field[self.pos] == '"':
+            if self.field[self.pos] == '"':
                 plist.append(self.getquote())
-            elif self.field[self.pos] == '(':
+            if self.field[self.pos] == '(':
                 self.commentlist.append(self.getcomment())
-            elif self.field[self.pos] in self.phraseends:
+            if self.field[self.pos] in self.phraseends:
                 break
-            else:
-                plist.append(self.getatom(self.phraseends))
+            plist.append(self.getatom(self.phraseends))
 
         return plist
 
@@ -947,10 +936,7 @@ def parsedate_tz(data):
 def parsedate(data):
     """Convert a time string to a time tuple."""
     t = parsedate_tz(data)
-    if t is None:
-        return t
-    else:
-        return t[:9]
+    return t if t is None else t[:9]
 
 
 def mktime_tz(data):
@@ -963,7 +949,7 @@ def mktime_tz(data):
         return
 
 
-def formatdate(timeval = None):
+def formatdate(timeval=None):
     """Returns time format preferred for Internet standards.
     
     Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123

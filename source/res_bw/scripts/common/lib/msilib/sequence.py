@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/msilib/sequence.py
 AdminExecuteSequence = [(u'InstallInitialize', None, 1500),
  (u'InstallFinalize', None, 6600),

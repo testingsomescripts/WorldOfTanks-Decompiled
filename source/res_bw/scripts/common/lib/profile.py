@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/profile.py
 """Class for profiling Python code."""
 import sys
@@ -10,7 +11,7 @@ __all__ = ['run',
  'help',
  'Profile']
 
-def run(statement, filename = None, sort = -1):
+def run(statement, filename=None, sort=-1):
     """Run statement under profiler optionally saving results in filename
     
     This function takes a single argument that can be passed to the
@@ -34,7 +35,7 @@ def run(statement, filename = None, sort = -1):
     return
 
 
-def runctx(statement, globals, locals, filename = None, sort = -1):
+def runctx(statement, globals, locals, filename=None, sort=-1):
     """Run statement under profiler, supplying your own globals and locals,
     optionally saving results in filename.
     
@@ -60,7 +61,7 @@ def help():
 
 if hasattr(os, 'times'):
 
-    def _get_time_times(timer = os.times):
+    def _get_time_times(timer=os.times):
         t = timer()
         return t[0] + t[1]
 
@@ -70,7 +71,7 @@ try:
     import resource
     resgetrusage = lambda : resource.getrusage(resource.RUSAGE_SELF)
 
-    def _get_time_resource(timer = resgetrusage):
+    def _get_time_resource(timer=resgetrusage):
         t = timer()
         return t[0] + t[1]
 
@@ -119,7 +120,7 @@ class Profile():
     """
     bias = 0
 
-    def __init__(self, timer = None, bias = None):
+    def __init__(self, timer=None, bias=None):
         self.timings = {}
         self.cur = None
         self.cmd = ''
@@ -156,7 +157,7 @@ class Profile():
                 else:
                     self.dispatcher = self.trace_dispatch_l
 
-                def get_time_timer(timer = timer, sum = sum):
+                def get_time_timer(timer=timer, sum=sum):
                     return sum(timer())
 
                 self.get_time = get_time_timer
@@ -218,21 +219,20 @@ class Profile():
          rfn,
          rframe,
          rcur)
-        return 1
 
     def trace_dispatch_call(self, frame, t):
         if self.cur and frame.f_back is not self.cur[-2]:
             rpt, rit, ret, rfn, rframe, rcur = self.cur
-            raise isinstance(rframe, Profile.fake_frame) or rframe.f_back is frame.f_back or AssertionError(('Bad call',
-             rfn,
-             rframe,
-             rframe.f_back,
-             frame,
-             frame.f_back))
-            self.trace_dispatch_return(rframe, 0)
-            if not self.cur is None:
-                if not frame.f_back is self.cur[-2]:
-                    raise AssertionError(('Bad call', self.cur[-3]))
+            if not isinstance(rframe, Profile.fake_frame):
+                assert rframe.f_back is frame.f_back, ('Bad call',
+                 rfn,
+                 rframe,
+                 rframe.f_back,
+                 frame,
+                 frame.f_back)
+                self.trace_dispatch_return(rframe, 0)
+                if not self.cur is None:
+                    assert frame.f_back is self.cur[-2], ('Bad call', self.cur[-3])
             fcode = frame.f_code
             fn = (fcode.co_filename, fcode.co_firstlineno, fcode.co_name)
             self.cur = (t,
@@ -278,29 +278,28 @@ class Profile():
              0,
              0,
              {})
-        return 1
 
     def trace_dispatch_return(self, frame, t):
         if frame is not self.cur[-2]:
-            if not frame is self.cur[-2].f_back:
-                raise AssertionError(('Bad return', self.cur[-3]))
-                self.trace_dispatch_return(self.cur[-2], 0)
-            rpt, rit, ret, rfn, frame, rcur = self.cur
-            rit = rit + t
-            frame_total = rit + ret
-            ppt, pit, pet, pfn, pframe, pcur = rcur
-            self.cur = (ppt,
-             pit + rpt,
-             pet + frame_total,
-             pfn,
-             pframe,
-             pcur)
-            timings = self.timings
-            cc, ns, tt, ct, callers = timings[rfn]
-            if not ns:
-                ct = ct + frame_total
-                cc = cc + 1
-            callers[pfn] = pfn in callers and callers[pfn] + 1
+            assert frame is self.cur[-2].f_back, ('Bad return', self.cur[-3])
+            self.trace_dispatch_return(self.cur[-2], 0)
+        rpt, rit, ret, rfn, frame, rcur = self.cur
+        rit = rit + t
+        frame_total = rit + ret
+        ppt, pit, pet, pfn, pframe, pcur = rcur
+        self.cur = (ppt,
+         pit + rpt,
+         pet + frame_total,
+         pfn,
+         pframe,
+         pcur)
+        timings = self.timings
+        cc, ns, tt, ct, callers = timings[rfn]
+        if not ns:
+            ct = ct + frame_total
+            cc = cc + 1
+        if pfn in callers:
+            callers[pfn] = callers[pfn] + 1
         else:
             callers[pfn] = 1
         timings[rfn] = (cc,
@@ -308,7 +307,6 @@ class Profile():
          tt + rit,
          ct,
          callers)
-        return 1
 
     dispatch = {'call': trace_dispatch_call,
      'exception': trace_dispatch_exception,
@@ -359,7 +357,7 @@ class Profile():
 
         self.t = get_time() - t
 
-    def print_stats(self, sort = -1):
+    def print_stats(self, sort=-1):
         import pstats
         pstats.Stats(self).strip_dirs().sort_stats(sort).print_stats()
 
@@ -412,7 +410,7 @@ class Profile():
 
         return
 
-    def calibrate(self, m, verbose = 0):
+    def calibrate(self, m, verbose=0):
         if self.__class__ is not Profile:
             raise TypeError('Subclasses must override .calibrate().')
         saved_bias = self.bias
@@ -429,7 +427,7 @@ class Profile():
             for i in range(n):
                 x = 1
 
-        def f(m, f1 = f1):
+        def f(m, f1=f1):
             for i in range(m):
                 f1(100)
 

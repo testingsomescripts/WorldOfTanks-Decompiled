@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/config.py
 """distutils.pypirc
 
@@ -56,8 +56,7 @@ class PyPIRCCommand(Command):
                     for key, default in (('repository', self.DEFAULT_REPOSITORY), ('realm', self.DEFAULT_REALM), ('password', None)):
                         if config.has_option(server, key):
                             current[key] = config.get(server, key)
-                        else:
-                            current[key] = default
+                        current[key] = default
 
                     if current['server'] == repository or current['repository'] == repository:
                         return current

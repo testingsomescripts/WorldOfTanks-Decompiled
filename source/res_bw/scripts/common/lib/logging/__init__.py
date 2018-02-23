@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/logging/__init__.py
 """
 Logging package for Python. Based on PEP 282 and comments thereto in
@@ -191,7 +191,7 @@ class LogRecord(object):
     information to be logged.
     """
 
-    def __init__(self, name, level, pathname, lineno, msg, args, exc_info, func = None):
+    def __init__(self, name, level, pathname, lineno, msg, args, exc_info, func=None):
         """
         Initialize a logging record with interesting information.
         """
@@ -325,7 +325,7 @@ class Formatter(object):
     """
     converter = time.localtime
 
-    def __init__(self, fmt = None, datefmt = None):
+    def __init__(self, fmt=None, datefmt=None):
         """
         Initialize the formatter with specified format strings.
         
@@ -339,7 +339,7 @@ class Formatter(object):
             self._fmt = '%(message)s'
         self.datefmt = datefmt
 
-    def formatTime(self, record, datefmt = None):
+    def formatTime(self, record, datefmt=None):
         """
         Return the creation time of the specified LogRecord as formatted text.
         
@@ -424,7 +424,7 @@ class BufferingFormatter(object):
     A formatter suitable for formatting a number of records.
     """
 
-    def __init__(self, linefmt = None):
+    def __init__(self, linefmt=None):
         """
         Optionally specify a formatter which will be used to format each
         individual record.
@@ -472,7 +472,7 @@ class Filter(object):
     initialized with the empty string, all events are passed.
     """
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         """
         Initialize a filter.
         
@@ -494,9 +494,7 @@ class Filter(object):
             return 1
         if self.name == record.name:
             return 1
-        if record.name.find(self.name, 0, self.nlen) != 0:
-            return 0
-        return record.name[self.nlen] == '.'
+        return 0 if record.name.find(self.name, 0, self.nlen) != 0 else record.name[self.nlen] == '.'
 
 
 class Filterer(object):
@@ -580,7 +578,7 @@ class Handler(Filterer):
     the 'raw' message as determined by record.message is logged.
     """
 
-    def __init__(self, level = NOTSET):
+    def __init__(self, level=NOTSET):
         """
         Initializes the instance - basically setting the formatter to None
         and the filter list to empty.
@@ -726,10 +724,12 @@ class Handler(Filterer):
         if raiseExceptions and sys.stderr:
             ei = sys.exc_info()
             try:
-                traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
-                sys.stderr.write('Logged from file %s, line %s\n' % (record.filename, record.lineno))
-            except IOError:
-                pass
+                try:
+                    traceback.print_exception(ei[0], ei[1], ei[2], None, sys.stderr)
+                    sys.stderr.write('Logged from file %s, line %s\n' % (record.filename, record.lineno))
+                except IOError:
+                    pass
+
             finally:
                 del ei
 
@@ -743,7 +743,7 @@ class StreamHandler(Handler):
     sys.stdout or sys.stderr may be used.
     """
 
-    def __init__(self, stream = None):
+    def __init__(self, stream=None):
         """
         Initialize the handler.
         
@@ -811,7 +811,7 @@ class FileHandler(StreamHandler):
     A handler class which writes formatted logging records to disk files.
     """
 
-    def __init__(self, filename, mode = 'a', encoding = None, delay = 0):
+    def __init__(self, filename, mode='a', encoding=None, delay=0):
         """
         Open the specified file and use it as the stream for logging.
         """
@@ -1032,7 +1032,7 @@ class Logger(Filterer):
     There is no arbitrary limit to the depth of nesting.
     """
 
-    def __init__(self, name, level = NOTSET):
+    def __init__(self, name, level=NOTSET):
         """
         Initialize the logger with a name and an optional level.
         """
@@ -1159,7 +1159,7 @@ class Logger(Filterer):
 
         return rv
 
-    def makeRecord(self, name, level, fn, lno, msg, args, exc_info, func = None, extra = None):
+    def makeRecord(self, name, level, fn, lno, msg, args, exc_info, func=None, extra=None):
         """
         A factory method which can be overridden in subclasses to create
         specialized LogRecords.
@@ -1173,7 +1173,7 @@ class Logger(Filterer):
 
         return rv
 
-    def _log(self, level, msg, args, exc_info = None, extra = None):
+    def _log(self, level, msg, args, exc_info=None, extra=None):
         """
         Low-level logging routine which creates a LogRecord and then calls
         all the handlers of this logger to handle the record.
@@ -1244,8 +1244,7 @@ class Logger(Filterer):
 
             if not c.propagate:
                 c = None
-            else:
-                c = c.parent
+            c = c.parent
 
         if found == 0 and raiseExceptions and not self.manager.emittedNoHandlerWarning:
             sys.stderr.write('No handlers could be found for logger "%s"\n' % self.name)
@@ -1271,9 +1270,7 @@ class Logger(Filterer):
         """
         Is this logger enabled for level 'level'?
         """
-        if self.manager.disable >= level:
-            return 0
-        return level >= self.getEffectiveLevel()
+        return 0 if self.manager.disable >= level else level >= self.getEffectiveLevel()
 
     def getChild(self, suffix):
         """
@@ -1469,7 +1466,7 @@ def basicConfig(**kwargs):
     return
 
 
-def getLogger(name = None):
+def getLogger(name=None):
     """
     Return a logger with the specified name, creating it if necessary.
     
@@ -1555,7 +1552,7 @@ def disable(level):
     root.manager.disable = level
 
 
-def shutdown(handlerList = _handlerList):
+def shutdown(handlerList=_handlerList):
     """
     Perform any cleanup actions in the logging system (e.g. flushing
     buffers).
@@ -1567,11 +1564,13 @@ def shutdown(handlerList = _handlerList):
             h = wr()
             if h:
                 try:
-                    h.acquire()
-                    h.flush()
-                    h.close()
-                except (IOError, ValueError):
-                    pass
+                    try:
+                        h.acquire()
+                        h.flush()
+                        h.close()
+                    except (IOError, ValueError):
+                        pass
+
                 finally:
                     h.release()
 
@@ -1607,7 +1606,7 @@ class NullHandler(Handler):
 
 _warnings_showwarning = None
 
-def _showwarning(message, category, filename, lineno, file = None, line = None):
+def _showwarning(message, category, filename, lineno, file=None, line=None):
     """
     Implementation of showwarnings which redirects to logging, which will first
     check to see if the file parameter is None. If a file is specified, it will

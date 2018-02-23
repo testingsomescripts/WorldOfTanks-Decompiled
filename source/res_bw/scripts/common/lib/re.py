@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/re.py
 r"""Support for regular expressions (RE).
 
@@ -122,19 +123,19 @@ T = TEMPLATE = sre_compile.SRE_FLAG_TEMPLATE
 DEBUG = sre_compile.SRE_FLAG_DEBUG
 error = sre_compile.error
 
-def match(pattern, string, flags = 0):
+def match(pattern, string, flags=0):
     """Try to apply the pattern at the start of the string, returning
     a match object, or None if no match was found."""
     return _compile(pattern, flags).match(string)
 
 
-def search(pattern, string, flags = 0):
+def search(pattern, string, flags=0):
     """Scan through string looking for a match to the pattern, returning
     a match object, or None if no match was found."""
     return _compile(pattern, flags).search(string)
 
 
-def sub(pattern, repl, string, count = 0, flags = 0):
+def sub(pattern, repl, string, count=0, flags=0):
     """Return the string obtained by replacing the leftmost
     non-overlapping occurrences of the pattern in string by the
     replacement repl.  repl can be either a string or a callable;
@@ -144,7 +145,7 @@ def sub(pattern, repl, string, count = 0, flags = 0):
     return _compile(pattern, flags).sub(repl, string, count)
 
 
-def subn(pattern, repl, string, count = 0, flags = 0):
+def subn(pattern, repl, string, count=0, flags=0):
     """Return a 2-tuple containing (new_string, number).
     new_string is the string obtained by replacing the leftmost
     non-overlapping occurrences of the pattern in the source
@@ -156,13 +157,13 @@ def subn(pattern, repl, string, count = 0, flags = 0):
     return _compile(pattern, flags).subn(repl, string, count)
 
 
-def split(pattern, string, maxsplit = 0, flags = 0):
+def split(pattern, string, maxsplit=0, flags=0):
     """Split the source string by the occurrences of the pattern,
     returning a list containing the resulting substrings."""
     return _compile(pattern, flags).split(string, maxsplit)
 
 
-def findall(pattern, string, flags = 0):
+def findall(pattern, string, flags=0):
     """Return a list of all non-overlapping matches in the string.
     
     If one or more groups are present in the pattern, return a
@@ -176,7 +177,7 @@ def findall(pattern, string, flags = 0):
 if sys.hexversion >= 33685504:
     __all__.append('finditer')
 
-    def finditer(pattern, string, flags = 0):
+    def finditer(pattern, string, flags=0):
         """Return an iterator over all non-overlapping matches in the
         string.  For each match, the iterator returns a match object.
         
@@ -184,7 +185,7 @@ if sys.hexversion >= 33685504:
         return _compile(pattern, flags).finditer(string)
 
 
-def compile(pattern, flags = 0):
+def compile(pattern, flags=0):
     """Compile a regular expression pattern, returning a pattern object."""
     return _compile(pattern, flags)
 
@@ -195,7 +196,7 @@ def purge():
     _cache_repl.clear()
 
 
-def template(pattern, flags = 0):
+def template(pattern, flags=0):
     """Compile a template pattern, returning a pattern object"""
     return _compile(pattern, flags | T)
 
@@ -275,7 +276,7 @@ def _subx(pattern, template):
     if not template[0] and len(template[1]) == 1:
         return template[1][0]
 
-    def filter(match, template = template):
+    def filter(match, template=template):
         return sre_parse.expand_template(template, match)
 
     return filter
@@ -291,7 +292,7 @@ copy_reg.pickle(_pattern_type, _pickle, _compile)
 
 class Scanner:
 
-    def __init__(self, lexicon, flags = 0):
+    def __init__(self, lexicon, flags=0):
         from sre_constants import BRANCH, SUBPATTERN
         self.lexicon = lexicon
         p = []

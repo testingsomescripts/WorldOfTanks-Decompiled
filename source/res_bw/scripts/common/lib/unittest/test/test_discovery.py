@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_discovery.py
 import os
 import re
@@ -103,7 +104,6 @@ class TestDiscovery(unittest.TestCase):
 
                     def load_tests(loader, tests, pattern):
                         self.load_tests_args.append((loader, tests, pattern))
-                        return 'load_tests'
 
                     self.load_tests = load_tests
 
@@ -233,7 +233,6 @@ class TestDiscovery(unittest.TestCase):
 
             def discover(self, start_dir, pattern, top_level_dir):
                 self.args.append((start_dir, pattern, top_level_dir))
-                return 'tests'
 
         program.testLoader = Loader()
         program._do_discovery(['-v'])
@@ -248,7 +247,6 @@ class TestDiscovery(unittest.TestCase):
 
             def discover(self, start_dir, pattern, top_level_dir):
                 self.args.append((start_dir, pattern, top_level_dir))
-                return 'tests'
 
         program._do_discovery(['-v'], Loader=Loader)
         self.assertEqual(program.verbosity, 2)
@@ -368,9 +366,7 @@ class TestDiscovery(unittest.TestCase):
         self.addCleanup(cleanup)
 
         def realpath(path):
-            if path == os.path.join(mod_dir, 'foo.py'):
-                return os.path.join(expected_dir, 'foo.py')
-            return path
+            return os.path.join(expected_dir, 'foo.py') if path == os.path.join(mod_dir, 'foo.py') else path
 
         os.path.realpath = realpath
         loader = unittest.TestLoader()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/cookielib.py
 r"""HTTP cookie handling for web clients.
 
@@ -72,8 +72,8 @@ EPOCH_YEAR = 1970
 
 def _timegm(tt):
     year, month, mday, hour, min, sec = tt[:6]
-    if year >= EPOCH_YEAR and 1 <= month <= 12 and 1 <= mday <= 31 and 0 <= hour <= 24 and 0 <= min <= 59 and 0 <= sec <= 61:
-        return timegm(tt)
+    if ((year >= EPOCH_YEAR and 1 <= month <= 12 and 1) <= mday <= 31 and 0 <= hour <= 24 and 0) <= min <= 59:
+        return 0 <= sec <= 61 and timegm(tt)
     else:
         return None
         return None
@@ -102,7 +102,7 @@ MONTHS_LOWER = []
 for month in MONTHS:
     MONTHS_LOWER.append(month.lower())
 
-def time2isoz(t = None):
+def time2isoz(t=None):
     """Return a string representing time in seconds since epoch, t.
     
     If the function is called without an argument, it will use the current
@@ -125,7 +125,7 @@ def time2isoz(t = None):
      sec)
 
 
-def time2netscape(t = None):
+def time2netscape(t=None):
     """Return a string representing time in seconds since epoch, t.
     
     If the function is called without an argument, it will use the current
@@ -383,15 +383,14 @@ def split_header_words(header_values):
                     else:
                         value = None
                 pairs.append((name, value))
-            elif text.lstrip().startswith(','):
+            if text.lstrip().startswith(','):
                 text = text.lstrip()[1:]
                 if pairs:
                     result.append(pairs)
                 pairs = []
-            else:
-                non_junk, nr_junk_chars = re.subn('^[=\\s;]*', '', text)
-                assert nr_junk_chars > 0, "split_header_words bug: '%s', '%s', %s" % (orig_text, text, pairs)
-                text = non_junk
+            non_junk, nr_junk_chars = re.subn('^[=\\s;]*', '', text)
+            assert nr_junk_chars > 0, "split_header_words bug: '%s', '%s', %s" % (orig_text, text, pairs)
+            text = non_junk
 
         if pairs:
             result.append(pairs)
@@ -494,9 +493,7 @@ def is_HDN(text):
         return False
     if text == '':
         return False
-    if text[0] == '.' or text[-1] == '.':
-        return False
-    return True
+    return False if text[0] == '.' or text[-1] == '.' else True
 
 
 def domain_match(A, B):
@@ -531,9 +528,7 @@ def domain_match(A, B):
         return False
     if not B.startswith('.'):
         return False
-    if not is_HDN(B[1:]):
-        return False
-    return True
+    return False if not is_HDN(B[1:]) else True
 
 
 def liberal_is_HDN(text):
@@ -542,9 +537,7 @@ def liberal_is_HDN(text):
     For accepting/blocking domains.
     
     """
-    if IPV4_RE.search(text):
-        return False
-    return True
+    return False if IPV4_RE.search(text) else True
 
 
 def user_domain_match(A, B):
@@ -562,9 +555,7 @@ def user_domain_match(A, B):
     initial_dot = B.startswith('.')
     if initial_dot and A.endswith(B):
         return True
-    if not initial_dot and A == B:
-        return True
-    return False
+    return True if not initial_dot and A == B else False
 
 
 cut_port_re = re.compile(':\\d+$')
@@ -708,7 +699,7 @@ class Cookie():
     
     """
 
-    def __init__(self, version, name, value, port, port_specified, domain, domain_specified, domain_initial_dot, path, path_specified, secure, expires, discard, comment, comment_url, rest, rfc2109 = False):
+    def __init__(self, version, name, value, port, port_specified, domain, domain_specified, domain_initial_dot, path, path_specified, secure, expires, discard, comment, comment_url, rest, rfc2109=False):
         if version is not None:
             version = int(version)
         if expires is not None:
@@ -737,19 +728,16 @@ class Cookie():
     def has_nonstandard_attr(self, name):
         return name in self._rest
 
-    def get_nonstandard_attr(self, name, default = None):
+    def get_nonstandard_attr(self, name, default=None):
         return self._rest.get(name, default)
 
     def set_nonstandard_attr(self, name, value):
         self._rest[name] = value
 
-    def is_expired(self, now = None):
+    def is_expired(self, now=None):
         if now is None:
             now = time.time()
-        if self.expires is not None and self.expires <= now:
-            return True
-        else:
-            return False
+        return True if self.expires is not None and self.expires <= now else False
 
     def __str__(self):
         if self.port is None:
@@ -816,7 +804,7 @@ class DefaultCookiePolicy(CookiePolicy):
     DomainLiberal = 0
     DomainStrict = DomainStrictNoDots | DomainStrictNonDomain
 
-    def __init__(self, blocked_domains = None, allowed_domains = None, netscape = True, rfc2965 = False, rfc2109_as_netscape = None, hide_cookie2 = False, strict_domain = False, strict_rfc2965_unverifiable = True, strict_ns_unverifiable = False, strict_ns_domain = DomainLiberal, strict_ns_set_initial_dollar = False, strict_ns_set_path = False):
+    def __init__(self, blocked_domains=None, allowed_domains=None, netscape=True, rfc2965=False, rfc2109_as_netscape=None, hide_cookie2=False, strict_domain=False, strict_rfc2965_unverifiable=True, strict_ns_unverifiable=False, strict_ns_domain=DomainLiberal, strict_ns_set_initial_dollar=False, strict_ns_set_path=False):
         """Constructor arguments should be passed as keyword arguments only."""
         self.netscape = netscape
         self.rfc2965 = rfc2965
@@ -1133,7 +1121,7 @@ class CookieJar():
     dots_re = re.compile('^\\.+')
     magic_re = '^\\#LWP-Cookies-(\\d+\\.\\d+)'
 
-    def __init__(self, policy = None):
+    def __init__(self, policy=None):
         if policy is None:
             policy = DefaultCookiePolicy()
         self._policy = policy
@@ -1298,8 +1286,7 @@ class CookieJar():
                         bad_cookie = True
                         break
                     standard[k] = v
-                else:
-                    rest[k] = v
+                rest[k] = v
 
             if bad_cookie:
                 continue
@@ -1423,7 +1410,7 @@ class CookieJar():
                     for cookie in cookies:
                         lookup[cookie.domain, cookie.path, cookie.name] = None
 
-                    def no_matching_rfc2965(ns_cookie, lookup = lookup):
+                    def no_matching_rfc2965(ns_cookie, lookup=lookup):
                         key = (ns_cookie.domain, ns_cookie.path, ns_cookie.name)
                         return key not in lookup
 
@@ -1471,7 +1458,7 @@ class CookieJar():
         finally:
             self._cookies_lock.release()
 
-    def clear(self, domain = None, path = None, name = None):
+    def clear(self, domain=None, path=None, name=None):
         """Clear some cookies.
         
         Invoking this method without arguments will clear all cookies.  If
@@ -1566,7 +1553,7 @@ class LoadError(IOError):
 class FileCookieJar(CookieJar):
     """CookieJar that can be loaded from and saved to a file."""
 
-    def __init__(self, filename = None, delayload = False, policy = None):
+    def __init__(self, filename=None, delayload=False, policy=None):
         """
         Cookies are NOT loaded from the named file until either the .load() or
         .revert() method is called.
@@ -1583,11 +1570,11 @@ class FileCookieJar(CookieJar):
         self.delayload = bool(delayload)
         return
 
-    def save(self, filename = None, ignore_discard = False, ignore_expires = False):
+    def save(self, filename=None, ignore_discard=False, ignore_expires=False):
         """Save cookies to a file."""
         raise NotImplementedError()
 
-    def load(self, filename = None, ignore_discard = False, ignore_expires = False):
+    def load(self, filename=None, ignore_discard=False, ignore_expires=False):
         """Load cookies from a file."""
         if filename is None:
             if self.filename is not None:
@@ -1602,7 +1589,7 @@ class FileCookieJar(CookieJar):
 
         return
 
-    def revert(self, filename = None, ignore_discard = False, ignore_expires = False):
+    def revert(self, filename=None, ignore_discard=False, ignore_expires=False):
         """Clear all cookies and reload cookies from a saved file.
         
         Raises LoadError (or IOError) if reversion is not successful; the

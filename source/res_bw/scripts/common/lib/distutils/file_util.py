@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/file_util.py
 """distutils.file_util
 
@@ -12,7 +12,7 @@ _copy_action = {None: 'copying',
  'hard': 'hard linking',
  'sym': 'symbolically linking'}
 
-def _copy_file_contents(src, dst, buffer_size = 16384):
+def _copy_file_contents(src, dst, buffer_size=16384):
     """Copy the file 'src' to 'dst'.
     
     Both must be filenames. Any error opening either file, reading from
@@ -61,7 +61,7 @@ def _copy_file_contents(src, dst, buffer_size = 16384):
     return
 
 
-def copy_file(src, dst, preserve_mode = 1, preserve_times = 1, update = 0, link = None, verbose = 1, dry_run = 0):
+def copy_file(src, dst, preserve_mode=1, preserve_times=1, update=0, link=None, verbose=1, dry_run=0):
     """Copy a file 'src' to 'dst'.
     
     If 'dst' is a directory, then 'src' is copied there with the same name;
@@ -128,7 +128,7 @@ def copy_file(src, dst, preserve_mode = 1, preserve_times = 1, update = 0, link 
     return (dst, 1)
 
 
-def move_file(src, dst, verbose = 1, dry_run = 0):
+def move_file(src, dst, verbose=1, dry_run=0):
     """Move a file 'src' to 'dst'.
     
     If 'dst' is a directory, the file will be moved into it with the same

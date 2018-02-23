@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pkgutil.py
 """Utilities to support packages."""
 import os
@@ -61,7 +62,7 @@ def simplegeneric(func):
     except (TypeError, AttributeError):
         pass
 
-    def register(typ, func = None):
+    def register(typ, func=None):
         if func is None:
             return lambda f: register(typ, f)
         else:
@@ -74,7 +75,7 @@ def simplegeneric(func):
     return wrapper
 
 
-def walk_packages(path = None, prefix = '', onerror = None):
+def walk_packages(path=None, prefix='', onerror=None):
     """Yields (module_loader, name, ispkg) for all modules recursively
     on path, or, if path is None, all accessible modules.
     
@@ -103,7 +104,7 @@ def walk_packages(path = None, prefix = '', onerror = None):
     walk_packages(ctypes.__path__, ctypes.__name__+'.')
     """
 
-    def seen(p, m = {}):
+    def seen(p, m={}):
         if p in m:
             return True
         m[p] = True
@@ -130,7 +131,7 @@ def walk_packages(path = None, prefix = '', onerror = None):
     return
 
 
-def iter_modules(path = None, prefix = ''):
+def iter_modules(path=None, prefix=''):
     """Yields (module_loader, name, ispkg) for all submodules on path,
     or, if path is None, all top-level modules on sys.path.
     
@@ -154,10 +155,8 @@ def iter_modules(path = None, prefix = ''):
     return
 
 
-def iter_importer_modules(importer, prefix = ''):
-    if not hasattr(importer, 'iter_modules'):
-        return []
-    return importer.iter_modules(prefix)
+def iter_importer_modules(importer, prefix=''):
+    return [] if not hasattr(importer, 'iter_modules') else importer.iter_modules(prefix)
 
 
 iter_importer_modules = simplegeneric(iter_importer_modules)
@@ -173,10 +172,10 @@ class ImpImporter:
     on sys.meta_path.
     """
 
-    def __init__(self, path = None):
+    def __init__(self, path=None):
         self.path = path
 
-    def find_module(self, fullname, path = None):
+    def find_module(self, fullname, path=None):
         subname = fullname.split('.')[-1]
         if subname != fullname and self.path is None:
             return
@@ -192,7 +191,7 @@ class ImpImporter:
 
             return ImpLoader(fullname, file, filename, etc)
 
-    def iter_modules(self, prefix = ''):
+    def iter_modules(self, prefix=''):
         if self.path is None or not os.path.isdir(self.path):
             return
         else:
@@ -275,7 +274,7 @@ class ImpLoader:
         fullname = self._fix_name(fullname)
         return self.etc[2] == imp.PKG_DIRECTORY
 
-    def get_code(self, fullname = None):
+    def get_code(self, fullname=None):
         fullname = self._fix_name(fullname)
         if self.code is None:
             mod_type = self.etc[2]
@@ -293,7 +292,7 @@ class ImpLoader:
                 self.code = self._get_delegate().get_code()
         return self.code
 
-    def get_source(self, fullname = None):
+    def get_source(self, fullname=None):
         fullname = self._fix_name(fullname)
         if self.source is None:
             mod_type = self.etc[2]
@@ -316,22 +315,20 @@ class ImpLoader:
     def _get_delegate(self):
         return ImpImporter(self.filename).find_module('__init__')
 
-    def get_filename(self, fullname = None):
+    def get_filename(self, fullname=None):
         fullname = self._fix_name(fullname)
         mod_type = self.etc[2]
         if self.etc[2] == imp.PKG_DIRECTORY:
             return self._get_delegate().get_filename()
-        elif self.etc[2] in (imp.PY_SOURCE, imp.PY_COMPILED, imp.C_EXTENSION):
-            return self.filename
         else:
-            return None
+            return self.filename if self.etc[2] in (imp.PY_SOURCE, imp.PY_COMPILED, imp.C_EXTENSION) else None
 
 
 try:
     import zipimport
     from zipimport import zipimporter
 
-    def iter_zipimport_modules(importer, prefix = ''):
+    def iter_zipimport_modules(importer, prefix=''):
         dirlist = zipimport._zip_directory_cache[importer.archive].keys()
         dirlist.sort()
         _prefix = importer.prefix
@@ -397,7 +394,7 @@ def get_importer(path_item):
     return importer
 
 
-def iter_importers(fullname = ''):
+def iter_importers(fullname=''):
     """Yield PEP 302 importers for the given module name
     
     If fullname contains a '.', the importers will be for the package

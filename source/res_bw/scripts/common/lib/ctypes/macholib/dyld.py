@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/macholib/dyld.py
 """
 dyld emulation
@@ -22,51 +22,46 @@ DEFAULT_LIBRARY_FALLBACK = [os.path.expanduser('~/lib'),
 
 def ensure_utf8(s):
     """Not all of PyObjC and Python understand unicode paths very well yet"""
-    if isinstance(s, unicode):
-        return s.encode('utf8')
-    return s
+    return s.encode('utf8') if isinstance(s, unicode) else s
 
 
 def dyld_env(env, var):
     if env is None:
         env = os.environ
     rval = env.get(var)
-    if rval is None:
-        return []
-    else:
-        return rval.split(':')
+    return [] if rval is None else rval.split(':')
 
 
-def dyld_image_suffix(env = None):
+def dyld_image_suffix(env=None):
     if env is None:
         env = os.environ
     return env.get('DYLD_IMAGE_SUFFIX')
 
 
-def dyld_framework_path(env = None):
+def dyld_framework_path(env=None):
     return dyld_env(env, 'DYLD_FRAMEWORK_PATH')
 
 
-def dyld_library_path(env = None):
+def dyld_library_path(env=None):
     return dyld_env(env, 'DYLD_LIBRARY_PATH')
 
 
-def dyld_fallback_framework_path(env = None):
+def dyld_fallback_framework_path(env=None):
     return dyld_env(env, 'DYLD_FALLBACK_FRAMEWORK_PATH')
 
 
-def dyld_fallback_library_path(env = None):
+def dyld_fallback_library_path(env=None):
     return dyld_env(env, 'DYLD_FALLBACK_LIBRARY_PATH')
 
 
-def dyld_image_suffix_search(iterator, env = None):
+def dyld_image_suffix_search(iterator, env=None):
     """For a potential path iterator, add DYLD_IMAGE_SUFFIX semantics"""
     suffix = dyld_image_suffix(env)
     if suffix is None:
         return iterator
     else:
 
-        def _inject(iterator = iterator, suffix = suffix):
+        def _inject(iterator=iterator, suffix=suffix):
             for path in iterator:
                 if path.endswith('.dylib'):
                     yield path[:-len('.dylib')] + suffix + '.dylib'
@@ -77,7 +72,7 @@ def dyld_image_suffix_search(iterator, env = None):
         return _inject()
 
 
-def dyld_override_search(name, env = None):
+def dyld_override_search(name, env=None):
     framework = framework_info(name)
     if framework is not None:
         for path in dyld_framework_path(env):
@@ -89,13 +84,13 @@ def dyld_override_search(name, env = None):
     return
 
 
-def dyld_executable_path_search(name, executable_path = None):
+def dyld_executable_path_search(name, executable_path=None):
     if name.startswith('@executable_path/') and executable_path is not None:
         yield os.path.join(executable_path, name[len('@executable_path/'):])
     return
 
 
-def dyld_default_search(name, env = None):
+def dyld_default_search(name, env=None):
     yield name
     framework = framework_info(name)
     if framework is not None:
@@ -118,7 +113,7 @@ def dyld_default_search(name, env = None):
     return
 
 
-def dyld_find(name, executable_path = None, env = None):
+def dyld_find(name, executable_path=None, env=None):
     """
     Find a library or framework using dyld semantics
     """
@@ -131,7 +126,7 @@ def dyld_find(name, executable_path = None, env = None):
     raise ValueError('dylib %s could not be found' % (name,))
 
 
-def framework_find(fn, executable_path = None, env = None):
+def framework_find(fn, executable_path=None, env=None):
     """
     Find a framework using dyld semantics in a very loose manner.
     

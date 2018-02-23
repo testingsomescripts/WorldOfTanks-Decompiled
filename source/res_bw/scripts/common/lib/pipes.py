@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pipes.py
 """Conversion pipeline templates.
 
@@ -228,8 +229,7 @@ def makepipeline(infile, steps, outfile):
             if 'f' in kind:
                 cmd = '{ ' + cmd + '; }'
             cmdlist = cmdlist + ' |\n' + cmd
-        else:
-            cmdlist = cmdlist + '\n' + cmd
+        cmdlist = cmdlist + '\n' + cmd
 
     if garbage:
         rmcmd = 'rm -f'

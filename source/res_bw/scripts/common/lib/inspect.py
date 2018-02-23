@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/inspect.py
 """Get useful information from live Python objects.
 
@@ -249,7 +249,7 @@ def isabstract(object):
     return bool(isinstance(object, type) and object.__flags__ & TPFLAGS_IS_ABSTRACT)
 
 
-def getmembers(object, predicate = None):
+def getmembers(object, predicate=None):
     """Return all members of an object as (name, value) pairs sorted by name.
     Optionally, only return members that satisfy a given predicate."""
     results = []
@@ -362,10 +362,7 @@ def getdoc(object):
     except AttributeError:
         return None
 
-    if not isinstance(doc, types.StringTypes):
-        return None
-    else:
-        return cleandoc(doc)
+    return None if not isinstance(doc, types.StringTypes) else cleandoc(doc)
 
 
 def cleandoc(doc):
@@ -443,8 +440,7 @@ def getmoduleinfo(path):
 def getmodulename(path):
     """Return the module name for a given file, or None."""
     info = getmoduleinfo(path)
-    if info:
-        return info[0]
+    return info[0] if info else None
 
 
 def getsourcefile(object):
@@ -462,13 +458,11 @@ def getsourcefile(object):
         return filename
     elif hasattr(getmodule(object, filename), '__loader__'):
         return filename
-    elif filename in linecache.cache:
-        return filename
     else:
-        return None
+        return filename if filename in linecache.cache else None
 
 
-def getabsfile(object, _filename = None):
+def getabsfile(object, _filename=None):
     """Return an absolute path to the source or compiled file for an object.
     
     The idea is for each object to have a unique origin, so this routine
@@ -481,7 +475,7 @@ def getabsfile(object, _filename = None):
 modulesbyfile = {}
 _filesbymodname = {}
 
-def getmodule(object, _filename = None):
+def getmodule(object, _filename=None):
     """Return the module an object was defined in, or None if not found."""
     if ismodule(object):
         return object
@@ -720,7 +714,7 @@ def walktree(classes, children, parent):
     return results
 
 
-def getclasstree(classes, unique = 0):
+def getclasstree(classes, unique=0):
     """Arrange the given list of classes into a hierarchy of nested lists.
     
     Where a nested list appears, it contains classes derived from the class
@@ -741,7 +735,7 @@ def getclasstree(classes, unique = 0):
                 if unique and parent in classes:
                     break
 
-        elif c not in roots:
+        if c not in roots:
             roots.append(c)
 
     for parent in children:
@@ -846,15 +840,15 @@ def joinseq(seq):
         return '(' + string.join(seq, ', ') + ')'
 
 
-def strseq(object, convert, join = joinseq):
+def strseq(object, convert, join=joinseq):
     """Recursively walk a sequence, stringifying each element."""
     if type(object) in (list, tuple):
-        return join(map(lambda o, c = convert, j = join: strseq(o, c, j), object))
+        return join(map(lambda o, c=convert, j=join: strseq(o, c, j), object))
     else:
         return convert(object)
 
 
-def formatargspec(args, varargs = None, varkw = None, defaults = None, formatarg = str, formatvarargs = lambda name: '*' + name, formatvarkw = lambda name: '**' + name, formatvalue = lambda value: '=' + repr(value), join = joinseq):
+def formatargspec(args, varargs=None, varkw=None, defaults=None, formatarg=str, formatvarargs=lambda name: '*' + name, formatvarkw=lambda name: '**' + name, formatvalue=lambda value: '=' + repr(value), join=joinseq):
     """Format an argument spec from the 4 values returned by getargspec.
     
     The first four arguments are (args, varargs, varkw, defaults).  The
@@ -877,7 +871,7 @@ def formatargspec(args, varargs = None, varkw = None, defaults = None, formatarg
     return '(' + string.join(specs, ', ') + ')'
 
 
-def formatargvalues(args, varargs, varkw, locals, formatarg = str, formatvarargs = lambda name: '*' + name, formatvarkw = lambda name: '**' + name, formatvalue = lambda value: '=' + repr(value), join = joinseq):
+def formatargvalues(args, varargs, varkw, locals, formatarg=str, formatvarargs=lambda name: '*' + name, formatvarkw=lambda name: '**' + name, formatvalue=lambda value: '=' + repr(value), join=joinseq):
     """Format an argument spec from the 4 values returned by getargvalues.
     
     The first four arguments are (args, varargs, varkw, locals).  The
@@ -885,7 +879,7 @@ def formatargvalues(args, varargs, varkw, locals, formatarg = str, formatvarargs
     that are called to turn names and values into strings.  The ninth
     argument is an optional function to format the sequence of arguments."""
 
-    def convert(name, locals = locals, formatarg = formatarg, formatvalue = formatvalue):
+    def convert(name, locals=locals, formatarg=formatarg, formatvalue=formatvalue):
         return formatarg(name) + formatvalue(locals[name])
 
     specs = []
@@ -932,9 +926,7 @@ def getcallargs(func, *positional, **named):
                 raise ValueError('too many values to unpack')
 
     def is_assigned(arg):
-        if isinstance(arg, str):
-            return arg in arg2value
-        return arg in assigned_tuple_params
+        return arg in arg2value if isinstance(arg, str) else arg in assigned_tuple_params
 
     if ismethod(func) and func.im_self is not None:
         positional = (func.im_self,) + positional
@@ -994,7 +986,7 @@ def getcallargs(func, *positional, **named):
 
 Traceback = namedtuple('Traceback', 'filename lineno function code_context index')
 
-def getframeinfo(frame, context = 1):
+def getframeinfo(frame, context=1):
     """Get information about a frame or traceback object.
     
     A tuple of five things is returned: the filename, the line number of
@@ -1032,7 +1024,7 @@ def getlineno(frame):
     return frame.f_lineno
 
 
-def getouterframes(frame, context = 1):
+def getouterframes(frame, context=1):
     """Get a list of records for a frame and all higher (calling) frames.
     
     Each record contains a frame object, filename, line number, function
@@ -1045,7 +1037,7 @@ def getouterframes(frame, context = 1):
     return framelist
 
 
-def getinnerframes(tb, context = 1):
+def getinnerframes(tb, context=1):
     """Get a list of records for a traceback's frame and all lower frames.
     
     Each record contains a frame object, filename, line number, function
@@ -1061,13 +1053,13 @@ def getinnerframes(tb, context = 1):
 if hasattr(sys, '_getframe'):
     currentframe = sys._getframe
 else:
-    currentframe = lambda _ = None: None
+    currentframe = lambda _=None: None
 
-def stack(context = 1):
+def stack(context=1):
     """Return a list of records for the stack above the caller's frame."""
     return getouterframes(sys._getframe(1), context)
 
 
-def trace(context = 1):
+def trace(context=1):
     """Return a list of records for the stack below the current exception."""
     return getinnerframes(sys.exc_info()[2], context)

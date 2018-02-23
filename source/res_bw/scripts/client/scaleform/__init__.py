@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Scaleform/__init__.py
 """Scaleform python module"""
 AVAILABLE = False
@@ -25,7 +25,7 @@ def exampleExternalInterfaceHandler(cmd, *args):
     print 'External Interface command - ', cmd, args
 
 
-def createMovieInstance(file = 'scaleform/d3d9guide.swf'):
+def createMovieInstance(file='scaleform/d3d9guide.swf'):
     mv = None
     mvDef = MovieDef(file)
     mv = mvDef.createInstance()
@@ -41,7 +41,7 @@ def create3DDemo():
     return createMovieInstance(file)
 
 
-def createMovieGUI(file = 'scaleform/d3d9guide.swf'):
+def createMovieGUI(file='scaleform/d3d9guide.swf'):
     m, d = createMovieInstance(file)
     import GUI
     for i in GUI.roots():
@@ -76,7 +76,7 @@ def createIMEMovie():
     return createMovieInstance(file)
 
 
-def createFontMovie(file = 'scaleform/drawtext_fonts.swf'):
+def createFontMovie(file='scaleform/drawtext_fonts.swf'):
     m, d = createMovieInstance(file)
     d.setAsFontMovie()
     d.addToFontLibrary()
@@ -89,7 +89,7 @@ def createAllFontsMovie():
     d.addToFontLibrary()
 
 
-def createFlashText(fontName = 'Slate Mobile'):
+def createFlashText(fontName='Slate Mobile'):
     import GUI
     g = GUI.FlashText(u'some label', fontName)
     g.size = (2, 2)

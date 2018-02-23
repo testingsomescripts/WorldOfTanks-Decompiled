@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/header.py
 """Header encoding and decoding functionality."""
 __all__ = ['Header', 'decode_header', 'make_header']
@@ -76,7 +76,7 @@ def decode_header(header):
         return decoded
 
 
-def make_header(decoded_seq, maxlinelen = None, header_name = None, continuation_ws = ' '):
+def make_header(decoded_seq, maxlinelen=None, header_name=None, continuation_ws=' '):
     """Create a Header from a sequence of pairs as returned by decode_header()
     
     decode_header() takes a header value string and returns a sequence of
@@ -98,7 +98,7 @@ def make_header(decoded_seq, maxlinelen = None, header_name = None, continuation
 
 class Header():
 
-    def __init__(self, s = None, charset = None, maxlinelen = None, header_name = None, continuation_ws = ' ', errors = 'strict'):
+    def __init__(self, s=None, charset=None, maxlinelen=None, header_name=None, continuation_ws=' ', errors='strict'):
         """Create a MIME-compliant header that can contain many character sets.
         
         Optional s is the initial header value.  If None, the initial header
@@ -171,7 +171,7 @@ class Header():
     def __ne__(self, other):
         return not self == other
 
-    def append(self, s, charset = None, errors = 'strict'):
+    def append(self, s, charset=None, errors='strict'):
         """Append a string to the MIME header.
         
         Optional charset, if given, should be a Charset instance or the name
@@ -260,7 +260,7 @@ class Header():
         joiner = NL + self._continuation_ws
         return joiner.join(chunks)
 
-    def encode(self, splitchars = ';, '):
+    def encode(self, splitchars=';, '):
         """Encode a message header into an RFC-compliant format.
         
         There are many issues involved in converting a given string for use in
@@ -333,7 +333,7 @@ def _split_ascii(s, firstlen, restlen, continuation_ws, splitchars):
             if ch == ' ' and onfirstline and len(this) == 1 and fcre.match(this[0]):
                 this.append(part)
                 linelen += partlen
-            elif curlen + partlen > maxlen:
+            if curlen + partlen > maxlen:
                 if this:
                     lines.append(joiner.join(this) + eol)
                 if partlen > maxlen and ch != ' ':
@@ -344,9 +344,8 @@ def _split_ascii(s, firstlen, restlen, continuation_ws, splitchars):
                     this = [part]
                 linelen = wslen + len(this[-1])
                 maxlen = restlen
-            else:
-                this.append(part)
-                linelen += partlen
+            this.append(part)
+            linelen += partlen
 
         if this:
             lines.append(joiner.join(this))
@@ -363,8 +362,7 @@ def _binsplit(splittable, charset, maxlinelen):
         chunklen = charset.encoded_header_len(chunk)
         if chunklen <= maxlinelen:
             i = m
-        else:
-            j = m - 1
+        j = m - 1
 
     first = charset.from_splittable(splittable[:i], False)
     last = charset.from_splittable(splittable[i:], False)

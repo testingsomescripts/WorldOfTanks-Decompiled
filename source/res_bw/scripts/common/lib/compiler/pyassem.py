@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/pyassem.py
 """A flow graph representation for Python bytecode"""
 import dis
@@ -26,7 +26,7 @@ class FlowGraph():
             print repr(block)
         self.current = block
 
-    def nextBlock(self, block = None):
+    def nextBlock(self, block=None):
         if block is None:
             block = self.newBlock()
         self.current.addNext(block)
@@ -103,8 +103,7 @@ def order_blocks(start_block, exit_block):
                 dominators.setdefault(c, set()).add(b)
                 if c.prev and c.prev[0] is not b:
                     c = c.prev[0]
-                else:
-                    break
+                break
 
     def find_next():
         for b in remaining:
@@ -135,7 +134,7 @@ def order_blocks(start_block, exit_block):
 class Block():
     _count = 0
 
-    def __init__(self, label = ''):
+    def __init__(self, label=''):
         self.insts = []
         self.outEdges = set()
         self.label = label
@@ -220,7 +219,7 @@ DONE = 'DONE'
 class PyFlowGraph(FlowGraph):
     super_init = FlowGraph.__init__
 
-    def __init__(self, name, filename, args = (), optimized = 0, klass = None):
+    def __init__(self, name, filename, args=(), optimized=0, klass=None):
         self.super_init()
         self.name = name
         self.filename = filename
@@ -255,8 +254,7 @@ class PyFlowGraph(FlowGraph):
             self.argcount = self.argcount - 1
 
     def checkFlag(self, flag):
-        if self.flags & flag:
-            return 1
+        return 1 if self.flags & flag else None
 
     def setFreeVars(self, names):
         self.freevars = list(names)
@@ -276,7 +274,7 @@ class PyFlowGraph(FlowGraph):
         assert self.stage == DONE
         return self.newCodeObject()
 
-    def dump(self, io = None):
+    def dump(self, io=None):
         if io:
             save = sys.stdout
             sys.stdout = io
@@ -288,9 +286,8 @@ class PyFlowGraph(FlowGraph):
             if len(t) == 1:
                 print '\t', '%3d' % pc, opname
                 pc = pc + 1
-            else:
-                print '\t', '%3d' % pc, opname, t[1]
-                pc = pc + 3
+            print '\t', '%3d' % pc, opname, t[1]
+            pc = pc + 3
 
         if io:
             sys.stdout = save
@@ -338,7 +335,7 @@ class PyFlowGraph(FlowGraph):
                 insts.append(inst)
                 if len(inst) == 1:
                     pc = pc + 1
-                elif inst[0] != 'SET_LINENO':
+                if inst[0] != 'SET_LINENO':
                     pc = pc + 3
 
             end[b] = pc
@@ -355,7 +352,7 @@ class PyFlowGraph(FlowGraph):
                 oparg = inst[1]
                 offset = begin[oparg] - pc
                 insts[i] = (opname, offset)
-            elif opname in self.hasjabs:
+            if opname in self.hasjabs:
                 insts[i] = (opname, begin[inst[1]])
 
         self.stage = FLAT
@@ -484,18 +481,17 @@ class PyFlowGraph(FlowGraph):
             opname = t[0]
             if len(t) == 1:
                 lnotab.addCode(self.opnum[opname])
-            else:
-                oparg = t[1]
-                if opname == 'SET_LINENO':
-                    lnotab.nextLine(oparg)
-                    continue
-                hi, lo = twobyte(oparg)
-                try:
-                    lnotab.addCode(self.opnum[opname], lo, hi)
-                except ValueError:
-                    print opname, oparg
-                    print self.opnum[opname], lo, hi
-                    raise
+            oparg = t[1]
+            if opname == 'SET_LINENO':
+                lnotab.nextLine(oparg)
+                continue
+            hi, lo = twobyte(oparg)
+            try:
+                lnotab.addCode(self.opnum[opname], lo, hi)
+            except ValueError:
+                print opname, oparg
+                print self.opnum[opname], lo, hi
+                raise
 
         self.stage = DONE
 
@@ -532,8 +528,7 @@ class PyFlowGraph(FlowGraph):
 
 
 def isJump(opname):
-    if opname[:4] == 'JUMP':
-        return 1
+    return 1 if opname[:4] == 'JUMP' else None
 
 
 class TupleArg():
@@ -631,7 +626,7 @@ class LineAddrTable():
 
 class StackDepthTracker():
 
-    def findDepth(self, insts, debug = 0):
+    def findDepth(self, insts, debug=0):
         depth = 0
         maxDepth = 0
         for i in insts:
@@ -733,8 +728,7 @@ class StackDepthTracker():
     def BUILD_SLICE(self, argc):
         if argc == 2:
             return -1
-        if argc == 3:
-            return -2
+        return -2 if argc == 3 else None
 
     def DUP_TOPX(self, argc):
         return argc

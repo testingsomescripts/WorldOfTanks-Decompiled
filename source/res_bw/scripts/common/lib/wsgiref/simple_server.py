@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/simple_server.py
 """BaseHTTPServer that implements the Python WSGI protocol (PEP 333, rev 1.21)
 
@@ -89,8 +90,7 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):
                 continue
             if 'HTTP_' + k in env:
                 env['HTTP_' + k] += ',' + v
-            else:
-                env['HTTP_' + k] = v
+            env['HTTP_' + k] = v
 
         return env
 
@@ -121,7 +121,7 @@ def demo_app(environ, start_response):
     return [stdout.getvalue()]
 
 
-def make_server(host, port, app, server_class = WSGIServer, handler_class = WSGIRequestHandler):
+def make_server(host, port, app, server_class=WSGIServer, handler_class=WSGIRequestHandler):
     """Create a new WSGI server listening on `host` and `port` for `app`"""
     server = server_class((host, port), handler_class)
     server.set_app(app)

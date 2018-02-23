@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_loader.py
 import sys
 import types
@@ -368,7 +369,7 @@ class Test_TestLoader(unittest.TestCase):
         m = types.ModuleType('m')
 
         def return_wrong():
-            return 6
+            pass
 
         m.return_wrong = return_wrong
         loader = unittest.TestLoader()
@@ -625,7 +626,7 @@ class Test_TestLoader(unittest.TestCase):
         m = types.ModuleType('m')
 
         def return_wrong():
-            return 6
+            pass
 
         m.return_wrong = return_wrong
         loader = unittest.TestLoader()

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/posixpath.py
 """Common operations on Posix pathnames.
 
@@ -90,10 +91,9 @@ def join(a, *p):
     for b in p:
         if b.startswith('/'):
             path = b
-        elif path == '' or path.endswith('/'):
+        if path == '' or path.endswith('/'):
             path += b
-        else:
-            path += '/' + b
+        path += '/' + b
 
     return path
 
@@ -190,9 +190,7 @@ def ismount(path):
         return True
     ino1 = s1.st_ino
     ino2 = s2.st_ino
-    if ino1 == ino2:
-        return True
-    return False
+    return True if ino1 == ino2 else False
 
 
 def walk(top, func, arg):
@@ -295,8 +293,7 @@ def expandvars(path):
                 path = path[:i] + value
                 i = len(path)
                 path += tail
-            else:
-                i = j
+            i = j
 
         return path
 
@@ -316,7 +313,7 @@ def normpath(path):
             continue
         if comp != '..' or not initial_slashes and not new_comps or new_comps and new_comps[-1] == '..':
             new_comps.append(comp)
-        elif new_comps:
+        if new_comps:
             new_comps.pop()
 
     comps = new_comps
@@ -357,8 +354,7 @@ def _joinrealpath(path, rest, seen):
                 path, name = split(path)
                 if name == pardir:
                     path = join(path, pardir, pardir)
-            else:
-                path = pardir
+            path = pardir
             continue
         newpath = join(path, name)
         if not islink(newpath):
@@ -380,7 +376,7 @@ def _joinrealpath(path, rest, seen):
 
 supports_unicode_filenames = sys.platform == 'darwin'
 
-def relpath(path, start = curdir):
+def relpath(path, start=curdir):
     """Return a relative version of a path"""
     if not path:
         raise ValueError('no path specified')
@@ -388,6 +384,4 @@ def relpath(path, start = curdir):
     path_list = [ x for x in abspath(path).split(sep) if x ]
     i = len(commonprefix([start_list, path_list]))
     rel_list = [pardir] * (len(start_list) - i) + path_list[i:]
-    if not rel_list:
-        return curdir
-    return join(*rel_list)
+    return curdir if not rel_list else join(*rel_list)

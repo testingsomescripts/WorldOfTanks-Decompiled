@@ -1,10 +1,11 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sqlite3/test/transactions.py
 import sys
 import os, unittest
 import sqlite3 as sqlite
 
 def get_db_path():
-    return 'sqlite_testdb'
+    pass
 
 
 class TransactionTests(unittest.TestCase):

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tarfile.py
 """Read from and write to tar format archives.
 """
@@ -116,9 +117,7 @@ def nts(s):
     """Convert a null-terminated string field to a python string.
     """
     p = s.find('\x00')
-    if p == -1:
-        return s
-    return s[:p]
+    return s if p == -1 else s[:p]
 
 
 def nti(s):
@@ -139,7 +138,7 @@ def nti(s):
     return n
 
 
-def itn(n, digits = 8, format = DEFAULT_FORMAT):
+def itn(n, digits=8, format=DEFAULT_FORMAT):
     """Convert a python number to a number field.
     """
     if 0 <= n < 8 ** (digits - 1):
@@ -192,7 +191,7 @@ def calc_chksums(buf):
     return (unsigned_chksum, signed_chksum)
 
 
-def copyfileobj(src, dst, length = None):
+def copyfileobj(src, dst, length=None):
     """Copy length bytes from fileobj src to fileobj dst.
        If length is None, copy the entire content.
     """
@@ -470,7 +469,7 @@ class _Stream():
         """
         return self.pos
 
-    def seek(self, pos = 0):
+    def seek(self, pos=0):
         """Set the stream's file pointer to pos. Negative seeking
            is forbidden.
         """
@@ -484,7 +483,7 @@ class _Stream():
             raise StreamError('seeking backwards is not allowed')
         return self.pos
 
-    def read(self, size = None):
+    def read(self, size=None):
         """Return the next size number of bytes from the stream.
            If size is not defined, return all bytes of the stream
            up to EOF.
@@ -560,9 +559,7 @@ class _StreamProxy(object):
     def getcomptype(self):
         if self.buf.startswith('\x1f\x8b\x08'):
             return 'gz'
-        if self.buf[0:3] == 'BZh' and self.buf[4:10] == '1AY&SY':
-            return 'bz2'
-        return 'tar'
+        return 'bz2' if self.buf[0:3] == 'BZh' and self.buf[4:10] == '1AY&SY' else 'tar'
 
     def close(self):
         self.fileobj.close()
@@ -636,7 +633,7 @@ class _FileInFile(object):
        object.
     """
 
-    def __init__(self, fileobj, offset, size, sparse = None):
+    def __init__(self, fileobj, offset, size, sparse=None):
         self.fileobj = fileobj
         self.offset = offset
         self.size = size
@@ -653,7 +650,7 @@ class _FileInFile(object):
         """
         self.position = position
 
-    def read(self, size = None):
+    def read(self, size=None):
         """Read data from the file.
         """
         if size is None:
@@ -720,7 +717,7 @@ class ExFileObject(object):
         self.buffer = ''
         return
 
-    def read(self, size = None):
+    def read(self, size=None):
         """Read at most size bytes from the file. If size is not
            present or None, read all data until EOF is reached.
         """
@@ -741,7 +738,7 @@ class ExFileObject(object):
         self.position += len(buf)
         return buf
 
-    def readline(self, size = -1):
+    def readline(self, size=-1):
         """Read one entire line from the file. If size is present
            and non-negative, return a string with at most that
            size, which may be an incomplete line.
@@ -788,7 +785,7 @@ class ExFileObject(object):
             raise ValueError('I/O operation on closed file')
         return self.position
 
-    def seek(self, pos, whence = os.SEEK_SET):
+    def seek(self, pos, whence=os.SEEK_SET):
         """Seek to a position in the file.
         """
         if self.closed:
@@ -830,7 +827,7 @@ class TarInfo(object):
        usually created internally.
     """
 
-    def __init__(self, name = ''):
+    def __init__(self, name=''):
         """Construct a TarInfo object. name is the optional name
            of the member.
         """
@@ -894,7 +891,7 @@ class TarInfo(object):
 
         return info
 
-    def tobuf(self, format = DEFAULT_FORMAT, encoding = ENCODING, errors = 'strict'):
+    def tobuf(self, format=DEFAULT_FORMAT, encoding=ENCODING, errors='strict'):
         """Return a tar header as a string of 512 byte blocks.
         """
         info = self.get_info(encoding, errors)
@@ -1037,7 +1034,7 @@ class TarInfo(object):
         return cls._create_header(info, USTAR_FORMAT) + cls._create_payload(name)
 
     @classmethod
-    def _create_pax_generic_header(cls, pax_headers, type = XHDTYPE):
+    def _create_pax_generic_header(cls, pax_headers, type=XHDTYPE):
         """Return a POSIX.1-2001 extended or global header sequence
            that contains a list of keyword, value pairs. The values
            must be unicode objects.
@@ -1316,7 +1313,7 @@ class TarFile(object):
     tarinfo = TarInfo
     fileobject = ExFileObject
 
-    def __init__(self, name = None, mode = 'r', fileobj = None, format = None, tarinfo = None, dereference = None, ignore_zeros = None, encoding = None, errors = None, pax_headers = None, debug = None, errorlevel = None):
+    def __init__(self, name=None, mode='r', fileobj=None, format=None, tarinfo=None, dereference=None, ignore_zeros=None, encoding=None, errors=None, pax_headers=None, debug=None, errorlevel=None):
         """Open an (uncompressed) tar archive `name'. `mode' is either 'r' to
            read from an existing archive, 'a' to append data to an existing
            file or 'w' to create a new file overwriting an existing one. `mode'
@@ -1419,7 +1416,7 @@ class TarFile(object):
     posix = property(_getposix, _setposix)
 
     @classmethod
-    def open(cls, name = None, mode = 'r', fileobj = None, bufsize = RECORDSIZE, **kwargs):
+    def open(cls, name=None, mode='r', fileobj=None, bufsize=RECORDSIZE, **kwargs):
         """Open a tar archive for reading, writing or appending. Return
            an appropriate TarFile class.
         
@@ -1481,7 +1478,7 @@ class TarFile(object):
         return
 
     @classmethod
-    def taropen(cls, name, mode = 'r', fileobj = None, **kwargs):
+    def taropen(cls, name, mode='r', fileobj=None, **kwargs):
         """Open uncompressed tar archive name for reading or writing.
         """
         if mode not in ('r', 'a', 'w'):
@@ -1489,7 +1486,7 @@ class TarFile(object):
         return cls(name, mode, fileobj, **kwargs)
 
     @classmethod
-    def gzopen(cls, name, mode = 'r', fileobj = None, compresslevel = 9, **kwargs):
+    def gzopen(cls, name, mode='r', fileobj=None, compresslevel=9, **kwargs):
         """Open gzip compressed tar archive name for reading or writing.
            Appending is not allowed.
         """
@@ -1514,7 +1511,7 @@ class TarFile(object):
         return t
 
     @classmethod
-    def bz2open(cls, name, mode = 'r', fileobj = None, compresslevel = 9, **kwargs):
+    def bz2open(cls, name, mode='r', fileobj=None, compresslevel=9, **kwargs):
         """Open bzip2 compressed tar archive name for reading or writing.
            Appending is not allowed.
         """
@@ -1585,7 +1582,7 @@ class TarFile(object):
         """
         return [ tarinfo.name for tarinfo in self.getmembers() ]
 
-    def gettarinfo(self, name = None, arcname = None, fileobj = None):
+    def gettarinfo(self, name=None, arcname=None, fileobj=None):
         """Create a TarInfo object for either the file `name' or the file
            object `fileobj' (using os.fstat on its file descriptor). You can
            modify some of the TarInfo's attributes before you add it using
@@ -1662,7 +1659,7 @@ class TarFile(object):
                 tarinfo.devminor = os.minor(statres.st_rdev)
         return tarinfo
 
-    def list(self, verbose = True):
+    def list(self, verbose=True):
         """Print a table of contents to sys.stdout. If `verbose' is False, only
            the names of the members are printed. If it is True, an `ls -l'-like
            output is produced.
@@ -1685,7 +1682,7 @@ class TarFile(object):
                     print 'link to', tarinfo.linkname,
             print
 
-    def add(self, name, arcname = None, recursive = True, exclude = None, filter = None):
+    def add(self, name, arcname=None, recursive=True, exclude=None, filter=None):
         """Add the file `name' to the archive. `name' may be any type of file
            (directory, fifo, symbolic link, etc.). If given, `arcname'
            specifies an alternative name for the file in the archive.
@@ -1732,7 +1729,7 @@ class TarFile(object):
                 self.addfile(tarinfo)
             return
 
-    def addfile(self, tarinfo, fileobj = None):
+    def addfile(self, tarinfo, fileobj=None):
         """Add the TarInfo object `tarinfo' to the archive. If `fileobj' is
            given, tarinfo.size bytes are read from it and added to the archive.
            You can create TarInfo objects using gettarinfo().
@@ -1754,7 +1751,7 @@ class TarFile(object):
         self.members.append(tarinfo)
         return
 
-    def extractall(self, path = '.', members = None):
+    def extractall(self, path='.', members=None):
         """Extract all members from the archive to the current working
            directory and set owner, modification time and permissions on
            directories afterwards. `path' specifies a different directory
@@ -1787,7 +1784,7 @@ class TarFile(object):
 
         return
 
-    def extract(self, member, path = ''):
+    def extract(self, member, path=''):
         """Extract a member from the archive to the current working directory,
            using its full name. Its file information is extracted as accurately
            as possible. `member' may be a filename or a TarInfo object. You can
@@ -2031,7 +2028,7 @@ class TarFile(object):
                 self._loaded = True
             return tarinfo
 
-    def _getmember(self, name, tarinfo = None, normalize = False):
+    def _getmember(self, name, tarinfo=None, normalize=False):
         """Find an archive member by name from bottom to top.
            If tarinfo is given, it is used as the starting point.
         """
@@ -2062,7 +2059,7 @@ class TarFile(object):
         self._loaded = True
         return
 
-    def _check(self, mode = None):
+    def _check(self, mode=None):
         """Check if TarFile is still open, and if the operation's mode
            corresponds to TarFile's mode.
         """
@@ -2211,7 +2208,7 @@ class TarFileCompat():
        ZipFile class.
     """
 
-    def __init__(self, file, mode = 'r', compression = TAR_PLAIN):
+    def __init__(self, file, mode='r', compression=TAR_PLAIN):
         from warnings import warnpy3k
         warnpy3k('the TarFileCompat class has been removed in Python 3.0', stacklevel=2)
         if compression == TAR_PLAIN:
@@ -2245,7 +2242,7 @@ class TarFileCompat():
     def read(self, name):
         return self.tarfile.extractfile(self.tarfile.getmember(name)).read()
 
-    def write(self, filename, arcname = None, compress_type = None):
+    def write(self, filename, arcname=None, compress_type=None):
         self.tarfile.add(filename, arcname)
 
     def writestr(self, zinfo, bytes):

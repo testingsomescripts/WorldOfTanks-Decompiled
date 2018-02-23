@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/applesingle.py
 """Routines to decode AppleSingle files
 """
@@ -50,7 +51,7 @@ class AppleSingle(object):
     datafork = None
     resourcefork = None
 
-    def __init__(self, fileobj, verbose = False):
+    def __init__(self, fileobj, verbose=False):
         header = fileobj.read(AS_HEADER_LENGTH)
         try:
             magic, version, ig, nentry = struct.unpack(AS_HEADER_FORMAT, header)
@@ -84,10 +85,10 @@ class AppleSingle(object):
             self.forks.append((restype, data))
             if restype == AS_DATAFORK:
                 self.datafork = data
-            elif restype == AS_RESOURCEFORK:
+            if restype == AS_RESOURCEFORK:
                 self.resourcefork = data
 
-    def tofile(self, path, resonly = False):
+    def tofile(self, path, resonly=False):
         outfile = open(path, 'wb')
         data = False
         if resonly:
@@ -110,7 +111,7 @@ class AppleSingle(object):
         return
 
 
-def decode(infile, outpath, resonly = False, verbose = False):
+def decode(infile, outpath, resonly=False, verbose=False):
     """decode(infile, outpath [, resonly=False, verbose=False])
     
     Creates a decoded file from an AppleSingle encoded file.

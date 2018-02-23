@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ssl.py
 """This module provides some more Pythonic support for SSL.
 
@@ -82,7 +83,7 @@ class SSLSocket(socket):
     the underlying OS socket in an SSL context when necessary, and
     provides read and write methods over that channel."""
 
-    def __init__(self, sock, keyfile = None, certfile = None, server_side = False, cert_reqs = CERT_NONE, ssl_version = PROTOCOL_SSLv23, ca_certs = None, do_handshake_on_connect = True, suppress_ragged_eofs = True, ciphers = None):
+    def __init__(self, sock, keyfile=None, certfile=None, server_side=False, cert_reqs=CERT_NONE, ssl_version=PROTOCOL_SSLv23, ca_certs=None, do_handshake_on_connect=True, suppress_ragged_eofs=True, ciphers=None):
         if sock.getsockopt(SOL_SOCKET, SO_TYPE) != SOCK_STREAM:
             raise NotImplementedError('only stream sockets are supported')
         socket.__init__(self, _sock=sock._sock)
@@ -120,7 +121,7 @@ class SSLSocket(socket):
         self._makefile_refs = 0
         return
 
-    def read(self, len = 1024):
+    def read(self, len=1024):
         """Read up to LEN bytes and return them.
         Return zero-length string on EOF."""
         try:
@@ -135,7 +136,7 @@ class SSLSocket(socket):
         number of bytes of DATA actually transmitted."""
         return self._sslobj.write(data)
 
-    def getpeercert(self, binary_form = False):
+    def getpeercert(self, binary_form=False):
         """Returns a formatted version of the data in the
         certificate provided by the other end of the SSL channel.
         Return None if no certificate was provided, {} if a
@@ -149,7 +150,7 @@ class SSLSocket(socket):
             return self._sslobj.cipher()
             return None
 
-    def send(self, data, flags = 0):
+    def send(self, data, flags=0):
         if self._sslobj:
             if flags != 0:
                 raise ValueError('non-zero flags not allowed in calls to send() on %s' % self.__class__)
@@ -168,7 +169,7 @@ class SSLSocket(socket):
         else:
             return self._sock.send(data, flags)
 
-    def sendto(self, data, flags_or_addr, addr = None):
+    def sendto(self, data, flags_or_addr, addr=None):
         if self._sslobj:
             raise ValueError('sendto not allowed on instances of %s' % self.__class__)
         else:
@@ -177,7 +178,7 @@ class SSLSocket(socket):
             return self._sock.sendto(data, flags_or_addr, addr)
         return
 
-    def sendall(self, data, flags = 0):
+    def sendall(self, data, flags=0):
         if self._sslobj:
             if flags != 0:
                 raise ValueError('non-zero flags not allowed in calls to sendall() on %s' % self.__class__)
@@ -191,7 +192,7 @@ class SSLSocket(socket):
         else:
             return socket.sendall(self, data, flags)
 
-    def recv(self, buflen = 1024, flags = 0):
+    def recv(self, buflen=1024, flags=0):
         if self._sslobj:
             if flags != 0:
                 raise ValueError('non-zero flags not allowed in calls to recv() on %s' % self.__class__)
@@ -199,7 +200,7 @@ class SSLSocket(socket):
         else:
             return self._sock.recv(buflen, flags)
 
-    def recv_into(self, buffer, nbytes = None, flags = 0):
+    def recv_into(self, buffer, nbytes=None, flags=0):
         if buffer and nbytes is None:
             nbytes = len(buffer)
         elif nbytes is None:
@@ -215,13 +216,13 @@ class SSLSocket(socket):
             return self._sock.recv_into(buffer, nbytes, flags)
             return
 
-    def recvfrom(self, buflen = 1024, flags = 0):
+    def recvfrom(self, buflen=1024, flags=0):
         if self._sslobj:
             raise ValueError('recvfrom not allowed on instances of %s' % self.__class__)
         else:
             return self._sock.recvfrom(buflen, flags)
 
-    def recvfrom_into(self, buffer, nbytes = None, flags = 0):
+    def recvfrom_into(self, buffer, nbytes=None, flags=0):
         if self._sslobj:
             raise ValueError('recvfrom_into not allowed on instances of %s' % self.__class__)
         else:
@@ -301,7 +302,7 @@ class SSLSocket(socket):
             newsock.close()
             raise e
 
-    def makefile(self, mode = 'r', bufsize = -1):
+    def makefile(self, mode='r', bufsize=-1):
         """Make and return a file-like object that
         works with the SSL connection.  Just use the code
         from the socket module."""
@@ -309,7 +310,7 @@ class SSLSocket(socket):
         return _fileobject(self, mode, bufsize, close=True)
 
 
-def wrap_socket(sock, keyfile = None, certfile = None, server_side = False, cert_reqs = CERT_NONE, ssl_version = PROTOCOL_SSLv23, ca_certs = None, do_handshake_on_connect = True, suppress_ragged_eofs = True, ciphers = None):
+def wrap_socket(sock, keyfile=None, certfile=None, server_side=False, cert_reqs=CERT_NONE, ssl_version=PROTOCOL_SSLv23, ca_certs=None, do_handshake_on_connect=True, suppress_ragged_eofs=True, ciphers=None):
     return SSLSocket(sock, keyfile=keyfile, certfile=certfile, server_side=server_side, cert_reqs=cert_reqs, ssl_version=ssl_version, ca_certs=ca_certs, do_handshake_on_connect=do_handshake_on_connect, suppress_ragged_eofs=suppress_ragged_eofs, ciphers=ciphers)
 
 
@@ -345,7 +346,7 @@ def PEM_cert_to_DER_cert(pem_cert_string):
     return base64.decodestring(d)
 
 
-def get_server_certificate(addr, ssl_version = PROTOCOL_SSLv3, ca_certs = None):
+def get_server_certificate(addr, ssl_version=PROTOCOL_SSLv3, ca_certs=None):
     """Retrieve the certificate from the server at the specified address,
     and return it as a PEM-encoded string.
     If 'ca_certs' is specified, validate the server cert against it.
@@ -366,7 +367,7 @@ def get_protocol_name(protocol_code):
     return _PROTOCOL_NAMES.get(protocol_code, '<unknown>')
 
 
-def sslwrap_simple(sock, keyfile = None, certfile = None):
+def sslwrap_simple(sock, keyfile=None, certfile=None):
     """A replacement for the old socket.ssl function.  Designed
     for compability with Python 2.5 and earlier.  Will disappear in
     Python 3.0."""

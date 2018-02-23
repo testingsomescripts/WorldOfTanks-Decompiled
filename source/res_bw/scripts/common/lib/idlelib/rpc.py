@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/rpc.py
 """RPC Implemention, originally written for the Python Idle IDE
 
@@ -60,7 +60,7 @@ LOCALHOST = '127.0.0.1'
 
 class RPCServer(SocketServer.TCPServer):
 
-    def __init__(self, addr, handlerclass = None):
+    def __init__(self, addr, handlerclass=None):
         if handlerclass is None:
             handlerclass = RPCHandler
         SocketServer.TCPServer.__init__(self, addr, handlerclass)
@@ -115,7 +115,7 @@ response_queue = Queue.Queue(0)
 class SocketIO(object):
     nextseq = 0
 
-    def __init__(self, sock, objtable = None, debugging = None):
+    def __init__(self, sock, objtable=None, debugging=None):
         self.sockthread = threading.currentThread()
         if debugging is not None:
             self.debugging = debugging
@@ -292,9 +292,7 @@ class SocketIO(object):
     def _proxify(self, obj):
         if isinstance(obj, RemoteProxy):
             return RPCProxy(self, obj.oid)
-        if isinstance(obj, types.ListType):
-            return map(self._proxify, obj)
-        return obj
+        return map(self._proxify, obj) if isinstance(obj, types.ListType) else obj
 
     def _getresponse(self, myseq, wait):
         self.debug('_getresponse:myseq:', myseq)
@@ -446,20 +444,19 @@ class SocketIO(object):
                 self.debug('pollresponse:%d:localcall:response:%s' % (seq, response))
                 if how == 'CALL':
                     self.putmessage((seq, response))
-                elif how == 'QUEUE':
+                if how == 'QUEUE':
                     pass
                 continue
+            if seq == myseq:
+                return resq
+            cv = self.cvars.get(seq, None)
+            if cv is not None:
+                cv.acquire()
+                self.responses[seq] = resq
+                cv.notify()
+                cv.release()
             else:
-                if seq == myseq:
-                    return resq
-                cv = self.cvars.get(seq, None)
-                if cv is not None:
-                    cv.acquire()
-                    self.responses[seq] = resq
-                    cv.notify()
-                    cv.release()
-                else:
-                    continue
+                continue
 
         return
 
@@ -520,7 +517,7 @@ class RPCClient(SocketIO):
     location = '#C'
     nextseq = 1
 
-    def __init__(self, address, family = socket.AF_INET, type = socket.SOCK_STREAM):
+    def __init__(self, address, family=socket.AF_INET, type=socket.SOCK_STREAM):
         self.listening_sock = socket.socket(family, type)
         self.listening_sock.bind(address)
         self.listening_sock.listen(1)

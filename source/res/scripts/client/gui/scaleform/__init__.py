@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/__init__.py
 from nations import NAMES
 SCALEFORM_SUPPORT = False
@@ -6,7 +6,7 @@ try:
     import _Scaleform
     SCALEFORM_SUPPORT = True
 except ImportError:
-    raise NotImplementedError, 'Client not support Scaleform'
+    raise NotImplementedError('Client not support Scaleform')
 
 SCALEFORM_SWF_PATH = 'gui/scaleform'
 SCALEFORM_SWF_PATH_V3 = 'gui/flash'
@@ -21,15 +21,13 @@ VEHICLE_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/tanks/'
 NATIONS_ICON_FILENAME = '../maps/icons/nations/%s_%s.%s'
 NATION_ICON_PREFIX_131x31 = '131x31'
 
-def getVehicleTypeAssetPath(vehicleType, extension = '.png'):
+def getVehicleTypeAssetPath(vehicleType, extension='.png'):
     return ''.join([VEHICLE_TYPES_ICONS_DIR_PATH, vehicleType, extension])
 
 
-def getNationsAssetPath(nation, namePrefix = '', extension = 'png'):
+def getNationsAssetPath(nation, namePrefix='', extension='png'):
     return NATIONS_ICON_FILENAME % (NAMES[nation], namePrefix, extension)
 
 
-def getNecessaryArenaFrameName(arenaSubType, hasBase = None):
-    if arenaSubType.startswith('assault'):
-        return '{0}{1}'.format('assault', '1' if hasBase else '2')
-    return arenaSubType
+def getNecessaryArenaFrameName(arenaSubType, hasBase=None):
+    return '{0}{1}'.format('assault', '1' if hasBase else '2') if arenaSubType.startswith('assault') else arenaSubType

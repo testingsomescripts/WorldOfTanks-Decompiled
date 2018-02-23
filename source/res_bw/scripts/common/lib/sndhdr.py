@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sndhdr.py
 """Routines to help recognizing sound files.
 
@@ -158,10 +159,7 @@ def test_wav(h, f):
 tests.append(test_wav)
 
 def test_8svx(h, f):
-    if h[:4] != 'FORM' or h[8:12] != '8SVX':
-        return None
-    else:
-        return ('8svx', 0, 1, 0, 8)
+    return None if h[:4] != 'FORM' or h[8:12] != '8SVX' else ('8svx', 0, 1, 0, 8)
 
 
 tests.append(test_8svx)
@@ -237,13 +235,12 @@ def testall(list, recursive, toplevel):
                 testall(names, recursive, 0)
             else:
                 print '*** directory (use -r) ***'
-        else:
-            print filename + ':',
-            sys.stdout.flush()
-            try:
-                print what(filename)
-            except IOError:
-                print '*** not found ***'
+        print filename + ':',
+        sys.stdout.flush()
+        try:
+            print what(filename)
+        except IOError:
+            print '*** not found ***'
 
 
 if __name__ == '__main__':

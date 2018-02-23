@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_dist.py
 """Tests for distutils.dist."""
 import os
@@ -46,7 +46,7 @@ class DistributionTestCase(support.TempdirManager, support.LoggingSilencer, supp
         sys.argv[:] = self.argv[1]
         super(DistributionTestCase, self).tearDown()
 
-    def create_distribution(self, configfiles = ()):
+    def create_distribution(self, configfiles=()):
         d = TestDistribution()
         d._config_files = configfiles
         d.parse_config_files()

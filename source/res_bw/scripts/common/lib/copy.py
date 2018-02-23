@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy.py
 """Generic (shallow and deep) copying operations.
 
@@ -159,7 +159,7 @@ def _copy_inst(x):
 d[types.InstanceType] = _copy_inst
 del d
 
-def deepcopy(x, memo = None, _nil = []):
+def deepcopy(x, memo=None, _nil=[]):
     """Deep copy operation on arbitrary Python objects.
     
     See the module's __doc__ string for more info.
@@ -337,7 +337,7 @@ def _deepcopy_inst(x, memo):
 
 d[types.InstanceType] = _deepcopy_inst
 
-def _reconstruct(x, info, deep, memo = None):
+def _reconstruct(x, info, deep, memo=None):
     if isinstance(info, str):
         return x
     else:
@@ -423,7 +423,7 @@ def _test():
 
     class C:
 
-        def __init__(self, arg = None):
+        def __init__(self, arg=None):
             self.a = 1
             self.arg = arg
             if __name__ == '__main__':
@@ -442,7 +442,7 @@ def _test():
             for key, value in state.iteritems():
                 setattr(self, key, value)
 
-        def __deepcopy__(self, memo = None):
+        def __deepcopy__(self, memo=None):
             new = self.__class__(deepcopy(self.arg, memo))
             new.a = self.a
             return new
@@ -474,7 +474,7 @@ def _test():
 
     class odict(dict):
 
-        def __init__(self, d = {}):
+        def __init__(self, d={}):
             self.a = 99
             dict.__init__(self, d)
 

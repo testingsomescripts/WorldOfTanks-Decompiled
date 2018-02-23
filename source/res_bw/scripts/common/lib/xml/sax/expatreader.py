@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/expatreader.py
 """
 SAX driver for the pyexpat C module.  This driver works with
@@ -51,37 +52,25 @@ class ExpatLocator(xmlreader.Locator):
 
     def getColumnNumber(self):
         parser = self._ref
-        if parser._parser is None:
-            return
-        else:
-            return parser._parser.ErrorColumnNumber
+        return None if parser._parser is None else parser._parser.ErrorColumnNumber
 
     def getLineNumber(self):
         parser = self._ref
-        if parser._parser is None:
-            return 1
-        else:
-            return parser._parser.ErrorLineNumber
+        return 1 if parser._parser is None else parser._parser.ErrorLineNumber
 
     def getPublicId(self):
         parser = self._ref
-        if parser is None:
-            return
-        else:
-            return parser._source.getPublicId()
+        return None if parser is None else parser._source.getPublicId()
 
     def getSystemId(self):
         parser = self._ref
-        if parser is None:
-            return
-        else:
-            return parser._source.getSystemId()
+        return None if parser is None else parser._source.getSystemId()
 
 
 class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
     """SAX driver for the pyexpat C module."""
 
-    def __init__(self, namespaceHandling = 0, bufsize = 65516):
+    def __init__(self, namespaceHandling=0, bufsize=65516):
         xmlreader.IncrementalParser.__init__(self, bufsize)
         self._source = xmlreader.InputSource()
         self._parser = None
@@ -179,7 +168,7 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
         else:
             raise SAXNotRecognizedException("Property '%s' not recognized" % name)
 
-    def feed(self, data, isFinal = 0):
+    def feed(self, data, isFinal=0):
         if not self._parsing:
             self.reset()
             self._parsing = 1
@@ -251,16 +240,10 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
         return
 
     def getColumnNumber(self):
-        if self._parser is None:
-            return
-        else:
-            return self._parser.ErrorColumnNumber
+        return None if self._parser is None else self._parser.ErrorColumnNumber
 
     def getLineNumber(self):
-        if self._parser is None:
-            return 1
-        else:
-            return self._parser.ErrorLineNumber
+        return 1 if self._parser is None else self._parser.ErrorLineNumber
 
     def getPublicId(self):
         return self._source.getPublicId()
@@ -349,7 +332,6 @@ class ExpatParser(xmlreader.IncrementalParser, xmlreader.Locator):
 
         self._parser, self._source = self._entity_stack[-1]
         del self._entity_stack[-1]
-        return 1
 
     def skipped_entity_handler(self, name, is_pe):
         if is_pe:

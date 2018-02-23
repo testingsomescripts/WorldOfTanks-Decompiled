@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/xmlbuilder.py
 """Implementation of the DOM Level 3 'LS-Load' feature."""
 import copy
@@ -167,17 +168,17 @@ class DOMEntityResolver(object):
     __slots__ = ('_opener',)
 
     def resolveEntity(self, publicId, systemId):
-        if not systemId is not None:
-            raise AssertionError
-            source = DOMInputSource()
-            source.publicId = publicId
-            source.systemId = systemId
-            source.byteStream = self._get_opener().open(systemId)
-            source.encoding = self._guess_media_encoding(source)
-            import posixpath, urlparse
-            parts = urlparse.urlparse(systemId)
-            scheme, netloc, path, params, query, fragment = parts
-            path = path and not path.endswith('/') and posixpath.dirname(path) + '/'
+        assert systemId is not None
+        source = DOMInputSource()
+        source.publicId = publicId
+        source.systemId = systemId
+        source.byteStream = self._get_opener().open(systemId)
+        source.encoding = self._guess_media_encoding(source)
+        import posixpath, urlparse
+        parts = urlparse.urlparse(systemId)
+        scheme, netloc, path, params, query, fragment = parts
+        if path and not path.endswith('/'):
+            path = posixpath.dirname(path) + '/'
             parts = (scheme,
              netloc,
              path,

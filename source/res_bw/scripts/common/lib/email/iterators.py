@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/iterators.py
 """Various types of useful iterators and generators."""
 __all__ = ['body_line_iterator', 'typed_subpart_iterator', 'walk']
@@ -18,7 +18,7 @@ def walk(self):
                 yield subsubpart
 
 
-def body_line_iterator(msg, decode = False):
+def body_line_iterator(msg, decode=False):
     """Iterate over the parts, returning string payloads line-by-line.
     
     Optional decode (default False) is passed through to .get_payload().
@@ -30,7 +30,7 @@ def body_line_iterator(msg, decode = False):
                 yield line
 
 
-def typed_subpart_iterator(msg, maintype = 'text', subtype = None):
+def typed_subpart_iterator(msg, maintype='text', subtype=None):
     """Iterate over the subparts with a given MIME type.
     
     Use `maintype' as the main MIME type to match against; this defaults to
@@ -45,7 +45,7 @@ def typed_subpart_iterator(msg, maintype = 'text', subtype = None):
     return
 
 
-def _structure(msg, fp = None, level = 0, include_default = False):
+def _structure(msg, fp=None, level=0, include_default=False):
     """A handy debugging aid"""
     if fp is None:
         fp = sys.stdout

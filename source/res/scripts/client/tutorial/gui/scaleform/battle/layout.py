@@ -1,63 +1,15 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle/layout.py
 import weakref
 from account_helpers.AccountSettings import AccountSettings
-from gui import DEPTH_OF_Aim
-from gui.Scaleform.Flash import Flash
+from gui.Scaleform.daapi.view.battle.indicators import createDirectIndicator
 from gui.app_loader import g_appLoader
 from gui.battle_control import g_sessionProvider
 from helpers import i18n
 from helpers.aop import Aspect
-from tutorial.control.battle.functional import IDirectionIndicator
 from tutorial.control import g_tutorialWeaver
 from tutorial.gui.Scaleform.battle.legacy import ScaleformLayout
-from tutorial.logger import LOG_CURRENT_EXCEPTION, LOG_MEMORY, LOG_ERROR
-
-class _DirectionIndicator(Flash, IDirectionIndicator):
-    __SWF_FILE_NAME = 'DirectionIndicator.swf'
-    __FLASH_CLASS = 'WGDirectionIndicatorFlash'
-    __FLASH_MC_NAME = 'directionalIndicatorMc'
-    __FLASH_SIZE = (680, 680)
-
-    def __init__(self):
-        Flash.__init__(self, self.__SWF_FILE_NAME, self.__FLASH_CLASS, [self.__FLASH_MC_NAME])
-        self.component.wg_inputKeyMode = 2
-        self.component.position.z = DEPTH_OF_Aim
-        self.movie.backgroundAlpha = 0.0
-        self.movie.scaleMode = 'NoScale'
-        self.component.focus = False
-        self.component.moveFocus = False
-        self.component.heightMode = 'PIXEL'
-        self.component.widthMode = 'PIXEL'
-        self.flashSize = self.__FLASH_SIZE
-        self.component.relativeRadius = 0.5
-        self.__dObject = getattr(self.movie, self.__FLASH_MC_NAME, None)
-        return
-
-    def __del__(self):
-        LOG_MEMORY('DirectionIndicator deleted')
-
-    def setShape(self, shape):
-        if self.__dObject:
-            self.__dObject.setShape(shape)
-
-    def setDistance(self, distance):
-        if self.__dObject:
-            self.__dObject.setDistance(distance)
-
-    def setPosition(self, position):
-        self.component.position3D = position
-
-    def track(self, position):
-        self.active(True)
-        self.component.visible = True
-        self.component.position3D = position
-
-    def remove(self):
-        self.__dObject = None
-        self.close()
-        return
-
+from tutorial.logger import LOG_CURRENT_EXCEPTION, LOG_ERROR
 
 class ShowBattleAspect(Aspect):
 
@@ -139,7 +91,7 @@ class BattleLayout(ScaleformLayout):
     def _getDirectionIndicator(self):
         indicator = None
         try:
-            indicator = _DirectionIndicator()
+            indicator = createDirectIndicator()
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
 
@@ -162,7 +114,7 @@ class BattleLayout(ScaleformLayout):
                 self._movieView.clearStage()
         return
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         g_sessionProvider.getCtx().resetNormalizePlayerName()
         dispatcher = self.getDispatcher()
         if dispatcher is not None:
@@ -174,7 +126,7 @@ class BattleLayout(ScaleformLayout):
     def getSceneID(self):
         pass
 
-    def showMessage(self, text, lookupType = None):
+    def showMessage(self, text, lookupType=None):
         self.uiHolder.call('battle.VehicleMessagesPanel.ShowMessage', [lookupType, text, 'green'])
 
     def getGuiRoot(self):

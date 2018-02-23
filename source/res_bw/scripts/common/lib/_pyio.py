@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/_pyio.py
 u"""
 Python implementation of the io module.
@@ -22,14 +23,14 @@ DEFAULT_BUFFER_SIZE = 8 * 1024
 class BlockingIOError(IOError):
     u"""Exception raised when I/O would block on a non-blocking I/O stream."""
 
-    def __init__(self, errno, strerror, characters_written = 0):
+    def __init__(self, errno, strerror, characters_written=0):
         super(IOError, self).__init__(errno, strerror)
         if not isinstance(characters_written, (int, long)):
             raise TypeError(u'characters_written must be a integer')
         self.characters_written = characters_written
 
 
-def open(file, mode = u'r', buffering = -1, encoding = None, errors = None, newline = None, closefd = True):
+def open(file, mode=u'r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True):
     ur"""Open file and return a stream.  Raise IOError upon failure.
     
     file is either a text or byte string giving the name (and the path
@@ -241,7 +242,7 @@ class IOBase():
         u"""Internal: raise an exception for unsupported operations."""
         raise UnsupportedOperation(u'%s.%s() not supported' % (self.__class__.__name__, name))
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         u"""Change stream position.
         
         Change the stream position to byte offset pos. Argument pos is
@@ -260,7 +261,7 @@ class IOBase():
         u"""Return current stream position."""
         return self.seek(0, 1)
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         u"""Truncate file to size bytes.
         
         Size defaults to the current IO position as reported by tell().  Return
@@ -303,7 +304,7 @@ class IOBase():
         """
         return False
 
-    def _checkSeekable(self, msg = None):
+    def _checkSeekable(self, msg=None):
         u"""Internal: raise an IOError if file is not seekable
         """
         if not self.seekable():
@@ -317,7 +318,7 @@ class IOBase():
         """
         return False
 
-    def _checkReadable(self, msg = None):
+    def _checkReadable(self, msg=None):
         u"""Internal: raise an IOError if file is not readable
         """
         if not self.readable():
@@ -331,7 +332,7 @@ class IOBase():
         """
         return False
 
-    def _checkWritable(self, msg = None):
+    def _checkWritable(self, msg=None):
         u"""Internal: raise an IOError if file is not writable
         """
         if not self.writable():
@@ -346,7 +347,7 @@ class IOBase():
         """
         return self.__closed
 
-    def _checkClosed(self, msg = None):
+    def _checkClosed(self, msg=None):
         u"""Internal: raise an ValueError if file is closed
         """
         if self.closed:
@@ -377,7 +378,7 @@ class IOBase():
         self._checkClosed()
         return False
 
-    def readline(self, limit = -1):
+    def readline(self, limit=-1):
         ur"""Read and return a line from the stream.
         
         If limit is specified, at most limit bytes will be read.
@@ -400,7 +401,7 @@ class IOBase():
         else:
 
             def nreadahead():
-                return 1
+                pass
 
         if limit is None:
             limit = -1
@@ -427,7 +428,7 @@ class IOBase():
             raise StopIteration
         return line
 
-    def readlines(self, hint = None):
+    def readlines(self, hint=None):
         u"""Return a list of lines from the stream.
         
         hint can be specified to control the number of lines read: no more
@@ -460,7 +461,7 @@ io.IOBase.register(IOBase)
 class RawIOBase(IOBase):
     u"""Base class for raw binary I/O."""
 
-    def read(self, n = -1):
+    def read(self, n=-1):
         u"""Read and return up to n bytes.
         
         Returns an empty bytes object on EOF, or None if the object is
@@ -528,7 +529,7 @@ class BufferedIOBase(IOBase):
     implementation, but wrap one.
     """
 
-    def read(self, n = None):
+    def read(self, n=None):
         u"""Read and return up to n bytes.
         
         If the argument is omitted, None, or negative, reads and
@@ -548,7 +549,7 @@ class BufferedIOBase(IOBase):
         """
         self._unsupported(u'read')
 
-    def read1(self, n = None):
+    def read1(self, n=None):
         u"""Read up to n bytes with at most one read() system call."""
         self._unsupported(u'read1')
 
@@ -609,7 +610,7 @@ class _BufferedIOMixin(BufferedIOBase):
     def __init__(self, raw):
         self._raw = raw
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         new_position = self.raw.seek(pos, whence)
         if new_position < 0:
             raise IOError(u'seek() returned an invalid position')
@@ -621,7 +622,7 @@ class _BufferedIOMixin(BufferedIOBase):
             raise IOError(u'tell() returned an invalid position')
         return pos
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         self.flush()
         if pos is None:
             pos = self.tell()
@@ -693,7 +694,7 @@ class _BufferedIOMixin(BufferedIOBase):
 class BytesIO(BufferedIOBase):
     u"""Buffered I/O implementation using an in-memory bytes buffer."""
 
-    def __init__(self, initial_bytes = None):
+    def __init__(self, initial_bytes=None):
         buf = bytearray()
         if initial_bytes is not None:
             buf.extend(initial_bytes)
@@ -713,7 +714,7 @@ class BytesIO(BufferedIOBase):
             raise ValueError(u'getvalue on closed file')
         return bytes(self._buffer)
 
-    def read(self, n = None):
+    def read(self, n=None):
         if self.closed:
             raise ValueError(u'read from closed file')
         if n is None:
@@ -751,7 +752,7 @@ class BytesIO(BufferedIOBase):
         self._pos += n
         return n
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         if self.closed:
             raise ValueError(u'seek on closed file')
         try:
@@ -776,7 +777,7 @@ class BytesIO(BufferedIOBase):
             raise ValueError(u'tell on closed file')
         return self._pos
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         if self.closed:
             raise ValueError(u'truncate on closed file')
         if pos is None:
@@ -818,7 +819,7 @@ class BufferedReader(_BufferedIOMixin):
     is used.
     """
 
-    def __init__(self, raw, buffer_size = DEFAULT_BUFFER_SIZE):
+    def __init__(self, raw, buffer_size=DEFAULT_BUFFER_SIZE):
         u"""Create a new buffered reader using the given readable raw IO object.
         """
         if not raw.readable():
@@ -834,7 +835,7 @@ class BufferedReader(_BufferedIOMixin):
         self._read_buf = ''
         self._read_pos = 0
 
-    def read(self, n = None):
+    def read(self, n=None):
         u"""Read n bytes.
         
         Returns exactly n bytes of data unless the underlying raw IO
@@ -848,7 +849,7 @@ class BufferedReader(_BufferedIOMixin):
             return self._read_unlocked(n)
         return
 
-    def _read_unlocked(self, n = None):
+    def _read_unlocked(self, n=None):
         nodata_val = ''
         empty_values = ('', None)
         buf = self._read_buf
@@ -872,36 +873,34 @@ class BufferedReader(_BufferedIOMixin):
                 chunks.append(chunk)
 
             return ''.join(chunks) or nodata_val
-        avail = len(buf) - pos
-        if n <= avail:
-            self._read_pos += n
-            return buf[pos:pos + n]
-        chunks = [buf[pos:]]
-        wanted = max(self.buffer_size, n)
-        while avail < n:
-            try:
-                chunk = self.raw.read(wanted)
-            except IOError as e:
-                if e.errno != EINTR:
-                    raise
-                continue
-
-            if chunk in empty_values:
-                nodata_val = chunk
-                break
-            avail += len(chunk)
-            chunks.append(chunk)
-
-        n = min(n, avail)
-        out = ''.join(chunks)
-        self._read_buf = out[n:]
-        self._read_pos = 0
-        if out:
-            return out[:n]
         else:
-            return nodata_val
+            avail = len(buf) - pos
+            if n <= avail:
+                self._read_pos += n
+                return buf[pos:pos + n]
+            chunks = [buf[pos:]]
+            wanted = max(self.buffer_size, n)
+            while avail < n:
+                try:
+                    chunk = self.raw.read(wanted)
+                except IOError as e:
+                    if e.errno != EINTR:
+                        raise
+                    continue
 
-    def peek(self, n = 0):
+                if chunk in empty_values:
+                    nodata_val = chunk
+                    break
+                avail += len(chunk)
+                chunks.append(chunk)
+
+            n = min(n, avail)
+            out = ''.join(chunks)
+            self._read_buf = out[n:]
+            self._read_pos = 0
+            return out[:n] if out else nodata_val
+
+    def peek(self, n=0):
         u"""Returns buffered bytes without advancing the position.
         
         The argument indicates a desired minimal number of bytes; we
@@ -911,7 +910,7 @@ class BufferedReader(_BufferedIOMixin):
         with self._read_lock:
             return self._peek_unlocked(n)
 
-    def _peek_unlocked(self, n = 0):
+    def _peek_unlocked(self, n=0):
         want = min(n, self.buffer_size)
         have = len(self._read_buf) - self._read_pos
         if have < want or have <= 0:
@@ -944,7 +943,7 @@ class BufferedReader(_BufferedIOMixin):
     def tell(self):
         return _BufferedIOMixin.tell(self) - len(self._read_buf) + self._read_pos
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         if not 0 <= whence <= 2:
             raise ValueError(u'invalid whence value')
         with self._read_lock:
@@ -964,7 +963,7 @@ class BufferedWriter(_BufferedIOMixin):
     """
     _warning_stack_offset = 2
 
-    def __init__(self, raw, buffer_size = DEFAULT_BUFFER_SIZE, max_buffer_size = None):
+    def __init__(self, raw, buffer_size=DEFAULT_BUFFER_SIZE, max_buffer_size=None):
         if not raw.writable():
             raise IOError(u'"raw" argument must be writable.')
         _BufferedIOMixin.__init__(self, raw)
@@ -1000,7 +999,7 @@ class BufferedWriter(_BufferedIOMixin):
 
             return written
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         with self._write_lock:
             self._flush_unlocked()
             if pos is None:
@@ -1036,7 +1035,7 @@ class BufferedWriter(_BufferedIOMixin):
     def tell(self):
         return _BufferedIOMixin.tell(self) + len(self._write_buf)
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         if not 0 <= whence <= 2:
             raise ValueError(u'invalid whence')
         with self._write_lock:
@@ -1056,7 +1055,7 @@ class BufferedRWPair(BufferedIOBase):
     DEFAULT_BUFFER_SIZE.
     """
 
-    def __init__(self, reader, writer, buffer_size = DEFAULT_BUFFER_SIZE, max_buffer_size = None):
+    def __init__(self, reader, writer, buffer_size=DEFAULT_BUFFER_SIZE, max_buffer_size=None):
         u"""Constructor.
         
         The arguments are two RawIO instances.
@@ -1071,7 +1070,7 @@ class BufferedRWPair(BufferedIOBase):
         self.writer = BufferedWriter(writer, buffer_size)
         return
 
-    def read(self, n = None):
+    def read(self, n=None):
         if n is None:
             n = -1
         return self.reader.read(n)
@@ -1082,7 +1081,7 @@ class BufferedRWPair(BufferedIOBase):
     def write(self, b):
         return self.writer.write(b)
 
-    def peek(self, n = 0):
+    def peek(self, n=0):
         return self.reader.peek(n)
 
     def read1(self, n):
@@ -1118,12 +1117,12 @@ class BufferedRandom(BufferedWriter, BufferedReader):
     """
     _warning_stack_offset = 3
 
-    def __init__(self, raw, buffer_size = DEFAULT_BUFFER_SIZE, max_buffer_size = None):
+    def __init__(self, raw, buffer_size=DEFAULT_BUFFER_SIZE, max_buffer_size=None):
         raw._checkSeekable()
         BufferedReader.__init__(self, raw, buffer_size)
         BufferedWriter.__init__(self, raw, buffer_size, max_buffer_size)
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         if not 0 <= whence <= 2:
             raise ValueError(u'invalid whence')
         self.flush()
@@ -1143,12 +1142,12 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         else:
             return BufferedReader.tell(self)
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         if pos is None:
             pos = self.tell()
         return BufferedWriter.truncate(self, pos)
 
-    def read(self, n = None):
+    def read(self, n=None):
         if n is None:
             n = -1
         self.flush()
@@ -1158,7 +1157,7 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         self.flush()
         return BufferedReader.readinto(self, b)
 
-    def peek(self, n = 0):
+    def peek(self, n=0):
         self.flush()
         return BufferedReader.peek(self, n)
 
@@ -1182,7 +1181,7 @@ class TextIOBase(IOBase):
     are immutable. There is no public constructor.
     """
 
-    def read(self, n = -1):
+    def read(self, n=-1):
         u"""Read at most n characters from stream.
         
         Read from underlying buffer until we have n characters or we hit EOF.
@@ -1194,7 +1193,7 @@ class TextIOBase(IOBase):
         u"""Write string s to stream."""
         self._unsupported(u'write')
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         u"""Truncate size to pos."""
         self._unsupported(u'truncate')
 
@@ -1247,14 +1246,14 @@ class IncrementalNewlineDecoder(codecs.IncrementalDecoder):
     one piece.
     """
 
-    def __init__(self, decoder, translate, errors = u'strict'):
+    def __init__(self, decoder, translate, errors=u'strict'):
         codecs.IncrementalDecoder.__init__(self, errors=errors)
         self.translate = translate
         self.decoder = decoder
         self.seennl = 0
         self.pendingcr = False
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         if self.decoder is None:
             output = input
         else:
@@ -1341,7 +1340,7 @@ class TextIOWrapper(TextIOBase):
     """
     _CHUNK_SIZE = 2048
 
-    def __init__(self, buffer, encoding = None, errors = None, newline = None, line_buffering = False):
+    def __init__(self, buffer, encoding=None, errors=None, newline=None, line_buffering=False):
         if newline is not None and not isinstance(newline, basestring):
             raise TypeError(u'illegal newline type: %r' % (type(newline),))
         if newline not in (None, u'', u'\n', u'\r', u'\r\n'):
@@ -1484,7 +1483,7 @@ class TextIOWrapper(TextIOBase):
         self._decoded_chars = chars
         self._decoded_chars_used = 0
 
-    def _get_decoded_chars(self, n = None):
+    def _get_decoded_chars(self, n=None):
         u"""Advance into the _decoded_chars buffer."""
         offset = self._decoded_chars_used
         if n is None:
@@ -1515,7 +1514,7 @@ class TextIOWrapper(TextIOBase):
             self._snapshot = (dec_flags, dec_buffer + input_chunk)
         return not eof
 
-    def _pack_cookie(self, position, dec_flags = 0, bytes_to_feed = 0, need_eof = 0, chars_to_skip = 0):
+    def _pack_cookie(self, position, dec_flags=0, bytes_to_feed=0, need_eof=0, chars_to_skip=0):
         return position | dec_flags << 64 | bytes_to_feed << 128 | chars_to_skip << 192 | bool(need_eof) << 256
 
     def _unpack_cookie(self, bigint):
@@ -1575,7 +1574,7 @@ class TextIOWrapper(TextIOBase):
 
             return
 
-    def truncate(self, pos = None):
+    def truncate(self, pos=None):
         self.flush()
         if pos is None:
             pos = self.tell()
@@ -1589,7 +1588,7 @@ class TextIOWrapper(TextIOBase):
         self._buffer = None
         return buffer
 
-    def seek(self, cookie, whence = 0):
+    def seek(self, cookie, whence=0):
         if self.closed:
             raise ValueError(u'tell on closed file')
         if not self._seekable:
@@ -1644,7 +1643,7 @@ class TextIOWrapper(TextIOBase):
 
             return cookie
 
-    def read(self, n = None):
+    def read(self, n=None):
         self._checkReadable()
         if n is None:
             n = -1
@@ -1678,7 +1677,7 @@ class TextIOWrapper(TextIOBase):
             raise StopIteration
         return line
 
-    def readline(self, limit = None):
+    def readline(self, limit=None):
         if self.closed:
             raise ValueError(u'read from closed file')
         if limit is None:
@@ -1733,10 +1732,9 @@ class TextIOWrapper(TextIOBase):
 
             if self._decoded_chars:
                 line += self._get_decoded_chars()
-            else:
-                self._set_decoded_chars(u'')
-                self._snapshot = None
-                return line
+            self._set_decoded_chars(u'')
+            self._snapshot = None
+            return line
 
         if limit >= 0 and endpos > limit:
             endpos = limit
@@ -1745,10 +1743,7 @@ class TextIOWrapper(TextIOBase):
 
     @property
     def newlines(self):
-        if self._decoder:
-            return self._decoder.newlines
-        else:
-            return None
+        return self._decoder.newlines if self._decoder else None
 
 
 class StringIO(TextIOWrapper):
@@ -1758,7 +1753,7 @@ class StringIO(TextIOWrapper):
     argument is like the one of TextIOWrapper's constructor.
     """
 
-    def __init__(self, initial_value = u'', newline = u'\n'):
+    def __init__(self, initial_value=u'', newline=u'\n'):
         super(StringIO, self).__init__(BytesIO(), encoding=u'utf-8', errors=u'strict', newline=newline)
         if newline is None:
             self._writetranslate = False

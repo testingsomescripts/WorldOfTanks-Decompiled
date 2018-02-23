@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ntpath.py
 """Common pathname manipulations, WindowsNT/95 version.
 
@@ -98,9 +99,7 @@ def join(path, *paths):
 def splitdrive(p):
     """Split a pathname into drive and path specifiers. Returns a 2-tuple
     "(drive,path)";  either part may be empty"""
-    if p[1:2] == ':':
-        return (p[0:2], p[2:])
-    return ('', p)
+    return (p[0:2], p[2:]) if p[1:2] == ':' else ('', p)
 
 
 def splitunc(p):
@@ -351,7 +350,7 @@ def normpath(path):
     while i < len(comps):
         if comps[i] in ('.', ''):
             del comps[i]
-        elif comps[i] == '..':
+        if comps[i] == '..':
             if i > 0 and comps[i - 1] != '..':
                 del comps[i - 1:i + 1]
                 i -= 1
@@ -359,8 +358,7 @@ def normpath(path):
                 del comps[i]
             else:
                 i += 1
-        else:
-            i += 1
+        i += 1
 
     if not prefix and not comps:
         comps.append(dot)
@@ -411,7 +409,7 @@ def _abspath_split(path):
     return (is_unc, prefix, [ x for x in rest.split(sep) if x ])
 
 
-def relpath(path, start = curdir):
+def relpath(path, start=curdir):
     """Return a relative version of a path"""
     if not path:
         raise ValueError('no path specified')
@@ -431,9 +429,7 @@ def relpath(path, start = curdir):
         i += 1
 
     rel_list = [pardir] * (len(start_list) - i) + path_list[i:]
-    if not rel_list:
-        return curdir
-    return join(*rel_list)
+    return curdir if not rel_list else join(*rel_list)
 
 
 try:

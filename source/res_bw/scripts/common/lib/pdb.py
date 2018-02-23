@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/pdb.py
 """A Python debugger."""
 import sys
@@ -54,7 +55,7 @@ line_prefix = '\n-> '
 
 class Pdb(bdb.Bdb, cmd.Cmd):
 
-    def __init__(self, completekey = 'tab', stdin = None, stdout = None, skip = None):
+    def __init__(self, completekey='tab', stdin=None, stdout=None, skip=None):
         bdb.Bdb.__init__(self, skip=skip)
         cmd.Cmd.__init__(self, completekey, stdin, stdout)
         if stdout:
@@ -326,7 +327,7 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             self.commands_defining = False
             self.prompt = prompt_back
 
-    def do_break(self, arg, temporary = 0):
+    def do_break(self, arg, temporary=0):
         if not arg:
             if self.breaks:
                 print >> self.stdout, 'Num Type         Disp Enb   Where'
@@ -591,8 +592,7 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             err = self.clear_bpbynumber(i)
             if err:
                 print >> self.stdout, '***', err
-            else:
-                print >> self.stdout, 'Deleted breakpoint', i
+            print >> self.stdout, 'Deleted breakpoint', i
 
     do_cl = do_clear
 
@@ -630,19 +630,16 @@ class Pdb(bdb.Bdb, cmd.Cmd):
 
     def do_until(self, arg):
         self.set_until(self.curframe)
-        return 1
 
     do_unt = do_until
 
     def do_step(self, arg):
         self.set_step()
-        return 1
 
     do_s = do_step
 
     def do_next(self, arg):
         self.set_next(self.curframe)
-        return 1
 
     do_n = do_next
 
@@ -660,13 +657,11 @@ class Pdb(bdb.Bdb, cmd.Cmd):
 
     def do_return(self, arg):
         self.set_return(self.curframe)
-        return 1
 
     do_r = do_return
 
     def do_continue(self, arg):
         self.set_continue()
-        return 1
 
     do_c = do_cont = do_continue
 
@@ -704,7 +699,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
     def do_quit(self, arg):
         self._user_requested_quit = 1
         self.set_quit()
-        return 1
 
     do_q = do_quit
     do_exit = do_quit
@@ -713,7 +707,6 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         print >> self.stdout
         self._user_requested_quit = 1
         self.set_quit()
-        return 1
 
     def do_args(self, arg):
         co = self.curframe.f_code
@@ -728,8 +721,7 @@ class Pdb(bdb.Bdb, cmd.Cmd):
             print >> self.stdout, name, '=',
             if name in dict:
                 print >> self.stdout, dict[name]
-            else:
-                print >> self.stdout, '*** undefined ***'
+            print >> self.stdout, '*** undefined ***'
 
     do_a = do_args
 
@@ -797,18 +789,17 @@ class Pdb(bdb.Bdb, cmd.Cmd):
                 if not line:
                     print >> self.stdout, '[EOF]'
                     break
+                s = repr(lineno).rjust(3)
+                if len(s) < 4:
+                    s = s + ' '
+                if lineno in breaklist:
+                    s = s + 'B'
                 else:
-                    s = repr(lineno).rjust(3)
-                    if len(s) < 4:
-                        s = s + ' '
-                    if lineno in breaklist:
-                        s = s + 'B'
-                    else:
-                        s = s + ' '
-                    if lineno == self.curframe.f_lineno:
-                        s = s + '->'
-                    print >> self.stdout, s + '\t' + line,
-                    self.lineno = lineno
+                    s = s + ' '
+                if lineno == self.curframe.f_lineno:
+                    s = s + '->'
+                print >> self.stdout, s + '\t' + line,
+                self.lineno = lineno
 
         except KeyboardInterrupt:
             pass
@@ -886,7 +877,7 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         except KeyboardInterrupt:
             pass
 
-    def print_stack_entry(self, frame_lineno, prompt_prefix = line_prefix):
+    def print_stack_entry(self, frame_lineno, prompt_prefix=line_prefix):
         frame, lineno = frame_lineno
         if frame is self.curframe:
             print >> self.stdout, '>',
@@ -1082,11 +1073,11 @@ class Pdb(bdb.Bdb, cmd.Cmd):
         self.run(statement)
 
 
-def run(statement, globals = None, locals = None):
+def run(statement, globals=None, locals=None):
     Pdb().run(statement, globals, locals)
 
 
-def runeval(expression, globals = None, locals = None):
+def runeval(expression, globals=None, locals=None):
     return Pdb().runeval(expression, globals, locals)
 
 
@@ -1102,7 +1093,7 @@ def set_trace():
     Pdb().set_trace(sys._getframe().f_back)
 
 
-def post_mortem(t = None):
+def post_mortem(t=None):
     if t is None:
         t = sys.exc_info()[2]
         if t is None:

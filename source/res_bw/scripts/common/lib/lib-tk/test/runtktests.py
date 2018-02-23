@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/runtktests.py
 """
 Use this module to get and run all tk tests.
@@ -22,7 +22,7 @@ def is_package(path):
     return False
 
 
-def get_tests_modules(basepath = this_dir_path, gui = True, packages = None):
+def get_tests_modules(basepath=this_dir_path, gui=True, packages=None):
     """This will import and yield modules whose names start with test_
     and are inside packages found in the path starting at basepath.
     
@@ -48,7 +48,7 @@ def get_tests_modules(basepath = this_dir_path, gui = True, packages = None):
                         raise
 
 
-def get_tests(text = True, gui = True, packages = None):
+def get_tests(text=True, gui=True, packages=None):
     """Yield all the tests in the modules found by get_tests_modules.
     
     If nogui is True, only tests that do not require a GUI will be

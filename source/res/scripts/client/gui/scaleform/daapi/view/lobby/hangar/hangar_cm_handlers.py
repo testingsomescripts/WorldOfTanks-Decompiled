@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_cm_handlers.py
 from adisp import process
 from debug_utils import LOG_ERROR
@@ -44,7 +44,7 @@ class VEHICLE(object):
 
 class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(CrewContextMenuHandler, self).__init__(cmProxy, ctx, {CREW.PERSONAL_CASE: 'showPersonalCase',
          CREW.UNLOAD: 'unloadTankman'})
 
@@ -58,7 +58,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         if len(result.userMsg):
             SystemMessages.g_instance.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'))]
 
     def _initFlashValues(self, ctx):
@@ -71,7 +71,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(TechnicalMaintenanceCMHandler, self).__init__(cmProxy, ctx, {MODULE.INFO: 'showModuleInfo',
          MODULE.CANCEL_BUY: 'resetSlot',
          MODULE.UNLOAD: 'resetSlot'})
@@ -93,7 +93,7 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
         self._isCanceled = None
         return
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         options = [self._makeItem(MODULE.INFO, MENU.contextmenu(MODULE.INFO))]
         if self._isCanceled:
             options.append(self._makeItem(MODULE.CANCEL_BUY, MENU.contextmenu(MODULE.CANCEL_BUY)))
@@ -104,7 +104,7 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
 
 class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
-    def __init__(self, cmProxy, ctx = None, handlers = None):
+    def __init__(self, cmProxy, ctx=None, handlers=None):
         super(SimpleVehicleCMHandler, self).__init__(cmProxy, ctx, handlers)
 
     def fini(self):
@@ -130,13 +130,13 @@ class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def buyVehicle(self):
         ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.getVehCD())
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         return []
 
 
 class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
-    def __init__(self, cmProxy, ctx = None):
+    def __init__(self, cmProxy, ctx=None):
         super(VehicleContextMenuHandler, self).__init__(cmProxy, ctx, {VEHICLE.INFO: 'showVehicleInfo',
          VEHICLE.SELL: 'sellVehicle',
          VEHICLE.RESEARCH: 'toResearch',
@@ -176,11 +176,12 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         self.vehCD = None
         return
 
-    def _generateOptions(self, ctx = None):
+    def _generateOptions(self, ctx=None):
         options = []
         vehicle = g_itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = g_itemsCache.items.getAccountDossier(None)
+        isEventVehicle = vehicle.isOnlyForEventBattles
         if accDossier:
             wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
             if vehicle.intCD in wasInBattleSet:
@@ -190,16 +191,18 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             if vehicle.isRented:
                 if not vehicle.isPremiumIGR:
                     money = g_itemsCache.items.stats.money
-                    canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
+                    canBuyOrRent = isEventVehicle
+                    if not isEventVehicle:
+                        canBuyOrRent, _ = vehicle.mayRentOrBuy(money)
                     options.append(self._makeItem(VEHICLE.BUY, MENU.contextmenu(VEHICLE.BUY), {'enabled': canBuyOrRent}))
                 options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.REMOVE), {'enabled': vehicle.canSell and vehicle.rentalIsOver}))
             else:
-                options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell}))
+                options.append(self._makeItem(VEHICLE.SELL, MENU.contextmenu(VEHICLE.SELL), {'enabled': vehicle.canSell and not isEventVehicle}))
             options.extend([self._makeSeparator(), self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH))])
             if vehicle.isFavorite:
                 options.append(self._makeItem(VEHICLE.UNCHECK, MENU.contextmenu(VEHICLE.UNCHECK)))
             else:
-                options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK)))
+                options.append(self._makeItem(VEHICLE.CHECK, MENU.contextmenu(VEHICLE.CHECK), {'enabled': not isEventVehicle}))
         return options
 
     @process

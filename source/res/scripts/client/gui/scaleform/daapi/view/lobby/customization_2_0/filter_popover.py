@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization_2_0/filter_popover.py
 from constants import IGR_TYPE
 from gui import GUI_SETTINGS
@@ -18,7 +18,7 @@ from gui.customization_2_0.elements.qualifier import getIcon16x16ByType as _getQ
 
 class FilterPopover(CustomizationFiltersPopoverMeta):
 
-    def __init__(self, ctx = None):
+    def __init__(self, ctx=None):
         super(FilterPopover, self).__init__()
         self.__filter = g_customizationController.carousel.filter
         self.__tooltipsMap = {QUALIFIER_TYPE.ALL: self.__createTooltip(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_BONUS_ENTIRECREW),
@@ -59,14 +59,21 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
                 self.__filter.set(FILTER_TYPE.GROUP, self.__filterTypeGroup)
 
     def changeFilter(self, filterGroup, filterGroupValue):
+        applyFilter = True
         if filterGroup == FILTER_TYPE.GROUP:
             filterGroupValue = self.__groupsMap[self.__filter.currentType][filterGroupValue][0]
-        if filterGroup == FILTER_TYPE.PURCHASE_TYPE:
+            if self.__filter.currentGroup == filterGroupValue:
+                applyFilter = False
+        elif filterGroup == FILTER_TYPE.PURCHASE_TYPE:
             filterGroupValue = self.__purchaseTypeList[filterGroupValue]
-            self.__switchIGRFilter(filterGroupValue == PURCHASE_TYPE.IGR)
-        self.__filter.set(filterGroup, filterGroupValue)
-        self.__filter.apply()
-        self.as_enableDefBtnS(not self.__filter.isDefaultFilterSet())
+            if self.__filter.purchaseType == filterGroupValue:
+                applyFilter = False
+            else:
+                self.__switchIGRFilter(filterGroupValue == PURCHASE_TYPE.IGR)
+        if applyFilter:
+            self.__filter.set(filterGroup, filterGroupValue)
+            self.__filter.apply()
+            self.as_enableDefBtnS(not self.__filter.isDefaultFilterSet())
 
     def createInitVO(self):
         isTypeNotCamouflage = self.__filter.currentType != CUSTOMIZATION_TYPE.CAMOUFLAGE

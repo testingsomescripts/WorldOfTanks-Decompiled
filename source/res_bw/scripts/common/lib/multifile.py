@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multifile.py
 """A readline()-style interface to the parts of a multipart message.
 
@@ -39,7 +40,7 @@ class Error(Exception):
 class MultiFile:
     seekable = 0
 
-    def __init__(self, fp, seekable = 1):
+    def __init__(self, fp, seekable=1):
         self.fp = fp
         self.stack = []
         self.level = 0
@@ -50,11 +51,9 @@ class MultiFile:
             self.posstack = []
 
     def tell(self):
-        if self.level > 0:
-            return self.lastpos
-        return self.fp.tell() - self.start
+        return self.lastpos if self.level > 0 else self.fp.tell() - self.start
 
-    def seek(self, pos, whence = 0):
+    def seek(self, pos, whence=0):
         here = self.tell()
         if whence:
             if whence == 1:
@@ -80,26 +79,25 @@ class MultiFile:
             if self.last:
                 raise Error, 'sudden EOF in MultiFile.readline()'
             return ''
-        if not self.level == 0:
-            raise AssertionError
-            if self.is_data(line):
-                return line
-            marker = line.rstrip()
-            for i, sep in enumerate(reversed(self.stack)):
-                if marker == self.section_divider(sep):
-                    self.last = 0
-                    break
-                elif marker == self.end_marker(sep):
-                    self.last = 1
-                    break
-            else:
-                return line
+        assert self.level == 0
+        if self.is_data(line):
+            return line
+        marker = line.rstrip()
+        for i, sep in enumerate(reversed(self.stack)):
+            if marker == self.section_divider(sep):
+                self.last = 0
+                break
+            if marker == self.end_marker(sep):
+                self.last = 1
+                break
+        else:
+            return line
 
-            if self.seekable:
-                self.lastpos = self.tell() - len(line)
-            self.level = i + 1
-            raise self.level > 1 and Error, 'Missing endmarker in MultiFile.readline()'
-        return ''
+        if self.seekable:
+            self.lastpos = self.tell() - len(line)
+        self.level = i + 1
+        if self.level > 1:
+            raise Error, 'Missing endmarker in MultiFile.readline()'
 
     def readlines(self):
         list = []
@@ -124,7 +122,6 @@ class MultiFile:
         self.last = 0
         if self.seekable:
             self.start = self.fp.tell()
-        return 1
 
     def push(self, sep):
         if self.level > 0:

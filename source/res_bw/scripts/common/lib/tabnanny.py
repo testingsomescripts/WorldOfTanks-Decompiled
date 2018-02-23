@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tabnanny.py
 """The Tab Nanny despises ambiguous indentation.  She knows no mercy.
 
@@ -138,15 +139,14 @@ class Whitespace:
             if ch == S:
                 n = n + 1
                 b = b + 1
-            elif ch == T:
+            if ch == T:
                 n = n + 1
                 nt = nt + 1
                 if b >= len(count):
                     count = count + [0] * (b - len(count) + 1)
                 count[b] = count[b] + 1
                 b = 0
-            else:
-                break
+            break
 
         self.n = n
         self.nt = nt
@@ -217,7 +217,7 @@ def process_tokens(tokens):
     for type, token, start, end, line in tokens:
         if type == NEWLINE:
             check_equal = 1
-        elif type == INDENT:
+        if type == INDENT:
             check_equal = 0
             thisguy = Whitespace(token)
             if not indents[-1].less(thisguy):
@@ -225,10 +225,10 @@ def process_tokens(tokens):
                 msg = 'indent not greater e.g. ' + format_witnesses(witness)
                 raise NannyNag(start[0], msg, line)
             indents.append(thisguy)
-        elif type == DEDENT:
+        if type == DEDENT:
             check_equal = 1
             del indents[-1]
-        elif check_equal and type not in JUNK:
+        if check_equal and type not in JUNK:
             check_equal = 0
             thisguy = Whitespace(line)
             if not indents[-1].equal(thisguy):

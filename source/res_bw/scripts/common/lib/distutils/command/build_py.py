@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/build_py.py
 """distutils.command.build_py
 
@@ -158,8 +158,7 @@ class build_py(Command):
             if abs_f != setup_script:
                 module = os.path.splitext(os.path.basename(f))[0]
                 modules.append((package, module, f))
-            else:
-                self.debug_print('excluding %s' % setup_script)
+            self.debug_print('excluding %s' % setup_script)
 
         return modules
 
@@ -220,7 +219,7 @@ class build_py(Command):
         outfile_path = [build_dir] + list(package) + [module + '.py']
         return os.path.join(*outfile_path)
 
-    def get_outputs(self, include_bytecode = 1):
+    def get_outputs(self, include_bytecode=1):
         modules = self.find_all_modules()
         outputs = []
         for package, module, module_file in modules:

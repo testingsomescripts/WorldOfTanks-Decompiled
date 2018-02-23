@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/code.py
 """Utilities needed to emulate Python's interactive interpreter.
 
@@ -35,7 +35,7 @@ class InteractiveInterpreter:
     
     """
 
-    def __init__(self, locals = None):
+    def __init__(self, locals=None):
         """Constructor.
         
         The optional 'locals' argument specifies the dictionary in
@@ -51,7 +51,7 @@ class InteractiveInterpreter:
         self.compile = CommandCompiler()
         return
 
-    def runsource(self, source, filename = '<input>', symbol = 'single'):
+    def runsource(self, source, filename='<input>', symbol='single'):
         """Compile and run some source in the interpreter.
         
         Arguments are as for compile_command().
@@ -109,7 +109,7 @@ class InteractiveInterpreter:
             if softspace(sys.stdout, 0):
                 print
 
-    def showsyntaxerror(self, filename = None):
+    def showsyntaxerror(self, filename=None):
         """Display the syntax error that just occurred.
         
         This doesn't display a stack trace because there isn't one.
@@ -182,7 +182,7 @@ class InteractiveConsole(InteractiveInterpreter):
     
     """
 
-    def __init__(self, locals = None, filename = '<console>'):
+    def __init__(self, locals=None, filename='<console>'):
         """Constructor.
         
         The optional locals argument will be passed to the
@@ -200,7 +200,7 @@ class InteractiveConsole(InteractiveInterpreter):
         """Reset the input buffer."""
         self.buffer = []
 
-    def interact(self, banner = None):
+    def interact(self, banner=None):
         """Closely emulate the interactive Python console.
         
         The optional banner argument specify the banner to print
@@ -275,7 +275,7 @@ class InteractiveConsole(InteractiveInterpreter):
             self.resetbuffer()
         return more
 
-    def raw_input(self, prompt = ''):
+    def raw_input(self, prompt=''):
         """Write a prompt and read a line.
         
         The returned line does not include the trailing newline.
@@ -289,7 +289,7 @@ class InteractiveConsole(InteractiveInterpreter):
         return raw_input(prompt)
 
 
-def interact(banner = None, readfunc = None, local = None):
+def interact(banner=None, readfunc=None, local=None):
     """Closely emulate the interactive Python interpreter.
     
     This is a backwards compatible interface to the InteractiveConsole

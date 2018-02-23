@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_scripts.py
 """distutils.command.install_scripts
 
@@ -37,10 +37,9 @@ class install_scripts(Command):
             for file in self.get_outputs():
                 if self.dry_run:
                     log.info('changing mode of %s', file)
-                else:
-                    mode = (os.stat(file)[ST_MODE] | 365) & 4095
-                    log.info('changing mode of %s to %o', file, mode)
-                    os.chmod(file, mode)
+                mode = (os.stat(file)[ST_MODE] | 365) & 4095
+                log.info('changing mode of %s to %o', file, mode)
+                os.chmod(file, mode)
 
     def get_inputs(self):
         return self.distribution.scripts or []

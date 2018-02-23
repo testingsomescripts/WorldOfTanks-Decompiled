@@ -1,11 +1,12 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sre_compile.py
 """Internal support module for sre"""
 import _sre, sys
 import sre_parse
 from sre_constants import *
-if not _sre.MAGIC == MAGIC:
-    raise AssertionError('SRE module mismatch')
-    MAXCODE = _sre.CODESIZE == 2 and 65535
+assert _sre.MAGIC == MAGIC, 'SRE module mismatch'
+if _sre.CODESIZE == 2:
+    MAXCODE = 65535
 else:
     MAXCODE = 4294967295L
 
@@ -33,11 +34,11 @@ def _compile(code, pattern, flags):
             else:
                 emit(OPCODES[op])
                 emit(av)
-        elif op is IN:
+        if op is IN:
             if flags & SRE_FLAG_IGNORECASE:
                 emit(OPCODES[OP_IGNORE[op]])
 
-                def fixup(literal, flags = flags):
+                def fixup(literal, flags=flags):
                     return _sre.getlower(literal, flags)
 
             else:
@@ -47,12 +48,12 @@ def _compile(code, pattern, flags):
             emit(0)
             _compile_charset(av, flags, code, fixup)
             code[skip] = _len(code) - skip
-        elif op is ANY:
+        if op is ANY:
             if flags & SRE_FLAG_DOTALL:
                 emit(OPCODES[ANY_ALL])
             else:
                 emit(OPCODES[ANY])
-        elif op in REPEATING_CODES:
+        if op in REPEATING_CODES:
             if flags & SRE_FLAG_TEMPLATE:
                 raise error, 'internal: unsupported template operator'
                 emit(OPCODES[REPEAT])
@@ -87,7 +88,7 @@ def _compile(code, pattern, flags):
                     emit(OPCODES[MAX_UNTIL])
                 else:
                     emit(OPCODES[MIN_UNTIL])
-        elif op is SUBPATTERN:
+        if op is SUBPATTERN:
             if av[0]:
                 emit(OPCODES[MARK])
                 emit((av[0] - 1) * 2)
@@ -95,9 +96,9 @@ def _compile(code, pattern, flags):
             if av[0]:
                 emit(OPCODES[MARK])
                 emit((av[0] - 1) * 2 + 1)
-        elif op in SUCCESS_CODES:
+        if op in SUCCESS_CODES:
             emit(OPCODES[op])
-        elif op in ASSERT_CODES:
+        if op in ASSERT_CODES:
             emit(OPCODES[op])
             skip = _len(code)
             emit(0)
@@ -111,14 +112,14 @@ def _compile(code, pattern, flags):
             _compile(code, av[1], flags)
             emit(OPCODES[SUCCESS])
             code[skip] = _len(code) - skip
-        elif op is CALL:
+        if op is CALL:
             emit(OPCODES[op])
             skip = _len(code)
             emit(0)
             _compile(code, av, flags)
             emit(OPCODES[SUCCESS])
             code[skip] = _len(code) - skip
-        elif op is AT:
+        if op is AT:
             emit(OPCODES[op])
             if flags & SRE_FLAG_MULTILINE:
                 av = AT_MULTILINE.get(av, av)
@@ -127,7 +128,7 @@ def _compile(code, pattern, flags):
             elif flags & SRE_FLAG_UNICODE:
                 av = AT_UNICODE.get(av, av)
             emit(ATCODES[av])
-        elif op is BRANCH:
+        if op is BRANCH:
             emit(OPCODES[op])
             tail = []
             tailappend = tail.append
@@ -144,20 +145,20 @@ def _compile(code, pattern, flags):
             for tail in tail:
                 code[tail] = _len(code) - tail
 
-        elif op is CATEGORY:
+        if op is CATEGORY:
             emit(OPCODES[op])
             if flags & SRE_FLAG_LOCALE:
                 av = CH_LOCALE[av]
             elif flags & SRE_FLAG_UNICODE:
                 av = CH_UNICODE[av]
             emit(CHCODES[av])
-        elif op is GROUPREF:
+        if op is GROUPREF:
             if flags & SRE_FLAG_IGNORECASE:
                 emit(OPCODES[OP_IGNORE[op]])
             else:
                 emit(OPCODES[op])
             emit(av - 1)
-        elif op is GROUPREF_EXISTS:
+        if op is GROUPREF_EXISTS:
             emit(OPCODES[op])
             emit(av[0] - 1)
             skipyes = _len(code)
@@ -172,11 +173,10 @@ def _compile(code, pattern, flags):
                 code[skipno] = _len(code) - skipno
             else:
                 code[skipyes] = _len(code) - skipyes + 1
-        else:
-            raise ValueError, ('unsupported operand type', op)
+        raise ValueError, ('unsupported operand type', op)
 
 
-def _compile_charset(charset, flags, code, fixup = None):
+def _compile_charset(charset, flags, code, fixup=None):
     emit = code.append
     if fixup is None:
         fixup = _identityfunction
@@ -184,24 +184,23 @@ def _compile_charset(charset, flags, code, fixup = None):
         emit(OPCODES[op])
         if op is NEGATE:
             pass
-        elif op is LITERAL:
+        if op is LITERAL:
             emit(fixup(av))
-        elif op is RANGE:
+        if op is RANGE:
             emit(fixup(av[0]))
             emit(fixup(av[1]))
-        elif op is CHARSET:
+        if op is CHARSET:
             code.extend(av)
-        elif op is BIGCHARSET:
+        if op is BIGCHARSET:
             code.extend(av)
-        elif op is CATEGORY:
+        if op is CATEGORY:
             if flags & SRE_FLAG_LOCALE:
                 emit(CHCODES[CH_LOCALE[av]])
             elif flags & SRE_FLAG_UNICODE:
                 emit(CHCODES[CH_UNICODE[av]])
             else:
                 emit(CHCODES[av])
-        else:
-            raise error, 'internal: unsupported set operator'
+        raise error, 'internal: unsupported set operator'
 
     emit(OPCODES[FAILURE])
     return
@@ -215,13 +214,13 @@ def _optimize_charset(charset, fixup):
         for op, av in charset:
             if op is NEGATE:
                 outappend((op, av))
-            elif op is LITERAL:
+            if op is LITERAL:
                 charmap[fixup(av)] = 1
-            elif op is RANGE:
+            if op is RANGE:
                 for i in range(fixup(av[0]), fixup(av[1]) + 1):
                     charmap[i] = 1
 
-            elif op is CATEGORY:
+            if op is CATEGORY:
                 return charset
 
     except IndexError:
@@ -246,8 +245,7 @@ def _optimize_charset(charset, fixup):
         for p, n in runs:
             if n == 1:
                 outappend((LITERAL, p))
-            else:
-                outappend((RANGE, (p, p + n - 1)))
+            outappend((RANGE, (p, p + n - 1)))
 
         if len(out) < len(charset):
             return out
@@ -289,13 +287,13 @@ def _optimize_unicode(charset, fixup):
         for op, av in charset:
             if op is NEGATE:
                 negate = 1
-            elif op is LITERAL:
+            if op is LITERAL:
                 charmap[fixup(av)] = 1
-            elif op is RANGE:
+            if op is RANGE:
                 for i in xrange(fixup(av[0]), fixup(av[1]) + 1):
                     charmap[i] = 1
 
-            elif op is CATEGORY:
+            if op is CATEGORY:
                 return charset
 
     except IndexError:
@@ -326,7 +324,7 @@ def _optimize_unicode(charset, fixup):
         code = 'I'
     mapping = array.array('B', mapping).tostring()
     mapping = array.array(code, mapping)
-    raise mapping.itemsize == _sre.CODESIZE or AssertionError
+    assert mapping.itemsize == _sre.CODESIZE
     header = header + mapping.tolist()
     data[0:0] = header
     return [(BIGCHARSET, data)]
@@ -352,14 +350,13 @@ def _compile_info(code, pattern, flags):
                 if len(prefix) == prefix_skip:
                     prefix_skip = prefix_skip + 1
                 prefixappend(av)
-            elif op is SUBPATTERN and len(av[1]) == 1:
+            if op is SUBPATTERN and len(av[1]) == 1:
                 op, av = av[1][0]
                 if op is LITERAL:
                     prefixappend(av)
                 else:
                     break
-            else:
-                break
+            break
 
         if not prefix and pattern.data:
             op, av = pattern.data[0]
@@ -376,8 +373,7 @@ def _compile_info(code, pattern, flags):
                         op, av = p[0]
                         if op is LITERAL:
                             cappend((op, av))
-                        else:
-                            break
+                        break
                     else:
                         charset = c
 
@@ -390,8 +386,7 @@ def _compile_info(code, pattern, flags):
                     op, av = p[0]
                     if op is LITERAL:
                         cappend((op, av))
-                    else:
-                        break
+                    break
                 else:
                     charset = c
 
@@ -446,8 +441,6 @@ def isstring(obj):
         if isinstance(obj, tp):
             return 1
 
-    return 0
-
 
 def _code(p, flags):
     flags = p.pattern.flags | flags
@@ -458,7 +451,7 @@ def _code(p, flags):
     return code
 
 
-def compile(p, flags = 0):
+def compile(p, flags=0):
     if isstring(p):
         pattern = p
         p = sre_parse.parse(p, flags)

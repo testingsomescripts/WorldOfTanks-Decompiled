@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/effects_player.py
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
@@ -16,13 +16,13 @@ class GUIEffect(object):
     def play(self, effectData):
         return False
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         pass
 
     def cancel(self, *criteria):
         pass
 
-    def isStillRunning(self, effectID = None):
+    def isStillRunning(self, effectID=None):
         return False
 
     def _getContainer(self, viewType):
@@ -30,15 +30,10 @@ class GUIEffect(object):
             return
         else:
             manager = self.app.containerManager
-            if manager is None:
-                return
-            return manager.getContainer(viewType)
+            return None if manager is None else manager.getContainer(viewType)
 
     def _getTutorialLayout(self):
-        if self.app is None:
-            return
-        else:
-            return self.app.tutorialManager
+        return None if self.app is None else self.app.tutorialManager
 
 
 class ShowDialogEffect(GUIEffect):
@@ -72,7 +67,7 @@ class ShowDialogEffect(GUIEffect):
             LOG_ERROR('Type or id of dialog not found', effectData)
         return result
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         isForceStop = effectID is None
         if not isForceStop and effectID != self._dialogID:
             LOG_ERROR('Dialog is not opened', effectID)
@@ -89,7 +84,7 @@ class ShowDialogEffect(GUIEffect):
                     LOG_ERROR('Dialog is not opened', effectID)
             return
 
-    def isStillRunning(self, effectID = None):
+    def isStillRunning(self, effectID=None):
         if effectID is not None:
             result = self._dialogID == effectID
         else:
@@ -118,7 +113,7 @@ class ShowWindowEffect(GUIEffect):
             LOG_ERROR('Alias of window not found', windowType, self._aliasMap)
         return result
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         isForceStop = effectID is None
         if not isForceStop:
             if effectID not in self._windowIDs:
@@ -135,12 +130,12 @@ class ShowWindowEffect(GUIEffect):
                 if window is not None:
                     window.destroy()
                     self._windowIDs.remove(eID)
-                elif not isForceStop:
+                if not isForceStop:
                     LOG_ERROR('Window is not opened', eID)
 
         return
 
-    def isStillRunning(self, effectID = None):
+    def isStillRunning(self, effectID=None):
         if effectID is not None:
             result = effectID in self._windowIDs
         else:
@@ -160,7 +155,7 @@ class ShowChainHint(GUIEffect):
         self._itemID = None
         return
 
-    def isStillRunning(self, effectID = None):
+    def isStillRunning(self, effectID=None):
         if effectID is not None:
             result = self._hintID == effectID
         else:
@@ -196,7 +191,7 @@ class ShowChainHint(GUIEffect):
                 return True
             return False
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         if effectID is not None and effectID != self._hintID:
             LOG_DEBUG('Hint is not added', effectID)
             return
@@ -219,7 +214,7 @@ class ShowChainHint(GUIEffect):
 
 class ShowOnceOnlyHint(ShowChainHint):
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         if effectID is not None:
             super(ShowOnceOnlyHint, self).stop(effectID)
         return
@@ -287,7 +282,7 @@ class SetTriggerEffect(GUIEffect):
                 layout.setTriggers(itemID, (_ACTION_TO_TRIGGER_TYPE[actionType],))
             return
 
-    def stop(self, effectID = None):
+    def stop(self, effectID=None):
         if effectID is None:
             itemIDs = self._itemsIDs.copy()
             self._itemsIDs.clear()
@@ -338,7 +333,7 @@ class EffectsPlayer(object):
         for effect in self._effects.itervalues():
             effect.stop()
 
-    def isStillRunning(self, effectName, effectID = None):
+    def isStillRunning(self, effectName, effectID=None):
         result = False
         if effectName in self._effects:
             result = self._effects[effectName].isStillRunning(effectID=effectID)

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_strings.py
 import unittest
 from ctypes import *
@@ -23,7 +23,7 @@ class StringArrayTestCase(unittest.TestCase):
         self.assertRaises(ValueError, setattr, buf, 'value', 'aaaaaaaa')
         self.assertRaises(TypeError, setattr, buf, 'value', 42)
 
-    def test_c_buffer_value(self, memoryview = memoryview):
+    def test_c_buffer_value(self, memoryview=memoryview):
         buf = c_buffer(32)
         buf.value = 'Hello, World'
         self.assertEqual(buf.value, 'Hello, World')
@@ -31,7 +31,7 @@ class StringArrayTestCase(unittest.TestCase):
         self.assertRaises(TypeError, setattr, buf, 'value', memoryview('abc'))
         self.assertRaises(ValueError, setattr, buf, 'raw', memoryview('x' * 100))
 
-    def test_c_buffer_raw(self, memoryview = memoryview):
+    def test_c_buffer_raw(self, memoryview=memoryview):
         buf = c_buffer(32)
         buf.raw = memoryview('Hello, World')
         self.assertEqual(buf.value, 'Hello, World')

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/encodings/undefined.py
 """ Python 'undefined' Codec
 
@@ -15,22 +15,22 @@ import codecs
 
 class Codec(codecs.Codec):
 
-    def encode(self, input, errors = 'strict'):
+    def encode(self, input, errors='strict'):
         raise UnicodeError('undefined encoding')
 
-    def decode(self, input, errors = 'strict'):
+    def decode(self, input, errors='strict'):
         raise UnicodeError('undefined encoding')
 
 
 class IncrementalEncoder(codecs.IncrementalEncoder):
 
-    def encode(self, input, final = False):
+    def encode(self, input, final=False):
         raise UnicodeError('undefined encoding')
 
 
 class IncrementalDecoder(codecs.IncrementalDecoder):
 
-    def decode(self, input, final = False):
+    def decode(self, input, final=False):
         raise UnicodeError('undefined encoding')
 
 

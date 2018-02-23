@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/battle/dispatcher.py
 from gui.Scaleform.windows import UIInterface
 from gui.battle_control import avatar_getter
@@ -15,7 +15,7 @@ class SfBattleDispatcher(GUIDispatcher, UIInterface):
     def __del__(self):
         LOG_MEMORY('SfBattleDispatcher deleted')
 
-    def findGUI(self, root = None):
+    def findGUI(self, root=None):
         gfxObj = getattr(root, 'dispatcher', None)
         if gfxObj is not None:
             self.__layout = root

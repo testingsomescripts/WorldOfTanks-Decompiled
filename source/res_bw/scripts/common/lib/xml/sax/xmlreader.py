@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/xmlreader.py
 """An XML Reader is the SAX 2 name for an XML parser. XML Parsers
 should be based on this code. """
@@ -105,7 +106,7 @@ class IncrementalParser(XMLReader):
     IncrementalParser interface as a convenience to SAX 2.0 driver
     writers."""
 
-    def __init__(self, bufsize = 65536):
+    def __init__(self, bufsize=65536):
         self._bufsize = bufsize
         XMLReader.__init__(self)
 
@@ -164,11 +165,11 @@ class Locator:
 
     def getColumnNumber(self):
         """Return the column number where the current event ends."""
-        return -1
+        pass
 
     def getLineNumber(self):
         """Return the line number where the current event ends."""
-        return -1
+        pass
 
     def getPublicId(self):
         """Return the public identifier for the current event."""
@@ -195,7 +196,7 @@ class InputSource:
     allowed to modify InputSource objects passed to it from the
     application, although it may make copies and modify those."""
 
-    def __init__(self, system_id = None):
+    def __init__(self, system_id=None):
         self.__system_id = system_id
         self.__public_id = None
         self.__encoding = None
@@ -280,7 +281,7 @@ class AttributesImpl:
         return len(self._attrs)
 
     def getType(self, name):
-        return 'CDATA'
+        pass
 
     def getValue(self, name):
         return self._attrs[name]
@@ -319,7 +320,7 @@ class AttributesImpl:
     def __contains__(self, name):
         return name in self._attrs
 
-    def get(self, name, alternative = None):
+    def get(self, name, alternative=None):
         return self._attrs.get(name, alternative)
 
     def copy(self):

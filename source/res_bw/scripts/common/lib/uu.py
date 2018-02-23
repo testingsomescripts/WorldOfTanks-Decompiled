@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/uu.py
 """Implementation of the UUencode and UUdecode functions.
 
@@ -13,7 +14,7 @@ class Error(Exception):
     pass
 
 
-def encode(in_file, out_file, name = None, mode = None):
+def encode(in_file, out_file, name=None, mode=None):
     """Uuencode file"""
     opened_files = []
     try:
@@ -53,7 +54,7 @@ def encode(in_file, out_file, name = None, mode = None):
     return
 
 
-def decode(in_file, out_file = None, mode = None, quiet = 0):
+def decode(in_file, out_file=None, mode=None, quiet=0):
     """Decode uuencoded file"""
     opened_files = []
     if in_file == '-':

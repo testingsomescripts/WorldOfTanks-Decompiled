@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/posixfile.py
 """Extended file operations available in POSIX.
 
@@ -67,7 +68,7 @@ class _posixfile_:
          file.mode,
          hex(id(self))[2:])
 
-    def open(self, name, mode = 'r', bufsize = -1):
+    def open(self, name, mode='r', bufsize=-1):
         import __builtin__
         return self.fileopen(__builtin__.open(name, mode, bufsize))
 
@@ -198,7 +199,7 @@ class _posixfile_:
                      l_pid)
 
 
-def open(name, mode = 'r', bufsize = -1):
+def open(name, mode='r', bufsize=-1):
     """Public routine to open a file as a posixfile object."""
     return _posixfile_().open(name, mode, bufsize)
 

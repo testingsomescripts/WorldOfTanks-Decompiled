@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/utils.py
 """Miscellaneous utilities."""
 __all__ = ['collapse_rfc2231_value',
@@ -48,9 +48,7 @@ def _bdecode(s):
     for backward compatibility. It used to remove the last \n of the decoded
     string, if it had any (see issue 7143).
     """
-    if not s:
-        return s
-    return base64.decodestring(s)
+    return s if not s else base64.decodestring(s)
 
 
 def fix_eols(s):
@@ -90,7 +88,7 @@ def getaddresses(fieldvalues):
 
 ecre = re.compile('\n  =\\?                   # literal =?\n  (?P<charset>[^?]*?)   # non-greedy up to the next ? is the charset\n  \\?                    # literal ?\n  (?P<encoding>[qb])    # either a "q" or a "b", case insensitive\n  \\?                    # literal ?\n  (?P<atom>.*?)         # non-greedy up to the next ?= is the atom\n  \\?=                   # literal ?=\n  ', re.VERBOSE | re.IGNORECASE)
 
-def formatdate(timeval = None, localtime = False, usegmt = False):
+def formatdate(timeval=None, localtime=False, usegmt=False):
     """Returns a date string as specified by RFC 2822, e.g.:
     
     Fri, 09 Nov 2001 01:08:47 -0000
@@ -153,7 +151,7 @@ def formatdate(timeval = None, localtime = False, usegmt = False):
      zone)
 
 
-def make_msgid(idstring = None):
+def make_msgid(idstring=None):
     """Returns a string suitable for RFC 2822 compliant Message-ID, e.g:
     
     <20020201195627.33539.96671@nightshade.la.mastaler.com>
@@ -179,24 +177,16 @@ def make_msgid(idstring = None):
 
 
 def parsedate(data):
-    if not data:
-        return None
-    else:
-        return _parsedate(data)
+    return None if not data else _parsedate(data)
 
 
 def parsedate_tz(data):
-    if not data:
-        return None
-    else:
-        return _parsedate_tz(data)
+    return None if not data else _parsedate_tz(data)
 
 
 def parseaddr(addr):
     addrs = _AddressList(addr).addresslist
-    if not addrs:
-        return ('', '')
-    return addrs[0]
+    return ('', '') if not addrs else addrs[0]
 
 
 def unquote(str):
@@ -212,13 +202,10 @@ def unquote(str):
 def decode_rfc2231(s):
     """Decode string according to RFC 2231"""
     parts = s.split(TICK, 2)
-    if len(parts) <= 2:
-        return (None, None, s)
-    else:
-        return parts
+    return (None, None, s) if len(parts) <= 2 else parts
 
 
-def encode_rfc2231(s, charset = None, language = None):
+def encode_rfc2231(s, charset=None, language=None):
     """Encode string according to RFC 2231.
     
     If neither charset nor language is given, then s is returned as-is.  If
@@ -260,8 +247,7 @@ def decode_params(params):
             if num is not None:
                 num = int(num)
             rfc2231_params.setdefault(name, []).append((num, value, encoded))
-        else:
-            new_params.append((name, '"%s"' % quote(value)))
+        new_params.append((name, '"%s"' % quote(value)))
 
     if rfc2231_params:
         for name, continuations in rfc2231_params.items():
@@ -278,13 +264,12 @@ def decode_params(params):
             if extended:
                 charset, language, value = decode_rfc2231(value)
                 new_params.append((name, (charset, language, '"%s"' % value)))
-            else:
-                new_params.append((name, '"%s"' % value))
+            new_params.append((name, '"%s"' % value))
 
     return new_params
 
 
-def collapse_rfc2231_value(value, errors = 'replace', fallback_charset = 'us-ascii'):
+def collapse_rfc2231_value(value, errors='replace', fallback_charset='us-ascii'):
     if isinstance(value, tuple):
         rawval = unquote(value[2])
         charset = value[0] or 'us-ascii'

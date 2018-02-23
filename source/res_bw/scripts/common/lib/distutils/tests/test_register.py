@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_register.py
 """Tests for distutils.command.register."""
 import os
@@ -26,7 +26,7 @@ class RawInputs(object):
         self.answers = answers
         self.index = 0
 
-    def __call__(self, prompt = ''):
+    def __call__(self, prompt=''):
         try:
             return self.answers[self.index]
         finally:
@@ -68,7 +68,7 @@ class RegisterTestCase(PyPIRCCommandTestCase):
         urllib2.build_opener = self.old_opener
         super(RegisterTestCase, self).tearDown()
 
-    def _get_cmd(self, metadata = None):
+    def _get_cmd(self, metadata=None):
         if metadata is None:
             metadata = {'url': 'xxx',
              'author': 'xxx',
@@ -96,7 +96,7 @@ class RegisterTestCase(PyPIRCCommandTestCase):
         finally:
             f.close()
 
-        def _no_way(prompt = ''):
+        def _no_way(prompt=''):
             raise AssertionError(prompt)
 
         register_module.raw_input = _no_way

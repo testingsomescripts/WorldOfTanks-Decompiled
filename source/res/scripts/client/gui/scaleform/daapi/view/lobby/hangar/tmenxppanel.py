@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TmenXpPanel.py
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
@@ -37,5 +37,5 @@ class TmenXpPanel(TmenXpPanelMeta):
             LOG_DEBUG('Do not show TMenXPPanel: No current vehicle')
             return
         else:
-            self.as_setTankmenXpPanelS(vehicle.isElite, vehicle.isXPToTman)
+            self.as_setTankmenXpPanelS(vehicle.isElite and not vehicle.isOnlyForEventBattles, vehicle.isXPToTman)
             return

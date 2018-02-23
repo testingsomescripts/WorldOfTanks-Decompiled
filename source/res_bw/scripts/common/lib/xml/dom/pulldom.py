@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/pulldom.py
 import xml.sax
 import xml.sax.handler
@@ -20,7 +21,7 @@ class PullDOM(xml.sax.ContentHandler):
     _locator = None
     document = None
 
-    def __init__(self, documentFactory = None):
+    def __init__(self, documentFactory=None):
         from xml.dom import XML_NAMESPACE
         self.documentFactory = documentFactory
         self.firstEvent = [None, None]
@@ -336,7 +337,7 @@ class SAX2DOM(PullDOM):
 
 default_bufsize = 16364
 
-def parse(stream_or_string, parser = None, bufsize = None):
+def parse(stream_or_string, parser=None, bufsize=None):
     if bufsize is None:
         bufsize = default_bufsize
     if type(stream_or_string) in _StringTypes:
@@ -348,7 +349,7 @@ def parse(stream_or_string, parser = None, bufsize = None):
     return DOMEventStream(stream, parser, bufsize)
 
 
-def parseString(string, parser = None):
+def parseString(string, parser=None):
     try:
         from cStringIO import StringIO
     except ImportError:

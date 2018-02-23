@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/copy_reg.py
 """Helper to provide extensibility for pickle/cPickle.
 
@@ -13,7 +13,7 @@ __all__ = ['pickle',
  'clear_extension_cache']
 dispatch_table = {}
 
-def pickle(ob_type, pickle_function, constructor_ob = None):
+def pickle(ob_type, pickle_function, constructor_ob=None):
     if type(ob_type) is _ClassType:
         raise TypeError('copy_reg is not intended for use with classes')
     if not hasattr(pickle_function, '__call__'):
@@ -118,10 +118,9 @@ def _slotnames(cls):
                     for name in slots:
                         if name in ('__dict__', '__weakref__'):
                             continue
-                        elif name.startswith('__') and not name.endswith('__'):
+                        if name.startswith('__') and not name.endswith('__'):
                             names.append('_%s%s' % (c.__name__, name))
-                        else:
-                            names.append(name)
+                        names.append(name)
 
         try:
             cls.__slotnames__ = names

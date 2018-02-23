@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hotshot/log.py
 import _hotshot
 import os.path
@@ -74,7 +74,7 @@ class LogReader:
         except KeyError:
             raise ValueError, 'unknown function location'
 
-    def next(self, index = 0):
+    def next(self, index=0):
         while 1:
             what, tdelta, fileno, lineno = self._nextitem()
             if what == WHAT_ENTER:
@@ -94,15 +94,14 @@ class LogReader:
             if what == WHAT_DEFINE_FILE:
                 filename = os.path.normcase(os.path.normpath(tdelta))
                 self._filemap[fileno] = filename
-            elif what == WHAT_DEFINE_FUNC:
+            if what == WHAT_DEFINE_FUNC:
                 filename = self._filemap[fileno]
                 self._funcmap[fileno, lineno] = (filename, tdelta)
-            elif what == WHAT_ADD_INFO:
+            if what == WHAT_ADD_INFO:
                 if tdelta == 'current-directory':
                     self.cwd = lineno
                 self.addinfo(tdelta, lineno)
-            else:
-                raise ValueError, 'unknown event type'
+            raise ValueError, 'unknown event type'
 
     def __iter__(self):
         return self

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ast.py
 """
     ast
@@ -29,7 +29,7 @@
 from _ast import *
 from _ast import __version__
 
-def parse(source, filename = '<unknown>', mode = 'exec'):
+def parse(source, filename='<unknown>', mode='exec'):
     """
     Parse the source into an AST node.
     Equivalent to compile(source, filename, mode, PyCF_ONLY_AST).
@@ -78,7 +78,7 @@ def literal_eval(node_or_string):
     return _convert(node_or_string)
 
 
-def dump(node, annotate_fields = True, include_attributes = False):
+def dump(node, annotate_fields=True, include_attributes=False):
     """
     Return a formatted dump of the tree in *node*.  This is mainly useful for
     debugging purposes.  The returned string will show the names and the values
@@ -96,9 +96,7 @@ def dump(node, annotate_fields = True, include_attributes = False):
                 rv += fields and ', ' or ' '
                 rv += ', '.join(('%s=%s' % (a, _format(getattr(node, a))) for a in node._attributes))
             return rv + ')'
-        if isinstance(node, list):
-            return '[%s]' % ', '.join((_format(x) for x in node))
-        return repr(node)
+        return '[%s]' % ', '.join((_format(x) for x in node)) if isinstance(node, list) else repr(node)
 
     if not isinstance(node, AST):
         raise TypeError('expected AST, got %r' % node.__class__.__name__)
@@ -144,7 +142,7 @@ def fix_missing_locations(node):
     return node
 
 
-def increment_lineno(node, n = 1):
+def increment_lineno(node, n=1):
     """
     Increment the line number of each node in the tree starting at *node* by *n*.
     This is useful to "move code" to a different location in a file.
@@ -176,13 +174,13 @@ def iter_child_nodes(node):
     for name, field in iter_fields(node):
         if isinstance(field, AST):
             yield field
-        elif isinstance(field, list):
+        if isinstance(field, list):
             for item in field:
                 if isinstance(item, AST):
                     yield item
 
 
-def get_docstring(node, clean = True):
+def get_docstring(node, clean=True):
     """
     Return the docstring for the given node or None if no docstring can
     be found.  If the node provided does not have docstrings a TypeError
@@ -245,7 +243,7 @@ class NodeVisitor(object):
                     if isinstance(item, AST):
                         self.visit(item)
 
-            elif isinstance(value, AST):
+            if isinstance(value, AST):
                 self.visit(value)
 
 
@@ -301,7 +299,7 @@ class NodeTransformer(NodeVisitor):
                     new_values.append(value)
 
                 old_value[:] = new_values
-            elif isinstance(old_value, AST):
+            if isinstance(old_value, AST):
                 new_node = self.visit(old_value)
                 if new_node is None:
                     delattr(node, field)

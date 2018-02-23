@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/symtable.py
 """Interface to the compiler's internal symbol tables"""
 import _symtable
@@ -22,9 +23,7 @@ class SymbolTableFactory:
     def new(self, table, filename):
         if table.type == _symtable.TYPE_FUNCTION:
             return Function(table, filename)
-        if table.type == _symtable.TYPE_CLASS:
-            return Class(table, filename)
-        return SymbolTable(table, filename)
+        return Class(table, filename) if table.type == _symtable.TYPE_CLASS else SymbolTable(table, filename)
 
     def __call__(self, table, filename):
         key = (table, filename)
@@ -60,7 +59,7 @@ class SymbolTable(object):
             return 'function'
         if self._table.type == _symtable.TYPE_CLASS:
             return 'class'
-        raise self._table.type in (1, 2, 3) or AssertionError('unexpected type: {0}'.format(self._table.type))
+        assert self._table.type in (1, 2, 3), 'unexpected type: {0}'.format(self._table.type)
 
     def get_id(self):
         return self._table.id
@@ -159,7 +158,7 @@ class Class(SymbolTable):
 
 class Symbol(object):
 
-    def __init__(self, name, flags, namespaces = None):
+    def __init__(self, name, flags, namespaces=None):
         self.__name = name
         self.__flags = flags
         self.__scope = flags >> SCOPE_OFF & SCOPE_MASK

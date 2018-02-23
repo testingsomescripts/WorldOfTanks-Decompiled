@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/pgen2/tokenize.py
 """Tokenization help for Python programs.
 
@@ -149,7 +149,7 @@ def printtoken(type, token, start, end, line):
      repr(token))
 
 
-def tokenize(readline, tokeneater = printtoken):
+def tokenize(readline, tokeneater=printtoken):
     """
     The tokenize() function accepts two parameters: one representing the
     input stream, and one providing an output mechanism for tokenize().
@@ -236,9 +236,7 @@ def _get_normal_name(orig_enc):
     enc = orig_enc[:12].lower().replace('_', '-')
     if enc == 'utf-8' or enc.startswith('utf-8-'):
         return 'utf-8'
-    if enc in ('latin-1', 'iso-8859-1', 'iso-latin-1') or enc.startswith(('latin-1-', 'iso-8859-1-', 'iso-latin-1-')):
-        return 'iso-8859-1'
-    return orig_enc
+    return 'iso-8859-1' if enc in ('latin-1', 'iso-8859-1', 'iso-latin-1') or enc.startswith(('latin-1-', 'iso-8859-1-', 'iso-latin-1-')) else orig_enc
 
 
 def detect_encoding(readline):
@@ -298,17 +296,15 @@ def detect_encoding(readline):
         default = 'utf-8-sig'
     if not first:
         return (default, [])
-    encoding = find_cookie(first)
-    if encoding:
-        return (encoding, [first])
-    second = read_or_stop()
-    if not second:
-        return (default, [first])
-    encoding = find_cookie(second)
-    if encoding:
-        return (encoding, [first, second])
     else:
-        return (default, [first, second])
+        encoding = find_cookie(first)
+        if encoding:
+            return (encoding, [first])
+        second = read_or_stop()
+        if not second:
+            return (default, [first])
+        encoding = find_cookie(second)
+        return (encoding, [first, second]) if encoding else (default, [first, second])
 
 
 def untokenize(iterable):
@@ -419,12 +415,11 @@ def generate_tokens(readline):
                      (lnum, nl_pos),
                      (lnum, len(line)),
                      line)
-                else:
-                    yield ((NL, COMMENT)[line[pos] == '#'],
-                     line[pos:],
-                     (lnum, pos),
-                     (lnum, len(line)),
-                     line)
+                yield ((NL, COMMENT)[line[pos] == '#'],
+                 line[pos:],
+                 (lnum, pos),
+                 (lnum, len(line)),
+                 line)
                 continue
             if column > indents[-1]:
                 indents.append(column)
@@ -530,13 +525,12 @@ def generate_tokens(readline):
                      spos,
                      epos,
                      line)
-            else:
-                yield (ERRORTOKEN,
-                 line[pos],
-                 (lnum, pos),
-                 (lnum, pos + 1),
-                 line)
-                pos = pos + 1
+            yield (ERRORTOKEN,
+             line[pos],
+             (lnum, pos),
+             (lnum, pos + 1),
+             line)
+            pos = pos + 1
 
     for indent in indents[1:]:
         yield (DEDENT,

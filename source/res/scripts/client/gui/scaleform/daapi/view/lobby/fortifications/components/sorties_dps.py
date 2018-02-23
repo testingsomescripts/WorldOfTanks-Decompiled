@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/sorties_dps.py
 import random
 import BigWorld
@@ -26,7 +26,7 @@ MIN_MAX_VEH_LVLS_MAPPING = {SORTIE_DIVISION.MIDDLE: SortieSlot6,
  SORTIE_DIVISION.CHAMPION: SortieSlot8,
  SORTIE_DIVISION.ABSOLUTE: SortieSlot10}
 
-def makeDivisionData(nameGenerator = None):
+def makeDivisionData(nameGenerator=None):
     result = []
     for name, divisionID, rosterTypeID in getDivisionsOrderData():
         settings = getDivisionSettings(name)
@@ -122,8 +122,7 @@ class SortiesDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self._selectedID in self._mapping:
-            return self._mapping[self._selectedID]
+        return self._mapping[self._selectedID] if self._selectedID in self._mapping else -1
 
     def setSelectedID(self, id):
         self._selectedID = id
@@ -251,8 +250,7 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self.__selectedID in self.__mapping:
-            return self.__mapping[self.__selectedID]
+        return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1
 
     def setSelectedID(self, id):
         self.__selectedID = id
@@ -283,9 +281,7 @@ class IntelligenceDataProvider(SortableDAAPIDataProvider):
     def refreshItem(self, cache, clanDBID):
         isSelected = self.__selectedID == clanDBID
         self.buildList(cache)
-        if isSelected and clanDBID not in self.__mapping:
-            return True
-        return False
+        return True if isSelected and clanDBID not in self.__mapping else False
 
     def pyGetSelectedIdx(self):
         return self.getSelectedIdx()
@@ -364,8 +360,7 @@ class FortBattlesDataProvider(SortableDAAPIDataProvider):
         self._dispose()
 
     def getSelectedIdx(self):
-        if self._selectedID in self._mapping:
-            return self._mapping[self._selectedID]
+        return self._mapping[self._selectedID] if self._selectedID in self._mapping else -1
 
     def setSelectedID(self, id):
         self._selectedID = id

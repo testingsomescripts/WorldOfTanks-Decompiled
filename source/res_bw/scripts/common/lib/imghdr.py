@@ -1,9 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/imghdr.py
 """Recognize image file formats based on their first few bytes."""
 __all__ = ['what']
 
-def what(file, h = None):
+def what(file, h=None):
     f = None
     try:
         if h is None:
@@ -30,79 +30,69 @@ tests = []
 
 def test_jpeg(h, f):
     """JPEG data in JFIF format"""
-    if h[6:10] == 'JFIF':
-        return 'jpeg'
+    return 'jpeg' if h[6:10] == 'JFIF' else None
 
 
 tests.append(test_jpeg)
 
 def test_exif(h, f):
     """JPEG data in Exif format"""
-    if h[6:10] == 'Exif':
-        return 'jpeg'
+    return 'jpeg' if h[6:10] == 'Exif' else None
 
 
 tests.append(test_exif)
 
 def test_png(h, f):
-    if h[:8] == '\x89PNG\r\n\x1a\n':
-        return 'png'
+    return 'png' if h[:8] == '\x89PNG\r\n\x1a\n' else None
 
 
 tests.append(test_png)
 
 def test_gif(h, f):
     """GIF ('87 and '89 variants)"""
-    if h[:6] in ('GIF87a', 'GIF89a'):
-        return 'gif'
+    return 'gif' if h[:6] in ('GIF87a', 'GIF89a') else None
 
 
 tests.append(test_gif)
 
 def test_tiff(h, f):
     """TIFF (can be in Motorola or Intel byte order)"""
-    if h[:2] in ('MM', 'II'):
-        return 'tiff'
+    return 'tiff' if h[:2] in ('MM', 'II') else None
 
 
 tests.append(test_tiff)
 
 def test_rgb(h, f):
     """SGI image library"""
-    if h[:2] == '\x01\xda':
-        return 'rgb'
+    return 'rgb' if h[:2] == '\x01\xda' else None
 
 
 tests.append(test_rgb)
 
 def test_pbm(h, f):
     """PBM (portable bitmap)"""
-    if len(h) >= 3 and h[0] == 'P' and h[1] in '14' and h[2] in ' \t\n\r':
-        return 'pbm'
+    return 'pbm' if len(h) >= 3 and h[0] == 'P' and h[1] in '14' and h[2] in ' \t\n\r' else None
 
 
 tests.append(test_pbm)
 
 def test_pgm(h, f):
     """PGM (portable graymap)"""
-    if len(h) >= 3 and h[0] == 'P' and h[1] in '25' and h[2] in ' \t\n\r':
-        return 'pgm'
+    return 'pgm' if len(h) >= 3 and h[0] == 'P' and h[1] in '25' and h[2] in ' \t\n\r' else None
 
 
 tests.append(test_pgm)
 
 def test_ppm(h, f):
     """PPM (portable pixmap)"""
-    if len(h) >= 3 and h[0] == 'P' and h[1] in '36' and h[2] in ' \t\n\r':
-        return 'ppm'
+    return 'ppm' if len(h) >= 3 and h[0] == 'P' and h[1] in '36' and h[2] in ' \t\n\r' else None
 
 
 tests.append(test_ppm)
 
 def test_rast(h, f):
     """Sun raster file"""
-    if h[:4] == 'Y\xa6j\x95':
-        return 'rast'
+    return 'rast' if h[:4] == 'Y\xa6j\x95' else None
 
 
 tests.append(test_rast)
@@ -110,15 +100,13 @@ tests.append(test_rast)
 def test_xbm(h, f):
     """X bitmap (X10 or X11)"""
     s = '#define '
-    if h[:len(s)] == s:
-        return 'xbm'
+    return 'xbm' if h[:len(s)] == s else None
 
 
 tests.append(test_xbm)
 
 def test_bmp(h, f):
-    if h[:2] == 'BM':
-        return 'bmp'
+    return 'bmp' if h[:2] == 'BM' else None
 
 
 tests.append(test_bmp)
@@ -152,10 +140,9 @@ def testall(list, recursive, toplevel):
                 testall(names, recursive, 0)
             else:
                 print '*** directory (use -r) ***'
-        else:
-            print filename + ':',
-            sys.stdout.flush()
-            try:
-                print what(filename)
-            except IOError:
-                print '*** not found ***'
+        print filename + ':',
+        sys.stdout.flush()
+        try:
+            print what(filename)
+        except IOError:
+            print '*** not found ***'

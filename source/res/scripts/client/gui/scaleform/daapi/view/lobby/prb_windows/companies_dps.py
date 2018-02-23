@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/companies_dps.py
 from constants import PREBATTLE_COMPANY_DIVISION, PREBATTLE_COMPANY_DIVISION_NAMES
 from gui.LobbyContext import g_lobbyContext
@@ -10,7 +10,7 @@ from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.storage import storage_getter
 
-def getDivisionsList(addAll = True):
+def getDivisionsList(addAll=True):
     result = []
     if addAll:
         result.append({'data': 0,
@@ -81,7 +81,6 @@ class CompaniesDataProvider(DAAPIDataProvider):
                          'color': getColor(key)})
 
                 item['players'] = players
-            else:
-                item['players'] = []
+            item['players'] = []
 
         return foundIdx

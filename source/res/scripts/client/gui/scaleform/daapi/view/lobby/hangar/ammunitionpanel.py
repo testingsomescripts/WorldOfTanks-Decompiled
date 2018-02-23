@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
@@ -37,6 +37,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
+        self.__isMoonVehicle = False
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.__falloutCtrl = getFalloutCtrl()
         self.__falloutCtrl.onSettingsChanged += self._updateFalloutSettings
@@ -55,13 +56,14 @@ class AmmunitionPanel(AmmunitionPanelMeta):
     def update(self):
         self._update()
 
-    def _update(self, modulesData = None, shellsData = None):
+    def _update(self, modulesData=None, shellsData=None):
         if g_currentVehicle.isPresent():
             self.as_setModulesEnabledS(True)
             self.__updateAmmo(shellsData)
             money = g_itemsCache.items.stats.money
             exchangeRate = g_itemsCache.items.shop.exchangeRate
             vehicle = g_currentVehicle.item
+            self.__isMoonVehicle = vehicle.isEvent
             self.as_setVehicleHasTurretS(vehicle.hasTurrets)
             devices = []
             for slotType in AmmunitionPanel.__FITTING_SLOTS:
@@ -118,22 +120,20 @@ class AmmunitionPanel(AmmunitionPanelMeta):
                             md['slotIndex'] = i
                             dataProvider[i].append(md)
 
-                    else:
-                        if isFit:
-                            reason = self._getInstallReason(module, vehicle, reason)
-                        moduleData['icon'] = module.level
-                        moduleData['removable'] = True
-                        moduleData['isSelected'] = moduleData.get('target') == 1
-                        moduleData['status'] = self.__getStatus(reason)
-                        moduleData['disabled'] = not isFit or reason == 'unlock_error'
-                        dataProvider.append(moduleData)
+                    if isFit:
+                        reason = self._getInstallReason(module, vehicle, reason)
+                    moduleData['icon'] = module.level
+                    moduleData['removable'] = True
+                    moduleData['isSelected'] = moduleData.get('target') == 1
+                    moduleData['status'] = self.__getStatus(reason)
+                    moduleData['disabled'] = not isFit or reason == 'unlock_error'
+                    dataProvider.append(moduleData)
 
                 if slotType in AmmunitionPanel.__ARTEFACTS_SLOTS:
                     for i in xrange(3):
                         self.__addDevice(devices, dataProvider[i], slotType, i)
 
-                else:
-                    self.__addDevice(devices, dataProvider, slotType)
+                self.__addDevice(devices, dataProvider, slotType)
 
             self.as_setDataS(devices)
             statusId, msg, msgLvl = g_currentVehicle.getHangarMessage()
@@ -154,13 +154,15 @@ class AmmunitionPanel(AmmunitionPanelMeta):
              'isBackground': isBackground})
         return
 
-    def __addDevice(self, seq, dp, slotType, slotIndex = 0):
+    def __addDevice(self, seq, dp, slotType, slotIndex=0):
         device = {'slotType': slotType,
          'slotIndex': slotIndex,
          'selectedIndex': self.__getSelectedItemIndex(dp),
          'availableDevices': dp,
          'tooltip': '',
          'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_MODULE}
+        if self.__isMoonVehicle:
+            device.update({'isMoonEvent': slotType in (FITTING_TYPES.OPTIONAL_DEVICE, FITTING_TYPES.EQUIPMENT)})
         self.updateDeviceTooltip(device, slotType)
         seq.append(device)
 
@@ -168,10 +170,10 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         if device['selectedIndex'] == -1:
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY if not self.__isMoonVehicle else TOOLTIPS.HANGAR_AMMUNITION_MOONEVENT_DEVICE
             elif slotType == FITTING_TYPES.EQUIPMENT:
                 device['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+                device['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY if not self.__isMoonVehicle else TOOLTIPS.HANGAR_AMMUNITION_MOONEVENT_EQUIPMENT
             else:
                 LOG_ERROR('Wrong device state! Module cannot be unselected!')
         else:
@@ -183,14 +185,14 @@ class AmmunitionPanel(AmmunitionPanelMeta):
             if item['isSelected']:
                 return idx
 
-    def _getInstallReason(self, module, vehicle, reason, slotIdx = None):
+    def _getInstallReason(self, module, vehicle, reason, slotIdx=None):
         _, installReason = module.mayInstall(vehicle, slotIdx)
         if reason == 'credit_error':
             return installReason or reason
         else:
             return installReason
 
-    def __updateAmmo(self, shellsData = None):
+    def __updateAmmo(self, shellsData=None):
         shells = []
         stateWarning = False
         if g_currentVehicle.isPresent():
@@ -204,7 +206,6 @@ class AmmunitionPanel(AmmunitionPanelMeta):
                  'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
                  'count': count,
-                 'historicalBattleID': -1,
                  'tooltip': '',
                  'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
 
@@ -239,10 +240,7 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_MODULE, invID, newId, slotIdx, oldId, isRemove)
 
     def __getStatus(self, reason):
-        if reason is not None:
-            return '#menu:moduleFits/' + reason.replace(' ', '_')
-        else:
-            return ''
+        return '#menu:moduleFits/' + reason.replace(' ', '_') if reason is not None else ''
 
     def __inventoryUpdateCallBack(self, *args):
         self.update()

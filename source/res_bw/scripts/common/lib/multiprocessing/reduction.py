@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/reduction.py
 __all__ = []
 import os
@@ -123,7 +124,7 @@ def rebuild_connection(reduced_handle, readable, writable):
 
 ForkingPickler.register(_multiprocessing.Connection, reduce_connection)
 
-def fromfd(fd, family, type_, proto = 0):
+def fromfd(fd, family, type_, proto=0):
     s = socket.fromfd(fd, family, type_, proto)
     if s.__class__ is not socket.socket:
         s = socket.socket(_sock=s)

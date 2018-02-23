@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/urlparse.py
 """Parse (absolute and relative) URLs.
 
@@ -200,7 +201,7 @@ class ParseResult(namedtuple('ParseResult', 'scheme netloc path params query fra
         return urlunparse(self)
 
 
-def urlparse(url, scheme = '', allow_fragments = True):
+def urlparse(url, scheme='', allow_fragments=True):
     """Parse a URL into 6 components:
     <scheme>://<netloc>/<path>;<params>?<query>#<fragment>
     Return a 6-tuple: (scheme, netloc, path, params, query, fragment).
@@ -225,7 +226,7 @@ def _splitparams(url):
     return (url[:i], url[i + 1:])
 
 
-def _splitnetloc(url, start = 0):
+def _splitnetloc(url, start=0):
     delim = len(url)
     for c in '/?#':
         wdelim = url.find(c, start)
@@ -235,7 +236,7 @@ def _splitnetloc(url, start = 0):
     return (url[start:delim], url[delim:])
 
 
-def urlsplit(url, scheme = '', allow_fragments = True):
+def urlsplit(url, scheme='', allow_fragments=True):
     """Parse a URL into 5 components:
     <scheme>://<netloc>/<path>?<query>#<fragment>
     Return a 5-tuple: (scheme, netloc, path, query, fragment).
@@ -325,7 +326,7 @@ def urlunsplit(data):
     return url
 
 
-def urljoin(base, url, allow_fragments = True):
+def urljoin(base, url, allow_fragments=True):
     """Join a base URL and a possibly relative URL to form an absolute
     interpretation of the latter."""
     if not base:
@@ -417,7 +418,7 @@ try:
 except NameError:
 
     def _is_unicode(x):
-        return 0
+        pass
 
 
 else:
@@ -459,7 +460,7 @@ def unquote(s):
     return ''.join(res)
 
 
-def parse_qs(qs, keep_blank_values = 0, strict_parsing = 0):
+def parse_qs(qs, keep_blank_values=0, strict_parsing=0):
     """Parse a query given as a string argument.
     
         Arguments:
@@ -481,13 +482,12 @@ def parse_qs(qs, keep_blank_values = 0, strict_parsing = 0):
     for name, value in parse_qsl(qs, keep_blank_values, strict_parsing):
         if name in dict:
             dict[name].append(value)
-        else:
-            dict[name] = [value]
+        dict[name] = [value]
 
     return dict
 
 
-def parse_qsl(qs, keep_blank_values = 0, strict_parsing = 0):
+def parse_qsl(qs, keep_blank_values=0, strict_parsing=0):
     """Parse a query given as a string argument.
     
     Arguments:

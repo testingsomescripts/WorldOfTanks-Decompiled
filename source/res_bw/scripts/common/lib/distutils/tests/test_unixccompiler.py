@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_unixccompiler.py
 """Tests for distutils.unixccompiler."""
 import os
@@ -59,8 +59,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'CC':
                 return 'gcc'
-            if v == 'GNULD':
-                return 'yes'
+            return 'yes' if v == 'GNULD' else None
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-Wl,-R/foo')
@@ -69,8 +68,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'CC':
                 return 'gcc'
-            if v == 'GNULD':
-                return 'no'
+            return 'no' if v == 'GNULD' else None
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-Wl,-R/foo')
@@ -79,8 +77,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'CC':
                 return 'x86_64-pc-linux-gnu-gcc-4.4.2'
-            if v == 'GNULD':
-                return 'yes'
+            return 'yes' if v == 'GNULD' else None
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-Wl,-R/foo')
@@ -89,8 +86,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'CC':
                 return 'cc'
-            if v == 'GNULD':
-                return 'yes'
+            return 'yes' if v == 'GNULD' else None
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-R/foo')
@@ -99,8 +95,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
         def gcv(v):
             if v == 'CC':
                 return 'cc'
-            if v == 'GNULD':
-                return 'no'
+            return 'no' if v == 'GNULD' else None
 
         sysconfig.get_config_var = gcv
         self.assertEqual(self.cc.rpath_foo(), '-R/foo')
@@ -116,8 +111,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
     def test_osx_cc_overrides_ldshared(self):
 
         def gcv(v):
-            if v == 'LDSHARED':
-                return 'gcc-4.2 -bundle -undefined dynamic_lookup '
+            return 'gcc-4.2 -bundle -undefined dynamic_lookup ' if v == 'LDSHARED' else 'gcc-4.2'
 
         sysconfig.get_config_var = gcv
         with EnvironmentVarGuard() as env:
@@ -130,8 +124,7 @@ class UnixCCompilerTestCase(unittest.TestCase):
     def test_osx_explict_ldshared(self):
 
         def gcv(v):
-            if v == 'LDSHARED':
-                return 'gcc-4.2 -bundle -undefined dynamic_lookup '
+            return 'gcc-4.2 -bundle -undefined dynamic_lookup ' if v == 'LDSHARED' else 'gcc-4.2'
 
         sysconfig.get_config_var = gcv
         with EnvironmentVarGuard() as env:

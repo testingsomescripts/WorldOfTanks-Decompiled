@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/tests/test_sdist.py
 """Tests for distutils.command.sdist."""
 import os
@@ -48,7 +48,7 @@ class SDistTestCase(PyPIRCCommandTestCase):
         os.chdir(self.old_path)
         super(SDistTestCase, self).tearDown()
 
-    def get_cmd(self, metadata = None):
+    def get_cmd(self, metadata=None):
         """Returns a cmd"""
         if metadata is None:
             metadata = {'name': 'fake',

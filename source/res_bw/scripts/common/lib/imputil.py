@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/imputil.py
 """
 Import utilities
@@ -26,7 +26,7 @@ _ModuleType = type(sys)
 class ImportManager:
     """Manage the import process."""
 
-    def install(self, namespace = vars(__builtin__)):
+    def install(self, namespace=vars(__builtin__)):
         """Install this ImportManager into the specified namespace."""
         if isinstance(namespace, _ModuleType):
             namespace = vars(namespace)
@@ -44,7 +44,7 @@ class ImportManager:
 
     clsFilesystemImporter = None
 
-    def __init__(self, fs_imp = None):
+    def __init__(self, fs_imp=None):
         global _os_stat
         if not _os_stat:
             _os_bootstrap()
@@ -59,7 +59,7 @@ class ImportManager:
         self.add_suffix('.py', py_suffix_importer)
         return
 
-    def _import_hook(self, fqname, globals = None, locals = None, fromlist = None):
+    def _import_hook(self, fqname, globals=None, locals=None, fromlist=None):
         """Python calls this hook to locate and import a module."""
         parts = fqname.split('.')
         parent = self._determine_import_context(globals)
@@ -219,10 +219,7 @@ class Importer:
         top_name = parts[0]
         top_fqname = parent.__name__ + '.' + top_name
         top_module = self._import_one(parent, top_name, top_fqname)
-        if not top_module:
-            return None
-        else:
-            return self._finish_import(top_module, parts[1:], fromlist)
+        return None if not top_module else self._finish_import(top_module, parts[1:], fromlist)
 
     def get_code(self, parent, modname, fqname):
         """Find and retrieve the code for the given module.
@@ -315,13 +312,11 @@ def _os_bootstrap():
         raise ImportError, 'no os specific module found'
     if join is None:
 
-        def join(a, b, sep = sep):
+        def join(a, b, sep=sep):
             if a == '':
                 return b
             lastchar = a[-1:]
-            if lastchar == '/' or lastchar == sep:
-                return a + b
-            return a + sep + b
+            return a + b if lastchar == '/' or lastchar == sep else a + sep + b
 
     _os_stat = stat
     _os_path_join = join
@@ -375,10 +370,7 @@ class _FilesystemImporter(Importer):
 
     def import_from_dir(self, dir, fqname):
         result = self._import_pathname(_os_path_join(dir, fqname), fqname)
-        if result:
-            return self._process_result(result, fqname)
-        else:
-            return None
+        return self._process_result(result, fqname) if result else None
 
     def get_code(self, parent, modname, fqname):
         assert parent
@@ -447,8 +439,7 @@ def _print_importers():
     for name, module in items:
         if module:
             print name, module.__dict__.get('__importer__', '-- no importer')
-        else:
-            print name, '-- non-existent module'
+        print name, '-- non-existent module'
 
 
 def _test_revamp():

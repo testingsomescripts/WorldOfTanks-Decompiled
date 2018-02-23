@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/hotshot/stats.py
 """Statistics analyzer for HotShot."""
 import profile
@@ -31,7 +31,7 @@ class StatsLoader:
                 frame = self.new_frame(filename, lineno, funcname)
                 p.trace_dispatch_call(frame, taccum * 1e-06)
                 taccum = 0
-            elif what == EXIT:
+            if what == EXIT:
                 frame = self.pop_frame()
                 p.trace_dispatch_return(frame, taccum * 1e-06)
                 taccum = 0

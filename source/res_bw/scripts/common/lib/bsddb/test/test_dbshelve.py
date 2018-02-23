@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_dbshelve.py
 """
 TestCases for checking dbShelve objects.
@@ -23,7 +23,7 @@ class DataClass:
 class DBShelveTestCase(unittest.TestCase):
     if sys.version_info < (2, 7) or sys.version_info >= (3, 0) and sys.version_info < (3, 2):
 
-        def assertIn(self, a, b, msg = None):
+        def assertIn(self, a, b, msg=None):
             return self.assertTrue(a in b, msg=msg)
 
     def setUp(self):

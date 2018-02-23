@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/audiodev.py
 """Classes for manipulating audio devices (currently only for Sun and SGI)"""
 from warnings import warnpy3k
@@ -218,7 +218,7 @@ def AudioDev():
         return Play_Audio_sgi()
 
 
-def test(fn = None):
+def test(fn=None):
     import sys
     if sys.argv[1:]:
         fn = sys.argv[1]

@@ -81,6 +81,7 @@
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
+    <hangarShadowTexture>	vehicles/russian/R71_IS_2_Berlin/IS_2_Berlin_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <Chassis_R71_IS_2B>
@@ -116,13 +117,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.44 0.78	</size>
+        <size>	0.48 0.68	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.709	</textureScale>
+        <textureScale>	-1.45	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -208,7 +209,7 @@
         <left>	vehicles/russian/R71_IS_2_Berlin/track/left.track	</left>
         <right>	vehicles/russian/R71_IS_2_Berlin/track/right.track	</right>
         <segmentLength>	0.141	</segmentLength>
-        <segmentOffset>	0.163	</segmentOffset>
+        <segmentOffset>	0.194	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -219,14 +220,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxAmplitude>	0.01	</maxAmplitude>
         <maxOffset>	0.01	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	757	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -319,6 +317,8 @@
       </effects>
       <soundPC>	/vehicles/tanks_pc/treads/treads_3	</soundPC>
       <soundNPC>	/vehicles/tanks_npc/treads/treads_3	</soundNPC>
+      <wwsoundPC>	trds_med_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.972175 0.000000	</hullPosition>
       <hitTester>
         <collisionModel>	vehicles/russian/R71_IS_2_Berlin/collision/Chassis.model	</collisionModel>
@@ -450,7 +450,7 @@
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.048 0.000 0.602 -0.013 0.566 0.243 0.421 0.524 0.177 0.410 0.198 0.534 0.000	</physicsShape>
       <turretRotatorSoundManual>	/turret/turret/turret_manual_traverse/turret_manual_traverse_6000-7999	</turretRotatorSoundManual>
-      <wwturretRotatorSoundManual>	turret_electric_traverse_05	</wwturretRotatorSoundManual>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <turretRotatorSoundGear>	/turret/turret/turret_electric_traverse/turret_electric_traverse_6000-7999	</turretRotatorSoundGear>
       <camouflage>
         <tiling>	0.58 0.58 0.000000 0.000000	</tiling>

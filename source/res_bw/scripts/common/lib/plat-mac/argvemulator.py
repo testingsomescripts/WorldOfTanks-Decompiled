@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/argvemulator.py
 """argvemulator - create sys.argv from OSA events. Used by applets that
 want unix-style arguments.
@@ -27,7 +28,7 @@ class ArgvCollector:
         AE.AERemoveEventHandler(kCoreEventClass, kAEOpenApplication)
         AE.AERemoveEventHandler(kCoreEventClass, kAEOpenDocuments)
 
-    def mainloop(self, mask = highLevelEventMask, timeout = 60):
+    def mainloop(self, mask=highLevelEventMask, timeout=60):
         stoptime = Evt.TickCount() + timeout
         while not self.quitting and Evt.TickCount() < stoptime:
             self._dooneevent(mask, timeout)
@@ -36,7 +37,7 @@ class ArgvCollector:
             print 'argvemulator: timeout waiting for arguments'
         self.close()
 
-    def _dooneevent(self, mask = highLevelEventMask, timeout = 60):
+    def _dooneevent(self, mask=highLevelEventMask, timeout=60):
         got, event = Evt.WaitNextEvent(mask, timeout)
         if got:
             self._lowlevelhandler(event)

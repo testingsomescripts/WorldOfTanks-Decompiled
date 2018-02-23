@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/json/decoder.py
 """Implementation of JSONDecoder
 """
@@ -33,7 +33,7 @@ def linecol(doc, pos):
     return (lineno, colno)
 
 
-def errmsg(msg, doc, pos, end = None):
+def errmsg(msg, doc, pos, end=None):
     lineno, colno = linecol(doc, pos)
     if end is None:
         fmt = '{0}: line {1} column {2} (char {3})'
@@ -70,7 +70,7 @@ def _decode_uXXXX(s, pos):
     raise ValueError(errmsg(msg, s, pos))
 
 
-def py_scanstring(s, end, encoding = None, strict = True, _b = BACKSLASH, _m = STRINGCHUNK.match):
+def py_scanstring(s, end, encoding=None, strict=True, _b=BACKSLASH, _m=STRINGCHUNK.match):
     """Scan the string s for a JSON string. End is the index of the
     character in s after the quote that started the JSON string.
     Unescapes all valid JSON string escape sequences and raises ValueError
@@ -134,7 +134,7 @@ scanstring = c_scanstring or py_scanstring
 WHITESPACE = re.compile('[ \\t\\n\\r]*', FLAGS)
 WHITESPACE_STR = ' \t\n\r'
 
-def JSONObject(s_and_end, encoding, strict, scan_once, object_hook, object_pairs_hook, _w = WHITESPACE.match, _ws = WHITESPACE_STR):
+def JSONObject(s_and_end, encoding, strict, scan_once, object_hook, object_pairs_hook, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
     s, end = s_and_end
     pairs = []
     pairs_append = pairs.append
@@ -213,7 +213,7 @@ def JSONObject(s_and_end, encoding, strict, scan_once, object_hook, object_pairs
         return (pairs, end)
 
 
-def JSONArray(s_and_end, scan_once, _w = WHITESPACE.match, _ws = WHITESPACE_STR):
+def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match, _ws=WHITESPACE_STR):
     s, end = s_and_end
     values = []
     nextchar = s[end:end + 1]
@@ -280,7 +280,7 @@ class JSONDecoder(object):
     
     """
 
-    def __init__(self, encoding = None, object_hook = None, parse_float = None, parse_int = None, parse_constant = None, strict = True, object_pairs_hook = None):
+    def __init__(self, encoding=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None):
         r"""``encoding`` determines the encoding used to interpret any ``str``
         objects decoded by this instance (utf-8 by default).  It has no
         effect when decoding ``unicode`` objects.
@@ -335,7 +335,7 @@ class JSONDecoder(object):
         self.parse_string = scanstring
         self.scan_once = scanner.make_scanner(self)
 
-    def decode(self, s, _w = WHITESPACE.match):
+    def decode(self, s, _w=WHITESPACE.match):
         """Return the Python representation of ``s`` (a ``str`` or ``unicode``
         instance containing a JSON document)
         
@@ -346,7 +346,7 @@ class JSONDecoder(object):
             raise ValueError(errmsg('Extra data', s, end, len(s)))
         return obj
 
-    def raw_decode(self, s, idx = 0):
+    def raw_decode(self, s, idx=0):
         """Decode a JSON document from ``s`` (a ``str`` or ``unicode``
         beginning with a JSON document) and return a 2-tuple of the Python
         representation and the index in ``s`` where the document ended.

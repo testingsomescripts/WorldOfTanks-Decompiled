@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/bcppcompiler.py
 """distutils.bcppcompiler
 
@@ -28,7 +28,7 @@ class BCPPCompiler(CCompiler):
     static_lib_format = shared_lib_format = '%s%s'
     exe_extension = '.exe'
 
-    def __init__(self, verbose = 0, dry_run = 0, force = 0):
+    def __init__(self, verbose=0, dry_run=0, force=0):
         CCompiler.__init__(self, verbose, dry_run, force)
         self.cc = 'bcc32.exe'
         self.linker = 'ilink32.exe'
@@ -58,7 +58,7 @@ class BCPPCompiler(CCompiler):
          '/r']
         return
 
-    def compile(self, sources, output_dir = None, macros = None, include_dirs = None, debug = 0, extra_preargs = None, extra_postargs = None, depends = None):
+    def compile(self, sources, output_dir=None, macros=None, include_dirs=None, debug=0, extra_preargs=None, extra_postargs=None, depends=None):
         macros, objects, extra_postargs, pp_opts, build = self._setup_compile(output_dir, macros, include_dirs, sources, depends, extra_postargs)
         compile_opts = extra_preargs or []
         compile_opts.append('-c')
@@ -101,7 +101,7 @@ class BCPPCompiler(CCompiler):
 
         return objects
 
-    def create_static_lib(self, objects, output_libname, output_dir = None, debug = 0, target_lang = None):
+    def create_static_lib(self, objects, output_libname, output_dir=None, debug=0, target_lang=None):
         objects, output_dir = self._fix_object_args(objects, output_dir)
         output_filename = self.library_filename(output_libname, output_dir=output_dir)
         if self._need_link(objects, output_filename):
@@ -116,7 +116,7 @@ class BCPPCompiler(CCompiler):
         else:
             log.debug('skipping %s (up-to-date)', output_filename)
 
-    def link(self, target_desc, objects, output_filename, output_dir = None, libraries = None, library_dirs = None, runtime_library_dirs = None, export_symbols = None, debug = 0, extra_preargs = None, extra_postargs = None, build_temp = None, target_lang = None):
+    def link(self, target_desc, objects, output_filename, output_dir=None, libraries=None, library_dirs=None, runtime_library_dirs=None, export_symbols=None, debug=0, extra_preargs=None, extra_postargs=None, build_temp=None, target_lang=None):
         objects, output_dir = self._fix_object_args(objects, output_dir)
         libraries, library_dirs, runtime_library_dirs = self._fix_lib_args(libraries, library_dirs, runtime_library_dirs)
         if runtime_library_dirs:
@@ -155,8 +155,7 @@ class BCPPCompiler(CCompiler):
                 base, ext = os.path.splitext(os.path.normcase(file))
                 if ext == '.res':
                     resources.append(file)
-                else:
-                    objects.append(file)
+                objects.append(file)
 
             for l in library_dirs:
                 ld_args.append('/L%s' % os.path.normpath(l))
@@ -169,8 +168,7 @@ class BCPPCompiler(CCompiler):
                 libfile = self.find_library_file(library_dirs, lib, debug)
                 if libfile is None:
                     ld_args.append(lib)
-                else:
-                    ld_args.append(libfile)
+                ld_args.append(libfile)
 
             ld_args.append('import32')
             ld_args.append('cw32mt')
@@ -191,7 +189,7 @@ class BCPPCompiler(CCompiler):
             log.debug('skipping %s (up-to-date)', output_filename)
         return
 
-    def find_library_file(self, dirs, lib, debug = 0):
+    def find_library_file(self, dirs, lib, debug=0):
         if debug:
             dlib = lib + '_d'
             try_names = (dlib + '_bcpp',
@@ -211,7 +209,7 @@ class BCPPCompiler(CCompiler):
 
         return None
 
-    def object_filenames(self, source_filenames, strip_dir = 0, output_dir = ''):
+    def object_filenames(self, source_filenames, strip_dir=0, output_dir=''):
         if output_dir is None:
             output_dir = ''
         obj_names = []
@@ -223,14 +221,13 @@ class BCPPCompiler(CCompiler):
                 base = os.path.basename(base)
             if ext == '.res':
                 obj_names.append(os.path.join(output_dir, base + ext))
-            elif ext == '.rc':
+            if ext == '.rc':
                 obj_names.append(os.path.join(output_dir, base + '.res'))
-            else:
-                obj_names.append(os.path.join(output_dir, base + self.obj_extension))
+            obj_names.append(os.path.join(output_dir, base + self.obj_extension))
 
         return obj_names
 
-    def preprocess(self, source, output_file = None, macros = None, include_dirs = None, extra_preargs = None, extra_postargs = None):
+    def preprocess(self, source, output_file=None, macros=None, include_dirs=None, extra_preargs=None, extra_postargs=None):
         _, macros, include_dirs = self._fix_compile_args(None, macros, include_dirs)
         pp_opts = gen_preprocess_options(macros, include_dirs)
         pp_args = ['cpp32.exe'] + pp_opts

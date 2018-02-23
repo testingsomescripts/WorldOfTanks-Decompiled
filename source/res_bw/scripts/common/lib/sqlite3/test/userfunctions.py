@@ -1,21 +1,22 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/sqlite3/test/userfunctions.py
 import unittest
 import sqlite3 as sqlite
 
 def func_returntext():
-    return 'foo'
+    pass
 
 
 def func_returnunicode():
-    return u'bar'
+    pass
 
 
 def func_returnint():
-    return 42
+    pass
 
 
 def func_returnfloat():
-    return 3.14
+    pass
 
 
 def func_returnnull():
@@ -27,7 +28,7 @@ def func_returnblob():
 
 
 def func_returnlonglong():
-    return 2147483648L
+    pass
 
 
 def func_raiseexception():
@@ -64,7 +65,7 @@ class AggrNoStep:
         pass
 
     def finalize(self):
-        return 1
+        pass
 
 
 class AggrNoFinalize:
@@ -97,7 +98,7 @@ class AggrExceptionInStep:
         5 // 0
 
     def finalize(self):
-        return 42
+        pass
 
 
 class AggrExceptionInFinalize:
@@ -177,7 +178,7 @@ class FunctionTests(unittest.TestCase):
         def getfunc():
 
             def f():
-                return 1
+                pass
 
             return f
 
@@ -404,9 +405,7 @@ class AuthorizerTests(unittest.TestCase):
     def authorizer_cb(action, arg1, arg2, dbname, source):
         if action != sqlite.SQLITE_SELECT:
             return sqlite.SQLITE_DENY
-        if arg2 == 'c2' or arg1 == 't2':
-            return sqlite.SQLITE_DENY
-        return sqlite.SQLITE_OK
+        return sqlite.SQLITE_DENY if arg2 == 'c2' or arg1 == 't2' else sqlite.SQLITE_OK
 
     def setUp(self):
         self.con = sqlite.connect(':memory:')
@@ -455,9 +454,7 @@ class AuthorizerIllegalTypeTests(AuthorizerTests):
     def authorizer_cb(action, arg1, arg2, dbname, source):
         if action != sqlite.SQLITE_SELECT:
             return 0.0
-        if arg2 == 'c2' or arg1 == 't2':
-            return 0.0
-        return sqlite.SQLITE_OK
+        return 0.0 if arg2 == 'c2' or arg1 == 't2' else sqlite.SQLITE_OK
 
 
 class AuthorizerLargeIntegerTests(AuthorizerTests):
@@ -466,9 +463,7 @@ class AuthorizerLargeIntegerTests(AuthorizerTests):
     def authorizer_cb(action, arg1, arg2, dbname, source):
         if action != sqlite.SQLITE_SELECT:
             return 4294967296L
-        if arg2 == 'c2' or arg1 == 't2':
-            return 4294967296L
-        return sqlite.SQLITE_OK
+        return 4294967296L if arg2 == 'c2' or arg1 == 't2' else sqlite.SQLITE_OK
 
 
 def suite():

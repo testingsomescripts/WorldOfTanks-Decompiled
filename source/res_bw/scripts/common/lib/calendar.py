@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/calendar.py
 """Calendar printing functions
 
@@ -139,7 +139,7 @@ class Calendar(object):
     provides data to subclasses.
     """
 
-    def __init__(self, firstweekday = 0):
+    def __init__(self, firstweekday=0):
         self.firstweekday = firstweekday
 
     def getfirstweekday(self):
@@ -186,8 +186,7 @@ class Calendar(object):
         for date in self.itermonthdates(year, month):
             if date.month != month:
                 yield (0, date.weekday())
-            else:
-                yield (date.day, date.weekday())
+            yield (date.day, date.weekday())
 
     def itermonthdays(self, year, month):
         """
@@ -197,8 +196,7 @@ class Calendar(object):
         for date in self.itermonthdates(year, month):
             if date.month != month:
                 yield 0
-            else:
-                yield date.day
+            yield date.day
 
     def monthdatescalendar(self, year, month):
         """
@@ -226,7 +224,7 @@ class Calendar(object):
         days = list(self.itermonthdays(year, month))
         return [ days[i:i + 7] for i in range(0, len(days), 7) ]
 
-    def yeardatescalendar(self, year, width = 3):
+    def yeardatescalendar(self, year, width=3):
         """
         Return the data for the specified year ready for formatting. The return
         value is a list of month rows. Each month row contains up to width months.
@@ -236,7 +234,7 @@ class Calendar(object):
         months = [ self.monthdatescalendar(year, i) for i in range(January, January + 12) ]
         return [ months[i:i + width] for i in range(0, len(months), width) ]
 
-    def yeardays2calendar(self, year, width = 3):
+    def yeardays2calendar(self, year, width=3):
         """
         Return the data for the specified year ready for formatting (similar to
         yeardatescalendar()). Entries in the week lists are
@@ -246,7 +244,7 @@ class Calendar(object):
         months = [ self.monthdays2calendar(year, i) for i in range(January, January + 12) ]
         return [ months[i:i + width] for i in range(0, len(months), width) ]
 
-    def yeardayscalendar(self, year, width = 3):
+    def yeardayscalendar(self, year, width=3):
         """
         Return the data for the specified year ready for formatting (similar to
         yeardatescalendar()). Entries in the week lists are day numbers.
@@ -300,7 +298,7 @@ class TextCalendar(Calendar):
         """
         return ' '.join((self.formatweekday(i, width) for i in self.iterweekdays()))
 
-    def formatmonthname(self, theyear, themonth, width, withyear = True):
+    def formatmonthname(self, theyear, themonth, width, withyear=True):
         """
         Return a formatted month name.
         """
@@ -309,13 +307,13 @@ class TextCalendar(Calendar):
             s = '%s %r' % (s, theyear)
         return s.center(width)
 
-    def prmonth(self, theyear, themonth, w = 0, l = 0):
+    def prmonth(self, theyear, themonth, w=0, l=0):
         """
         Print a month's calendar.
         """
         print self.formatmonth(theyear, themonth, w, l),
 
-    def formatmonth(self, theyear, themonth, w = 0, l = 0):
+    def formatmonth(self, theyear, themonth, w=0, l=0):
         """
         Return a month's calendar string (multi-line).
         """
@@ -332,7 +330,7 @@ class TextCalendar(Calendar):
 
         return s
 
-    def formatyear(self, theyear, w = 2, l = 1, c = 6, m = 3):
+    def formatyear(self, theyear, w=2, l=1, c=6, m=3):
         """
         Returns a year's calendar as a multi-line string.
         """
@@ -360,15 +358,14 @@ class TextCalendar(Calendar):
                 for cal in row:
                     if j >= len(cal):
                         weeks.append('')
-                    else:
-                        weeks.append(self.formatweek(cal[j], w))
+                    weeks.append(self.formatweek(cal[j], w))
 
                 a(formatstring(weeks, colwidth, c).rstrip())
                 a('\n' * l)
 
         return ''.join(v)
 
-    def pryear(self, theyear, w = 0, l = 0, c = 6, m = 3):
+    def pryear(self, theyear, w=0, l=0, c=6, m=3):
         """Print a year's calendar."""
         print self.formatyear(theyear, w, l, c, m)
 
@@ -414,7 +411,7 @@ class HTMLCalendar(Calendar):
         s = ''.join((self.formatweekday(i) for i in self.iterweekdays()))
         return '<tr>%s</tr>' % s
 
-    def formatmonthname(self, theyear, themonth, withyear = True):
+    def formatmonthname(self, theyear, themonth, withyear=True):
         """
         Return a month name as a table row.
         """
@@ -424,7 +421,7 @@ class HTMLCalendar(Calendar):
             s = '%s' % month_name[themonth]
         return '<tr><th colspan="7" class="month">%s</th></tr>' % s
 
-    def formatmonth(self, theyear, themonth, withyear = True):
+    def formatmonth(self, theyear, themonth, withyear=True):
         """
         Return a formatted month as a table.
         """
@@ -444,7 +441,7 @@ class HTMLCalendar(Calendar):
         a('\n')
         return ''.join(v)
 
-    def formatyear(self, theyear, width = 3):
+    def formatyear(self, theyear, width=3):
         """
         Return a formatted year as a table of tables.
         """
@@ -467,7 +464,7 @@ class HTMLCalendar(Calendar):
         a('</table>')
         return ''.join(v)
 
-    def formatyearpage(self, theyear, width = 3, css = 'calendar.css', encoding = None):
+    def formatyearpage(self, theyear, width=3, css='calendar.css', encoding=None):
         """
         Return a formatted year as a complete HTML page.
         """
@@ -513,7 +510,7 @@ class LocaleTextCalendar(TextCalendar):
     as unicode.
     """
 
-    def __init__(self, firstweekday = 0, locale = None):
+    def __init__(self, firstweekday=0, locale=None):
         TextCalendar.__init__(self, firstweekday)
         if locale is None:
             locale = _locale.getdefaultlocale()
@@ -532,7 +529,7 @@ class LocaleTextCalendar(TextCalendar):
             return name[:width].center(width)
         return
 
-    def formatmonthname(self, theyear, themonth, width, withyear = True):
+    def formatmonthname(self, theyear, themonth, width, withyear=True):
         with TimeEncoding(self.locale) as encoding:
             s = month_name[themonth]
             if encoding is not None:
@@ -551,7 +548,7 @@ class LocaleHTMLCalendar(HTMLCalendar):
     as unicode.
     """
 
-    def __init__(self, firstweekday = 0, locale = None):
+    def __init__(self, firstweekday=0, locale=None):
         HTMLCalendar.__init__(self, firstweekday)
         if locale is None:
             locale = _locale.getdefaultlocale()
@@ -566,7 +563,7 @@ class LocaleHTMLCalendar(HTMLCalendar):
             return '<th class="%s">%s</th>' % (self.cssclasses[day], s)
         return
 
-    def formatmonthname(self, theyear, themonth, withyear = True):
+    def formatmonthname(self, theyear, themonth, withyear=True):
         with TimeEncoding(self.locale) as encoding:
             s = month_name[themonth]
             if encoding is not None:
@@ -602,12 +599,12 @@ prcal = c.pryear
 _colwidth = 20
 _spacing = 6
 
-def format(cols, colwidth = _colwidth, spacing = _spacing):
+def format(cols, colwidth=_colwidth, spacing=_spacing):
     """Prints multi-column formatting for year calendars"""
     print formatstring(cols, colwidth, spacing)
 
 
-def formatstring(cols, colwidth = _colwidth, spacing = _spacing):
+def formatstring(cols, colwidth=_colwidth, spacing=_spacing):
     """Returns a string formatted from n strings, centered within n columns."""
     spacing *= ' '
     return spacing.join((c.center(colwidth) for c in cols))

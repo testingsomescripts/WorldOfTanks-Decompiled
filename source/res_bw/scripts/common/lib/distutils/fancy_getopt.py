@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/fancy_getopt.py
 """distutils.fancy_getopt
 
@@ -32,7 +32,7 @@ class FancyGetopt():
         on the command line sets 'verbose' to false
     """
 
-    def __init__(self, option_table = None):
+    def __init__(self, option_table=None):
         self.option_table = option_table
         self.option_index = {}
         if self.option_table:
@@ -55,7 +55,7 @@ class FancyGetopt():
         self.option_table = option_table
         self._build_index()
 
-    def add_option(self, long_option, short_option = None, help_string = None):
+    def add_option(self, long_option, short_option=None, help_string=None):
         if long_option in self.option_index:
             raise DistutilsGetoptError, "option conflict: already an option '%s'" % long_option
         else:
@@ -145,7 +145,7 @@ class FancyGetopt():
 
         return
 
-    def getopt(self, args = None, object = None):
+    def getopt(self, args=None, object=None):
         """Parse command-line options in args. Store as attributes on object.
         
         If 'args' is None or not supplied, uses 'sys.argv[1:]'.  If
@@ -210,7 +210,7 @@ class FancyGetopt():
             return self.option_order
         return
 
-    def generate_help(self, header = None):
+    def generate_help(self, header=None):
         """Generate help text (a list of strings, one per suggested line of
         output) from the option table for this FancyGetopt object.
         """
@@ -255,7 +255,7 @@ class FancyGetopt():
 
         return lines
 
-    def print_help(self, header = None, file = None):
+    def print_help(self, header=None, file=None):
         if file is None:
             file = sys.stdout
         for line in self.generate_help(header):
@@ -297,10 +297,9 @@ def wrap_text(text, width):
                     cur_line.append(chunks[0])
                     del chunks[0]
                     cur_len = cur_len + l
-                else:
-                    if cur_line and cur_line[-1][0] == ' ':
-                        del cur_line[-1]
-                    break
+                if cur_line and cur_line[-1][0] == ' ':
+                    del cur_line[-1]
+                break
 
             if chunks:
                 if cur_len == 0:
@@ -324,7 +323,7 @@ class OptionDummy():
     """Dummy class just used as a place to hold command-line option
     values as instance attributes."""
 
-    def __init__(self, options = []):
+    def __init__(self, options=[]):
         """Create a new OptionDummy instance.  The attributes listed in
         'options' will be initialized to None."""
         for opt in options:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/lobby/proxy.py
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
@@ -34,10 +34,10 @@ class SfLobbyProxy(GUIProxy):
         return None
 
     def getViewSettings(self):
-        raise Exception, 'Routine getViewSettings must be implemented'
+        raise Exception('Routine getViewSettings must be implemented')
 
     def getViewsAliases(self):
-        raise Exception, 'Routine getViewsAliases must be implemented'
+        raise Exception('Routine getViewsAliases must be implemented')
 
     def init(self):
         result = False
@@ -61,7 +61,7 @@ class SfLobbyProxy(GUIProxy):
         self.onGUILoaded()
         return result
 
-    def fini(self, isItemsRevert = True):
+    def fini(self, isItemsRevert=True):
         self.eManager.clear()
         self.effects.stopAll()
         if self.app is not None:
@@ -109,26 +109,26 @@ class SfLobbyProxy(GUIProxy):
         if event:
             g_eventBus.handleEvent(events.LoadViewEvent(event), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def playEffect(self, effectName, args, itemRef = None, containerRef = None):
+    def playEffect(self, effectName, args, itemRef=None, containerRef=None):
         return self.effects.play(effectName, args)
 
     def stopEffect(self, effectName, effectID):
         self.effects.stop(effectName, effectID)
 
-    def isEffectRunning(self, effectName, effectID = None):
+    def isEffectRunning(self, effectName, effectID=None):
         return self.effects.isStillRunning(effectName, effectID=effectID)
 
-    def showWaiting(self, messageID, isSingle = False):
+    def showWaiting(self, messageID, isSingle=False):
         Waiting.show('tutorial-{0:>s}'.format(messageID), isSingle=isSingle)
 
-    def hideWaiting(self, messageID = None):
+    def hideWaiting(self, messageID=None):
         if messageID is not None:
             Waiting.hide('tutorial-{0:>s}'.format(messageID))
         else:
             Waiting.close()
         return
 
-    def showMessage(self, text, lookupType = None):
+    def showMessage(self, text, lookupType=None):
         guiType = None
         if type is not None:
             guiType = SystemMessages.SM_TYPE.lookup(lookupType)

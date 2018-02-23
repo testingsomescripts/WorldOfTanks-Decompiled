@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/test/test_ttk/test_functions.py
 import sys
 import unittest
@@ -136,13 +136,13 @@ class InternalFunctionsTest(unittest.TestCase):
 
     def test_format_layoutlist(self):
 
-        def sample(indent = 0, indent_size = 2):
+        def sample(indent=0, indent_size=2):
             return ttk._format_layoutlist([('a', {'other': [1, 2, 3],
                'children': [('b', {'children': [('c', {'children': [('d', {'nice': 'opt'})],
                                              'something': (1, 2)})]})]})], indent=indent, indent_size=indent_size)[0]
 
-        def sample_expected(indent = 0, indent_size = 2):
-            spaces = lambda amount = 0: ' ' * (amount + indent)
+        def sample_expected(indent=0, indent_size=2):
+            spaces = lambda amount=0: ' ' * (amount + indent)
             return '%sa -other {1 2 3} -children {\n%sb -children {\n%sc -something {1 2} -children {\n%sd -nice opt\n%s}\n%s}\n%s}' % (spaces(),
              spaces(indent_size),
              spaces(2 * indent_size),
@@ -238,11 +238,8 @@ class InternalFunctionsTest(unittest.TestCase):
 
     def test_val_or_dict(self):
 
-        def func(opt, val = None):
-            if val is None:
-                return 'test val'
-            else:
-                return (opt, val)
+        def func(opt, val=None):
+            return 'test val' if val is None else (opt, val)
 
         options = {'test': None}
         self.assertEqual(ttk._val_or_dict(options, func), 'test val')

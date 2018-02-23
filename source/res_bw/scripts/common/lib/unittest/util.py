@@ -1,18 +1,17 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/util.py
 """Various utility functions."""
 from collections import namedtuple, OrderedDict
 __unittest = True
 _MAX_LENGTH = 80
 
-def safe_repr(obj, short = False):
+def safe_repr(obj, short=False):
     try:
         result = repr(obj)
     except Exception:
         result = object.__repr__(obj)
 
-    if not short or len(result) < _MAX_LENGTH:
-        return result
-    return result[:_MAX_LENGTH] + ' [truncated]...'
+    return result if not short or len(result) < _MAX_LENGTH else result[:_MAX_LENGTH] + ' [truncated]...'
 
 
 def strclass(cls):
@@ -65,7 +64,7 @@ def sorted_list_difference(expected, actual):
     return (missing, unexpected)
 
 
-def unorderable_list_difference(expected, actual, ignore_duplicate = False):
+def unorderable_list_difference(expected, actual, ignore_duplicate=False):
     """Same behavior as sorted_list_difference but
     for lists of unorderable items (like dicts).
     

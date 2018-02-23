@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/managers.py
 __all__ = ['BaseManager',
  'SyncManager',
@@ -45,7 +46,7 @@ class Token(object):
         return 'Token(typeid=%r, address=%r, id=%r)' % (self.typeid, self.address, self.id)
 
 
-def dispatch(c, id, methodname, args = (), kwds = {}):
+def dispatch(c, id, methodname, args=(), kwds={}):
     """
     Send a message to manager using connection `c` and return response
     """
@@ -63,10 +64,10 @@ def convert_to_error(kind, result):
     if kind == '#ERROR':
         return result
     elif kind == '#TRACEBACK':
-        if not type(result) is str:
-            raise AssertionError
-            return RemoteError(result)
-        raise kind == '#UNSERIALIZABLE' and (type(result) is str or AssertionError)
+        assert type(result) is str
+        return RemoteError(result)
+    elif kind == '#UNSERIALIZABLE':
+        assert type(result) is str
         return RemoteError('Unserializable message: %s\n' % result)
     else:
         return ValueError('Unrecognized message type')
@@ -113,7 +114,7 @@ class Server(object):
      'decref']
 
     def __init__(self, registry, address, authkey, serializer):
-        raise isinstance(authkey, bytes) or AssertionError
+        assert isinstance(authkey, bytes)
         self.registry = registry
         self.authkey = AuthenticationString(authkey)
         Listener, Client = listener_client[serializer]
@@ -131,18 +132,20 @@ class Server(object):
         """
         current_process()._manager_server = self
         try:
-            while 1:
-                try:
-                    c = self.listener.accept()
-                except (OSError, IOError):
-                    continue
+            try:
+                while 1:
+                    try:
+                        c = self.listener.accept()
+                    except (OSError, IOError):
+                        continue
 
-                t = threading.Thread(target=self.handle_request, args=(c,))
-                t.daemon = True
-                t.start()
+                    t = threading.Thread(target=self.handle_request, args=(c,))
+                    t.daemon = True
+                    t.start()
 
-        except (KeyboardInterrupt, SystemExit):
-            pass
+            except (KeyboardInterrupt, SystemExit):
+                pass
+
         finally:
             self.stop = 999
             self.listener.close()
@@ -157,7 +160,7 @@ class Server(object):
             connection.answer_challenge(c, self.authkey)
             request = c.recv()
             ignore, funcname, args, kwds = request
-            raise funcname in self.public or AssertionError('%r unrecognized' % funcname)
+            assert funcname in self.public, '%r unrecognized' % funcname
             func = getattr(self, funcname)
         except Exception:
             msg = ('#TRACEBACK', format_exc())
@@ -290,26 +293,28 @@ class Server(object):
         Shutdown this process
         """
         try:
-            util.debug('manager received shutdown message')
-            c.send(('#RETURN', None))
-            if sys.stdout != sys.__stdout__:
-                util.debug('resetting stdout, stderr')
-                sys.stdout = sys.__stdout__
-                sys.stderr = sys.__stderr__
-            util._run_finalizers(0)
-            for p in active_children():
-                util.debug('terminating a child process of manager')
-                p.terminate()
+            try:
+                util.debug('manager received shutdown message')
+                c.send(('#RETURN', None))
+                if sys.stdout != sys.__stdout__:
+                    util.debug('resetting stdout, stderr')
+                    sys.stdout = sys.__stdout__
+                    sys.stderr = sys.__stderr__
+                util._run_finalizers(0)
+                for p in active_children():
+                    util.debug('terminating a child process of manager')
+                    p.terminate()
 
-            for p in active_children():
-                util.debug('terminating a child process of manager')
-                p.join()
+                for p in active_children():
+                    util.debug('terminating a child process of manager')
+                    p.join()
 
-            util._run_finalizers()
-            util.info('manager exiting with exitcode 0')
-        except:
-            import traceback
-            traceback.print_exc()
+                util._run_finalizers()
+                util.info('manager exiting with exitcode 0')
+            except:
+                import traceback
+                traceback.print_exc()
+
         finally:
             exit(0)
 
@@ -323,20 +328,20 @@ class Server(object):
         try:
             callable, exposed, method_to_typeid, proxytype = self.registry[typeid]
             if callable is None:
-                if not (len(args) == 1 and not kwds):
-                    raise AssertionError
-                    obj = args[0]
-                else:
-                    obj = callable(*args, **kwds)
-                exposed = exposed is None and public_methods(obj)
+                assert len(args) == 1 and not kwds
+                obj = args[0]
+            else:
+                obj = callable(*args, **kwds)
+            if exposed is None:
+                exposed = public_methods(obj)
             if method_to_typeid is not None:
-                if not type(method_to_typeid) is dict:
-                    raise AssertionError
-                    exposed = list(exposed) + list(method_to_typeid)
-                ident = '%x' % id(obj)
-                util.debug('%r callable returned object with id %r', typeid, ident)
-                self.id_to_obj[ident] = (obj, set(exposed), method_to_typeid)
-                self.id_to_refcount[ident] = ident not in self.id_to_refcount and 0
+                assert type(method_to_typeid) is dict
+                exposed = list(exposed) + list(method_to_typeid)
+            ident = '%x' % id(obj)
+            util.debug('%r callable returned object with id %r', typeid, ident)
+            self.id_to_obj[ident] = (obj, set(exposed), method_to_typeid)
+            if ident not in self.id_to_refcount:
+                self.id_to_refcount[ident] = 0
             self.incref(c, ident)
             return (ident, tuple(exposed))
         finally:
@@ -369,10 +374,10 @@ class Server(object):
     def decref(self, c, ident):
         self.mutex.acquire()
         try:
-            if not self.id_to_refcount[ident] >= 1:
-                raise AssertionError
-                self.id_to_refcount[ident] -= 1
-                del self.id_to_refcount[ident] == 0 and self.id_to_obj[ident]
+            assert self.id_to_refcount[ident] >= 1
+            self.id_to_refcount[ident] -= 1
+            if self.id_to_refcount[ident] == 0:
+                del self.id_to_obj[ident]
                 del self.id_to_refcount[ident]
                 util.debug('disposing of obj with id %r', ident)
         finally:
@@ -396,7 +401,7 @@ class BaseManager(object):
     _registry = {}
     _Server = Server
 
-    def __init__(self, address = None, authkey = None, serializer = 'pickle'):
+    def __init__(self, address=None, authkey=None, serializer='pickle'):
         if authkey is None:
             authkey = current_process().authkey
         self._address = address
@@ -414,7 +419,7 @@ class BaseManager(object):
         """
         Return server object with serve_forever() method and address attribute
         """
-        raise self._state.value == State.INITIAL or AssertionError
+        assert self._state.value == State.INITIAL
         return Server(self._registry, self._address, self._authkey, self._serializer)
 
     def connect(self):
@@ -427,13 +432,13 @@ class BaseManager(object):
         self._state.value = State.STARTED
         return
 
-    def start(self, initializer = None, initargs = ()):
+    def start(self, initializer=None, initargs=()):
         """
         Spawn a server process for this manager object
         """
-        if not self._state.value == State.INITIAL:
-            raise AssertionError
-            raise initializer is not None and not hasattr(initializer, '__call__') and TypeError('initializer must be a callable')
+        assert self._state.value == State.INITIAL
+        if initializer is not None and not hasattr(initializer, '__call__'):
+            raise TypeError('initializer must be a callable')
         reader, writer = connection.Pipe(duplex=False)
         self._process = Process(target=type(self)._run_server, args=(self._registry,
          self._address,
@@ -457,7 +462,7 @@ class BaseManager(object):
         return
 
     @classmethod
-    def _run_server(cls, registry, address, authkey, serializer, writer, initializer = None, initargs = ()):
+    def _run_server(cls, registry, address, authkey, serializer, writer, initializer=None, initargs=()):
         """
         Create a server, report its address and run it
         """
@@ -474,7 +479,7 @@ class BaseManager(object):
         """
         Create a new shared object; return the token and exposed tuple
         """
-        raise self._state.value == State.STARTED or AssertionError('server not yet started')
+        assert self._state.value == State.STARTED, 'server not yet started'
         conn = self._Client(self._address, authkey=self._authkey)
         try:
             id, exposed = dispatch(conn, None, 'create', (typeid,) + args, kwds)
@@ -483,7 +488,7 @@ class BaseManager(object):
 
         return (Token(typeid, self._address, id), exposed)
 
-    def join(self, timeout = None):
+    def join(self, timeout=None):
         """
         Join the manager process (if it has been spawned)
         """
@@ -556,7 +561,7 @@ class BaseManager(object):
     address = property(lambda self: self._address)
 
     @classmethod
-    def register(cls, typeid, callable = None, proxytype = None, exposed = None, method_to_typeid = None, create_method = True):
+    def register(cls, typeid, callable=None, proxytype=None, exposed=None, method_to_typeid=None, create_method=True):
         """
         Register a typeid with the manager type
         """
@@ -568,8 +573,8 @@ class BaseManager(object):
         method_to_typeid = method_to_typeid or getattr(proxytype, '_method_to_typeid_', None)
         if method_to_typeid:
             for key, value in method_to_typeid.items():
-                raise type(key) is str or AssertionError('%r is not a string' % key)
-                raise type(value) is str or AssertionError('%r is not a string' % value)
+                assert type(key) is str, '%r is not a string' % key
+                assert type(value) is str, '%r is not a string' % value
 
         cls._registry[typeid] = (callable,
          exposed,
@@ -606,7 +611,7 @@ class BaseProxy(object):
     _address_to_local = {}
     _mutex = util.ForkAwareThreadLock()
 
-    def __init__(self, token, serializer, manager = None, authkey = None, exposed = None, incref = True):
+    def __init__(self, token, serializer, manager=None, authkey=None, exposed=None, incref=True):
         BaseProxy._mutex.acquire()
         try:
             tls_idset = BaseProxy._address_to_local.get(token.address, None)
@@ -644,7 +649,7 @@ class BaseProxy(object):
         self._tls.connection = conn
         return
 
-    def _callmethod(self, methodname, args = (), kwds = {}):
+    def _callmethod(self, methodname, args=(), kwds={}):
         """
         Try to call a method of the referrent and return a copy of the result
         """
@@ -769,7 +774,7 @@ def RebuildProxy(func, token, serializer, kwds):
         return
 
 
-def MakeProxyType(name, exposed, _cache = {}):
+def MakeProxyType(name, exposed, _cache={}):
     """
     Return an proxy type whose methods are given by `exposed`
     """
@@ -789,7 +794,7 @@ def MakeProxyType(name, exposed, _cache = {}):
     return ProxyType
 
 
-def AutoProxy(token, serializer, manager = None, authkey = None, exposed = None, incref = True):
+def AutoProxy(token, serializer, manager=None, authkey=None, exposed=None, incref=True):
     """
     Return an auto-proxy for `token`
     """
@@ -829,7 +834,7 @@ class Namespace(object):
 
 class Value(object):
 
-    def __init__(self, typecode, value, lock = True):
+    def __init__(self, typecode, value, lock=True):
         self._typecode = typecode
         self._value = value
 
@@ -845,7 +850,7 @@ class Value(object):
     value = property(get, set)
 
 
-def Array(typecode, sequence, lock = True):
+def Array(typecode, sequence, lock=True):
     return array.array(typecode, sequence)
 
 
@@ -874,7 +879,7 @@ class IteratorProxy(BaseProxy):
 class AcquirerProxy(BaseProxy):
     _exposed_ = ('acquire', 'release')
 
-    def acquire(self, blocking = True):
+    def acquire(self, blocking=True):
         return self._callmethod('acquire', (blocking,))
 
     def release(self):
@@ -890,7 +895,7 @@ class AcquirerProxy(BaseProxy):
 class ConditionProxy(AcquirerProxy):
     _exposed_ = ('acquire', 'release', 'wait', 'notify', 'notify_all')
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         return self._callmethod('wait', (timeout,))
 
     def notify(self):
@@ -912,7 +917,7 @@ class EventProxy(BaseProxy):
     def clear(self):
         return self._callmethod('clear')
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         return self._callmethod('wait', (timeout,))
 
 

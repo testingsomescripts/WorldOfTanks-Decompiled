@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mhlib.py
 """MH interface -- purely object-oriented (well, almost)
 
@@ -83,7 +84,7 @@ class MH():
     If either is omitted or empty a default is used; the default
     directory is taken from the MH profile if it is specified there."""
 
-    def __init__(self, path = None, profile = None):
+    def __init__(self, path=None, profile=None):
         """Constructor."""
         if profile is None:
             profile = MH_PROFILE
@@ -478,7 +479,7 @@ class Folder():
             else:
                 raise os.error, ('multiple errors:', errors)
 
-    def refilemessages(self, list, tofolder, keepsequences = 0):
+    def refilemessages(self, list, tofolder, keepsequences=0):
         """Refile one or more messages -- may raise os.error.
         'tofolder' is an open folder object."""
         errors = []
@@ -667,7 +668,7 @@ class Folder():
 
 class Message(mimetools.Message):
 
-    def __init__(self, f, n, fp = None):
+    def __init__(self, f, n, fp=None):
         """Constructor."""
         self.folder = f
         self.number = n
@@ -681,7 +682,7 @@ class Message(mimetools.Message):
         """String representation."""
         return 'Message(%s, %s)' % (repr(self.folder), self.number)
 
-    def getheadertext(self, pred = None):
+    def getheadertext(self, pred=None):
         """Return the message's header text as a string.  If an
         argument is specified, it is used as a filter predicate to
         decide which headers to return (its argument is the header
@@ -701,7 +702,7 @@ class Message(mimetools.Message):
 
             return ''.join(headers)
 
-    def getbodytext(self, decode = 1):
+    def getbodytext(self, decode=1):
         """Return the message's body text as string.  This undoes a
         Content-Transfer-Encoding, but does not interpret other MIME
         features (e.g. multipart messages).  To suppress decoding,
@@ -764,15 +765,13 @@ class SubMessage(Message):
         f, n, fp = self.folder, self.number, self.fp
         return 'SubMessage(%s, %s, %s)' % (f, n, fp)
 
-    def getbodytext(self, decode = 1):
+    def getbodytext(self, decode=1):
         if not decode:
             return self.bodyencoded
-        if type(self.body) == type(''):
-            return self.body
+        return self.body if type(self.body) == type('') else None
 
     def getbodyparts(self):
-        if type(self.body) == type([]):
-            return self.body
+        return self.body if type(self.body) == type([]) else None
 
     def getbody(self):
         return self.body
@@ -796,7 +795,7 @@ class IntSet():
     IntSet constructor; __repr__() is a valid IntSet constructor itself.
     """
 
-    def __init__(self, data = None, sep = ',', rng = '-'):
+    def __init__(self, data=None, sep=',', rng='-'):
         self.pairs = []
         self.sep = sep
         self.rng = rng
@@ -823,8 +822,7 @@ class IntSet():
             blo, bhi = self.pairs[i]
             if ahi >= blo - 1:
                 self.pairs[i - 1:i + 1] = [(alo, max(ahi, bhi))]
-            else:
-                i = i + 1
+            i = i + 1
 
     def tostring(self):
         s = ''
@@ -835,8 +833,7 @@ class IntSet():
                 t = repr(lo) + self.rng + repr(hi)
             if s:
                 s = s + (self.sep + t)
-            else:
-                s = t
+            s = t
 
         return s
 
@@ -908,16 +905,15 @@ class IntSet():
 
             if len(list) == 1:
                 new.append((list[0], list[0]))
-            elif len(list) == 2 and list[0] <= list[1]:
+            if len(list) == 2 and list[0] <= list[1]:
                 new.append((list[0], list[1]))
-            else:
-                raise ValueError, 'bad data passed to IntSet'
+            raise ValueError, 'bad data passed to IntSet'
 
         self.pairs = self.pairs + new
         self.normalize()
 
 
-def pickline(file, key, casefold = 1):
+def pickline(file, key, casefold=1):
     try:
         f = open(file, 'r')
     except IOError:
@@ -942,7 +938,7 @@ def pickline(file, key, casefold = 1):
     return None
 
 
-def updateline(file, key, value, casefold = 1):
+def updateline(file, key, value, casefold=1):
     try:
         f = open(file, 'r')
         lines = f.readlines()

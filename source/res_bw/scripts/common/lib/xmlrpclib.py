@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xmlrpclib.py
 """
 An XML-RPC client interface for Python.
@@ -69,13 +70,13 @@ try:
 except NameError:
     _bool_is_builtin = 0
 
-def _decode(data, encoding, is8bit = re.compile('[\x80-\xff]').search):
+def _decode(data, encoding, is8bit=re.compile('[\x80-\xff]').search):
     if unicode and encoding and is8bit(data):
         data = unicode(data, encoding)
     return data
 
 
-def escape(s, replace = string.replace):
+def escape(s, replace=string.replace):
     s = replace(s, '&', '&amp;')
     s = replace(s, '<', '&lt;')
     return replace(s, '>', '&gt;')
@@ -164,7 +165,7 @@ else:
         Use True or False to generate a "boolean" XML-RPC value.
         """
 
-        def __init__(self, value = 0):
+        def __init__(self, value=0):
             self.value = operator.truth(value)
 
         def encode(self, out):
@@ -191,7 +192,7 @@ else:
     mod_dict['True'] = Boolean(1)
     mod_dict['False'] = Boolean(0)
 
-    def boolean(value, _truefalse = (False, True)):
+    def boolean(value, _truefalse=(False, True)):
         """Convert any Python value to XML-RPC 'boolean'."""
         return _truefalse[operator.truth(value)]
 
@@ -221,7 +222,7 @@ class DateTime:
     value.
     """
 
-    def __init__(self, value = 0):
+    def __init__(self, value=0):
         if isinstance(value, StringType):
             self.value = value
         else:
@@ -312,7 +313,7 @@ except ImportError:
 class Binary:
     """Wrapper for binary data."""
 
-    def __init__(self, data = None):
+    def __init__(self, data=None):
         self.data = data
 
     def __str__(self):
@@ -413,7 +414,7 @@ class Marshaller:
     function for this purpose.
     """
 
-    def __init__(self, encoding = None, allow_none = 0):
+    def __init__(self, encoding=None, allow_none=0):
         self.memo = {}
         self.data = None
         self.encoding = encoding
@@ -499,7 +500,7 @@ class Marshaller:
 
     dispatch[FloatType] = dump_double
 
-    def dump_string(self, value, write, escape = escape):
+    def dump_string(self, value, write, escape=escape):
         write('<value><string>')
         write(escape(value))
         write('</string></value>\n')
@@ -507,7 +508,7 @@ class Marshaller:
     dispatch[StringType] = dump_string
     if unicode:
 
-        def dump_unicode(self, value, write, escape = escape):
+        def dump_unicode(self, value, write, escape=escape):
             value = value.encode(self.encoding)
             write('<value><string>')
             write(escape(value))
@@ -532,7 +533,7 @@ class Marshaller:
     dispatch[TupleType] = dump_array
     dispatch[ListType] = dump_array
 
-    def dump_struct(self, value, write, escape = escape):
+    def dump_struct(self, value, write, escape=escape):
         i = id(value)
         if i in self.memo:
             raise TypeError, 'cannot marshal recursive dictionaries'
@@ -584,7 +585,7 @@ class Unmarshaller:
     XML-RPC data without complaining (but not bogus XML).
     """
 
-    def __init__(self, use_datetime = 0):
+    def __init__(self, use_datetime=0):
         self._type = None
         self._stack = []
         self._marks = []
@@ -619,7 +620,7 @@ class Unmarshaller:
     def data(self, text):
         self._data.append(text)
 
-    def end(self, tag, join = string.join):
+    def end(self, tag, join=string.join):
         try:
             f = self.dispatch[tag]
         except KeyError:
@@ -807,7 +808,7 @@ class MultiCall:
         return MultiCallIterator(self.__server.system.multicall(marshalled_list))
 
 
-def getparser(use_datetime = 0):
+def getparser(use_datetime=0):
     """getparser() -> parser, unmarshaller
     
     Create an instance of the fastest available parser, and attach it
@@ -833,7 +834,7 @@ def getparser(use_datetime = 0):
     return (parser, target)
 
 
-def dumps(params, methodname = None, methodresponse = None, encoding = None, allow_none = 0):
+def dumps(params, methodname=None, methodresponse=None, encoding=None, allow_none=0):
     """data [,options] -> marshalled data
     
     Convert an argument tuple or a Fault instance to an XML-RPC
@@ -854,12 +855,12 @@ def dumps(params, methodname = None, methodresponse = None, encoding = None, all
     packet encoding.  Unicode strings are automatically converted,
     where necessary.
     """
-    if not (isinstance(params, TupleType) or isinstance(params, Fault)):
-        raise AssertionError('argument must be tuple or Fault instance')
+    if not isinstance(params, TupleType):
+        assert isinstance(params, Fault), 'argument must be tuple or Fault instance'
         if isinstance(params, Fault):
             methodresponse = 1
-        elif not (methodresponse and isinstance(params, TupleType) and len(params) == 1):
-            raise AssertionError('response tuple must be a singleton')
+        elif methodresponse and isinstance(params, TupleType):
+            assert len(params) == 1, 'response tuple must be a singleton'
         if not encoding:
             encoding = 'utf-8'
         if FastMarshaller:
@@ -889,7 +890,7 @@ def dumps(params, methodname = None, methodresponse = None, encoding = None, all
     return string.join(data, '')
 
 
-def loads(data, use_datetime = 0):
+def loads(data, use_datetime=0):
     """data -> unmarshalled data, method name
     
     Convert an XML-RPC packet to unmarshalled data plus a method
@@ -974,13 +975,13 @@ class Transport:
     accept_gzip_encoding = True
     encode_threshold = None
 
-    def __init__(self, use_datetime = 0):
+    def __init__(self, use_datetime=0):
         self._use_datetime = use_datetime
         self._connection = (None, None)
         self._extra_headers = []
         return None
 
-    def request(self, host, handler, request_body, verbose = 0):
+    def request(self, host, handler, request_body, verbose=0):
         for i in (0, 1):
             try:
                 return self.single_request(host, handler, request_body, verbose)
@@ -991,7 +992,7 @@ class Transport:
                 if i:
                     raise
 
-    def single_request(self, host, handler, request_body, verbose = 0):
+    def single_request(self, host, handler, request_body, verbose=0):
         h = self.make_connection(host)
         if verbose:
             h.set_debuglevel(1)
@@ -1136,7 +1137,7 @@ class ServerProxy:
     the given encoding.
     """
 
-    def __init__(self, uri, transport = None, encoding = None, verbose = 0, allow_none = 0, use_datetime = 0):
+    def __init__(self, uri, transport=None, encoding=None, verbose=0, allow_none=0, use_datetime=0):
         if isinstance(uri, unicode):
             uri = uri.encode('ISO-8859-1')
         import urllib

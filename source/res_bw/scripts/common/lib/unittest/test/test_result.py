@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/unittest/test/test_result.py
 import sys
 import textwrap
@@ -204,7 +205,7 @@ for m in ('addSkip',
  '__init__'):
     del classDict[m]
 
-def __init__(self, stream = None, descriptions = None, verbosity = None):
+def __init__(self, stream=None, descriptions=None, verbosity=None):
     self.failures = []
     self.errors = []
     self.testsRun = 0
@@ -257,7 +258,6 @@ class Test_OldTestResult(unittest.TestCase):
     def testOldTestResultClass(self):
 
         @unittest.skip('no reason')
-
         class Test(unittest.TestCase):
 
             def testFoo(self):

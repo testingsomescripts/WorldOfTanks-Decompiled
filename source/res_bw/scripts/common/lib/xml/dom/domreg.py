@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/dom/domreg.py
 """Registration facilities for DOM. This module should not be used
 directly. Instead, the functions getDOMImplementation and
@@ -24,10 +25,8 @@ def _good_enough(dom, features):
         if not dom.hasFeature(f, v):
             return 0
 
-    return 1
 
-
-def getDOMImplementation(name = None, features = ()):
+def getDOMImplementation(name=None, features=()):
     """getDOMImplementation(name = None, features = ()) -> DOM implementation.
     
     Return a suitable DOM implementation. The name is either

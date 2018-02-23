@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mailcap.py
 """Mailcap file handling.  See RFC 1524."""
 import os
@@ -26,8 +26,7 @@ def getcaps():
         for key, value in morecaps.iteritems():
             if key not in caps:
                 caps[key] = value
-            else:
-                caps[key] = caps[key] + value
+            caps[key] = caps[key] + value
 
     return caps
 
@@ -82,8 +81,7 @@ def readmailcapfile(fp):
         key = '/'.join(types).lower()
         if key in caps:
             caps[key].append(fields)
-        else:
-            caps[key] = [fields]
+        caps[key] = [fields]
 
     return caps
 
@@ -116,8 +114,7 @@ def parseline(line):
                 fvalue = field[i + 1:].strip()
             if fkey in fields:
                 pass
-            else:
-                fields[fkey] = fvalue
+            fields[fkey] = fvalue
 
         return (key, fields)
 
@@ -129,15 +126,14 @@ def parsefield(line, i, n):
         c = line[i]
         if c == ';':
             break
-        elif c == '\\':
+        if c == '\\':
             i = i + 2
-        else:
-            i = i + 1
+        i = i + 1
 
     return (line[start:i].strip(), i)
 
 
-def findmatch(caps, MIMEtype, key = 'view', filename = '/dev/null', plist = []):
+def findmatch(caps, MIMEtype, key='view', filename='/dev/null', plist=[]):
     """Find a match for a mailcap entry.
     
     Return a tuple containing the command line, and the mailcap entry
@@ -158,7 +154,7 @@ def findmatch(caps, MIMEtype, key = 'view', filename = '/dev/null', plist = []):
     return (None, None)
 
 
-def lookup(caps, MIMEtype, key = None):
+def lookup(caps, MIMEtype, key=None):
     entries = []
     if MIMEtype in caps:
         entries = entries + caps[MIMEtype]
@@ -167,11 +163,11 @@ def lookup(caps, MIMEtype, key = None):
     if MIMEtype in caps:
         entries = entries + caps[MIMEtype]
     if key is not None:
-        entries = filter(lambda e, key = key: key in e, entries)
+        entries = filter(lambda e, key=key: key in e, entries)
     return entries
 
 
-def subst(field, MIMEtype, filename, plist = []):
+def subst(field, MIMEtype, filename, plist=[]):
     res = ''
     i, n = 0, len(field)
     while i < n:
@@ -182,25 +178,23 @@ def subst(field, MIMEtype, filename, plist = []):
                 c = field[i:i + 1]
                 i = i + 1
             res = res + c
-        else:
-            c = field[i]
-            i = i + 1
-            if c == '%':
-                res = res + c
-            elif c == 's':
-                res = res + filename
-            elif c == 't':
-                res = res + MIMEtype
-            elif c == '{':
-                start = i
-                while i < n and field[i] != '}':
-                    i = i + 1
-
-                name = field[start:i]
+        c = field[i]
+        i = i + 1
+        if c == '%':
+            res = res + c
+        if c == 's':
+            res = res + filename
+        if c == 't':
+            res = res + MIMEtype
+        if c == '{':
+            start = i
+            while i < n and field[i] != '}':
                 i = i + 1
-                res = res + findparam(name, plist)
-            else:
-                res = res + '%' + c
+
+            name = field[start:i]
+            i = i + 1
+            res = res + findparam(name, plist)
+        res = res + '%' + c
 
     return res
 
@@ -229,11 +223,10 @@ def test():
         command, e = findmatch(caps, MIMEtype, 'view', file)
         if not command:
             print 'No viewer found for', type
-        else:
-            print 'Executing:', command
-            sts = os.system(command)
-            if sts:
-                print 'Exit status:', sts
+        print 'Executing:', command
+        sts = os.system(command)
+        if sts:
+            print 'Exit status:', sts
 
 
 def show(caps):

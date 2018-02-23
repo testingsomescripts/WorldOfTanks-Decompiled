@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/check.py
 """distutils.command.check
 
@@ -17,7 +17,7 @@ try:
 
     class SilentReporter(Reporter):
 
-        def __init__(self, source, report_level, halt_level, stream = None, debug = 0, encoding = 'ascii', error_handler = 'replace'):
+        def __init__(self, source, report_level, halt_level, stream=None, debug=0, encoding='ascii', error_handler='replace'):
             self.messages = []
             Reporter.__init__(self, source, report_level, halt_level, stream, debug, encoding, error_handler)
 

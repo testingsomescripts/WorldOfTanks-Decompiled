@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_compare.py
 """
 TestCases for python DB duplicate and Btree key comparison function.
@@ -12,8 +12,7 @@ from test_all import db, dbshelve, test_support, get_new_environment_path, get_n
 def cmp(a, b):
     if a == b:
         return 0
-    if a < b:
-        return -1
+    return -1 if a < b else 1
 
 
 lexical_cmp = cmp
@@ -24,7 +23,7 @@ def lowercase_cmp(left, right):
 
 def make_reverse_comparator(cmp):
 
-    def reverse(left, right, delegate = cmp):
+    def reverse(left, right, delegate=cmp):
         return -delegate(left, right)
 
     return reverse
@@ -86,7 +85,7 @@ class AbstractBtreeKeyCompareTestCase(unittest.TestCase):
     db = None
     if sys.version_info < (2, 7) or sys.version_info >= (3, 0) and sys.version_info < (3, 2):
 
-        def assertLess(self, a, b, msg = None):
+        def assertLess(self, a, b, msg=None):
             return self.assertTrue(a < b, msg=msg)
 
     def setUp(self):
@@ -127,7 +126,7 @@ class AbstractBtreeKeyCompareTestCase(unittest.TestCase):
     def startTest(self):
         pass
 
-    def finishTest(self, expected = None):
+    def finishTest(self, expected=None):
         if expected is not None:
             self.check_results(expected)
         self.closeDB()
@@ -243,9 +242,7 @@ class BtreeExceptionsTestCase(AbstractBtreeKeyCompareTestCase):
         self.startTest()
 
         def bad_comparator(l, r):
-            if l == r:
-                return 0
-            return l
+            return 0 if l == r else l
 
         self.createDB(bad_comparator)
         self.addDataToDB(['a', 'b', 'c'])
@@ -269,7 +266,7 @@ class AbstractDuplicateCompareTestCase(unittest.TestCase):
     db = None
     if sys.version_info < (2, 7) or sys.version_info >= (3, 0) and sys.version_info < (3, 2):
 
-        def assertLess(self, a, b, msg = None):
+        def assertLess(self, a, b, msg=None):
             return self.assertTrue(a < b, msg=msg)
 
     def setUp(self):
@@ -309,7 +306,7 @@ class AbstractDuplicateCompareTestCase(unittest.TestCase):
     def startTest(self):
         pass
 
-    def finishTest(self, expected = None):
+    def finishTest(self, expected=None):
         if expected is not None:
             self.check_results(expected)
         self.closeDB()
@@ -425,9 +422,7 @@ class DuplicateExceptionsTestCase(AbstractDuplicateCompareTestCase):
         self.startTest()
 
         def bad_comparator(l, r):
-            if l == r:
-                return 0
-            return l
+            return 0 if l == r else l
 
         self.createDB(bad_comparator)
         self.addDataToDB(['a', 'b', 'c'])

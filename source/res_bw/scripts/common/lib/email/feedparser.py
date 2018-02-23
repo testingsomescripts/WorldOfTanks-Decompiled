@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/feedparser.py
 """FeedParser - An email feed parser.
 
@@ -104,7 +104,7 @@ class BufferedSubFile(object):
 class FeedParser:
     """A feed-style parser of email."""
 
-    def __init__(self, _factory = message.Message):
+    def __init__(self, _factory=message.Message):
         """_factory is called with no arguments to create a new message obj"""
         self._factory = _factory
         self._input = BufferedSubFile()
@@ -299,9 +299,8 @@ class FeedParser:
                     self._input.pop_eof_matcher()
                     self._pop_message()
                     self._last = self._cur
-                else:
-                    assert capturing_preamble
-                    preamble.append(line)
+                assert capturing_preamble
+                preamble.append(line)
 
             if capturing_preamble:
                 self._cur.defects.append(errors.StartBoundaryNotFoundDefect())

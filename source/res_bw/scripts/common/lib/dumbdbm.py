@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/dumbdbm.py
 """A dumb and slow but simple dbm clone.
 
@@ -167,7 +167,7 @@ class _Database(UserDict.DictMixin):
             self._os.chmod(file, self._mode)
 
 
-def open(file, flag = None, mode = 438):
+def open(file, flag=None, mode=438):
     """Open the database file, filename, and return corresponding object.
     
     The flag argument, used to control how the database is opened in the

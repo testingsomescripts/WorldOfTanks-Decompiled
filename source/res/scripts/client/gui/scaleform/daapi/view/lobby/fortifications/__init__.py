@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/__init__.py
 from adisp import process
 from gui.LobbyContext import g_lobbyContext
@@ -633,11 +633,8 @@ class _FortsBusinessHandler(PackageBusinessHandler):
         super(_FortsBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
         self.__fortClanInfoNameInc = 0
 
-    def _loadUniqueWindow(self, alias, ctx = None):
-        if ctx is not None:
-            return self.loadViewWithDefName(alias, alias, ctx)
-        else:
-            return self.loadViewWithDefName(alias, alias)
+    def _loadUniqueWindow(self, alias, ctx=None):
+        return self.loadViewWithDefName(alias, alias, ctx) if ctx is not None else self.loadViewWithDefName(alias, alias)
 
     def __showMultipleViews(self, event):
         self.loadViewWithDefName(event.eventType, event.name + str(self.__fortClanInfoNameInc), event.ctx)

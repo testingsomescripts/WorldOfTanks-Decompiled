@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/mimify.py
 """Mimification and unmimification of mail messages.
 
@@ -123,7 +124,7 @@ def mime_decode_header(line):
     return newline + line[pos:]
 
 
-def unmimify_part(ifile, ofile, decode_base64 = 0):
+def unmimify_part(ifile, ofile, decode_base64=0):
     """Convert a quoted-printable part of a MIME mail message to 8bit."""
     multipart = None
     quoted_printable = 0
@@ -205,7 +206,7 @@ def unmimify_part(ifile, ofile, decode_base64 = 0):
     return
 
 
-def unmimify(infile, outfile, decode_base64 = 0):
+def unmimify(infile, outfile, decode_base64=0):
     """Convert quoted-printable parts of a MIME mail message to 8bit."""
     if type(infile) == type(''):
         ifile = open(infile)
@@ -449,16 +450,16 @@ if __name__ == '__main__' or len(sys.argv) > 0 and sys.argv[0] == 'mimify':
     for o, a in opts:
         if o == '-e':
             encode = mimify
-        elif o == '-d':
+        if o == '-d':
             encode = unmimify
-        elif o == '-l':
+        if o == '-l':
             try:
                 MAXLEN = int(a)
             except (ValueError, OverflowError):
                 print usage
                 sys.exit(1)
 
-        elif o == '-b':
+        if o == '-b':
             decode_base64 = 1
 
     if len(args) == 0:

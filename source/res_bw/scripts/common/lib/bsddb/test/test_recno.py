@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_recno.py
 """TestCases for exercising a Recno DB.
 """
@@ -12,10 +12,10 @@ letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 class SimpleRecnoTestCase(unittest.TestCase):
     if sys.version_info < (2, 7) or sys.version_info >= (3, 0) and sys.version_info < (3, 2):
 
-        def assertIsInstance(self, obj, datatype, msg = None):
+        def assertIsInstance(self, obj, datatype, msg=None):
             return self.assertEqual(type(obj), datatype, msg=msg)
 
-        def assertGreaterEqual(self, a, b, msg = None):
+        def assertGreaterEqual(self, a, b, msg=None):
             return self.assertTrue(a >= b, msg=msg)
 
     def setUp(self):

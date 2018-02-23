@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/getpass.py
 """Utilities to get a password and/or the current user name.
 
@@ -19,7 +19,7 @@ class GetPassWarning(UserWarning):
     pass
 
 
-def unix_getpass(prompt = 'Password: ', stream = None):
+def unix_getpass(prompt='Password: ', stream=None):
     """Prompt for a password, with echo turned off.
     
     Args:
@@ -79,7 +79,7 @@ def unix_getpass(prompt = 'Password: ', stream = None):
     return passwd
 
 
-def win_getpass(prompt = 'Password: ', stream = None):
+def win_getpass(prompt='Password: ', stream=None):
     """Prompt for password with echo off, using Windows getch()."""
     if sys.stdin is not sys.__stdin__:
         return fallback_getpass(prompt, stream)
@@ -96,15 +96,14 @@ def win_getpass(prompt = 'Password: ', stream = None):
             raise KeyboardInterrupt
         if c == '\x08':
             pw = pw[:-1]
-        else:
-            pw = pw + c
+        pw = pw + c
 
     msvcrt.putch('\r')
     msvcrt.putch('\n')
     return pw
 
 
-def fallback_getpass(prompt = 'Password: ', stream = None):
+def fallback_getpass(prompt='Password: ', stream=None):
     warnings.warn('Can not control echo on the terminal.', GetPassWarning, stacklevel=2)
     if not stream:
         stream = sys.stderr
@@ -112,7 +111,7 @@ def fallback_getpass(prompt = 'Password: ', stream = None):
     return _raw_input(prompt, stream)
 
 
-def _raw_input(prompt = '', stream = None, input = None):
+def _raw_input(prompt='', stream=None, input=None):
     if not stream:
         stream = sys.stderr
     if not input:

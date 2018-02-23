@@ -1,10 +1,9 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/views.py
 from gui.Scaleform.framework import COMMON_VIEW_ALIAS
 
 class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     PREMIUM_WINDOW = 'premiumWindow'
-    PREMIUM_CONGRATULATION_WINDOW = 'premiumCongratulationWindow'
     GOLD_FISH_WINDOW = 'goldFishWindow'
     PERSONAL_CASE = 'personalCase'
     EULA = 'EULA'
@@ -14,6 +13,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_HEADER = 'lobbyHeader'
     LOBBY_HANGAR = 'hangar'
     LOBBY_SHOP = 'shop'
+    LOBBY_STORE = 'store'
     LOBBY_INVENTORY = 'inventory'
     LOBBY_PROFILE = 'profile'
     PROFILE_TAB_NAVIGATOR = 'profileTabNavigator'
@@ -71,6 +71,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     RETRAIN_CREW = 'retrainCrewWindow'
     CREW_OPERATIONS_POPOVER = 'crewOperationsPopOver'
     BATTLE_TYPE_SELECT_POPOVER = 'battleTypeSelectPopover'
+    SQUAD_TYPE_SELECT_POPOVER = 'squadTypeSelectPopover'
     ACCOUNT_POPOVER = 'accountPopover'
     CAPTCHA_DIALOG = 'captchaDialog'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
@@ -107,4 +108,3 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SANDBOX_QUEUE_DIALOG = 'sandboxQueueDialog'
     CUSTOMIZATION_PURCHASE_WINDOW = 'CustomizationBuyWindow'
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
-    CUSTOMIZATION_PURCHASES_POPOVER = 'customizationPurchasesPopover'

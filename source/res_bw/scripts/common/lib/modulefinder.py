@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/modulefinder.py
 """Find modules used by a script, using introspection."""
 from __future__ import generators
@@ -34,7 +35,7 @@ def ReplacePackage(oldname, newname):
 
 class Module():
 
-    def __init__(self, name, file = None, path = None):
+    def __init__(self, name, file=None, path=None):
         self.__name__ = name
         self.__file__ = file
         self.__path__ = path
@@ -55,7 +56,7 @@ class Module():
 
 class ModuleFinder():
 
-    def __init__(self, path = None, debug = 0, excludes = [], replace_paths = []):
+    def __init__(self, path=None, debug=0, excludes=[], replace_paths=[]):
         if path is None:
             path = sys.path
         self.path = path
@@ -104,7 +105,7 @@ class ModuleFinder():
         stuff = (ext, 'r', imp.PY_SOURCE)
         self.load_module(name, fp, pathname, stuff)
 
-    def import_hook(self, name, caller = None, fromlist = None, level = -1):
+    def import_hook(self, name, caller=None, fromlist=None, level=-1):
         self.msg(3, 'import_hook', name, caller, fromlist, level)
         parent = self.determine_parent(caller, level=level)
         q, tail = self.find_head_package(parent, name)
@@ -116,7 +117,7 @@ class ModuleFinder():
                 self.ensure_fromlist(m, fromlist)
             return None
 
-    def determine_parent(self, caller, level = -1):
+    def determine_parent(self, caller, level=-1):
         self.msgin(4, 'determine_parent', caller, level)
         if not caller or level == 0:
             self.msgout(4, 'determine_parent -> None')
@@ -124,11 +125,11 @@ class ModuleFinder():
         else:
             pname = caller.__name__
             if level >= 1:
-                caller.__path__ and level -= 1
-            if level == 0:
-                parent = self.modules[pname]
-                if not parent is caller:
-                    raise AssertionError
+                if caller.__path__:
+                    level -= 1
+                if level == 0:
+                    parent = self.modules[pname]
+                    assert parent is caller
                     self.msgout(4, 'determine_parent ->', parent)
                     return parent
                 if pname.count('.') < level:
@@ -137,16 +138,16 @@ class ModuleFinder():
                 parent = self.modules[pname]
                 self.msgout(4, 'determine_parent ->', parent)
                 return parent
-            parent = caller.__path__ and self.modules[pname]
-            if not caller is parent:
-                raise AssertionError
+            if caller.__path__:
+                parent = self.modules[pname]
+                assert caller is parent
                 self.msgout(4, 'determine_parent ->', parent)
                 return parent
-            i = '.' in pname and pname.rfind('.')
-            pname = pname[:i]
-            parent = self.modules[pname]
-            if not parent.__name__ == pname:
-                raise AssertionError
+            if '.' in pname:
+                i = pname.rfind('.')
+                pname = pname[:i]
+                parent = self.modules[pname]
+                assert parent.__name__ == pname
                 self.msgout(4, 'determine_parent ->', parent)
                 return parent
             self.msgout(4, 'determine_parent -> None')
@@ -198,7 +199,7 @@ class ModuleFinder():
         self.msgout(4, 'load_tail ->', m)
         return m
 
-    def ensure_fromlist(self, m, fromlist, recursive = 0):
+    def ensure_fromlist(self, m, fromlist, recursive=0):
         self.msg(4, 'ensure_fromlist', m, fromlist, recursive)
         for sub in fromlist:
             if sub == '*':
@@ -206,7 +207,7 @@ class ModuleFinder():
                     all = self.find_all_submodules(m)
                     if all:
                         self.ensure_fromlist(m, all, 1)
-            elif not hasattr(m, sub):
+            if not hasattr(m, sub):
                 subname = '%s.%s' % (m.__name__, sub)
                 submod = self.import_module(sub, subname, m)
                 if not submod:
@@ -311,7 +312,7 @@ class ModuleFinder():
         else:
             self.badmodules[name]['-'] = 1
 
-    def _safe_import_hook(self, name, caller, fromlist, level = -1):
+    def _safe_import_hook(self, name, caller, fromlist, level=-1):
         if name in self.badmodules:
             self._add_badmodule(name, caller)
             return
@@ -333,14 +334,14 @@ class ModuleFinder():
                         fullname = name + '.' + sub
                         self._add_badmodule(fullname, caller)
 
-    def scan_opcodes(self, co, unpack = struct.unpack):
+    def scan_opcodes(self, co, unpack=struct.unpack):
         code = co.co_code
         names = co.co_names
         consts = co.co_consts
         while code:
             c = code[0]
             if c in STORE_OPS:
-                oparg, = unpack('<H', code[1:3])
+                oparg = unpack('<H', code[1:3])
                 yield ('store', (names[oparg],))
                 code = code[3:]
                 continue
@@ -351,10 +352,9 @@ class ModuleFinder():
                 continue
             if c >= HAVE_ARGUMENT:
                 code = code[3:]
-            else:
-                code = code[1:]
+            code = code[1:]
 
-    def scan_opcodes_25(self, co, unpack = struct.unpack):
+    def scan_opcodes_25(self, co, unpack=struct.unpack):
         code = co.co_code
         names = co.co_names
         consts = co.co_consts
@@ -362,7 +362,7 @@ class ModuleFinder():
         while code:
             c = code[0]
             if c in STORE_OPS:
-                oparg, = unpack('<H', code[1:3])
+                oparg = unpack('<H', code[1:3])
                 yield ('store', (names[oparg],))
                 code = code[3:]
                 continue
@@ -379,8 +379,7 @@ class ModuleFinder():
                 continue
             if c >= HAVE_ARGUMENT:
                 code = code[3:]
-            else:
-                code = code[1:]
+            code = code[1:]
 
     def scan_code(self, co, m):
         code = co.co_code
@@ -390,9 +389,9 @@ class ModuleFinder():
             scanner = self.scan_opcodes
         for what, args in scanner(co):
             if what == 'store':
-                name, = args
+                name = args
                 m.globalnames[name] = 1
-            elif what in ('import', 'absolute_import'):
+            if what in ('import', 'absolute_import'):
                 fromlist, name = args
                 have_star = 0
                 if fromlist is not None:
@@ -417,15 +416,14 @@ class ModuleFinder():
                             m.starimports[name] = 1
                     else:
                         m.starimports[name] = 1
-            elif what == 'relative_import':
+            if what == 'relative_import':
                 level, fromlist, name = args
                 if name:
                     self._safe_import_hook(name, m, fromlist, level=level)
                 else:
                     parent = self.determine_parent(m, level=level)
                     self._safe_import_hook(parent.__name__, None, fromlist, level=0)
-            else:
-                raise RuntimeError(what)
+            raise RuntimeError(what)
 
         for c in co.co_consts:
             if isinstance(c, type(co)):
@@ -453,7 +451,7 @@ class ModuleFinder():
         self.modules[fqname] = m = Module(fqname)
         return m
 
-    def find_module(self, name, path, parent = None):
+    def find_module(self, name, path, parent=None):
         if parent is not None:
             fullname = parent.__name__ + '.' + name
         else:
@@ -540,8 +538,7 @@ class ModuleFinder():
                     maybe.append(name)
                 else:
                     missing.append(name)
-            else:
-                missing.append(name)
+            missing.append(name)
 
         missing.sort()
         maybe.sort()
@@ -614,8 +611,7 @@ def test():
                 mf.import_hook(arg[:-2], None, ['*'])
             else:
                 mf.import_hook(arg)
-        else:
-            mf.load_file(arg)
+        mf.load_file(arg)
 
     mf.run_script(script)
     mf.report()

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/sysconfig.py
 """Provide access to Python's configuration information.  The specific
 configuration variables available depend heavily on the platform and
@@ -46,7 +46,7 @@ def get_python_version():
     return sys.version[:3]
 
 
-def get_python_inc(plat_specific = 0, prefix = None):
+def get_python_inc(plat_specific=0, prefix=None):
     """Return the directory containing installed Python header files.
     
     If 'plat_specific' is false (the default), this is the path to the
@@ -78,7 +78,7 @@ def get_python_inc(plat_specific = 0, prefix = None):
         return
 
 
-def get_python_lib(plat_specific = 0, standard_lib = 0, prefix = None):
+def get_python_lib(plat_specific=0, standard_lib=0, prefix=None):
     """Return the directory containing the Python library (standard or
     site additions).
     
@@ -188,7 +188,7 @@ def get_makefile_filename():
     return os.path.join(lib_dir, 'config', 'Makefile')
 
 
-def parse_config_h(fp, g = None):
+def parse_config_h(fp, g=None):
     """Parse a config.h-style file.
     
     A dictionary containing name/value pairs is returned.  If an
@@ -212,10 +212,9 @@ def parse_config_h(fp, g = None):
                 pass
 
             g[n] = v
-        else:
-            m = undef_rx.match(line)
-            if m:
-                g[m.group(1)] = 0
+        m = undef_rx.match(line)
+        if m:
+            g[m.group(1)] = 0
 
     return g
 
@@ -224,7 +223,7 @@ _variable_rx = re.compile('([a-zA-Z][a-zA-Z0-9_]+)\\s*=\\s*(.*)')
 _findvar1_rx = re.compile('\\$\\(([A-Za-z][A-Za-z0-9_]*)\\)')
 _findvar2_rx = re.compile('\\${([A-Za-z][A-Za-z0-9_]*)}')
 
-def parse_makefile(fn, g = None):
+def parse_makefile(fn, g=None):
     """Parse a Makefile-style file.
     
     A dictionary containing name/value pairs is returned.  If an
@@ -285,8 +284,7 @@ def parse_makefile(fn, g = None):
                             done[name] = value
 
                         del notdone[name]
-            else:
-                del notdone[name]
+            del notdone[name]
 
     fp.close()
     for k, v in done.items():
@@ -310,8 +308,7 @@ def expand_makefile_vars(s, vars):
         if m:
             beg, end = m.span()
             s = s[0:beg] + vars.get(m.group(1)) + s[end:]
-        else:
-            break
+        break
 
     return s
 

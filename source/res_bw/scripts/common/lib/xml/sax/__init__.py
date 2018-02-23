@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/xml/sax/__init__.py
 """Simple API for XML (SAX) implementation for Python.
 
@@ -23,14 +24,14 @@ from xmlreader import InputSource
 from handler import ContentHandler, ErrorHandler
 from _exceptions import SAXException, SAXNotRecognizedException, SAXParseException, SAXNotSupportedException, SAXReaderNotAvailable
 
-def parse(source, handler, errorHandler = ErrorHandler()):
+def parse(source, handler, errorHandler=ErrorHandler()):
     parser = make_parser()
     parser.setContentHandler(handler)
     parser.setErrorHandler(errorHandler)
     parser.parse(source)
 
 
-def parseString(string, handler, errorHandler = ErrorHandler()):
+def parseString(string, handler, errorHandler=ErrorHandler()):
     try:
         from cStringIO import StringIO
     except ImportError:
@@ -59,7 +60,7 @@ _key = 'python.xml.sax.parser'
 if sys.platform[:4] == 'java' and sys.registry.containsKey(_key):
     default_parser_list = sys.registry.getProperty(_key).split(',')
 
-def make_parser(parser_list = []):
+def make_parser(parser_list=[]):
     """Creates and returns a SAX parser.
     
     Creates the first parser it is able to instantiate of the ones

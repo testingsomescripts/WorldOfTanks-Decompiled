@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/ctypes/test/test_numbers.py
 from ctypes import *
 import unittest
@@ -203,7 +203,7 @@ class c_int_S(_SimpleCData):
     __slots__ = []
 
 
-def run_test(rep, msg, func, arg = None):
+def run_test(rep, msg, func, arg=None):
     items = range(rep)
     from time import clock
     if arg is not None:

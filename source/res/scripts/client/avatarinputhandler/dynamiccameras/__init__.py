@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/__init__.py
 import BigWorld
 import Math
@@ -13,7 +13,7 @@ def createCrosshairMatrix(offsetFromNearPlane):
     return mathUtils.createTranslationMatrix(Vector3(0, 0, nearPlane + offsetFromNearPlane))
 
 
-def createOscillatorFromSection(oscillatorSection, constraintsAsAngle = True):
+def createOscillatorFromSection(oscillatorSection, constraintsAsAngle=True):
     constraints = readVec3(oscillatorSection, 'constraints', (0.0, 0.0, 0.0), (175.0, 175.0, 175.0), 10.0)
     if constraintsAsAngle:
         constraints = Vector3((math.radians(constraints.x), math.radians(constraints.y), math.radians(constraints.z)))
@@ -68,7 +68,7 @@ class CameraDynamicConfig(dict):
         self.__readReasonProjection('impulseLimits', rootDataSec, True)
         self.__readReasonProjection('noiseLimits', rootDataSec, True)
 
-    def __readReasonProjection(self, projectionName, rootDataSec, asMinMax = False):
+    def __readReasonProjection(self, projectionName, rootDataSec, asMinMax=False):
         self[projectionName] = impulseDict = {}
         projectionDataSec = rootDataSec[projectionName]
         if projectionDataSec is None:

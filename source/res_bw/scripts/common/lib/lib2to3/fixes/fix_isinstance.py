@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_isinstance.py
 """Fixer that cleans up a tuple argument to isinstance after the tokens
 in it were fixed.  This is mainly used to remove double occurrences of
@@ -26,10 +26,9 @@ class FixIsinstance(fixer_base.BaseFix):
                 if idx < len(args) - 1 and args[idx + 1].type == token.COMMA:
                     iterator.next()
                     continue
-            else:
-                new_args.append(arg)
-                if arg.type == token.NAME:
-                    names_inserted.add(arg.value)
+            new_args.append(arg)
+            if arg.type == token.NAME:
+                names_inserted.add(arg.value)
 
         if new_args and new_args[-1].type == token.COMMA:
             del new_args[-1]

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-os2emx/grp.py
 """Replacement for grp standard extension module, intended for use on
 OS/2 and similar systems which don't normally have an /etc/group file.
@@ -95,7 +96,7 @@ class Group:
          self.gr_mem)
 
     def __len__(self):
-        return 4
+        pass
 
     def __getitem__(self, key):
         return self._record[key]
@@ -137,10 +138,9 @@ def __read_group_file():
                 gidx[fields[2]] = record
             if not namx.has_key(fields[0]):
                 namx[fields[0]] = record
-        elif len(entry) > 0:
+        if len(entry) > 0:
             pass
-        else:
-            break
+        break
 
     group.close()
     if len(gidx) == 0:

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/clean.py
 """distutils.command.clean
 
@@ -41,8 +41,7 @@ class clean(Command):
             for directory in (self.build_lib, self.bdist_base, self.build_scripts):
                 if os.path.exists(directory):
                     remove_tree(directory, dry_run=self.dry_run)
-                else:
-                    log.warn("'%s' does not exist -- can't clean it", directory)
+                log.warn("'%s' does not exist -- can't clean it", directory)
 
         if not self.dry_run:
             try:

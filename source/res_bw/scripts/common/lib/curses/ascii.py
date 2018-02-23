@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/curses/ascii.py
 """Constants and membership tests for ASCII characters"""
 NUL = 0
@@ -167,6 +167,4 @@ def unctrl(c):
         rep = chr(bits & 127)
     else:
         rep = '^' + chr((bits & 127 | 32) + 32)
-    if bits & 128:
-        return '!' + rep
-    return rep
+    return '!' + rep if bits & 128 else rep

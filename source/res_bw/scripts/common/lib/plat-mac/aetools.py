@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/plat-mac/aetools.py
 """Tools for use in AppleEvent clients and servers.
 
@@ -54,7 +55,7 @@ def missed(ae):
     return desc.data
 
 
-def unpackevent(ae, formodulename = ''):
+def unpackevent(ae, formodulename=''):
     parameters = {}
     try:
         dirobj = ae.AEGetParamDesc('----', '****')
@@ -92,7 +93,7 @@ def unpackevent(ae, formodulename = ''):
     return (parameters, attributes)
 
 
-def packevent(ae, parameters = {}, attributes = {}):
+def packevent(ae, parameters={}, attributes={}):
     for key, value in parameters.items():
         packkey(ae, key, value)
 
@@ -108,7 +109,7 @@ def keysubst(arguments, keydict):
             v = arguments[k]
             del arguments[k]
             arguments[keydict[k]] = v
-        elif k != '----' and k not in ok:
+        if k != '----' and k not in ok:
             raise TypeError, 'Unknown keyword argument: %s' % k
 
 
@@ -155,11 +156,10 @@ class TalkTo:
         if not MacOS.WMAvailable():
             return 0
         Evt.WaitNextEvent(0, 0)
-        return 1
 
     __ensure_WMAvailable = classmethod(__ensure_WMAvailable)
 
-    def __init__(self, signature = None, start = 0, timeout = 0):
+    def __init__(self, signature=None, start=0, timeout=0):
         """Create a communication channel with a particular application.
         
         Addressing the application is done by specifying either a
@@ -208,7 +208,7 @@ class TalkTo:
         """Deprecated, used _start()"""
         self._start()
 
-    def newevent(self, code, subcode, parameters = {}, attributes = {}):
+    def newevent(self, code, subcode, parameters={}, attributes={}):
         """Create a complete structure for an apple event"""
         event = AE.AECreateAppleEvent(code, subcode, self.target, AppleEvents.kAutoGenerateReturnID, AppleEvents.kAnyTransactionID)
         packevent(event, parameters, attributes)
@@ -222,7 +222,7 @@ class TalkTo:
         parameters, attributes = unpackevent(reply, self._moduleName)
         return (reply, parameters, attributes)
 
-    def send(self, code, subcode, parameters = {}, attributes = {}):
+    def send(self, code, subcode, parameters={}, attributes={}):
         """Send an appleevent given code/subcode/pars/attrs and unpack the reply"""
         return self.sendevent(self.newevent(code, subcode, parameters, attributes))
 
@@ -230,7 +230,7 @@ class TalkTo:
         """Send 'activate' command"""
         self.send('misc', 'actv')
 
-    def _get(self, _object, asfile = None, _attributes = {}):
+    def _get(self, _object, asfile=None, _attributes={}):
         """_get: get data from an object
         Required argument: the object
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -253,7 +253,7 @@ class TalkTo:
     get = _get
     _argmap_set = {'to': 'data'}
 
-    def _set(self, _object, _attributes = {}, **_arguments):
+    def _set(self, _object, _attributes={}, **_arguments):
         """set: Set an object's data.
         Required argument: the object for the command
         Keyword argument to: The new value.
@@ -266,8 +266,7 @@ class TalkTo:
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if _arguments.get('errn', 0):
             raise Error, decodeerror(_arguments)
-        if '----' in _arguments:
-            return _arguments['----']
+        return _arguments['----'] if '----' in _arguments else None
 
     set = _set
 
@@ -285,7 +284,7 @@ class TalkTo:
 
 class _miniFinder(TalkTo):
 
-    def open(self, _object, _attributes = {}, **_arguments):
+    def open(self, _object, _attributes={}, **_arguments):
         """open: Open the specified object(s)
         Required argument: list of objects to open
         Keyword argument _attributes: AppleEvent attribute dictionary
@@ -298,8 +297,7 @@ class _miniFinder(TalkTo):
         _reply, _arguments, _attributes = self.send(_code, _subcode, _arguments, _attributes)
         if 'errn' in _arguments:
             raise Error, decodeerror(_arguments)
-        if '----' in _arguments:
-            return _arguments['----']
+        return _arguments['----'] if '----' in _arguments else None
 
 
 _finder = _miniFinder('MACS')

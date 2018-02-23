@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/tokenize.py
 """Tokenization help for Python programs.
 
@@ -155,7 +156,7 @@ def printtoken(type, token, srow_scol, erow_ecol, line):
      repr(token))
 
 
-def tokenize(readline, tokeneater = printtoken):
+def tokenize(readline, tokeneater=printtoken):
     """
     The tokenize() function accepts two parameters: one representing the
     input stream, and one providing an output mechanism for tokenize().
@@ -353,12 +354,11 @@ def generate_tokens(readline):
                      (lnum, nl_pos),
                      (lnum, len(line)),
                      line)
-                else:
-                    yield ((NL, COMMENT)[line[pos] == '#'],
-                     line[pos:],
-                     (lnum, pos),
-                     (lnum, len(line)),
-                     line)
+                yield ((NL, COMMENT)[line[pos] == '#'],
+                 line[pos:],
+                 (lnum, pos),
+                 (lnum, len(line)),
+                 line)
                 continue
             if column > indents[-1]:
                 indents.append(column)
@@ -404,8 +404,8 @@ def generate_tokens(readline):
                      spos,
                      epos,
                      line)
-                elif not (initial == '#' and not token.endswith('\n')):
-                    raise AssertionError
+                elif initial == '#':
+                    assert not token.endswith('\n')
                     yield (COMMENT,
                      token,
                      spos,
@@ -458,13 +458,12 @@ def generate_tokens(readline):
                      spos,
                      epos,
                      line)
-            else:
-                yield (ERRORTOKEN,
-                 line[pos],
-                 (lnum, pos),
-                 (lnum, pos + 1),
-                 line)
-                pos += 1
+            yield (ERRORTOKEN,
+             line[pos],
+             (lnum, pos),
+             (lnum, pos + 1),
+             line)
+            pos += 1
 
     for indent in indents[1:]:
         yield (DEDENT,

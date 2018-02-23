@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/bdist_rpm.py
 """distutils.command.bdist_rpm
 
@@ -296,7 +296,7 @@ class bdist_rpm(Command):
             val = getattr(self, string.lower(field))
             if isinstance(val, list):
                 spec_file.append('%s: %s' % (field, string.join(val)))
-            elif val is not None:
+            if val is not None:
                 spec_file.append('%s: %s' % (field, val))
 
         if self.distribution.get_url() != 'UNKNOWN':
@@ -351,10 +351,9 @@ class bdist_rpm(Command):
             line = string.strip(line)
             if line[0] == '*':
                 new_changelog.extend(['', line])
-            elif line[0] == '-':
+            if line[0] == '-':
                 new_changelog.append(line)
-            else:
-                new_changelog.append('  ' + line)
+            new_changelog.append('  ' + line)
 
         if not new_changelog[0]:
             del new_changelog[0]

@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/quopri.py
 """Conversions to/from quoted-printable transport encoding as per RFC 1521."""
 __all__ = ['encode',
@@ -34,7 +35,7 @@ def quote(c):
     return ESCAPE + HEX[i // 16] + HEX[i % 16]
 
 
-def encode(input, output, quotetabs, header = 0):
+def encode(input, output, quotetabs, header=0):
     """Read 'input', apply quoted-printable encoding, and write to 'output'.
     
     'input' and 'output' are files with readline() and write() methods.
@@ -51,7 +52,7 @@ def encode(input, output, quotetabs, header = 0):
         return
     else:
 
-        def write(s, output = output, lineEnd = '\n'):
+        def write(s, output=output, lineEnd='\n'):
             if s and s[-1:] in ' \t':
                 output.write(s[:-1] + quote(s[-1]) + lineEnd)
             elif s == '.':
@@ -74,8 +75,7 @@ def encode(input, output, quotetabs, header = 0):
                     c = quote(c)
                 if header and c == ' ':
                     outline.append('_')
-                else:
-                    outline.append(c)
+                outline.append(c)
 
             if prevline is not None:
                 write(prevline)
@@ -91,7 +91,7 @@ def encode(input, output, quotetabs, header = 0):
         return
 
 
-def encodestring(s, quotetabs = 0, header = 0):
+def encodestring(s, quotetabs=0, header=0):
     if b2a_qp is not None:
         return b2a_qp(s, quotetabs=quotetabs, header=header)
     else:
@@ -102,7 +102,7 @@ def encodestring(s, quotetabs = 0, header = 0):
         return outfp.getvalue()
 
 
-def decode(input, output, header = 0):
+def decode(input, output, header=0):
     """Read 'input', apply quoted-printable decoding, and write to 'output'.
     'input' and 'output' are files with readline() and write() methods.
     If 'header' is true, decode underscore as space (per RFC 1522)."""
@@ -131,21 +131,20 @@ def decode(input, output, header = 0):
                 if c == '_' and header:
                     new = new + ' '
                     i = i + 1
-                elif c != ESCAPE:
+                if c != ESCAPE:
                     new = new + c
                     i = i + 1
-                elif i + 1 == n and not partial:
+                if i + 1 == n and not partial:
                     partial = 1
                     break
-                elif i + 1 < n and line[i + 1] == ESCAPE:
+                if i + 1 < n and line[i + 1] == ESCAPE:
                     new = new + ESCAPE
                     i = i + 2
-                elif i + 2 < n and ishex(line[i + 1]) and ishex(line[i + 2]):
+                if i + 2 < n and ishex(line[i + 1]) and ishex(line[i + 2]):
                     new = new + chr(unhex(line[i + 1:i + 3]))
                     i = i + 3
-                else:
-                    new = new + c
-                    i = i + 1
+                new = new + c
+                i = i + 1
 
             if not partial:
                 output.write(new + '\n')
@@ -156,7 +155,7 @@ def decode(input, output, header = 0):
         return
 
 
-def decodestring(s, header = 0):
+def decodestring(s, header=0):
     if a2b_qp is not None:
         return a2b_qp(s, header=header)
     else:

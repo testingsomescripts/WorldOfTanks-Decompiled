@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/markupbase.py
 """Shared support for scanning document type declarations in HTML and XHTML.
 
@@ -97,7 +97,7 @@ class ParserBase:
             if j < 0:
                 return j
 
-    def parse_marked_section(self, i, report = 1):
+    def parse_marked_section(self, i, report=1):
         rawdata = self.rawdata
         assert rawdata[i:i + 3] == '<![', 'unexpected call to parse_marked_section()'
         sectName, j = self._scan_name(i + 3, i)
@@ -116,7 +116,7 @@ class ParserBase:
             self.unknown_decl(rawdata[i + 3:j])
         return match.end(0)
 
-    def parse_comment(self, i, report = 1):
+    def parse_comment(self, i, report=1):
         rawdata = self.rawdata
         if rawdata[i:i + 4] != '<!--':
             self.error('unexpected call to parse_comment()')
@@ -160,7 +160,7 @@ class ParserBase:
                 j = meth(j, declstartpos)
                 if j < 0:
                     return j
-            elif c == '%':
+            if c == '%':
                 if j + 1 == n:
                     return -1
                 s, j = self._scan_name(j + 1, declstartpos)
@@ -168,7 +168,7 @@ class ParserBase:
                     return j
                 if rawdata[j] == ';':
                     j = j + 1
-            elif c == ']':
+            if c == ']':
                 j = j + 1
                 while j < n and rawdata[j].isspace():
                     j = j + 1
@@ -180,19 +180,17 @@ class ParserBase:
                     self.error('unexpected char after internal subset')
                 else:
                     return -1
-            elif c.isspace():
+            if c.isspace():
                 j = j + 1
-            else:
-                self.updatepos(declstartpos, j)
-                self.error('unexpected char %r in internal subset' % c)
+            self.updatepos(declstartpos, j)
+            self.error('unexpected char %r in internal subset' % c)
 
     def _parse_doctype_element(self, i, declstartpos):
         name, j = self._scan_name(i, declstartpos)
         if j == -1:
             return -1
         rawdata = self.rawdata
-        if '>' in rawdata[j:]:
-            return rawdata.find('>', j) + 1
+        return rawdata.find('>', j) + 1 if '>' in rawdata[j:] else -1
 
     def _parse_doctype_attlist(self, i, declstartpos):
         rawdata = self.rawdata
@@ -261,10 +259,9 @@ class ParserBase:
                 if not m:
                     return -1
                 j = m.end()
-            else:
-                name, j = self._scan_name(j, declstartpos)
-                if j < 0:
-                    return j
+            name, j = self._scan_name(j, declstartpos)
+            if j < 0:
+                return j
 
     def _parse_doctype_entity(self, i, declstartpos):
         rawdata = self.rawdata
@@ -276,8 +273,7 @@ class ParserBase:
                     return -1
                 if c.isspace():
                     j = j + 1
-                else:
-                    break
+                break
 
         else:
             j = i
@@ -294,12 +290,11 @@ class ParserBase:
                     j = m.end()
                 else:
                     return -1
-            else:
-                if c == '>':
-                    return j + 1
-                name, j = self._scan_name(j, declstartpos)
-                if j < 0:
-                    return j
+            if c == '>':
+                return j + 1
+            name, j = self._scan_name(j, declstartpos)
+            if j < 0:
+                return j
 
     def _scan_name(self, i, declstartpos):
         rawdata = self.rawdata

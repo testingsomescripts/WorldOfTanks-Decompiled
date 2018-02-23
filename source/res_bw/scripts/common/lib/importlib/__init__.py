@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/importlib/__init__.py
 """Backport of importlib.import_module from 3.x."""
 import sys
@@ -17,7 +17,7 @@ def _resolve_name(name, package, level):
     return '%s.%s' % (package[:dot], name)
 
 
-def import_module(name, package = None):
+def import_module(name, package=None):
     """Import a module.
     
     The 'package' argument is required when performing a relative import. It

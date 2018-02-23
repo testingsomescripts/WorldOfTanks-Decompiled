@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/functional/random.py
 import BigWorld
 import ArenaType
@@ -43,7 +43,7 @@ class RandomQueueFunctional(prequeue.AccountQueueFunctional):
         return prb_getters.isInRandomQueue()
 
     @vehicleAmmoCheck
-    def queue(self, ctx, callback = None):
+    def queue(self, ctx, callback=None):
         super(RandomQueueFunctional, self).queue(ctx, callback=callback)
 
     def doSelectAction(self, action):
@@ -52,6 +52,9 @@ class RandomQueueFunctional(prequeue.AccountQueueFunctional):
         name = action.actionName
         if name == PREBATTLE_ACTION_NAME.SQUAD:
             newEntry = unit.SquadEntry(accountsToInvite=action.accountsToInvite)
+            isProcessed = True
+        elif name == PREBATTLE_ACTION_NAME.EVENT_SQUAD:
+            newEntry = unit.EventSquadEntry(accountsToInvite=action.accountsToInvite)
             isProcessed = True
         elif name == PREBATTLE_ACTION_NAME.RANDOM_QUEUE:
             isProcessed = True
@@ -68,7 +71,7 @@ class RandomQueueFunctional(prequeue.AccountQueueFunctional):
         BigWorld.player().dequeueRandom()
         LOG_DEBUG('Sends request on dequeuing from the random battle')
 
-    def _makeQueueCtxByAction(self, action = None):
+    def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
         assert invID, 'Inventory ID of vehicle can not be zero'
         if action is not None:

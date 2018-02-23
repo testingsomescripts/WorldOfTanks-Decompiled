@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/text_file.py
 """text_file
 
@@ -71,7 +71,7 @@ class TextFile:
      'join_lines': 0,
      'collapse_join': 0}
 
-    def __init__(self, filename = None, file = None, **options):
+    def __init__(self, filename=None, file=None, **options):
         """Construct a new TextFile object.  At least one of 'filename'
         (a string) and 'file' (a file-like object) must be supplied.
         They keyword argument options are described above and affect
@@ -81,8 +81,7 @@ class TextFile:
         for opt in self.default_options.keys():
             if opt in options:
                 setattr(self, opt, options[opt])
-            else:
-                setattr(self, opt, self.default_options[opt])
+            setattr(self, opt, self.default_options[opt])
 
         for opt in options.keys():
             if opt not in self.default_options:
@@ -113,7 +112,7 @@ class TextFile:
         self.current_line = None
         return
 
-    def gen_error(self, msg, line = None):
+    def gen_error(self, msg, line=None):
         outmsg = []
         if line is None:
             line = self.current_line
@@ -125,10 +124,10 @@ class TextFile:
         outmsg.append(str(msg))
         return ''.join(outmsg)
 
-    def error(self, msg, line = None):
+    def error(self, msg, line=None):
         raise ValueError, 'error: ' + self.gen_error(msg, line)
 
-    def warn(self, msg, line = None):
+    def warn(self, msg, line=None):
         """Print (to stderr) a warning message tied to the current logical
         line in the current file.  If the current logical line in the
         file spans multiple physical lines, the warning refers to the

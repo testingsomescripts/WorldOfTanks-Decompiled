@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/distutils/command/install_data.py
 """distutils.command.install_data
 
@@ -35,20 +35,18 @@ class install_data(Command):
                     self.warn("setup script did not provide a directory for '%s' -- installing right in '%s'" % (f, self.install_dir))
                 out, _ = self.copy_file(f, self.install_dir)
                 self.outfiles.append(out)
-            else:
-                dir = convert_path(f[0])
-                if not os.path.isabs(dir):
-                    dir = os.path.join(self.install_dir, dir)
-                elif self.root:
-                    dir = change_root(self.root, dir)
-                self.mkpath(dir)
-                if f[1] == []:
-                    self.outfiles.append(dir)
-                else:
-                    for data in f[1]:
-                        data = convert_path(data)
-                        out, _ = self.copy_file(data, dir)
-                        self.outfiles.append(out)
+            dir = convert_path(f[0])
+            if not os.path.isabs(dir):
+                dir = os.path.join(self.install_dir, dir)
+            elif self.root:
+                dir = change_root(self.root, dir)
+            self.mkpath(dir)
+            if f[1] == []:
+                self.outfiles.append(dir)
+            for data in f[1]:
+                data = convert_path(data)
+                out, _ = self.copy_file(data, dir)
+                self.outfiles.append(out)
 
     def get_inputs(self):
         return self.data_files or []

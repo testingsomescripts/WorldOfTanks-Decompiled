@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/compiler/future.py
 """Parser for future statements
 
@@ -32,8 +32,7 @@ class FutureParser:
             for name, asname in stmt.names:
                 if name in self.features:
                     self.found[name] = 1
-                else:
-                    raise SyntaxError, 'future feature %s is not defined' % name
+                raise SyntaxError, 'future feature %s is not defined' % name
 
             stmt.valid_future = 1
             return 1

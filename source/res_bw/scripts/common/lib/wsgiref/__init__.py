@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/wsgiref/__init__.py
 """wsgiref -- a WSGI (PEP 333) Reference Library
 

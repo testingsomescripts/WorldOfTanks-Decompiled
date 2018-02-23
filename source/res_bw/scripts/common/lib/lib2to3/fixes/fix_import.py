@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_import.py
 """Fixer for import statements.
 If spam is being imported from the local directory, this import:
@@ -24,14 +24,13 @@ def traverse_imports(names):
         node = pending.pop()
         if node.type == token.NAME:
             yield node.value
-        elif node.type == syms.dotted_name:
+        if node.type == syms.dotted_name:
             yield ''.join([ ch.value for ch in node.children ])
-        elif node.type == syms.dotted_as_name:
+        if node.type == syms.dotted_as_name:
             pending.append(node.children[0])
-        elif node.type == syms.dotted_as_names:
+        if node.type == syms.dotted_as_names:
             pending.extend(node.children[::-2])
-        else:
-            raise AssertionError('unknown node type')
+        raise AssertionError('unknown node type')
 
 
 class FixImport(fixer_base.BaseFix):
@@ -59,8 +58,7 @@ class FixImport(fixer_base.BaseFix):
             for mod_name in traverse_imports(imp):
                 if self.probably_a_local_import(mod_name):
                     have_local = True
-                else:
-                    have_absolute = True
+                have_absolute = True
 
             if have_absolute:
                 if have_local:

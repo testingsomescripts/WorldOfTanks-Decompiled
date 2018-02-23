@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/email/mime/audio.py
 """Class representing audio/* type MIME documents."""
 __all__ = ['MIMEAudio']
@@ -31,7 +31,7 @@ def _whatsnd(data):
 class MIMEAudio(MIMENonMultipart):
     """Class for generating audio/* MIME documents."""
 
-    def __init__(self, _audiodata, _subtype = None, _encoder = encoders.encode_base64, **_params):
+    def __init__(self, _audiodata, _subtype=None, _encoder=encoders.encode_base64, **_params):
         """Create an audio/* type MIME document.
         
         _audiodata is a string containing the raw audio data.  If this data

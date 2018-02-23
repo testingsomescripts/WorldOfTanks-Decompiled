@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/__init__.py
 __version__ = '0.70a1'
 __all__ = ['Process',
@@ -64,7 +65,7 @@ def Manager():
     return m
 
 
-def Pipe(duplex = True):
+def Pipe(duplex=True):
     """
     Returns two connection object connected by a pipe
     """
@@ -121,7 +122,7 @@ def get_logger():
     return get_logger()
 
 
-def log_to_stderr(level = None):
+def log_to_stderr(level=None):
     """
     Turn on logging and add a handler which prints to stderr
     """
@@ -152,7 +153,7 @@ def RLock():
     return RLock()
 
 
-def Condition(lock = None):
+def Condition(lock=None):
     """
     Returns a condition object
     """
@@ -160,7 +161,7 @@ def Condition(lock = None):
     return Condition(lock)
 
 
-def Semaphore(value = 1):
+def Semaphore(value=1):
     """
     Returns a semaphore object
     """
@@ -168,7 +169,7 @@ def Semaphore(value = 1):
     return Semaphore(value)
 
 
-def BoundedSemaphore(value = 1):
+def BoundedSemaphore(value=1):
     """
     Returns a bounded semaphore object
     """
@@ -184,7 +185,7 @@ def Event():
     return Event()
 
 
-def Queue(maxsize = 0):
+def Queue(maxsize=0):
     """
     Returns a queue object
     """
@@ -192,7 +193,7 @@ def Queue(maxsize = 0):
     return Queue(maxsize)
 
 
-def JoinableQueue(maxsize = 0):
+def JoinableQueue(maxsize=0):
     """
     Returns a queue object
     """
@@ -200,7 +201,7 @@ def JoinableQueue(maxsize = 0):
     return JoinableQueue(maxsize)
 
 
-def Pool(processes = None, initializer = None, initargs = (), maxtasksperchild = None):
+def Pool(processes=None, initializer=None, initargs=(), maxtasksperchild=None):
     """
     Returns a process pool object
     """

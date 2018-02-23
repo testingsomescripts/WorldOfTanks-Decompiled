@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_tuple_params.py
 """Fixer for function definitions with tuple parameters.
 
@@ -47,7 +47,7 @@ class FixTupleParams(fixer_base.BaseFix):
             indent = u'; '
             end = pytree.Leaf(token.INDENT, u'')
 
-        def handle_tuple(tuple_arg, add_prefix = False):
+        def handle_tuple(tuple_arg, add_prefix=False):
             n = Name(self.new_name())
             arg = tuple_arg.clone()
             arg.prefix = u''
@@ -125,15 +125,14 @@ def find_params(node):
     return [ find_params(c) for c in node.children if c.type != token.COMMA ]
 
 
-def map_to_index(param_list, prefix = [], d = None):
+def map_to_index(param_list, prefix=[], d=None):
     if d is None:
         d = {}
     for i, obj in enumerate(param_list):
         trailer = [Subscript(Number(unicode(i)))]
         if isinstance(obj, list):
             map_to_index(obj, trailer, d=d)
-        else:
-            d[obj] = prefix + trailer
+        d[obj] = prefix + trailer
 
     return d
 
@@ -143,7 +142,6 @@ def tuple_name(param_list):
     for obj in param_list:
         if isinstance(obj, list):
             l.append(tuple_name(obj))
-        else:
-            l.append(obj)
+        l.append(obj)
 
     return u'_'.join(l)

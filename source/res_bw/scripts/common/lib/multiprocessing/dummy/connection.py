@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/dummy/connection.py
 __all__ = ['Client', 'Listener', 'Pipe']
 from Queue import Queue
@@ -5,7 +6,7 @@ families = [None]
 
 class Listener(object):
 
-    def __init__(self, address = None, family = None, backlog = 1):
+    def __init__(self, address=None, family=None, backlog=1):
         self._backlog_queue = Queue(backlog)
 
     def accept(self):
@@ -24,7 +25,7 @@ def Client(address):
     return Connection(_in, _out)
 
 
-def Pipe(duplex = True):
+def Pipe(duplex=True):
     a, b = Queue(), Queue()
     return (Connection(a, b), Connection(b, a))
 
@@ -37,7 +38,7 @@ class Connection(object):
         self.send = self.send_bytes = _out.put
         self.recv = self.recv_bytes = _in.get
 
-    def poll(self, timeout = 0.0):
+    def poll(self, timeout=0.0):
         if self._in.qsize() > 0:
             return True
         if timeout <= 0.0:

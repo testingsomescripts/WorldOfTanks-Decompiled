@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/runpy.py
 """runpy.py - locating and running Python code using the module namespace
 
@@ -60,7 +61,7 @@ class _ModifiedArgv0(object):
         sys.argv[0] = self._saved_value
 
 
-def _run_code(code, run_globals, init_globals = None, mod_name = None, mod_fname = None, mod_loader = None, pkg_name = None):
+def _run_code(code, run_globals, init_globals=None, mod_name=None, mod_fname=None, mod_loader=None, pkg_name=None):
     """Helper to run code in nominated namespace"""
     if init_globals is not None:
         run_globals.update(init_globals)
@@ -69,7 +70,7 @@ def _run_code(code, run_globals, init_globals = None, mod_name = None, mod_fname
     return run_globals
 
 
-def _run_module_code(code, init_globals = None, mod_name = None, mod_fname = None, mod_loader = None, pkg_name = None):
+def _run_module_code(code, init_globals=None, mod_name=None, mod_fname=None, mod_loader=None, pkg_name=None):
     """Helper to run code in new namespace with sys modified"""
     with _TempModule(mod_name) as temp_module:
         with _ModifiedArgv0(mod_fname):
@@ -120,7 +121,7 @@ def _get_main_module_details():
         raise
 
 
-def _run_module_as_main(mod_name, alter_argv = True):
+def _run_module_as_main(mod_name, alter_argv=True):
     """Runs the designated module in the __main__ namespace
     
        Note that the executed module will have full access to the
@@ -149,7 +150,7 @@ def _run_module_as_main(mod_name, alter_argv = True):
     return _run_code(code, main_globals, None, '__main__', fname, loader, pkg_name)
 
 
-def run_module(mod_name, init_globals = None, run_name = None, alter_sys = False):
+def run_module(mod_name, init_globals=None, run_name=None, alter_sys=False):
     """Execute a module's code without importing it
     
        Returns the resulting top level namespace dictionary
@@ -199,7 +200,7 @@ def _get_code_from_file(fname):
     return code
 
 
-def run_path(path_name, init_globals = None, run_name = None):
+def run_path(path_name, init_globals=None, run_name=None):
     """Execute code located at the specified filesystem location
     
        Returns the resulting top level namespace dictionary

@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib2to3/fixes/fix_ws_comma.py
 """Fixer that changes 'a ,b' into 'a, b'.
 
@@ -26,11 +26,10 @@ class FixWsComma(fixer_base.BaseFix):
                 if prefix.isspace() and u'\n' not in prefix:
                     child.prefix = u''
                 comma = True
-            else:
-                if comma:
-                    prefix = child.prefix
-                    if not prefix:
-                        child.prefix = u' '
-                comma = False
+            if comma:
+                prefix = child.prefix
+                if not prefix:
+                    child.prefix = u' '
+            comma = False
 
         return new

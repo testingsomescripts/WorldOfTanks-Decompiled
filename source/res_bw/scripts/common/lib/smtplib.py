@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/smtplib.py
 """SMTP/ESMTP client class.
 
@@ -157,9 +158,7 @@ def quoteaddr(addr):
 
 def _addr_only(addrstring):
     displayname, addr = email.utils.parseaddr(addrstring)
-    if (displayname, addr) == ('', ''):
-        return addrstring
-    return addr
+    return addrstring if (displayname, addr) == ('', '') else addr
 
 
 def quotedata(data):
@@ -240,7 +239,7 @@ class SMTP():
     does_esmtp = 0
     default_port = SMTP_PORT
 
-    def __init__(self, host = '', port = 0, local_hostname = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+    def __init__(self, host='', port=0, local_hostname=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
         """Initialize a new instance.
         
         If specified, `host' is the name of the remote host to which to
@@ -289,7 +288,7 @@ class SMTP():
             print >> stderr, 'connect:', (host, port)
         return socket.create_connection((host, port), timeout)
 
-    def connect(self, host = 'localhost', port = 0):
+    def connect(self, host='localhost', port=0):
         """Connect to a host on a given port.
         
         If the hostname ends with a colon (`:') followed by a number, and
@@ -333,7 +332,7 @@ class SMTP():
         else:
             raise SMTPServerDisconnected('please run connect() first')
 
-    def putcmd(self, cmd, args = ''):
+    def putcmd(self, cmd, args=''):
         """Send a command to the server."""
         if args == '':
             str = '%s%s' % (cmd, CRLF)
@@ -385,12 +384,12 @@ class SMTP():
             print >> stderr, 'reply: retcode (%s); Msg: %s' % (errcode, errmsg)
         return (errcode, errmsg)
 
-    def docmd(self, cmd, args = ''):
+    def docmd(self, cmd, args=''):
         """Send a command, and return its response code."""
         self.putcmd(cmd, args)
         return self.getreply()
 
-    def helo(self, name = ''):
+    def helo(self, name=''):
         """SMTP 'helo' command.
         Hostname to send for this command defaults to the FQDN of the local
         host.
@@ -400,7 +399,7 @@ class SMTP():
         self.helo_resp = msg
         return (code, msg)
 
-    def ehlo(self, name = ''):
+    def ehlo(self, name=''):
         """ SMTP 'ehlo' command.
         Hostname to send for this command defaults to the FQDN of the local
         host.
@@ -437,7 +436,7 @@ class SMTP():
         """Does the server support a given SMTP service extension?"""
         return opt.lower() in self.esmtp_features
 
-    def help(self, args = ''):
+    def help(self, args=''):
         """SMTP 'help' command.
         Returns help text from server."""
         self.putcmd('help', args)
@@ -451,7 +450,7 @@ class SMTP():
         """SMTP 'noop' command -- doesn't do anything :>"""
         return self.docmd('noop')
 
-    def mail(self, sender, options = []):
+    def mail(self, sender, options=[]):
         """SMTP 'mail' command -- begins mail xfer session."""
         optionlist = ''
         if options and self.does_esmtp:
@@ -459,7 +458,7 @@ class SMTP():
         self.putcmd('mail', 'FROM:%s%s' % (quoteaddr(sender), optionlist))
         return self.getreply()
 
-    def rcpt(self, recip, options = []):
+    def rcpt(self, recip, options=[]):
         """SMTP 'rcpt' command -- indicates 1 recipient for this mail."""
         optionlist = ''
         if options and self.does_esmtp:
@@ -584,7 +583,7 @@ class SMTP():
             raise SMTPAuthenticationError(code, resp)
         return (code, resp)
 
-    def starttls(self, keyfile = None, certfile = None):
+    def starttls(self, keyfile=None, certfile=None):
         """Puts the connection to the SMTP server into TLS mode.
         
         If there has been no previous EHLO or HELO command this session, this
@@ -616,7 +615,7 @@ class SMTP():
             self.does_esmtp = 0
         return (resp, reply)
 
-    def sendmail(self, from_addr, to_addrs, msg, mail_options = [], rcpt_options = []):
+    def sendmail(self, from_addr, to_addrs, msg, mail_options=[], rcpt_options=[]):
         r"""This command performs an entire mail transaction.
         
         The arguments are:
@@ -733,7 +732,7 @@ if _have_ssl:
         """
         default_port = SMTP_SSL_PORT
 
-        def __init__(self, host = '', port = 0, local_hostname = None, keyfile = None, certfile = None, timeout = socket._GLOBAL_DEFAULT_TIMEOUT):
+        def __init__(self, host='', port=0, local_hostname=None, keyfile=None, certfile=None, timeout=socket._GLOBAL_DEFAULT_TIMEOUT):
             self.keyfile = keyfile
             self.certfile = certfile
             SMTP.__init__(self, host, port, local_hostname, timeout)
@@ -765,11 +764,11 @@ class LMTP(SMTP):
     authentication, but your mileage might vary."""
     ehlo_msg = 'lhlo'
 
-    def __init__(self, host = '', port = LMTP_PORT, local_hostname = None):
+    def __init__(self, host='', port=LMTP_PORT, local_hostname=None):
         """Initialize a new instance."""
         SMTP.__init__(self, host, port, local_hostname)
 
-    def connect(self, host = 'localhost', port = 0):
+    def connect(self, host='localhost', port=0):
         """Connect to the LMTP daemon, on either a Unix or a TCP socket."""
         if host[0] != '/':
             return SMTP.connect(self, host, port)

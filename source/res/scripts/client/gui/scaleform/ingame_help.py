@@ -1,7 +1,8 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/ingame_help.py
 from account_helpers.AccountSettings import AccountSettings
-import BigWorld, ResMgr
+import BigWorld
+import ResMgr
 import CommandMapping
 import constants
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -88,7 +89,7 @@ class IngameHelpLobbyDelegator(UIInterface):
     def isRequiredToShow(self):
         return self.__ingameHelp.isRequiredToShow()
 
-    def showIngameHelp(self, callback = None):
+    def showIngameHelp(self, callback=None):
         self.__ingameHelp.buildCmdMapping()
         self.__ingameHelp._writeVersionForCurrentPlayer()
         self.__callback = callback

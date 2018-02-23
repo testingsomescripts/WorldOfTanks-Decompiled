@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/multiprocessing/sharedctypes.py
 import sys
 import ctypes
@@ -99,10 +100,10 @@ def copy(obj):
     return new_obj
 
 
-def synchronized(obj, lock = None):
-    if not not isinstance(obj, SynchronizedBase):
-        raise AssertionError('object already synchronized')
-        return isinstance(obj, ctypes._SimpleCData) and Synchronized(obj, lock)
+def synchronized(obj, lock=None):
+    assert not isinstance(obj, SynchronizedBase), 'object already synchronized'
+    if isinstance(obj, ctypes._SimpleCData):
+        return Synchronized(obj, lock)
     elif isinstance(obj, ctypes.Array):
         if obj._type_ is ctypes.c_char:
             return SynchronizedString(obj, lock)
@@ -154,7 +155,7 @@ class_cache = weakref.WeakKeyDictionary()
 
 class SynchronizedBase(object):
 
-    def __init__(self, obj, lock = None):
+    def __init__(self, obj, lock=None):
         self._obj = obj
         self._lock = lock or RLock()
         self.acquire = self._lock.acquire

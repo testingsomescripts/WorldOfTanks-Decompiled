@@ -1,4 +1,4 @@
-# Python 2.7 (decompiled from Python 2.7)
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/bsddb/test/test_basics.py
 """
 Basic TestCases for BTree and hash DBs, with and without a DBEnv, with
@@ -83,7 +83,7 @@ class BasicTestCase(unittest.TestCase):
             os.remove(self.filename)
         return
 
-    def populateDB(self, _txn = None):
+    def populateDB(self, _txn=None):
         d = self.d
         for x in range(self._numKeys // 2):
             key = '%04d' % (self._numKeys - x)
@@ -250,7 +250,7 @@ class BasicTestCase(unittest.TestCase):
         self.assertTrue('0401' in d)
         self.assertFalse('1234' in d)
 
-    def test03_SimpleCursorStuff(self, get_raises_error = 0, set_raises_error = 0):
+    def test03_SimpleCursorStuff(self, get_raises_error=0, set_raises_error=0):
         if verbose:
             print '\n', '-=' * 30
             print 'Running %s.test03_SimpleCursorStuff (get_error %s, set_error %s)...' % (self.__class__.__name__, get_raises_error, set_raises_error)
@@ -568,7 +568,7 @@ class BasicHashWithEnvTestCase(BasicWithEnvTestCase):
 class BasicTransactionTestCase(BasicTestCase):
     if sys.version_info < (2, 7) or sys.version_info >= (3, 0) and sys.version_info < (3, 2):
 
-        def assertIn(self, a, b, msg = None):
+        def assertIn(self, a, b, msg=None):
             return self.assertTrue(a in b, msg=msg)
 
     dbopenflags = db.DB_THREAD | db.DB_AUTO_COMMIT

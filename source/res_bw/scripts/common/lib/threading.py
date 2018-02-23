@@ -1,3 +1,4 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/threading.py
 """Thread module emulating a subset of Java's threading model."""
 import sys as _sys
@@ -38,7 +39,7 @@ _VERBOSE = False
 
 class _Verbose(object):
 
-    def __init__(self, verbose = None):
+    def __init__(self, verbose=None):
         if verbose is None:
             verbose = _VERBOSE
         self.__verbose = verbose
@@ -103,7 +104,7 @@ class _RLock(_Verbose):
        has acquired it.
     """
 
-    def __init__(self, verbose = None):
+    def __init__(self, verbose=None):
         _Verbose.__init__(self, verbose)
         self.__block = _allocate_lock()
         self.__owner = None
@@ -119,7 +120,7 @@ class _RLock(_Verbose):
 
         return '<%s owner=%r count=%d>' % (self.__class__.__name__, owner, self.__count)
 
-    def acquire(self, blocking = 1):
+    def acquire(self, blocking=1):
         """Acquire a lock, blocking or non-blocking.
         
         When invoked without arguments: if this thread already owns the lock,
@@ -225,7 +226,7 @@ class _Condition(_Verbose):
        notified by another thread.
     """
 
-    def __init__(self, lock = None, verbose = None):
+    def __init__(self, lock=None, verbose=None):
         _Verbose.__init__(self, verbose)
         if lock is None:
             lock = RLock()
@@ -272,7 +273,7 @@ class _Condition(_Verbose):
         else:
             return True
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         """Wait until notified or until a timeout occurs.
         
         If the calling thread has not acquired the lock when this method is
@@ -332,7 +333,7 @@ class _Condition(_Verbose):
 
         return
 
-    def notify(self, n = 1):
+    def notify(self, n=1):
         """Wake up one or more threads waiting on this condition, if any.
         
         If the calling thread has not acquired the lock when this method is
@@ -389,14 +390,14 @@ class _Semaphore(_Verbose):
     
     """
 
-    def __init__(self, value = 1, verbose = None):
+    def __init__(self, value=1, verbose=None):
         if value < 0:
             raise ValueError('semaphore initial value must be >= 0')
         _Verbose.__init__(self, verbose)
         self.__cond = Condition(Lock())
         self.__value = value
 
-    def acquire(self, blocking = 1):
+    def acquire(self, blocking=1):
         """Acquire a semaphore, decrementing the internal counter by one.
         
         When invoked without arguments: if the internal counter is larger than
@@ -473,7 +474,7 @@ class _BoundedSemaphore(_Semaphore):
        semaphores are used to guard resources with limited capacity.
     """
 
-    def __init__(self, value = 1, verbose = None):
+    def __init__(self, value=1, verbose=None):
         _Semaphore.__init__(self, value, verbose)
         self._initial_value = value
 
@@ -512,7 +513,7 @@ class _Event(_Verbose):
     
     """
 
-    def __init__(self, verbose = None):
+    def __init__(self, verbose=None):
         _Verbose.__init__(self, verbose)
         self.__cond = Condition(Lock())
         self.__flag = False
@@ -553,7 +554,7 @@ class _Event(_Verbose):
         finally:
             self.__cond.release()
 
-    def wait(self, timeout = None):
+    def wait(self, timeout=None):
         """Block until the internal flag is true.
         
         If the internal flag is true on entry, return immediately. Otherwise,
@@ -579,7 +580,7 @@ class _Event(_Verbose):
 
 _counter = 0
 
-def _newname(template = 'Thread-%d'):
+def _newname(template='Thread-%d'):
     global _counter
     _counter = _counter + 1
     return template % _counter
@@ -599,7 +600,7 @@ class Thread(_Verbose):
     __exc_info = _sys.exc_info
     __exc_clear = _sys.exc_clear
 
-    def __init__(self, group = None, target = None, name = None, args = (), kwargs = None, verbose = None):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs=None, verbose=None):
         """This constructor should always be called with keyword arguments. Arguments are:
         
                 *group* should be None; reserved for future extension when a ThreadGroup
@@ -621,10 +622,10 @@ class Thread(_Verbose):
                 else to the thread.
         
         """
-        if not group is None:
-            raise AssertionError('group argument must be None for now')
-            _Verbose.__init__(self, verbose)
-            kwargs = kwargs is None and {}
+        assert group is None, 'group argument must be None for now'
+        _Verbose.__init__(self, verbose)
+        if kwargs is None:
+            kwargs = {}
         self.__target = target
         self.__name = str(name or _newname())
         self.__args = args
@@ -651,16 +652,16 @@ class Thread(_Verbose):
         return current_thread().daemon
 
     def __repr__(self):
-        if not self.__initialized:
-            raise AssertionError('Thread.__init__() was not called')
-            status = 'initial'
-            if self.__started.is_set():
-                status = 'started'
-            if self.__stopped:
-                status = 'stopped'
-            if self.__daemonic:
-                status += ' daemon'
-            self.__ident is not None and status += ' %s' % self.__ident
+        assert self.__initialized, 'Thread.__init__() was not called'
+        status = 'initial'
+        if self.__started.is_set():
+            status = 'started'
+        if self.__stopped:
+            status = 'stopped'
+        if self.__daemonic:
+            status += ' daemon'
+        if self.__ident is not None:
+            status += ' %s' % self.__ident
         return '<%s(%s, %s)>' % (self.__class__.__name__, self.__name, status)
 
     def start(self):
@@ -735,30 +736,32 @@ class Thread(_Verbose):
                 self._note('%s.__bootstrap(): registering profile hook', self)
                 _sys.setprofile(_profile_hook)
             try:
-                self.run()
-            except SystemExit:
-                self._note('%s.__bootstrap(): raised SystemExit', self)
-            except:
-                self._note('%s.__bootstrap(): unhandled exception', self)
-                if _sys:
-                    _sys.stderr.write('Exception in thread %s:\n%s\n' % (self.name, _format_exc()))
+                try:
+                    self.run()
+                except SystemExit:
+                    self._note('%s.__bootstrap(): raised SystemExit', self)
+                except:
+                    self._note('%s.__bootstrap(): unhandled exception', self)
+                    if _sys:
+                        _sys.stderr.write('Exception in thread %s:\n%s\n' % (self.name, _format_exc()))
+                    else:
+                        exc_type, exc_value, exc_tb = self.__exc_info()
+                        try:
+                            print >> self.__stderr, 'Exception in thread ' + self.name + ' (most likely raised during interpreter shutdown):'
+                            print >> self.__stderr, 'Traceback (most recent call last):'
+                            while exc_tb:
+                                print >> self.__stderr, '  File "%s", line %s, in %s' % (exc_tb.tb_frame.f_code.co_filename, exc_tb.tb_lineno, exc_tb.tb_frame.f_code.co_name)
+                                exc_tb = exc_tb.tb_next
+
+                            print >> self.__stderr, '%s: %s' % (exc_type, exc_value)
+                        finally:
+                            del exc_type
+                            del exc_value
+                            del exc_tb
+
                 else:
-                    exc_type, exc_value, exc_tb = self.__exc_info()
-                    try:
-                        print >> self.__stderr, 'Exception in thread ' + self.name + ' (most likely raised during interpreter shutdown):'
-                        print >> self.__stderr, 'Traceback (most recent call last):'
-                        while exc_tb:
-                            print >> self.__stderr, '  File "%s", line %s, in %s' % (exc_tb.tb_frame.f_code.co_filename, exc_tb.tb_lineno, exc_tb.tb_frame.f_code.co_name)
-                            exc_tb = exc_tb.tb_next
+                    self._note('%s.__bootstrap(): normal return', self)
 
-                        print >> self.__stderr, '%s: %s' % (exc_type, exc_value)
-                    finally:
-                        del exc_type
-                        del exc_value
-                        del exc_tb
-
-            else:
-                self._note('%s.__bootstrap(): normal return', self)
             finally:
                 self.__exc_clear()
 
@@ -787,7 +790,7 @@ class Thread(_Verbose):
             if 'dummy_threading' not in _sys.modules:
                 raise
 
-    def join(self, timeout = None):
+    def join(self, timeout=None):
         """Wait until the thread terminates.
         
         This blocks the calling thread until the thread whose join() method is
@@ -850,12 +853,12 @@ class Thread(_Verbose):
         initial name is set by the constructor.
         
         """
-        raise self.__initialized or AssertionError('Thread.__init__() not called')
+        assert self.__initialized, 'Thread.__init__() not called'
         return self.__name
 
     @name.setter
     def name(self, name):
-        raise self.__initialized or AssertionError('Thread.__init__() not called')
+        assert self.__initialized, 'Thread.__init__() not called'
         self.__name = str(name)
 
     @property
@@ -867,7 +870,7 @@ class Thread(_Verbose):
         created. The identifier is available even after the thread has exited.
         
         """
-        raise self.__initialized or AssertionError('Thread.__init__() not called')
+        assert self.__initialized, 'Thread.__init__() not called'
         return self.__ident
 
     def isAlive(self):
@@ -878,7 +881,7 @@ class Thread(_Verbose):
         returns a list of all alive threads.
         
         """
-        raise self.__initialized or AssertionError('Thread.__init__() not called')
+        assert self.__initialized, 'Thread.__init__() not called'
         return self.__started.is_set() and not self.__stopped
 
     is_alive = isAlive
@@ -896,7 +899,7 @@ class Thread(_Verbose):
         left.
         
         """
-        raise self.__initialized or AssertionError('Thread.__init__() not called')
+        assert self.__initialized, 'Thread.__init__() not called'
         return self.__daemonic
 
     @daemon.setter
@@ -942,7 +945,7 @@ class _Timer(Thread):
     
     """
 
-    def __init__(self, interval, function, args = [], kwargs = {}):
+    def __init__(self, interval, function, args=[], kwargs={}):
         Thread.__init__(self)
         self.interval = interval
         self.function = function
@@ -1007,8 +1010,8 @@ class _DummyThread(Thread):
     def _set_daemon(self):
         return True
 
-    def join(self, timeout = None):
-        raise False or AssertionError('cannot join a dummy thread')
+    def join(self, timeout=None):
+        assert False, 'cannot join a dummy thread'
 
 
 def currentThread():
@@ -1075,13 +1078,12 @@ def _after_fork():
                 ident = _get_ident()
                 thread._Thread__ident = ident
                 new_active[ident] = thread
-            else:
-                thread._Thread__stop()
+            thread._Thread__stop()
 
         _limbo.clear()
         _active.clear()
         _active.update(new_active)
-        raise len(_active) == 1 or AssertionError
+        assert len(_active) == 1
 
 
 def _test():
