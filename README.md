@@ -25,7 +25,7 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
 5. Create an **zip**-archive by running the console program **ZipPacker.cmd** (required **7z.exe**)
-6. Move the archive to the **"zip"** folder
+6. Clean the existing **"zip"** directory and move to it the new archive
 7. Create a commit and offer a **"Pull request"** in the right branch (named as **"X.X.X: ... #YYY"**)
 
 **Note:** Requests with the test clients to the master-branch will be rejected! Main branch only for releases.
