@@ -3,7 +3,7 @@
 from collections import namedtuple
 import BigWorld
 import Math
-from constants import EVENT_TYPE as _ET
+from constants import EVENT_TYPE as _ET, DOSSIER_TYPE
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -23,6 +23,16 @@ from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+_CUSTOMIZATIONS_SCALE = 44.0 / 128
+
+def _getAchievement(block, record, value):
+    factory = getAchievementFactory((block, record))
+    return factory.create(value=value)
+
+
+def _isAchievement(block):
+    return block in ACHIEVEMENT_BLOCK.ALL
+
 
 class SimpleBonus(object):
 
@@ -236,7 +246,7 @@ class BoosterBonus(SimpleBonus):
             _getBooster = g_goodiesCache.getBooster
             for boosterID, info in self._value.iteritems():
                 booster = _getBooster(int(boosterID))
-                if booster is not None:
+                if booster is not None and booster.enabled:
                     boosters[booster] = info.get('count', 1)
 
         return boosters
@@ -297,7 +307,13 @@ class VehiclesBonus(SimpleBonus):
                 tmanRoleLevel = None
             vInfoLabels = []
             if 'rent' in vehInfo:
-                rentDays = vehInfo.get('rent', {}).get('expires', {}).get('after', None)
+                time = vehInfo.get('rent', {}).get('time', None)
+                rentDays = None
+                if time:
+                    if time == float('inf'):
+                        pass
+                    elif time <= time_utils.DAYS_IN_YEAR:
+                        rentDays = int(time)
                 if rentDays:
                     rentDaysStr = makeHtmlString('html_templates:lobby/quests/bonuses', 'rentDays', {'value': str(rentDays)})
                     vInfoLabels.append(rentDaysStr)
@@ -331,21 +347,43 @@ class VehiclesBonus(SimpleBonus):
 class DossierBonus(SimpleBonus):
 
     def getRecords(self):
-        return set((name for name in self._value.iterkeys())) if self._value is not None else set()
+        """ Returns dictionary of dossier records {(dossier_block, record_name): record_value), ....}
+        """
+        records = {}
+        if self._value is not None:
+            for dossierType in self._value:
+                if dossierType != DOSSIER_TYPE.CLAN:
+                    for name, data in self._value[dossierType].iteritems():
+                        records[name] = data.get('value', 0)
+
+        return records
+
+    def getAchievements(self):
+        result = []
+        for (block, record), value in self.getRecords().iteritems():
+            if _isAchievement(block):
+                if block == ACHIEVEMENT_BLOCK.RARE:
+                    continue
+                try:
+                    result.append(_getAchievement(block, record, value))
+                except Exception:
+                    LOG_ERROR('There is error while getting bonus dossier record name')
+                    LOG_CURRENT_EXCEPTION()
+
+        return result
 
     def format(self):
         return ', '.join(self.formattedList())
 
     def formattedList(self):
         result = []
-        for block, record in self.getRecords():
+        for (block, record), value in self.getRecords().iteritems():
             try:
-                if block in ACHIEVEMENT_BLOCK.ALL:
-                    factory = getAchievementFactory((block, record))
-                    if factory is not None:
-                        achieve = factory.create()
-                        if achieve is not None:
-                            result.append(achieve.userName)
+                if _isAchievement(block):
+                    if block == ACHIEVEMENT_BLOCK.RARE:
+                        continue
+                    achieve = _getAchievement(block, record, value)
+                    result.append(achieve.userName)
                 else:
                     result.append(i18n.makeString('#quests:details/dossier/%s' % record))
             except Exception:
@@ -551,6 +589,16 @@ _BONUSES = {'credits': CreditsBonus,
  'customizations': CustomizationsBonus,
  'goodies': BoosterBonus,
  'strBonus': SimpleBonus}
+_BONUSES_PRIORITY = ('tokens',)
+_BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
+
+def compareBonuses(bonusName1, bonusName2):
+    if bonusName1 not in _BONUSES_ORDER and bonusName2 not in _BONUSES_ORDER:
+        return cmp(bonusName1, bonusName2)
+    if bonusName1 not in _BONUSES_ORDER:
+        return 1
+    return -1 if bonusName2 not in _BONUSES_ORDER else _BONUSES_ORDER[bonusName1] - _BONUSES_ORDER[bonusName2]
+
 
 def _getClassFromTree(tree, path):
     if not tree or not path:

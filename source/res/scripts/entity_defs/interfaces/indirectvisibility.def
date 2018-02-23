@@ -1,4 +1,7 @@
 <indirectvisibility.def>
+  <TempProperties>
+    <_indirectVisibility></_indirectVisibility>
+  </TempProperties>
   <CellMethods>
     <indirectVisibility_onVehicleCreated>
       <Arg>	UINT8	</Arg>
@@ -6,6 +9,7 @@
       <Arg>	MAILBOX	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </indirectVisibility_onVehicleCreated>

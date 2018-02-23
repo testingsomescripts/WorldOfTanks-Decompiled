@@ -265,7 +265,7 @@ class UnitChatHandler(_EntityChatHandler):
             return
         else:
             settings = None
-            if prbType in (PREBATTLE_TYPE.SQUAD, PREBATTLE_TYPE.FALLOUT):
+            if prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES:
                 settings = BATTLE_CHANNEL.SQUAD
             self.__channel = self._addChannel(entities.BWUnitChannelEntity(settings, prbType))
             return
@@ -353,10 +353,12 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
         self.__targetIDs = []
         if scope != MESSENGER_SCOPE.BATTLE:
             return
-        from gui.battle_control.arena_info import getClientArena
-        arena = getClientArena()
-        if arena:
-            arena.onVehicleKilled += self.__onVehicleKilled
+        else:
+            from gui.battle_control import g_sessionProvider
+            arena = g_sessionProvider.arenaVisitor.getArenaSubscription()
+            if arena is not None:
+                arena.onVehicleKilled += self.__onVehicleKilled
+            return
 
     def send(self, decorator):
         command = decorator.getCommand()

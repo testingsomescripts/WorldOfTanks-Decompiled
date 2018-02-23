@@ -3,12 +3,25 @@
 from debug_utils import LOG_WARNING
 
 class INGAME_GUI(object):
+    """
+    DO NOT MODIFY!
+    Generated with yaml.
+    __author__ = 'yaml_processor'
+    null
+    """
+    PLAYERS_PANEL_STATE_NONE = '#ingame_gui:players_panel/state/none'
+    PLAYERS_PANEL_STATE_SHORT = '#ingame_gui:players_panel/state/short'
+    PLAYERS_PANEL_STATE_MEDIUM = '#ingame_gui:players_panel/state/medium'
+    PLAYERS_PANEL_STATE_MEDIUM2 = PLAYERS_PANEL_STATE_MEDIUM + '2'
+    PLAYERS_PANEL_STATE_LARGE = '#ingame_gui:players_panel/state/large'
     DEVICES_ENGINE = '#ingame_gui:devices/engine'
     DEVICES_AMMO_BAY = '#ingame_gui:devices/ammo_bay'
     DEVICES_FUEL_TANK = '#ingame_gui:devices/fuel_tank'
     DEVICES_RADIO = '#ingame_gui:devices/radio'
     DEVICES_LEFT_TRACK = '#ingame_gui:devices/left_track'
     DEVICES_RIGHT_TRACK = '#ingame_gui:devices/right_track'
+    DEVICES_LEFT_WHEEL = '#ingame_gui:devices/left_wheel'
+    DEVICES_RIGHT_WHEEL = '#ingame_gui:devices/right_wheel'
     DEVICES_GUN = '#ingame_gui:devices/gun'
     DEVICES_TURRET_ROTATOR = '#ingame_gui:devices/turret_rotator'
     DEVICES_SURVEING_DEVICE = '#ingame_gui:devices/surveing_device'
@@ -33,6 +46,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_DEVICEISNOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/deviceIsNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_ALLDEVICESARENOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/allDevicesAreNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
+    PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
@@ -56,6 +70,7 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_ENEMY_TEAM_NAME = '#ingame_gui:player_messages/enemy_team_name'
     PLAYER_MESSAGES_POSTMORTEM_CAPTION = '#ingame_gui:player_messages/postmortem_caption'
     PLAYER_MESSAGES_POSTMORTEM_CAPTION_SELF = '#ingame_gui:player_messages/postmortem_caption/self'
+    PLAYER_MESSAGES_POSTMORTEM_CAPTION_OTHER = '#ingame_gui:player_messages/postmortem_caption/other'
     PLAYER_MESSAGES_POSTMORTEM_USERNOHASAMMO = '#ingame_gui:player_messages/postmortem_userNoHasAmmo'
     PLAYER_MESSAGES_TANK_IN_FIRE = '#ingame_gui:player_messages/tank_in_fire'
     PLAYER_MESSAGES_REPLAYFREECAMERAACTIVATED = '#ingame_gui:player_messages/replayFreeCameraActivated'
@@ -167,6 +182,9 @@ class INGAME_GUI(object):
     DAMAGE_PANEL_DEVICES_CHASSIS_NORMAL = '#ingame_gui:damage_panel/devices/chassis/normal'
     DAMAGE_PANEL_DEVICES_CHASSIS_CRITICAL = '#ingame_gui:damage_panel/devices/chassis/critical'
     DAMAGE_PANEL_DEVICES_CHASSIS_DESTROYED = '#ingame_gui:damage_panel/devices/chassis/destroyed'
+    DAMAGE_PANEL_CREW_WHEEL_NORMAL = '#ingame_gui:damage_panel/crew/wheel/normal'
+    DAMAGE_PANEL_CREW_WHEEL_CRITICAL = '#ingame_gui:damage_panel/crew/wheel/critical'
+    DAMAGE_PANEL_CREW_WHEEL_DESTROYED = '#ingame_gui:damage_panel/crew/wheel/destroyed'
     DAMAGE_PANEL_DEVICES_RADIO_NORMAL = '#ingame_gui:damage_panel/devices/radio/normal'
     DAMAGE_PANEL_DEVICES_RADIO_CRITICAL = '#ingame_gui:damage_panel/devices/radio/critical'
     DAMAGE_PANEL_DEVICES_RADIO_DESTROYED = '#ingame_gui:damage_panel/devices/radio/destroyed'
@@ -202,21 +220,21 @@ class INGAME_GUI(object):
     POSTMORTEM_TIPS_OBSERVERMODE_TEXT = '#ingame_gui:postmortem/tips/observerMode/text'
     POSTMORTEM_TIPS_EXITHANGAR_LABEL = '#ingame_gui:postmortem/tips/exitHangar/label'
     POSTMORTEM_TIPS_EXITHANGAR_TEXT = '#ingame_gui:postmortem/tips/exitHangar/text'
-    PLAYERS_PANEL_STATE_NONE_HEADER = '#ingame_gui:players_panel/state/none/header'
-    PLAYERS_PANEL_STATE_NONE_BODY = '#ingame_gui:players_panel/state/none/body'
-    PLAYERS_PANEL_STATE_NONE_NOTE = '#ingame_gui:players_panel/state/none/note'
-    PLAYERS_PANEL_STATE_SHORT_HEADER = '#ingame_gui:players_panel/state/short/header'
-    PLAYERS_PANEL_STATE_SHORT_BODY = '#ingame_gui:players_panel/state/short/body'
-    PLAYERS_PANEL_STATE_SHORT_NOTE = '#ingame_gui:players_panel/state/short/note'
-    PLAYERS_PANEL_STATE_MEDIUM_HEADER = '#ingame_gui:players_panel/state/medium/header'
-    PLAYERS_PANEL_STATE_MEDIUM_BODY = '#ingame_gui:players_panel/state/medium/body'
-    PLAYERS_PANEL_STATE_MEDIUM_NOTE = '#ingame_gui:players_panel/state/medium/note'
-    PLAYERS_PANEL_STATE_MEDIUM2_HEADER = '#ingame_gui:players_panel/state/medium2/header'
-    PLAYERS_PANEL_STATE_MEDIUM2_BODY = '#ingame_gui:players_panel/state/medium2/body'
-    PLAYERS_PANEL_STATE_MEDIUM2_NOTE = '#ingame_gui:players_panel/state/medium2/note'
-    PLAYERS_PANEL_STATE_LARGE_HEADER = '#ingame_gui:players_panel/state/large/header'
-    PLAYERS_PANEL_STATE_LARGE_BODY = '#ingame_gui:players_panel/state/large/body'
-    PLAYERS_PANEL_STATE_LARGE_NOTE = '#ingame_gui:players_panel/state/large/note'
+    PLAYERS_PANEL_STATE_NONE_HEADER = PLAYERS_PANEL_STATE_NONE + '/header'
+    PLAYERS_PANEL_STATE_NONE_BODY = PLAYERS_PANEL_STATE_NONE + '/body'
+    PLAYERS_PANEL_STATE_NONE_NOTE = PLAYERS_PANEL_STATE_NONE + '/note'
+    PLAYERS_PANEL_STATE_SHORT_HEADER = PLAYERS_PANEL_STATE_SHORT + '/header'
+    PLAYERS_PANEL_STATE_SHORT_BODY = PLAYERS_PANEL_STATE_SHORT + '/body'
+    PLAYERS_PANEL_STATE_SHORT_NOTE = PLAYERS_PANEL_STATE_SHORT + '/note'
+    PLAYERS_PANEL_STATE_MEDIUM_HEADER = PLAYERS_PANEL_STATE_MEDIUM + '/header'
+    PLAYERS_PANEL_STATE_MEDIUM_BODY = PLAYERS_PANEL_STATE_MEDIUM + '/body'
+    PLAYERS_PANEL_STATE_MEDIUM_NOTE = PLAYERS_PANEL_STATE_MEDIUM + '/note'
+    PLAYERS_PANEL_STATE_MEDIUM2_HEADER = PLAYERS_PANEL_STATE_MEDIUM + '2/header'
+    PLAYERS_PANEL_STATE_MEDIUM2_BODY = PLAYERS_PANEL_STATE_MEDIUM + '2/body'
+    PLAYERS_PANEL_STATE_MEDIUM2_NOTE = PLAYERS_PANEL_STATE_MEDIUM + '2/note'
+    PLAYERS_PANEL_STATE_LARGE_HEADER = PLAYERS_PANEL_STATE_LARGE + '/header'
+    PLAYERS_PANEL_STATE_LARGE_BODY = PLAYERS_PANEL_STATE_LARGE + '/body'
+    PLAYERS_PANEL_STATE_LARGE_NOTE = PLAYERS_PANEL_STATE_LARGE + '/note'
     PLAYERS_PANEL_UNKNOWN_NAME = '#ingame_gui:players_panel/unknown_name'
     PLAYERS_PANEL_UNKNOWN_VEHICLE = '#ingame_gui:players_panel/unknown_vehicle'
     PLAYERS_PANEL_UNKNOWN_FRAGS = '#ingame_gui:players_panel/unknown_frags'
@@ -414,15 +432,58 @@ class INGAME_GUI(object):
     DYNAMICSQUAD_INVITE = '#ingame_gui:dynamicSquad/invite'
     DYNAMICSQUAD_ALLY_RECEIVED = '#ingame_gui:dynamicSquad/ally/received'
     DYNAMICSQUAD_ENEMY_RECEIVED = '#ingame_gui:dynamicSquad/enemy/received'
+    AIM_ZOOM = '#ingame_gui:aim/zoom'
+    DISTANCE_METERS = '#ingame_gui:distance/meters'
     TABSTATSHINT = '#ingame_gui:tabStatsHint'
     REPAIRPOINT_TITLE = '#ingame_gui:repairPoint/title'
     REPAIRPOINT_UNAVAILABLE = '#ingame_gui:repairPoint/unavailable'
-    EVENT_RANDOM = '#ingame_gui:event/random'
-    EVENT_BOUNCE = '#ingame_gui:event/bounce'
-    EVENT_ARTILLERY = '#ingame_gui:event/artillery'
-    EVENT_IMPULSE = '#ingame_gui:event/impulse'
-    EVENT_SLIDE = '#ingame_gui:event/slide'
-    EVENT_NOTHING = '#ingame_gui:event/nothing'
+    BATTLEENDWARNING_TEXT = '#ingame_gui:battleEndWarning/text'
+    MARK1_BOMB_ATACK_TITLE = '#ingame_gui:mark1/bomb/atack/title'
+    MARK1_BOMB_ATACK_BODY = '#ingame_gui:mark1/bomb/atack/body'
+    MARK1_BOMB_DEFENCE_TITLE = '#ingame_gui:mark1/bomb/defence/title'
+    MARK1_BOMB_DEFENCE_BODY = '#ingame_gui:mark1/bomb/defence/body'
+    MARK1_REPAIR_TITLE = '#ingame_gui:mark1/repair/title'
+    MARK1_REPAIR_BODY = '#ingame_gui:mark1/repair/body'
+    MARK1_BIGGUN_TITLE = '#ingame_gui:mark1/bigGun/title'
+    MARK1_BIGGUN_BODY = '#ingame_gui:mark1/bigGun/body'
+    MARK1_MACHINEGUN_TITLE = '#ingame_gui:mark1/machineGun/title'
+    MARK1_MACHINEGUN_BODY = '#ingame_gui:mark1/machineGun/body'
+    MARK1_AMMO_TITLE = '#ingame_gui:mark1/ammo/title'
+    MARK1_AMMO_BODY = '#ingame_gui:mark1/ammo/body'
+    MARK1_BOMB_DELIVERED = '#ingame_gui:mark1/bomb/delivered'
+    MARK1_REPAIR_DELIVERED_TITLE = '#ingame_gui:mark1/repair/delivered/title'
+    MARK1_REPAIR_DELIVERED_BODY = '#ingame_gui:mark1/repair/delivered/body'
+    MARK1_AMMO_DELIVERED = '#ingame_gui:mark1/ammo/delivered'
+    MARK1_NOTIFICATION_BOMB_ATTACK_HEADER = '#ingame_gui:mark1/notification/bomb/attack/header'
+    MARK1_NOTIFICATION_BOMB_ATTACK_BODY = '#ingame_gui:mark1/notification/bomb/attack/body'
+    MARK1_NOTIFICATION_REPAIR_ATTACK_HEADER = '#ingame_gui:mark1/notification/repair/attack/header'
+    MARK1_NOTIFICATION_REPAIR_ATTACK_BODY = '#ingame_gui:mark1/notification/repair/attack/body'
+    MARK1_NOTIFICATION_BOMB_DEFENCE_HEADER = '#ingame_gui:mark1/notification/bomb/defence/header'
+    MARK1_NOTIFICATION_BOMB_DEFENCE_BODY = '#ingame_gui:mark1/notification/bomb/defence/body'
+    MARK1_NOTIFICATION_MARKSTOPPEDATTACK_REPAIR_HEADER = '#ingame_gui:mark1/notification/markStoppedAttack/repair/header'
+    MARK1_NOTIFICATION_MARKSTOPPEDATTACK_REPAIR_BODY = '#ingame_gui:mark1/notification/markStoppedAttack/repair/body'
+    MARK1_NOTIFICATION_MARKSTOPPEDATTACK_BOMB_HEADER = '#ingame_gui:mark1/notification/markStoppedAttack/bomb/header'
+    MARK1_NOTIFICATION_MARKSTOPPEDATTACK_BOMB_BODY = '#ingame_gui:mark1/notification/markStoppedAttack/bomb/body'
+    MARK1_NOTIFICATION_MARKSTOPPEDDEFENCE_BOMB_HEADER = '#ingame_gui:mark1/notification/markStoppedDefence/bomb/header'
+    MARK1_NOTIFICATION_MARKSTOPPEDDEFENCE_BOMB_BODY = '#ingame_gui:mark1/notification/markStoppedDefence/bomb/body'
+    MARK1_NOTIFICATION_MARKSTOPPEDDEFENCE_OBSTACLE_HEADER = '#ingame_gui:mark1/notification/markStoppedDefence/obstacle/header'
+    MARK1_NOTIFICATION_MARKSTOPPEDDEFENCE_OBSTACLE_BODY = '#ingame_gui:mark1/notification/markStoppedDefence/obstacle/body'
+    MARK1_NOTIFICATION_ATTENTION_ATTACK_HEADER = '#ingame_gui:mark1/notification/attention/attack/header'
+    MARK1_NOTIFICATION_ATTENTION_ATTACK_BODY = '#ingame_gui:mark1/notification/attention/attack/body'
+    MARK1_NOTIFICATION_ATTENTION_DEFENCE_HEADER = '#ingame_gui:mark1/notification/attention/defence/header'
+    MARK1_NOTIFICATION_ATTENTION_DEFENCE_BODY = '#ingame_gui:mark1/notification/attention/defence/body'
+    MARK1_NOTIFICATION_MARKREPAIRED_BOMB_ATTACK_HEADER = '#ingame_gui:mark1/notification/markRepaired/bomb/attack/header'
+    MARK1_NOTIFICATION_MARKREPAIRED_BOMB_ATTACK_BODY = '#ingame_gui:mark1/notification/markRepaired/bomb/attack/body'
+    MARK1_NOTIFICATION_MARKREPAIRED_BOMB_DEFENCE_HEADER = '#ingame_gui:mark1/notification/markRepaired/bomb/defence/header'
+    MARK1_NOTIFICATION_MARKREPAIRED_BOMB_DEFENCE_BODY = '#ingame_gui:mark1/notification/markRepaired/bomb/defence/body'
+    MARK1_NOTIFICATION_DEFENCE_REPAIR_HEADER = '#ingame_gui:mark1/notification/defence/repair/header'
+    MARK1_NOTIFICATION_DEFENCE_REPAIR_BODY = '#ingame_gui:mark1/notification/defence/repair/body'
+    MARK1_BONUS_HEADER = '#ingame_gui:mark1/bonus/header'
+    MARK1_BONUS_BIGSIZE_BIGGUN = '#ingame_gui:mark1/bonus/bigSize/bigGun'
+    MARK1_BONUS_BIGSIZE_MACHINEGUN = '#ingame_gui:mark1/bonus/bigSize/machineGun'
+    MARK1_PROGRESSPANEL_WIN = '#ingame_gui:mark1/progressPanel/win'
+    MARK1_PROGRESSPANEL_LOSE = '#ingame_gui:mark1/progressPanel/lose'
+    MARK1_DEAD = '#ingame_gui:mark1/dead'
     CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,
@@ -460,6 +521,10 @@ class INGAME_GUI(object):
 
     @staticmethod
     def chat_example(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#ingame_gui:chat_example/%s' % key
         if outcome not in INGAME_GUI.CHAT_EXAMPLE_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
@@ -469,6 +534,10 @@ class INGAME_GUI(object):
 
     @staticmethod
     def chat_shortcuts(key):
+        """
+        :param key:
+        :return String:
+        """
         outcome = '#ingame_gui:chat_shortcuts/%s' % key
         if outcome not in INGAME_GUI.CHAT_SHORTCUTS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')

@@ -115,7 +115,7 @@
       <Flags>	CELL_PRIVATE	</Flags>
     </cp>
     <historyLoggingFlags>
-      <Type>	UINT16	</Type>
+      <Type>	UINT32	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </historyLoggingFlags>
     <accountDBIDOnCell>
@@ -296,6 +296,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -410,7 +411,6 @@
       <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
       </Arg>
     </fullyDiscloseVehicles>
-    <freezeVisibilityState></freezeVisibilityState>
     <receiveVisibilityEvents>
       <Arg>	USER_TYPE	  <implementedBy>	VisibilityTypes.Events_instance	</implementedBy>
       </Arg>
@@ -459,6 +459,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>

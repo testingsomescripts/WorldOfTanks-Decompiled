@@ -16,34 +16,34 @@
   <scene>
     <anisotropy>	4	</anisotropy>
     <type>
-      <name>	PBS	</name>
+      <name>	GBufferDecals	</name>
       <atlas>
         <width>	4096	</width>
         <height>	4096	</height>
-        <format>	DXT5	</format>
+        <format>	DXT3	</format>
         <constrains>
           <minWidth>	64	</minWidth>
           <minHeight>	64	</minHeight>
           <maxWidth>	1024	</maxWidth>
           <maxHeight>	1024	</maxHeight>
-          <format>	DXT5	</format>
+          <format>	DXT3	</format>
         </constrains>
       </atlas>
       <atlas>
         <width>	4096	</width>
         <height>	4096	</height>
-        <format>	DXT5	</format>
+        <format>	DXT3	</format>
         <constrains>
           <minWidth>	64	</minWidth>
           <minHeight>	64	</minHeight>
           <maxWidth>	1024	</maxWidth>
           <maxHeight>	1024	</maxHeight>
-          <format>	DXT5	</format>
+          <format>	DXT3	</format>
         </constrains>
       </atlas>
     </type>
     <type>
-      <name>	Other	</name>
+      <name>	OtherDecals	</name>
       <atlas>
         <width>	2048	</width>
         <height>	2048	</height>
@@ -76,7 +76,7 @@
   </scene>
   <dynamic>
     <type>
-      <name>	PBS	</name>
+      <name>	GBufferDecals	</name>
       <atlas>
         <width>	2048	</width>
         <height>	2048	</height>
@@ -178,7 +178,7 @@
   <semiDynamic>
     <anisotropy>	4	</anisotropy>
     <type>
-      <name>	Other	</name>
+      <name>	OtherDecals	</name>
       <atlas>
         <width>	1024	</width>
         <height>	1024	</height>

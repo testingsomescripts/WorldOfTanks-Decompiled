@@ -14,6 +14,7 @@ from PlayerEvents import g_playerEvents
 from debug_utils import *
 from CTFManager import g_ctfManager
 from helpers.EffectsList import FalloutDestroyEffect
+from gui.battle_control import g_sessionProvider
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
@@ -39,7 +40,7 @@ class ClientArena(object):
      ARENA_UPDATE.RESOURCE_POINT_STATE_CHANGED: '_ClientArena__onResourcePointStateChanged',
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
-     ARENA_UPDATE.FIRST_APRIL_ACTION_SCHEDULED: '_ClientArena__onFirstAprilActionScheduled'}
+     ARENA_UPDATE.FLAG_BONUSES: '_ClientArena__onFlagBonuses'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -71,7 +72,6 @@ class ClientArena(object):
         self.onRespawnResurrected = Event.Event(em)
         self.onInteractiveStats = Event.Event(em)
         self.onVehicleWillRespawn = Event.Event(em)
-        self.onFirstOfAprilAction = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         if self.arenaType is None:
@@ -195,8 +195,8 @@ class ClientArena(object):
         return
 
     def __onBasePointsUpdate(self, argStr):
-        team, baseID, points, capturingStopped = cPickle.loads(argStr)
-        self.onTeamBasePointsUpdate(team, baseID, points, capturingStopped)
+        team, baseID, points, timeLeft, invadersCnt, capturingStopped = cPickle.loads(argStr)
+        self.onTeamBasePointsUpdate(team, baseID, points, timeLeft, invadersCnt, capturingStopped)
 
     def __onBaseCaptured(self, argStr):
         team, baseID = cPickle.loads(argStr)
@@ -261,10 +261,6 @@ class ClientArena(object):
         LOG_DEBUG('[RESOURCE POINTS] own vehicle is locked', unlockTime)
         g_ctfManager.onOwnVehicleLockedForRP(unlockTime)
 
-    def __onFirstAprilActionScheduled(self, argStr):
-        actionID, actionTime = cPickle.loads(zlib.decompress(argStr))
-        self.onFirstOfAprilAction(actionID, actionTime)
-
     def __onInteractiveStats(self, argStr):
         stats = cPickle.loads(zlib.decompress(argStr))
         self.onInteractiveStats(stats)
@@ -296,16 +292,23 @@ class ClientArena(object):
     def __vehicleStatisticsAsDict(self, stats):
         return (stats[0], {'frags': stats[1]})
 
+    def __onFlagBonuses(self, msg):
+        data = cPickle.loads(msg)
+        LOG_DEBUG('[EVENT BONUSES]', data)
+        if data:
+            bonusCtrl = g_sessionProvider.dynamic.mark1Bonus
+            if bonusCtrl is not None:
+                opcode, info = data
+                bonusCtrl.bonusChangedFromArena(opcode, info)
+        return
+
 
 def _convertToList(vec4):
     return ((vec4.x, vec4.y), (vec4.z, vec4.w))
 
 
 def _pointInBB(bottomLeft2D, upperRight2D, point3D, minMaxHeight):
-    if (bottomLeft2D[0] < point3D[0] < upperRight2D[0] and bottomLeft2D[1]) < point3D[2] < upperRight2D[1]:
-        return minMaxHeight[0] < point3D[1] < minMaxHeight[1] and True
-    else:
-        return False
+    return bottomLeft2D[0] < point3D[0] < upperRight2D[0] and bottomLeft2D[1] < point3D[2] < upperRight2D[1] and minMaxHeight[0] < point3D[1] < minMaxHeight[1]
 
 
 class _BBCollider():

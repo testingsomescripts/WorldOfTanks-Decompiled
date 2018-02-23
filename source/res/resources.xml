@@ -30,7 +30,7 @@
     <ashesMaterial>	system/materials/ashes.mfm	</ashesMaterial>
     <goboMaterial>	system/materials/gobo.mfm	</goboMaterial>
     <minimapMaterial>	system/materials/minimap.mfm	</minimapMaterial>
-    <shaderIncludePaths>	shaders/std_effects/;shaders/terrain;shaders/post_processing	</shaderIncludePaths>
+    <shaderIncludePaths>	shaders/std_effects/;shaders/terrain;shaders/post_processing;shaders/generic	</shaderIncludePaths>
     <defaultShaderPath>	shaders/std_effects/	</defaultShaderPath>
     <defaultMfmPath>	materials/template_mfms	</defaultMfmPath>
     <defaultLightsPath>	helpers/lights	</defaultLightsPath>
@@ -75,7 +75,6 @@
     <wgFloraWithShadowMaterial>	system/materials/wg_flora_with_shadows.mfm	</wgFloraWithShadowMaterial>
     <sunFlareMaterial>	system/materials/fx_sun_flare.mfm	</sunFlareMaterial>
     <sunSplitMaterial>	system/materials/fx_sun_split.mfm	</sunSplitMaterial>
-    <skyDomeMaterial>	system/materials/sky_dome.mfm	</skyDomeMaterial>
     <skyDomeVisual>	system/models/fx_skydome.visual	</skyDomeVisual>
     <ZBufferOccluderFX>	shaders/environment/z_buffer_occluder.fx	</ZBufferOccluderFX>
     <billboardMaterial>	system/materials/billboard.mfm	</billboardMaterial>

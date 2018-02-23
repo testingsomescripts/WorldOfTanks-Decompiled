@@ -25,7 +25,7 @@ class StaticSceneBoundEffects(object):
     def addNew(self, position, effectsList, keyPoints, callbackOnStop, **args):
         model = helpers.newFakeModel()
         model.position = position
-        BigWorld.addModel(model)
+        BigWorld.addModel(model, BigWorld.player().spaceID)
         dir = args.get('dir', None)
         if dir is not None:
             model.rotate(dir.yaw, (0.0, 1.0, 0.0))
@@ -37,6 +37,9 @@ class StaticSceneBoundEffects(object):
         desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop))
         self._models[effectID] = desc
         return effectID
+
+    def findEffect(self, effectID):
+        return self._models.get(effectID, None)
 
     def stop(self, effectID):
         if self._models.has_key(effectID):
@@ -54,9 +57,8 @@ class StaticSceneBoundEffects(object):
 
 class ModelBoundEffects(object):
 
-    def __init__(self, model, nodeName=''):
+    def __init__(self, model):
         self.__model = model
-        self.__nodeName = nodeName
         self._effects = list()
 
     def destroy(self):
@@ -67,11 +69,18 @@ class ModelBoundEffects(object):
         self.__model = None
         return
 
-    def addNew(self, matProv, effectsList, keyPoints, **args):
-        desc = EffectsListPlayer(effectsList, keyPoints, position=(self.__nodeName, matProv), **args)
-        desc.play(self.__model, None, partial(self._effects.remove, desc))
+    def addNew(self, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
+        return self.addNewToNode('', matProv, effectsList, keyPoints, waitForKeyOff, **args)
+
+    def addNewToNode(self, node, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
+        if not node and matProv is None:
+            position = None
+        else:
+            position = (node, matProv)
+        desc = EffectsListPlayer(effectsList, keyPoints, position=position, **args)
+        desc.play(self.__model, None, partial(self._effects.remove, desc), waitForKeyOff)
         self._effects.append(desc)
-        return
+        return desc
 
     def reattachTo(self, model):
         self.__model = model
