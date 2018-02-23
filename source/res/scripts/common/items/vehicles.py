@@ -7,22 +7,26 @@ import struct
 import itertools
 import copy
 import BigWorld
-from realm_utils import ResMgr
 from Math import Vector2, Vector3
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
-from items import vehicle_items
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components import shared_components
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
 from items.readers import sound_readers
-from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
+from items import vehicle_items
+from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, IS_DEVELOPMENT
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from items.stun import g_cfg as stunConfig
+import deepUpdate
+if IS_CLIENT:
+    import ResMgr
+else:
+    from realm_utils import ResMgr
 if IS_CELLAPP or IS_CLIENT or IS_BOT:
     from ModelHitTester import ModelHitTester
 if IS_CELLAPP or IS_CLIENT or IS_WEB:
@@ -81,6 +85,7 @@ g_cache = None
 _VEHICLE_TYPE_XML_PATH = ITEM_DEFS_PATH + 'vehicles/'
 _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION = 0.0875
 _CUSTOMIZATION_EPOCH = 1306886400
+_CUSTOMIZATION_XML_PATH = ITEM_DEFS_PATH + 'customization/'
 EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'rayEnd',
  'rayUp',
@@ -116,24 +121,6 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0}
 _g_prices = None
-TURRET_DEPENDENT_FACTORS_PREFIXERS = ['turret', 'gun']
-
-def __createAttributeFactors(turretsCount):
-    ret = {}
-    for k, v in VEHICLE_ATTRIBUTE_FACTORS.iteritems():
-        key = k.split('/')
-        if key[0] == 'turret':
-            for i in xrange(turretsCount):
-                ret['/'.join(['turrets', str(i)] + key[1:])] = v
-
-        if key[0] == 'gun':
-            for i in xrange(turretsCount):
-                ret['/'.join(['turrets', str(i), 'gun'] + key[1:])] = v
-
-        ret[k] = v
-
-    return ret
-
 
 def init(preloadEverything, pricesToCollect):
     global g_cache
@@ -153,44 +140,19 @@ def init(preloadEverything, pricesToCollect):
             for vehicleTypeID in g_list.getList(nationID).iterkeys():
                 g_cache.vehicle(nationID, vehicleTypeID)
 
+        g_cache.customization20()
         _g_prices = None
     return
 
 
-def reload():
+def reload(full=True):
     import vehicle_extras
     vehicle_extras.reload()
     from sys import modules
     import __builtin__
     __builtin__.reload(modules[reload.__module__])
-    init(True, None)
+    init(full, None)
     return
-
-
-class TurretSlot(object):
-    __slots__ = ['turret',
-     'gun',
-     'shotIndex',
-     'shot',
-     '_TurretSlot__shotIdx']
-
-    def __init__(self, turret, gun, shotIndex=0):
-        self.turret = turret
-        self.gun = gun
-        self.shotIndex = 0
-
-    def __set_gunShotIndex(self, idx):
-        if self.gun is not None:
-            self.shot = self.gun.shots[idx]
-        else:
-            self.shot = None
-        self.__shotIdx = idx
-        return
-
-    def __str__(self):
-        return str(self.__dict__)
-
-    shotIndex = property(lambda self: self.__shotIdx, __set_gunShotIndex)
 
 
 class VehicleDescriptor(object):
@@ -203,13 +165,25 @@ class VehicleDescriptor(object):
                 assert typeName is not None
                 nationID, vehicleTypeID = g_list.getIDsByName(typeName)
             type = g_cache.vehicle(nationID, vehicleTypeID)
+            turretDescr = type.turrets[0][0]
             header = items.ITEM_TYPES.vehicle + (nationID << 4)
-            compactDescr = struct.pack(('<2B' + str(4 + 2 * len(type.turrets)) + 'HB'), header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], *([ item for turretSlot in type.turrets for item in (turretSlot[0].id[1], turretSlot[0].guns[0].id[1]) ] + [0]))
+            compactDescr = struct.pack('<2B6HB', header, vehicleTypeID, type.chassis[0].id[1], type.engines[0].id[1], type.fuelTanks[0].id[1], type.radios[0].id[1], turretDescr.id[1], turretDescr.guns[0].id[1], 0)
         self.__initFromCompactDescr(compactDescr, vehMode)
         return
 
+    def __set_activeTurretPos(self, turretPosition):
+        self.turret, self.gun = self.turrets[turretPosition]
+        self.__activeTurretPos = turretPosition
+        self.activeGunShotIndex = 0
+
+    activeTurretPosition = property(lambda self: self.__activeTurretPos, __set_activeTurretPos)
+
+    def __set_activeGunShotIndex(self, shotIndex):
+        self.shot = self.gun.shots[shotIndex]
+        self.__activeGunShotIdx = shotIndex
+
+    activeGunShotIndex = property(lambda self: self.__activeGunShotIdx, __set_activeGunShotIndex)
     hasSiegeMode = property(lambda self: self.type.hasSiegeMode)
-    isMultiTurret = property(lambda self: self.type.isMultiTurret)
     isPitchHullAimingAvailable = property(lambda self: self.type.hullAimingParams['pitch']['isAvailable'])
     isYawHullAimingAvailable = property(lambda self: self.type.hullAimingParams['yaw']['isAvailable'])
 
@@ -228,18 +202,14 @@ class VehicleDescriptor(object):
             chassisDescr = self.chassis
             hullDescr = self.hull
             hullOnChassisOffsetZ = chassisDescr.hullPosition.z
+            turretOnHullOffsetZ = hullDescr.turretPositions[0].z
+            gunOnTurretOffsetZ = self.turret.gunPosition.z
             chassisBbox = chassisDescr.hitTester.bbox
             hullBbox = hullDescr.hitTester.bbox
             bboxMin = Vector2(min(chassisBbox[0].x, hullBbox[0].x), min(chassisBbox[0].z, hullBbox[0].z + hullOnChassisOffsetZ))
             bboxMax = Vector2(max(chassisBbox[1].x, hullBbox[1].x), max(chassisBbox[1].z, hullBbox[1].z + hullOnChassisOffsetZ))
-            maxOffsetZ = 0
-            for turretIndex, turretSlot in enumerate(self.turrets):
-                gunOnTurretOffsetZ = turretSlot.turret.gunPosition.z
-                turretOnHullOffsetZ = hullDescr.turretPositions[turretIndex].z
-                gunOnTurretMaxZ = gunOnTurretOffsetZ + self.gun.hitTester.bbox[1].z
-                maxOffsetZ = max(abs(hullOnChassisOffsetZ + turretOnHullOffsetZ + gunOnTurretMaxZ), abs(hullOnChassisOffsetZ + turretOnHullOffsetZ - gunOnTurretMaxZ))
-
-            radius = max(bboxMin.length, bboxMax.length, maxOffsetZ)
+            gunOnTurretMaxZ = gunOnTurretOffsetZ + self.gun.hitTester.bbox[1].z
+            radius = max(bboxMin.length, bboxMax.length, abs(hullOnChassisOffsetZ + turretOnHullOffsetZ + gunOnTurretMaxZ), abs(hullOnChassisOffsetZ + turretOnHullOffsetZ - gunOnTurretMaxZ))
             self.__boundingRadius = radius
         return radius
 
@@ -339,10 +309,10 @@ class VehicleDescriptor(object):
         if itemTypeName == 'vehicleFuelTank':
             return (self.fuelTank, self.type.fuelTanks)
         if itemTypeName == 'vehicleTurret':
-            return (self.turrets[positionIndex].turret, self.type.turrets[positionIndex])
+            return (self.turrets[positionIndex][0], self.type.turrets[positionIndex])
         if itemTypeName == 'vehicleGun':
-            turretSlot = self.turrets[positionIndex]
-            return (turretSlot.gun, turretSlot.turret.guns)
+            turretDescr, gunDescr = self.turrets[positionIndex]
+            return (gunDescr, turretDescr.guns)
         assert False
 
     def mayInstallTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
@@ -355,7 +325,7 @@ class VehicleDescriptor(object):
             return (False, 'wrong nation')
         else:
             if gunCompactDescr == 0:
-                gunID = selfTurrets[positionIndex].gun.id[1]
+                gunID = selfTurrets[positionIndex][1].id[1]
             else:
                 itemTypeID, nationID, gunID = parseIntCompactDescr(gunCompactDescr)
                 if items.ITEM_TYPE_NAMES[itemTypeID] != 'vehicleGun':
@@ -370,11 +340,11 @@ class VehicleDescriptor(object):
                 if gunCompactDescr not in selfType.installableComponents:
                     return (False, 'not for this vehicle type')
                 return (False, 'not for current vehicle')
-            setter = partial(selfTurrets.__setitem__, positionIndex, TurretSlot(newTurretDescr, newGunDescr))
+            setter = partial(selfTurrets.__setitem__, positionIndex, (newTurretDescr, newGunDescr))
             restorer = partial(selfTurrets.__setitem__, positionIndex, selfTurrets[positionIndex])
             if len(selfType.hulls) > 1:
                 turrets = list(selfTurrets)
-                turrets[positionIndex] = TurretSlot(newTurretDescr, newGunDescr)
+                turrets[positionIndex] = (newTurretDescr, newGunDescr)
                 hullDescr = self.__selectBestHull(turrets, self.chassis)
                 if hullDescr is not self.hull:
                     setter = partial(self.__setHullAndCall, hullDescr, setter)
@@ -393,21 +363,22 @@ class VehicleDescriptor(object):
 
     def installTurret(self, turretCompactDescr, gunCompactDescr, positionIndex=0):
         turretID = parseIntCompactDescr(turretCompactDescr)[2]
-        turretSlot = self.turrets[positionIndex]
-        prevTurret, prevGun = turretSlot.turret, turretSlot.gun
         if gunCompactDescr == 0:
-            gunID = turretSlot.gun.id[1]
+            gunID = self.turrets[positionIndex][1].id[1]
         else:
             gunID = parseIntCompactDescr(gunCompactDescr)[2]
-        turretSlot.turret = _descrByID(self.type.turrets[positionIndex], turretID)
-        turretSlot.gun = _descrByID(turretSlot.turret.guns, gunID)
-        turretSlot.shotIndex = 0
+        prevTurretDescr, prevGunDescr = self.turrets[positionIndex]
+        newTurretDescr = _descrByID(self.type.turrets[positionIndex], turretID)
+        newGunDescr = _descrByID(newTurretDescr.guns, gunID)
+        self.turrets[positionIndex] = (newTurretDescr, newGunDescr)
         if len(self.type.hulls) > 1:
             self.hull = self.__selectBestHull(self.turrets, self.chassis)
         self.__updateAttributes()
-        removed = [prevTurret.compactDescr]
+        if self.__activeTurretPos == positionIndex:
+            self.activeTurretPosition = positionIndex
+        removed = [prevTurretDescr.compactDescr]
         if gunCompactDescr != 0:
-            removed.append(prevGun.compactDescr)
+            removed.append(prevGunDescr.compactDescr)
         return removed
 
     def mayInstallComponent(self, compactDescr, positionIndex=0):
@@ -419,11 +390,11 @@ class VehicleDescriptor(object):
         else:
             if itemTypeName == 'vehicleGun':
                 hullDescr = self.hull
-                turretDescr = self.turrets[positionIndex].turret
+                turretDescr = self.turrets[positionIndex][0]
                 newDescr = _findDescrByID(turretDescr.guns, compID)
                 if newDescr is None and positionIndex in hullDescr.fakeTurrets['lobby']:
                     newDescr, turretDescr, hullDescr = self.__selectTurretForGun(compID, positionIndex)
-                setter = partial(self.turrets.__setitem__, positionIndex, TurretSlot(turretDescr, newDescr))
+                setter = partial(self.turrets.__setitem__, positionIndex, (turretDescr, newDescr))
                 restorer = partial(self.turrets.__setitem__, positionIndex, self.turrets[positionIndex])
                 if hullDescr is not self.hull:
                     setter = partial(self.__setHullAndCall, hullDescr, setter)
@@ -568,8 +539,8 @@ class VehicleDescriptor(object):
         pack = struct.pack
         components = pack('<4H', self.chassis.id[1], self.engine.id[1], self.fuelTank.id[1], self.radio.id[1])
         for n in xrange(len(type.turrets)):
-            turretSlot = self.turrets[n]
-            components += pack('<2H', turretSlot.turret.id[1], turretSlot.gun.id[1])
+            turretDescr, gunDescr = self.turrets[n]
+            components += pack('<2H', turretDescr.id[1], gunDescr.id[1])
 
         optionalDevices = ''
         optionalDeviceSlots = 0
@@ -604,9 +575,9 @@ class VehicleDescriptor(object):
         type = self.type
         cost = itemPrices[type.compactDescr]
         for idx in xrange(len(self.turrets)):
-            turretSlot = self.turrets[idx]
-            cost = _summPriceDiff(cost, itemPrices[turretSlot.turret.compactDescr], itemPrices[type.turrets[idx][0].compactDescr])
-            cost = _summPriceDiff(cost, itemPrices[turretSlot.gun.compactDescr], itemPrices[turretSlot.turret.guns[0].compactDescr])
+            turretDescr, gunDescr = self.turrets[idx]
+            cost = _summPriceDiff(cost, itemPrices[turretDescr.compactDescr], itemPrices[type.turrets[idx][0].compactDescr])
+            cost = _summPriceDiff(cost, itemPrices[gunDescr.compactDescr], itemPrices[turretDescr.guns[0].compactDescr])
 
         cost = _summPriceDiff(cost, itemPrices[self.chassis.compactDescr], itemPrices[type.chassis[0].compactDescr])
         cost = _summPriceDiff(cost, itemPrices[self.engine.compactDescr], itemPrices[type.engines[0].compactDescr])
@@ -621,8 +592,8 @@ class VehicleDescriptor(object):
     def getMaxRepairCost(self):
         type = self.type
         cost = self.maxHealth * type.repairCost
-        for turretSlot in self.turrets:
-            cost += turretSlot.gun.maxRepairCost + turretSlot.turret.turretRotatorHealth.maxRepairCost + turretSlot.turret.surveyingDeviceHealth.maxRepairCost
+        for turretDescr, gunDescr in self.turrets:
+            cost += gunDescr.maxRepairCost + turretDescr.turretRotatorHealth.maxRepairCost + turretDescr.surveyingDeviceHealth.maxRepairCost
 
         cost += self.hull.ammoBayHealth.maxRepairCost + self.chassis.maxRepairCost * 2 + self.engine.maxRepairCost + self.fuelTank.maxRepairCost + self.radio.maxRepairCost
         return cost
@@ -639,11 +610,11 @@ class VehicleDescriptor(object):
         defComps.append(type.fuelTanks[0].compactDescr)
         instComps.append(self.radio.compactDescr)
         defComps.append(type.radios[0].compactDescr)
-        for turretSlot, turrets in zip(self.turrets, type.turrets):
-            instComps.append(turretSlot.turret.compactDescr)
+        for (turretDescr, gunDescr), turrets in zip(self.turrets, type.turrets):
+            instComps.append(turretDescr.compactDescr)
             defComps.append(turrets[0].compactDescr)
-            instComps.append(turretSlot.gun.compactDescr)
-            defComps.append(turretSlot.turret.guns[0].compactDescr)
+            instComps.append(gunDescr.compactDescr)
+            defComps.append(turretDescr.guns[0].compactDescr)
 
         optDevices = []
         for device in self.optionalDevices:
@@ -654,9 +625,9 @@ class VehicleDescriptor(object):
 
     def getHitTesters(self):
         hitTesters = [self.chassis.hitTester, self.hull.hitTester]
-        for turretSlot in self.turrets:
-            hitTesters.append(turretSlot.turret.hitTester)
-            hitTesters.append(turretSlot.gun.hitTester)
+        for turretDescr, gunDescr in self.turrets:
+            hitTesters.append(turretDescr.hitTester)
+            hitTesters.append(gunDescr.hitTester)
 
         return hitTesters
 
@@ -676,18 +647,18 @@ class VehicleDescriptor(object):
                 effGroup, readyPrereqs = self.chassis.effects['mud']
                 if not readyPrereqs:
                     prereqs.update(self.__getChassisEffectNames(effGroup))
-        for turretSlot in self.turrets:
-            detachmentEff = turretSlot.turret.turretDetachmentEffects
+        for turretDescr, gunDescr in self.turrets:
+            detachmentEff = turretDescr.turretDetachmentEffects
             detachmentEff = itertools.chain((detachmentEff['flight'], detachmentEff['flamingOnGround']), detachmentEff['collision'].itervalues())
             for stages, effects, readyPrereqs in detachmentEff:
                 if not readyPrereqs:
                     prereqs.update(effects.prerequisites())
 
-            if turretSlot.gun.effects is not None:
-                keyPoints, effects, readyPrereqs = turretSlot.gun.effects
+            if gunDescr.effects is not None:
+                keyPoints, effects, readyPrereqs = gunDescr.effects
                 if not readyPrereqs:
                     prereqs.update(effects.prerequisites())
-            for shotDescr in turretSlot.gun.shots:
+            for shotDescr in gunDescr.shots:
                 effectsDescr = g_cache.shotEffects[shotDescr.shell.effectsIndex]
                 if not effectsDescr['prereqs']:
                     projectileModel, projectileOwnShotModel, effects = effectsDescr['projectile']
@@ -706,7 +677,7 @@ class VehicleDescriptor(object):
                     prereqs.update(effectsDescr['armorCriticalHit'][1].prerequisites())
 
         if self.type._prereqs is None and not newPhysic:
-            prereqs.update(self.hull.exhaust.prerequisites())
+            prereqs.update(self.hull['exhaust'].prerequisites())
             for extra in self.extras:
                 prereqs.update(extra.prerequisites())
 
@@ -726,17 +697,17 @@ class VehicleDescriptor(object):
                     if not readyPrereqs:
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
 
-            for turretSlot in self.turrets:
-                detachmentEff = turretSlot.turret.turretDetachmentEffects
+            for turretDescr, gunDescr in self.turrets:
+                detachmentEff = turretDescr.turretDetachmentEffects
                 detachmentEff = itertools.chain((detachmentEff['flight'], detachmentEff['flamingOnGround']), detachmentEff['collision'].itervalues())
                 for stages, effects, readyPrereqs in detachmentEff:
                     if not readyPrereqs:
                         readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
 
-                keyPoints, effects, readyPrereqs = turretSlot.gun.effects
+                keyPoints, effects, readyPrereqs = gunDescr.effects
                 if not readyPrereqs:
                     readyPrereqs.update(_extractNeededPrereqs(prereqs, effects.prerequisites()))
-                for shotDescr in turretSlot.gun.shots:
+                for shotDescr in gunDescr.shots:
                     effectsDescr = g_cache.shotEffects[shotDescr.shell.effectsIndex]
                     readyPrereqs = effectsDescr['prereqs']
                     if not readyPrereqs:
@@ -762,13 +733,11 @@ class VehicleDescriptor(object):
                 self.type._prereqs = _extractNeededPrereqs(prereqs, resourceNames)
             return
 
-    def computeBaseInvisibility(self, crewFactor, arenaCamouflageKind):
-        camID = self.camouflages[arenaCamouflageKind][0]
-        if camID is None:
+    def computeBaseInvisibility(self, crewFactor, camouflageId):
+        if not camouflageId:
             camouflageBonus = 0.0
         else:
-            nationID = self.type.customizationNationID
-            camouflageBonus = self.type.invisibilityDeltas['camouflageBonus'] * g_cache.customization(nationID)['camouflages'][camID]['invisibilityFactor']
+            camouflageBonus = self.type.invisibilityDeltas['camouflageBonus'] * g_cache.customization20().camouflages[camouflageId].invisibilityFactor
         vehicleFactor = self.miscAttrs['invisibilityFactor']
         invMoving, invStill = self.type.invisibility
         return (invMoving * crewFactor * vehicleFactor + camouflageBonus, invStill * crewFactor * vehicleFactor + camouflageBonus)
@@ -785,23 +754,22 @@ class VehicleDescriptor(object):
         return ret
 
     def __installGun(self, gunID, turretPositionIdx):
-        turretSlot = self.turrets[turretPositionIdx]
-        turretDescr = turretSlot.turret
-        prevGunDescr = turretSlot.gun
+        turretDescr, prevGunDescr = self.turrets[turretPositionIdx]
         newGunDescr = _findDescrByID(turretDescr.guns, gunID)
         hullDescr = self.hull
         if newGunDescr is None and turretPositionIdx in self.hull.fakeTurrets['lobby']:
             newGunDescr, turretDescr, hullDescr = self.__selectTurretForGun(gunID, turretPositionIdx)
         if newGunDescr is None:
             raise KeyError
-        turretSlot.turret = turretDescr
-        turretSlot.gun = newGunDescr
+        self.turrets[turretPositionIdx] = (turretDescr, newGunDescr)
         self.hull = hullDescr
         self.__updateAttributes()
+        if self.__activeTurretPos == turretPositionIdx:
+            self.activeTurretPosition = turretPositionIdx
         return (prevGunDescr.compactDescr,)
 
     def __selectBestHull(self, turrets, chassis):
-        turretIDs = [ turretSlot.turret.id[1] for turretSlot in turrets ]
+        turretIDs = [ descr[0].id[1] for descr in turrets ]
         chassisID = chassis.id[1]
         hulls = self.type.hulls
         bestHull = hulls[0]
@@ -834,7 +802,7 @@ class VehicleDescriptor(object):
             if gunDescr is not None:
                 if len(self.type.hulls) > 1:
                     turrets = list(self.turrets)
-                    turrets[turretPositionIdx] = TurretSlot(turretDescr, gunDescr)
+                    turrets[turretPositionIdx] = (turretDescr, gunDescr)
                     hullDescr = self.__selectBestHull(turrets, self.chassis)
                 return (gunDescr, turretDescr, hullDescr)
 
@@ -865,10 +833,10 @@ class VehicleDescriptor(object):
             for idx in xrange(len(type.turrets)):
                 turretID, gunID = unpack('<2H', components[8 + idx * 4:12 + idx * 4])
                 turret = _descrByID(type.turrets[idx], turretID)
-                turrets.append(TurretSlot(turret, _descrByID(turret.guns, gunID)))
+                turrets.append((turret, _descrByID(turret.guns, gunID)))
 
             self.turrets = turrets
-            self.activeGunShotIndex = 0
+            self.activeTurretPosition = 0
             if len(type.hulls) == 1:
                 self.hull = type.hulls[0]
             else:
@@ -937,8 +905,8 @@ class VehicleDescriptor(object):
     def __computeWeight(self):
         maxWeight = self.chassis.maxLoad
         weight = self.hull.weight + self.chassis.weight + self.engine.weight + self.fuelTank.weight + self.radio.weight
-        for turretSlot in self.turrets:
-            weight += turretSlot.turret.weight + turretSlot.gun.weight
+        for turretDescr, gunDescr in self.turrets:
+            weight += turretDescr.weight + gunDescr.weight
 
         vehWeightFraction = 0.0
         vehWeightAddition = 0.0
@@ -964,15 +932,15 @@ class VehicleDescriptor(object):
         type = self.type
         chassis = self.chassis
         self.maxHealth = self.hull.maxHealth
-        for turretSlot in self.turrets:
-            self.maxHealth += turretSlot.turret.maxHealth
+        for turretDescr, gunDescr in self.turrets:
+            self.maxHealth += turretDescr.maxHealth
 
         if IS_BASEAPP or IS_WEB:
             bpl = type.balanceByComponentLevels
             modMul = g_cache.commonConfig['balanceModulesWeightMultipliers']
             vmw = g_cache.commonConfig['balanceByVehicleModule'].get(self.type.name, None)
             vehicleBalance = (vmw if vmw else bpl[self.level]) * modMul['vehicle']
-            self.balanceWeight = (vehicleBalance + bpl[self.turrets[0].gun.level] * modMul['gun'] + bpl[self.turrets[0].turret.level] * modMul['turret'] + bpl[self.engine.level] * modMul['engine'] + bpl[chassis.level] * modMul['chassis'] + bpl[self.radio.level] * modMul['radio']) * type.balanceByClass
+            self.balanceWeight = (vehicleBalance + bpl[self.gun.level] * modMul['gun'] + bpl[self.turret.level] * modMul['turret'] + bpl[self.engine.level] * modMul['engine'] + bpl[chassis.level] * modMul['chassis'] + bpl[self.radio.level] * modMul['radio']) * type.balanceByClass
         if IS_CLIENT or IS_CELLAPP or IS_WEB or IS_BOT:
             weight, maxWeight = self.__computeWeight()
             trackCenterOffset = chassis.topRightCarryingPoint[0]
@@ -1027,20 +995,16 @@ class VehicleDescriptor(object):
             physics['massRotationFactor'] = defWeight / weight
             if IS_CELLAPP or IS_CLIENT or IS_BOT:
                 invisibilityFactor = 1.0
-                for turretSlot in self.turrets:
-                    invisibilityFactor *= turretSlot.turret.invisibilityFactor
+                for turretDescr, _ in self.turrets:
+                    invisibilityFactor *= turretDescr.invisibilityFactor
 
                 self.miscAttrs['invisibilityFactor'] = invisibilityFactor
         if IS_CELLAPP:
             hullPos = self.chassis.hullPosition
             hullBboxMin, hullBboxMax, _ = self.hull.hitTester.bbox
             turretPosOnHull = self.hull.turretPositions[0]
-            maxTurretY = self.turrets[0].turret.hitTester.bbox[1].y
-            for turretSlot in self.turrets:
-                maxTurretY = max(maxTurretY, turretSlot.turret.hitTester.bbox[1].y)
-
-            turretLocalTopY = max(hullBboxMax.y, turretPosOnHull.y + maxTurretY)
-            gunPosOnHull = turretPosOnHull + self.turrets[0].turret.gunPosition
+            turretLocalTopY = max(hullBboxMax.y, turretPosOnHull.y + self.turret.hitTester.bbox[1].y)
+            gunPosOnHull = turretPosOnHull + self.turret.gunPosition
             hullLocalCenterY = (hullBboxMin.y + hullBboxMax.y) / 2.0
             hullLocalPt1 = Vector3(0.0, hullLocalCenterY, hullBboxMax.z)
             hullLocalPt2 = Vector3(0.0, hullLocalCenterY, hullBboxMin.z)
@@ -1054,20 +1018,8 @@ class VehicleDescriptor(object):
              hullPos + hullLocalPt3,
              hullPos + hullLocalPt4)
             self.observerPosOnChassis = Vector3(0, hullPos.y + turretLocalTopY, 0)
-            self.observerPosOnTurret = self.turrets[0].turret.gunPosition
+            self.observerPosOnTurret = self.turret.gunPosition
         return
-
-    @property
-    def turret(self):
-        return self.turrets[0].turret
-
-    @property
-    def gun(self):
-        return self.turrets[0].gun
-
-    @property
-    def shot(self):
-        return self.gun.shots[self.activeGunShotIndex]
 
 
 class CompositeVehicleDescriptor(object):
@@ -1081,10 +1033,8 @@ class CompositeVehicleDescriptor(object):
         if IS_CLIENT:
             self.__siegeDescr.chassis.hitTester = self.__vehicleDescr.chassis.hitTester
             self.__siegeDescr.hull.hitTester = self.__vehicleDescr.hull.hitTester
-            assert len(self.__siegeDescr.turrets) == len(self.__vehicleDescr.turrets)
-            for i in xrange(len(self.__vehicleDescr.turrets)):
-                self.__siegeDescr.turrets[i].turret.hitTester = self.__vehicleDescr.turrets[i].turret.hitTester
-                self.__siegeDescr.turrets[i].gun.hitTester = self.__vehicleDescr.turrets[i].gun.hitTester
+            self.__siegeDescr.turret.hitTester = self.__vehicleDescr.turret.hitTester
+            self.__siegeDescr.gun.hitTester = self.__vehicleDescr.gun.hitTester
 
     def __getattr__(self, item):
         return getattr(self.__siegeDescr, item) if self.__vehicleMode == VEHICLE_MODE.SIEGE else getattr(self.__vehicleDescr, item)
@@ -1134,9 +1084,9 @@ def isVehicleDescr(descr):
 
 class VehicleType(object):
     currentReadingVeh = None
-    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'balanceByClass', 'balanceByComponentLevels', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters', 'isMultiTurret')
+    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'balanceByClass', 'balanceByComponentLevels', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
 
-    def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
+    def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT, standalone=False):
         self.name = basicInfo.name
         self.id = (nationID, basicInfo.id)
         self.compactDescr = basicInfo.compactDescr
@@ -1148,7 +1098,6 @@ class VehicleType(object):
         self.tags = basicInfo.tags
         self.level = basicInfo.level
         self.hasSiegeMode = 'siegeMode' in self.tags
-        self.isMultiTurret = 'multi_turret' in self.tags
         VehicleType.currentReadingVeh = self
         self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
         customizationNation = section.readString('customizationNation')
@@ -1221,6 +1170,9 @@ class VehicleType(object):
         unlocksDescrs = []
         self.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs)
         defHull = _readHull((xmlCtx, 'hull'), _xml.getSubsection(xmlCtx, section, 'hull'))
+        if standalone:
+            savedMode = VehicleType.currentReadingVeh.mode
+            VehicleType.currentReadingVeh.mode = VEHICLE_MODE.SIEGE
         self.chassis = _readInstallableComponents(xmlCtx, section, 'chassis', nationID, _readChassis, _readChassisLocals, g_cache.chassis(nationID), g_cache.chassisIDs(nationID), unlocksDescrs)
         self.engines = _readInstallableComponents(xmlCtx, section, 'engines', nationID, _readEngine, _readEngineLocal, g_cache.engines(nationID), g_cache.engineIDs(nationID), unlocksDescrs)
         self.fuelTanks = _readInstallableComponents(xmlCtx, section, 'fuelTanks', nationID, _readFuelTank, _defaultLocalReader, g_cache.fuelTanks(nationID), g_cache.fuelTankIDs(nationID), unlocksDescrs)
@@ -1231,6 +1183,8 @@ class VehicleType(object):
             turretsList.append(turrets)
 
         self.turrets = tuple(turretsList)
+        if standalone:
+            VehicleType.currentReadingVeh.mode = savedMode
         self.hulls = (defHull,)
         if section.has_key('hull/variants'):
             self.hulls += _readHullVariants((xmlCtx, 'hull/variants'), section['hull/variants'], defHull, self.chassis, self.turrets)
@@ -1289,6 +1243,10 @@ class VehicleType(object):
     @property
     def description(self):
         return self.i18nInfo.description
+
+    @property
+    def isCustomizationLocked(self):
+        return 'lockOutfit' in self.tags
 
     def __convertAndValidateUnlocksDescrs(self, srcList):
         nationID = self.id[0]
@@ -1349,28 +1307,9 @@ class VehicleType(object):
 
         return autounlocks
 
-    def createAttributeFactors(self):
-        return self.__createAttributeFactors()
-
-    def __createAttributeFactors(self):
-        ret = {}
-        for k, v in VEHICLE_ATTRIBUTE_FACTORS.iteritems():
-            key = k.split('/')
-            if key[0] == 'turret':
-                for i in xrange(len(self.turrets)):
-                    ret['/'.join(['turrets', str(i)] + key[1:])] = copy.deepcopy(v)
-
-            if key[0] == 'gun':
-                for i in xrange(len(self.turrets)):
-                    ret['/'.join(['turrets', str(i), 'gun'] + key[1:])] = copy.deepcopy(v)
-
-            ret[k] = copy.deepcopy(v)
-
-        return ret
-
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20')
 
     def __init__(self):
         self.__vehicles = {}
@@ -1393,6 +1332,7 @@ class Cache(object):
         self.__turretIDs = [ None for i in nations.NAMES ]
         self.__gunIDs = [ None for i in nations.NAMES ]
         self.__shellIDs = [ None for i in nations.NAMES ]
+        self.__customization20 = None
         self.__customization = [ None for i in nations.NAMES ]
         self.__playerEmblems = None
         self.__shotEffects = None
@@ -1423,13 +1363,30 @@ class Cache(object):
         vt = self.__vehicles.get(id)
         if vt:
             return vt
+        vt = self.__loadVehicle(nationID, vehicleTypeID, vehMode, standalone=False)
+        self.__vehicles[id] = vt
+        return vt
+
+    def __loadVehicle(self, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT, standalone=False):
         nation = nations.NAMES[nationID]
         basicInfo = g_list.getList(nationID)[vehicleTypeID]
         xmlName = basicInfo.name.split(':')[1] + VEHICLE_MODE_FILE_SUFFIX[vehMode]
         xmlPath = _VEHICLE_TYPE_XML_PATH + nation + '/' + xmlName + '.xml'
-        vt = VehicleType(nationID, basicInfo, xmlPath, vehMode)
-        self.__vehicles[id] = vt
-        return vt
+        return VehicleType(nationID, basicInfo, xmlPath, vehMode, standalone)
+
+    def reloadVehicle(self, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT):
+        if not IS_DEVELOPMENT:
+            return
+        mem_vt = self.vehicle(nationID, vehicleTypeID, vehMode)
+        xml_vt = self.__loadVehicle(nationID, vehicleTypeID, vehMode, standalone=True)
+        deepUpdate.deepUpdate(mem_vt, xml_vt)
+
+    def tuneupVehicle(self, vehTypeJSON, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT):
+        if not IS_DEVELOPMENT:
+            return
+        LOG_DEBUG('tuneup:', nationID, vehicleTypeID, vehTypeJSON)
+        mem_vt = self.vehicle(nationID, vehicleTypeID, vehMode)
+        deepUpdate.deepUpdate(mem_vt, vehTypeJSON)
 
     def chassis(self, nationID):
         return self.__getList(nationID, 'chassis')
@@ -1472,6 +1429,18 @@ class Cache(object):
 
     def shellIDs(self, nationID):
         return self.__getList(nationID, 'shellIDs')
+
+    def customization20(self):
+        """
+        Lazy initialization of CustomizationCache instance.
+        :return:
+        """
+        if self.__customization20 is None:
+            from items.components.c11n_components import CustomizationCache
+            from items.readers.c11n_readers import readCustomizationCacheFromXml
+            self.__customization20 = CustomizationCache()
+            readCustomizationCacheFromXml(self.__customization20, _CUSTOMIZATION_XML_PATH)
+        return self.__customization20
 
     def customization(self, nationID):
         descr = self.__customization[nationID]
@@ -1742,9 +1711,7 @@ def makeVehicleTypeCompDescrByName(name):
 
 def getItemByCompactDescr(compactDescr):
     try:
-        itemTypeID = compactDescr & 15
-        nationID = compactDescr >> 4 & 15
-        compTypeID = compactDescr >> 8 & 65535
+        itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
         return _itemGetters[itemTypeID](nationID, compTypeID)
     except Exception:
         LOG_CURRENT_EXCEPTION()
@@ -1760,7 +1727,8 @@ _itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(na
  ITEM_TYPES.vehicleEngine: lambda nationID, compTypeID: g_cache.engines(nationID)[compTypeID],
  ITEM_TYPES.vehicleRadio: lambda nationID, compTypeID: g_cache.radios(nationID)[compTypeID],
  ITEM_TYPES.vehicleChassis: lambda nationID, compTypeID: g_cache.chassis(nationID)[compTypeID],
- ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID]}
+ ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID],
+ ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID]}
 
 def getVehicleType(compactDescr):
     cdType = type(compactDescr)
@@ -2099,21 +2067,6 @@ def _readHull(xmlCtx, section):
     if not v:
         _xml.raiseWrongSection(xmlCtx, 'turretPositions')
     item.turretPositions = tuple(v)
-    r = []
-    sections = _xml.getSubsection(xmlCtx, section, 'turretRotations', False)
-    if sections is not None:
-        for subS in sections.values():
-            rotation = _xml.readVector3((xmlCtx, 'turretRotations'), subS, '')
-            for i, angle in enumerate(rotation):
-                rotation[i] = radians(angle)
-
-            r.append(rotation)
-
-    else:
-        for i in range(0, len(item.turretPositions)):
-            r.append([0, 0, 0])
-
-    item.turretRotations = tuple(r)
     numTurrets = len(item.turretPositions)
     if IS_CLIENT:
         item.turretHardPoints = __readTurretHardPoints(section, numTurrets)
@@ -2628,7 +2581,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
         For more information about turret configuration see class vehicle_items.Turret.
     :param xmlCtx: tuple(root ctx or None, path to section).
     :param section: instance of DataSection.
-    :param item: instance of Turret(InstallableItem).
+    :param item: instance of Radio.
     :param unlocksDescrs: sequence containing unlock info or None.
     :param _: unused argument to make capability with other readers that are used in method _readInstallableComponents.
     """
@@ -2649,6 +2602,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     else:
         item.invisibilityFactor = component_constants.DEFAULT_INVISIBILITY_FACTOR
     _readPriceForItem(xmlCtx, section, item.compactDescr)
+    item.showEmblemsOnGun = section.readBool('showEmblemsOnGun', False)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
     if IS_CLIENT or IS_WEB or IS_CELLAPP:
@@ -2658,7 +2612,6 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     if IS_CLIENT:
         item.ceilless = section.readBool('ceilless', False)
         item.models = shared_readers.readModels(xmlCtx, section, 'models')
-        item.showEmblemsOnGun = section.readBool('showEmblemsOnGun', False)
         if section.has_key('camouflage'):
             item.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
         item.turretRotatorSoundManual = section.readString('wwturretRotatorSoundManual')
@@ -2671,15 +2624,9 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.physicsShape = tuple(map(float, strArr))
     v = _xml.readNonNegativeFloat(xmlCtx, section, 'circularVisionRadius')
     item.circularVisionRadius = v
-    item.defaultTurretAngle = 0.0
-    if section.has_key('defaultTurretAngle'):
-        angle = _xml.readFloat(xmlCtx, section, 'defaultTurretAngle')
-        if angle is not None:
-            item.defaultTurretAngle = radians(angle)
     nationID = parseIntCompactDescr(item.compactDescr)[1]
     item.guns = _readInstallableComponents(xmlCtx, section, 'guns', nationID, _readGun, _readGunLocals, g_cache.guns(nationID), g_cache.gunIDs(nationID), unlocksDescrs, item.compactDescr)
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
-    return
 
 
 def _readTurretLocals(xmlCtx, section, sharedItem, unlocksDescrs, _=None):
@@ -2816,6 +2763,8 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         v = _xml.readVector2(xmlCtx, section, 'turretYawLimits')
+        if v[0] > v[1]:
+            _xml.raiseWrongSection(xmlCtx, 'turretYawLimits')
         turretYawLimits = (radians(v[0]), radians(v[1])) if v[0] > -179.0 or v[1] < 179.0 else None
     if section.has_key('pitchLimits'):
         hasOverride = True
@@ -3151,8 +3100,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             _xml.raiseWrongXml(xmlCtx, 'stunFactor', 'stun factor cannot exceed 1')
         stun.guaranteedStunDuration = _xml.readFraction(xmlCtx, section, 'guaranteedStunDuration') if section.has_key('guaranteedStunDuration') else stunConfig['guaranteedStunDuration']
         stun.damageDurationCoeff = _xml.readFraction(xmlCtx, section, 'damageDurationCoeff') if section.has_key('damageDurationCoeff') else stunConfig['damageDurationCoeff']
-        stun.guaranteedStunEffect = _xml.readPositiveFloat(xmlCtx, section, 'guaranteedStunEffect') if section.has_key('guaranteedStunEffect') else stunConfig['guaranteedStunEffect']
-        stun.damageEffectCoeff = _xml.readPositiveFloat(xmlCtx, section, 'damageEffectCoeff') if section.has_key('damageEffectCoeff') else stunConfig['damageEffectCoeff']
+        stun.guaranteedStunEffect = _xml.readFraction(xmlCtx, section, 'guaranteedStunEffect') if section.has_key('guaranteedStunEffect') else stunConfig['guaranteedStunEffect']
+        stun.damageEffectCoeff = _xml.readFraction(xmlCtx, section, 'damageEffectCoeff') if section.has_key('damageEffectCoeff') else stunConfig['damageEffectCoeff']
     else:
         stun = None
     shell.stun = stun
@@ -3331,6 +3280,15 @@ def _readPriceForItem(xmlCtx, section, compactDescr):
         pricesDest['itemPrices'][compactDescr] = _xml.readPrice(xmlCtx, section, 'price')
         if section.readBool('notInShop', False):
             pricesDest['notInShopItems'].add(compactDescr)
+    return
+
+
+def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
+    pricesDest = _g_prices
+    if pricesDest is not None:
+        pricesDest['itemPrices'][destCompactDescr] = pricesDest['itemPrices'].getPrices(sourceCompactDescr)
+        if itemNotInShop or sourceCompactDescr in pricesDest['notInShopItems']:
+            pricesDest['notInShopItems'].add(destCompactDescr)
     return
 
 
@@ -3982,7 +3940,7 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
     return (id, camouflage)
 
 
-def _readColors(xmlCtx, section, sectionName, requiredSize):
+def _readColors(xmlCtx, section, sectionName, requiredSize=None):
     res = []
     if not IS_CLIENT and not IS_BOT:
         for sname, subsection in _xml.getChildren(xmlCtx, section, sectionName):
@@ -3992,7 +3950,7 @@ def _readColors(xmlCtx, section, sectionName, requiredSize):
         for sname, subsection in _xml.getChildren(xmlCtx, section, sectionName):
             res.append(_readColor((xmlCtx, sectionName + '/' + sname), subsection, ''))
 
-    if len(res) != requiredSize:
+    if requiredSize is not None and len(res) != requiredSize:
         _xml.raiseWrongXml(xmlCtx, sectionName, 'wrong number of items; required %d' % requiredSize)
     return tuple(res)
 
@@ -4344,6 +4302,8 @@ def _readHullAimingParams(xmlCtx, section):
 
 def __readRotationAngleLimits(xmlCtx, section, name):
     v = _xml.readVector2(xmlCtx, section, name)
+    if v[0] > v[1]:
+        _xml.raiseWrongSection(xmlCtx, name)
     return (radians(v[0]), radians(v[1])) if v[0] > -179.0 or v[1] < 179.0 else None
 
 
@@ -4400,7 +4360,6 @@ def _descrByID(descrList, id):
         if descr.id[1] == id:
             return descr
 
-    LOG_ERROR('_descrByID', descrList, id)
     raise KeyError
 
 

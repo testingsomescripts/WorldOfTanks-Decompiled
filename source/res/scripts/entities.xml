@@ -11,11 +11,13 @@
     <FlockExotic></FlockExotic>
     <Login></Login>
     <DetachedTurret></DetachedTurret>
-    <OfflineFlag></OfflineFlag>
     <BootcampAccount></BootcampAccount>
-    <BossLandmine></BossLandmine>
-    <HalloweenHealthPowerup></HalloweenHealthPowerup>
-    <ClientSelectableCameraObject></ClientSelectableCameraObject>
-    <HalloweenSupplyDrop></HalloweenSupplyDrop>
+    <CustomizableNewYearSceneObject></CustomizableNewYearSceneObject>
+    <CameraAnchorObject></CameraAnchorObject>
+    <LootBoxObject></LootBoxObject>
+    <NewYearSelectableObject></NewYearSelectableObject>
+    <DormantSelectableObject></DormantSelectableObject>
+    <GroundLightNewYearSceneObject></GroundLightNewYearSceneObject>
+    <PosterSelectableObject></PosterSelectableObject>
   </ClientServerEntities>
 </entities.xml>

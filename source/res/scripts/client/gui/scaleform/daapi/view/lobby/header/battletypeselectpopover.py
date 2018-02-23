@@ -10,22 +10,31 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import LoadViewEvent
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.new_year import ICustomizableObjectsManager
+from items.new_year_types import NY_STATE
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    customizableObjectsMgr = dependency.descriptor(ICustomizableObjectsManager)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
     def selectFight(self, actionName):
-        battle_selector_items.getItems().select(actionName)
+        if self.__isNY() and self.customizableObjectsMgr.state is not None:
+            battle_selector_items.getItems().select(actionName)
+            if actionName not in ('trainingsList', 'ranked'):
+                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            battle_selector_items.getItems().select(actionName)
+        return
 
     def getTooltipData(self, itemData, itemIsDisabled):
         if itemData is None:
@@ -75,7 +84,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         self.update()
 
     def __getRankedAvailabilityData(self):
-        if self.rankedController.isAvailable():
+        hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
+        if self.rankedController.isAvailable() and hasSuitableVehicles:
             return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True)
         else:
             tooltipData = TOOLTIPS.BATTLETYPES_RANKED
@@ -83,11 +93,18 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             bodyKey = tooltipData + '/body'
             body = i18n.makeString(bodyKey)
             nextSeason = self.rankedController.getNextSeason()
-            if self.rankedController.isFrozen():
-                additionalInfo = i18n.makeString(bodyKey + '/frozen')
-            elif nextSeason is not None:
-                additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
-            else:
-                additionalInfo = i18n.makeString(bodyKey + '/disabled')
-            res = makeTooltip(header, '%s\n\n%s' % (body, additionalInfo))
+            if hasSuitableVehicles:
+                if self.rankedController.isFrozen():
+                    additionalInfo = i18n.makeString(bodyKey + '/frozen')
+                elif nextSeason is not None:
+                    additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
+                else:
+                    additionalInfo = i18n.makeString(bodyKey + '/disabled')
+                body = '%s\n\n%s' % (body, additionalInfo)
+            res = makeTooltip(header, body)
             return (res, False)
+
+    @staticmethod
+    def __isNY():
+        player = BigWorld.player()
+        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS

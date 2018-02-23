@@ -70,6 +70,10 @@ class DIALOGS(object):
     GRAPHICSPRESETDELAYEDCONFIRMATION_MESSAGE = '#dialogs:graphicsPresetDelayedConfirmation/message'
     GRAPHICSPRESETDELAYEDCONFIRMATION_SUBMIT = '#dialogs:graphicsPresetDelayedConfirmation/submit'
     GRAPHICSPRESETDELAYEDCONFIRMATION_CANCEL = '#dialogs:graphicsPresetDelayedConfirmation/cancel'
+    NEXTBATTLEOPTIONCONFIRMATION_TITLE = '#dialogs:nextBattleOptionConfirmation/title'
+    NEXTBATTLEOPTIONCONFIRMATION_MESSAGE = '#dialogs:nextBattleOptionConfirmation/message'
+    NEXTBATTLEOPTIONCONFIRMATION_SUBMIT = '#dialogs:nextBattleOptionConfirmation/submit'
+    NEXTBATTLEOPTIONCONFIRMATION_CANCEL = '#dialogs:nextBattleOptionConfirmation/cancel'
     GRAPHICSPRESETAUTODETECTCONFIRMATION_TITLE = '#dialogs:graphicsPresetAutodetectConfirmation/title'
     GRAPHICSPRESETAUTODETECTCONFIRMATION_MESSAGE = '#dialogs:graphicsPresetAutodetectConfirmation/message'
     GRAPHICSPRESETAUTODETECTCONFIRMATION_SUBMIT = '#dialogs:graphicsPresetAutodetectConfirmation/submit'
@@ -839,14 +843,6 @@ class DIALOGS(object):
     CUSTOMIZATION_REMOVE_ELEMENT_MESSAGE = '#dialogs:customization/remove_element/message'
     CUSTOMIZATION_REMOVE_ELEMENT_SUBMIT = '#dialogs:customization/remove_element/submit'
     CUSTOMIZATION_REMOVE_ELEMENT_CANCEL = '#dialogs:customization/remove_element/cancel'
-    CUSTOMIZATION_REPLACE_ELEMENT_TITLE = '#dialogs:customization/replace_element/title'
-    CUSTOMIZATION_REPLACE_ELEMENT_MESSAGE = '#dialogs:customization/replace_element/message'
-    CUSTOMIZATION_REPLACE_ELEMENT_SUBMIT = '#dialogs:customization/replace_element/submit'
-    CUSTOMIZATION_REPLACE_ELEMENT_CANCEL = '#dialogs:customization/replace_element/cancel'
-    CUSTOMIZATION_REPLACE_ELEMENTS_TITLE = '#dialogs:customization/replace_elements/title'
-    CUSTOMIZATION_REPLACE_ELEMENTS_MESSAGE = '#dialogs:customization/replace_elements/message'
-    CUSTOMIZATION_REPLACE_ELEMENTS_SUBMIT = '#dialogs:customization/replace_elements/submit'
-    CUSTOMIZATION_REPLACE_ELEMENTS_CANCEL = '#dialogs:customization/replace_elements/cancel'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_WILL_BE_DELETED = '#dialogs:customization/install_invoice_item/will_be_deleted'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_TITLE = '#dialogs:customization/install_invoice_item/temporary/title'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_MESSAGE = '#dialogs:customization/install_invoice_item/temporary/message'
@@ -928,6 +924,10 @@ class DIALOGS(object):
     HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
     HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
     HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
+    CUSTOMIZATIONCONFIRMSELL_TITLE = '#dialogs:customizationConfirmSell/title'
+    CUSTOMIZATIONCONFIRMSELL_MESSAGE = '#dialogs:customizationConfirmSell/message'
+    CUSTOMIZATIONCONFIRMSELL_SUBMIT = '#dialogs:customizationConfirmSell/submit'
+    CUSTOMIZATIONCONFIRMSELL_CANCEL = '#dialogs:customizationConfirmSell/cancel'
     LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
     LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
     LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
@@ -936,12 +936,18 @@ class DIALOGS(object):
     LEAVESTARTEDEVENT_MESSAGE = '#dialogs:leaveStartedEvent/message'
     LEAVESTARTEDEVENT_SUBMIT = '#dialogs:leaveStartedEvent/submit'
     LEAVESTARTEDEVENT_CANCEL = '#dialogs:leaveStartedEvent/cancel'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_TITLE = '#dialogs:halloween/supply_drop/claim/failed/title'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_MESSAGE = '#dialogs:halloween/supply_drop/claim/failed/message'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_CANCEL = '#dialogs:halloween/supply_drop/claim/failed/cancel'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_TITLE = '#dialogs:halloween/supply_drop/claim/platoon/title'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_MESSAGE = '#dialogs:halloween/supply_drop/claim/platoon/message'
-    HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_CANCEL = '#dialogs:halloween/supply_drop/claim/platoon/cancel'
+    CONFIRMAPPLYVEHICLEDISCOUNT_TITLE = '#dialogs:confirmApplyVehicleDiscount/title'
+    CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE = '#dialogs:confirmApplyVehicleDiscount/message'
+    CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT = '#dialogs:confirmApplyVehicleDiscount/submit'
+    CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL = '#dialogs:confirmApplyVehicleDiscount/cancel'
+    CONFIRMTOYSBREAK_TITLE = '#dialogs:confirmToysBreak/title'
+    CONFIRMTOYSBREAK_MESSAGE = '#dialogs:confirmToysBreak/message'
+    CONFIRMTOYSBREAK_SUBMIT = '#dialogs:confirmToysBreak/submit'
+    CONFIRMTOYSBREAK_CANCEL = '#dialogs:confirmToysBreak/cancel'
+    CONFIRMHIGHLEVELTOYBREAK_TITLE = '#dialogs:confirmHighLevelToyBreak/title'
+    CONFIRMHIGHLEVELTOYBREAK_MESSAGE = '#dialogs:confirmHighLevelToyBreak/message'
+    CONFIRMHIGHLEVELTOYBREAK_SUBMIT = '#dialogs:confirmHighLevelToyBreak/submit'
+    CONFIRMHIGHLEVELTOYBREAK_CANCEL = '#dialogs:confirmHighLevelToyBreak/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1007,6 +1013,10 @@ class DIALOGS(object):
      GRAPHICSPRESETDELAYEDCONFIRMATION_MESSAGE,
      GRAPHICSPRESETDELAYEDCONFIRMATION_SUBMIT,
      GRAPHICSPRESETDELAYEDCONFIRMATION_CANCEL,
+     NEXTBATTLEOPTIONCONFIRMATION_TITLE,
+     NEXTBATTLEOPTIONCONFIRMATION_MESSAGE,
+     NEXTBATTLEOPTIONCONFIRMATION_SUBMIT,
+     NEXTBATTLEOPTIONCONFIRMATION_CANCEL,
      GRAPHICSPRESETAUTODETECTCONFIRMATION_TITLE,
      GRAPHICSPRESETAUTODETECTCONFIRMATION_MESSAGE,
      GRAPHICSPRESETAUTODETECTCONFIRMATION_SUBMIT,
@@ -1776,14 +1786,6 @@ class DIALOGS(object):
      CUSTOMIZATION_REMOVE_ELEMENT_MESSAGE,
      CUSTOMIZATION_REMOVE_ELEMENT_SUBMIT,
      CUSTOMIZATION_REMOVE_ELEMENT_CANCEL,
-     CUSTOMIZATION_REPLACE_ELEMENT_TITLE,
-     CUSTOMIZATION_REPLACE_ELEMENT_MESSAGE,
-     CUSTOMIZATION_REPLACE_ELEMENT_SUBMIT,
-     CUSTOMIZATION_REPLACE_ELEMENT_CANCEL,
-     CUSTOMIZATION_REPLACE_ELEMENTS_TITLE,
-     CUSTOMIZATION_REPLACE_ELEMENTS_MESSAGE,
-     CUSTOMIZATION_REPLACE_ELEMENTS_SUBMIT,
-     CUSTOMIZATION_REPLACE_ELEMENTS_CANCEL,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_WILL_BE_DELETED,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_TITLE,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_MESSAGE,
@@ -1865,6 +1867,10 @@ class DIALOGS(object):
      HOFDISABLED_TITLE,
      HOFDISABLED_MESSAGE,
      HOFDISABLED_CANCEL,
+     CUSTOMIZATIONCONFIRMSELL_TITLE,
+     CUSTOMIZATIONCONFIRMSELL_MESSAGE,
+     CUSTOMIZATIONCONFIRMSELL_SUBMIT,
+     CUSTOMIZATIONCONFIRMSELL_CANCEL,
      LEAVEEVENT_TITLE,
      LEAVEEVENT_MESSAGE,
      LEAVEEVENT_SUBMIT,
@@ -1873,12 +1879,18 @@ class DIALOGS(object):
      LEAVESTARTEDEVENT_MESSAGE,
      LEAVESTARTEDEVENT_SUBMIT,
      LEAVESTARTEDEVENT_CANCEL,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_TITLE,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_MESSAGE,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_FAILED_CANCEL,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_TITLE,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_MESSAGE,
-     HALLOWEEN_SUPPLY_DROP_CLAIM_PLATOON_CANCEL)
+     CONFIRMAPPLYVEHICLEDISCOUNT_TITLE,
+     CONFIRMAPPLYVEHICLEDISCOUNT_MESSAGE,
+     CONFIRMAPPLYVEHICLEDISCOUNT_SUBMIT,
+     CONFIRMAPPLYVEHICLEDISCOUNT_CANCEL,
+     CONFIRMTOYSBREAK_TITLE,
+     CONFIRMTOYSBREAK_MESSAGE,
+     CONFIRMTOYSBREAK_SUBMIT,
+     CONFIRMTOYSBREAK_CANCEL,
+     CONFIRMHIGHLEVELTOYBREAK_TITLE,
+     CONFIRMHIGHLEVELTOYBREAK_MESSAGE,
+     CONFIRMHIGHLEVELTOYBREAK_SUBMIT,
+     CONFIRMHIGHLEVELTOYBREAK_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

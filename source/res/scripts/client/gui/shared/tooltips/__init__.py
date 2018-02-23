@@ -16,6 +16,7 @@ from skeletons.gui.shared import IItemsCache
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
     TANKMAN = 'tankman'
+    SEASONS = 'seasons'
     SKILL = 'skill'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
@@ -35,7 +36,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     HANGAR_TUTORIAL = 'hangarTutorial'
     CLAN_PROFILE = 'clanProfile'
     TECH_CUSTOMIZATION = 'techCustomization'
-    TECH_CUSTOMIZATION_BONUS = 'techCustomizationBonus'
     BOOSTER = 'booster'
     VEHICLE_FILTER = 'vehicleFilter'
     VEH_CMP_CUSTOMIZATION = 'vehCmpCustomization'
@@ -44,6 +44,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_RANK = 'rankedRank'
     RANKED_CALENDAR_DAY = 'rankedCalendarDayInfo'
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
+    NY = 'ny'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -68,6 +69,8 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     BOOSTER = 'booster'
     RANK = 'ranked'
     RESERVE = 'reserve'
+    DECORATION = 'decoration'
+    NY_REWARDS = 'nyRewards'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

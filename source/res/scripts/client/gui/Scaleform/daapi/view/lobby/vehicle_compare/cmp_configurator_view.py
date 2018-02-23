@@ -368,9 +368,10 @@ class _CrewSkillsManager(object):
         for roleIdx, role in affectedTankmens:
             skills = skillsByRoles[role]
             veh_crew = vehicle.crew
-            for idx, (vehCrewRoleIdx, _) in enumerate(veh_crew):
+            for idx, (vehCrewRoleIdx, vehCrewRole) in enumerate(veh_crew):
                 if vehCrewRoleIdx == roleIdx:
-                    veh_crew[idx] = (roleIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, tankmen.MAX_SKILL_LEVEL, skills.intersection(selectedSkills)))
+                    prevRoleLevel = vehCrewRole.roleLevel if vehCrewRole is not None else tankmen.MAX_SKILL_LEVEL
+                    veh_crew[idx] = (roleIdx, cmp_helpers.createTankman(nationID, vehicleTypeID, role, prevRoleLevel, skills.intersection(selectedSkills)))
                     success = True
                     break
             else:
@@ -504,7 +505,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def _init(self):
         super(VehicleCompareConfiguratorView, self)._init()
         currentVehicle = self._container.getCurrentVehicle()
-        enableCamo = bool(getSuitableCamouflage(currentVehicle)[0])
+        enableCamo = bool(getSuitableCamouflage(currentVehicle))
         topModulesFromStock = self._container.isTopModulesFromStock()
         enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
         isInInventory = self._container.getBasketVehCmpData().isInInventory()

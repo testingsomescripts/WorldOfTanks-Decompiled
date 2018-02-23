@@ -8,13 +8,14 @@ from AvatarInputHandler import mathUtils
 import items
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from helpers import dependency
-from items import vehicles
 import Math
 import BattleReplay
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
 from vehicle_systems.tankStructure import DetachedTurretPartIndexes, DetachedTurretPartNames
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.outfit import Outfit
 TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 
 class StickerAttributes():
@@ -36,24 +37,23 @@ class SlotTypes():
 class ModelStickers():
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vDesc, emblemSlots, onHull=True, insigniaRank=0):
+    def __init__(self, vDesc, emblemSlots, decals, onHull=True, insigniaRank=0):
         self.__slotsByType = {}
         self.__texParamsBySlotType = {}
         self.__isLoadingClanEmblems = False
         self.__clanID = 0
-        self.__vehicleDescriptor = vDesc
         self.__model = None
         self.__toPartRootMatrix = mathUtils.createIdentityMatrix()
         self.__parentNode = None
         self.__isDamaged = False
-        self.__calcTexParams(vDesc, emblemSlots, onHull, insigniaRank)
+        self.__calcTexParams(vDesc, emblemSlots, decals, onHull, insigniaRank)
         if 'clan' in self.__texParamsBySlotType:
             self.__texParamsBySlotType[SlotTypes.CLAN] = [TextureParams('', '', False)]
         self.__stickerModel = BigWorld.WGStickerModel()
         self.__stickerModel.setLODDistance(vDesc.type.emblemsLodDist)
         return
 
-    def __calcTexParams(self, vDesc, emblemSlots, onHull, insigniaRank):
+    def __calcTexParams(self, vDesc, emblemSlots, decals, onHull, insigniaRank):
         g_cache = items.vehicles.g_cache
         customizationCache = g_cache.customization(vDesc.type.customizationNationID)
         playerEmblemsCache = g_cache.playerEmblems()[1]
@@ -69,15 +69,23 @@ class ModelStickers():
             elif slotType == SlotTypes.CLAN:
                 self.__texParamsBySlotType[slotType] = [TextureParams('', '', False)]
                 continue
+            descIdx = len(self.__slotsByType[slotType]) - 1
             emblemsDesc = None
             emblemsCache = None
             emblemID = None
-            if slotType == SlotTypes.PLAYER:
-                emblemsDesc = vDesc.playerEmblems[0:2] if onHull else vDesc.playerEmblems[2:]
-                emblemsCache = playerEmblemsCache
-            elif slotType == SlotTypes.INSCRIPTION:
-                emblemsDesc = vDesc.playerInscriptions[0:2] if onHull else vDesc.playerInscriptions[2:]
-                emblemsCache = inscriptionsCache
+            if slotType in (SlotTypes.PLAYER, SlotTypes.INSCRIPTION):
+                stickers = decals[slotType]
+                if stickers:
+                    sticker = stickers.getItem(descIdx)
+                    if sticker:
+                        texParams = TextureParams(sticker.texture, '', sticker.isMirrored)
+                        self.__texParamsBySlotType[slotType].append(texParams)
+                    elif slotType == SlotTypes.PLAYER:
+                        emblemsCache = playerEmblemsCache
+                        emblemID = vDesc.type.defaultPlayerEmblemID
+                    else:
+                        self.__texParamsBySlotType[slotType].append(TextureParams('', '', False))
+                        continue
             elif slotType == SlotTypes.FIXED_EMBLEM:
                 emblemsCache = playerEmblemsCache
                 emblemID = slot.emblemId
@@ -87,7 +95,6 @@ class ModelStickers():
             if emblemsDesc is None and emblemID is None:
                 continue
             if emblemID is None:
-                descIdx = len(self.__slotsByType[slotType]) - 1
                 emblemID = emblemsDesc[descIdx][0]
             if emblemID is None:
                 self.__texParamsBySlotType[slotType].append(None)
@@ -261,37 +268,46 @@ class VehicleStickers(object):
             componentStickers.stickers.setAlpha(alpha)
 
     show = property(lambda self: self.__show, __setShow)
+    COMPONENT_NAMES = ((TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION))
     __INSIGNIA_NODE_NAME = 'G'
 
-    def __init__(self, vehicleDesc, insigniaRank=0):
-        self.__showEmblemsOnGun = vehicleDesc.turrets[0].turret.showEmblemsOnGun
+    def __init__(self, vehicleDesc, insigniaRank=0, outfit=None):
+        self.__showEmblemsOnGun = vehicleDesc.turret.showEmblemsOnGun
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
-        self.__animateGunInsignia = vehicleDesc.turrets[0].gun.animateEmblemSlots
+        self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
         self.__currentInsigniaRank = insigniaRank
-        self.componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
-        componentSlots = [(TankPartNames.HULL, vehicleDesc.hull.emblemSlots),
-         (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turrets[0].turret.emblemSlots),
+        if outfit is None:
+            outfit = Outfit()
+        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots),
+         (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots),
          (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []),
-         ('gunInsignia', vehicleDesc.turrets[0].gun.emblemSlots)]
-        for turretIndex in xrange(1, len(vehicleDesc.turrets)):
-            turretName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, turretIndex)
-            gunName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, turretIndex)
-            componentSlots.append((gunName if self.__showEmblemsOnGun else turretName, vehicleDesc.turrets[turretIndex].turret.emblemSlots))
-            self.componentNames.append((turretName, turretName))
-            componentSlots.append((turretName if self.__showEmblemsOnGun else gunName, []))
-            self.componentNames.append((gunName, TankNodeNames.GUN_INCLINATION))
-
+         ('gunInsignia', vehicleDesc.gun.emblemSlots))
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
-            modelStickers = ModelStickers(vehicleDesc, emblemSlots, componentName == TankPartNames.HULL, self.__currentInsigniaRank)
+            try:
+                componentIdx = TankPartNames.getIdx(componentName)
+            except Exception:
+                componentIdx = -1
+
+            container = outfit.getContainer(componentIdx)
+            emblems = None
+            inscriptions = None
+            if container:
+                emblems = container.slotFor(GUI_ITEM_TYPE.EMBLEM)
+                inscriptions = container.slotFor(GUI_ITEM_TYPE.INSCRIPTION)
+            decals = {SlotTypes.PLAYER: emblems,
+             SlotTypes.INSCRIPTION: inscriptions}
+            modelStickers = ModelStickers(vehicleDesc, emblemSlots, decals, componentName == TankPartNames.HULL, self.__currentInsigniaRank)
             self.__stickers[componentName] = ComponentStickers(modelStickers, {}, 1.0)
+
+        return
 
     def getCurrentInsigniaRank(self):
         return self.__currentInsigniaRank
 
     def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
-        for componentName, attachNodeName in self.componentNames:
+        for componentName, attachNodeName in VehicleStickers.COMPONENT_NAMES:
             idx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
             node = compoundModel.node(attachNodeName)
             if node is None:

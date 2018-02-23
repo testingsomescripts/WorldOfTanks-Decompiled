@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
-from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
+from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen
+from gui.shared.tooltips import vehicle, tankman, seasons, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen, new_year
 from gui.shared.tooltips.filter import VehicleFilterTooltip
 from gui.shared.tooltips.wgm_currency import WGMGoldCurrencyTooltip, WGMCreditsCurrencyTooltip
 DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMGoldCurrencyTooltip(contexts.ToolTipContext(None)),
  TOOLTIPS_CONSTANTS.CREDITS_STATS: WGMCreditsCurrencyTooltip(contexts.ToolTipContext(None))}
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
+                              'complex': None},
+ TOOLTIPS_CONSTANTS.SEASONS: {'tooltip': TOOLTIPS_CONSTANTS.SEASONS_UI,
+                              'method': lambda season: seasons.SeasonsTooltipData(contexts.SeasonsHangarContext()).buildToolTip(season),
                               'complex': None},
  TOOLTIPS_CONSTANTS.TANKMAN_SKILL: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_SKILL_UI,
                                     'method': skill.SkillTooltipData(contexts.PersonalCaseContext(fieldsToExclude=('count',))).buildToolTip,
@@ -74,9 +77,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.HANGAR_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                     'method': module.ModuleBlockTooltipData(contexts.HangarContext()).buildToolTip,
                                     'complex': None},
- TOOLTIPS_CONSTANTS.HANGAR_MODULE_MULTITURRET: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                                'method': module.ModuleBlockTooltipData_MultiTurret(contexts.HangarContext()).buildToolTip,
-                                                'complex': None},
  TOOLTIPS_CONSTANTS.BATTLE_BOOSTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': battle_booster.BattleBoosterBlockTooltipData(contexts.HangarContext()).buildToolTip,
                                      'complex': None},
@@ -254,9 +254,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SETTINGS_BUTTON: {'tooltip': TOOLTIPS_CONSTANTS.SETTINGS_BUTTON_UI,
                                       'method': common.SettingsButtonTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
                                       'complex': None},
- TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI,
-                                         'method': CustomizationQuestElementTooltip(contexts.TechCustomizationContext()).buildToolTip,
-                                         'complex': None},
  TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI,
                                               'method': CustomizationElementTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                               'complex': None},
@@ -272,9 +269,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.ENVIRONMENT: {'tooltip': TOOLTIPS_CONSTANTS.ENVIRONMENT_UI,
                                   'method': common.EnvironmentTooltipData(contexts.HangarContext()).buildToolTip,
                                   'complex': None},
- TOOLTIPS_CONSTANTS.SUPPLYDROP: {'tooltip': TOOLTIPS_CONSTANTS.SUPPLY_DROP_UI,
-                                 'method': common.EnvironmentTooltipData(contexts.HangarContext()).buildToolTip,
-                                 'complex': None},
  TOOLTIPS_CONSTANTS.SETTINGS_MINIMAP_CIRCLES: {'tooltip': TOOLTIPS_CONSTANTS.SETTINGS_MINIMAP_CIRCLES_UI,
                                                'method': common.SettingsMinimapCircles(contexts.SettingsMinimapContext(None)).buildToolTip,
                                                'complex': None},
@@ -409,4 +403,40 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                          'complex': None},
  TOOLTIPS_CONSTANTS.EVENT_BOARDS_BADGES_GROUP: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                                 'method': elen.BabgesGroupTooltipData(contexts.QuestContext()).buildToolTip,
-                                                'complex': None}}
+                                                'complex': None},
+ TOOLTIPS_CONSTANTS.NY_DECORATION: {'tooltip': TOOLTIPS_CONSTANTS.NY_DECORATION_UI,
+                                    'method': common.NyDecorationTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                    'complex': None},
+ TOOLTIPS_CONSTANTS.NY_DECORATION_WITH_STATUS: {'tooltip': TOOLTIPS_CONSTANTS.NY_DECORATION_UI,
+                                                'method': new_year.NyDecorationWithStatusTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                                'complex': None},
+ TOOLTIPS_CONSTANTS.NY_COLLECTION_HIGH_LEVEL: {'tooltip': TOOLTIPS_CONSTANTS.NY_DECORATION_UI,
+                                               'method': new_year.NYCollectionProgressBarTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                               'complex': None},
+ TOOLTIPS_CONSTANTS.NY_COLLECTION_BONUS_INFO: {'tooltip': TOOLTIPS_CONSTANTS.NY_DECORATION_UI,
+                                               'method': new_year.NYCollectionBonusInfoTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                               'complex': None},
+ TOOLTIPS_CONSTANTS.NY_HANGAR_COLLECTION_BONUS_INFO: {'tooltip': TOOLTIPS_CONSTANTS.NY_DECORATION_UI,
+                                                      'method': new_year.NYHangarCollectionBonusInfoTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                                      'complex': None},
+ TOOLTIPS_CONSTANTS.NY_FLAKES: {'tooltip': TOOLTIPS_CONSTANTS.NY_FLAKES_UI,
+                                'method': common.NyFlakesTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                'complex': None},
+ TOOLTIPS_CONSTANTS.NY_BOX: {'tooltip': TOOLTIPS_CONSTANTS.NY_FLAKES_UI,
+                             'method': common.NyBoxTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                             'complex': None},
+ TOOLTIPS_CONSTANTS.NY_CAROUSEL_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.NY_CAROUSEL_ITEM_UI,
+                                       'method': common.NyCarouselItemTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
+                                       'complex': None},
+ TOOLTIPS_CONSTANTS.NY_REWARD_BONUS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                      'method': lambda intCD: module.ModuleBlockTooltipData(contexts.AwardContext()).buildToolTip(intCD),
+                                      'complex': None},
+ TOOLTIPS_CONSTANTS.NY_REWARD_TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
+                                        'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
+                                        'complex': None},
+ TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_NY_TANKWOMAN: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                     'method': new_year.TankwomanNYTooltipData(contexts.PersonalMissionContext()).buildToolTip,
+                                                     'complex': None},
+ TOOLTIPS_CONSTANTS.NY_ACHIEVEMENT: {'tooltip': TOOLTIPS_CONSTANTS.ACHIEVEMENT_UI,
+                                     'method': achievement.AchievementTooltipData(contexts.NewYearAwardsResultContext()).buildToolTip,
+                                     'complex': None}}

@@ -501,6 +501,32 @@
         </inscription>
       </inscriptions>
     </grandFinal>
+    <WGChrisEvent1718_france>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <priceFactor>	0.0	</priceFactor>
+      <notInShop>	true	</notInShop>
+      <nations>	france	</nations>
+      <inscriptions>
+        <inscription>
+          <id>	901	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_160.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_160	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	902	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_164.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_164	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	903	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_168.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_168	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </WGChrisEvent1718_france>
   </inscriptions>
   <insigniaOnGun>
     <insignia>
@@ -554,8 +580,8 @@
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
-        <c0>	218 159 37 142	</c0>
-        <c1>	0 64 64 18	</c1>
+        <c0>	137 122 54 255	</c0>
+        <c1>	0 64 64 0	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -586,7 +612,7 @@
         <F25_Lorraine155_51>	5.5 5.5 0.000000 3.2	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	4 4 0.84 0.66	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2.5 2.5 0.15 0.000000	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	3.3 3.4 0.08 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2.3 2.3 0.08 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	4.8 4.9 0.28 0.34	</F33_S_35CA>
         <F37_AMX50_Foch>	3.5 3.5 0.000000 0.000000	</F37_AMX50_Foch>
         <F34_ARL_V39>	4.3 4.3 0.000000 0.000000	</F34_ARL_V39>
@@ -620,12 +646,16 @@
         <F73_M4A1_Revalorise>	3.3 3.3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.4 3.4 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	2.2 2.2 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.8 2.8 1.5 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.6 4.6 2.8 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.5 3.5 0.000000 0.8	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	2.3 1.8 0.2 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.9 2.9 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7 7 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.6 3.6 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	7 7 5.5 5.5	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_1>
@@ -638,8 +668,8 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	196 169 77 184	</c0>
-        <c1>	0 0 0 175	</c1>
+        <c0>	141 132 77 255	</c0>
+        <c1>	27 34 33 255	</c1>
         <c2>	0 64 64 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -671,7 +701,7 @@
         <F25_Lorraine155_51>	6 6 0.000000 2.6	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	5.5 5.5 6.8 1.9	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2.5 2.5 7 2.9	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	3.4 3.4 0.72 0.59	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	1.6 1.6 6.7 0.59	</F32_Somua_Sau_40>
         <F33_S_35CA>	4.8 4.8 0.8 0.3	</F33_S_35CA>
         <F37_AMX50_Foch>	3.8 3.8 0.000000 0.12	</F37_AMX50_Foch>
         <F34_ARL_V39>	4.8 4.8 0.2 0.000000	</F34_ARL_V39>
@@ -704,12 +734,16 @@
         <F73_M4A1_Revalorise>	3 3 0.000000 0.04	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.1 3.1 0.24 0.46	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.7 1.7 0.000000 0.82	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.4 2.4 3 3.2	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.9 3.9 2.1 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.7 3.7 4.6 2.9	</F84_Somua_SM>
         <F01_RenaultFT_bot>	3 3 5.9 5.9	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.6 1.6 2.2 1.8	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.2 2.3 5.7 0.7	</F88_AMX_13_105>
         <F19_Lorraine40t>	10 10 1.8 2.9	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.3 1.3 5.2 3.2	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.9 2.9 1.2 2.9	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	7 7 5.5 9.9	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_2>
@@ -722,9 +756,9 @@
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
-        <c0>	210 123 45 170	</c0>
-        <c1>	128 0 0 133	</c1>
-        <c2>	97 34 22 155	</c2>
+        <c0>	136 100 57 255	</c0>
+        <c1>	84 22 30 255	</c1>
+        <c2>	79 40 41 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -755,7 +789,7 @@
         <F25_Lorraine155_51>	5 5 2.6 5.1	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	4.5 4.5 0.56 7.1	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2 2 0.07 0.000000	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	2.9 2.9 0.4 0.26	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	1.9 1.9 0.4 0.26	</F32_Somua_Sau_40>
         <F33_S_35CA>	4.1 4.1 0.000000 0.000000	</F33_S_35CA>
         <F37_AMX50_Foch>	3.1 3.1 0.000000 0.000000	</F37_AMX50_Foch>
         <F34_ARL_V39>	3.9 3.9 0.1 0.26	</F34_ARL_V39>
@@ -788,12 +822,16 @@
         <F73_M4A1_Revalorise>	2.6 2.6 0.000000 1	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.4 3.4 0.06 0.42	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.7 1.7 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.1 2.1 0.9 2.6	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	5.2 5.2 4.1 5.6	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.6 3.6 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.6 0.2 0.1	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7 7 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.3 3.3 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 2.2 4.9	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_3>
@@ -806,8 +844,8 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	62 0 0 199	</c0>
-        <c1>	68 136 0 78	</c1>
+        <c0>	58 31 31 255	</c0>
+        <c1>	57 94 53 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -839,8 +877,8 @@
         <F25_Lorraine155_51>	6 6 0.46 0.66	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	4 4 0.24 0.19	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2 2 0.93 6.8	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	3.3 1.5 0.66 0.54	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.5 2.3 0.000000 0.02	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.4 1.4 0.66 0.54	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.9 2.9 0.000000 0.02	</F33_S_35CA>
         <F37_AMX50_Foch>	3.9 3.9 0.58 0.32	</F37_AMX50_Foch>
         <F34_ARL_V39>	3.6 3.6 0.000000 0.000000	</F34_ARL_V39>
         <F09_AMX_50_120>	5.5 5.5 0.000000 0.000000	</F09_AMX_50_120>
@@ -872,12 +910,16 @@
         <F73_M4A1_Revalorise>	3.3 3.3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.8 3.8 0.000000 0.2	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.3 1.3 0.04 0.85	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2 2 0.9 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.2 3.2 2 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.5 3.5 1.7 3.9	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.8 1.8 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1 0.5 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 3.5 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	10 10 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 0.8 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.9 2.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 7.2 0.000000	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_4>
@@ -890,8 +932,8 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	209 209 209 181	</c0>
-        <c1>	0 64 64 15	</c1>
+        <c0>	180 180 180 255	</c0>
+        <c1>	0 64 64 0	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -923,8 +965,8 @@
         <F25_Lorraine155_51>	5 5 0.11 0.14	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	5 5 0.42 0.3	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	3 3 0.28 0.25	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	3.3 3.4 0.42 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	5.1 5.1 0.1 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2 2 0.42 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	6.1 6.1 0.1 0.000000	</F33_S_35CA>
         <F37_AMX50_Foch>	3.5 3.5 0.5 0.22	</F37_AMX50_Foch>
         <F34_ARL_V39>	3.7 3.7 0.58 0.49	</F34_ARL_V39>
         <F09_AMX_50_120>	5.9 5.9 0.33 0.76	</F09_AMX_50_120>
@@ -956,12 +998,16 @@
         <F73_M4A1_Revalorise>	3.9 3.9 0.23 0.26	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.7 2.7 0.57 0.82	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.7 1.7 0.17 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	3.3 3.3 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.9 3.9 3.2 0.6	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2.5 2.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	2.3 2.3 0.9 0.7	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.1 1.1 1.4 3.3	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.6 2.6 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 5.3 5.5	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_5>
@@ -974,9 +1020,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	74 0 0 226	</c0>
-        <c1>	169 147 56 201	</c1>
-        <c2>	255 255 255 11	</c2>
+        <c0>	68 23 22 255	</c0>
+        <c1>	129 121 58 255	</c1>
+        <c2>	59 77 80 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1007,8 +1053,8 @@
         <F25_Lorraine155_51>	5 5 0.000000 0.29	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	4.5 4.5 0.75 0.34	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2 2 0.43 3.1	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	4.8 4.8 0.26 0.24	</F32_Somua_Sau_40>
-        <F33_S_35CA>	6.5 6.5 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2.3 2.3 0.26 0.24	</F32_Somua_Sau_40>
+        <F33_S_35CA>	4.6 4.6 0.000000 0.000000	</F33_S_35CA>
         <F37_AMX50_Foch>	4.2 4.2 0.68 0.8	</F37_AMX50_Foch>
         <F34_ARL_V39>	3.5 3.5 0.8 0.58	</F34_ARL_V39>
         <F09_AMX_50_120>	5.8 5.8 0.1 0.000000	</F09_AMX_50_120>
@@ -1040,12 +1086,16 @@
         <F73_M4A1_Revalorise>	2.9 2.9 0.47 0.24	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	5 5 0.42 0.36	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.1 1.1 0.38 0.74	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	3.4 3.4 0.000000 1.8	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	5.7 5.7 0.5 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.1 3.1 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 5.7	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1 1 2.5 0.7	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	4.1 4.1 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	9 9 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.5 1.5 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.8 3.8 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	6 6 1.8 4.3	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_6>
@@ -1058,9 +1108,9 @@
       <kind>	desert	</kind>
       <group>	desert	</group>
       <colors>
-        <c0>	183 140 62 202	</c0>
-        <c1>	113 0 0 170	</c1>
-        <c2>	193 97 0 71	</c2>
+        <c0>	143 123 69 255	</c0>
+        <c1>	91 26 26 255	</c1>
+        <c2>	81 79 57 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1091,7 +1141,7 @@
         <F25_Lorraine155_51>	4 4 0.43 0.92	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	4 4 0.36 0.15	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2.3 2.3 0.34 0.000000	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	4.1 4 0.4 0.66	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2 2 1.8 0.66	</F32_Somua_Sau_40>
         <F33_S_35CA>	4 4.3 0.34 0.000000	</F33_S_35CA>
         <F37_AMX50_Foch>	3.6 3.6 0.22 0.16	</F37_AMX50_Foch>
         <F34_ARL_V39>	4.1 4.1 0.42 0.12	</F34_ARL_V39>
@@ -1124,12 +1174,16 @@
         <F73_M4A1_Revalorise>	3.3 3.3 0.56 0.18	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.6 3.6 0.000000 0.14	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.4 1.4 0.14 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.2 2.2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.5 3.5 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	2.7 2.7 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.4 1.1 0.6 0.4	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.7 2.7 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7 7 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.8 0.8 1.5 6.4	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.6 2.6 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5.4 5.4 3.5 1.7	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_7>
@@ -1142,9 +1196,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	168 150 23 146	</c0>
-        <c1>	172 47 11 109	</c1>
-        <c2>	0 64 64 26	</c2>
+        <c0>	112 112 47 255	</c0>
+        <c1>	97 64 48 255	</c1>
+        <c2>	59 77 80 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1175,8 +1229,8 @@
         <F25_Lorraine155_51>	5.5 5.5 2.4 4.2	</F25_Lorraine155_51>
         <F30_RenaultFT_AC>	6 6 0.91 0.98	</F30_RenaultFT_AC>
         <F52_RenaultUE57>	2.5 2.5 0.56 0.000000	</F52_RenaultUE57>
-        <F32_Somua_Sau_40>	3.7 3.8 0.25 0.68	</F32_Somua_Sau_40>
-        <F33_S_35CA>	5.8 5.6 0.04 0.02	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2.1 2.1 0.25 0.68	</F32_Somua_Sau_40>
+        <F33_S_35CA>	5.1 5.1 0.04 0.02	</F33_S_35CA>
         <F37_AMX50_Foch>	3.9 3.9 0.68 0.26	</F37_AMX50_Foch>
         <F34_ARL_V39>	4.1 4.1 0.85 0.28	</F34_ARL_V39>
         <F09_AMX_50_120>	5.2 5.2 0.74 0.56	</F09_AMX_50_120>
@@ -1208,12 +1262,16 @@
         <F73_M4A1_Revalorise>	4.4 4.4 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.4 3.4 0.64 0.08	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	2.7 2.7 0.45 0.62	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	3.2 3.2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.9 3.9 0.7 0.8	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.6 3.6 3.5 2.9	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2.5 2.5 0.000000 4.3	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.6 1.5 0.8 1	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	9 9 2.6 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.8 0.8 0.000000 1.6	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.4 3.4 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 5.1 5.1	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_8>
@@ -1226,9 +1284,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	0 0 0 255	</c0>
-        <c1>	55 32 26 212	</c1>
-        <c2>	51 85 45 205	</c2>
+        <c0>	10 14 14 255	</c0>
+        <c1>	55 44 40 255	</c1>
+        <c2>	49 81 49 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1259,7 +1317,7 @@
         <F27_FCM_36Pak40>	6.2 6.2 0.24 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.3 6.3 0.63 0.52	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.18 0.18	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.8 2.8 0.02 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	1.2 1.2 4.8 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	3.5 3.5 0.43 0.24	</F33_S_35CA>
         <F34_ARL_V39>	3.4 3.4 0.18 0.000000	</F34_ARL_V39>
         <F38_Bat_Chatillon155_58>	3.1 3.1 0.000000 1	</F38_Bat_Chatillon155_58>
@@ -1292,12 +1350,16 @@
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.8 3.8 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.5 1.5 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.4 2.4 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.4 3.4 0.5 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	2 2 0.000000 4.2	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 0.000000 3.9	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.4 0.6 0.2	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.4 1.4 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.3 2.3 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	6 6 2.4 0.000000	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_9>
@@ -1310,9 +1372,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	199 184 137 226	</c0>
-        <c1>	87 50 40 213	</c1>
-        <c2>	0 0 0 255	</c2>
+        <c0>	162 156 121 255	</c0>
+        <c1>	76 58 52 255	</c1>
+        <c2>	30 24 21 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1343,8 +1405,8 @@
         <F27_FCM_36Pak40>	5.8 5.8 0.2 0.28	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.4 6.4 0.8 0.39	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	5.5 5.5 3.6 2.8	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.3 3.4 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.3 4.3 0.1 0.2	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.2 1.2 4.1 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.6 2.6 0.1 0.2	</F33_S_35CA>
         <F34_ARL_V39>	3.7 3.7 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.9 5.9 0.66 0.12	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	5.8 5.8 0.6 0.76	</F36_AMX_AC_Mle1948>
@@ -1376,12 +1438,16 @@
         <F73_M4A1_Revalorise>	2.1 2.1 0.15 0.32	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	4 4 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.6 1.6 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.7 2.7 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.5 4.5 2.2 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.7 3.7 8.2 7.1	</F84_Somua_SM>
         <F01_RenaultFT_bot>	3 3 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.5 0.6 0.5	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.2 3.2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 4.3 2.5	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.1 1.1 0.000000 7	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.9 2.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 3.2 6.9	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </franch_10>
@@ -1394,7 +1460,7 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	255 255 255 170	</c0>
+        <c0>	180 180 180 255	</c0>
         <c1>	0 64 64 0	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
@@ -1457,9 +1523,11 @@
         <F72_AMX_30>	5.9 5.9 0.000000 0.000000	</F72_AMX_30>
         <F73_M4A1_Revalorise>	3.1 3.1 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	4 4 0.000000 0.000000	</F74_AMX_M4_1949>
+        <F82_AMX_M4_Mle1949_Ter>	2.7 2.7 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F87_Batignolles-Chatillon_12t>	4.2 3.9 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.3 2.3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
+        <F97_ELC_EVEN_90>	5 5 0.000000 0.000000	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Winter>
@@ -1472,8 +1540,8 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	199 146 35 212	</c0>
-        <c1>	108 86 19 126	</c1>
+        <c0>	168 134 45 255	</c0>
+        <c1>	73 78 53 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -1505,7 +1573,7 @@
         <F27_FCM_36Pak40>	4 3.9 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.5 6.5 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.5 3.5 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2 2 0.000000 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	4 4.2 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3.5 3.5 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.3 5.3 0.08 0.18	</F35_AMX_AC_Mle1946>
@@ -1538,12 +1606,16 @@
         <F73_M4A1_Revalorise>	2.9 2.9 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.9 2.9 0.11 0.4	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.6 1.6 0.36 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	1.1 1.1 1.5 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.3 3.3 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 7.2 2.2	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.6 1.6 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7.2 7.2 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.1 1.1 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 5.1 2.8	</F97_ELC_EVEN_90>
       </tiling>
       <notInShop>	true	</notInShop>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
@@ -1557,8 +1629,8 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	168 6 6 170	</c0>
-        <c1>	81 0 0 162	</c1>
+        <c0>	126 33 35 255	</c0>
+        <c1>	64 34 35 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -1590,8 +1662,8 @@
         <F27_FCM_36Pak40>	3.7 3.7 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.7 6.7 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3 3.1 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.2 4.3 0.27 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2 2 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	4.8 4.8 0.27 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3.5 3.5 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.7 5.7 0.28 0.000000	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	6.7 6.7 0.5 0.64	</F36_AMX_AC_Mle1948>
@@ -1623,11 +1695,15 @@
         <F73_M4A1_Revalorise>	2.7 2.7 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.6 3.6 0.15 0.34	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.4 1.4 0.09 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	1.1 1.1 1.5 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	2.4 2.4 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 7.2 2.2	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.4 1.4 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7.2 7.2 0.000000 0.000000	</F19_Lorraine40t>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 6.3 3.7	</F97_ELC_EVEN_90>
       </tiling>
       <notInShop>	true	</notInShop>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
@@ -1641,8 +1717,8 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	13 13 13 231	</c0>
-        <c1>	79 79 79 204	</c1>
+        <c0>	29 32 33 255	</c0>
+        <c1>	72 83 82 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -1674,8 +1750,8 @@
         <F27_FCM_36Pak40>	4.3 4.4 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6 6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.6 3.5 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.7 4.8 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2 2 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	4.9 4.9 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3.5 3.5 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.8 5.8 0.06 0.22	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	7.4 7.4 0.000000 0.4	</F36_AMX_AC_Mle1948>
@@ -1707,11 +1783,15 @@
         <F73_M4A1_Revalorise>	2.4 2.4 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.2 3.2 0.07 0.22	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.5 1.5 0.1 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	1.1 1.1 1.5 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	2.6 2.6 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 7.2 2.2	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.5 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7.2 7.2 0.000000 0.000000	</F19_Lorraine40t>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4.2 4.2 4 2.7	</F97_ELC_EVEN_90>
       </tiling>
       <notInShop>	true	</notInShop>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
@@ -1725,8 +1805,8 @@
       <kind>	winter	</kind>
       <group>	winter	</group>
       <colors>
-        <c0>	162 165 174 230	</c0>
-        <c1>	79 85 96 204	</c1>
+        <c0>	168 170 172 255	</c0>
+        <c1>	75 88 95 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -1758,8 +1838,8 @@
         <F27_FCM_36Pak40>	4.1 4 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.4 6.4 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.4 3.5 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	3.9 4 0.56 0.25	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2 2 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	5 5 0.56 0.25	</F33_S_35CA>
         <F34_ARL_V39>	3.6 3.6 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6 6 0.000000 0.53	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	7 7 0.000000 0.26	</F36_AMX_AC_Mle1948>
@@ -1791,11 +1871,15 @@
         <F73_M4A1_Revalorise>	2.8 2.8 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3 3 0.1 0.25	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.5 1.5 0.13 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	1.1 1.1 1.5 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.2 3.2 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 7.2 2.2	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.1 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7.2 7.2 0.000000 0.000000	</F19_Lorraine40t>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5.3 5.3 3.9 6.2	</F97_ELC_EVEN_90>
       </tiling>
       <notInShop>	true	</notInShop>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
@@ -1809,9 +1893,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	65 37 16 144	</c0>
-        <c1>	73 105 27 187	</c1>
-        <c2>	176 164 72 159	</c2>
+        <c0>	51 52 44 255	</c0>
+        <c1>	57 95 41 255	</c1>
+        <c2>	126 130 74 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1843,8 +1927,8 @@
         <F27_FCM_36Pak40>	5.4 5.4 0.45 0.17	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	7.3 7.3 0.44 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3.5 3.5 0.47 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	4.8 4.9 0.36 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	5.8 6 0.28 0.36	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2.4 2.4 0.36 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	5.2 5.2 0.28 0.36	</F33_S_35CA>
         <F34_ARL_V39>	4.4 4.4 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6.4 6.4 0.19 0.45	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	6.5 6.5 0.16 0.46	</F36_AMX_AC_Mle1948>
@@ -1875,12 +1959,16 @@
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	4.2 4.2 0.000000 0.04	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.6 1.6 0.2 0.02	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.9 2.9 0.2 1.2	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.4 4.4 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	4.2 4.2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.4 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	4.5 4.5 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6.5 6.5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.3 1.3 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.2 3.2 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 4.7 0.000000	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Branches_and_Leaves>
@@ -1893,9 +1981,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	132 45 23 214	</c0>
-        <c1>	12 14 16 255	</c1>
-        <c2>	71 51 37 255	</c2>
+        <c0>	111 52 37 255	</c0>
+        <c1>	10 12 12 255	</c1>
+        <c2>	67 56 46 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -1927,7 +2015,7 @@
         <F27_FCM_36Pak40>	6 6 0.48 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.8 6.8 0.04 0.6	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	5 5 2.6 6.5	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.8 2.7 0.06 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2.5 2.5 0.06 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	3.6 3.7 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	4 4 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	9.2 7.8 0.19 0.02	</F35_AMX_AC_Mle1946>
@@ -1959,12 +2047,16 @@
         <F73_M4A1_Revalorise>	3.6 3.6 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.8 2.8 0.2 0.8	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	2.3 2.3 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.8 2.8 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.4 3.4 1 1.7	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.3 3.3 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	2.1 2.1 0.3 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2 2.3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6.5 6.5 1.4 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 6.4 6.9	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.1 3.1 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 5.8 5.5	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Geometric_Shapes>
@@ -1977,9 +2069,9 @@
       <kind>	summer	</kind>
       <group>	summer	</group>
       <colors>
-        <c0>	101 34 27 226	</c0>
-        <c1>	22 24 29 213	</c1>
-        <c2>	65 85 21 186	</c2>
+        <c0>	90 45 39 255	</c0>
+        <c1>	30 37 41 255	</c1>
+        <c2>	58 82 37 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -2011,8 +2103,8 @@
         <F27_FCM_36Pak40>	6.5 6.5 0.61 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.5 6.5 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	5 5 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.8 4 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.7 4.8 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.6 1.6 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	3.4 3.4 3 3.9	</F33_S_35CA>
         <F34_ARL_V39>	4.4 4.4 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	7.5 7.5 0.3 0.18	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	7.5 7.5 0.8 0.86	</F36_AMX_AC_Mle1948>
@@ -2043,12 +2135,16 @@
         <F73_M4A1_Revalorise>	4 4 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.8 3.8 0.08 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	2 2 0.29 0.25	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 2 1.6	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.7 3.7 2.7 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.8 3.8 2 5.8	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.5 0.3 0.3	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	1.7 4.6 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	9 9 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.8 0.8 7.2 1.7	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.2 3.2 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 5.9 3.2	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Gyrus>
@@ -2094,8 +2190,8 @@
         <F27_FCM_36Pak40>	4.5 4.5 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	5.2 5.2 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 2.3	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.9 2.9 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.9 5 0.31 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.5 1.5 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	5 5 0.31 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3 3 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.5 5.5 0.000000 0.000000	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	8 8 0.000000 0.000000	</F36_AMX_AC_Mle1948>
@@ -2127,12 +2223,16 @@
         <F73_M4A1_Revalorise>	2 2 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	4.6 4.6 0.3 0.88	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.6 1.6 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.4 2.4 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.9 3.9 3.1 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3 3 3.4 6.7	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.8 3.8 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.1 1.1 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2 2 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 3.2 3.4	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2179,7 +2279,7 @@
         <F27_FCM_36Pak40>	5.5 5.5 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	5.6 5.6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3 3 0.000000 4.5	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.7 2.9 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2.1 2.1 0.000000 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	3.4 3.3 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3.4 3.4 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6.8 6.8 0.4 0.1	</F35_AMX_AC_Mle1946>
@@ -2212,12 +2312,16 @@
         <F73_M4A1_Revalorise>	2.4 2.4 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	4.4 4.4 0.04 0.64	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.4 1.4 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.1 2.1 1.7 1	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.8 3.8 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3 3 3.2 1.3	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.3 3.3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7 7 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 2.1 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.7 2.7 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 3.2 7.8	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2264,8 +2368,8 @@
         <F27_FCM_36Pak40>	4.8 4.8 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	4.4 4.4 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	2.5 2.5 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3 3.1 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	3.1 3 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.5 1.5 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	4.5 4.5 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	2.7 2.7 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6.1 6.1 0.18 0.12	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	6.4 6.4 0.000000 0.13	</F36_AMX_AC_Mle1948>
@@ -2297,12 +2401,16 @@
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.4 2.4 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.4 1.4 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 1.3 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	2.8 2.8 2.3 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.7 1.7 7.8 5.1	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.3 1.3 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.2 3.2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	4.5 4.5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.2 1.2 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.8 1.8 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 4.9 9.5	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2349,7 +2457,7 @@
         <F27_FCM_36Pak40>	6.2 6.2 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.6 6.6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	6 6 0.000000 5.3	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	5 5 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2.2 2.2 0.000000 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	5 5 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	4.6 4.6 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6 6 0.4 0.32	</F35_AMX_AC_Mle1946>
@@ -2382,12 +2490,16 @@
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	6 6 0.000000 0.32	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	3 3 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.7 2.7 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.1 4.1 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.8 3.8 4.8 2.9	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2.5 2.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	2.3 2.3 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.8 3.8 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	9 9 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.5 1.5 6.3 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.1 3.1 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	7 7 4.4 5.7	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2433,7 +2545,7 @@
         <F25_Lorraine155_51>	4.5 4.5 0.000000 0.000000	</F25_Lorraine155_51>
         <F28_105_leFH18B2>	6.4 6.4 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	4 4 0.000000 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	5 5 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	2.1 2.1 0.000000 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	5 5 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	4.3 4.3 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.6 5.6 0.000000 0.000000	</F35_AMX_AC_Mle1946>
@@ -2467,12 +2579,16 @@
         <F74_AMX_M4_1949>	4.2 4.2 0.000000 0.04	</F74_AMX_M4_1949>
         <F27_FCM_36Pak40>	4.4 4.4 0.000000 0.000000	</F27_FCM_36Pak40>
         <F75_Char_de_25t>	1.2 1.2 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.8 3.8 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3 3 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 0.000000 1.3	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.3 2.3 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	7 7 7.7 2.3	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2520,7 +2636,7 @@
         <F27_FCM_36Pak40>	4.6 4.6 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	5.6 5.6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3.5 3.5 8 4.6	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.3 2.4 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	1.2 1.2 0.000000 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	3 3 0.2 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	1.9 1.9 0.2 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	2.3 2.4 0.000000 0.000000	</F35_AMX_AC_Mle1946>
@@ -2551,12 +2667,16 @@
         <F72_AMX_30>	6 6 0.000000 0.14	</F72_AMX_30>
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	5 5 0.16 0.24	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	2.9 2.9 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.7 1.7 4.1 6.4	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1 1 2.6 4.7	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.5 1.5 0.3 0.4	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.3 2.3 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 2.3 3.3	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2603,8 +2723,8 @@
         <F27_FCM_36Pak40>	5 5 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	3 3 0.000000 0.2	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	5 5 0.2 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3 3 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	3.8 3.7 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.4 1.4 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2 2 0.000000 3.8	</F33_S_35CA>
         <F34_ARL_V39>	2.7 2.7 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	6.2 6.2 0.000000 0.000000	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	7.2 7.2 0.000000 0.38	</F36_AMX_AC_Mle1948>
@@ -2635,12 +2755,16 @@
         <F72_AMX_30>	5.7 5.7 0.000000 0.54	</F72_AMX_30>
         <F73_M4A1_Revalorise>	3 3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3 3 0.000000 0.000000	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2 2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.4 3.4 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	2 2 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	2 2 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1 1 0.000000 0.3	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.5 3.5 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6 6 1 4.5	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.2 1.2 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.6 2.6 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 5.5 6.4	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2687,8 +2811,8 @@
         <F27_FCM_36Pak40>	5.1 5.1 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6.6 6.6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3.5 3.5 0.000000 3.4	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	4.2 4.1 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	4.2 4.2 0.000000 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.6 1.6 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	3.4 3.4 0.000000 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	3.8 3.8 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	3.1 3.2 0.000000 0.000000	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	4.2 4.2 0.000000 0.000000	</F36_AMX_AC_Mle1948>
@@ -2720,12 +2844,16 @@
         <F73_M4A1_Revalorise>	2 2 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.4 2.4 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.5 1.5 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.7 3.7 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	2.5 2.5 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.8 1.8 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.1 1.1 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.2 2.2 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6.5 6.5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 0.000000 3.6	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.1 2.1 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 6 5.1	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
       <notInShop>	false	</notInShop>
@@ -2739,9 +2867,9 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	100 13 0 175	</c0>
-        <c1>	201 136 48 108	</c1>
-        <c2>	20 27 16 208	</c2>
+        <c0>	82 34 27 255	</c0>
+        <c1>	116 109 63 255	</c1>
+        <c2>	23 32 26 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
@@ -2772,8 +2900,8 @@
         <F27_FCM_36Pak40>	5.6 5.6 0.000000 0.48	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	6 6 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	7 7 2.8 5.6	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	4.8 4.8 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	5.7 5.7 0.94 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2.2 2.2 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.6 2.6 0.94 2.2	</F33_S_35CA>
         <F34_ARL_V39>	4 4 0.16 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	7.8 7.8 0.67 0.47	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	7.9 7.9 1 0.8	</F36_AMX_AC_Mle1948>
@@ -2806,12 +2934,16 @@
         <F73_M4A1_Revalorise>	3.2 3.2 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	5.2 5.2 0.26 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	2.7 2.7 0.2 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.3 2.3 2.7 3	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.4 3.4 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.2 3.2 3.1 3	</F84_Somua_SM>
         <F01_RenaultFT_bot>	3.5 3.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	2.1 1.9 0.000000 0.6	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.6 3.6 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	7.5 7.5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 6.8 0.7	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	3.2 3.2 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 3.9 5.7	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Clan_camuflage_01>
@@ -2824,8 +2956,8 @@
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
-        <c0>	54 70 21 124	</c0>
-        <c1>	255 255 255 148	</c1>
+        <c0>	52 72 51 0	</c0>
+        <c1>	170 170 170 255	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -2857,7 +2989,7 @@
         <F27_FCM_36Pak40>	5.7 5.7 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	5.5 5.5 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	3.5 3.5 0.000000 5.9	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.8 2.7 0.000000 0.06	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	0.8 0.8 0.000000 0.06	</F32_Somua_Sau_40>
         <F33_S_35CA>	3.4 3.3 0.27 1	</F33_S_35CA>
         <F34_ARL_V39>	2.7 2.7 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.2 5.2 0.66 0.04	</F35_AMX_AC_Mle1946>
@@ -2891,12 +3023,16 @@
         <F73_M4A1_Revalorise>	2.3 2.3 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	3.5 3.5 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.2 1.2 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.1 2.1 2.8 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.3 3.3 1 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.8 1.8 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1.5 1.5 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1 1 0.9 0.7	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3 3 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	4.8 4.8 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.8 0.8 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.4 1.4 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	4 4 3.6 3	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Clan_camuflage_02>
@@ -2909,8 +3045,8 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	117 119 77 175	</c0>
-        <c1>	0 13 0 186	</c1>
+        <c0>	94 106 85 255	</c0>
+        <c1>	29 39 32 255	</c1>
         <c2>	20 27 16 0	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
@@ -2942,8 +3078,8 @@
         <F27_FCM_36Pak40>	4.8 4.8 0.000000 0.000000	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	4.6 4.6 0.12 0.5	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	2 2 0.000000 2.6	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.1 2.2 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	2.7 2.7 0.37 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.1 1.1 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	5 5 0.37 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	2.2 2.2 0.09 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.6 5.6 0.5 0.11	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	5 5 0.000000 0.24	</F36_AMX_AC_Mle1948>
@@ -2975,12 +3111,16 @@
         <F72_AMX_30>	5 5 0.02 0.18	</F72_AMX_30>
         <F73_M4A1_Revalorise>	1.4 1.4 0.000000 0.17	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	1.8 1.8 0.08 0.000000	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2.1 2.1 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.3 3.3 1.7 4.8	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.5 1.5 0.000000 3.2	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1 1 0.000000 4.8	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.1 1.1 0.1 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.5 2.5 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	3 3 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1 1 0.000000 2.1	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.3 1.3 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	3 3 2 3.1	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Clan_camuflage_03>
@@ -2993,10 +3133,10 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	60 99 1 175	</c0>
-        <c1>	163 216 37 94	</c1>
-        <c2>	4 21 5 218	</c2>
-        <c3>	201 192 133 160	</c3>
+        <c0>	55 88 30 255	</c0>
+        <c1>	88 116 65 255	</c1>
+        <c2>	21 38 27 255	</c2>
+        <c3>	133 136 106 255	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -3025,8 +3165,8 @@
         <F27_FCM_36Pak40>	5.6 5.6 0.16 0.15	</F27_FCM_36Pak40>
         <F28_105_leFH18B2>	4.8 4.8 0.000000 0.000000	</F28_105_leFH18B2>
         <F30_RenaultFT_AC>	2.3 2.3 8.4 6.2	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	2.3 2.3 0.2 0.32	</F32_Somua_Sau_40>
-        <F33_S_35CA>	3.1 3 0.56 0.9	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1.5 1.5 0.2 0.32	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.4 2.4 0.56 0.9	</F33_S_35CA>
         <F34_ARL_V39>	2 2 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	5.3 5.3 0.000000 0.000000	</F35_AMX_AC_Mle1946>
         <F36_AMX_AC_Mle1948>	6.9 6.9 0.000000 0.46	</F36_AMX_AC_Mle1948>
@@ -3059,12 +3199,16 @@
         <F44_Somua_S35>	5.9 5.9 0.000000 0.000000	</F44_Somua_S35>
         <F73_M4A1_Revalorise>	1.9 1.9 0.000000 0.000000	</F73_M4A1_Revalorise>
         <F74_AMX_M4_1949>	2.6 2.6 0.14 0.02	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2 2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.3 4.3 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.6 1.6 3.2 5.4	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1 1 0.000000 0.000000	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.1 1.1 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	2.5 2.5 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	4 4 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	3.8 3.8 2.2 6.9	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Clan_camuflage_04>
@@ -3077,7 +3221,7 @@
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
-        <c0>	255 255 255 243	</c0>
+        <c0>	196 196 196 255	</c0>
         <c1>	255 255 255 0	</c1>
         <c2>	255 255 255 0	</c2>
         <c3>	255 255 255 0	</c3>
@@ -3111,7 +3255,7 @@
         <F25_Lorraine155_51>	4 4 0.97 0.59	</F25_Lorraine155_51>
         <F27_FCM_36Pak40>	4.2 4.2 0.000000 0.000000	</F27_FCM_36Pak40>
         <F30_RenaultFT_AC>	4 4 0.23 0.000000	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	3.6 3.6 0.3 0.000000	</F32_Somua_Sau_40>
+        <F32_Somua_Sau_40>	1.1 1.1 0.3 0.000000	</F32_Somua_Sau_40>
         <F33_S_35CA>	5.4 5.4 0.000000 0.000000	</F33_S_35CA>
         <F33_S_35CA_IGR>	5.4 5.4 0.000000 0.000000	</F33_S_35CA_IGR>
         <F34_ARL_V39>	3.4 3.4 0.5 0.35	</F34_ARL_V39>
@@ -3146,11 +3290,15 @@
         <F17_AMX_13_90_IGR>	2.8 2.8 0.000000 0.000000	</F17_AMX_13_90_IGR>
         <F74_AMX_M4_1949>	4.1 4.1 0.24 0.43	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1 1 0.25 0.09	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	3.4 3.4 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	2.7 2.7 0.1 0.2	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	2.2 2.2 0.000000 0.000000	</F84_Somua_SM>
         <F87_Batignolles-Chatillon_12t>	1 1 0.6 0.1	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.1 3.1 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	6.5 6.5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.7 1.7 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	5 5 7 7.5	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Cracked_ice>
@@ -3163,8 +3311,8 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	125 86 34 255	</c0>
-        <c1>	69 60 28 255	</c1>
+        <c0>	114 81 39 255	</c0>
+        <c1>	67 64 39 255	</c1>
         <c2>	4 21 5 0	</c2>
         <c3>	201 192 133 0	</c3>
       </colors>
@@ -3194,8 +3342,8 @@
         <F25_Lorraine155_51>	2 2 0.000000 3.6	</F25_Lorraine155_51>
         <F27_FCM_36Pak40>	2.1 2.1 0.000000 0.000000	</F27_FCM_36Pak40>
         <F30_RenaultFT_AC>	2.5 2.5 0.000000 3.4	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	1.8 1.8 0.000000 0.000000	</F32_Somua_Sau_40>
-        <F33_S_35CA>	2.2 2.2 0.16 0.000000	</F33_S_35CA>
+        <F32_Somua_Sau_40>	1 1 0.000000 0.000000	</F32_Somua_Sau_40>
+        <F33_S_35CA>	4 4 0.16 0.000000	</F33_S_35CA>
         <F34_ARL_V39>	1.8 1.8 0.000000 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	2.8 2.8 0.04 0.000000	</F35_AMX_AC_Mle1946>
         <F37_AMX50_Foch>	2.3 2.3 0.000000 0.000000	</F37_AMX50_Foch>
@@ -3229,12 +3377,16 @@
         <F08_AMX_50_100_IGR>	1.7 1.7 0.52 0.86	</F08_AMX_50_100_IGR>
         <F74_AMX_M4_1949>	3 3 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1 1 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	2.1 2.1 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.5 3.5 0.1 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	1.5 1.5 0.000000 0.000000	</F84_Somua_SM>
         <F01_RenaultFT_bot>	1 1 3.1 4.8	</F01_RenaultFT_bot>
         <F87_Batignolles-Chatillon_12t>	1.2 1.2 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	3.1 3.1 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	5 5 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.7 1.7 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	3 3 3.2 7.2	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </summer_camo>
@@ -3247,7 +3399,7 @@
       <group>	desert	</group>
       <kind>	desert	</kind>
       <colors>
-        <c0>	162 123 77 222	</c0>
+        <c0>	156 123 82 255	</c0>
         <c1>	128 0 0 0	</c1>
         <c2>	97 34 22 0	</c2>
         <c3>	255 255 255 0	</c3>
@@ -3282,8 +3434,8 @@
         <F25_Lorraine155_51>	6 6 0.14 0.000000	</F25_Lorraine155_51>
         <F27_FCM_36Pak40>	7.6 7.6 0.58 0.000000	</F27_FCM_36Pak40>
         <F30_RenaultFT_AC>	4 4 0.000000 4.1	</F30_RenaultFT_AC>
-        <F32_Somua_Sau_40>	7 7 0.68 0.76	</F32_Somua_Sau_40>
-        <F33_S_35CA>	9.8 9.8 0.64 0.16	</F33_S_35CA>
+        <F32_Somua_Sau_40>	2.3 2.3 0.68 0.76	</F32_Somua_Sau_40>
+        <F33_S_35CA>	7 7 0.64 0.16	</F33_S_35CA>
         <F33_S_35CA_IGR>	9.8 9.8 0.64 0.16	</F33_S_35CA_IGR>
         <F34_ARL_V39>	3.7 3.7 0.18 0.000000	</F34_ARL_V39>
         <F35_AMX_AC_Mle1946>	8 8 0.68 0.5	</F35_AMX_AC_Mle1946>
@@ -3315,11 +3467,15 @@
         <F17_AMX_13_90_IGR>	3.4 3.4 0.5 0.48	</F17_AMX_13_90_IGR>
         <F74_AMX_M4_1949>	6.6 6.6 0.000000 0.000000	</F74_AMX_M4_1949>
         <F75_Char_de_25t>	1.6 1.6 0.000000 0.000000	</F75_Char_de_25t>
+        <F83_AMX_M4_Mle1949_Bis>	1.6 1.6 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	3.7 3.7 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
         <F84_Somua_SM>	3.5 3.5 0.000000 0.000000	</F84_Somua_SM>
         <F87_Batignolles-Chatillon_12t>	1.4 1.4 0.1 0.000000	</F87_Batignolles-Chatillon_12t>
         <F88_AMX_13_105>	4 4 0.000000 0.000000	</F88_AMX_13_105>
         <F19_Lorraine40t>	8 8 0.000000 0.000000	</F19_Lorraine40t>
         <F89_Canon_dassaut_de_105>	1.6 1.6 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	2.9 2.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	6 6 4.8 4.2	</F97_ELC_EVEN_90>
       </tiling>
       <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
     </Desert_camou>
@@ -3334,9 +3490,9 @@
       <group>	winter	</group>
       <kind>	winter	</kind>
       <colors>
-        <c0>	211 211 211 242	</c0>
-        <c1>	106 108 130 233	</c1>
-        <c2>	43 47 64 234	</c2>
+        <c0>	191 191 191 255	</c0>
+        <c1>	88 99 118 255	</c1>
+        <c2>	44 52 63 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -3355,9 +3511,9 @@
       <group>	summer	</group>
       <kind>	summer	</kind>
       <colors>
-        <c0>	117 109 60 241	</c0>
-        <c1>	209 209 209 241	</c1>
-        <c2>	2 2 2 143	</c2>
+        <c0>	106 103 64 255	</c0>
+        <c1>	170 170 170 255	</c1>
+        <c2>	29 41 42 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -3376,9 +3532,9 @@
       <group>	desert	</group>
       <kind>	desert	</kind>
       <colors>
-        <c0>	222 145 58 225	</c0>
-        <c1>	245 234 216 221	</c1>
-        <c2>	41 30 29 159	</c2>
+        <c0>	179 125 60 255	</c0>
+        <c1>	197 196 186 255	</c1>
+        <c2>	38 47 47 255	</c2>
         <c3>	255 255 255 0	</c3>
       </colors>
       <tiling>
@@ -3386,5 +3542,181 @@
       </tiling>
       <allow>	F19_Lorraine40t	</allow>
     </Splinter_desert>
+    <Clan_camuflage_04_winter>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
+      <id>	126	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	25 71 111 255	</c0>
+        <c1>	160 160 160 255	</c1>
+        <c2>	17 32 45 255	</c2>
+        <c3>	201 192 133 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <F02_D1>	2 2 0.000000 5.2	</F02_D1>
+        <F01_RenaultFT>	1 1 0.27 0.000000	</F01_RenaultFT>
+        <F03_D2>	1.5 1.5 0.000000 0.000000	</F03_D2>
+        <F04_B1>	1.1 1.1 0.000000 0.000000	</F04_B1>
+        <F05_BDR_G1B>	2.3 2.3 0.000000 0.000000	</F05_BDR_G1B>
+        <F06_ARL_44>	1.5 1.5 0.1 0.19	</F06_ARL_44>
+        <F07_AMX_M4_1945>	4.6 4.6 0.26 0.3	</F07_AMX_M4_1945>
+        <F08_AMX_50_100>	2.2 2 0.000000 0.000000	</F08_AMX_50_100>
+        <F09_AMX_50_120>	2.9 2.9 0.000000 0.000000	</F09_AMX_50_120>
+        <F12_Hotchkiss_H35>	0.7 0.7 0.000000 0.000000	</F12_Hotchkiss_H35>
+        <F13_AMX38>	1.1 1.1 0.000000 0.000000	</F13_AMX38>
+        <F14_AMX40>	2 2 0.66 0.000000	</F14_AMX40>
+        <F15_AMX_12t>	1.8 2 0.000000 0.000000	</F15_AMX_12t>
+        <F16_AMX_13_75>	2.7 2.7 0.000000 0.000000	</F16_AMX_13_75>
+        <F17_AMX_13_90>	2 2 0.000000 0.000000	</F17_AMX_13_90>
+        <F18_Bat_Chatillon25t>	2.2 2.2 0.000000 0.000000	</F18_Bat_Chatillon25t>
+        <F20_RenaultBS>	1.1 1.1 7.4 5.2	</F20_RenaultBS>
+        <F21_Lorraine39_L_AM>	1.5 1.5 0.33 3.6	</F21_Lorraine39_L_AM>
+        <F22_AMX_105AM>	3.4 3.4 0.000000 0.000000	</F22_AMX_105AM>
+        <F23_AMX_13F3AM>	2 2 0.000000 2.6	</F23_AMX_13F3AM>
+        <F24_Lorraine155_50>	2.2 2.2 0.25 0.000000	</F24_Lorraine155_50>
+        <F25_Lorraine155_51>	2 2 0.000000 0.000000	</F25_Lorraine155_51>
+        <F27_FCM_36Pak40>	5.6 5.6 0.16 0.15	</F27_FCM_36Pak40>
+        <F28_105_leFH18B2>	4.8 4.8 0.000000 0.000000	</F28_105_leFH18B2>
+        <F30_RenaultFT_AC>	2.3 2.3 8.4 6.2	</F30_RenaultFT_AC>
+        <F32_Somua_Sau_40>	1.5 1.5 0.2 0.32	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.4 2.4 0.56 0.9	</F33_S_35CA>
+        <F34_ARL_V39>	2 2 0.000000 0.000000	</F34_ARL_V39>
+        <F35_AMX_AC_Mle1946>	5.3 5.3 0.000000 0.000000	</F35_AMX_AC_Mle1946>
+        <F36_AMX_AC_Mle1948>	6.9 6.9 0.000000 0.46	</F36_AMX_AC_Mle1948>
+        <F37_AMX50_Foch>	2.4 2.4 0.6 0.000000	</F37_AMX50_Foch>
+        <F38_Bat_Chatillon155_58>	2.7 1 0.4 0.000000	</F38_Bat_Chatillon155_58>
+        <F52_RenaultUE57>	1 1 0.000000 3.1	</F52_RenaultUE57>
+        <F62_ELC_AMX>	1.9 1.9 0.08 0.000000	</F62_ELC_AMX>
+        <F64_AMX_50Fosh_155>	4.3 4.3 0.000000 0.29	</F64_AMX_50Fosh_155>
+        <F64_AMX_50Fosh_B>	4.3 4.3 0.000000 0.29	</F64_AMX_50Fosh_B>
+        <F66_AMX_Ob_Am105>	1.4 1.4 0.000000 0.1	</F66_AMX_Ob_Am105>
+        <F67_Bat_Chatillon155_55>	2.7 2.7 0.41 0.000000	</F67_Bat_Chatillon155_55>
+        <F68_AMX_Chasseur_de_char_46>	1.2 1.2 0.94 0.59	</F68_AMX_Chasseur_de_char_46>
+        <F69_AMX13_57_100>	2.2 2.2 0.000000 0.46	</F69_AMX13_57_100>
+        <F69_AMX13_57_100_GrandFinal>	2.2 2.2 0.000000 0.46	</F69_AMX13_57_100_GrandFinal>
+        <F08_AMX_50_100_IGR>	2.2 2 0.000000 0.000000	</F08_AMX_50_100_IGR>
+        <F17_AMX_13_90_IGR>	2 2 0.000000 0.000000	</F17_AMX_13_90_IGR>
+        <F18_Bat_Chatillon25t_IGR>	2.2 2.2 0.000000 0.000000	</F18_Bat_Chatillon25t_IGR>
+        <F28_105_leFH18B2_IGR>	4.8 4.8 0.000000 0.000000	</F28_105_leFH18B2_IGR>
+        <F33_S_35CA_IGR>	3.1 3 0.56 0.9	</F33_S_35CA_IGR>
+        <F36_AMX_AC_Mle1948_IGR>	6.9 6.9 0.000000 0.46	</F36_AMX_AC_Mle1948_IGR>
+        <F62_ELC_AMX_IGR>	1.9 1.9 0.08 0.000000	</F62_ELC_AMX_IGR>
+        <F65_FCM_50t>	3.3 3.3 0.31 0.33	</F65_FCM_50t>
+        <F10_AMX_50B>	1.2 1.2 0.000000 0.000000	</F10_AMX_50B>
+        <F50_FCM36_20t>	6.1 6.1 0.000000 0.000000	</F50_FCM36_20t>
+        <F70_SARL42>	5.2 5.2 0.000000 0.000000	</F70_SARL42>
+        <F49_RenaultR35>	4.3 4.3 0.000000 0.000000	</F49_RenaultR35>
+        <F71_AMX_30_prototype>	4.5 4.5 0.4 0.44	</F71_AMX_30_prototype>
+        <F11_Renault_G1R>	3.6 3.6 0.12 0.000000	</F11_Renault_G1R>
+        <F72_AMX_30>	5 5 0.000000 0.32	</F72_AMX_30>
+        <F44_Somua_S35>	5.9 5.9 0.000000 0.000000	</F44_Somua_S35>
+        <F73_M4A1_Revalorise>	1.9 1.9 0.000000 0.000000	</F73_M4A1_Revalorise>
+        <F74_AMX_M4_1949>	2.6 2.6 0.14 0.02	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2 2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.3 4.3 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
+        <F84_Somua_SM>	1.6 1.6 3.2 5.4	</F84_Somua_SM>
+        <F01_RenaultFT_bot>	1 1 0.000000 0.000000	</F01_RenaultFT_bot>
+        <F87_Batignolles-Chatillon_12t>	1.1 1.1 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
+        <F88_AMX_13_105>	2.5 2.5 0.000000 0.000000	</F88_AMX_13_105>
+        <F19_Lorraine40t>	4 4 0.000000 0.000000	</F19_Lorraine40t>
+        <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	3.8 3.8 2.2 6.9	</F97_ELC_EVEN_90>
+      </tiling>
+      <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
+    </Clan_camuflage_04_winter>
+    <Clan_camuflage_04_desert>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
+      <id>	127	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	108 90 36 255	</c0>
+        <c1>	148 137 88 255	</c1>
+        <c2>	44 41 29 255	</c2>
+        <c3>	171 179 180 255	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <F02_D1>	2 2 0.000000 5.2	</F02_D1>
+        <F01_RenaultFT>	1 1 0.27 0.000000	</F01_RenaultFT>
+        <F03_D2>	1.5 1.5 0.000000 0.000000	</F03_D2>
+        <F04_B1>	1.1 1.1 0.000000 0.000000	</F04_B1>
+        <F05_BDR_G1B>	2.3 2.3 0.000000 0.000000	</F05_BDR_G1B>
+        <F06_ARL_44>	1.5 1.5 0.1 0.19	</F06_ARL_44>
+        <F07_AMX_M4_1945>	4.6 4.6 0.26 0.3	</F07_AMX_M4_1945>
+        <F08_AMX_50_100>	2.2 2 0.000000 0.000000	</F08_AMX_50_100>
+        <F09_AMX_50_120>	2.9 2.9 0.000000 0.000000	</F09_AMX_50_120>
+        <F12_Hotchkiss_H35>	0.7 0.7 0.000000 0.000000	</F12_Hotchkiss_H35>
+        <F13_AMX38>	1.1 1.1 0.000000 0.000000	</F13_AMX38>
+        <F14_AMX40>	2 2 0.66 0.000000	</F14_AMX40>
+        <F15_AMX_12t>	1.8 2 0.000000 0.000000	</F15_AMX_12t>
+        <F16_AMX_13_75>	2.7 2.7 0.000000 0.000000	</F16_AMX_13_75>
+        <F17_AMX_13_90>	2 2 0.000000 0.000000	</F17_AMX_13_90>
+        <F18_Bat_Chatillon25t>	2.2 2.2 0.000000 0.000000	</F18_Bat_Chatillon25t>
+        <F20_RenaultBS>	1.1 1.1 7.4 5.2	</F20_RenaultBS>
+        <F21_Lorraine39_L_AM>	1.5 1.5 0.33 3.6	</F21_Lorraine39_L_AM>
+        <F22_AMX_105AM>	3.4 3.4 0.000000 0.000000	</F22_AMX_105AM>
+        <F23_AMX_13F3AM>	2 2 0.000000 2.6	</F23_AMX_13F3AM>
+        <F24_Lorraine155_50>	2.2 2.2 0.25 0.000000	</F24_Lorraine155_50>
+        <F25_Lorraine155_51>	2 2 0.000000 0.000000	</F25_Lorraine155_51>
+        <F27_FCM_36Pak40>	5.6 5.6 0.16 0.15	</F27_FCM_36Pak40>
+        <F28_105_leFH18B2>	4.8 4.8 0.000000 0.000000	</F28_105_leFH18B2>
+        <F30_RenaultFT_AC>	2.3 2.3 8.4 6.2	</F30_RenaultFT_AC>
+        <F32_Somua_Sau_40>	1.5 1.5 0.2 0.32	</F32_Somua_Sau_40>
+        <F33_S_35CA>	2.4 2.4 0.56 0.9	</F33_S_35CA>
+        <F34_ARL_V39>	2 2 0.000000 0.000000	</F34_ARL_V39>
+        <F35_AMX_AC_Mle1946>	5.3 5.3 0.000000 0.000000	</F35_AMX_AC_Mle1946>
+        <F36_AMX_AC_Mle1948>	6.9 6.9 0.000000 0.46	</F36_AMX_AC_Mle1948>
+        <F37_AMX50_Foch>	2.4 2.4 0.6 0.000000	</F37_AMX50_Foch>
+        <F38_Bat_Chatillon155_58>	2.7 1 0.4 0.000000	</F38_Bat_Chatillon155_58>
+        <F52_RenaultUE57>	1 1 0.000000 3.1	</F52_RenaultUE57>
+        <F62_ELC_AMX>	1.9 1.9 0.08 0.000000	</F62_ELC_AMX>
+        <F64_AMX_50Fosh_155>	4.3 4.3 0.000000 0.29	</F64_AMX_50Fosh_155>
+        <F64_AMX_50Fosh_B>	4.3 4.3 0.000000 0.29	</F64_AMX_50Fosh_B>
+        <F66_AMX_Ob_Am105>	1.4 1.4 0.000000 0.1	</F66_AMX_Ob_Am105>
+        <F67_Bat_Chatillon155_55>	2.7 2.7 0.41 0.000000	</F67_Bat_Chatillon155_55>
+        <F68_AMX_Chasseur_de_char_46>	1.2 1.2 0.94 0.59	</F68_AMX_Chasseur_de_char_46>
+        <F69_AMX13_57_100>	2.2 2.2 0.000000 0.46	</F69_AMX13_57_100>
+        <F69_AMX13_57_100_GrandFinal>	2.2 2.2 0.000000 0.46	</F69_AMX13_57_100_GrandFinal>
+        <F08_AMX_50_100_IGR>	2.2 2 0.000000 0.000000	</F08_AMX_50_100_IGR>
+        <F17_AMX_13_90_IGR>	2 2 0.000000 0.000000	</F17_AMX_13_90_IGR>
+        <F18_Bat_Chatillon25t_IGR>	2.2 2.2 0.000000 0.000000	</F18_Bat_Chatillon25t_IGR>
+        <F28_105_leFH18B2_IGR>	4.8 4.8 0.000000 0.000000	</F28_105_leFH18B2_IGR>
+        <F33_S_35CA_IGR>	3.1 3 0.56 0.9	</F33_S_35CA_IGR>
+        <F36_AMX_AC_Mle1948_IGR>	6.9 6.9 0.000000 0.46	</F36_AMX_AC_Mle1948_IGR>
+        <F62_ELC_AMX_IGR>	1.9 1.9 0.08 0.000000	</F62_ELC_AMX_IGR>
+        <F65_FCM_50t>	3.3 3.3 0.31 0.33	</F65_FCM_50t>
+        <F10_AMX_50B>	1.2 1.2 0.000000 0.000000	</F10_AMX_50B>
+        <F50_FCM36_20t>	6.1 6.1 0.000000 0.000000	</F50_FCM36_20t>
+        <F70_SARL42>	5.2 5.2 0.000000 0.000000	</F70_SARL42>
+        <F49_RenaultR35>	4.3 4.3 0.000000 0.000000	</F49_RenaultR35>
+        <F71_AMX_30_prototype>	4.5 4.5 0.4 0.44	</F71_AMX_30_prototype>
+        <F11_Renault_G1R>	3.6 3.6 0.12 0.000000	</F11_Renault_G1R>
+        <F72_AMX_30>	5 5 0.000000 0.32	</F72_AMX_30>
+        <F44_Somua_S35>	5.9 5.9 0.000000 0.000000	</F44_Somua_S35>
+        <F73_M4A1_Revalorise>	1.9 1.9 0.000000 0.000000	</F73_M4A1_Revalorise>
+        <F74_AMX_M4_1949>	2.6 2.6 0.14 0.02	</F74_AMX_M4_1949>
+        <F83_AMX_M4_Mle1949_Bis>	2 2 0.000000 0.000000	</F83_AMX_M4_Mle1949_Bis>
+        <F82_AMX_M4_Mle1949_Ter>	4.3 4.3 0.000000 0.000000	</F82_AMX_M4_Mle1949_Ter>
+        <F84_Somua_SM>	1.6 1.6 3.2 5.4	</F84_Somua_SM>
+        <F01_RenaultFT_bot>	1 1 0.000000 0.000000	</F01_RenaultFT_bot>
+        <F87_Batignolles-Chatillon_12t>	1.1 1.1 0.000000 0.000000	</F87_Batignolles-Chatillon_12t>
+        <F88_AMX_13_105>	2.5 2.5 0.000000 0.000000	</F88_AMX_13_105>
+        <F19_Lorraine40t>	4 4 0.000000 0.000000	</F19_Lorraine40t>
+        <F89_Canon_dassaut_de_105>	0.9 0.9 0.000000 0.000000	</F89_Canon_dassaut_de_105>
+        <F81_Char_de_65t>	1.9 1.9 0.000000 0.000000	</F81_Char_de_65t>
+        <F97_ELC_EVEN_90>	3.8 3.8 2.2 6.9	</F97_ELC_EVEN_90>
+      </tiling>
+      <deny>	F69_AMX13_57_100_GrandFinal F74_AMX_M4_1949_Liberte	</deny>
+    </Clan_camuflage_04_desert>
   </camouflages>
 </customization.xml>

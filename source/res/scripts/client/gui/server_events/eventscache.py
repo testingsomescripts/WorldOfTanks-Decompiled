@@ -12,7 +12,7 @@ from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.personal_missions_controller import PersonalMissionsController
@@ -75,6 +75,7 @@ class EventsCache(IEventsCache):
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
+        self.__commonQuests = None
         return
 
     def init(self):
@@ -141,29 +142,35 @@ class EventsCache(IEventsCache):
     @process
     def update(self, diff=None, callback=None):
         yield self.randomQuestsProgress.request()
-        yield self.__questsProgress.request()
-        isNeedToInvalidate = True
-        isNeedToClearItemsCaches = False
-
-        def _cbWrapper(*args):
-            self.__personalMissions.update(self, diff)
-            callback(*args)
-
-        if diff is not None:
-            isQPUpdated = 'quests' in diff or 'tokens' in diff
-            isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
-            isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
-            hasVehicleUnlocks = False
-            for intCD in diff.get('stats', {}).get('unlocks', set()):
-                if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
-                    hasVehicleUnlocks = True
-                    break
-
-            isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
-        if isNeedToInvalidate:
-            self.__invalidateData(_cbWrapper)
+        if not self.randomQuestsProgress.isSynced():
+            callback(False)
             return
         else:
+            yield self.__questsProgress.request()
+            if not self.__questsProgress.isSynced():
+                callback(False)
+                return
+            isNeedToInvalidate = True
+            isNeedToClearItemsCaches = False
+
+            def _cbWrapper(*args):
+                self.__personalMissions.update(self, diff)
+                callback(*args)
+
+            if diff is not None:
+                isQPUpdated = 'quests' in diff or 'tokens' in diff
+                isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
+                isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
+                hasVehicleUnlocks = False
+                for intCD in diff.get('stats', {}).get('unlocks', set()):
+                    if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
+                        hasVehicleUnlocks = True
+                        break
+
+                isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
+            if isNeedToInvalidate:
+                self.__invalidateData(_cbWrapper)
+                return
             if isNeedToClearItemsCaches:
                 self.__clearQuestsItemsCache()
             _cbWrapper(True)
@@ -361,12 +368,6 @@ class EventsCache(IEventsCache):
         resultMult = self.__actionsCache[ACTION_SECTION_TYPE.ECONOMICS][ACTION_MODIFIER_TYPE.DISCOUNT].get('%sMultiplier' % name, [])
         return tuple(result + resultMult)
 
-    def getCamouflageAction(self, vehicleIntCD):
-        return tuple(self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(vehicleIntCD, tuple()))
-
-    def getEmblemsAction(self, group):
-        return tuple(self.__actionsCache[ACTION_SECTION_TYPE.CUSTOMIZATION][ACTION_MODIFIER_TYPE.DISCOUNT].get(group, tuple()))
-
     def isBalancedSquadEnabled(self):
         return bool(self.__getUnitRestrictions().get('enabled', False))
 
@@ -416,7 +417,8 @@ class EventsCache(IEventsCache):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
-        for qID, q in self.__getCommonQuestsIterator():
+        commonQuests = self.__getCommonQuests()
+        for qID, q in commonQuests.iteritems():
             if qID in self.__quests2actions:
                 q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
@@ -452,7 +454,8 @@ class EventsCache(IEventsCache):
     def _getQuestsGroups(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         result = {}
-        for qID, q in self.__getCommonQuestsIterator():
+        commonQuests = self.__getCommonQuests()
+        for qID, q in commonQuests.iteritems():
             if q.getType() != EVENT_TYPE.GROUP:
                 continue
             if not filterFunc(q):
@@ -549,6 +552,7 @@ class EventsCache(IEventsCache):
         self.__clearInvalidateCallback()
         self.__waitForSync = True
         self.onSyncStarted()
+        self.__updateCommonQuests()
         for action in self.getActions().itervalues():
             for modifier in action.getModifiers():
                 section = modifier.getSection()
@@ -705,6 +709,18 @@ class EventsCache(IEventsCache):
         motiveQuests = motivation_quests.g_cache.getAllQuests() or []
         for questDescr in motiveQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_motiveQuestMaker))
+
+    def __updateCommonQuests(self):
+        self.__commonQuests = {}
+        for qID, qData in self.__getCommonQuestsIterator():
+            self.__commonQuests[qID] = qData
+
+        return self.__commonQuests
+
+    def __getCommonQuests(self):
+        if self.__commonQuests is None:
+            self.__updateCommonQuests()
+        return self.__commonQuests
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

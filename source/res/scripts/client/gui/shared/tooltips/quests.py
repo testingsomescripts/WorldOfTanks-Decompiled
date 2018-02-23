@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -22,20 +22,29 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.game_control import IQuestsController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.new_year import INewYearController
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2
 
 class _StringTokenBonusFormatter(TokenBonusFormatter):
+    _newYearController = dependency.descriptor(INewYearController)
 
     def format(self, bonus):
+        outcome = []
+        for tokenID, token in bonus.getTokens().iteritems():
+            if tokenID in self._newYearController.boxStorage.getDescriptors():
+                (outcome.append(_ms('#ny:hangar/bonusFlagInfo/tooltip/text', count=token.count)),)
+
         result = super(_StringTokenBonusFormatter, self).format(bonus)
-        return [ _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=b.userName) for b in result ]
+        outcome.extend([ _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=b.userName) for b in result ])
+        return outcome
 
 
 class QuestsPreviewTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
+    _newYearController = dependency.descriptor(INewYearController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -58,12 +67,10 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     bonusFormat = bonus.format()
                     if bonusFormat:
                         if isinstance(bonus, CustomizationsBonus):
-                            formatStr = '#vehicle_customization:typeSwitchScreen/typeName/{0}'
                             for item in bonus.getCustomizations():
                                 itemType = item.get('custType')
-                                cType = CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(itemType)
-                                bonusForamt = _ms(formatStr.format(cType))
-                                bonusNames.append(bonusForamt)
+                                bonusFmt = _ms(ITEM_TYPES.customization(itemType))
+                                bonusNames.append(bonusFmt)
 
                         else:
                             bonusNames.extend(bonusFormat.split(', '))
@@ -92,7 +99,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         return items
 
     def _getHeader(self, count, vehicleName, description):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_HEADER_QUESTS_HEADER, count=count)), img=RES_ICONS.MAPS_ICONS_QUESTS_QUESTTOOLTIPHEADER if not self._newYearController.isEnabled else RES_ICONS.MAPS_ICONS_QUESTS_NYAWARDBACK, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=text_styles.main(_ms(description, vehicle=vehicleName)))
 
     def _getBottom(self, value):
         if value > 0:

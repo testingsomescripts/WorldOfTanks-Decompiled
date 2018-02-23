@@ -46,11 +46,6 @@
     </musicStopPredelay>
   </wwmusicDroneSetup>
   <gameplayTypes>
-    <leviathan>
-      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
-      <battleEndWarningDuration>	5	</battleEndWarningDuration>
-      <battleEndingSoonTime>	60	</battleEndingSoonTime>
-    </leviathan>
     <ctf>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
@@ -109,5 +104,4 @@
       <crystalRewardFactor>	1.	</crystalRewardFactor>
     </domination30x30>
   </gameplayTypes>
-  <preloadSoundBanks>	fort_area.bnk ; hangar_v2.bnk ; Personal_missions.bnk	</preloadSoundBanks>
 </_default_.xml>

@@ -90,9 +90,6 @@ class ServerEventAbstract(object):
     def getType(self):
         return self._data.get('type', 0)
 
-    def getBattleTypeName(self):
-        pass
-
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 
@@ -423,7 +420,7 @@ class Quest(ServerEventAbstract):
         return True
 
     def _checkConditions(self):
-        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.getSuitableVehicles()
+        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles()
 
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
@@ -485,9 +482,6 @@ class RankedQuest(Quest):
 
     def isBooby(self):
         return self.__rankedData['subtype'] == 'booby'
-
-    def getBattleTypeName(self):
-        pass
 
     def _bonusDecorator(self, bonus):
         if bonus.getName() == 'oneof':
@@ -559,9 +553,9 @@ class Action(ServerEventAbstract):
                 continue
             modifiers = m.splitModifiers()
             for modifier in modifiers:
-                if mName in result:
-                    result[mName].extend([ActionData(modifier, priority, uiDecoration)])
-                result[mName] = [ActionData(modifier, priority, uiDecoration)]
+                if modifier.getName() in result:
+                    result[modifier.getName()].extend([ActionData(modifier, priority, uiDecoration)])
+                result[modifier.getName()] = [ActionData(modifier, priority, uiDecoration)]
 
         return result
 
@@ -572,9 +566,9 @@ class Action(ServerEventAbstract):
             m = getModifierObj(mName, stepData.get('params'))
             if m is None:
                 continue
-            if mName in result:
-                result[mName].update(m)
-            result[mName] = m
+            if m.getName() in result:
+                result[m.getName()].update(m)
+            result[m.getName()] = m
 
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 

@@ -13,8 +13,11 @@ class HangarHeaderMeta(BaseDAAPIComponent):
     def showBeginnerQuests(self):
         self._printOverrideError('showBeginnerQuests')
 
-    def showEventQuests(self):
+    def showEventQuests(self, eventQuestsID):
         self._printOverrideError('showEventQuests')
+
+    def showNYCustomization(self):
+        self._printOverrideError('showNYCustomization')
 
     def as_setDataS(self, data):
         """

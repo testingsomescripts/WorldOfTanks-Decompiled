@@ -76,7 +76,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.meta.MiniClientComponentMeta import MiniClientComponentMeta
     from gui.Scaleform.daapi.view.lobby.BadgesPage import BadgesPage
     from gui.Scaleform.daapi.view.lobby.tradein.TradeInPopup import TradeInPopup
-    from gui.Scaleform.daapi.view.lobby.leviathanPreview.LeviathanPreview import LeviathanPreview
     from gui.Scaleform.daapi.view.bootcamp.BCLobbyView import BCLobbyView
     from gui.Scaleform.daapi.view.bootcamp.BCVehicleBuyWindow import BCVehicleBuyWindow
     from gui.Scaleform.daapi.view.bootcamp.BCPersonalCase import BCPersonalCase
@@ -88,7 +87,6 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, BootcampComponentOverride(VehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE, VehicleCompareView, 'vehicleCompareView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, VehicleCompareConfiguratorMain, 'vehicleCompareConfiguratorMain.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.LEVIATHAN_PREVIEW, LeviathanPreview, 'leviathanPreview.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LEVIATHAN_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.CONFIRM_MODULE_DIALOG, ConfirmModuleDialog, 'confirmModuleWindow.swf', ViewTypes.TOP_WINDOW, 'confirmModuleDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.USE_FREEW_AWARD_SHEET_DIALOG, UseAwardSheetWindow, 'useAwardSheetWindow.swf', ViewTypes.TOP_WINDOW, 'useAwardSheetWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -103,6 +101,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, SystemMessageDialog, 'systemMessageDialog.swf', ViewTypes.WINDOW, 'systemMessageDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, FreeXPInfoWindow, 'freeXPInfoWindow.swf', ViewTypes.TOP_WINDOW, 'freeXPInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.RECRUIT_WINDOW, RecruitWindow, 'recruitWindow.swf', ViewTypes.WINDOW, 'recruitWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.ADVENT_CALENDAR, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, canDrag=True, isModal=False),
      GroupedViewSettings(FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW, FalloutBattleSelectorWindow, FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW_SWF, ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', ViewTypes.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.BATTLE_RESULTS, BootcampComponentOverride(BattleResultsWindow, BCBattleResult), BootcampComponentOverride('battleResults.swf', 'BCBattleResult.swf'), BootcampComponentOverride(ViewTypes.WINDOW, ViewTypes.TOP_WINDOW), BootcampComponentOverride('BattleResultsWindow', ''), None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.TOP_WINDOW_SCOPE)),
@@ -113,7 +112,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.GOLD_FISH_WINDOW, GoldFishWindow, 'goldFishWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.LOBBY_MENU, LobbyMenu, 'lobbyMenu.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True, canClose=False, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.MODULE_INFO_WINDOW, ModuleInfoWindow, 'moduleInfo.swf', ViewTypes.WINDOW, 'moduleInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     ConditionalViewSettings(VIEW_ALIAS.PERSONAL_CASE, BootcampComponentOverride(PersonalCase, BCPersonalCase), 'personalCase.swf', ViewTypes.WINDOW, 'personalCaseWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ConditionalViewSettings(VIEW_ALIAS.PERSONAL_CASE, BootcampComponentOverride(PersonalCase, BCPersonalCase), 'personalCase.swf', ViewTypes.WINDOW, 'personalCaseWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isResizable=False),
      GroupedViewSettings(VIEW_ALIAS.PREMIUM_WINDOW, PremiumWindow, 'premiumWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.QUESTS_RECRUIT_WINDOW, QuestsRecruitWindow, 'questRecruitWindow.swf', ViewTypes.WINDOW, 'questRecruitWindow', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -149,6 +148,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.ADVENT_CALENDAR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
@@ -161,7 +161,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.LEVIATHAN_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_MENU, self.loadViewByCtxEvent),

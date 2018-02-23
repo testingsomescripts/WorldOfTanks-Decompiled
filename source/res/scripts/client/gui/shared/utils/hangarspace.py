@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
 import BigWorld
+import Math
 import Event
 import Keys
 import ResMgr
@@ -13,6 +14,8 @@ from helpers import dependency
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.gui.game_control import IGameSessionController, IIGRController
 from skeletons.helpers.statistics import IStatisticsCollector
+from skeletons.new_year import ICustomizableObjectsManager
+from items.new_year_types import NY_STATE
 
 class HangarVideoCameraController:
     import AvatarInputHandler
@@ -80,6 +83,7 @@ class _HangarSpace(object):
     gameSession = dependency.descriptor(IGameSessionController)
     igrCtrl = dependency.descriptor(IIGRController)
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    _customizableObjMgr = dependency.descriptor(ICustomizableObjectsManager)
 
     def __init__(self):
         self.__space = ClientHangarSpace()
@@ -94,10 +98,12 @@ class _HangarSpace(object):
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
         self.onSpaceCreate = Event.Event()
+        self.onSpaceDestroy = Event.Event()
+        self.onSpaceDestroy = Event.Event()
+        self.onSpaceRefreshed = Event.Event()
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
-        self.onRequestOpenWindowsUpdate = Event.Event()
         return
 
     @property
@@ -112,8 +118,16 @@ class _HangarSpace(object):
     def spaceInited(self):
         return self.__spaceInited
 
+    @staticmethod
+    def __isNY():
+        player = BigWorld.player()
+        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS
+
     def spaceLoading(self):
         return self.__space.spaceLoading()
+
+    def getSlotPositions(self):
+        return self.__space.getSlotPositions()
 
     def init(self, isPremium):
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
@@ -124,7 +138,7 @@ class _HangarSpace(object):
             Waiting.show('loadHangarSpace')
             self.__inited = True
             self.__isSpacePremium = isPremium
-            self.__igrSpaceType = self.igrCtrl.getRoomType()
+            self.__igrSpaceType = self.igrCtrl.getRoomType() if not self.__isNY() else constants.IGR_TYPE.NONE
             self.__space.create(isPremium, self.__spaceDone)
             if self.__lastUpdatedVehicle is not None:
                 self.updateVehicle(self.__lastUpdatedVehicle)
@@ -132,7 +146,7 @@ class _HangarSpace(object):
         return
 
     def refreshSpace(self, isPremium, forceRefresh=False):
-        igrType = self.igrCtrl.getRoomType()
+        igrType = self.igrCtrl.getRoomType() if not self.__isNY() else constants.IGR_TYPE.NONE
         if self.__isSpacePremium == isPremium and self.__igrSpaceType == igrType and not forceRefresh:
             return
         elif not self.__spaceInited and self.__space.spaceLoading():
@@ -144,16 +158,22 @@ class _HangarSpace(object):
             return
         else:
             LOG_DEBUG('_HangarSpace::refreshSpace(isPremium={0!r:s})'.format(isPremium))
+            if self._customizableObjMgr.state:
+                from gui.prb_control.events_dispatcher import g_eventDispatcher
+                g_eventDispatcher.loadHangar()
             self.destroy()
             self.init(isPremium)
             self.__isSpacePremium = isPremium
             self.__igrSpaceType = igrType
+            self.onSpaceRefreshed()
             return
 
     def destroy(self):
+        self.onSpaceDestroy()
         self.__videoCameraController.destroy()
         if self.__spaceInited:
             LOG_DEBUG('_HangarSpace::destroy')
+            self.onSpaceDestroy()
             self.__inited = False
             self.__spaceInited = False
             self.__space.destroy()
@@ -173,7 +193,7 @@ class _HangarSpace(object):
         if self.__inited:
             Waiting.show('loadHangarSpaceVehicle', True)
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
-            self.__space.recreateVehicle(vehicle.getCustomizedDescriptor(), vehicle.modelState, self.__changeDone)
+            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
 
     def updatePreviewVehicle(self, vehicle):
@@ -181,6 +201,20 @@ class _HangarSpace(object):
             Waiting.show('loadHangarSpaceVehicle', True)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
+
+    def getVehicleEntity(self):
+        """ Get BigWorld entity of the current hangar vehicle.
+        """
+        return self.__space.getVehicleEntity() if self.__inited else None
+
+    def updateVehicleOutfit(self, outfit):
+        """ Updates outfit of the current vehicle.
+        """
+        if self.__inited:
+            self.__space.updateVehicleCustomization(outfit)
+
+    def getCentralPointForArea(self, areaId):
+        return self.__space.getCentralPointForArea(areaId) if self.__inited else Math.Vector3(0.0)
 
     def removeVehicle(self):
         if self.__inited:
@@ -190,6 +224,10 @@ class _HangarSpace(object):
             Waiting.hide('loadHangarSpaceVehicle')
             self.__lastUpdatedVehicle = None
         return
+
+    def setVehicleSelectable(self, flag):
+        """See comment in HangarVehicle."""
+        self.__space.setVehicleSelectable(flag)
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
         self.refreshSpace(isPremium)

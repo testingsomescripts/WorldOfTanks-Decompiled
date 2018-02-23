@@ -212,7 +212,8 @@ class AS3_AppFactory(IAppFactory):
         libs = ['guiControlsLobbyBattleDynamic.swf',
          'guiControlsLobbyDynamic.swf',
          'popovers.swf',
-         'IconLibrary.swf']
+         'IconLibrary.swf',
+         'nyCmptsDynamic.swf']
         if self.bootcampCtrl.isInBootcamp():
             libs.extend(['BCGuiControlsLobbyBattle.swf', 'BCGuiControlsLobby.swf'])
         app.as_loadLibrariesS(libs)
@@ -271,10 +272,6 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(VIEW_ALIAS.RANKED_BATTLE_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.BOOTCAMP:
             event = events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES:
-            event = events.LoadViewEvent(VIEW_ALIAS.HALLOWEEN_PVP_BATTLE_PAGE)
-        elif arenaGuiType == ARENA_GUI_TYPE.EVENT_BATTLES_2:
-            event = events.LoadViewEvent(VIEW_ALIAS.BOSS_MODE_BATTLE_PAGE)
         else:
             event = events.LoadViewEvent(VIEW_ALIAS.CLASSIC_BATTLE_PAGE)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.BATTLE)

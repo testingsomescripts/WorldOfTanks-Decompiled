@@ -174,6 +174,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_NOTSETREADYSTATUS = '#system_messages:squad/notSetReadyStatus'
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
+    SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
     MEMBERROSTERCHANGEDSECOND = '#system_messages:memberRosterChangedSecond'
@@ -194,6 +195,9 @@ class SYSTEM_MESSAGES(object):
     GRAFICSOPTIONSFAIL = '#system_messages:graficsOptionsFail'
     GRAFICSPRESETFAIL = '#system_messages:graficsPresetFail'
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
+    CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
+    CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
+    CUSTOMIZATION_SERVER_ERROR = '#system_messages:customization/server_error'
     CUSTOMIZATION_CREDITS_NOT_ENOUGH = '#system_messages:customization/credits_not_enough'
     CUSTOMIZATION_GOLD_NOT_ENOUGH = '#system_messages:customization/gold_not_enough'
     CUSTOMIZATION_CREDITS_AND_GOLD_NOT_ENOUGH = '#system_messages:customization/credits_and_gold_not_enough'
@@ -201,52 +205,22 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_VEHICLE_DAMAGED = '#system_messages:customization/vehicle_damaged'
     CUSTOMIZATION_VEHICLE_DESTROYED = '#system_messages:customization/vehicle_destroyed'
     CUSTOMIZATION_VEHICLE_EXPLODED = '#system_messages:customization/vehicle_exploded'
-    CUSTOMIZATION_CAMOUFLAGE_NOT_SELECTED = '#system_messages:customization/camouflage_not_selected'
-    CUSTOMIZATION_CAMOUFLAGE_DAYS_NOT_SELECTED = '#system_messages:customization/camouflage_days_not_selected'
-    CUSTOMIZATION_CAMOUFLAGE_COST_NOT_FOUND = '#system_messages:customization/camouflage_cost_not_found'
-    CUSTOMIZATION_CAMOUFLAGE_NOT_FOUND_TO_DROP = '#system_messages:customization/camouflage_not_found_to_drop'
-    CUSTOMIZATION_CAMOUFLAGE_GET_COST_SERVER_ERROR = '#system_messages:customization/camouflage_get_cost_server_error'
-    CUSTOMIZATION_CAMOUFLAGE_CHANGE_SERVER_ERROR = '#system_messages:customization/camouflage_change_server_error'
-    CUSTOMIZATION_CAMOUFLAGE_DROP_SERVER_ERROR = '#system_messages:customization/camouflage_drop_server_error'
-    CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_CREDITS = '#system_messages:customization/camouflage_change_success/credits'
-    CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_GOLD = '#system_messages:customization/camouflage_change_success/gold'
-    CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_FREE = '#system_messages:customization/camouflage_change_success/free'
-    CUSTOMIZATION_CAMOUFLAGE_DROP_SUCCESS = '#system_messages:customization/camouflage_drop_success'
-    CUSTOMIZATION_CAMOUFLAGE_STORED_SUCCESS = '#system_messages:customization/camouflage_stored_success'
-    CUSTOMIZATION_EMBLEM_NOT_SELECTED = '#system_messages:customization/emblem_not_selected'
-    CUSTOMIZATION_EMBLEM_DAYS_NOT_SELECTED = '#system_messages:customization/emblem_days_not_selected'
-    CUSTOMIZATION_EMBLEM_COST_NOT_FOUND = '#system_messages:customization/emblem_cost_not_found'
-    CUSTOMIZATION_EMBLEM_NOT_FOUND_TO_DROP = '#system_messages:customization/emblem_not_found_to_drop'
-    CUSTOMIZATION_EMBLEM_GET_COST_SERVER_ERROR = '#system_messages:customization/emblem_get_cost_server_error'
-    CUSTOMIZATION_EMBLEM_CHANGE_SERVER_ERROR = '#system_messages:customization/emblem_change_server_error'
-    CUSTOMIZATION_EMBLEM_DROP_SERVER_ERROR = '#system_messages:customization/emblem_drop_server_error'
-    CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_CREDITS = '#system_messages:customization/emblem_change_success/credits'
-    CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_GOLD = '#system_messages:customization/emblem_change_success/gold'
-    CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_FREE = '#system_messages:customization/emblem_change_success/free'
-    CUSTOMIZATION_EMBLEM_DROP_SUCCESS = '#system_messages:customization/emblem_drop_success'
-    CUSTOMIZATION_EMBLEM_STORED_SUCCESS = '#system_messages:customization/emblem_stored_success'
-    CUSTOMIZATION_INSCRIPTION_NOT_SELECTED = '#system_messages:customization/inscription_not_selected'
-    CUSTOMIZATION_INSCRIPTION_DAYS_NOT_SELECTED = '#system_messages:customization/inscription_days_not_selected'
-    CUSTOMIZATION_INSCRIPTION_COST_NOT_FOUND = '#system_messages:customization/inscription_cost_not_found'
-    CUSTOMIZATION_INSCRIPTION_NOT_FOUND_TO_DROP = '#system_messages:customization/inscription_not_found_to_drop'
-    CUSTOMIZATION_INSCRIPTION_GET_COST_SERVER_ERROR = '#system_messages:customization/inscription_get_cost_server_error'
-    CUSTOMIZATION_INSCRIPTION_CHANGE_SERVER_ERROR = '#system_messages:customization/inscription_change_server_error'
-    CUSTOMIZATION_INSCRIPTION_DROP_SERVER_ERROR = '#system_messages:customization/inscription_drop_server_error'
-    CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_CREDITS = '#system_messages:customization/inscription_change_success/credits'
-    CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_GOLD = '#system_messages:customization/inscription_change_success/gold'
-    CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_FREE = '#system_messages:customization/inscription_change_success/free'
-    CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS = '#system_messages:customization/inscription_drop_success'
-    CUSTOMIZATION_INSCRIPTION_STORED_SUCCESS = '#system_messages:customization/inscription_stored_success'
     CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR = '#system_messages:customization/igr_type_changed_error'
-    CUSTOMIZATION_ADDED_CAMOUFLAGES = '#system_messages:customization/added/camouflages'
-    CUSTOMIZATION_ADDED_EMBLEMS = '#system_messages:customization/added/emblems'
-    CUSTOMIZATION_ADDED_INSCRIPTIONS = '#system_messages:customization/added/inscriptions'
-    CUSTOMIZATION_REMOVED_CAMOUFLAGES = '#system_messages:customization/removed/camouflages'
-    CUSTOMIZATION_REMOVED_EMBLEMS = '#system_messages:customization/removed/emblems'
-    CUSTOMIZATION_REMOVED_INSCRIPTIONS = '#system_messages:customization/removed/inscriptions'
-    CUSTOMIZATION_ADDED_CAMOUFLAGESVALUE = '#system_messages:customization/added/camouflagesValue'
-    CUSTOMIZATION_ADDED_EMBLEMSVALUE = '#system_messages:customization/added/emblemsValue'
-    CUSTOMIZATION_ADDED_INSCRIPTIONSVALUE = '#system_messages:customization/added/inscriptionsValue'
+    CUSTOMIZATION_ADDED_PAINT = '#system_messages:customization/added/paint'
+    CUSTOMIZATION_ADDED_CAMOUFLAGE = '#system_messages:customization/added/camouflage'
+    CUSTOMIZATION_ADDED_MODIFICATION = '#system_messages:customization/added/modification'
+    CUSTOMIZATION_ADDED_STYLE = '#system_messages:customization/added/style'
+    CUSTOMIZATION_ADDED_DECAL = '#system_messages:customization/added/decal'
+    CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
+    CUSTOMIZATION_REMOVED_CAMOUFLAGE = '#system_messages:customization/removed/camouflage'
+    CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
+    CUSTOMIZATION_REMOVED_STYLE = '#system_messages:customization/removed/style'
+    CUSTOMIZATION_REMOVED_DECAL = '#system_messages:customization/removed/decal'
+    CUSTOMIZATION_ADDED_PAINTVALUE = '#system_messages:customization/added/paintValue'
+    CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE = '#system_messages:customization/added/camouflageValue'
+    CUSTOMIZATION_ADDED_MODIFICATIONVALUE = '#system_messages:customization/added/modificationValue'
+    CUSTOMIZATION_ADDED_STYLEVALUE = '#system_messages:customization/added/styleValue'
+    CUSTOMIZATION_ADDED_DECALVALUE = '#system_messages:customization/added/decalValue'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
@@ -1017,6 +991,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_PRIMETIME = '#system_messages:ranked/notification/primeTime'
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
+    TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1285,6 +1260,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_NOTSETREADYSTATUS,
      SQUAD_KICKEDFROMQUEUE,
      SQUAD_NOTVALIDDELETED,
+     SQUAD_NOTVALIDMAXSPGDELETED,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,
      MEMBERROSTERCHANGEDSECOND,
@@ -1305,6 +1281,9 @@ class SYSTEM_MESSAGES(object):
      GRAFICSOPTIONSFAIL,
      GRAFICSPRESETFAIL,
      DENUNCIATION_SUCCESS,
+     CUSTOMIZATION_UNAVAILABLE,
+     CUSTOMIZATION_PROHIBITED,
+     CUSTOMIZATION_SERVER_ERROR,
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
      CUSTOMIZATION_GOLD_NOT_ENOUGH,
      CUSTOMIZATION_CREDITS_AND_GOLD_NOT_ENOUGH,
@@ -1312,52 +1291,22 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_VEHICLE_DAMAGED,
      CUSTOMIZATION_VEHICLE_DESTROYED,
      CUSTOMIZATION_VEHICLE_EXPLODED,
-     CUSTOMIZATION_CAMOUFLAGE_NOT_SELECTED,
-     CUSTOMIZATION_CAMOUFLAGE_DAYS_NOT_SELECTED,
-     CUSTOMIZATION_CAMOUFLAGE_COST_NOT_FOUND,
-     CUSTOMIZATION_CAMOUFLAGE_NOT_FOUND_TO_DROP,
-     CUSTOMIZATION_CAMOUFLAGE_GET_COST_SERVER_ERROR,
-     CUSTOMIZATION_CAMOUFLAGE_CHANGE_SERVER_ERROR,
-     CUSTOMIZATION_CAMOUFLAGE_DROP_SERVER_ERROR,
-     CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_CREDITS,
-     CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_GOLD,
-     CUSTOMIZATION_CAMOUFLAGE_CHANGE_SUCCESS_FREE,
-     CUSTOMIZATION_CAMOUFLAGE_DROP_SUCCESS,
-     CUSTOMIZATION_CAMOUFLAGE_STORED_SUCCESS,
-     CUSTOMIZATION_EMBLEM_NOT_SELECTED,
-     CUSTOMIZATION_EMBLEM_DAYS_NOT_SELECTED,
-     CUSTOMIZATION_EMBLEM_COST_NOT_FOUND,
-     CUSTOMIZATION_EMBLEM_NOT_FOUND_TO_DROP,
-     CUSTOMIZATION_EMBLEM_GET_COST_SERVER_ERROR,
-     CUSTOMIZATION_EMBLEM_CHANGE_SERVER_ERROR,
-     CUSTOMIZATION_EMBLEM_DROP_SERVER_ERROR,
-     CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_CREDITS,
-     CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_GOLD,
-     CUSTOMIZATION_EMBLEM_CHANGE_SUCCESS_FREE,
-     CUSTOMIZATION_EMBLEM_DROP_SUCCESS,
-     CUSTOMIZATION_EMBLEM_STORED_SUCCESS,
-     CUSTOMIZATION_INSCRIPTION_NOT_SELECTED,
-     CUSTOMIZATION_INSCRIPTION_DAYS_NOT_SELECTED,
-     CUSTOMIZATION_INSCRIPTION_COST_NOT_FOUND,
-     CUSTOMIZATION_INSCRIPTION_NOT_FOUND_TO_DROP,
-     CUSTOMIZATION_INSCRIPTION_GET_COST_SERVER_ERROR,
-     CUSTOMIZATION_INSCRIPTION_CHANGE_SERVER_ERROR,
-     CUSTOMIZATION_INSCRIPTION_DROP_SERVER_ERROR,
-     CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_CREDITS,
-     CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_GOLD,
-     CUSTOMIZATION_INSCRIPTION_CHANGE_SUCCESS_FREE,
-     CUSTOMIZATION_INSCRIPTION_DROP_SUCCESS,
-     CUSTOMIZATION_INSCRIPTION_STORED_SUCCESS,
      CUSTOMIZATION_IGR_TYPE_CHANGED_ERROR,
-     CUSTOMIZATION_ADDED_CAMOUFLAGES,
-     CUSTOMIZATION_ADDED_EMBLEMS,
-     CUSTOMIZATION_ADDED_INSCRIPTIONS,
-     CUSTOMIZATION_REMOVED_CAMOUFLAGES,
-     CUSTOMIZATION_REMOVED_EMBLEMS,
-     CUSTOMIZATION_REMOVED_INSCRIPTIONS,
-     CUSTOMIZATION_ADDED_CAMOUFLAGESVALUE,
-     CUSTOMIZATION_ADDED_EMBLEMSVALUE,
-     CUSTOMIZATION_ADDED_INSCRIPTIONSVALUE,
+     CUSTOMIZATION_ADDED_PAINT,
+     CUSTOMIZATION_ADDED_CAMOUFLAGE,
+     CUSTOMIZATION_ADDED_MODIFICATION,
+     CUSTOMIZATION_ADDED_STYLE,
+     CUSTOMIZATION_ADDED_DECAL,
+     CUSTOMIZATION_REMOVED_PAINT,
+     CUSTOMIZATION_REMOVED_CAMOUFLAGE,
+     CUSTOMIZATION_REMOVED_MODIFICATION,
+     CUSTOMIZATION_REMOVED_STYLE,
+     CUSTOMIZATION_REMOVED_DECAL,
+     CUSTOMIZATION_ADDED_PAINTVALUE,
+     CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE,
+     CUSTOMIZATION_ADDED_MODIFICATIONVALUE,
+     CUSTOMIZATION_ADDED_STYLEVALUE,
+     CUSTOMIZATION_ADDED_DECALVALUE,
      BONUSES_BOOSTER_VALUE,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,
@@ -2127,7 +2076,8 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE_CYCLE,
      RANKED_NOTIFICATION_PRIMETIME,
      RANKED_NOTIFICATION_NOTAVAILABLE,
-     RANKED_NOTIFICATION_AVAILABLE)
+     RANKED_NOTIFICATION_AVAILABLE,
+     TOKENS_NOTIFICATION_MARK_ACQUIRED)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

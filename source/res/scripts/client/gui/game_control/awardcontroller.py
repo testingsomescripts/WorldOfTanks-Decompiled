@@ -4,6 +4,7 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+import BigWorld
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
@@ -11,15 +12,18 @@ from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, INVOICE_ASSET
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
+from gui import SystemMessages
+from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
@@ -42,9 +46,13 @@ from skeletons.gui.game_control import IRefSystemController, IAwardController, I
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController, ILootBoxManager
+from gui.shared.utils.functions import getViewName
+from items.new_year_types import NY_STATE
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
+    bootcampController = dependency.descriptor(IBootcampController)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
@@ -68,7 +76,10 @@ class AwardController(IAwardController, IGlobalListener):
          PersonalMissionOperationUnlockedHandler(self),
          GoldFishHandler(self),
          TelecomHandler(self),
-         RankedQuestsHandler(self)]
+         RankedQuestsHandler(self),
+         MarkByInvoiceHandler(self),
+         MarkByQuestHandler(self),
+         _NYBoxesHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -97,7 +108,7 @@ class AwardController(IAwardController, IGlobalListener):
             self.__delayedHandlers = []
 
     def canShow(self):
-        popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
+        popupsWindowsDisabled = isPopupsWindowsOpenDisabled() or self.bootcampController.isInBootcamp()
         prbDispatcher = self.prbDispatcher
         return self.__isLobbyLoaded and not popupsWindowsDisabled if prbDispatcher is None else self.__isLobbyLoaded and not popupsWindowsDisabled and not prbDispatcher.getFunctionalState().hasLockedState
 
@@ -281,25 +292,72 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         data = ctx[1].data
         completedQuests = {}
-        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True)
-        for qID in data.get('completedQuestIDs', set()):
-            if qID in allQuests:
-                if self.isShowCongrats(allQuests[qID]):
-                    completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
+        completedQuestIDs = data.get('completedQuestIDs', set())
+        filterCompleted = lambda q: q.getID() in completedQuestIDs
+        allCompletedQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=filterCompleted)
+        for quest in allCompletedQuests.itervalues():
+            if self.isShowCongrats(quest):
+                completedQuests[quest.getID()] = (quest, {'eventsCache': self.eventsCache})
 
-        bonus_data = dict(data)
-        del bonus_data['completedQuestIDs']
         for quest, context in completedQuests.itervalues():
-            self._showWindow(quest, context, bonus_data)
+            self._showWindow(quest, context)
 
     @staticmethod
-    def _showWindow(quest, context, bonus_data):
+    def _showWindow(quest, context):
         """Fire an actual show event to display an award window.
         
         :param quest: instance of event_items.Quest (or derived)
         :param context: dict with required data
         """
-        quests_events.showMissionAward(quest, context, bonus_data)
+        quests_events.showMissionAward(quest, context)
+
+
+class MarkByInvoiceHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(MarkByInvoiceHandler, self).__init__(SYS_MESSAGE_TYPE.invoiceReceived.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        invoiceData = ctx[1].data
+        if 'assetType' in invoiceData and invoiceData['assetType'] == INVOICE_ASSET.DATA:
+            if 'data' in invoiceData:
+                data = invoiceData['data']
+                if 'tokens' in data:
+                    tokensDict = data['tokens']
+                    for tokenName, tokenData in tokensDict.iteritems():
+                        if tokenName.startswith('img:'):
+                            count = tokenData.get('count', 0)
+                            if count:
+                                self._showWindow(count)
+
+    @staticmethod
+    def _showWindow(tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+
+
+class MarkByQuestHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(MarkByQuestHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()]
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__questTypes and message.data is not None
+
+    def _showAward(self, ctx):
+        messageData = ctx[1].data
+        if 'tokens' in messageData:
+            tokensDict = messageData['tokens']
+            for tokenName, tokenData in tokensDict.iteritems():
+                if tokenName.startswith('img:'):
+                    count = tokenData.get('count', 0)
+                    if count:
+                        self._showWindow(count)
+
+    @staticmethod
+    def _showWindow(tokenCount):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
 
 
 class MotiveQuestsWindowHandler(ServiceChannelHandler):
@@ -317,19 +375,23 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    lootboxManager = dependency.descriptor(ILootBoxManager)
 
     def __init__(self, awardCtrl):
         super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        data = ctx[1].data
-        goodies = data.get('goodies', {})
-        for boosterID in goodies:
-            booster = self.goodiesCache.getBooster(boosterID)
-            if booster is not None and booster.enabled:
-                shared_events.showBoosterAward(booster)
+        if self.lootboxManager.isQuestBoosterAwardWindowBlocked:
+            return
+        else:
+            data = ctx[1].data
+            goodies = data.get('goodies', {})
+            for boosterID in goodies:
+                booster = self.goodiesCache.getBooster(boosterID)
+                if booster is not None and booster.enabled:
+                    shared_events.showBoosterAward(booster)
 
-        return
+            return
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
@@ -369,16 +431,16 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
                     completedQuests[questID] = (quest, ctx)
 
         for quest, context in completedQuests.itervalues():
-            self._showWindow(quest, context, message.data)
+            self._showWindow(quest, context)
 
     @staticmethod
-    def _showWindow(quest, context, data):
+    def _showWindow(quest, context):
         """Fire an actual show event to display an award window.
         
         :param quest: instance of event_items.Quest (or derived)
         :param context: dict with required data
         """
-        quests_events.showMissionAward(quest, context, data)
+        quests_events.showMissionAward(quest, context)
 
     @staticmethod
     def _isAppropriate(quest):
@@ -409,7 +471,7 @@ class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
     """
 
     @staticmethod
-    def _showWindow(quest, context, _ignoredBonusData):
+    def _showWindow(quest, context):
         quests_events.showPersonalMissionAward(quest, context)
 
     @staticmethod
@@ -433,7 +495,7 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if personal_missions.g_cache.isPersonalMission(uniqueQuestID) and uniqueQuestID.endswith('_main_award_list'):
@@ -442,7 +504,7 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
         return False
 
     @staticmethod
-    def _showWindow(quest, context, _ignoredBonusData):
+    def _showWindow(quest, context):
         quests_events.showPersonalMissionAward(quest, context)
 
     @staticmethod
@@ -468,7 +530,7 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if uniqueQuestID == self.BADGE_QUEST_ID:
@@ -515,7 +577,7 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if uniqueQuestID in self.OPERATION_COMPLETION_IDS:
@@ -863,3 +925,40 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
     def __showBoobyAwardWindow(self, quest):
         quests_events.showRankedBoobyAward(quest)
         self.__unlock()
+
+
+class _NYBoxesHandler(AwardHandler):
+    _newYearController = dependency.descriptor(INewYearController)
+
+    def __init__(self, awardCtrl):
+        super(_NYBoxesHandler, self).__init__(awardCtrl)
+        self.__postponedBoxes = defaultdict(int)
+
+    def init(self):
+        self._newYearController.boxStorage.onCountChanged += self.__onBoxesCountChanged
+
+    def fini(self):
+        self._newYearController.boxStorage.onCountChanged -= self.__onBoxesCountChanged
+
+    def __onBoxesCountChanged(self, _, __, addedInfo):
+        if addedInfo:
+            descrs = self._newYearController.boxStorage.getDescriptors()
+            for bId, new_count in addedInfo.iteritems():
+                self.__postponedBoxes[descrs[bId].setting] += new_count
+
+            self.handle()
+
+    def _showAward(self, ctx):
+        for setting, new_count in self.__postponedBoxes.iteritems():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, name=getViewName(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, setting), ctx={'rewards': new_count,
+             'setting': setting}), EVENT_BUS_SCOPE.LOBBY)
+
+        self.__postponedBoxes = defaultdict(int)
+
+    def _needToShowAward(self, ctx):
+        return self.__isNY()
+
+    @staticmethod
+    def __isNY():
+        player = BigWorld.player()
+        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS

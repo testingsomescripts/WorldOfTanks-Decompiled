@@ -533,6 +533,9 @@ class _ViewCollection(object):
     def __len__(self):
         return self._views.__len__()
 
+    def iteritems(self):
+        return self._views.iteritems()
+
     def destroy(self):
         for view in self._views.itervalues():
             view.onDispose -= self._onViewDisposed
@@ -820,16 +823,20 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
     def __init__(self, loader, *containers):
         super(ContainerManager, self).__init__()
         self.onViewAddedToContainer = Event()
+        self.onViewLoading = Event()
+        self.onViewLoaded = Event()
         self.__globalContainer = _GlobalViewContainer(weakref.proxy(self))
         for container in containers:
             assert isinstance(container, ViewContainer)
             self.__globalContainer.addChildContainer(container)
 
         self.__loader = loader
+        self.__loader.onViewLoadInit += self.__onViewLoadInit
         self.__loader.onViewLoaded += self.__onViewLoaded
         self.__scopeController = GlobalScopeController()
         self.__scopeController.create()
         self.__viewCache = _ViewCollection()
+        self.__isFrozen = False
         self.__chainMng = _ChainManager(weakref.proxy(self))
 
     def _dispose(self):
@@ -837,6 +844,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         self.__chainMng.destroy()
         if self.__loader is not None:
             self.__loader.onViewLoaded -= self.__onViewLoaded
+            self.__loader.onViewLoadInit -= self.__onViewLoadInit
             self.__loader = None
         for viewType in _CONTAINERS_DESTROY_ORDER:
             container = self.__globalContainer.findContainer(viewType)
@@ -935,8 +943,8 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
                     LOG_DEBUG('View with key {} ({}) is already pre-loaded.'.format(viewKey, view))
                 elif loadParams.loadMode == ViewLoadMode.DEFAULT:
                     LOG_DEBUG('Load view with loadParams={} from the cache. Cache=[{}]'.format(loadParams, self.__viewCache))
-                    self.__viewCache.removeView(viewKey)
-                    self.__showAndInitializeView(view)
+                    if not self.__isFrozen:
+                        self.__showCachedView(view)
                     view.validate(*args, **kwargs)
                 else:
                     LOG_WARNING('Unsupported load mode {}. View loading will be skipped.'.format(loadParams))
@@ -956,6 +964,38 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         :param viewType: viewType: View type. @see ViewTypes.
         """
         return self.__globalContainer.findContainer(viewType)
+
+    def getViewByKey(self, viewKey):
+        """
+        Returns view object by view key if is view already exists
+        :param viewKey: view key (@see ViewKey)
+        :return: view object (@see View)
+        """
+        if self.__loader is not None:
+            loadingItem = self.__loader.getViewLoadingItem(viewKey)
+            if loadingItem is not None:
+                return loadingItem.pyEntity
+        sources = (self.__globalContainer.findView, self.__viewCache.getView)
+        for source in sources:
+            view = source(viewKey)
+            if view is not None:
+                return view
+
+        return
+
+    def isViewCreated(self, viewKey):
+        """
+        Return True view is loaded and visible
+        :param viewKey: view key (@see ViewKey)
+        """
+        return self.__globalContainer.findView(viewKey) is not None
+
+    def isViewInCache(self, viewKey):
+        """
+        Return True view is loaded and is in cache
+        :param viewKey: view key (@see ViewKey)
+        """
+        return self.__viewCache.getView(viewKey) is not None
 
     def isModalViewsIsExists(self):
         """
@@ -1045,6 +1085,13 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         self.as_unregisterContainerS(viewType)
         LOG_DEBUG('The container [type={}] has been unregistered.'.format(viewType))
 
+    def freeze(self):
+        self.__isFrozen = True
+
+    def unfreeze(self):
+        self.__isFrozen = False
+        self.__showAllCachedViews()
+
     def __addLoadingView(self, pyView):
         viewType = pyView.settings.type
         viewContainer = self.__globalContainer.findContainer(viewType)
@@ -1098,15 +1145,37 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         return
 
     def __onViewLoaded(self, pyView, loadParams):
+        self.onViewLoaded(pyView)
         loadMode = loadParams.loadMode
-        if loadMode == ViewLoadMode.DEFAULT:
+        container = self.__globalContainer.findContainer(ViewTypes.LOBBY_SUB)
+        if container is not None:
+            view = container.getView(None)
+            if view is not None:
+                if view.delaySwitchTo(pyView.key.alias, self.freeze, self.unfreeze):
+                    self.__addViewToCache(pyView)
+                    return
+        if loadMode == ViewLoadMode.PRELOAD or self.__isFrozen:
+            self.__addViewToCache(pyView)
+        elif loadMode == ViewLoadMode.DEFAULT:
             if self.__scopeController.isViewLoading(pyView=pyView):
                 self.__showAndInitializeView(pyView)
             else:
                 LOG_DEBUG('{} view loading is cancelled because its scope has been destroyed.'.format(pyView))
                 pyView.destroy()
-        elif loadMode == ViewLoadMode.PRELOAD:
-            self.__addViewToCache(pyView)
         else:
             LOG_WARNING('Unsupported load mode {}. View {} will be destroyed.'.format(loadMode, pyView))
             pyView.destroy()
+        return
+
+    def __onViewLoadInit(self, view, *args, **kwargs):
+        self.onViewLoading(view)
+
+    def __showCachedView(self, view):
+        self.__viewCache.removeView(view.key)
+        self.__showAndInitializeView(view)
+
+    def __showAllCachedViews(self):
+        while self.__viewCache:
+            key, view = self.__viewCache.iteritems().next()
+            LOG_DEBUG('Load view {} from the cache. Cache=[{}]'.format(view, self.__viewCache))
+            self.__showCachedView(view)

@@ -12,6 +12,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOGIN_QUEUE = 'loginQueue'
     LOGIN_CREATE_AN_ACC = 'loginCreateAnAcc'
     LOBBY_HEADER = 'lobbyHeader'
+    CUSTOMIZATION_POPOVER = 'customizationPopover'
     LOBBY_HANGAR = 'hangar'
     LOBBY_SHOP = 'shop'
     LOBBY_STORE_ACTIONS = 'storeActions'
@@ -23,6 +24,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_PERSONAL_MISSION_DETAILS = 'personalMissionDetails'
     LOBBY_PERSONAL_MISSIONS = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS
     PERSONAL_MISSIONS_PAGE = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS
+    ADVENT_CALENDAR = 'adventCalendar'
     LOBBY_EVENT_BOARDS_TABLE = 'eventBoardsTable'
     LOBBY_EVENT_BOARDS_AWARDGROUP = 'eventBoardsAwardGroupsLobby'
     LOBBY_EVENT_BOARDS_PAGINATION = 'eventBoardsPaginationLobby'
@@ -100,6 +102,10 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     ACCOUNT_POPOVER = 'accountPopover'
     TRADEIN_POPOVER = 'TradeInPopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
+    NY_DECORATIONS_POPOVER = 'nyDecorationsPopover'
+    NY_BOX_POPOVER = 'nyBoxPopover'
+    NY_CRAFT_POPOVER = 'nyCraftPopover'
+    NY_APPLY_DISCOUNT_FILTER = 'nyApplyDiscountFilter'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'
     AWARD_WINDOW = 'awardWindow'
@@ -107,7 +113,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOSTERS_WINDOW = 'boostersWindow'
     GET_PREMIUM_POPOVER = 'getPremiumPopover'
     FITTING_SELECT_POPOVER = 'fittingSelectPopover'
-    FITTING_SELECT_POPOVER_MULTITURRET = 'fittingSelectPopoverMultiTurret'
     FITTING_CMP_SELECT_POPOVER = 'fittingCmpSelectPopover'
     BOOSTER_CMP_SELECT_POPOVER = 'boosterCmpSelectPopover'
     RESERVE_SELECT_POPOVER = 'reserveSelectPopover'
@@ -142,6 +147,9 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     SANDBOX_QUEUE_DIALOG = 'sandboxQueueDialog'
     CUSTOMIZATION_PURCHASE_WINDOW = 'CustomizationBuyWindow'
     CUSTOMIZATION_FILTER_POPOVER = 'CustomizationFilterPopover'
+    CUSTOMIZATION_ANCHOR_POPOVER = 'CustomizationAnchorPopover'
+    CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER = 'CustomizationNonHistoricItemsPopover'
+    SEASON_BUTTONS_COMPONENTS = 'SeasonButtonsComponent'
     TANK_CAROUSEL_FILTER_POPOVER = 'TankCarouselFilterPopover'
     VEHICLES_FILTER_POPOVER = 'VehiclesFilterPopover'
     CLASSIC_BATTLE_PAGE = 'classicBattlePage'
@@ -156,8 +164,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
     BOOTCAMP_BATTLE_PAGE = 'bootcampBattlePage'
-    HALLOWEEN_PVP_BATTLE_PAGE = 'halloweenBattlePage'
-    BOSS_MODE_BATTLE_PAGE = 'bossModeBattlePage'
     INGAME_MENU = 'ingameMenu'
     INGAME_HELP = 'ingameHelp'
     INGAME_DESERTER = 'ingameDeserter'
@@ -187,8 +193,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOTCAMP_LOGIN_QUEUE = 'bootcampLoginQueue'
     BOOTCAMP_EXECUTION_CHOOSER = 'bootcampExecutionChooser'
     BOOTCAMP_SIMPLE_DIALOG = 'bootcampSimpleDialog'
-    LEVIATHAN_PREVIEW = 'leviathanPreview'
-    HALLOWEEN_BATTLE_SELECTOR = 'halloweenBattleSelector'
     LOADINGS = (BATTLE_LOADING, FALLOUT_MULTI_TEAM_BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,
@@ -197,6 +201,19 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
-     BOOTCAMP_BATTLE_PAGE,
-     HALLOWEEN_PVP_BATTLE_PAGE,
-     BOSS_MODE_BATTLE_PAGE)
+     BOOTCAMP_BATTLE_PAGE)
+    LOBBY_NY_SCREEN = 'nyScreen'
+    LOBBY_NY_REWARDS = 'nyRewards'
+    LOBBY_NY_CRAFT = 'nyCraft'
+    LOBBY_NY_BREAK = 'nyScreenBreak'
+    LOBBY_NY_CHESTS = 'nyChestsView'
+    LOBBY_NY_MISSIONS_REWARD = 'nyMissionRewardWindow'
+    LOBBY_NY_MISSIONS_REWARD_RECEIPT = 'nyMissionRewardScreen'
+    NY_TREE = 'nyScreenViewTree'
+    NY_SNOWMAN = 'nyScreenViewTreeSnowman'
+    NY_HOUSE = 'nyScreenViewTreeHouse'
+    NY_LIGHT = 'nyScreenViewTreeLight'
+    NY_LEVEL_UP = 'nyLevelUp'
+    LOBBY_NY_COLLECTIONS_GROUP = 'nyCollectionsGroups'
+    LOBBY_NY_COLLECTIONS = 'nyCollections'
+    NY_RECRUIT_WINDOW = 'nyRecruitWindow'

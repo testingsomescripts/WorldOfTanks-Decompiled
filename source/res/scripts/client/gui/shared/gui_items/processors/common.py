@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import BigWorld
-from debug_utils import LOG_DEBUG, LOG_WARNING
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
+from gui import SystemMessages
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.SystemMessages import SM_TYPE
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
+from gui.shared.gui_items.customization.c11n_items import Camouflage, Modification, Style
 from gui.shared.money import Money, Currency
 
 class TankmanBerthsBuyer(Processor):
@@ -122,6 +125,170 @@ class BattleResultsGetter(Processor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to get battle results')
         BigWorld.player().battleResultsCache.get(self.__arenaUniqueID, lambda code, battleResults: self._response(code, callback, ctx=battleResults))
+
+
+class OutfitApplier(Processor):
+    """ Outfit buyer and applier.
+    """
+
+    def __init__(self, vehicle, outfit, season):
+        super(OutfitApplier, self).__init__()
+        self.vehicle = vehicle
+        self.outfit = outfit
+        self.season = season
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        if not errStr:
+            msg = 'server_error'
+        else:
+            msg = errStr
+        return makeI18nError('customization/{}'.format(msg))
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to put on outfit on vehicle {}, season {}'.format(self.vehicle.invID, self.season))
+        BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, self.season, self.outfit.pack().makeCompDescr(), lambda code: self._response(code, callback))
+
+
+class StyleApplier(Processor):
+    """ Style buyer and applier.
+    """
+
+    def __init__(self, vehicle, style=None):
+        super(StyleApplier, self).__init__()
+        self.vehicle = vehicle
+        self.style = style
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        if not errStr:
+            msg = 'server_error'
+        else:
+            msg = errStr
+        return makeI18nError('customization/{}'.format(msg))
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to put on style on vehicle {}'.format(self.vehicle.invID))
+        if self.style:
+            styleID = self.style.id
+        else:
+            styleID = 0
+        BigWorld.player().shop.buyAndEquipStyle(self.vehicle.invID, styleID, lambda code: self._response(code, callback))
+
+    def _getTotalPrice(self):
+        buyPrice = self.style.buyPrices.itemPrice.price
+        if not buyPrice:
+            LOG_ERROR('Incorrect attempt to buy item {}'.format(self.style))
+        return buyPrice
+
+    def _getMsgCtx(self):
+        return {'itemType': '',
+         'itemName': self.style.longUserName,
+         'count': 1,
+         'money': formatPrice(self._getTotalPrice())}
+
+    def _successHandler(self, code, ctx=None):
+        if not self.style:
+            return makeSuccess(auxData=ctx)
+        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_1
+        sysMsgType = CURRENCY_TO_SM_TYPE.get(self.style.buyPrices.itemPrice.price, SM_TYPE.PurchaseForCredits)
+        SystemMessages.pushI18nMessage(messageType, type=sysMsgType, **self._getMsgCtx())
+        return makeSuccess(auxData=ctx)
+
+
+class CustomizationsBuyer(Processor):
+    """ Customizations buyer.
+    """
+
+    def __init__(self, vehicle, item, count):
+        super(CustomizationsBuyer, self).__init__()
+        self.vehicle = vehicle
+        self.item = item
+        self.count = count
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        if not errStr:
+            msg = 'server_error'
+        else:
+            msg = errStr
+        return makeI18nError('customization/{}'.format(msg))
+
+    def _request(self, callback):
+        if self.vehicle:
+            invID = self.vehicle.invID
+        else:
+            invID = 0
+        LOG_DEBUG('Make server request to buy customizations on vehicle {}: {} count {}'.format(invID, self.item, self.count))
+        BigWorld.player().shop.buyCustomizations(invID, {self.item.intCD: self.count}, lambda code: self._response(code, callback))
+
+    def _getTotalPrice(self):
+        buyPrice = self.item.buyPrices.itemPrice.price
+        if not buyPrice:
+            LOG_ERROR('Incorrect attempt to buy item {}'.format(self.item))
+        return buyPrice * self.count
+
+    def _getMsgCtx(self):
+        itemTypeName = ''
+        if type(self.item) is not Camouflage:
+            itemTypeName = self.item.userType
+        return {'itemType': itemTypeName,
+         'itemName': self.item.userName,
+         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'money': formatPrice(self._getTotalPrice())}
+
+    def _successHandler(self, code, ctx=None):
+        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_2
+        sysMsgType = CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.price, SM_TYPE.PurchaseForGold)
+        if type(self.item) in (Camouflage, Modification, Style):
+            messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_1
+        SystemMessages.pushI18nMessage(messageType, type=sysMsgType, **self._getMsgCtx())
+        return makeSuccess(auxData=ctx)
+
+
+class CustomizationsSeller(Processor):
+    """ Customizations buyer.
+    """
+
+    def __init__(self, vehicle, item, count=1):
+        super(CustomizationsSeller, self).__init__()
+        self.vehicle = vehicle
+        self.item = item
+        self.count = count
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        if not errStr:
+            msg = 'server_error'
+        else:
+            msg = errStr
+        return makeI18nError('customization/{}'.format(msg))
+
+    def _getTotalPrice(self):
+        sellPrice = self.item.sellPrices.itemPrice.price
+        if not sellPrice:
+            LOG_ERROR('Attempt to sell item {} that is not sold.'.format(self.item))
+        return sellPrice * self.count
+
+    def _getMsgCtx(self):
+        itemTypeName = ''
+        if type(self.item) is not Camouflage:
+            itemTypeName = self.item.userType
+        return {'itemType': itemTypeName,
+         'itemName': self.item.userName,
+         'count': BigWorld.wg_getIntegralFormat(int(self.count)),
+         'money': formatPrice(self._getTotalPrice())}
+
+    def _successHandler(self, code, ctx=None):
+        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_2
+        if type(self.item) in (Camouflage, Modification, Style):
+            messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_1
+        SystemMessages.pushI18nMessage(messageType, type=SM_TYPE.Selling, **self._getMsgCtx())
+        return makeSuccess(auxData=ctx)
+
+    def _request(self, callback):
+        if self.vehicle:
+            invID = self.vehicle.invID
+        else:
+            invID = 0
+        LOG_DEBUG('Make server request to sell customizations on vehicle {}, item {}, count {}'.format(invID, self.item, self.count))
+        BigWorld.player().shop.sellCustomizations(invID, self.item.intCD, self.count, lambda code: self._response(code, callback))
 
 
 class BadgesSelector(Processor):

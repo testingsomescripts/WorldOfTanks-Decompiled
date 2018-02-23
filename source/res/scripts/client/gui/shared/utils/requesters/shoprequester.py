@@ -5,7 +5,8 @@ from collections import namedtuple
 from abc import ABCMeta, abstractmethod
 import BigWorld
 from adisp import async
-from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_GUI_TYPE
+from arena_achievements import getAchievementCondition
+from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_BONUS_TYPE
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import ItemsPrices
 from debug_utils import LOG_DEBUG, LOG_WARNING
@@ -15,6 +16,9 @@ from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
+_DEFAULT_EXCHANGE_RATE = 400
+_DEFAULT_CRYSTAL_EXCHANGE_RATE = 200
+_DEFAULT_SELL_PRICE_MODIF = 0.5
 _VehiclesRestoreConfig = namedtuple('_VehiclesRestoreConfig', 'restoreDuration restoreCooldown restorePriceModif')
 _TankmenRestoreConfig = namedtuple('_TankmenRestoreConfig', 'freeDuration billableDuration cost limit')
 _TargetData = namedtuple('_TargetData', 'targetType, targetValue, limit')
@@ -90,28 +94,52 @@ class ShopCommonStats(IShopCommonStats):
         pass
 
     def getPrices(self):
-        return self.getItemsData().get('itemPrices', ItemsPrices())
+        try:
+            return self.getItemsData()['itemPrices']
+        except KeyError:
+            return ItemsPrices()
 
     def getBoosterPrices(self):
-        return self.getGoodiesData().get('prices', {})
+        try:
+            return self.getGoodiesData()['prices']
+        except KeyError:
+            return {}
 
     def getHiddens(self):
-        return self.getItemsData().get('notInShopItems', set([]))
+        try:
+            return self.getItemsData()['notInShopItems']
+        except KeyError:
+            return set([])
 
     def getHiddenBoosters(self):
-        return self.getGoodiesData().get('notInShop', set([]))
+        try:
+            return self.getGoodiesData()['notInShop']
+        except KeyError:
+            return set([])
 
     def getNotToBuyVehicles(self):
-        return self.getItemsData().get('vehiclesNotToBuy', set([]))
+        try:
+            return self.getItemsData()['vehiclesNotToBuy']
+        except KeyError:
+            return set([])
 
     def getVehicleRentPrices(self):
-        return self.getItemsData().get('vehiclesRentPrices', {})
+        try:
+            return self.getItemsData()['vehiclesRentPrices']
+        except KeyError:
+            return {}
 
     def getVehiclesForGold(self):
-        return self.getItemsData().get('vehiclesToSellForGold', set([]))
+        try:
+            return self.getItemsData()['vehiclesToSellForGold']
+        except KeyError:
+            return set([])
 
     def getVehiclesSellPriceFactors(self):
-        return self.getItemsData().get('vehicleSellPriceFactors', {})
+        try:
+            return self.getItemsData()['vehicleSellPriceFactors']
+        except KeyError:
+            return {}
 
     def getItemPrice(self, intCD):
         prices = self.getPrices()
@@ -123,7 +151,7 @@ class ShopCommonStats(IShopCommonStats):
     def getItem(self, intCD):
         return (self.getItemPrice(intCD), intCD in self.getHiddens())
 
-    def getAchievementReward(self, achievement, arenaType=ARENA_GUI_TYPE.RANDOM):
+    def getAchievementReward(self, achievement, arenaType=ARENA_BONUS_TYPE.REGULAR):
         result = None
         rewards = self.getValue('achievementsReward', None)
         if rewards is None:
@@ -142,6 +170,14 @@ class ShopCommonStats(IShopCommonStats):
                         if group is not None and arenaType in group['arenaTypes']:
                             result = group
                             break
+
+            if result is not None:
+                result = dict(result)
+                achievementCond = getAchievementCondition(arenaType, achievement.getName())
+                if 'minLevel' in achievementCond:
+                    vehs = result['vehicleMultipliers']
+                    for i in range(achievementCond['minLevel'] - 1):
+                        vehs[i] = 0.0
 
             return result
 
@@ -175,14 +211,14 @@ class ShopCommonStats(IShopCommonStats):
         """
         @return: rate of gold for credits exchanging
         """
-        return self.getValue('exchangeRate', 400)
+        return self.getValue('exchangeRate', _DEFAULT_EXCHANGE_RATE)
 
     @property
     def crystalExchangeRate(self):
         """
         @return: rate of crystals for credits exchanging
         """
-        return self.getValue('crystalExchangeRate', 200)
+        return self.getValue('crystalExchangeRate', _DEFAULT_CRYSTAL_EXCHANGE_RATE)
 
     @property
     def exchangeRateForShellsAndEqs(self):
@@ -190,11 +226,11 @@ class ShopCommonStats(IShopCommonStats):
         @return: rate of gold for credits exchanging for F2W
                                 premium shells and eqs action
         """
-        return self.getValue('exchangeRateForShellsAndEqs', 400)
+        return self.getValue('exchangeRateForShellsAndEqs', _DEFAULT_EXCHANGE_RATE)
 
     @property
     def sellPriceModif(self):
-        return self.getValue('sellPriceModif', 0.5)
+        return self.getValue('sellPriceModif', _DEFAULT_SELL_PRICE_MODIF)
 
     @property
     def vehiclesRestoreConfig(self):
@@ -215,13 +251,16 @@ class ShopCommonStats(IShopCommonStats):
     def sellPriceModifiers(self, compDescr):
         sellPriceModif = self.sellPriceModif
         sellPriceFactors = self.getVehiclesSellPriceFactors()
-        sellForGold = self.getVehiclesForGold()
+        if compDescr in sellPriceFactors:
+            modifiers = sellPriceFactors[compDescr]
+        else:
+            modifiers = sellPriceModif
         return (self.revision,
          self.exchangeRate,
          self.exchangeRateForShellsAndEqs,
          sellPriceModif,
-         sellPriceFactors.get(compDescr, sellPriceModif),
-         compDescr in sellForGold)
+         modifiers,
+         compDescr in self.getVehiclesForGold())
 
     @property
     def slotsPrices(self):
@@ -650,7 +689,7 @@ class DefaultShopRequester(ShopCommonStats):
         return
 
     def getValue(self, key, defaultValue=None):
-        return self.__cache.get(key, defaultValue)
+        return self.__cache[key] if key in self.__cache else defaultValue
 
     @property
     def revision(self):

@@ -152,6 +152,32 @@
         </inscription>
       </inscriptions>
     </sweden>
+    <WGChrisEvent1718_sweden>
+      <userString>	#vehicle_customization:inscription/special	</userString>
+      <priceFactor>	0.0	</priceFactor>
+      <notInShop>	true	</notInShop>
+      <nations>	sweden	</nations>
+      <inscriptions>
+        <inscription>
+          <id>	901	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_156.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_156	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	902	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_154.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_154	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+        <inscription>
+          <id>	903	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/special/inscription_158.dds	</texName>
+          <userString>	#vehicle_customization:inscription/special/special_158	</userString>
+          <qualifier>	main_skill_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </WGChrisEvent1718_sweden>
   </inscriptions>
   <insigniaOnGun>
     <insignia>
@@ -201,8 +227,8 @@
       <kind>	winter	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	240 240 240 227	</c0>
-        <c1>	36 35 28 45	</c1>
+        <c0>	170 172 168 255	</c0>
+        <c1>	59 64 51 255	</c1>
         <c2>	0 0 0 0	</c2>
         <c3>	0 0 0 0	</c3>
       </colors>
@@ -238,8 +264,8 @@
       <kind>	winter	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	240 240 240 199	</c0>
-        <c1>	36 35 28 0	</c1>
+        <c0>	170 172 168 255	</c0>
+        <c1>	0 0 0 0	</c1>
         <c2>	0 0 0 0	</c2>
         <c3>	0 0 0 0	</c3>
       </colors>
@@ -275,10 +301,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	70 74 45 98	</c0>
-        <c1>	72 56 45 188	</c1>
-        <c2>	217 178 121 144	</c2>
-        <c3>	0 0 0 255	</c3>
+        <c0>	64 69 52 255	</c0>
+        <c1>	64 61 49 255	</c1>
+        <c2>	114 105 77 255	</c2>
+        <c3>	21 23 19 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.5 1.5 0.9 0.000000	</S01_Strv_74_A2>
@@ -315,10 +341,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	81 44 19 155	</c0>
-        <c1>	82 100 74 140	</c1>
-        <c2>	21 30 15 208	</c2>
-        <c3>	160 133 83 201	</c3>
+        <c0>	69 59 41 255	</c0>
+        <c1>	69 78 61 255	</c1>
+        <c2>	42 49 35 255	</c2>
+        <c3>	108 99 69 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
@@ -355,10 +381,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	81 44 19 0	</c0>
-        <c1>	140 158 16 0	</c1>
-        <c2>	21 30 15 0	</c2>
-        <c3>	164 126 74 203	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	112 94 58 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.7 1.7 0.000000 0.000000	</S01_Strv_74_A2>
@@ -395,10 +421,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	29 29 29 255	</c0>
-        <c1>	125 128 125 255	</c1>
-        <c2>	206 181 147 0	</c2>
-        <c3>	206 181 147 116	</c3>
+        <c0>	82 80 67 255	</c0>
+        <c1>	126 118 103 255	</c1>
+        <c2>	46 48 43 255	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
@@ -436,10 +462,10 @@
       <group>	IGRwinter	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	79 79 79 225	</c0>
-        <c1>	0 0 0 227	</c1>
-        <c2>	255 255 255 226	</c2>
-        <c3>	192 192 192 226	</c3>
+        <c0>	71 74 67 255	</c0>
+        <c1>	29 31 25 255	</c1>
+        <c2>	164 166 160 255	</c2>
+        <c3>	130 133 127 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
@@ -477,10 +503,10 @@
       <group>	IGRsummer	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	157 108 34 213	</c0>
-        <c1>	226 210 154 223	</c1>
-        <c2>	10 10 10 244	</c2>
-        <c3>	61 86 35 226	</c3>
+        <c0>	109 88 44 255	</c0>
+        <c1>	148 142 106 255	</c1>
+        <c2>	33 35 29 255	</c2>
+        <c3>	61 78 44 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
@@ -519,10 +545,10 @@
       <group>	IGRdesert	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	196 126 34 202	</c0>
-        <c1>	226 210 154 230	</c1>
-        <c2>	0 0 0 222	</c2>
-        <c3>	113 89 57 202	</c3>
+        <c0>	126 96 44 255	</c0>
+        <c1>	151 145 108 255	</c1>
+        <c2>	30 33 26 255	</c2>
+        <c3>	86 78 55 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
@@ -561,10 +587,10 @@
       <group>	IGRwinter	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	32 35 43 225	</c0>
-        <c1>	101 74 50 227	</c1>
-        <c2>	164 164 164 148	</c2>
-        <c3>	255 255 255 172	</c3>
+        <c0>	46 51 48 255	</c0>
+        <c1>	83 71 52 255	</c1>
+        <c2>	97 102 92 255	</c2>
+        <c3>	139 143 135 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	2 2 0.000000 0.000000	</S01_Strv_74_A2>
@@ -602,10 +628,10 @@
       <group>	IGRdesert	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	138 90 68 202	</c0>
-        <c1>	203 135 67 230	</c1>
-        <c2>	202 169 123 194	</c2>
-        <c3>	112 67 46 0	</c3>
+        <c0>	98 78 61 255	</c0>
+        <c1>	138 104 61 255	</c1>
+        <c2>	126 114 85 255	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
@@ -641,10 +667,10 @@
       <group>	IGRwinter	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	43 33 23 225	</c0>
-        <c1>	101 74 50 227	</c1>
-        <c2>	181 153 89 226	</c2>
-        <c3>	221 201 153 226	</c3>
+        <c0>	52 49 38 255	</c0>
+        <c1>	83 71 52 255	</c1>
+        <c2>	125 113 73 255	</c2>
+        <c3>	146 138 106 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
@@ -682,10 +708,10 @@
       <group>	IGRsummer	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	52 78 41 213	</c0>
-        <c1>	108 72 19 223	</c1>
-        <c2>	39 40 30 244	</c2>
-        <c3>	207 196 150 226	</c3>
+        <c0>	57 73 47 255	</c0>
+        <c1>	86 70 36 255	</c1>
+        <c2>	49 52 40 255	</c2>
+        <c3>	138 135 104 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.6 1.6 0.000000 0.000000	</S01_Strv_74_A2>
@@ -723,10 +749,10 @@
       <group>	IGRdesert	</group>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	33 27 22 202	</c0>
-        <c1>	153 116 60 230	</c1>
-        <c2>	198 166 117 222	</c2>
-        <c3>	112 67 46 202	</c3>
+        <c0>	48 49 39 255	</c0>
+        <c1>	111 94 57 255	</c1>
+        <c2>	133 119 87 255	</c2>
+        <c3>	85 67 50 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
@@ -764,10 +790,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	94 12 0 152	</c0>
-        <c1>	201 123 48 113	</c1>
-        <c2>	22 28 17 164	</c2>
-        <c3>	121 111 38 0	</c3>
+        <c0>	72 48 35 255	</c0>
+        <c1>	101 83 50 255	</c1>
+        <c2>	46 52 40 255	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -806,10 +832,10 @@
       <kind>	winter	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	39 71 29 64	</c0>
-        <c1>	255 255 255 137	</c1>
-        <c2>	239 242 125 0	</c2>
-        <c3>	230 253 255 0	</c3>
+        <c0>	58 69 50 0	</c0>
+        <c1>	149 153 145 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -848,10 +874,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	78 107 69 108	</c0>
-        <c1>	0 13 0 179	</c1>
-        <c2>	22 28 17 0	</c2>
-        <c3>	121 111 38 0	</c3>
+        <c0>	66 78 58 255	</c0>
+        <c1>	35 43 32 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -889,10 +915,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	60 99 1 169	</c0>
-        <c1>	164 217 38 79	</c1>
-        <c2>	4 21 5 197	</c2>
-        <c3>	201 192 133 153	</c3>
+        <c0>	58 85 32 255	</c0>
+        <c1>	85 103 52 255	</c1>
+        <c2>	35 46 31 255	</c2>
+        <c3>	108 108 85 255	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -929,10 +955,10 @@
       <kind>	winter	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	255 255 255 243	</c0>
-        <c1>	255 255 255 0	</c1>
-        <c2>	255 255 255 0	</c2>
-        <c3>	255 255 255 0	</c3>
+        <c0>	175 177 173 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -970,10 +996,10 @@
       <kind>	summer	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	125 86 34 255	</c0>
-        <c1>	69 60 28 255	</c1>
-        <c2>	4 21 5 0	</c2>
-        <c3>	201 192 133 0	</c3>
+        <c0>	100 80 43 255	</c0>
+        <c1>	64 62 36 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -1011,10 +1037,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	162 123 77 222	</c0>
-        <c1>	128 0 0 0	</c1>
-        <c2>	97 34 22 0	</c2>
-        <c3>	255 255 255 0	</c3>
+        <c0>	112 96 58 255	</c0>
+        <c1>	0 0 0 0	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <notInShop>	true	</notInShop>
       <tiling>
@@ -1053,10 +1079,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	0 0 0 224	</c0>
-        <c1>	36 36 36 186	</c1>
+        <c0>	22 24 20 255	</c0>
+        <c1>	0 0 0 0	</c1>
         <c2>	0 0 0 0	</c2>
-        <c3>	0 0 0 51	</c3>
+        <c3>	0 0 0 0	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
@@ -1091,10 +1117,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	0 0 0 224	</c0>
-        <c1>	97 89 35 215	</c1>
-        <c2>	97 89 35 217	</c2>
-        <c3>	193 184 0 219	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	75 71 31 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	130 130 30 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
@@ -1131,10 +1157,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	0 0 0 224	</c0>
-        <c1>	77 15 15 215	</c1>
-        <c2>	77 15 15 217	</c2>
-        <c3>	138 21 21 219	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	61 14 14 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	105 27 27 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
@@ -1171,10 +1197,10 @@
       <kind>	desert	</kind>
       <deny>	S23_Strv_81_sabaton	</deny>
       <colors>
-        <c0>	0 0 0 224	</c0>
-        <c1>	97 112 114 182	</c1>
-        <c2>	97 112 114 182	</c2>
-        <c3>	168 177 181 255	</c3>
+        <c0>	0 0 0 0	</c0>
+        <c1>	61 78 75 255	</c1>
+        <c2>	0 0 0 0	</c2>
+        <c3>	138 138 138 255	</c3>
       </colors>
       <tiling>
         <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
@@ -1200,5 +1226,85 @@
         <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Sweden_Victim_Silver>
+    <Clan_camuflage_04_winter>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
+      <id>	158	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	40 71 94 255	</c0>
+        <c1>	143 148 139 255	</c1>
+        <c2>	36 46 47 255	</c2>
+        <c3>	0 0 0 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.3 4.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.5 0.5 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.4 1.4 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_04_winter>
+    <Clan_camuflage_04_desert>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
+      <id>	159	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <deny>	S23_Strv_81_sabaton	</deny>
+      <colors>
+        <c0>	85 74 30 255	</c0>
+        <c1>	128 124 57 255	</c1>
+        <c2>	48 47 31 255	</c2>
+        <c3>	133 135 131 255	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling>
+        <S01_Strv_74_A2>	1 1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S03_Strv_M38>	4.3 4.3 0.000000 0.000000	</S03_Strv_M38>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S04_Lago_I>	0.5 0.5 0.000000 0.000000	</S04_Lago_I>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S19_Sav_M43>	1.4 1.4 0.000000 0.000000	</S19_Sav_M43>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S02_Strv_M42>	0.7 0.7 0.000000 0.000000	</S02_Strv_M42>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S16_Kranvagn>	0.7 0.7 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </Clan_camuflage_04_desert>
   </camouflages>
 </customization.xml>

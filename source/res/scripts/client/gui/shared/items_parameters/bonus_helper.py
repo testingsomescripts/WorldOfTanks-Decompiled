@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/bonus_helper.py
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES, getParamExtendedData
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from helpers import dependency
+from items.components.c11n_components import SeasonType
 from skeletons.gui.shared import IItemsCache
 
 def isSituationalBonus(bonusName):
@@ -17,9 +19,10 @@ def _removeCamouflageModifier(vehicle, bonusID):
     remove camouflage from vehicle copy
     """
     if bonusID == EXTRAS_CAMOUFLAGE:
-        oldCamouflages = vehicle.descriptor.camouflages
-        for pos, _ in enumerate(oldCamouflages):
-            vehicle.descriptor.setCamouflage(pos, None, 0, 0)
+        for season in SeasonType.SEASONS:
+            outfit = vehicle.getOutfit(season)
+            if outfit:
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
 
     return vehicle
 
@@ -87,14 +90,10 @@ class _BonusSorter(object):
 
     def __opticsSorter(self, bonuses):
         if self.__paramName == 'circularVisionRadius':
-            optics = ('coatedOptics', 'optionalDevice')
             stereoscope = ('stereoscope', 'optionalDevice')
-            if stereoscope in bonuses and optics in bonuses:
-                stereoscopeIdx = bonuses.index(stereoscope)
-                opticsIdx = bonuses.index(optics)
-                if stereoscopeIdx > opticsIdx:
-                    bonuses[stereoscopeIdx] = optics
-                    bonuses[opticsIdx] = stereoscope
+            if stereoscope in bonuses:
+                bonuses.remove(stereoscope)
+                bonuses.insert(0, stereoscope)
         return bonuses
 
 

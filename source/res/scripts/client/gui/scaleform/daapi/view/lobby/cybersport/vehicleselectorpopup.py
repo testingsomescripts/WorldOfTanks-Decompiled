@@ -5,6 +5,7 @@ from constants import VEHICLE_CLASSES
 from gui.Scaleform.daapi.view.lobby.vehicle_selector_base import VehicleSelectorBase
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
 from gui.Scaleform.daapi.view.meta.VehicleSelectorPopupMeta import VehicleSelectorPopupMeta
+from gui.Scaleform.genConsts.VEHICLE_SELECTOR_CONSTANTS import VEHICLE_SELECTOR_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.events import CSVehicleSelectEvent, HideWindowEvent
@@ -21,11 +22,15 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         self._levelsRange = ctx.get('levelsRange', self._levelsRange)
         self.__isMultiSelect = ctx.get('isMultiSelect', False)
         self.__infoText = ctx.get('infoText', '')
-        self.__componentsOffset = ctx.get('componentsOffset', 0)
+        self.__titleText = ctx.get('titleText', '')
+        self.__selectButton = ctx.get('selectButton', '')
+        self.__cancelButton = ctx.get('cancelButton', '')
+        self._compatibleOnlyLabel = ctx.get('compatibleOnlyLabel', '')
         self.__section = ctx.get('section')
         self.__vehicles = ctx.get('vehicles')
         self.__selectedVehicles = ctx.get('selectedVehicles')
         self.__vehicleTypes = ctx.get('vehicleTypes', VEHICLE_CLASSES)
+        self._filterVisibility = ctx.get('filterVisibility', VEHICLE_SELECTOR_CONSTANTS.VISIBLE_ALL)
         self.showNotReadyVehicles = ctx.get('showNotReady', True)
 
     def _populate(self):
@@ -33,7 +38,7 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         self.addListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)
         self.initFilters()
         self.as_setListModeS(self.__isMultiSelect)
-        self.as_setInfoTextS(self.__infoText, self.__componentsOffset)
+        self.as_setTextsS(self.__titleText, self.__infoText, self.__selectButton, self.__cancelButton)
 
     def _dispose(self):
         self.removeListener(HideWindowEvent.HIDE_VEHICLE_SELECTOR_WINDOW, self.onWindowForceClose)
@@ -69,11 +74,10 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         self.as_setFiltersDataS(filters)
 
     def updateData(self):
-        compatiblePredicate = lambda vo: vo.get('enabled') and 'event_battles' not in self.itemsCache.items.getItemByCD(vo['intCD']).tags
         if not self.getFilters().get('compatibleOnly', True) or self.__vehicles is None:
-            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY), compatiblePredicate)
+            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
         else:
-            vehicleVOs = self._updateData(self.__vehicles, compatiblePredicate)
+            vehicleVOs = self._updateData(self.__vehicles)
         if self.__selectedVehicles is not None:
             vehicleGetter = self.itemsCache.items.getItemByCD
             selected = [ makeVehicleVO(vehicleGetter(int(item))) for item in self.__selectedVehicles ]

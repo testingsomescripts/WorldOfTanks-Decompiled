@@ -140,8 +140,10 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_16 = '#menu:loading/battleTypes/desc/16'
     LOADING_BATTLETYPES_17 = '#menu:loading/battleTypes/17'
     LOADING_BATTLETYPES_DESC_17 = '#menu:loading/battleTypes/desc/17'
-    LOADING_BATTLETYPES_21 = '#menu:loading/battleTypes/21'
-    LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
+    LOADING_BATTLETYPES_19 = '#menu:loading/battleTypes/19'
+    LOADING_BATTLETYPES_DESC_19 = '#menu:loading/battleTypes/desc/19'
+    LOADING_BATTLETYPES_20 = '#menu:loading/battleTypes/20'
+    LOADING_BATTLETYPES_DESC_20 = '#menu:loading/battleTypes/desc/20'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -454,10 +456,6 @@ class MENU(object):
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
-    TANK_PARAMS_TURRETARMOR_PRIMARY = '#menu:tank_params/turretArmor_Primary'
-    TANK_PARAMS_TURRETARMOR_SECONDARY = '#menu:tank_params/turretArmor_Secondary'
-    TANK_PARAMS_PARAMTITLE_SECONDARYTURRET = '#menu:tank_params/paramTitle_SecondaryTurret'
-    TANK_PARAMS_PARAMTITLE_PRIMARYTURRET = '#menu:tank_params/paramTitle_PrimaryTurret'
     TANK_PARAMS_RELOADTIME = '#menu:tank_params/reloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
@@ -517,18 +515,6 @@ class MENU(object):
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
-    TANK_PARAMS_AVGDAMAGE_SECONDARY = '#menu:tank_params/avgDamage_Secondary'
-    TANK_PARAMS_AVGPIERCINGPOWER_SECONDARY = '#menu:tank_params/avgPiercingPower_Secondary'
-    TANK_PARAMS_RELOADTIME_SECONDARY = '#menu:tank_params/reloadTime_Secondary'
-    TANK_PARAMS_RELOADTIMESECS_SECONDARY = '#menu:tank_params/reloadTimeSecs_Secondary'
-    TANK_PARAMS_TURRETROTATIONSPEED_SECONDARY = '#menu:tank_params/turretRotationSpeed_Secondary'
-    TANK_PARAMS_TURRETYAWLIMITS_SECONDARY = '#menu:tank_params/turretYawLimits_Secondary'
-    TANK_PARAMS_PITCHLIMITS_SECONDARY = '#menu:tank_params/pitchLimits_Secondary'
-    TANK_PARAMS_GUNYAWLIMITS_SECONDARY = '#menu:tank_params/gunYawLimits_Secondary'
-    TANK_PARAMS_CLIPFIRERATE_SECONDARY = '#menu:tank_params/clipFireRate_Secondary'
-    TANK_PARAMS_AIMINGTIME_SECONDARY = '#menu:tank_params/aimingTime_Secondary'
-    TANK_PARAMS_SHOTDISPERSIONANGLE_SECONDARY = '#menu:tank_params/shotDispersionAngle_Secondary'
-    TANK_PARAMS_AVGDAMAGEPERMINUTE_SECONDARY = '#menu:tank_params/avgDamagePerMinute_Secondary'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
@@ -628,17 +614,11 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedVehLevelRequired/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_HALLOWEEN_INVALID_LEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/halloween/invalid/level/body'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
-    PVEHALLOWEEN_QUEUE_TITLE = '#menu:pveHalloween/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
-    PVEHALLOWEEN_QUEUE_UNITS = '#menu:pveHalloween/queue/units'
     PVESANDBOX_QUEUE_MESSAGE = '#menu:pveSandbox/queue/message'
-    PVEHALLOWEEN_QUEUE_MESSAGE = '#menu:pveHalloween/queue/message'
     PVESANDBOX_QUEUE_MORE_N_MINUTES = '#menu:pveSandbox/queue/more_n_minutes'
-    PVEHALLOWEEN_QUEUE_MORE_N_MINUTES = '#menu:pveHalloween/queue/more_n_minutes'
     PVESANDBOX_QUEUE_PLAYER_WAITING_TIME = '#menu:pveSandbox/queue/player-waiting-time'
-    PVEHALLOWEEN_QUEUE_PLAYER_WAITING_TIME = '#menu:pveHalloween/queue/player-waiting-time'
     HEADERBUTTONS_RATING = '#menu:headerButtons/rating'
     HEADERBUTTONS_PROFILE = '#menu:headerButtons/profile'
     STORETAB_INVENTORY = '#menu:storeTab/inventory'
@@ -658,6 +638,9 @@ class MENU(object):
     HEADERBUTTONS_PERSONALMISSIONS = '#menu:headerButtons/personalMissions'
     HEADER_ACCOUNT_PREMIUM_DAYS = '#menu:header/account/premium/days'
     HEADER_ACCOUNT_PREMIUM_HOURS = '#menu:header/account/premium/hours'
+    HEADER_CUSTOMIZATION_SEASON_WINTER = '#menu:header/customization/season/winter'
+    HEADER_CUSTOMIZATION_SEASON_SUMMER = '#menu:header/customization/season/summer'
+    HEADER_CUSTOMIZATION_SEASON_DESERT = '#menu:header/customization/season/desert'
     HEADER_SERVERINFO = '#menu:header/serverInfo'
     HEADER_LEVEL = '#menu:header/level'
     HEADER_LEVEL_1 = '#menu:header/level/1'
@@ -1253,70 +1236,6 @@ class MENU(object):
     SHELLLISTITEMRENDERER_REPLACE = '#menu:shellListItemRenderer/replace'
     SHELLLISTITEMRENDERER_SETASDEFAULT = '#menu:shellListItemRenderer/setAsDefault'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
-    CUSTOMIZATION_ITEMS_CAMOUFLAGE = '#menu:customization/items/camouflage'
-    CUSTOMIZATION_ITEMS_EMBLEMLEFT = '#menu:customization/items/emblemLeft'
-    CUSTOMIZATION_ITEMS_EMBLEMRIGHT = '#menu:customization/items/emblemRight'
-    CUSTOMIZATION_ITEMS_INSCRIPTIONLEFT = '#menu:customization/items/inscriptionLeft'
-    CUSTOMIZATION_ITEMS_INSCRIPTIONRIGHT = '#menu:customization/items/inscriptionRight'
-    CUSTOMIZATION_CHANGE_CAMOUFLAGE = '#menu:customization/change/camouflage'
-    CUSTOMIZATION_CHANGE_EMBLEMLEFT = '#menu:customization/change/emblemLeft'
-    CUSTOMIZATION_CHANGE_EMBLEMRIGHT = '#menu:customization/change/emblemRight'
-    CUSTOMIZATION_CHANGE_INSCRIPTIONLEFT = '#menu:customization/change/inscriptionLeft'
-    CUSTOMIZATION_CHANGE_INSCRIPTIONRIGHT = '#menu:customization/change/inscriptionRight'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE_SIDE_01 = '#menu:customization/remove/camouflage/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE0_SIDE_01 = '#menu:customization/remove/camouflage0/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE1_SIDE_01 = '#menu:customization/remove/camouflage1/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE2_SIDE_01 = '#menu:customization/remove/camouflage2/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE_SIDE_02 = '#menu:customization/remove/camouflage/side-02'
-    CUSTOMIZATION_STORE_CAMOUFLAGE_SIDE_02 = '#menu:customization/store/camouflage/side-02'
-    CUSTOMIZATION_REMOVE_EMBLEMLEFT_SIDE_01 = '#menu:customization/remove/emblemLeft/side-01'
-    CUSTOMIZATION_REMOVE_EMBLEMLEFT_SIDE_02 = '#menu:customization/remove/emblemLeft/side-02'
-    CUSTOMIZATION_STORE_EMBLEMLEFT_SIDE_02 = '#menu:customization/store/emblemLeft/side-02'
-    CUSTOMIZATION_REMOVE_EMBLEMRIGHT_SIDE_01 = '#menu:customization/remove/emblemRight/side-01'
-    CUSTOMIZATION_REMOVE_EMBLEMRIGHT_SIDE_02 = '#menu:customization/remove/emblemRight/side-02'
-    CUSTOMIZATION_STORE_EMBLEMRIGHT_SIDE_02 = '#menu:customization/store/emblemRight/side-02'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONLEFT_SIDE_01 = '#menu:customization/remove/inscriptionLeft/side-01'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONLEFT_SIDE_02 = '#menu:customization/remove/inscriptionLeft/side-02'
-    CUSTOMIZATION_STORE_INSCRIPTIONLEFT_SIDE_02 = '#menu:customization/store/inscriptionLeft/side-02'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONRIGHT_SIDE_01 = '#menu:customization/remove/inscriptionRight/side-01'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONRIGHT_SIDE_02 = '#menu:customization/remove/inscriptionRight/side-02'
-    CUSTOMIZATION_STORE_INSCRIPTIONRIGHT_SIDE_02 = '#menu:customization/store/inscriptionRight/side-02'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_SECTION = '#menu:customization/labels/camouflage/section'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_PRICE = '#menu:customization/labels/camouflage/price'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_CURRENT = '#menu:customization/labels/camouflage/current'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_NEW = '#menu:customization/labels/camouflage/new'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_NEW = '#menu:customization/marker/camouflage/new'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_DEFAULTHINT = '#menu:customization/marker/camouflage/defaultHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_WINTERHINT = '#menu:customization/marker/camouflage/winterHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_SUMMERHINT = '#menu:customization/marker/camouflage/summerHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_DESERTHINT = '#menu:customization/marker/camouflage/desertHint'
-    CUSTOMIZATION_LABELS_EMBLEMLEFT_SECTION = '#menu:customization/labels/emblemLeft/section'
-    CUSTOMIZATION_LABELS_EMBLEMLEFT_PRICE = '#menu:customization/labels/emblemLeft/price'
-    CUSTOMIZATION_LABELS_EMBLEMRIGHT_SECTION = '#menu:customization/labels/emblemRight/section'
-    CUSTOMIZATION_LABELS_EMBLEMRIGHT_PRICE = '#menu:customization/labels/emblemRight/price'
-    CUSTOMIZATION_LABELS_INSCRIPTIONLEFT_SECTION = '#menu:customization/labels/inscriptionLeft/section'
-    CUSTOMIZATION_LABELS_INSCRIPTIONLEFT_PRICE = '#menu:customization/labels/inscriptionLeft/price'
-    CUSTOMIZATION_LABELS_INSCRIPTIONRIGHT_SECTION = '#menu:customization/labels/inscriptionRight/section'
-    CUSTOMIZATION_LABELS_INSCRIPTIONRIGHT_PRICE = '#menu:customization/labels/inscriptionRight/price'
-    CUSTOMIZATION_LABELS_EMBLEM_CURRENT = '#menu:customization/labels/emblem/current'
-    CUSTOMIZATION_LABELS_EMBLEM_NEW = '#menu:customization/labels/emblem/new'
-    CUSTOMIZATION_LABELS_TOTALPRICE = '#menu:customization/labels/totalPrice'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_PERIOD = '#menu:customization/labels/camouflage/period'
-    CUSTOMIZATION_LABELS_EMBLEM_PERIOD = '#menu:customization/labels/emblem/period'
-    CUSTOMIZATION_LABELS_INSCRIPTION_PERIOD = '#menu:customization/labels/inscription/period'
-    CUSTOMIZATION_LABELS_TIMELEFT_DAYS = '#menu:customization/labels/timeLeft/days'
-    CUSTOMIZATION_LABELS_TIMELEFT_HOURS = '#menu:customization/labels/timeLeft/hours'
-    CUSTOMIZATION_LABELS_TIMELEFT_LASTMINUTE = '#menu:customization/labels/timeLeft/lastMinute'
-    CUSTOMIZATION_LABELS_TIMELEFT_TITLE = '#menu:customization/labels/timeLeft/title'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_TIMELEFT_DAYS = '#menu:customization/labels/camouflage/timeLeft/days'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_TIMELEFT_HOURS = '#menu:customization/labels/camouflage/timeLeft/hours'
-    CUSTOMIZATION_BUTTONS_APPLY = '#menu:customization/buttons/apply'
-    CUSTOMIZATION_BUTTONS_CLOSE = '#menu:customization/buttons/close'
-    CUSTOMIZATION_PERIOD_INFINITY = '#menu:customization/period/infinity'
-    CUSTOMIZATION_PERIOD_DAY = '#menu:customization/period/day'
-    CUSTOMIZATION_PERIOD_DAYS = '#menu:customization/period/days'
-    CUSTOMIZATION_PERIOD_IGR = '#menu:customization/period/igr'
-    CUSTOMIZATION_GROUP_IGR = '#menu:customization/group/igr'
     SCREENSHOT_SAVE = '#menu:screenshot/save'
     TECHNICALMAINTENANCE_AMMOTITLEEX = '#menu:technicalMaintenance/ammoTitleEx'
     CONTEXTMENU_VEHICLEINFO = '#menu:contextMenu/vehicleInfo'
@@ -1474,7 +1393,6 @@ class MENU(object):
     BONUSTYPE_21 = '#menu:bonusType/21'
     BONUSTYPE_22 = '#menu:bonusType/22'
     BONUSTYPE_24 = '#menu:bonusType/24'
-    BONUSTYPE_26 = '#menu:bonusType/26'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1609,10 +1527,6 @@ class MENU(object):
     AWARDWINDOW_MISSION_MAINCONDITIONCOMPLETE = '#menu:awardWindow/mission/mainConditionComplete'
     AWARDWINDOW_MISSION_AVAILABLE = '#menu:awardWindow/mission/available'
     AWARDWINDOW_MISSION_NEXTBUTTON = '#menu:awardWindow/mission/nextButton'
-    AWARDWINDOW_HALLOWEENMISSION_REWARDOPENED = '#menu:awardWindow/halloweenMission/rewardOpened'
-    AWARDWINDOW_HALLOWEENMISSION_NEXTBUTTON = '#menu:awardWindow/halloweenMission/nextButton'
-    AWARDWINDOW_HALLOWEENMISSION_CLOSEBUTTON = '#menu:awardWindow/halloweenMission/closeButton'
-    AWARDWINDOW_HALLOWEENMISSION_AWARDSGRANTED = '#menu:awardWindow/halloweenMission/awardsGranted'
     AWARDWINDOW_MISSION_NEXTBUTTON_TOOLTIP_HEADER = '#menu:awardWindow/mission/nextButton/tooltip/header'
     AWARDWINDOW_MISSION_NEXTBUTTON_TOOLTIP_BODY = '#menu:awardWindow/mission/nextButton/tooltip/body'
     AWARDWINDOW_MISSION_ADDITIONALCOMPLETE = '#menu:awardWindow/mission/additionalComplete'
@@ -1764,21 +1678,10 @@ class MENU(object):
     FITTINGSELECTPOPOVER_OKBTNLABEL = '#menu:fittingSelectPopover/okBtnLabel'
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
-    FITTINGSELECTPOPOVER_BATTLETYPE = '#menu:fittingSelectPopover/battleType'
-    FITTINGSELECTPOPOVERMULTI_MAIN = '#menu:fittingSelectPopoverMulti/main'
-    FITTINGSELECTPOPOVERMULTI_SECONDARY = '#menu:fittingSelectPopoverMulti/secondary'
     QUOTE = '#menu:quote'
-    HANGAR_LEVIATHANPREVIEW_HEADERTITLE = '#menu:hangar/leviathanPreview/headerTitle'
-    HANGAR_LEVIATHANPREVIEW_CLOSE = '#menu:hangar/leviathanPreview/close'
-    HANGAR_LEVIATHANPREVIEW_HEADERDESC = '#menu:hangar/leviathanPreview/headerDesc'
-    HANGAR_LEVIATHANPREVIEW_VEHICLEINFO = '#menu:hangar/leviathanPreview/vehicleInfo'
-    HANGAR_LEVIATHANPREVIEW_INFOBUTTON = '#menu:hangar/leviathanPreview/infoButton'
-    HANGAR_LEVIATHANPREVIEW_SUMMARY = '#menu:hangar/leviathanPreview/summary'
-    TANK_PARAMS_LEVIATHAN_MONSTROUS = '#menu:tank_params/leviathan/monstrous'
-    TANK_PARAMS_LEVIATHAN_UNBELIEVABLE = '#menu:tank_params/leviathan/unbelievable'
-    TANK_PARAMS_LEVIATHAN_UNSTOPPABLE = '#menu:tank_params/leviathan/unstoppable'
-    TANK_PARAMS_LEVIATHAN_UNKNOWN = '#menu:tank_params/leviathan/unknown'
-    HANGAR_LEVIATHANPREVIEW_BACKDESCR = '#menu:hangar/leviathanPreview/backDescr'
+    CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
+    CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
+    CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2041,10 +1944,6 @@ class MENU(object):
      TANK_PARAMS_HULLARMOR,
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,
-     TANK_PARAMS_TURRETARMOR_PRIMARY,
-     TANK_PARAMS_TURRETARMOR_SECONDARY,
-     TANK_PARAMS_PARAMTITLE_SECONDARYTURRET,
-     TANK_PARAMS_PARAMTITLE_PRIMARYTURRET,
      TANK_PARAMS_RELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
@@ -2103,23 +2002,7 @@ class MENU(object):
      TANK_PARAMS_KG,
      TANK_PARAMS_CLIPSEC,
      TANK_PARAMS_STUNMAXDURATION,
-     TANK_PARAMS_STUNMINDURATION,
-     TANK_PARAMS_AVGDAMAGE_SECONDARY,
-     TANK_PARAMS_AVGPIERCINGPOWER_SECONDARY,
-     TANK_PARAMS_RELOADTIME_SECONDARY,
-     TANK_PARAMS_RELOADTIMESECS_SECONDARY,
-     TANK_PARAMS_TURRETROTATIONSPEED_SECONDARY,
-     TANK_PARAMS_TURRETYAWLIMITS_SECONDARY,
-     TANK_PARAMS_PITCHLIMITS_SECONDARY,
-     TANK_PARAMS_GUNYAWLIMITS_SECONDARY,
-     TANK_PARAMS_CLIPFIRERATE_SECONDARY,
-     TANK_PARAMS_AIMINGTIME_SECONDARY,
-     TANK_PARAMS_SHOTDISPERSIONANGLE_SECONDARY,
-     TANK_PARAMS_AVGDAMAGEPERMINUTE_SECONDARY,
-     TANK_PARAMS_LEVIATHAN_MONSTROUS,
-     TANK_PARAMS_LEVIATHAN_UNBELIEVABLE,
-     TANK_PARAMS_LEVIATHAN_UNSTOPPABLE,
-     TANK_PARAMS_LEVIATHAN_UNKNOWN)
+     TANK_PARAMS_STUNMINDURATION)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
@@ -2138,7 +2021,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_15,
      LOADING_BATTLETYPES_DESC_16,
      LOADING_BATTLETYPES_DESC_17,
-     LOADING_BATTLETYPES_DESC_21)
+     LOADING_BATTLETYPES_DESC_19,
+     LOADING_BATTLETYPES_DESC_20)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2173,8 +2057,11 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_16,
      LOADING_BATTLETYPES_17,
      LOADING_BATTLETYPES_DESC_17,
-     LOADING_BATTLETYPES_21,
-     LOADING_BATTLETYPES_DESC_21)
+     LOADING_BATTLETYPES_19,
+     LOADING_BATTLETYPES_DESC_19,
+     LOADING_BATTLETYPES_20,
+     LOADING_BATTLETYPES_DESC_20)
+    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
 
     @classmethod
     def contextmenu(cls, key0):
@@ -2369,6 +2256,15 @@ class MENU(object):
     def loading_battletypes(cls, key0):
         outcome = '#menu:loading/battleTypes/{}'.format(key0)
         if outcome not in cls.LOADING_BATTLETYPES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def cst_item_ctx_menu(cls, key0):
+        outcome = '#menu:cst_item_ctx_menu/{}'.format(key0)
+        if outcome not in cls.CST_ITEM_CTX_MENU_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

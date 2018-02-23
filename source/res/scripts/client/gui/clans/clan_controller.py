@@ -477,7 +477,7 @@ class ClanController(ClansListeners, IClanController):
         g_wgncEvents.onProxyDataItemShowByDefault += self._onProxyDataItemShowByDefault
         g_playerEvents.onClanMembersListChanged += self._onClanMembersListChanged
 
-    def stop(self):
+    def stop(self, logout=True):
         g_playerEvents.onClanMembersListChanged -= self._onClanMembersListChanged
         g_wgncEvents.onProxyDataItemShowByDefault -= self._onProxyDataItemShowByDefault
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -489,7 +489,8 @@ class ClanController(ClansListeners, IClanController):
         if self.__profile is not None:
             self.__profile.fini()
             self.__profile = None
-        self.__state.logout()
+        if logout:
+            self.__state.logout()
         self.__cleanDossiers()
         return
 
@@ -555,6 +556,12 @@ class ClanController(ClansListeners, IClanController):
 
     def isLoggedOn(self):
         return self.__state.isLoggedOn()
+
+    @async
+    @process
+    def getAccessTokenData(self, force, callback):
+        accessToken = yield self.__state.getAccessTokenData(force)
+        callback(accessToken)
 
     def updateClanCommonDataCache(self, cache):
         for item in cache or {}:
