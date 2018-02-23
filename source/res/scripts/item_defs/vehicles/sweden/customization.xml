@@ -10,6 +10,19 @@
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <armorColor>	15 36 36 0	</armorColor>
   <inscriptions>
+    <swedenhidden>
+      <userString>	#vehicle_customization:inscription/historical	</userString>
+      <notInShop>	true	</notInShop>
+      <priceFactor>	1.0	</priceFactor>
+      <inscriptions>
+        <inscription>
+          <id>	5	</id>
+          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
+          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
+          <qualifier>	map_kind_summer_all_crew	</qualifier>
+        </inscription>
+      </inscriptions>
+    </swedenhidden>
     <sweden>
       <userString>	#vehicle_customization:inscription/historical	</userString>
       <priceFactor>	1.0	</priceFactor>
@@ -36,12 +49,6 @@
           <id>	4	</id>
           <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_04.dds	</texName>
           <userString>	#vehicle_customization:inscription/sweden/gamla_bettan	</userString>
-          <qualifier>	map_kind_summer_all_crew	</qualifier>
-        </inscription>
-        <inscription>
-          <id>	5	</id>
-          <texName>	gui/maps/vehicles/decals/inscriptions/sweden/inscription_05.dds	</texName>
-          <userString>	#vehicle_customization:inscription/sweden/gittan	</userString>
           <qualifier>	map_kind_summer_all_crew	</qualifier>
         </inscription>
         <inscription>
@@ -202,6 +209,7 @@
         <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.8 1.8 0.000000 0.000000	</S10_Strv_103_0_Series>
         <S23_Strv_81>	1 1 0.000000 0.000000	</S23_Strv_81>
+        <S22_Strv_S1>	3 3 0.000000 0.000000	</S22_Strv_S1>
       </tiling>
     </Sw_winter_01>
     <Sw_winter_02>
@@ -275,7 +283,7 @@
         <S11_Strv_103B>	1.8 1.8 1.2 0.9	</S11_Strv_103B>
         <S21_UDES_03>	4.8 4.8 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	2.8 2.8 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.3 2.3 1.8 0.000000	</S23_Strv_81>
       </tiling>
     </Sw_summer_01>
@@ -314,7 +322,7 @@
         <S18_EMIL_1951_E1>	1.4 1.4 2.4 0.000000	</S18_EMIL_1951_E1>
         <S11_Strv_103B>	1.2 1.2 1.7 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	3.2 3.2 0.000000 0.000000	</S21_UDES_03>
-        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.1 1.1 3.6 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Sw_summer_02>
@@ -353,7 +361,7 @@
         <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.9 1.9 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Sw_desert_01>
@@ -393,7 +401,7 @@
         <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.9 1.9 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Sw_desert_02>
@@ -514,7 +522,7 @@
         <S11_Strv_103B>	1.1 1.1 0.5 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.1 2.1 0.000000 0.000000	</S23_Strv_81>
       </tiling>
       <notInShop>	false	</notInShop>
@@ -554,7 +562,7 @@
         <S11_Strv_103B>	1.3 1.3 1.8 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	3.8 3.8 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.3 1.3 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	2.1 2.1 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.5 1.5 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
       </tiling>
       <notInShop>	false	</notInShop>
@@ -632,7 +640,7 @@
         <S11_Strv_103B>	1.1 1.1 3.2 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	3.7 3.7 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1.4 1.4 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.5 2.5 0.000000 0.000000	</S23_Strv_81>
       </tiling>
       <notInShop>	false	</notInShop>
@@ -835,7 +843,7 @@
         <S11_Strv_103B>	1.2 1.2 0.000000 0.000000	</S11_Strv_103B>
         <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	0.9 0.9 4 2.1	</S22_Strv_S1>
         <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Clan_camuflage_03>
@@ -994,7 +1002,7 @@
         <S18_EMIL_1951_E1>	1.9 1.9 0.000000 0.000000	</S18_EMIL_1951_E1>
         <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
         <S10_Strv_103_0_Series>	1.2 1.2 0.4 0.000000	</S10_Strv_103_0_Series>
-        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S22_Strv_S1>	1 1 0.000000 0.000000	</S22_Strv_S1>
         <S23_Strv_81>	2.9 2.9 0.000000 0.000000	</S23_Strv_81>
       </tiling>
     </Desert_camou>
