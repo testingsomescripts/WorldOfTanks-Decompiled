@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ScrolledList.py
 from Tkinter import *
 
@@ -45,13 +46,11 @@ class ScrolledList:
         index = self.listbox.index('active')
         self.select(index)
         self.on_select(index)
-        return 'break'
 
     def double_click_event(self, event):
         index = self.listbox.index('active')
         self.select(index)
         self.on_double(index)
-        return 'break'
 
     menu = None
 
@@ -80,7 +79,6 @@ class ScrolledList:
         else:
             self.select(index)
             self.on_select(index)
-        return 'break'
 
     def down_event(self, event):
         index = self.listbox.index('active')
@@ -93,7 +91,6 @@ class ScrolledList:
         else:
             self.select(index)
             self.on_select(index)
-        return 'break'
 
     def select(self, index):
         self.listbox.focus_set()

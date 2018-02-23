@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderInfoWindow.py
 from helpers.i18n import makeString as _ms
 from constants import MAX_FORTIFICATION_LEVEL
@@ -15,7 +16,7 @@ class FortOrderInfoWindow(FortOrderInfoWindowMeta, FortViewHelper):
 
     def __init__(self, ctx = None):
         super(FortOrderInfoWindow, self).__init__()
-        raise 'orderID' in ctx or AssertionError
+        assert 'orderID' in ctx
         self.__orderID = ctx['orderID']
         self.__order = self.fortCtrl.getFort().getOrder(self.__orderID)
 

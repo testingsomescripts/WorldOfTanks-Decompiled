@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/ClientUnitMgr.py
 import cPickle
 from ClientUnit import ClientUnit

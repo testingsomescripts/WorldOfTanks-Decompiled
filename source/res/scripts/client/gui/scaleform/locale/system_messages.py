@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SYSTEM_MESSAGES.py
 from debug_utils import LOG_WARNING
 
@@ -781,6 +782,7 @@ class SYSTEM_MESSAGES(object):
     EXCHANGEXP_WALLET_NOT_AVAILABLE = '#system_messages:exchangeXP/wallet_not_available'
     EXCHANGEXP_SERVER_ERROR = '#system_messages:exchangeXP/server_error'
     QUESTS_NOQUESTSWITHGIVENID = '#system_messages:quests/noQuestsWithGivenID'
+    QUEUE_ISINQUEUE = '#system_messages:queue/isInQueue'
     WALLET_AVAILABLE = '#system_messages:wallet/available'
     WALLET_AVAILABLE_GOLD = '#system_messages:wallet/available_gold'
     WALLET_AVAILABLE_FREEXP = '#system_messages:wallet/available_freexp'
@@ -1024,6 +1026,18 @@ class SYSTEM_MESSAGES(object):
     SQUAD_LEAVEDISABLED = '#system_messages:squad/leaveDisabled'
     BATTLERESULTS_SHARING_SUCCESS = '#system_messages:battleResults/sharing/success'
     BATTLE_REQUEST_SEND_INVITES = '#system_messages:battle/request/SEND_INVITES'
+    TELECOM_NOTIFICATIONS_VEHICLERECEIVED_TITLE = '#system_messages:telecom/notifications/vehicleReceived/title'
+    TELECOM_NOTIFICATIONS_VEHICLERECEIVED_COMMENT = '#system_messages:telecom/notifications/vehicleReceived/comment'
+    TELECOM_NOTIFICATIONS_VEHICLERECEIVED_CREW = '#system_messages:telecom/notifications/vehicleReceived/crew'
+    TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_TITLE = '#system_messages:telecom/notifications/vehicleBlocked/title'
+    TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_COMMENT = '#system_messages:telecom/notifications/vehicleBlocked/comment'
+    TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleBlocked/subcomment'
+    TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_TITLE = '#system_messages:telecom/notifications/vehicleUnblocked/title'
+    TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_COMMENT = '#system_messages:telecom/notifications/vehicleUnblocked/comment'
+    TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleUnblocked/subcomment'
+    TELECOM_NOTIFICATIONS_VEHICLEREMOVED_TITLE = '#system_messages:telecom/notifications/vehicleRemoved/title'
+    TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT = '#system_messages:telecom/notifications/vehicleRemoved/comment'
+    TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT = '#system_messages:telecom/notifications/vehicleRemoved/subcomment'
     PREBATTLE_REQUEST_NAME_ENUM = (PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
      PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
      PREBATTLE_REQUEST_NAME_CHANGE_USER_STATUS,
@@ -2018,6 +2032,7 @@ class SYSTEM_MESSAGES(object):
      EXCHANGEXP_WALLET_NOT_AVAILABLE,
      EXCHANGEXP_SERVER_ERROR,
      QUESTS_NOQUESTSWITHGIVENID,
+     QUEUE_ISINQUEUE,
      WALLET_AVAILABLE,
      WALLET_AVAILABLE_GOLD,
      WALLET_AVAILABLE_FREEXP,
@@ -2260,7 +2275,19 @@ class SYSTEM_MESSAGES(object):
      RALLY_LEAVEDISABLED,
      SQUAD_LEAVEDISABLED,
      BATTLERESULTS_SHARING_SUCCESS,
-     BATTLE_REQUEST_SEND_INVITES)
+     BATTLE_REQUEST_SEND_INVITES,
+     TELECOM_NOTIFICATIONS_VEHICLERECEIVED_TITLE,
+     TELECOM_NOTIFICATIONS_VEHICLERECEIVED_COMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLERECEIVED_CREW,
+     TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_TITLE,
+     TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_COMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLEBLOCKED_SUBCOMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_TITLE,
+     TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_COMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLEUNBLOCKED_SUBCOMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_TITLE,
+     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_COMMENT,
+     TELECOM_NOTIFICATIONS_VEHICLEREMOVED_SUBCOMMENT)
 
     @staticmethod
     def prebattle_request_name(key):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortBuildingCardPopover.py
 import BigWorld
 import ArenaType
@@ -267,13 +268,11 @@ class FortBuildingCardPopover(FortViewHelper, FortBuildingCardPopoverMeta):
     def __getMapUserName(cls, arenaTypeID):
         if arenaTypeID in ArenaType.g_cache:
             return ArenaType.g_cache[arenaTypeID].name
-        return ''
 
     @classmethod
     def __getMapImage(cls, arenaTypeID):
         if arenaTypeID in ArenaType.g_cache:
             return '../maps/icons/map/small/%s.png' % ArenaType.g_cache[arenaTypeID].geometryName
-        return ''
 
     def __setDefaultEnabling(self):
         demountEnabling = False

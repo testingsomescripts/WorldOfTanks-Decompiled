@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/VoiceChatInterface.py
 import BigWorld, Event
 import BattleReplay
@@ -137,7 +138,6 @@ class _VoiceChatInterface(UIInterface):
             return 'vivox'
         if self.isYY():
             return 'YY'
-        return 'unknown'
 
     @process
     def __doInitialize(self):

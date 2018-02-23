@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/BWCoroutine.py
 """This module provides a number of utilities to simplify the writing of code
 that needs to execute in order over a number of  frames using python generators
@@ -63,8 +64,8 @@ class BWCoroutineTimeoutException(Exception):
 class _BWCoroutineThread:
 
     def __init__(self, generator, completionCallback = None):
-        raise isinstance(generator, types.GeneratorType) or AssertionError
-        raise callable(completionCallback) or completionCallback is None or AssertionError
+        assert isinstance(generator, types.GeneratorType)
+        assert callable(completionCallback) or completionCallback is None
         self._generator = generator
         self._completionCallback = completionCallback
         self._waitObject = None
@@ -74,11 +75,11 @@ class _BWCoroutineThread:
         self._tick()
 
     def _tick(self):
-        raise isinstance(self._generator, types.GeneratorType) or AssertionError
+        assert isinstance(self._generator, types.GeneratorType)
         self._waitObject = None
         try:
             self._waitObject = self._generator.next()
-            raise isinstance(self._waitObject, _BWWaitObject) or AssertionError
+            assert isinstance(self._waitObject, _BWWaitObject)
             self._waitObject.doWait(self)
         except StopIteration:
             if self._completionCallback is not None:
@@ -88,8 +89,8 @@ class _BWCoroutineThread:
         return
 
     def stop(self):
-        raise isinstance(self._waitObject, _BWWaitObject) or AssertionError
-        raise isinstance(self._generator, types.GeneratorType) or AssertionError
+        assert isinstance(self._waitObject, _BWWaitObject)
+        assert isinstance(self._generator, types.GeneratorType)
         self._waitObject.onStop()
         self._generator.close()
 
@@ -153,7 +154,7 @@ class BWWaitForPeriod(_BWWaitObject):
         self.waitTime = waitTime
 
     def doWait(self, coroutineThread):
-        raise isinstance(coroutineThread, _BWCoroutineThread) or AssertionError
+        assert isinstance(coroutineThread, _BWCoroutineThread)
         BigWorld.callback(self.waitTime, coroutineThread.onContinue)
 
 
@@ -165,11 +166,11 @@ class BWWaitForCondition(_BWWaitObject):
 
     def __init__(self, condition, timeout = None, checkFrequency = 0.01):
         _BWWaitObject.__init__(self)
-        if not callable(condition):
-            raise AssertionError
-            self._condition = condition
-            self._checkFrequency = checkFrequency
-            self._timeoutTime = timeout is not None and BigWorld.time() + timeout
+        assert callable(condition)
+        self._condition = condition
+        self._checkFrequency = checkFrequency
+        if timeout is not None:
+            self._timeoutTime = BigWorld.time() + timeout
         else:
             self._timeoutTime = None
         self._stopped = False
@@ -233,17 +234,17 @@ class BWWaitForCoroutine(_BWWaitObject):
 
     def __init__(self, waitThread, timeout = None):
         _BWWaitObject.__init__(self)
-        raise isinstance(waitThread, _BWCoroutineThread) or AssertionError
+        assert isinstance(waitThread, _BWCoroutineThread)
         self._waitThread = waitThread
         self._hostThread = None
-        if not self._waitThread._completionCallback is None:
-            raise AssertionError
-            self._waitThread._completionCallback = self.handleCompletionCallback
-            timeout is not None and BigWorld.callback(timeout, self.handleTimeout)
+        assert self._waitThread._completionCallback is None
+        self._waitThread._completionCallback = self.handleCompletionCallback
+        if timeout is not None:
+            BigWorld.callback(timeout, self.handleTimeout)
         return
 
     def doWait(self, coroutineThread):
-        raise isinstance(coroutineThread, _BWCoroutineThread) or AssertionError
+        assert isinstance(coroutineThread, _BWCoroutineThread)
         self._hostThread = coroutineThread
         self._waitThread.run()
 
@@ -267,8 +268,8 @@ class BWWaitForCoroutine(_BWWaitObject):
 
 
 def _niceFunctionString(f):
-    if not (callable(f) or isinstance(f, types.GeneratorType) or isinstance(f, _BWCoroutineFunction)):
-        raise AssertionError
+    if not callable(f):
+        assert isinstance(f, types.GeneratorType) or isinstance(f, _BWCoroutineFunction)
         return isinstance(f, partial) and 'partial %s %s %s:%d' % (f.func.func_name,
          f.args,
          f.func.func_code.co_filename,

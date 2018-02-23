@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RareAchievement.py
 import uuid
 import imghdr
@@ -75,7 +76,7 @@ class RareAchievement(RegularAchievement):
         return icons
 
     def _getIconName(self):
-        return 'actionUnknown'
+        pass
 
     def __repr__(self):
         return '%s<rareID=%s; value=%s>' % (self.__class__.__name__, str(self._rareID), str(self._value))

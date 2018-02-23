@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/ColorSchemeManager.py
 import types
 import Math, ResMgr
@@ -194,7 +195,6 @@ class _ColorSchemeManager(UIInterface):
     def getColorGroup(cls, isColorBlind = False):
         if isColorBlind:
             return 'color_blind'
-        return 'default'
 
     @classmethod
     def getScheme(cls, schemeName):

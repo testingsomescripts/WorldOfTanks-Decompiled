@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/Crypto/Hash/CMAC.py
 """CMAC (Cipher-based Message Authentication Code) algorithm
 

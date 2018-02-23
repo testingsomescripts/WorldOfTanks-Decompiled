@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/SoundGroups.py
 import BigWorld
 import FMOD
@@ -86,7 +87,6 @@ class SoundModes():
                 return -1
             if other.name == 'default':
                 return 1
-            return 1
 
     class NationalPresetDesc(object):
 

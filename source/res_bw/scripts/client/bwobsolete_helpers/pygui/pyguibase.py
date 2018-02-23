@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/PyGUIBase.py
 import BigWorld, GUI
 import weakref
@@ -157,7 +158,7 @@ class PyGUIBase(object, Listenable):
         for name, child in self.component.children:
             if not child.script:
                 child.script = PyGUIBase(child)
-            raise isinstance(child.script, PyGUIBase) or AssertionError
+            assert isinstance(child.script, PyGUIBase)
 
         self._bindEvents(self.__class__)
 
@@ -165,15 +166,15 @@ class PyGUIBase(object, Listenable):
         for name, function in cls.__dict__.iteritems():
             if hasattr(function, '_PyGUIEventHandler'):
                 for componentName, eventName, args, kargs in function._PyGUIEventHandler:
-                    if not callable(function):
-                        raise AssertionError
-                        component = self.component
-                        for name in componentName.split('.'):
-                            component = getattr(component, name, None)
-                            if component is None:
-                                break
+                    assert callable(function)
+                    component = self.component
+                    for name in componentName.split('.'):
+                        component = getattr(component, name, None)
+                        if component is None:
+                            break
 
-                        component is None and ERROR_MSG("PyGUIEvent: '%s' has no component named '%s'." % (str(self), componentName))
+                    if component is None:
+                        ERROR_MSG("PyGUIEvent: '%s' has no component named '%s'." % (str(self), componentName))
                         continue
                     function = getattr(self, function.__name__)
                     setattr(component.script, eventName, partial(function, *args, **kargs))

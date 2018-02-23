@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/FalloutDeathMode.py
 import weakref
 import GUI
@@ -53,7 +54,7 @@ class FalloutDeathMode(IControlMode):
         self.__cam.disable()
 
     def handleMouseEvent(self, dx, dy, dz):
-        raise self.__isEnabled or AssertionError
+        assert self.__isEnabled
         GUI.mcursor().position = self.__aim.offset()
         self.__cam.update(dx, dy, clamp(-1.0, 1.0, dz))
         return True

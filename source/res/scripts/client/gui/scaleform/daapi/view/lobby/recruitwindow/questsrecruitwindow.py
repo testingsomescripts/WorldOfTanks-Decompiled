@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/QuestsRecruitWindow.py
 import nations
 from items import tankmen
@@ -14,11 +15,11 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
     def __init__(self, ctx = None):
         super(QuestsRecruitWindow, self).__init__()
         self.__currentSelectedNationID = None
-        raise len({'isPremium',
+        assert len({'isPremium',
          'fnGroup',
          'lnGroup',
          'iGroupID',
-         'questID'} - set(ctx.keys())) == 0 or AssertionError
+         'questID'} - set(ctx.keys())) == 0
         self.__questID = ctx['questID']
         self.__isPremium = ctx['isPremium']
         self.__fnGroup = ctx['fnGroup']

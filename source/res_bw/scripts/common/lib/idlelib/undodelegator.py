@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/UndoDelegator.py
 import string
 from Tkinter import *
@@ -30,7 +31,6 @@ class UndoDelegator(Delegator):
         print 'can_merge:', self.can_merge,
         print 'get_saved():', self.get_saved()
         pprint(self.undolist[self.pointer:])
-        return 'break'
 
     def reset_undo(self):
         self.was_saved = -1
@@ -115,7 +115,6 @@ class UndoDelegator(Delegator):
         self.pointer = self.pointer - 1
         self.can_merge = False
         self.check_saved()
-        return 'break'
 
     def redo_event(self, event):
         if self.pointer >= len(self.undolist):
@@ -126,7 +125,6 @@ class UndoDelegator(Delegator):
         self.pointer = self.pointer + 1
         self.can_merge = False
         self.check_saved()
-        return 'break'
 
 
 class Command:
@@ -161,7 +159,7 @@ class Command:
         pass
 
     def merge(self, cmd):
-        return 0
+        pass
 
     def save_marks(self, text):
         marks = {}
@@ -225,7 +223,6 @@ class InsertCommand(Command):
             return 'alphanumeric'
         if c == '\n':
             return 'newline'
-        return 'punctuation'
 
 
 class DeleteCommand(Command):

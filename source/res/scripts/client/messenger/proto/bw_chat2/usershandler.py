@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/UsersHandler.py
 from messenger.m_constants import GAME_ONLINE_STATUS
 from messenger.proto.bw_chat2 import provider, limits

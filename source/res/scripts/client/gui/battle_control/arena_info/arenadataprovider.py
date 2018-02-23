@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/ArenaDataProvider.py
 from collections import defaultdict
 import operator
@@ -206,7 +207,6 @@ class ArenaDataProvider(object):
         vehIDs = self.getVehIDsByPrebattleID(team, prebattleID)
         if vehIDs:
             return len(vehIDs)
-        return 0
 
     def getVehicleInteractiveStats(self, vID = None):
         if vID is None:

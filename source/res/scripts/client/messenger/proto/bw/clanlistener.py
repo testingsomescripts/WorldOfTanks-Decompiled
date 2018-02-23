@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/ClanListener.py
 import BigWorld
 from PlayerEvents import g_playerEvents

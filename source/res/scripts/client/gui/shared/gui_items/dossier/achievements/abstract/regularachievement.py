@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/RegularAchievement.py
 import BigWorld
 from helpers import i18n
@@ -92,7 +93,7 @@ class RegularAchievement(GUIItem):
         return self._isDone
 
     def getProgressValue(self):
-        return 0.0
+        pass
 
     def hasProgress(self):
         return False
@@ -122,19 +123,16 @@ class RegularAchievement(GUIItem):
         heroInfoKey = '#achievements:%s_heroInfo' % self._getActualName()
         if i18n.doesTextExist(heroInfoKey):
             return i18n.makeString(heroInfoKey)
-        return ''
 
     def getNotificationInfo(self):
         notificationKey = '#achievements:%s_notification' % self._getActualName()
         if i18n.doesTextExist(notificationKey):
             return i18n.makeString(notificationKey)
-        return ''
 
     def getUserCondition(self):
         condKey = '#achievements:%s_condition' % self._getActualName()
         if i18n.doesTextExist(condKey):
             return i18n.makeString(condKey)
-        return ''
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):

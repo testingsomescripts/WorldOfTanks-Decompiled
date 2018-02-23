@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/FixTk.py
 import sys, os
 try:
@@ -12,11 +13,11 @@ except (ImportError, AttributeError):
 else:
 
     def convert_path(s):
-        if not isinstance(s, str):
-            raise AssertionError
-            udir = s.decode('mbcs')
-            hdir = ctypes.windll.kernel32.CreateFileW(udir, 128, 1, None, 3, 33554432, None)
-            return hdir == -1 and s
+        assert isinstance(s, str)
+        udir = s.decode('mbcs')
+        hdir = ctypes.windll.kernel32.CreateFileW(udir, 128, 1, None, 3, 33554432, None)
+        if hdir == -1:
+            return s
         else:
             buf = ctypes.create_unicode_buffer(u'', 32768)
             res = ctypes.windll.kernel32.GetFinalPathNameByHandleW(hdir, buf, len(buf), 0)

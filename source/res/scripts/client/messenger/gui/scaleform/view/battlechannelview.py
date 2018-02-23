@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/BattleChannelView.py
 import weakref
 from gui import makeHtmlString
@@ -135,14 +136,14 @@ class BattleChannelView(UIInterface, IBattleChannelView):
 
     def __onReceiverChanged(self, *args):
         parser = CommandArgsParser(self.__onReceiverChanged.__name__, 1, [long])
-        clientID, = parser.parse(*args)
+        clientID = parser.parse(*args)
         controller = self.__getController(clientID)
         if controller:
             BattleChannelView._lastReceiver = controller.getSettings().name
 
     def __onCheckCooldownPeriod(self, *args):
         parser = CommandArgsParser(self.__onCheckCooldownPeriod.__name__, 1, [long])
-        clientID, = parser.parse(*args)
+        clientID = parser.parse(*args)
         controller = self.__getController(clientID)
         if not controller:
             return

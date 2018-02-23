@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/UnitFactory.py
 from constants import PREBATTLE_TYPE, FALLOUT_BATTLE_TYPE
 from debug_utils import LOG_ERROR

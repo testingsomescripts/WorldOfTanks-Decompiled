@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/BattleResultsWindow.py
 from collections import defaultdict
 import re
@@ -243,8 +244,8 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
 
     def __init__(self, ctx = None):
         super(BattleResultsWindow, self).__init__()
-        raise 'dataProvider' in ctx or AssertionError
-        raise ctx['dataProvider'] is not None or AssertionError
+        assert 'dataProvider' in ctx
+        assert ctx['dataProvider'] is not None
         self.dataProvider = ctx['dataProvider']
         self.__premiumBonusesDiff = {}
         self.__isFallout = False
@@ -1298,7 +1299,10 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
                 xp += data.get('xp', 0) - data.get('achievementXP', 0)
                 damageDealt += data.get('damageDealt', 0)
                 statValues.append(self.__populateStatValues(data, isSelf))
-                achievementsData += data.get('achievements', [])
+                for achievement in data.get('achievements', []):
+                    if achievement not in achievementsData:
+                        achievementsData.append(achievement)
+
                 for k, (d, func) in CUMULATIVE_STATS_DATA.iteritems():
                     if self.__isFallout and k in FALLOUT_EXCLUDE_VEHICLE_STATS:
                         continue
@@ -1919,7 +1923,6 @@ class BattleResultsWindow(BattleResultsMeta, ClubListener):
         if arenaUniqueID and arenaUniqueID not in self.__buyPremiumCache:
             self.__buyPremiumCache.add(arenaUniqueID)
             if arenaUniqueID == self.dataProvider.getArenaUniqueID():
-                SystemMessages.g_instance.pushI18nMessage('#system_messages:premium/post_battle_premium', type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, **self.__premiumBonusesDiff)
                 self.__showStats()
         elif event.ctx.get('becomePremium', False):
             self.__showStats()

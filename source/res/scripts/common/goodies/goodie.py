@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/Goodie.py
 import time
 from goodie_constants import GOODIE_STATE

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GraphicsResolutions.py
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
@@ -121,8 +122,6 @@ class GraphicsResolutions(object):
             if videoModeInfo[0] == self.__videoMode:
                 return index
 
-        return -1
-
     @property
     def monitorIndex(self):
         return BigWorld.wg_getActiveMonitorIndex()
@@ -151,13 +150,11 @@ class GraphicsResolutions(object):
     def multisamplingTypeIndex(self):
         if self.__multisamplingType in self.__multisamplingTypes:
             return self.__multisamplingTypes.index(self.__multisamplingType)
-        return -1
 
     @property
     def customAAModeIndex(self):
         if self.__customAAMode in self.__customAAModes:
             return self.__customAAModes.index(self.__customAAMode)
-        return -1
 
     @property
     def videoModesList(self):

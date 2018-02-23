@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/StaticFormationInvitesAndRequestsWindow.py
 from collections import namedtuple
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -33,7 +34,6 @@ def _formatInviteStatus(invitation):
         return text_styles.error('#cybersport:InvitesAndRequestsWindow/rejected')
     if invitation.isCancelled():
         return text_styles.error('#cybersport:InvitesAndRequestsWindow/cancelled')
-    return ''
 
 
 class _DataProvider(SortableDAAPIDataProvider):
@@ -72,7 +72,7 @@ class StaticFormationInvitesAndRequestsWindow(StaticFormationInvitesAndRequestsM
 
     def __init__(self, ctx = None):
         super(StaticFormationInvitesAndRequestsWindow, self).__init__()
-        raise 'clubDbID' in ctx or AssertionError
+        assert 'clubDbID' in ctx
         self.__clubDbID = ctx['clubDbID']
         self.__isOnlyInvites = False
         self.__dataProvider = _DataProvider()

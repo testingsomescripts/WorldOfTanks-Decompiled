@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/EULAVersionLoader.py
 import ResMgr
 from helpers import VERSION_FILE_PATH

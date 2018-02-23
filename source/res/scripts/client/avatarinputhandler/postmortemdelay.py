@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/PostmortemDelay.py
 import BigWorld
 import Math
@@ -17,7 +18,7 @@ class PostmortemDelay:
     KILLER_VEHICLE_PITCH_OFFSET = -0.3
 
     def __init__(self, arcadeCamera, onStop):
-        raise isinstance(arcadeCamera, ArcadeCamera) or AssertionError
+        assert isinstance(arcadeCamera, ArcadeCamera)
         self.__killerVehicleID = None
         self.__bActive = False
         self.__bChoiceWindowActive = False

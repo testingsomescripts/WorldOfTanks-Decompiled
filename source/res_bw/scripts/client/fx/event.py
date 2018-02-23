@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Event.py
 """
 Interface FX.Event
@@ -47,18 +48,18 @@ class Event:
     def go(self, effect, actor, source, target, **kargs):
         """This method starts the event playing.  The event should return a
         time suggesting how long it will take until the event ends."""
-        return 0.0
+        pass
 
     def stop(self, actor, source, target):
         """This method stops the event playing.  The method should return
         a time suggesting how long it will take to gracefully stop the
         event."""
-        return 0.0
+        pass
 
     def duration(self, actor, source, target):
         """This method returns the amount of time in seconds
         the event will take to fully play out."""
-        return 0.0
+        pass
 
     def eventTiming(self):
         """This method tells the FX system whether or not this

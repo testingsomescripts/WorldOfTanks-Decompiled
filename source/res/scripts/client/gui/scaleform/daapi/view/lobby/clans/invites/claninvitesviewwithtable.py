@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/invites/ClanInvitesViewWithTable.py
 import weakref
 import math
@@ -128,7 +129,6 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
     def getSelectedIdx(self):
         if self.__selectedID in self.__listMapping:
             return self.__listMapping[self.__selectedID]
-        return -1
 
     def setSelectedID(self, id):
         self.__selectedID = id
@@ -215,15 +215,6 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
         else:
             return
 
-    def _makeRequestTooltip(self, status, date, user = None):
-        if status == CLAN_INVITE_STATES.ACCEPTED:
-            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status == CLAN_INVITE_STATES.DECLINED or status == CLAN_INVITE_STATES.DECLINED_RESENT:
-            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status == CLAN_INVITE_STATES.EXPIRED or status == CLAN_INVITE_STATES.EXPIRED_RESENT:
-            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date))
-        return ''
-
     def _makeInviteStateString(self, item):
         status = item.getStatus()
         if status == CLAN_INVITE_STATES.ACTIVE:
@@ -238,7 +229,6 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
             return text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_STATUS_SENT))
         if status == CLAN_INVITE_STATES.ERROR:
             return text_styles.error(_ms(CLANS.CLANINVITESWINDOW_STATUS_ERROR))
-        return ''
 
     def __formatActiveStateString(self, item):
         if not isValueAvailable(getter=item.getCreatedAt):

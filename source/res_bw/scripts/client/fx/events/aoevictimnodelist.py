@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/AOEVictimNodeList.py
 import BigWorld
 import random
@@ -99,7 +100,6 @@ class AOEVictimNodeList(ParticleSubSystem):
     def go(self, effect, actor, source, target, **kargs):
         self.findTargets(actor, source, target)
         self.subSystemIterate(actor, source, target, self.setNodes)
-        return 0.0
 
     def eventTiming(self):
         return TRANSFORM_DEPENDENT_EVENT

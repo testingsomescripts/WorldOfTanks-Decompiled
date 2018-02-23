@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortSettingsPeripheryPopover.py
 from ConnectionManager import connectionManager
 from predefined_hosts import g_preDefinedHosts

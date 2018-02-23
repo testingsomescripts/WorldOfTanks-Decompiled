@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
 import BigWorld
 import ResMgr
@@ -53,7 +54,7 @@ class IMapActivity:
         return False
 
     def name(self):
-        return ''
+        pass
 
 
 class MapActivities(object):

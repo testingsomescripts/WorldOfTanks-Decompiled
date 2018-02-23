@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/SetOrbitorPoint.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import *
@@ -26,7 +27,6 @@ class SetOrbitorPoint(ParticleSubSystem):
 
     def go(self, effect, actor, source, target, **kargs):
         self.subSystemIterate(actor, source, target, self.setOrbitorPoint)
-        return 0.0
 
 
 s_sectionProcessors['SetOrbitorPoint'] = SetOrbitorPoint

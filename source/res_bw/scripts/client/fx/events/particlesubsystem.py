@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/ParticleSubSystem.py
 from FX.Event import Event
 from bwdebug import *
@@ -36,10 +37,10 @@ class ParticleSubSystem(Event):
         return self
 
     def duration(self, actor, source, target):
-        return 0.0
+        pass
 
     def isInteresting(self, subSystem):
-        return 1
+        pass
 
     def populateSubSystemList(self, actor):
         if type(actor) == Pixie.MetaParticleSystem:

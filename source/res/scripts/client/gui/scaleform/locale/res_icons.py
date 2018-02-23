@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/RES_ICONS.py
 from debug_utils import LOG_WARNING
 
@@ -68,6 +69,7 @@ class RES_ICONS(object):
     MAPS_ICONS_ARTEFACT_TOOLBOX = '../maps/icons/artefact/toolbox.png'
     MAPS_ICONS_ARTEFACT_WETCOMBATPACK = '../maps/icons/artefact/wetCombatPack.png'
     MAPS_ICONS_AWARDS_BATTLESWORDS = '../maps/icons/awards/battleSwords.png'
+    MAPS_ICONS_AWARDS_USSR_R127_T44_100_P = '../maps/icons/awards/ussr-R127_T44_100_P.png'
     MAPS_ICONS_AWARDS_VEHICLESRESEARCH = '../maps/icons/awards/vehiclesResearch.png'
     MAPS_ICONS_AWARDS_VICTORY = '../maps/icons/awards/victory.png'
     MAPS_ICONS_BATTLETYPES_1 = '../maps/icons/battleTypes/1.png'
@@ -1076,6 +1078,21 @@ class RES_ICONS(object):
     MAPS_ICONS_WINDOWS_PREM_ICON_PREM7_98 = '../maps/icons/windows/prem/icon_prem7_98.png'
     MAPS_ICONS_WINDOWS_PREM_PREMHEADER = '../maps/icons/windows/prem/premHeader.png'
     MAPS_ICONS_WINDOWS_SWITCH_PERIPHERY_WINDOW_BG = '../maps/icons/windows/switch_periphery_window_bg.png'
+    MAPS_ICONS_ORDERS_SMALL_ENUM = (MAPS_ICONS_ORDERS_SMALL_ADDITIONALBRIEFING,
+     MAPS_ICONS_ORDERS_SMALL_ARTILLERY,
+     MAPS_ICONS_ORDERS_SMALL_BOMBER,
+     MAPS_ICONS_ORDERS_SMALL_COMBATPAYMENTS,
+     MAPS_ICONS_ORDERS_SMALL_EVACUATION,
+     MAPS_ICONS_ORDERS_SMALL_HEAVYTRANSPORT,
+     MAPS_ICONS_ORDERS_SMALL_MILITARYEXERCISES,
+     MAPS_ICONS_ORDERS_SMALL_REQUISITION,
+     MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE,
+     MAPS_ICONS_ORDERS_SMALL_TACTICALTRAINING)
+    MAPS_ICONS_VEHICLETYPES_ELITE_ENUM = (MAPS_ICONS_VEHICLETYPES_ELITE_AT_SPG,
+     MAPS_ICONS_VEHICLETYPES_ELITE_SPG,
+     MAPS_ICONS_VEHICLETYPES_ELITE_HEAVYTANK,
+     MAPS_ICONS_VEHICLETYPES_ELITE_LIGHTTANK,
+     MAPS_ICONS_VEHICLETYPES_ELITE_MEDIUMTANK)
     MAPS_ICONS_BUTTONS_ENUM = (MAPS_ICONS_BUTTONS_TANK_ICO,
      MAPS_ICONS_BUTTONS_BOOKMARK,
      MAPS_ICONS_BUTTONS_CALENDAR,
@@ -1153,21 +1170,6 @@ class RES_ICONS(object):
      MAPS_ICONS_BUTTONS_TRANSPORTING,
      MAPS_ICONS_BUTTONS_TRANSPORTINGARROW,
      MAPS_ICONS_BUTTONS_TUNING)
-    MAPS_ICONS_VEHICLETYPES_ELITE_ENUM = (MAPS_ICONS_VEHICLETYPES_ELITE_AT_SPG,
-     MAPS_ICONS_VEHICLETYPES_ELITE_SPG,
-     MAPS_ICONS_VEHICLETYPES_ELITE_HEAVYTANK,
-     MAPS_ICONS_VEHICLETYPES_ELITE_LIGHTTANK,
-     MAPS_ICONS_VEHICLETYPES_ELITE_MEDIUMTANK)
-    MAPS_ICONS_ORDERS_SMALL_ENUM = (MAPS_ICONS_ORDERS_SMALL_ADDITIONALBRIEFING,
-     MAPS_ICONS_ORDERS_SMALL_ARTILLERY,
-     MAPS_ICONS_ORDERS_SMALL_BOMBER,
-     MAPS_ICONS_ORDERS_SMALL_COMBATPAYMENTS,
-     MAPS_ICONS_ORDERS_SMALL_EVACUATION,
-     MAPS_ICONS_ORDERS_SMALL_HEAVYTRANSPORT,
-     MAPS_ICONS_ORDERS_SMALL_MILITARYEXERCISES,
-     MAPS_ICONS_ORDERS_SMALL_REQUISITION,
-     MAPS_ICONS_ORDERS_SMALL_RESERVEROULETTE,
-     MAPS_ICONS_ORDERS_SMALL_TACTICALTRAINING)
     MAPS_ICONS_QUESTS_TILES_ENUM = (MAPS_ICONS_QUESTS_TILES_TILE_1_1_COLOR_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_1_1_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_1_1_GRAY_OVER,
@@ -1188,12 +1190,6 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_COLOR_UP,
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_GRAY_OVER,
      MAPS_ICONS_QUESTS_TILES_TILE_2_5_GRAY_UP)
-    MAPS_ICONS_BUTTONS_SOCIAL_COLOR_ENUM = (MAPS_ICONS_BUTTONS_SOCIAL_COLOR_FACEBOOK,
-     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_GOOGLE,
-     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_NAVER,
-     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_VKONTAKTE,
-     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_WGNI,
-     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_YAHOO)
     MAPS_ICONS_BUTTONS_SOCIAL_ENUM = (MAPS_ICONS_BUTTONS_SOCIAL_FACEBOOK,
      MAPS_ICONS_BUTTONS_SOCIAL_GOOGLE,
      MAPS_ICONS_BUTTONS_SOCIAL_NAVER,
@@ -1210,6 +1206,12 @@ class RES_ICONS(object):
      MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOTG,
      MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOWP,
      MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_WOWS)
+    MAPS_ICONS_BUTTONS_SOCIAL_COLOR_ENUM = (MAPS_ICONS_BUTTONS_SOCIAL_COLOR_FACEBOOK,
+     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_GOOGLE,
+     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_NAVER,
+     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_VKONTAKTE,
+     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_WGNI,
+     MAPS_ICONS_BUTTONS_SOCIAL_COLOR_YAHOO)
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_ENUM = (MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1,
      MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_2,
      MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_3,
@@ -1226,9 +1228,9 @@ class RES_ICONS(object):
      MAPS_ICONS_LIBRARY_USERSTATUS_WOWS)
 
     @staticmethod
-    def maps_icons_buttons(key):
-        outcome = '../maps/icons/buttons/%s' % key
-        if outcome not in RES_ICONS.MAPS_ICONS_BUTTONS_ENUM:
+    def maps_icons_orders_small(key):
+        outcome = '../maps/icons/orders/small/%s' % key
+        if outcome not in RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:
@@ -1244,9 +1246,9 @@ class RES_ICONS(object):
             return outcome
 
     @staticmethod
-    def maps_icons_orders_small(key):
-        outcome = '../maps/icons/orders/small/%s' % key
-        if outcome not in RES_ICONS.MAPS_ICONS_ORDERS_SMALL_ENUM:
+    def maps_icons_buttons(key):
+        outcome = '../maps/icons/buttons/%s' % key
+        if outcome not in RES_ICONS.MAPS_ICONS_BUTTONS_ENUM:
             LOG_WARNING('locale key "' + outcome + '" was not found')
             return None
         else:
@@ -1262,13 +1264,6 @@ class RES_ICONS(object):
             return outcome
 
     @staticmethod
-    def maps_icons_buttons_social_color(key):
-        outcome = '../maps/icons/buttons/social/color/%s' % key
-        if outcome not in RES_ICONS.MAPS_ICONS_BUTTONS_SOCIAL_COLOR_ENUM:
-            raise Exception, 'locale key "' + outcome + '" was not found'
-        return outcome
-
-    @staticmethod
     def maps_icons_buttons_social(key):
         outcome = '../maps/icons/buttons/social/%s' % key
         if outcome not in RES_ICONS.MAPS_ICONS_BUTTONS_SOCIAL_ENUM:
@@ -1279,6 +1274,13 @@ class RES_ICONS(object):
     def maps_icons_library_userstatus_small(key):
         outcome = '../maps/icons/library/userStatus/small/%s' % key
         if outcome not in RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_ENUM:
+            raise Exception, 'locale key "' + outcome + '" was not found'
+        return outcome
+
+    @staticmethod
+    def maps_icons_buttons_social_color(key):
+        outcome = '../maps/icons/buttons/social/color/%s' % key
+        if outcome not in RES_ICONS.MAPS_ICONS_BUTTONS_SOCIAL_COLOR_ENUM:
             raise Exception, 'locale key "' + outcome + '" was not found'
         return outcome
 

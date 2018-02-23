@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/IOBinding.py
 import os
 import types
@@ -287,7 +288,6 @@ class IOBinding():
                 pass
 
         self.text.focus_set()
-        return 'break'
 
     def save_as(self, event):
         filename = self.asksavefile()
@@ -302,7 +302,6 @@ class IOBinding():
 
         self.text.focus_set()
         self.updaterecentfileslist(filename)
-        return 'break'
 
     def save_a_copy(self, event):
         filename = self.asksavefile()
@@ -310,7 +309,6 @@ class IOBinding():
             self.writefile(filename)
         self.text.focus_set()
         self.updaterecentfileslist(filename)
-        return 'break'
 
     def writefile(self, filename):
         self.fixlastline()
@@ -488,7 +486,7 @@ def test():
             return
 
         def get_saved(self):
-            return 0
+            pass
 
         def set_saved(self, flag):
             pass

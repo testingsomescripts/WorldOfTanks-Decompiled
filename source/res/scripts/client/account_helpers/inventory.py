@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Inventory.py
 import AccountCommands
 import items
@@ -111,13 +112,13 @@ class Inventory(object):
             return
         else:
             itemTypeIdx = vehicles.parseIntCompactDescr(itemCompDescr)[0]
-            if not itemTypeIdx in (_CHASSIS,
+            assert itemTypeIdx in (_CHASSIS,
              _GUN,
              _ENGINE,
              _FUEL_TANK,
-             _RADIO):
-                raise AssertionError
-                proxy = callback is not None and (lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext))
+             _RADIO)
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext = {}: callback(resultID, ext)
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_EQUIP, vehInvID, itemCompDescr, 0, proxy)

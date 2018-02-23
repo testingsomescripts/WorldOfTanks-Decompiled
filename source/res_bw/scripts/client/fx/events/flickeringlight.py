@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/FlickeringLight.py
 import BigWorld
 from FX import s_sectionProcessors

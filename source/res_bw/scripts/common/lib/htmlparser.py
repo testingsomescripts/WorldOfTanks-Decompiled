@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/HTMLParser.py
 """A parser for HTML and XHTML."""
 import markupbase
@@ -20,7 +21,7 @@ class HTMLParseError(Exception):
     """Exception raised for all parse errors."""
 
     def __init__(self, msg, position = (None, None)):
-        raise msg or AssertionError
+        assert msg
         self.msg = msg
         self.lineno = position[0]
         self.offset = position[1]
@@ -181,7 +182,7 @@ class HTMLParser(markupbase.ParserBase):
                 else:
                     break
             else:
-                raise 0 or AssertionError('interesting.search() lied')
+                assert 0, 'interesting.search() lied'
 
         if end and i < n and not self.cdata_elem:
             self.handle_data(rawdata[i:n])
@@ -218,10 +219,10 @@ class HTMLParser(markupbase.ParserBase):
 
     def parse_pi(self, i):
         rawdata = self.rawdata
-        if not rawdata[i:i + 2] == '<?':
-            raise AssertionError('unexpected call to parse_pi()')
-            match = piclose.search(rawdata, i + 2)
-            return match or -1
+        assert rawdata[i:i + 2] == '<?', 'unexpected call to parse_pi()'
+        match = piclose.search(rawdata, i + 2)
+        if not match:
+            return -1
         j = match.start()
         self.handle_pi(rawdata[i + 2:j])
         j = match.end()
@@ -237,35 +238,35 @@ class HTMLParser(markupbase.ParserBase):
             self.__starttag_text = rawdata[i:endpos]
             attrs = []
             match = tagfind.match(rawdata, i + 1)
-            if not match:
-                raise AssertionError('unexpected call to parse_starttag()')
-                k = match.end()
-                self.lasttag = tag = match.group(1).lower()
-                while k < endpos:
-                    m = attrfind.match(rawdata, k)
-                    if not m:
-                        break
-                    attrname, rest, attrvalue = m.group(1, 2, 3)
-                    if not rest:
-                        attrvalue = None
-                    elif attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
-                        attrvalue = attrvalue[1:-1]
-                    if attrvalue:
-                        attrvalue = self.unescape(attrvalue)
-                    attrs.append((attrname.lower(), attrvalue))
-                    k = m.end()
+            assert match, 'unexpected call to parse_starttag()'
+            k = match.end()
+            self.lasttag = tag = match.group(1).lower()
+            while k < endpos:
+                m = attrfind.match(rawdata, k)
+                if not m:
+                    break
+                attrname, rest, attrvalue = m.group(1, 2, 3)
+                if not rest:
+                    attrvalue = None
+                elif attrvalue[:1] == "'" == attrvalue[-1:] or attrvalue[:1] == '"' == attrvalue[-1:]:
+                    attrvalue = attrvalue[1:-1]
+                if attrvalue:
+                    attrvalue = self.unescape(attrvalue)
+                attrs.append((attrname.lower(), attrvalue))
+                k = m.end()
 
-                end = rawdata[k:endpos].strip()
-                if end not in ('>', '/>'):
-                    lineno, offset = self.getpos()
-                    if '\n' in self.__starttag_text:
-                        lineno = lineno + self.__starttag_text.count('\n')
-                        offset = len(self.__starttag_text) - self.__starttag_text.rfind('\n')
-                    else:
-                        offset = offset + len(self.__starttag_text)
-                    self.handle_data(rawdata[i:endpos])
-                    return endpos
-                end.endswith('/>') and self.handle_startendtag(tag, attrs)
+            end = rawdata[k:endpos].strip()
+            if end not in ('>', '/>'):
+                lineno, offset = self.getpos()
+                if '\n' in self.__starttag_text:
+                    lineno = lineno + self.__starttag_text.count('\n')
+                    offset = len(self.__starttag_text) - self.__starttag_text.rfind('\n')
+                else:
+                    offset = offset + len(self.__starttag_text)
+                self.handle_data(rawdata[i:endpos])
+                return endpos
+            if end.endswith('/>'):
+                self.handle_startendtag(tag, attrs)
             else:
                 self.handle_starttag(tag, attrs)
                 if tag in self.CDATA_CONTENT_ELEMENTS:
@@ -299,7 +300,7 @@ class HTMLParser(markupbase.ParserBase):
 
     def parse_endtag(self, i):
         rawdata = self.rawdata
-        raise rawdata[i:i + 2] == '</' or AssertionError('unexpected call to parse_endtag')
+        assert rawdata[i:i + 2] == '</', 'unexpected call to parse_endtag'
         match = endendtag.search(rawdata, i + 1)
         if not match:
             return -1

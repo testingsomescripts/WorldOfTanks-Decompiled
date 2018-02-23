@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/videoFeeds.py
 import BigWorld
 import GUI
@@ -207,9 +208,9 @@ class VideoFeed(PyGUIBase):
             return
         self.isActive = state
         if self.isActive:
-            self.camera = camera and camera
-        if not self.camera:
-            raise AssertionError
+            if camera:
+                self.camera = camera
+            assert self.camera
             s_videoFeeds.add(self)
         else:
             s_videoFeeds.rem(self)
@@ -220,10 +221,10 @@ class VideoFeed(PyGUIBase):
             self.guiViewer.modCurrentFeedCamera()
 
     def handleAxisEvent(self, event):
-        return 0
+        pass
 
     def handleMouseEvent(self, event):
-        return 0
+        pass
 
     def handleKeyEvent(self, event):
         return False

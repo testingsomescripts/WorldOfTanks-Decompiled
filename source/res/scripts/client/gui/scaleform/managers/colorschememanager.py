@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/ColorSchemeManager.py
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.abstract.ColorSchemeManagerMeta import ColorSchemeManagerMeta
@@ -48,7 +49,6 @@ class ColorSchemeManager(ColorSchemeManagerMeta):
         from account_helpers.settings_core.SettingsCore import g_settingsCore
         if g_settingsCore.getSetting('isColorBlind'):
             return 'color_blind'
-        return 'default'
 
     def update(self):
         self.as_updateS()

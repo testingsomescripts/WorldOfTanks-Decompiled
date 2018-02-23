@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/PlaySound.py
 from FX.Event import Event
 from FX.Event import TRANSFORM_DEPENDENT_EVENT

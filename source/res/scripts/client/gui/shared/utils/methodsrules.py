@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/MethodsRules.py
 from collections import defaultdict
 from types import MethodType
@@ -13,9 +14,9 @@ class MethodsRules(object):
 
         def __call__(self, *args, **kwargs):
             instance = args[0]
-            if not isinstance(instance, MethodsRules):
-                raise AssertionError('Wrong inheritance.')
-                instance.skip(self.__listerner) and LOG_DEBUG('Notification skipped: ', instance, self.__listerner)
+            assert isinstance(instance, MethodsRules), 'Wrong inheritance.'
+            if instance.skip(self.__listerner):
+                LOG_DEBUG('Notification skipped: ', instance, self.__listerner)
                 return
             self.__listerner(*args, **kwargs)
 
@@ -31,9 +32,9 @@ class MethodsRules(object):
 
             def wrapper(*args, **kwargs):
                 instance = args[0]
-                if not isinstance(instance, MethodsRules):
-                    raise AssertionError('Wrong inheritance.')
-                    instance.delay(self.__delayerName, listener, *args, **kwargs) and LOG_DEBUG('Notification delayed: ', listener, *args, **kwargs)
+                assert isinstance(instance, MethodsRules), 'Wrong inheritance.'
+                if instance.delay(self.__delayerName, listener, *args, **kwargs):
+                    LOG_DEBUG('Notification delayed: ', listener, *args, **kwargs)
                     return
                 result = listener(*args, **kwargs)
                 instance.processDelayer(listener.__name__)

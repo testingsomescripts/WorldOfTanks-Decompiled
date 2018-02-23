@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ModelHitTester.py
 from collections import namedtuple
 import math
@@ -54,7 +55,7 @@ class ModelHitTester(object):
         return self.__bspModel.collideSegment(start, stop)
 
     def localHitTestFull_debug(self, start, stop):
-        raise IS_DEVELOPMENT or AssertionError
+        assert IS_DEVELOPMENT
         LOG_DEBUG('localHitTestFull_debug', self.bspModelName, start, stop)
         return self.__bspModel.collideSegmentFull_debug(start, stop)
 

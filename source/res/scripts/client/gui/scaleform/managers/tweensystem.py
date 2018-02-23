@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/managers/TweenSystem.py
 from gui.Scaleform.framework.entities.abstract.TweenManagerMeta import TweenManagerMeta
 import BigWorld

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/PrebattleFactory.py
 import inspect
 from constants import PREBATTLE_TYPE
@@ -101,11 +102,11 @@ class PrebattleFactory(ControlFactory):
         if ctx.getCtrlType() != CTRL_ENTITY_TYPE.PREBATTLE:
             return self._createNoPrbFunctional(ctx)
         prbType = ctx.getEntityType()
-        prbType in _SUPPORTED_INTRO and ctx.removeFlags(FUNCTIONAL_FLAG.PREBATTLE_BITMASK)
-        ctx.addFlags(FUNCTIONAL_FLAG.PREBATTLE_INTRO)
-        clazz = _SUPPORTED_INTRO[prbType]
-        if not inspect.isclass(clazz):
-            raise AssertionError('Class is not found, checks settings')
+        if prbType in _SUPPORTED_INTRO:
+            ctx.removeFlags(FUNCTIONAL_FLAG.PREBATTLE_BITMASK)
+            ctx.addFlags(FUNCTIONAL_FLAG.PREBATTLE_INTRO)
+            clazz = _SUPPORTED_INTRO[prbType]
+            assert inspect.isclass(clazz), 'Class is not found, checks settings'
             created = clazz()
         else:
             created = self._createNoPrbFunctional(ctx)

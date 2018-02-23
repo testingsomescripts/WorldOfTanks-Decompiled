@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ScriptBinding.py
 """Extension to execute code outside the Python shell window.
 
@@ -134,14 +135,12 @@ class ScriptBinding:
         interp.runcommand('if 1:\n            __file__ = {filename!r}\n            import sys as _sys\n            from os.path import basename as _basename\n            if (not _sys.argv or\n                _basename(_sys.argv[0]) != _basename(__file__)):\n                _sys.argv = [__file__]\n            import os as _os\n            _os.chdir({dirname!r})\n            del _sys, _basename, _os\n            \n'.format(filename=filename, dirname=dirname))
         interp.prepend_syspath(filename)
         interp.runcode(code)
-        return 'break'
 
     if macosxSupport.isCocoaTk():
         _run_module_event = run_module_event
 
         def run_module_event(self, event):
             self.editwin.text_frame.after(200, lambda : self.editwin.text_frame.event_generate('<<run-module-event-2>>'))
-            return 'break'
 
     def getfilename(self):
         """Get source filename.  If not saved, offer to save (or create) file

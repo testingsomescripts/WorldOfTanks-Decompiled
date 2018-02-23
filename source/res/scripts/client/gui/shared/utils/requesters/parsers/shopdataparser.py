@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/parsers/ShopDataParser.py
 import weakref
 from gui.shared.gui_items import GUI_ITEM_TYPE

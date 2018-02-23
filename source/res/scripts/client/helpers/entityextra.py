@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EntityExtra.py
 import BigWorld
 from debug_utils import *
@@ -10,12 +11,12 @@ class EntityExtra(object):
         self._readConfig(dataSection, containerName)
 
     def prerequisites(self):
-        return ()
+        pass
 
     def stop(self, data):
-        if not data['extra'] is self:
-            raise AssertionError
-            return data['entity'] is None and None
+        assert data['extra'] is self
+        if data['entity'] is None:
+            return
         else:
             try:
                 del data['entity'].extras[self.index]

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/ClubLadderView.py
 import BigWorld
 from adisp import process
@@ -135,14 +136,12 @@ class ClubLadderView(StaticFormationLadderViewMeta, ClubPage, ClubEmblemsHelper)
             divisionStr = getDivisionString(ladderInfo.division)
             leagueStr = getLeagueString(ladderInfo.getLeague())
             return text_styles.highTitle(_ms(CYBERSPORT.STATICFORMATION_LADDERVIEW_DIVISIONNAME_TEXT, division=divisionStr, league=leagueStr))
-        return ''
 
     def __getPositionText(self, ladderInfo):
         if ladderInfo.isInLadder():
             fmtPosition = text_styles.middleTitle(str(ladderInfo.position))
             fmtPoint = text_styles.middleTitle(str(ladderInfo.getRatingPoints()))
             return text_styles.standard(_ms(CYBERSPORT.STATICFORMATION_LADDERVIEW_DIVISIONPOSITION_TEXT, place=fmtPosition, points=fmtPoint))
-        return ''
 
     def __packTableHeaders(self):
         return [self.__packTableHeaderItem(CYBERSPORT.STATICFORMATION_LADDERVIEW_LADDERTABLE_HEADERPLACE_TEXT, 70, tooltip=TOOLTIPS.STATICFORMATIONLADDERVIEW_TABLE_HEADERPLACE, fieldName='placeSortValue', sortOrder=1),

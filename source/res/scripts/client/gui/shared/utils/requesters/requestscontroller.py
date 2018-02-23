@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/RequestsController.py
 from functools import partial
 import BigWorld
@@ -14,7 +15,7 @@ class _NoCooldownsManager(RequestCooldownManager):
         return str(rqTypeID)
 
     def getDefaultCoolDown(self):
-        return 0.0
+        pass
 
 
 class RequestsController(object):
@@ -100,7 +101,7 @@ class RequestsController(object):
         raise NotImplementedError
 
     def _getRequestTimeOut(self):
-        return 30.0
+        pass
 
     def _callbackWrapper(self, requestType, callback, cooldown, *args):
         callbackID = self._waiters.pop(requestType, None)

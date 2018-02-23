@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/factories/ControlFactory.py
 from debug_utils import LOG_DEBUG
 from gui.prb_control.items import PlayerDecorator
@@ -29,10 +30,11 @@ class ControlFactory(object):
     @staticmethod
     def _createEntryByAction(action, available):
         result = None
-        if action in available:
-            clazz, args = available[action]
+        if action.actionName in available:
+            clazz, args = available[action.actionName]
             if args:
                 result = clazz(*args)
             else:
                 result = clazz()
+            result.setAccountsToInvite(action.accountsToInvite)
         return result

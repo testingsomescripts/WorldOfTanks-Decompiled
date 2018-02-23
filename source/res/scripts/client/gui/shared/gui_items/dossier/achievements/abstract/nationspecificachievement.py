@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/NationSpecificAchievement.py
 from SimpleProgressAchievement import SimpleProgressAchievement
 from dossiers2.custom.cache import getCache as getDossiersCache
@@ -19,7 +20,7 @@ class NationSpecificAchievement(SimpleProgressAchievement):
         return self._nationID
 
     def _readValue(self, dossier):
-        return 0
+        pass
 
     def _readLevelUpTotalValue(self, dossier):
         cache = getDossiersCache()
@@ -38,4 +39,3 @@ class NationSpecificAchievement(SimpleProgressAchievement):
         if isinstance(other, NationSpecificAchievement):
             if self._nationID != -1 and other._nationID != -1:
                 return nationCompareByIndex(self._nationID, other._nationID)
-        return 0

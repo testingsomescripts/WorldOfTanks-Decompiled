@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/SetColour.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import *
@@ -35,8 +36,6 @@ class SetColour(ParticleSubSystem):
             self.subSystemIterate(actor, source, target, self.setModulator)
         except:
             WARNING_MSG('No colour was passed into the argument list', self, actor, source, target, kargs)
-
-        return 0.0
 
 
 s_sectionProcessors['SetColour'] = SetColour

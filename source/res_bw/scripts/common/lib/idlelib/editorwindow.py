@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/EditorWindow.py
 import sys
 import os
@@ -317,7 +318,6 @@ class EditorWindow(object):
     def new_callback(self, event):
         dirname, basename = self.io.defaultfilename()
         self.flist.new(dirname)
-        return 'break'
 
     def home_callback(self, event):
         if event.state & 4 != 0 and event.keysym == 'Home':
@@ -353,7 +353,6 @@ class EditorWindow(object):
             self.text.tag_add('sel', first, last)
         self.text.mark_set('insert', dest)
         self.text.see('insert')
-        return 'break'
 
     def set_status_bar(self):
         self.status_bar = self.MultiStatusBar(self.top)
@@ -495,28 +494,23 @@ class EditorWindow(object):
 
         else:
             webbrowser.open(self.help_url)
-        return 'break'
 
     def cut(self, event):
         self.text.event_generate('<<Cut>>')
-        return 'break'
 
     def copy(self, event):
         if not self.text.tag_ranges('sel'):
             return
         self.text.event_generate('<<Copy>>')
-        return 'break'
 
     def paste(self, event):
         self.text.event_generate('<<Paste>>')
         self.text.see('insert')
-        return 'break'
 
     def select_all(self, event = None):
         self.text.tag_add('sel', '1.0', 'end-1c')
         self.text.mark_set('insert', '1.0')
         self.text.see('insert')
-        return 'break'
 
     def remove_selection(self, event = None):
         self.text.tag_remove('sel', '1.0', 'end')
@@ -546,31 +540,24 @@ class EditorWindow(object):
 
     def del_word_left(self, event):
         self.text.event_generate('<Meta-Delete>')
-        return 'break'
 
     def del_word_right(self, event):
         self.text.event_generate('<Meta-d>')
-        return 'break'
 
     def find_event(self, event):
         SearchDialog.find(self.text)
-        return 'break'
 
     def find_again_event(self, event):
         SearchDialog.find_again(self.text)
-        return 'break'
 
     def find_selection_event(self, event):
         SearchDialog.find_selection(self.text)
-        return 'break'
 
     def find_in_files_event(self, event):
         GrepDialog.grep(self.text, self.io, self.flist)
-        return 'break'
 
     def replace_event(self, event):
         ReplaceDialog.replace(self.text)
-        return 'break'
 
     def goto_line_event(self, event):
         text = self.text
@@ -1115,28 +1102,27 @@ class EditorWindow(object):
             return 'break'
         tabwidth = self.tabwidth
         have = len(chars.expandtabs(tabwidth))
-        if not have > 0:
-            raise AssertionError
-            want = (have - 1) // self.indentwidth * self.indentwidth
-            if self.context_use_ps1:
-                last_line_of_prompt = sys.ps1.split('\n')[-1]
-            else:
-                last_line_of_prompt = ''
-            ncharsdeleted = 0
-            while 1:
-                if chars == last_line_of_prompt:
-                    break
-                chars = chars[:-1]
-                ncharsdeleted = ncharsdeleted + 1
-                have = len(chars.expandtabs(tabwidth))
-                if have <= want or chars[-1] not in ' \t':
-                    break
+        assert have > 0
+        want = (have - 1) // self.indentwidth * self.indentwidth
+        if self.context_use_ps1:
+            last_line_of_prompt = sys.ps1.split('\n')[-1]
+        else:
+            last_line_of_prompt = ''
+        ncharsdeleted = 0
+        while 1:
+            if chars == last_line_of_prompt:
+                break
+            chars = chars[:-1]
+            ncharsdeleted = ncharsdeleted + 1
+            have = len(chars.expandtabs(tabwidth))
+            if have <= want or chars[-1] not in ' \t':
+                break
 
-            text.undo_block_start()
-            text.delete('insert-%dc' % ncharsdeleted, 'insert')
-            have < want and text.insert('insert', ' ' * (want - have))
+        text.undo_block_start()
+        text.delete('insert-%dc' % ncharsdeleted, 'insert')
+        if have < want:
+            text.insert('insert', ' ' * (want - have))
         text.undo_block_stop()
-        return 'break'
 
     def smart_indent_event(self, event):
         text = self.text
@@ -1230,7 +1216,7 @@ class EditorWindow(object):
                     else:
                         self.reindent_to(y.compute_backslash_indent())
                 else:
-                    raise 0 or AssertionError('bogus continuation type %r' % (c,))
+                    assert 0, 'bogus continuation type %r' % (c,)
                 return 'break'
             indent = y.get_base_indent_string()
             text.insert('insert', indent)
@@ -1262,7 +1248,6 @@ class EditorWindow(object):
                 lines[pos] = self._make_blanks(effective) + line[raw:]
 
         self.set_region(head, tail, chars, lines)
-        return 'break'
 
     def dedent_region_event(self, event):
         head, tail, chars, lines = self.get_region()
@@ -1274,7 +1259,6 @@ class EditorWindow(object):
                 lines[pos] = self._make_blanks(effective) + line[raw:]
 
         self.set_region(head, tail, chars, lines)
-        return 'break'
 
     def comment_region_event(self, event):
         head, tail, chars, lines = self.get_region()
@@ -1330,13 +1314,11 @@ class EditorWindow(object):
         if self.askyesno('Toggle tabs', 'Turn tabs ' + ('on', 'off')[self.usetabs] + '?\nIndent width ' + ('will be', 'remains at')[self.usetabs] + ' 8.' + '\n Note: a tab is always 8 columns', parent=self.text):
             self.usetabs = not self.usetabs
             self.indentwidth = 8
-        return 'break'
 
     def change_indentwidth_event(self, event):
         new = self.askinteger('Indent width', 'New indent width (2-16)\n(Always use 8 when using tabs)', parent=self.text, initialvalue=self.indentwidth, minvalue=2, maxvalue=16)
         if new and new != self.indentwidth and not self.usetabs:
             self.indentwidth = new
-        return 'break'
 
     def get_region(self):
         text = self.text

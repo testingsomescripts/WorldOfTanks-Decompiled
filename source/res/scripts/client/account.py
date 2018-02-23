@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Account.py
 import cPickle
 import zlib
@@ -319,7 +320,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             LOG_DEBUG('No any ClientSelectableObject to unselect')
 
     def targetFocus(self, entity):
-        if isinstance(entity, ClientSelectableObject):
+        if isinstance(entity, ClientSelectableObject) and entity.enabled:
             from gui.shared.utils.HangarSpace import g_hangarSpace
             g_hangarSpace.onObjectSelected(entity)
 
@@ -968,9 +969,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         return
 
     def __synchronizeCacheDict(self, repDict, diffDict, key, syncMode, event):
-        if not syncMode in ('update', 'replace'):
-            raise AssertionError
-            return diffDict is None and None
+        assert syncMode in ('update', 'replace')
+        if diffDict is None:
+            return
         else:
             repl = diffDict.get((key, '_r'), None)
             if repl is not None:

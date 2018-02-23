@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/Preferences.py
 import json
 from predefined_hosts import AUTO_LOGIN_QUERY_URL

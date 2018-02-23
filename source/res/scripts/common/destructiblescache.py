@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/DestructiblesCache.py
 import ResMgr
 import BigWorld
@@ -401,7 +402,7 @@ def _readProjectilePiercingPowerReduction(section):
         try:
             reductionFactor = float(val[0])
             minReduction = float(val[1])
-            raise reductionFactor >= 0.0 and minReduction >= 0.0 or AssertionError
+            assert reductionFactor >= 0.0 and minReduction >= 0.0
         except:
             raise Exception, 'Wrong of missing value of %s/%s' % (section.name, matName)
 

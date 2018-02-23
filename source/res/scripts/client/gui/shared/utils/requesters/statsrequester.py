@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
 import BigWorld
 from account_helpers import isPremiumAccount
@@ -51,7 +52,6 @@ class StatsRequester(AbstractSyncDataRequester):
         from gui import game_control
         if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useGold:
             return self.getCacheValue('gold', 0)
-        return 0
 
     @property
     def actualMoney(self):
@@ -72,7 +72,6 @@ class StatsRequester(AbstractSyncDataRequester):
         from gui import game_control
         if self.mayConsumeWalletResources or not game_control.g_instance.wallet.useFreeXP:
             return self.getCacheValue('freeXP', 0)
-        return 0
 
     @property
     def vehiclesXPs(self):

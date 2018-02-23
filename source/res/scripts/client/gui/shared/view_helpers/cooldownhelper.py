@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/view_helpers/CooldownHelper.py
 import operator
 import BigWorld
@@ -7,7 +8,7 @@ from gui.shared.rq_cooldown import getRequestCoolDown
 class CooldownHelper(object):
 
     def __init__(self, requestIDs, handler, eventType, eventScope = EVENT_BUS_SCOPE.LOBBY):
-        raise len(requestIDs) or AssertionError
+        assert len(requestIDs)
         self._eventType = eventType
         self._eventScope = eventScope
         self._requestIDs = requestIDs

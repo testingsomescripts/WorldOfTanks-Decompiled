@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
@@ -56,6 +57,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         g_itemsCache.onSyncCompleted += self.onCacheResync
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
+        g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_clientUpdateManager.addCallbacks({'stats.credits': self.onMoneyUpdate,
          'stats.gold': self.onMoneyUpdate,
@@ -119,6 +121,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         game_control.g_instance.serverStats.onStatsReceived -= self.__onStatsReceived
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
+        g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
@@ -158,12 +161,13 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         return
 
     def __highlight3DEntityAndShowTT(self, entity):
-        BigWorld.wgAddEdgeDetectEntity(entity, 0, 2)
+        entity.highlight(True)
         itemId = entity.selectionId
-        self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
+        if len(itemId) > 0:
+            self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def __fade3DEntityAndHideTT(self, entity):
-        BigWorld.wgDelEdgeDetectEntity(entity)
+        entity.highlight(False)
         self.as_hide3DSceneTooltipS()
 
     def __onWaitingShown(self, event):
@@ -189,6 +193,12 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
         self.__selected3DEntity = None
         if self.__isCursorOver3dScene:
             self.__fade3DEntityAndHideTT(entity)
+        return
+
+    def __on3DObjectClicked(self):
+        if self.__isCursorOver3dScene:
+            if self.__selected3DEntity is not None:
+                self.__selected3DEntity.onClicked()
         return
 
     @property
@@ -289,7 +299,7 @@ class Hangar(LobbySubView, HangarMeta, GlobalListener):
             igrActionIcon = makeHtmlString('html_templates:igr/iconSmall', 'premium', {})
             localization = '#menu:vehicleIgr/%s'
             rentInfo = g_currentVehicle.item.rentInfo
-            vehicleIgrTimeLeft = getTimeLeftStr(localization, rentInfo.timeLeft, timeStyle=text_styles.stats, ctx={'igrIcon': igrActionIcon})
+            vehicleIgrTimeLeft = getTimeLeftStr(localization, rentInfo.getTimeLeft(), timeStyle=text_styles.stats, ctx={'igrIcon': igrActionIcon})
         self.as_setVehicleIGRS(vehicleIgrTimeLeft)
 
     def __updateState(self):

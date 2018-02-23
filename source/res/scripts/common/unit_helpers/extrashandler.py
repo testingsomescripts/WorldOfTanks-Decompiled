@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_helpers/ExtrasHandler.py
 import cPickle
 from debug_utils import LOG_OGNICK_DEV
@@ -14,7 +15,7 @@ class EmptyExtrasHandler(object):
         return result
 
     def pack(self, extras):
-        return ''
+        pass
 
     def unpack(self, extrasStr):
         return {}

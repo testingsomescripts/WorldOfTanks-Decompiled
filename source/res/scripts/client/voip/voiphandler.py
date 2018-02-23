@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/VOIP/VOIPHandler.py
 from VOIPLog import LOG_VOIP_INT
 from wotdecorators import noexcept

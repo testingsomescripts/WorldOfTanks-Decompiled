@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationsCollection.py
 from debug_utils import LOG_ERROR, LOG_WARNING
 from notification.decorators import SearchCriteria, _NotificationDecorator
@@ -24,14 +25,14 @@ class NotificationsCollection(object):
 
     def addItem(self, item):
         result = True
-        if not isinstance(item, _NotificationDecorator):
-            raise AssertionError
-            typeID, itemID = item.getType(), item.getID()
-            if typeID in self.__received:
-                notifications = self.__received[typeID]
-                if item not in notifications:
-                    notifications.append(item)
-                    last = len(notifications) > ITEMS_MAX_LENGTHS[typeID] and notifications.pop(0)
+        assert isinstance(item, _NotificationDecorator)
+        typeID, itemID = item.getType(), item.getID()
+        if typeID in self.__received:
+            notifications = self.__received[typeID]
+            if item not in notifications:
+                notifications.append(item)
+                if len(notifications) > ITEMS_MAX_LENGTHS[typeID]:
+                    last = notifications.pop(0)
                     last.clear()
             else:
                 result = False

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/IntroPage.py
 import BigWorld
 import SoundGroups
@@ -20,25 +21,21 @@ class IntroPage(IntroPageMeta):
             return
         else:
             LOG_DEBUG('Startup Video: STOP')
-            BigWorld.wg_setMovieSoundMuted(True)
             self.__sendResult(True)
             return
 
     def handleError(self, data):
-        BigWorld.wg_setMovieSoundMuted(True)
         self.__sendResult(False, 'Startup Video: ERROR - NetStream code = {0:>s}'.format(data))
 
     def _populate(self):
         super(IntroPage, self)._populate()
         if self.__movieFiles is not None and len(self.__movieFiles):
-            BigWorld.wg_setMovieSoundMuted(False)
             self.__showNextMovie()
         else:
             self.__sendResult(False, 'There is no movie files for broadcast!')
         return
 
     def _dispose(self):
-        BigWorld.wg_setMovieSoundMuted(True)
         super(IntroPage, self)._dispose()
 
     def __showNextMovie(self):

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bwobsolete_helpers/PyGUI/ScrollingList.py
 import BigWorld, GUI, Keys
 import Utils
@@ -30,7 +31,7 @@ class ScrollingList(PyGUIBase):
         pass
 
     def createItem(self):
-        raise self.itemGuiName != '' or AssertionError
+        assert self.itemGuiName != ''
         g = GUI.load(self.itemGuiName)
         setattr(self.items, 'm%d' % (len(self.items.children),), g)
         g.script.doLayout(self)
@@ -241,7 +242,7 @@ class ScrollingList(PyGUIBase):
 
     def onLoad(self, section):
         self.itemGuiName = section.readString('itemGui', '')
-        raise self.itemGuiName != '' or AssertionError
+        assert self.itemGuiName != ''
 
     def onBound(self):
         PyGUIBase.onBound(self)

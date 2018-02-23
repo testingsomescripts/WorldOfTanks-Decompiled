@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Shop.py
 import AccountCommands
 import cPickle
@@ -114,11 +115,11 @@ class Shop(object):
 
     def getSellPrice(self, buyPrice, sellPriceModifiers, itemTypeID):
         shopRev, exchangeRate, exchangeRateForShellsAndEqs, sellPriceModif, sellPriceFactor, sellForGold = sellPriceModifiers
-        if not shopRev == self.__getCacheRevision():
-            raise AssertionError
-            if itemTypeID in (_SHELL, _EQUIPMENT):
-                exchangeRate = exchangeRateForShellsAndEqs
-            sellPrice = sellForGold and (int(ceil(sellPriceFactor * buyPrice[0])), int(ceil(sellPriceFactor * buyPrice[1])))
+        assert shopRev == self.__getCacheRevision()
+        if itemTypeID in (_SHELL, _EQUIPMENT):
+            exchangeRate = exchangeRateForShellsAndEqs
+        if sellForGold:
+            sellPrice = (int(ceil(sellPriceFactor * buyPrice[0])), int(ceil(sellPriceFactor * buyPrice[1])))
         else:
             sellPrice = (int(ceil(sellPriceFactor * (buyPrice[0] + buyPrice[1] * exchangeRate))), 0)
         return sellPrice

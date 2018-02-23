@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/PathBrowser.py
 import os
 import sys
@@ -21,7 +22,7 @@ class PathBrowser(ClassBrowser):
 class PathBrowserTreeItem(TreeItem):
 
     def GetText(self):
-        return 'sys.path'
+        pass
 
     def GetSubList(self):
         sublist = []

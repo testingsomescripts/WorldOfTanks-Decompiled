@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ReferralManagementWindow.py
 from operator import methodcaller
 import pickle
@@ -78,7 +79,6 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
         updates = map(lambda r: r.getBonus()[1], game_control.g_instance.refSystem.getReferrals())
         if len(updates):
             return min(updates)
-        return 0
 
     def __update(self):
         self.__makeData()
@@ -126,32 +126,32 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
             referralNumber = text_styles.stats(ms('%d.' % (i + 1)))
             dbID = item.getAccountDBID()
             user = self.usersStorage.getUser(dbID)
-            if not user:
-                raise AssertionError('User must be defined')
-                isOnline = user.isOnline()
-                xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
-                icon = icons.makeImageTag(xpIcon, 16, 16, -3, 0)
-                bonus, timeLeft = item.getBonus()
-                if bonus == 1:
-                    multiplier = '-'
-                    multiplierTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1
-                    icon = ''
-                else:
-                    multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
-                    multiplierTooltip = ''
-                if timeLeft:
-                    multiplierTime = text_styles.main(ms(item.getBonusTimeLeftStr()))
-                    expMultiplierText = text_styles.standard(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
-                else:
-                    expMultiplierText = ''
-                multiplierFactor = text_styles.credits(multiplier)
-                multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
-                referralData = {'accID': dbID,
-                 'fullName': user.getFullName(),
-                 'userName': user.getName(),
-                 'clanAbbrev': user.getClanAbbrev()}
-                canInviteToSquad = self.prbFunctional.getEntityType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
-                btnEnabled = canInviteToSquad or False
+            assert user, 'User must be defined'
+            isOnline = user.isOnline()
+            xpIcon = RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON
+            icon = icons.makeImageTag(xpIcon, 16, 16, -3, 0)
+            bonus, timeLeft = item.getBonus()
+            if bonus == 1:
+                multiplier = '-'
+                multiplierTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_MULTIPLIER_X1
+                icon = ''
+            else:
+                multiplier = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
+                multiplierTooltip = ''
+            if timeLeft:
+                multiplierTime = text_styles.main(ms(item.getBonusTimeLeftStr()))
+                expMultiplierText = text_styles.standard(ms(MENU.REFERRALMANAGEMENTWINDOW_REFERRALSTABLE_LEFTTIME, time=multiplierTime))
+            else:
+                expMultiplierText = ''
+            multiplierFactor = text_styles.credits(multiplier)
+            multiplierStr = ms(icon + '<nobr>' + multiplierFactor + ' ' + expMultiplierText)
+            referralData = {'accID': dbID,
+             'fullName': user.getFullName(),
+             'userName': user.getName(),
+             'clanAbbrev': user.getClanAbbrev()}
+            canInviteToSquad = self.prbFunctional.getEntityType() == PREBATTLE_TYPE.NONE or self.prbFunctional.getEntityType() == PREBATTLE_TYPE.SQUAD and self.prbFunctional.getPermissions().canSendInvite()
+            if not canInviteToSquad:
+                btnEnabled = False
                 btnTooltip = TOOLTIPS.REFERRALMANAGEMENTWINDOW_CREATESQUADBTN_DISABLED_SQUADISFULL
             else:
                 btnEnabled = True
@@ -251,8 +251,6 @@ class ReferralManagementWindow(ReferralManagementWindowMeta, GlobalListener, Not
             bonuses = event.getBonuses(bonusName)
             if bonuses:
                 return bonuses[0].getIcon()
-
-        return ''
 
     @process
     def __inviteOrCreateSquad(self, referralID):

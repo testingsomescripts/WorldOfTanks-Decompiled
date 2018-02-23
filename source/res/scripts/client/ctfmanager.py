@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CTFManager.py
 import BigWorld
 import Math
@@ -73,7 +74,7 @@ class _CTFConfigReader():
 
     def __init__(self):
         self.__configSection = ResMgr.openSection(_DYNAMIC_OBJECTS_CONFIG_FILE)
-        raise self.__configSection is not None or AssertionError
+        assert self.__configSection is not None
         return
 
     def readModelParams(self, name):
@@ -357,29 +358,29 @@ class _CTFManager():
         return self.__resourcePointsLock
 
     def registerResourcePointModel(self, rpModel):
-        if not hasattr(rpModel, 'guid'):
-            raise AssertionError
-            pointID = self.__rpGuids.get(rpModel.guid)
-            raise pointID is not None or AssertionError
-            rp = pointID in self.__resourcePoints and self.__resourcePoints[pointID]
+        assert hasattr(rpModel, 'guid')
+        pointID = self.__rpGuids.get(rpModel.guid)
+        assert pointID is not None
+        if pointID in self.__resourcePoints:
+            rp = self.__resourcePoints[pointID]
             rp['model'] = rpModel
         return
 
     def unregisterResourcePointModel(self, rpModel):
-        if not hasattr(rpModel, 'guid'):
-            raise AssertionError
-            pointID = self.__rpGuids.get(rpModel.guid)
-            rp = pointID in self.__resourcePoints and self.__resourcePoints[pointID]
+        assert hasattr(rpModel, 'guid')
+        pointID = self.__rpGuids.get(rpModel.guid)
+        if pointID in self.__resourcePoints:
+            rp = self.__resourcePoints[pointID]
             rp['model'] = None
         return
 
     def updateRegisteredResourcePointModel(self, rpModel):
-        if not hasattr(rpModel, 'guid'):
-            raise AssertionError
-            pointID = self.__rpGuids.get(rpModel.guid)
-            if pointID in self.__resourcePoints:
-                rp = self.__resourcePoints[pointID]
-                rp['state'] == RESOURCE_POINT_STATE.FREE and rpModel.playEffect()
+        assert hasattr(rpModel, 'guid')
+        pointID = self.__rpGuids.get(rpModel.guid)
+        if pointID in self.__resourcePoints:
+            rp = self.__resourcePoints[pointID]
+            if rp['state'] == RESOURCE_POINT_STATE.FREE:
+                rpModel.playEffect()
 
     def __getResourcePointFromArena(self, pointID):
         arena = BigWorld.player().arena
@@ -577,7 +578,7 @@ class _CTFPointFlag():
         if g_ctfManager.isNeedHideAll:
             return
         else:
-            raise self.__flagModelFile is not None or AssertionError
+            assert self.__flagModelFile is not None
             self.__loadTask = _g_resLoader.startLoadTask((self.__flagModelFile,), partial(self.__onModelLoaded, applyOverlay))
             return
 
@@ -586,20 +587,20 @@ class _CTFPointFlag():
             LOG_ERROR('Failed to load flag model %s' % (resourceRefs.failedIDs,))
         else:
             model = resourceRefs[self.__flagModelFile]
-            if not model is not None:
-                raise AssertionError
-                model.position = self.__flagPos
-                BigWorld.addModel(model, BigWorld.player().spaceID)
-                BigWorld.wg_applyOverlayToModel(model, applyOverlay)
-                self.__flagModel = model
-                if self.__flagAnimAction is not None:
-                    try:
-                        animAction = model.action(self.__flagAnimAction)
-                        animAction()
-                    except:
-                        LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
+            assert model is not None
+            model.position = self.__flagPos
+            BigWorld.addModel(model, BigWorld.player().spaceID)
+            BigWorld.wg_applyOverlayToModel(model, applyOverlay)
+            self.__flagModel = model
+            if self.__flagAnimAction is not None:
+                try:
+                    animAction = model.action(self.__flagAnimAction)
+                    animAction()
+                except:
+                    LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (self.__flagAnimAction, self.__flagModelFile))
 
-                g_ctfManager.isNeedHideAll and self.__hidePointFlag()
+            if g_ctfManager.isNeedHideAll:
+                self.__hidePointFlag()
             else:
                 self.__hideListener = _GlobalHideListener(self.__hidePointFlag)
         return
@@ -650,7 +651,7 @@ class _CTFResourcePointModel():
         if g_ctfManager.isNeedHideAll:
             return
         else:
-            raise self.__modelFile is not None or AssertionError
+            assert self.__modelFile is not None
             self.__loadTask = _g_resLoader.startLoadTask((self.__modelFile,), self.__onModelLoaded)
             return
 
@@ -659,18 +660,18 @@ class _CTFResourcePointModel():
             LOG_ERROR('Failed to load model %s' % (resourceRefs.failedIDs,))
         else:
             model = resourceRefs[self.__modelFile]
-            if not model is not None:
-                raise AssertionError
-                model.position = self.position
-                roll, pitch, yaw = self.direction
-                model.rotate(roll, (0.0, 0.0, 1.0))
-                model.rotate(pitch, (1.0, 0.0, 0.0))
-                model.rotate(yaw, (0.0, 1.0, 0.0))
-                BigWorld.addModel(model, BigWorld.player().spaceID)
-                BigWorld.wg_applyOverlayToModel(model, False)
-                self.__model = model
-                g_ctfManager.updateRegisteredResourcePointModel(self)
-                g_ctfManager.isNeedHideAll and self.__hideResPointFlag()
+            assert model is not None
+            model.position = self.position
+            roll, pitch, yaw = self.direction
+            model.rotate(roll, (0.0, 0.0, 1.0))
+            model.rotate(pitch, (1.0, 0.0, 0.0))
+            model.rotate(yaw, (0.0, 1.0, 0.0))
+            BigWorld.addModel(model, BigWorld.player().spaceID)
+            BigWorld.wg_applyOverlayToModel(model, False)
+            self.__model = model
+            g_ctfManager.updateRegisteredResourcePointModel(self)
+            if g_ctfManager.isNeedHideAll:
+                self.__hideResPointFlag()
             else:
                 self.__hideListener = _GlobalHideListener(self.__hideResPointFlag)
         return
@@ -710,6 +711,6 @@ class _UDOAttributeChecker():
     def checkAttribute(self, attributeName):
         self.__isCheckFailed = True
         attribute = getattr(self, attributeName, None)
-        raise attribute is not None and len(attribute) > 0 or AssertionError
+        assert attribute is not None and len(attribute) > 0
         self.__isCheckFailed = False
         return

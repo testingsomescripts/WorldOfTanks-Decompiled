@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/LobbyContext.py
 import BigWorld
 from constants import CURRENT_REALM
@@ -44,8 +45,6 @@ class _LobbyContext(object):
         for arenaUniqueID, cArenaID in self.__arenaUniqueIDs.iteritems():
             if cArenaID == clientArenaID:
                 return arenaUniqueID
-
-        return 0
 
     def getClientIDByArenaUniqueID(self, arenaUniqueID):
         if arenaUniqueID in self.__arenaUniqueIDs:

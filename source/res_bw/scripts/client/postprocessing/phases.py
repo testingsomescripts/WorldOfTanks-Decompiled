@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PostProcessing/Phases.py
 from _PostProcessing import CopyBackBuffer
 from _PostProcessing import FilterQuad

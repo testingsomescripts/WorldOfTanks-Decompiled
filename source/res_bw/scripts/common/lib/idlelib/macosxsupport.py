@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/macosxSupport.py
 """
 A number of functions that enhance IDLE on Mac OSX.
@@ -43,7 +44,7 @@ def isAquaTk():
     """
     Returns True if IDLE is using a native OS X Tk (Cocoa or Carbon).
     """
-    raise _tk_type is not None or AssertionError
+    assert _tk_type is not None
     return _tk_type == 'cocoa' or _tk_type == 'carbon'
 
 
@@ -52,7 +53,7 @@ def isCarbonTk():
     Returns True if IDLE is using a Carbon Aqua Tk (instead of the
     newer Cocoa Aqua Tk).
     """
-    raise _tk_type is not None or AssertionError
+    assert _tk_type is not None
     return _tk_type == 'carbon'
 
 
@@ -60,7 +61,7 @@ def isCocoaTk():
     """
     Returns True if IDLE is using a Cocoa Aqua Tk.
     """
-    raise _tk_type is not None or AssertionError
+    assert _tk_type is not None
     return _tk_type == 'cocoa'
 
 
@@ -68,7 +69,7 @@ def isXQuartz():
     """
     Returns True if IDLE is using an OS X X11 Tk.
     """
-    raise _tk_type is not None or AssertionError
+    assert _tk_type is not None
     return _tk_type == 'xquartz'
 
 

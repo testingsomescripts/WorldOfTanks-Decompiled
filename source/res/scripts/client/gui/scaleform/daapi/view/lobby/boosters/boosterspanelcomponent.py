@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/BoostersPanelComponent.py
 from gui import game_control
 from helpers import i18n

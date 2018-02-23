@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortOrderPopover.py
 import constants
 from adisp import process
@@ -42,7 +43,6 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
             else:
                 nextBattle = i18n.makeString(FORTIFICATIONS.ORDERS_ORDERPOPOVER_NEXTBATTLE)
                 return text_styles.success(nextBattle)
-        return ''
 
     def _getBuildingStr(self, order):
         buildingID = self.getBuildingUIDbyID(order.buildingID)
@@ -212,7 +212,6 @@ class FortOrderPopover(FortOrderPopoverMeta, FortViewHelper):
             else:
                 leftTimeStr = time_formatters.getTimeDurationStr(order.getUsageLeftTime())
                 return i18n.makeString(TOOLTIPS.FORTIFICATION_ORDERPOPOVER_PROGRESSBAR_TIMELEFT, timeLeft=leftTimeStr)
-        return ''
 
     def onUpdated(self, isFullUpdate):
         self._updateData()

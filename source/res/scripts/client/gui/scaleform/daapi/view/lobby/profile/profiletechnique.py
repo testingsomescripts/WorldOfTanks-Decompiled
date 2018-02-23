@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechnique.py
 import BigWorld
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK

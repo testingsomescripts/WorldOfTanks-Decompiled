@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/RosterSlotSettingsWindow.py
 from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view.lobby.cyberSport.VehicleSelectorBase import VehicleSelectorBase
@@ -10,7 +11,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
 
     def __init__(self, ctx = None):
         super(RosterSlotSettingsWindow, self).__init__()
-        raise 'section' in ctx or AssertionError('Section is required to show selector popup')
+        assert 'section' in ctx, 'Section is required to show selector popup'
         self.__section = ctx.get('section')
         self.__levelsRange = ctx.get('levelsRange', (1, 10))
         self.__vehicleTypes = ctx.get('vehicleTypes', None)

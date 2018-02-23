@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/clubs/ClubsController.py
 import weakref
 from functools import partial
@@ -501,7 +502,6 @@ class ClubsController(subscriptions.ClubsListeners):
         season = self._seasonsCache.getSeasonCommonInfo(seasonID)
         if season:
             return season.getSeasonUserName()
-        return ''
 
     def getCompletedSeasons(self):
         return self._seasonsCache.getCompletedSeasons()

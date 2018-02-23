@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/cyberSport/VehicleSelectorBase.py
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleBasicVO, makeVehicleVO
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT

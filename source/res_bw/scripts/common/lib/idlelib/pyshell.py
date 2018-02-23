@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/PyShell.py
 import os
 import os.path
@@ -363,17 +364,17 @@ class ModifiedInterpreter(InteractiveInterpreter):
         return
 
     def build_subprocess_arglist(self):
-        if not self.port != 0:
-            raise AssertionError('Socket should have been assigned a port number.')
-            w = [ '-W' + s for s in sys.warnoptions ]
-            if 1 / 2 > 0:
-                w.append('-Qnew')
-            del_exitf = idleConf.GetOption('main', 'General', 'delete-exitfunc', default=False, type='bool')
-            if __name__ == 'idlelib.PyShell':
-                command = "__import__('idlelib.run').run.main(%r)" % (del_exitf,)
-            else:
-                command = "__import__('run').main(%r)" % (del_exitf,)
-            decorated_exec = sys.platform[:3] == 'win' and ' ' in sys.executable and '"%s"' % sys.executable
+        assert self.port != 0, 'Socket should have been assigned a port number.'
+        w = [ '-W' + s for s in sys.warnoptions ]
+        if 1 / 2 > 0:
+            w.append('-Qnew')
+        del_exitf = idleConf.GetOption('main', 'General', 'delete-exitfunc', default=False, type='bool')
+        if __name__ == 'idlelib.PyShell':
+            command = "__import__('idlelib.run').run.main(%r)" % (del_exitf,)
+        else:
+            command = "__import__('run').main(%r)" % (del_exitf,)
+        if sys.platform[:3] == 'win' and ' ' in sys.executable:
+            decorated_exec = '"%s"' % sys.executable
         else:
             decorated_exec = sys.executable
         return [decorated_exec] + w + ['-c', command, str(self.port)]
@@ -707,7 +708,6 @@ class ModifiedInterpreter(InteractiveInterpreter):
             self.rpcclt.remotequeue('exec', 'runcode', (code,), {})
         else:
             exec code in self.locals
-        return 1
 
     def runcode(self, code):
         """Override base class method"""
@@ -1010,7 +1010,6 @@ class PyShell(OutputWindow):
                 self.interp.interrupt_subprocess()
         if self.reading:
             self.top.quit()
-        return 'break'
 
     def eof_callback(self, event):
         if self.executing and not self.reading:
@@ -1024,7 +1023,6 @@ class PyShell(OutputWindow):
             self.canceled = 0
             self.endoffile = 1
             self.top.quit()
-        return 'break'
 
     def linefeed_callback(self, event):
         if self.reading:
@@ -1032,7 +1030,6 @@ class PyShell(OutputWindow):
             self.text.see('insert')
         else:
             self.newline_and_indent_event(event)
-        return 'break'
 
     def enter_callback(self, event):
         if self.executing and not self.reading:
@@ -1081,7 +1078,6 @@ class PyShell(OutputWindow):
             self.top.quit()
         else:
             self.runit()
-        return 'break'
 
     def recall(self, s, event):
         s = re.sub('^\\s*\\n', '', s)

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/common/DossierBlockBuilders.py
 import struct
 from dossiers2.custom.records import RECORDS, RECORD_INDICES, BIT_STORAGES
@@ -49,8 +50,8 @@ class DictBlockBuilder(object):
         self.__keyFormat = keyFormat
         self.__valueFormat = valueFormat
         self.__eventsHandlers = eventsHandlers
-        raise _SUPPORTED_FORMATS.issuperset(self.__keyFormat) or AssertionError
-        raise _SUPPORTED_FORMATS.issuperset(self.__valueFormat) or AssertionError
+        assert _SUPPORTED_FORMATS.issuperset(self.__keyFormat)
+        assert _SUPPORTED_FORMATS.issuperset(self.__valueFormat)
 
     def build(self, dossierDescr, compDescr = ''):
         return DictDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, keyFormat=self.__keyFormat, valueFormat=self.__valueFormat)
@@ -62,7 +63,7 @@ class ListBlockBuilder(object):
         self.name = name
         self.__itemFormat = itemFormat
         self.__eventsHandlers = eventsHandlers
-        raise _SUPPORTED_FORMATS.issuperset(self.__itemFormat) or AssertionError
+        assert _SUPPORTED_FORMATS.issuperset(self.__itemFormat)
 
     def build(self, dossierDescr, compDescr = ''):
         return ListDossierBlockDescr(name=self.name, dossierDescr=dossierDescr, compDescr=compDescr, eventsHandlers=self.__eventsHandlers, itemFormat=self.__itemFormat)
@@ -73,7 +74,7 @@ class BinarySetDossierBlockBuilder(object):
     def __init__(self, name, valueNames, eventHandlers, popUpRecords):
         self.name = name
         self.recordsLayout = valueNames
-        raise len(set(valueNames)) == len(valueNames) or AssertionError('Possible binary set values should be unique')
+        assert len(set(valueNames)) == len(valueNames), 'Possible binary set values should be unique'
         self.__valueToPosition = self.__buildValueToPosition(valueNames)
         self.__eventHandlers = eventHandlers
         self.__popUpRecords = popUpRecords

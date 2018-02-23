@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/PremiumCongratulationWindow.py
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract
@@ -11,7 +12,7 @@ class PremiumCongratulationWindow(PremiumCongratulationWindowMeta):
 
     def __init__(self, ctx = None):
         super(PremiumCongratulationWindow, self).__init__()
-        raise 'award' in ctx and isinstance(ctx['award'], AwardAbstract) or AssertionError
+        assert 'award' in ctx and isinstance(ctx['award'], AwardAbstract)
         self.__award = ctx['award']
 
     def onBtnClick(self, action):

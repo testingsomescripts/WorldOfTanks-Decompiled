@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/profile/ClanProfileSummaryView.py
 import BigWorld
 from adisp import process, async
@@ -358,5 +359,5 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
 
     def __updateStatus(self):
         reason = self.clansCtrl.getLimits().canSendApplication(self._clanDossier).reason
-        raise reason in _STATES or AssertionError('Unknown reason, ' + reason)
+        assert reason in _STATES, 'Unknown reason, ' + reason
         self.as_updateStatusS(_STATES[reason])

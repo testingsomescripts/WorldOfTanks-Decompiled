@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/exchange/ExchangeFreeToTankmanXpWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -88,7 +89,6 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
             if tankman.roleLevel == MAX_SKILL_LEVEL:
                 skillSeqNum = lastSkillNumberValue
             return self.__calcLevelUpCost(tankman, nextSkillLevel, skillSeqNum) - tankmanDescriptor.freeXP
-        return 0
 
     def calcValueRequest(self, toLevel):
         items = g_itemsCache.items

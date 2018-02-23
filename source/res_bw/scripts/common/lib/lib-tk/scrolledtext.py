@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/ScrolledText.py
 """A ScrolledText widget feels like a text widget but also has a
 vertical scroll bar on its right.  (Later, options may be added to

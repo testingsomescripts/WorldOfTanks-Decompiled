@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/mathUtils.py
 import functools
 import BigWorld
@@ -90,7 +91,7 @@ class Easing(object):
         self.reset(a, b, duration)
 
     def reset(self, a, b, duration):
-        raise duration > 0.0 or AssertionError
+        assert duration > 0.0
         self.__a = a
         self.__b = b
         self.__t = 0.0

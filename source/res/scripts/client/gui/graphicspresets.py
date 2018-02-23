@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/GraphicsPresets.py
 import BigWorld
 import ResMgr
@@ -236,4 +237,3 @@ class GraphicsPresets:
 
         if delayedSettings:
             return 'hasPendingSettings'
-        return 'apply'

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/streamIDs.py
 STREAM_ID_CHAT_MIN = 1
 STREAM_ID_CHAT_MAX = 99

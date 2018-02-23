@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ExchangeDialogMeta.py
 import math
 import Event
@@ -161,14 +162,12 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
             resource = BigWorld.wg_getIntegralFormat(resToExchange)
             resStr = self._getCurrencyFormat()(resource) + self._getCurrencyIconStr()
             return self._getCurrencyTxt(resStr)
-        return ''
 
     def __getGoldToExchangeTxt(self, resToExchange):
         if resToExchange > 0:
             goldToExchange = self.__getGoldToExchange(resToExchange)
             fmtGold = self.__getGoldValueWithIcon(goldToExchange)
             return self._getExchangeTxt(fmtGold)
-        return ''
 
     def __getGoldValueWithIcon(self, gold):
         return ''.join(text_styles.gold(BigWorld.wg_getGoldFormat(gold)) + icons.gold())
@@ -176,7 +175,6 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
     def __getGoldToExchange(self, resToExchange):
         if resToExchange > 0:
             return int(math.ceil(float(resToExchange) / self.getExchangeRate()))
-        return 0
 
     def __getIconType(self, item):
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:

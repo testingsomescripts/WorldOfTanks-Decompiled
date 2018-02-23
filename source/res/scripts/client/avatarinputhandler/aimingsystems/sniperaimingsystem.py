@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/SniperAimingSystem.py
 import BigWorld
 import Math
@@ -129,4 +130,3 @@ class SniperAimingSystem(IAimingSystem):
         self.__worldPitch = currentGunMat.pitch
         self._matrix.set(currentGunMat)
         self.__vehiclePrevMat = vehicleMat
-        return 0.0

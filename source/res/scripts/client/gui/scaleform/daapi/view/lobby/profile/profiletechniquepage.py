@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileTechniquePage.py
 from gui.Scaleform.daapi.view.meta.ProfileTechniquePageMeta import ProfileTechniquePageMeta
 from gui.Scaleform.locale.PROFILE import PROFILE
@@ -11,13 +12,6 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         super(ProfileTechniquePage, self).__init__(*args)
         self.__isInHangarSelected = False
 
-    def _sendAccountData(self, targetData, accountDossier):
-        if self.__isInHangarSelected:
-            vehList = self._getTechniqueListVehicles(targetData, True)
-        else:
-            vehList = self._getTechniqueListVehicles(targetData, False)
-        self.as_responseDossierS(self._battlesType, vehList, '', self.getEmptyScreenLabel())
-
     def _populate(self):
         super(ProfileTechniquePage, self)._populate()
         if self._selectedData is not None:
@@ -30,11 +24,14 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         self.as_setSelectedVehicleIntCDS(int(self._selectedData.get('itemCD')) if self._selectedData else -1)
         return
 
-    def _getInitData(self):
-        initDataResult = super(ProfileTechniquePage, self)._getInitData()
+    def _getInitData(self, isFallout = False):
+        initDataResult = super(ProfileTechniquePage, self)._getInitData(isFallout)
         initDataResult['hangarVehiclesLabel'] = makeString(PROFILE.SECTION_TECHNIQUE_WINDOW_HANGARVEHICLESLABEL)
         initDataResult['isInHangarSelected'] = self.__isInHangarSelected
         return initDataResult
+
+    def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly = False):
+        return super(ProfileTechniquePage, self)._getTechniqueListVehicles(targetData, self.__isInHangarSelected)
 
     def setIsInHangarSelected(self, value):
         self.__isInHangarSelected = value

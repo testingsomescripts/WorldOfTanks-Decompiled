@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ConfirmModuleMeta.py
 import math
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
@@ -44,16 +45,16 @@ class ConfirmModuleMeta(IDialogMeta):
         return self.__typeCompactDescr
 
     def getMaxAvailableItemsCount(self, module):
-        return (1, 1)
+        pass
 
     def getDefaultValue(self, module):
-        return -1
+        pass
 
     def getActualPrice(self, module):
-        return (0, 0)
+        pass
 
     def getDefaultPrice(self, module):
-        return (0, 0)
+        pass
 
     def getActionState(self, module):
         return (None, (None, None))
@@ -140,7 +141,7 @@ class BuyModuleMeta(ConfirmModuleMeta):
         return (self.__getMaxCount(module, 0), self.__getMaxCount(module, 1))
 
     def getDefaultValue(self, module):
-        return 1
+        pass
 
     def getActualPrice(self, module):
         return module.altPrice or module.buyPrice

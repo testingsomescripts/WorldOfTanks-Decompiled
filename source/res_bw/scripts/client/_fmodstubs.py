@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/_FMODStubs.py
 import Math
 
@@ -75,7 +76,7 @@ class MusicSystem:
         pass
 
     def getParameterValue(self, name):
-        return 0.0
+        pass
 
     def setCallback(self, fn):
         pass
@@ -140,7 +141,7 @@ def setMasterVolume(*args, **kwargs):
 
 
 def getFxSoundDuration(*args, **kwargs):
-    return 0.0
+    pass
 
 
 def registerEventReverb(*args, **kwargs):

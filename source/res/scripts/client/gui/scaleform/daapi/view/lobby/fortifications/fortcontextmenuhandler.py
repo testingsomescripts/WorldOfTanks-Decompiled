@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/FortContextMenuHandler.py
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.Scaleform.locale.MENU import MENU

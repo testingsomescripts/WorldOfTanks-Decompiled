@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/meta/LobbyChannelWindowMeta.py
 from messenger.gui.Scaleform.view.SimpleChannelWindow import SimpleChannelWindow
 

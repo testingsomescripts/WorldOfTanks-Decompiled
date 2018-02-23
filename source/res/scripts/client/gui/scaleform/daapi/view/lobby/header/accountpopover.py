@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/AccountPopover.py
 import BigWorld
 from PlayerEvents import g_playerEvents
@@ -45,7 +46,8 @@ class AccountPopover(AccountPopoverMeta, GlobalListener, MyClubListener, ClanLis
 
     def openClanStatistic(self):
         if self.clansCtrl.isEnabled():
-            shared_events.showClanProfileWindow(self.clansCtrl.getAccountProfile().getClanDbID())
+            clan = self.clansCtrl.getAccountProfile()
+            shared_events.showClanProfileWindow(clan.getClanDbID(), clan.getClanAbbrev())
         else:
             self.fireEvent(events.LoadViewEvent(FORTIFICATION_ALIASES.FORT_CLAN_STATISTICS_WINDOW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()

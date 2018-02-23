@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/SniperCamera.py
 import BigWorld
 import Math
@@ -72,7 +73,6 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.disable()
         self.__onChangeControlMode = None
         self.__cam = None
-        self._writeUserPreferences()
         self.__aimingSystem.destroy()
         self.__aimingSystem = None
         self.__aim = None
@@ -260,7 +260,6 @@ class SniperCamera(ICamera, CallbackDelayer):
         if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):
             self.__onChangeControlMode(False)
             return -1
-        return 0.0
 
     def __calcAimOffset(self, aimLocalTransform = None):
         worldCrosshair = Matrix(self.__crosshairMatrix)
@@ -392,7 +391,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         return
 
-    def _writeUserPreferences(self):
+    def writeUserPreferences(self):
         ds = Settings.g_instance.userPrefs
         if not ds.has_key(Settings.KEY_CONTROL_MODE):
             ds.write(Settings.KEY_CONTROL_MODE, '')

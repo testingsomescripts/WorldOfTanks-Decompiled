@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/ClassProgressAchievement.py
 import BigWorld
 from SimpleProgressAchievement import SimpleProgressAchievement
@@ -41,7 +42,6 @@ class ClassProgressAchievement(SimpleProgressAchievement):
         notificationKey = '#achievements:%s_notification%d' % (self._getActualName(), self._value)
         if i18n.doesTextExist(notificationKey):
             return i18n.makeString(notificationKey)
-        return ''
 
     def _readLevelUpTotalValue(self, dossier):
         if self._name not in RECORD_CONFIGS:
@@ -65,7 +65,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
             return max(float(self._lvlUpTotalValue) - float(self._currentProgressValue), 0.0)
 
     def _readCurrentProgressValue(self, dossier):
-        return 0
+        pass
 
     def _getIconName(self):
         return '%s%d' % (self._name, self._value or self.MIN_LVL)

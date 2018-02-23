@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/AutoExpand.py
 import string
 import re
@@ -38,7 +39,6 @@ class AutoExpand:
          index,
          curinsert,
          curline)
-        return 'break'
 
     def getwords(self):
         word = self.getprevword()

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/FalloutBattleSelectorWindow.py
 from constants import FALLOUT_BATTLE_TYPE
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS

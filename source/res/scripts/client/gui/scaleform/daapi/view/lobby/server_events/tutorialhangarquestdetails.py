@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/TutorialHangarQuestDetails.py
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.TutorialHangarQuestDetailsMeta import TutorialHangarQuestDetailsMeta
@@ -42,8 +43,8 @@ class TutorialHangarQuestDetails(TutorialHangarQuestDetailsMeta):
             event_dispatcher.runTutorialChain(id)
         elif type == CONDITION_TYPE.TUTORIAL:
             battle_selector_items.getItems().select(PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL)
-        elif not (type == CONDITION_TYPE.VIDEO and id in (OpenLinkEvent.REPAIRKITHELP_HELP, OpenLinkEvent.MEDKIT_HELP, OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP)):
-            raise AssertionError
+        elif type == CONDITION_TYPE.VIDEO:
+            assert id in (OpenLinkEvent.REPAIRKITHELP_HELP, OpenLinkEvent.MEDKIT_HELP, OpenLinkEvent.FIRE_EXTINGUISHERHELP_HELP)
             self.fireEvent(OpenLinkEvent(id, title=i18n.makeString('#tutorial:tutorialQuest/video/%s' % id)))
 
     def requestQuestInfo(self, questID):

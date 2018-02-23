@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/TOOLTIPS.py
 from debug_utils import LOG_WARNING
 
@@ -1073,6 +1074,7 @@ class TOOLTIPS(object):
     VEHICLEIGR_SPECIALABILITY = '#tooltips:vehicleIgr/specialAbility'
     VEHICLEIGR_DAYS = '#tooltips:vehicleIgr/days'
     VEHICLEIGR_HOURS = '#tooltips:vehicleIgr/hours'
+    VEHICLE_DEAL_TELECOM_MAIN = '#tooltips:vehicle/deal/telecom/main'
     BUYSKILL_FULLY = '#tooltips:buySkill/fully'
     BUYSKILL_PARTLY = '#tooltips:buySkill/partly'
     BUYSKILL_HEADER = '#tooltips:buySkill/header'
@@ -1119,6 +1121,8 @@ class TOOLTIPS(object):
     VEHICLESTATUS_NOTUNLOCKED_HEADER = '#tooltips:vehicleStatus/notUnlocked/header'
     VEHICLESTATUS_INHANGAR_HEADER = '#tooltips:vehicleStatus/inHangar/header'
     VEHICLESTATUS_SERVERRESTRICTION_HEADER = '#tooltips:vehicleStatus/serverRestriction/header'
+    VEHICLESTATUS_DEALISOVER_HEADER = '#tooltips:vehicleStatus/dealIsOver/header'
+    VEHICLESTATUS_DEALISOVER_TEXT = '#tooltips:vehicleStatus/dealIsOver/text'
     VEHICLESTATUS_NOTENOUGHCREDITS_HEADER = '#tooltips:vehicleStatus/notEnoughCredits/header'
     VEHICLESTATUS_NOTENOUGHCREDITS_TEXT = '#tooltips:vehicleStatus/notEnoughCredits/text'
     VEHICLESTATUS_NOTENOUGHGOLD_HEADER = '#tooltips:vehicleStatus/notEnoughGold/header'
@@ -2076,6 +2080,8 @@ class TOOLTIPS(object):
     CUSTOMIZATION_BONUSPANEL_BONUS_LOADER_BODY = '#tooltips:customization/bonusPanel/bonus/loader/body'
     CUSTOMIZATION_BONUSPANEL_BONUS_MASKING_BODY = '#tooltips:customization/bonusPanel/bonus/masking/body'
     CUSTOMIZATION_BONUSPANEL_BONUS_FOOTER = '#tooltips:customization/bonusPanel/bonus/footer'
+    CUSTOMIZATION_SLOTREVERT_HEADER = '#tooltips:customization/slotRevert/header'
+    CUSTOMIZATION_SLOTREVERT_BODY = '#tooltips:customization/slotRevert/body'
     CONTACT_STATUS_INBATTLE_ENUM = (CONTACT_STATUS_INBATTLE_UNKNOWN,
      CONTACT_STATUS_INBATTLE_RANDOM,
      CONTACT_STATUS_INBATTLE_TRAINING,
@@ -2183,6 +2189,7 @@ class TOOLTIPS(object):
      VEHICLEIGR_SPECIALABILITY,
      VEHICLEIGR_DAYS,
      VEHICLEIGR_HOURS,
+     VEHICLE_DEAL_TELECOM_MAIN,
      VEHICLESTATUS_BODY,
      VEHICLESTATUS_BATTLE_HEADER,
      VEHICLESTATUS_LOCKED_HEADER,
@@ -2202,6 +2209,8 @@ class TOOLTIPS(object):
      VEHICLESTATUS_NOTUNLOCKED_HEADER,
      VEHICLESTATUS_INHANGAR_HEADER,
      VEHICLESTATUS_SERVERRESTRICTION_HEADER,
+     VEHICLESTATUS_DEALISOVER_HEADER,
+     VEHICLESTATUS_DEALISOVER_TEXT,
      VEHICLESTATUS_NOTENOUGHCREDITS_HEADER,
      VEHICLESTATUS_NOTENOUGHCREDITS_TEXT,
      VEHICLESTATUS_NOTENOUGHGOLD_HEADER,

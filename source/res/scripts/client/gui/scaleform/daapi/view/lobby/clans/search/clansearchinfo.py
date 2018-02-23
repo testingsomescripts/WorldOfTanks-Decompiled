@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchInfo.py
 import weakref
 import BigWorld
@@ -39,7 +40,7 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
         self.__dataProvider = weakref.proxy(dataProvider)
 
     def openClanProfile(self):
-        shared_events.showClanProfileWindow(self.__selectedClan.getClanDbID())
+        shared_events.showClanProfileWindow(self.__selectedClan.getClanDbID(), self.__selectedClan.getClanAbbrev())
 
     def onAccountClanProfileChanged(self, profile):
         self._updateSetaledState()
@@ -117,7 +118,6 @@ class ClanSearchInfo(ClanSearchInfoMeta, ClanListener, ClanEmblemsHelper):
             sendRequestBtnEnabled = False
             sendRequestTooltip = CLANS.SEARCH_INFO_REQUESTSARENOTACCEPTED_TOOLTIP
         elif reason == CLIENT_CLAN_RESTRICTIONS.FORBIDDEN_ACCOUNT_TYPE:
-            requestSentVisible = True
             sendRequestBtnEnabled = False
             sendRequestTooltip = makeTooltip(CLANS.SEARCH_INFO_FORBIDDENACCOUNTTYPE_TOOLTIP_HEADER, text_styles.error(_ms(CLANS.SEARCH_INFO_FORBIDDENACCOUNTTYPE_TOOLTIP_BODY)))
         else:

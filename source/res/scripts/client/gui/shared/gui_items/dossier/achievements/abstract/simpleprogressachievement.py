@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/abstract/SimpleProgressAchievement.py
 from RegularAchievement import RegularAchievement
 from dossiers2.custom.config import RECORD_CONFIGS
@@ -32,4 +33,4 @@ class SimpleProgressAchievement(RegularAchievement):
         return RECORD_CONFIGS[self._name]
 
     def _readProgressValue(self, dossier):
-        return 0
+        pass

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlayerEvents.py
 import Event
 from constants import ARENA_PERIOD

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/DAAPIDataProvider.py
 from abc import ABCMeta, abstractmethod, abstractproperty
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
@@ -86,4 +87,4 @@ class SortableDAAPIDataProvider(DAAPIDataProvider):
         self._sort = tuple(zip(fields, order))
 
     def pyGetSelectedIdx(self):
-        return -1
+        pass

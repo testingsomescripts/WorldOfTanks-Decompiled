@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/CustomizationInterface.py
 import Event
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
@@ -36,13 +37,13 @@ class CustomizationInterface(BaseDAAPIModule):
         return False
 
     def getSelectedItemCost(self):
-        return (-1, 0)
+        pass
 
     def getSelectedItemsCount(self, *args):
         return int(self.isNewItemSelected())
 
     def getItemCost(self, itemId, priceIndex):
-        return (-1, 0)
+        pass
 
     def isCurrentItemRemove(self):
         return True

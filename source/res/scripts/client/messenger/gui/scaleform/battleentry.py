@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/BattleEntry.py
 import Keys
 import VOIP
@@ -225,7 +226,7 @@ class BattleEntry(IGUIEntry):
 
     def __downHistory(self, *args):
         parser = CommandArgsParser(self.__downHistory.__name__, 1, [bool])
-        toLastMessage, = parser.parse(*args)
+        toLastMessage = parser.parse(*args)
         if toLastMessage == False:
             self.__sharedHistory.syncCursor(False)
             self.__sharedHistory.next()
@@ -242,7 +243,7 @@ class BattleEntry(IGUIEntry):
         toLastMessage = None
         if len(args) > 0:
             parser = CommandArgsParser(self.__getLatestHistory.__name__, 1, [bool])
-            toLastMessage, = parser.parse(*args)
+            toLastMessage = parser.parse(*args)
         if toLastMessage is not None and toLastMessage == True:
             self.__sharedHistory.syncCursor(True)
             self.__updateHistoryControls()
@@ -268,7 +269,7 @@ class BattleEntry(IGUIEntry):
         data = -1
         if len(args) > 0:
             parser = CommandArgsParser(self.__getLatestMessages.__name__, 1, [long])
-            data, = parser.parse(*args)
+            data = parser.parse(*args)
         self.__sharedHistory.syncCursor(True)
         historyList = self.__sharedHistory.getHistory()
         if data > 0:

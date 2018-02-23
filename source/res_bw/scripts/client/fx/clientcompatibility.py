@@ -1,13 +1,14 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/ClientCompatibility.py
 import BigWorld
 if BigWorld.component == 'editor':
 
     def addMat(a, b):
-        return 0
+        pass
 
 
     def delMat(a):
-        return 0
+        pass
 
 
     BigWorld.addMat = addMat

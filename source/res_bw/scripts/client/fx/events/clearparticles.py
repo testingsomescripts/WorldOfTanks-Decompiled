@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Events/ClearParticles.py
 from FX import s_sectionProcessors
 from ParticleSubSystem import ParticleSubSystem
@@ -19,7 +20,6 @@ class ClearParticles(ParticleSubSystem):
 
     def go(self, effect, actor, source, target, **kargs):
         self.subSystemIterate(actor, source, target, self.clearSubSystem)
-        return 0.0
 
 
 s_sectionProcessors['ClearParticles'] = ClearParticles

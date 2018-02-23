@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FX/Joints/LightSource.py
 from FX import s_sectionProcessors
 from FX import typeCheck

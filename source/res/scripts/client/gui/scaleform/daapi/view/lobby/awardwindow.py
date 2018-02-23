@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
 from collections import namedtuple
 from helpers import i18n
@@ -20,25 +21,25 @@ def packRibbonInfo(awards = None, awardForCompleteText = '', awardReceivedText =
 class AwardAbstract(object):
 
     def getWindowTitle(self):
-        return ''
+        pass
 
     def getBackgroundImage(self):
-        return ''
+        pass
 
     def getAwardImage(self):
         return None
 
     def getHeader(self):
-        return ''
+        pass
 
     def getDescription(self):
-        return ''
+        pass
 
     def getAdditionalText(self):
-        return ''
+        pass
 
     def getTextAreaIconPath(self):
-        return ''
+        pass
 
     def getTextAreaIconIsShow(self):
         return False
@@ -59,7 +60,7 @@ class AwardAbstract(object):
         return i18n.makeString(MENU.AWARDWINDOW_CLOSEBUTTON)
 
     def getBodyButtonText(self):
-        return ''
+        pass
 
     def getRibbonInfo(self):
         return None
@@ -81,7 +82,7 @@ class AwardWindow(AwardWindowMeta):
 
     def __init__(self, ctx):
         super(AwardWindow, self).__init__()
-        raise 'award' in ctx and isinstance(ctx['award'], AwardAbstract) or AssertionError
+        assert 'award' in ctx and isinstance(ctx['award'], AwardAbstract)
         self.__award = ctx['award']
 
     def onWindowClose(self):

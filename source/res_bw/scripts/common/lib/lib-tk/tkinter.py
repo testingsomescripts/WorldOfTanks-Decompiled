@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/lib-tk/Tkinter.py
 """Wrapper functions for Tcl/Tk.
 
@@ -2351,7 +2352,7 @@ class Button(Widget):
 
 
 def AtEnd():
-    return 'end'
+    pass
 
 
 def AtInsert(*args):
@@ -2364,11 +2365,11 @@ def AtInsert(*args):
 
 
 def AtSelFirst():
-    return 'sel.first'
+    pass
 
 
 def AtSelLast():
-    return 'sel.last'
+    pass
 
 
 def At(x, y = None):

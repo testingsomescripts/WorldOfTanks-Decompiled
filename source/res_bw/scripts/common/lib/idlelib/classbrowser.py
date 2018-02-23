@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/Lib/idlelib/ClassBrowser.py
 """Class browser.
 
@@ -64,7 +65,7 @@ class ModuleBrowserTreeItem(TreeItem):
         return os.path.basename(self.file)
 
     def GetIconName(self):
-        return 'python'
+        pass
 
     def GetSubList(self):
         sublist = []
@@ -199,10 +200,10 @@ class MethodBrowserTreeItem(TreeItem):
         return 'def ' + self.name + '(...)'
 
     def GetIconName(self):
-        return 'python'
+        pass
 
     def IsExpandable(self):
-        return 0
+        pass
 
     def OnDoubleClick(self):
         if not os.path.exists(self.file):

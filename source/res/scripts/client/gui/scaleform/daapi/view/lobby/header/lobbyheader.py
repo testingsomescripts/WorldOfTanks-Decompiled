@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyHeader.py
 import math
 import BigWorld
@@ -248,29 +249,29 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, GlobalListener):
         if self.prbDispatcher:
             isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
         if isPremiumAccount:
-            if not premiumExpiryTime > 0:
-                raise AssertionError
-                deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
-                if deltaInSeconds > time_utils.ONE_DAY:
-                    timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_DAY)
-                    timeMetric = i18n.makeString('#menu:header/account/premium/days')
-                else:
-                    timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_HOUR)
-                    timeMetric = i18n.makeString('#menu:header/account/premium/hours')
-                buyPremiumLabel = i18n.makeString('#menu:headerButtons/doLabel/premium')
-                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label', {'timeMetric': timeMetric,
-                 'timeLeft': timeLeft})
-                canUpdatePremium = deltaInSeconds < time_utils.ONE_YEAR
+            assert premiumExpiryTime > 0
+            deltaInSeconds = float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(premiumExpiryTime)))
+            if deltaInSeconds > time_utils.ONE_DAY:
+                timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_DAY)
+                timeMetric = i18n.makeString('#menu:header/account/premium/days')
             else:
-                canUpdatePremium = True
-                premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
-                buyPremiumLabel = i18n.makeString('#menu:common/premiumBuy')
-            if not canUpdatePremium:
-                disableTTHeader = i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER)
-                disableTTBody = i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY)
-            self.as_doDisableHeaderButtonS(self.BUTTONS.PREM, canUpdatePremium and isNavigationEnabled)
-            hasPersonalDiscount = len(g_itemsCache.items.shop.personalPremiumPacketsDiscounts) > 0
-            tooltip = canUpdatePremium or {'header': disableTTHeader,
+                timeLeft = math.ceil(deltaInSeconds / time_utils.ONE_HOUR)
+                timeMetric = i18n.makeString('#menu:header/account/premium/hours')
+            buyPremiumLabel = i18n.makeString('#menu:headerButtons/doLabel/premium')
+            premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'premium-account-label', {'timeMetric': timeMetric,
+             'timeLeft': timeLeft})
+            canUpdatePremium = deltaInSeconds < time_utils.ONE_YEAR
+        else:
+            canUpdatePremium = True
+            premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
+            buyPremiumLabel = i18n.makeString('#menu:common/premiumBuy')
+        if not canUpdatePremium:
+            disableTTHeader = i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_HEADER)
+            disableTTBody = i18n.makeString(TOOLTIPS.LOBBY_HEADER_BUYPREMIUMACCOUNT_DISABLED_BODY, number=time_utils.ONE_YEAR / time_utils.ONE_DAY)
+        self.as_doDisableHeaderButtonS(self.BUTTONS.PREM, canUpdatePremium and isNavigationEnabled)
+        hasPersonalDiscount = len(g_itemsCache.items.shop.personalPremiumPacketsDiscounts) > 0
+        if not canUpdatePremium:
+            tooltip = {'header': disableTTHeader,
              'body': disableTTBody}
         else:
             tooltip = TOOLTIPS.HEADER_PREMIUM_EXTEND if isPremiumAccount else TOOLTIPS.HEADER_PREMIUM_BUY

@@ -1,3 +1,4 @@
+# Python 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/ConsumablesPanel.py
 from collections import namedtuple
 from functools import partial
@@ -184,17 +185,17 @@ class ConsumablesPanel(object):
             idx = start
         else:
             idx = int(math.log(bits, 2)) + 1
-        raise -1 < idx < PANEL_MAX_LENGTH - 1 or AssertionError
+        assert -1 < idx < PANEL_MAX_LENGTH - 1
         self.__mask |= 1 << idx
         return idx
 
     def __genKey(self, idx):
-        if not -1 < idx < PANEL_MAX_LENGTH - 1:
-            raise AssertionError
-            cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
-            bwKey = CommandMapping.g_instance.get(cmdMappingKey)
-            sfKey = 0
-            sfKey = bwKey is not None and bwKey != 0 and getScaleformKey(bwKey)
+        assert -1 < idx < PANEL_MAX_LENGTH - 1
+        cmdMappingKey = COMMAND_AMMO_CHOICE_MASK.format(idx + 1 if idx < 9 else 0)
+        bwKey = CommandMapping.g_instance.get(cmdMappingKey)
+        sfKey = 0
+        if bwKey is not None and bwKey != 0:
+            sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
     def __makeShellTooltip(self, descriptor, piercingPower):
