@@ -3,10 +3,10 @@
 import operator
 from collections import namedtuple
 from operator import attrgetter
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.constants import RANK_TYPES
-from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from helpers import i18n
 from helpers import time_utils
@@ -40,8 +40,10 @@ class RANK_CHANGE_STATES(object):
     RANK_EARNED = 'rankEarned'
     RANK_LOST = 'rankLost'
     STEP_EARNED = 'stepEarned'
+    STEPS_EARNED = 'stepsEarned'
     STEP_LOST = 'stepLost'
     NOTHING_CHANGED = 'nothingChanged'
+    RANK_POINT = 'rankPoint'
 
 
 class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ordinalNumber, points')):
@@ -107,7 +109,7 @@ class RankedSeason(object):
         return self.__data.get('number')
 
     def getUserName(self):
-        return i18n.makeString(RANKED_BATTLES.season_name(self.getNumber()))
+        return str(self.getNumber())
 
     def getPoints(self):
         """
@@ -196,20 +198,14 @@ class RankProgress(object):
     def getAcquiredSteps(self):
         return filter(operator.methodcaller('isAcquired'), self._steps)
 
-    def getUserStr(self):
-        return text_styles.main(' / '.join((text_styles.stats(len(self.getAcquiredSteps())), str(len(self.getSteps())))))
-
-    def getNewUserStr(self):
-        stepsSeenByPlayer = filter(lambda s: not s.isNewForPlayer(), self.getSteps())
-        return text_styles.main(' / '.join((text_styles.stats(len(stepsSeenByPlayer)), str(len(self.getSteps())))))
-
 
 class Rank(object):
     _ICON_SIZES = {'tiny': '24x24',
      'small': '58x80',
      'medium': '80x110',
      'big': '114x160',
-     'huge': '190x260'}
+     'huge': '190x260',
+     'final': '216x300'}
     _awardsOrder = ['oneof',
      Currency.CRYSTAL,
      Currency.GOLD,
@@ -244,7 +240,7 @@ class Rank(object):
         return self._rankID
 
     def getUserName(self):
-        return i18n.makeString(RANKED_BATTLES.rank_name(self._rankID))
+        return i18n.makeString(str(self._rankID))
 
     def getIcon(self, size):
         return RES_ICONS.getRankIcon(self._ICON_SIZES.get(size, ''), self._rankID)
@@ -345,27 +341,13 @@ class VehicleRank(Rank):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '_opened' if isOpened else '', self.__accTopRankID)
 
     def getUserName(self):
-        if self.getSerialID() > 1:
-            nameKey = RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_VEHICLEBONUSRANK
-        else:
-            nameKey = RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_VEHICLERANK
-        return i18n.makeString(nameKey, vehicle=self.__vehicle.shortUserName)
+        return i18n.makeString(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_VEHICLERANK)
 
     def isRewardClaimed(self):
         return self.isAcquired()
 
     def getVehicle(self):
         return self.__vehicle
-
-
-class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'vehRank', 'vehStep', 'stepChanges'))):
-
-    @classmethod
-    def fromDict(cls, dictWithInfo):
-        accRank, accStep = dictWithInfo.get('accRank', (0, 0))
-        vehRank, vehStep = dictWithInfo.get('vehRank', (0, 0))
-        stepChanges = dictWithInfo.get('rankChange', 0)
-        return cls(accRank, accStep, vehRank, vehStep, stepChanges)
 
 
 class PrimeTime(object):
@@ -424,6 +406,62 @@ class PrimeTime(object):
             startTimeDayStart += time_utils.ONE_DAY
 
         return collapseIntervals(periods)
+
+
+class PostBattleRankInfo(namedtuple('PostBattleRankInfo', ('accRank', 'accStep', 'vehRank', 'vehStep', 'stepChanges', 'prevAccRank', 'prevAccStep', 'prevVehRank', 'prevVehStep', 'shields', 'prevShields'))):
+    __slots__ = ()
+
+    @classmethod
+    def fromDict(cls, dictWithInfo):
+        accRank, accStep = dictWithInfo.get('accRank', (0, 0))
+        vehRank, vehStep = dictWithInfo.get('vehRank', (0, 0))
+        stepChanges = dictWithInfo.get('rankChange', 0)
+        prevAccRank, prevAccStep = dictWithInfo.get('prevAccRank', (0, 0))
+        prevVehRank, prevVehStep = dictWithInfo.get('prevVehRank', (0, 0))
+        shields = dictWithInfo.get('shields', {})
+        prevShields = dictWithInfo.get('prevShields', {})
+        return cls(accRank, accStep, vehRank, vehStep, stepChanges, prevAccRank, prevAccStep, prevVehRank, prevVehStep, shields, prevShields)
+
+    @property
+    def shieldHP(self):
+        hp = None
+        shieldState = self.shields.get(self.accRank, None)
+        if shieldState is not None:
+            hp, _ = shieldState
+        return hp
+
+    @property
+    def shieldState(self):
+        """
+        Returns shield state
+        :return:
+        """
+        currentRankID = self.accRank
+        shieldState = self.shields.get(currentRankID, None)
+        state = None
+        if shieldState is not None:
+            lastShieldState = self.prevShields.get(currentRankID, None)
+            hp, _ = shieldState
+            if lastShieldState is None:
+                if hp > 0:
+                    state = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                else:
+                    state = RANKEDBATTLES_ALIASES.SHIELD_LOSE
+            else:
+                lastHp, _ = lastShieldState
+                if lastHp == hp:
+                    if hp > 0:
+                        state = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                elif lastHp > hp:
+                    if hp == 0:
+                        state = RANKEDBATTLES_ALIASES.SHIELD_LOSE
+                    else:
+                        state = RANKEDBATTLES_ALIASES.SHIELD_LOSE_STEP
+                elif lastHp == 0:
+                    state = RANKEDBATTLES_ALIASES.SHIELD_FULL_RENEW
+                else:
+                    state = RANKEDBATTLES_ALIASES.SHIELD_RENEW
+        return state
 
 
 class RankedDossier(namedtuple('RankedDossier', 'rank, step, vehRankCount, ladderPts, allStepsCount')):

@@ -35,11 +35,11 @@ class CRAFT:
     RANDOM_TOY_COST = 100
     NATIONAL_SETTING_COST_FACTOR = 1.0
     TYPE_COST_FACTOR = 1.0
-    PROBABILITY_FOR_RANK = ((1, 0.5),
-     (2, 0.257),
-     (3, 0.15),
-     (4, 0.077),
-     (5, 0.016))
+    PROBABILITY_FOR_RANK = ((1, 0.5344),
+     (2, 0.27),
+     (3, 0.12),
+     (4, 0.065),
+     (5, 0.0106))
     PROBABILITY_FOR_SETTING = (('soviet', 0.25),
      ('traditionalWestern', 0.25),
      ('modernWestern', 0.25),
@@ -316,13 +316,6 @@ def _readToy(section):
     cfg['setting'] = setting = section.readString('setting')
     if setting not in NATIONAL_SETTINGS:
         raise Exception("Wrong toy national setting '%s'" % setting)
-    if IS_CLIENT:
-        cfg['icon'] = section.readString('icon')
-        cfg['slotIcon'] = section.readString('slotIcon')
-        cfg['model'] = section.readString('model')
-        cfg['name'] = section.readString('name')
-        cfg['regularEffect'] = section.readString('regularEffect')
-        cfg['hangingEffect'] = section.readString('hangingEffect')
     return cfg
 
 

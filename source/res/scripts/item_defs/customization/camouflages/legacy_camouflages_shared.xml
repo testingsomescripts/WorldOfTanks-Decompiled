@@ -1180,6 +1180,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15335	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -1496,6 +1497,7 @@
     </camouflage>
     <camouflage>
       <id>	15337	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -1799,6 +1801,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15329	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/chinese/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -1861,6 +1864,7 @@
     </camouflage>
     <camouflage>
       <id>	15331	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -1923,6 +1927,7 @@
     </camouflage>
     <camouflage>
       <id>	15332	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -1984,6 +1989,7 @@
     </camouflage>
     <camouflage>
       <id>	15333	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -2061,6 +2067,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15330	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -2123,6 +2130,7 @@
     </camouflage>
     <camouflage>
       <id>	15334	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -2186,6 +2194,7 @@
     </camouflage>
     <camouflage>
       <id>	15336	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -2470,6 +2479,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15703	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -2498,6 +2508,7 @@
     </camouflage>
     <camouflage>
       <id>	15712	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -2526,6 +2537,7 @@
     </camouflage>
     <camouflage>
       <id>	15714	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -2554,6 +2566,7 @@
     </camouflage>
     <camouflage>
       <id>	15715	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -2714,6 +2727,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15713	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -2742,6 +2756,7 @@
     </camouflage>
     <camouflage>
       <id>	15716	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -2770,6 +2785,7 @@
     </camouflage>
     <camouflage>
       <id>	15724	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -2810,6 +2826,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15717	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -2962,6 +2979,7 @@
     </camouflage>
     <camouflage>
       <id>	15725	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -3019,7 +3037,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	2.8 2.8 0.000000 0.5	</F06_ARL_44>
-        <F14_AMX40>	4.7 4.2 0.01 0.2	</F14_AMX40>
+        <F14_AMX40>	4.1 4.1 0.01 0.2	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.5 1.5 0.11 0.18	</F12_Hotchkiss_H35>
         <F03_D2>	3.5 3.5 0.000000 0.26	</F03_D2>
         <F18_Bat_Chatillon25t>	1.7 1.7 0.19 0.000000	</F18_Bat_Chatillon25t>
@@ -3133,7 +3151,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	3.1 3.1 0.24 0.14	</F06_ARL_44>
-        <F14_AMX40>	2.6 2.4 0.14 0.2	</F14_AMX40>
+        <F14_AMX40>	3.6 3.6 0.14 0.2	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.3 1.3 0.3 0.14	</F12_Hotchkiss_H35>
         <F03_D2>	3.4 3.4 0.1 0.000000	</F03_D2>
         <F18_Bat_Chatillon25t>	2.2 2.2 0.58 0.84	</F18_Bat_Chatillon25t>
@@ -3220,7 +3238,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	2.6 2.6 0.4 0.4	</F06_ARL_44>
-        <F14_AMX40>	2.4 2.2 0.35 0.06	</F14_AMX40>
+        <F14_AMX40>	3.1 3.1 0.35 0.06	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.3 1.3 0.06 2.6	</F12_Hotchkiss_H35>
         <F03_D2>	2.8 2.8 0.000000 0.24	</F03_D2>
         <F18_Bat_Chatillon25t>	2.1 2.1 0.35 0.1	</F18_Bat_Chatillon25t>
@@ -3322,7 +3340,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	2.9 2.9 0.43 0.82	</F06_ARL_44>
-        <F14_AMX40>	2.5 2.4 0.24 0.11	</F14_AMX40>
+        <F14_AMX40>	5 5 0.24 0.11	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.8 1.8 0.14 0.32	</F12_Hotchkiss_H35>
         <F03_D2>	4 4 0.000000 0.86	</F03_D2>
         <F18_Bat_Chatillon25t>	2.2 2.2 1 4.3	</F18_Bat_Chatillon25t>
@@ -3435,7 +3453,7 @@
         <F11_Renault_G1R>	4.8 4.8 0.46 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.9 1.9 0.32 0.4	</F12_Hotchkiss_H35>
         <F13_AMX38>	2.8 2.8 0.07 0.25	</F13_AMX38>
-        <F14_AMX40>	2.8 2.9 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	4.4 4.4 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	4.5 4.5 0.56 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4.4 4.4 0.56 0.46	</F16_AMX_13_75>
         <F20_RenaultBS>	3 3 0.000000 1.3	</F20_RenaultBS>
@@ -3523,7 +3541,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	2.8 2.8 0.51 0.000000	</F06_ARL_44>
-        <F14_AMX40>	2.8 1.7 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.6 3.6 0.000000 0.000000	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.2 1.2 0.04 0.26	</F12_Hotchkiss_H35>
         <F03_D2>	3.7 3.7 0.26 0.000000	</F03_D2>
         <F18_Bat_Chatillon25t>	2 2 0.44 0.62	</F18_Bat_Chatillon25t>
@@ -3610,7 +3628,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	3 3 0.8 0.36	</F06_ARL_44>
-        <F14_AMX40>	2.9 2.3 0.32 0.31	</F14_AMX40>
+        <F14_AMX40>	4 4 0.32 0.31	</F14_AMX40>
         <F12_Hotchkiss_H35>	1.4 1.4 0.000000 1.4	</F12_Hotchkiss_H35>
         <F03_D2>	4.6 4.6 0.48 0.000000	</F03_D2>
         <F18_Bat_Chatillon25t>	2.1 2.1 0.75 0.74	</F18_Bat_Chatillon25t>
@@ -3697,7 +3715,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	3.6 3.6 0.000000 0.000000	</F06_ARL_44>
-        <F14_AMX40>	2.6 3 0.34 0.57	</F14_AMX40>
+        <F14_AMX40>	5.7 5.7 0.34 0.57	</F14_AMX40>
         <F12_Hotchkiss_H35>	2.3 2.3 0.42 0.000000	</F12_Hotchkiss_H35>
         <F03_D2>	4 4 0.73 0.68	</F03_D2>
         <F18_Bat_Chatillon25t>	3 3 0.57 0.26	</F18_Bat_Chatillon25t>
@@ -3796,7 +3814,7 @@
         <F11_Renault_G1R>	4.7 4.7 0.04 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	0.9 0.9 0.64 0.76	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.3 1.3 0.4 0.14	</F13_AMX38>
-        <F14_AMX40>	2.8 3 0.04 0.46	</F14_AMX40>
+        <F14_AMX40>	3 3 0.04 0.46	</F14_AMX40>
         <F15_AMX_12t>	2.7 2.8 0.3 0.45	</F15_AMX_12t>
         <F16_AMX_13_75>	2.8 3 0.6 0.16	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.6 2.7 0.17 0.12	</F17_AMX_13_90>
@@ -3884,7 +3902,7 @@
         <F11_Renault_G1R>	6 6 0.74 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.5 1.5 0.25 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	2.3 2.3 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	4 4 0.4 0.64	</F14_AMX40>
+        <F14_AMX40>	4.8 4.8 0.4 0.64	</F14_AMX40>
         <F15_AMX_12t>	4.7 4.8 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4.3 4.3 0.4 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	4.5 4.5 0.26 0.19	</F17_AMX_13_90>
@@ -3971,7 +3989,7 @@
         <F11_Renault_G1R>	4.8 3.2 0.5 0.66	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.3 1.3 0.44 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	2 2 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.7 2.9 0.08 0.06	</F14_AMX40>
+        <F14_AMX40>	3.9 3.9 0.08 0.06	</F14_AMX40>
         <F15_AMX_12t>	3.4 3.4 0.06 0.37	</F15_AMX_12t>
         <F16_AMX_13_75>	4.6 4.6 0.3 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	3.2 3.2 0.04 0.000000	</F17_AMX_13_90>
@@ -4058,7 +4076,7 @@
         <F11_Renault_G1R>	4.5 4.5 0.54 0.08	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.4 1.4 0.08 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	2.6 2.6 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	3 3.4 0.36 0.28	</F14_AMX40>
+        <F14_AMX40>	5 5 0.36 0.28	</F14_AMX40>
         <F15_AMX_12t>	3.7 3.7 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4.8 4.8 0.26 0.32	</F16_AMX_13_75>
         <F17_AMX_13_90>	3.3 3.4 0.23 0.95	</F17_AMX_13_90>
@@ -4159,7 +4177,7 @@
       </palettes>
       <tiling>
         <F06_ARL_44>	4.8 3.7 0.000000 0.76	</F06_ARL_44>
-        <F14_AMX40>	2.3 2.3 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.5 3.5 0.000000 0.000000	</F14_AMX40>
         <F12_Hotchkiss_H35>	2 2 0.27 0.000000	</F12_Hotchkiss_H35>
         <F03_D2>	4 4 0.3 0.7	</F03_D2>
         <F18_Bat_Chatillon25t>	2.2 4.6 0.06 0.000000	</F18_Bat_Chatillon25t>
@@ -4273,7 +4291,7 @@
         <F11_Renault_G1R>	3.7 3.6 0.000000 0.23	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	3.6 3.7 0.22 0.15	</F12_Hotchkiss_H35>
         <F13_AMX38>	4 4 0.26 0.000000	</F13_AMX38>
-        <F14_AMX40>	4 3.9 0.3 0.14	</F14_AMX40>
+        <F14_AMX40>	3.9 3.9 0.3 0.14	</F14_AMX40>
         <F15_AMX_12t>	3.5 3.4 0.19 0.4	</F15_AMX_12t>
         <F16_AMX_13_75>	4.2 3.9 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	3.3 3.1 0.000000 0.000000	</F17_AMX_13_90>
@@ -4367,7 +4385,7 @@
         <F11_Renault_G1R>	5 5 0.19 0.06	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.5 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.8 1.8 0.28 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.5 2.7 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.4 3.4 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	2.6 2.5 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4 4 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2 2 0.000000 0.000000	</F17_AMX_13_90>
@@ -4454,7 +4472,7 @@
         <F11_Renault_G1R>	5.5 5.5 0.44 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.5 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.8 1.8 0.28 0.000000	</F13_AMX38>
-        <F14_AMX40>	3 3.1 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.4 3.4 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	2.8 2.8 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4.4 4.4 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.6 2.6 0.000000 0.000000	</F17_AMX_13_90>
@@ -4540,7 +4558,7 @@
         <F11_Renault_G1R>	4.9 4.9 0.32 0.82	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.5 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.8 1.8 0.28 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.5 2.7 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.4 3.4 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	2.8 2.7 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	4.5 4.5 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.4 2.4 0.000000 0.000000	</F17_AMX_13_90>
@@ -4626,7 +4644,7 @@
         <F11_Renault_G1R>	4.9 4.9 0.29 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.5 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.8 1.8 0.28 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.6 2.6 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.4 3.4 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	2.9 3 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	5 5 0.08 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.7 2.7 0.000000 0.000000	</F17_AMX_13_90>
@@ -4701,6 +4719,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15427	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -4726,7 +4745,7 @@
         <F11_Renault_G1R>	4.5 4.5 0.13 0.21	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.28 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.5 1.5 0.28 0.69	</F13_AMX38>
-        <F14_AMX40>	2.4 2.4 0.45 0.09	</F14_AMX40>
+        <F14_AMX40>	2.6 2.6 0.45 0.09	</F14_AMX40>
         <F15_AMX_12t>	2.3 2.3 0.19 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	3.4 3.4 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.1 2.1 0.000000 0.000000	</F17_AMX_13_90>
@@ -4788,6 +4807,7 @@
     </camouflage>
     <camouflage>
       <id>	15430	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -4816,7 +4836,7 @@
         <F11_Renault_G1R>	4.1 4.1 0.49 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.2 1.2 0.24 0.32	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.9 1.9 0.83 0.75	</F13_AMX38>
-        <F14_AMX40>	3.8 3.8 0.3 0.9	</F14_AMX40>
+        <F14_AMX40>	3.9 3.9 0.3 0.9	</F14_AMX40>
         <F16_AMX_13_75>	3.8 3.8 0.63 0.1	</F16_AMX_13_75>
         <F18_Bat_Chatillon25t>	3.5 3.5 0.38 0.68	</F18_Bat_Chatillon25t>
         <F18_Bat_Chatillon25t_IGR>	3.5 3.5 0.38 0.68	</F18_Bat_Chatillon25t_IGR>
@@ -4876,6 +4896,7 @@
     </camouflage>
     <camouflage>
       <id>	15436	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -5004,7 +5025,7 @@
         <F11_Renault_G1R>	3.2 3.2 0.2 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1 1 0.2 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.3 1.3 0.56 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.2 2.2 0.2 0.62	</F14_AMX40>
+        <F14_AMX40>	2.5 2.5 0.2 0.62	</F14_AMX40>
         <F15_AMX_12t>	2.2 2.2 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	3.9 3.9 0.28 0.42	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.4 2.4 0.000000 0.000000	</F17_AMX_13_90>
@@ -5105,7 +5126,7 @@
         <F11_Renault_G1R>	3.4 3.4 0.58 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.1 1.1 0.28 5.8	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.6 1.6 0.2 0.18	</F13_AMX38>
-        <F14_AMX40>	3 3 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.2 3.2 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	3 3 0.42 0.06	</F15_AMX_12t>
         <F16_AMX_13_75>	3.6 3.6 0.000000 0.29	</F16_AMX_13_75>
         <F18_Bat_Chatillon25t>	1.8 1.8 0.000000 0.000000	</F18_Bat_Chatillon25t>
@@ -5206,7 +5227,7 @@
         <F11_Renault_G1R>	4.5 4.5 0.000000 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	1.5 1.5 0.000000 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	2.1 2.1 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	3.7 3.7 0.000000 0.000000	</F14_AMX40>
+        <F14_AMX40>	3.9 3.9 0.000000 0.000000	</F14_AMX40>
         <F15_AMX_12t>	3.8 3.9 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	3.7 3.8 0.000000 0.000000	</F16_AMX_13_75>
         <F18_Bat_Chatillon25t>	1.9 1.9 0.000000 0.000000	</F18_Bat_Chatillon25t>
@@ -5281,6 +5302,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15426	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -5306,7 +5328,7 @@
         <F11_Renault_G1R>	4.4 4.4 0.32 0.32	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	2 2 0.000000 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	3.1 3.1 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	4.6 4.5 0.1 0.09	</F14_AMX40>
+        <F14_AMX40>	5.2 5.2 0.1 0.09	</F14_AMX40>
         <F15_AMX_12t>	4.4 4.3 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	3.9 3.7 0.000000 0.56	</F16_AMX_13_75>
         <F17_AMX_13_90>	2.3 2.3 0.000000 0.000000	</F17_AMX_13_90>
@@ -5368,6 +5390,7 @@
     </camouflage>
     <camouflage>
       <id>	15428	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -5393,7 +5416,7 @@
         <F11_Renault_G1R>	2.9 2.9 0.34 0.000000	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	0.7 0.7 0.000000 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.1 1.1 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	1.9 1.8 0.43 0.43	</F14_AMX40>
+        <F14_AMX40>	2.1 2.1 0.43 0.43	</F14_AMX40>
         <F15_AMX_12t>	1.9 1.8 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	2.4 2.4 0.1 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	1.9 1.8 0.000000 0.000000	</F17_AMX_13_90>
@@ -5454,6 +5477,7 @@
     </camouflage>
     <camouflage>
       <id>	15429	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -5478,7 +5502,7 @@
         <F09_AMX_50_120>	2.9 2.9 0.000000 0.000000	</F09_AMX_50_120>
         <F12_Hotchkiss_H35>	0.7 0.7 0.000000 0.000000	</F12_Hotchkiss_H35>
         <F13_AMX38>	1.1 1.1 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	2.1 2 0.66 0.000000	</F14_AMX40>
+        <F14_AMX40>	2 2 0.66 0.000000	</F14_AMX40>
         <F15_AMX_12t>	1.8 2 0.000000 0.000000	</F15_AMX_12t>
         <F16_AMX_13_75>	2.7 2.7 0.000000 0.000000	</F16_AMX_13_75>
         <F17_AMX_13_90>	2 2 0.000000 0.000000	</F17_AMX_13_90>
@@ -5540,6 +5564,7 @@
     </camouflage>
     <camouflage>
       <id>	15431	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -5566,7 +5591,7 @@
         <F11_Renault_G1R>	2.1 2.1 0.87 0.3	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	0.5 0.5 0.04 5.8	</F12_Hotchkiss_H35>
         <F13_AMX38>	1 1 0.000000 0.000000	</F13_AMX38>
-        <F14_AMX40>	2 2 0.4 0.000000	</F14_AMX40>
+        <F14_AMX40>	1.6 1.6 0.4 0.000000	</F14_AMX40>
         <F16_AMX_13_75>	3.6 3.6 0.000000 0.000000	</F16_AMX_13_75>
         <F18_Bat_Chatillon25t>	1.8 1.8 0.37 0.000000	</F18_Bat_Chatillon25t>
         <F20_RenaultBS>	1 1 5 7.8	</F20_RenaultBS>
@@ -5641,6 +5666,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15432	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -5670,7 +5696,7 @@
         <F11_Renault_G1R>	6.1 6.1 0.14 0.64	</F11_Renault_G1R>
         <F12_Hotchkiss_H35>	2 2 0.88 0.82	</F12_Hotchkiss_H35>
         <F13_AMX38>	2.5 2.5 0.6 0.02	</F13_AMX38>
-        <F14_AMX40>	6 6 0.84 0.36	</F14_AMX40>
+        <F14_AMX40>	3.8 3.8 0.84 0.36	</F14_AMX40>
         <F16_AMX_13_75>	5.6 5.6 0.14 0.000000	</F16_AMX_13_75>
         <F18_Bat_Chatillon25t>	2.6 2.6 0.1 0.12	</F18_Bat_Chatillon25t>
         <F18_Bat_Chatillon25t_IGR>	2.6 2.6 0.1 0.12	</F18_Bat_Chatillon25t_IGR>
@@ -5743,6 +5769,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15437	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -5968,7 +5995,7 @@
         <G03_PzV_Panther>	3 3.5 0.94 0.45	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	2.9 2.7 0.46 0.43	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	3.8 3.8 0.14 0.86	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	3.9 4 0.39 0.17	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.9 4 1.1 0.17	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.9 4 0.39 0.17	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	4 4.1 0.29 0.28	</G05_StuG_40_AusfG>
         <G06_PzII>	2.1 2.1 0.57 0.12	</G06_PzII>
@@ -6119,7 +6146,7 @@
         <G03_PzV_Panther>	2.2 2.2 0.66 0.37	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	3 3.7 0.76 0.12	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	3.2 3.6 0.34 0.67	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	3.9 4.1 0.11 0.54	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.9 4.1 0.1 0.54	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.9 4.1 0.11 0.54	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5 5 0.67 0.62	</G05_StuG_40_AusfG>
         <G06_PzII>	2.5 2.5 0.36 0.49	</G06_PzII>
@@ -6270,7 +6297,7 @@
         <G03_PzV_Panther>	2.2 2.2 0.53 0.18	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	3.7 4.7 1 0.000000	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	4 4 0.52 0.23	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	4.6 4.5 0.63 0.86	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.8 2.8 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	4.6 4.5 0.63 0.86	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.9 5.9 0.38 0.26	</G05_StuG_40_AusfG>
         <G06_PzII>	2.5 2.5 1 0.27	</G06_PzII>
@@ -6422,7 +6449,7 @@
         <G03_PzV_Panther>	1.7 1.7 0.4 1	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	3.6 3.7 0.34 0.000000	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	3.8 3.9 0.75 0.66	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	3.4 3.2 0.72 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.3 2.3 0.72 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.4 3.2 0.72 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	3.5 3.6 0.63 0.64	</G05_StuG_40_AusfG>
         <G06_PzII>	1.5 1.5 0.64 0.72	</G06_PzII>
@@ -6576,7 +6603,7 @@
         <G79_Pz_IV_AusfGH>	5.5 5.5 0.26 0.000000	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	6.7 6.7 0.000000 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	2.7 2.7 0.000000 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	7.1 8.1 0.000000 0.68	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.8 3.8 0.000000 0.68	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	7.1 8.1 0.000000 0.68	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	4.4 4.4 0.08 0.12	</G05_StuG_40_AusfG>
         <G06_PzII>	3.2 3.2 0.55 0.000000	</G06_PzII>
@@ -6731,7 +6758,7 @@
         <G79_Pz_IV_AusfGH>	4.3 4.4 0.28 0.04	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	5.6 5.6 0.54 0.16	</G02_Hummel>
         <G03_PzV_Panther>	2.7 2.7 0.000000 0.78	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	3.1 3.1 0.77 0.69	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.5 3.5 0.77 0.69	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.1 3.1 0.77 0.69	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	4.9 5.1 0.76 0.68	</G05_StuG_40_AusfG>
         <G06_PzII>	2 2 0.54 0.37	</G06_PzII>
@@ -7195,7 +7222,7 @@
         <G03_PzV_Panther>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther>
         <G03_PzV_Panther_IGR>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther_IGR>
         <G03_PzV_Panther_training>	2 2 0.2 0.000000	</G03_PzV_Panther_training>
-        <G04_PzVI_Tiger_I>	2 2 1.4 0.5	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.7 2.7 1.4 0.5	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_I_IGR>	2 2 1.4 0.5	</G04_PzVI_Tiger_I_IGR>
         <G04_PzVI_Tiger_IA>	1.7 1.7 0.7 1	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	2 2 0.000000 0.000000	</G05_StuG_40_AusfG>
@@ -7355,7 +7382,7 @@
         <G79_Pz_IV_AusfGH>	3 2.7 0.71 0.44	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	4 4.1 0.23 0.38	</G02_Hummel>
         <G03_PzV_Panther>	2.2 2.2 0.56 0.65	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	3.4 3.5 0.42 0.31	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.2 3.2 0.42 0.31	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.4 3.5 0.42 0.31	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	3.6 3.7 0.51 0.33	</G05_StuG_40_AusfG>
         <G06_PzII>	1.7 1.7 0.26 0.36	</G06_PzII>
@@ -7523,7 +7550,7 @@
         <G79_Pz_IV_AusfGH>	3.1 2.8 0.21 0.000000	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	5 5 0.19 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	3.2 3.1 0.2 0.26	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	2.6 2.7 0.2 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.6 2.7 0.9 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	2.6 2.7 0.2 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.8 5.8 0.47 0.52	</G05_StuG_40_AusfG>
         <G06_PzII>	4.7 4.7 0.12 0.2	</G06_PzII>
@@ -7664,7 +7691,7 @@
         <G03_PzV_Panther>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther>
         <G03_PzV_Panther_IGR>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther_IGR>
         <G03_PzV_Panther_training>	2 2 0.2 0.000000	</G03_PzV_Panther_training>
-        <G04_PzVI_Tiger_I>	2 2 1.4 0.5	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.7 2.7 1.4 0.5	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_I_IGR>	2 2 1.4 0.5	</G04_PzVI_Tiger_I_IGR>
         <G04_PzVI_Tiger_IA>	1.7 1.7 0.7 0.6	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	2 2 0.000000 0.000000	</G05_StuG_40_AusfG>
@@ -7837,7 +7864,7 @@
         <G03_PzV_Panther>	3.3 2.8 0.63 1.2	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	3.4 4.7 0.91 0.07	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	5 5 0.08 0.84	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	4.4 3.8 0.56 0.3	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	4.4 3.8 1.1 0.3	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	4.4 3.8 0.56 0.3	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.6 5.6 0.57 0.14	</G05_StuG_40_AusfG>
         <G06_PzII>	2.7 2.7 0.9 0.13	</G06_PzII>
@@ -8167,7 +8194,7 @@
         <G03_PzV_Panther>	2.4 2.4 0.32 0.41	</G03_PzV_Panther>
         <G79_Pz_IV_AusfGH>	4.3 3.2 0.28 0.87	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	4.3 4.3 0.000000 0.71	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	3.2 3.2 0.68 0.15	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.8 2.8 0.68 0.15	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.2 3.2 0.68 0.15	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.1 5.1 0.18 0.08	</G05_StuG_40_AusfG>
         <G06_PzII>	2.8 2.8 0.28 0.000000	</G06_PzII>
@@ -8320,7 +8347,7 @@
         <G79_Pz_IV_AusfGH>	2.7 2.8 0.000000 0.000000	</G79_Pz_IV_AusfGH>
         <G02_Hummel>	3.6 3.6 0.2 0.36	</G02_Hummel>
         <G03_PzV_Panther>	1.5 1.5 0.000000 0.62	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	3 3.1 0.34 0.37	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.3 2.3 0.34 0.37	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3 3.1 0.34 0.37	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	4.2 4.3 0.000000 0.1	</G05_StuG_40_AusfG>
         <G06_PzII>	2.1 2.1 0.000000 0.06	</G06_PzII>
@@ -8468,7 +8495,7 @@
         <G51_Lowe>	4.1 4 0.88 0.37	</G51_Lowe>
         <G02_Hummel>	6.4 6.4 0.1 0.76	</G02_Hummel>
         <G03_PzV_Panther>	3 3 0.9 1.8	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	6.7 5.8 0.4 0.28	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	5 5 0.4 0.28	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	6.7 5.8 0.4 0.28	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	6.7 7.4 0.43 0.14	</G05_StuG_40_AusfG>
         <G06_PzII>	3.2 3.2 0.28 0.000000	</G06_PzII>
@@ -8623,7 +8650,7 @@
         <G03_PzV_Panther>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther>
         <G03_PzV_Panther_IGR>	1.6 1.6 0.000000 0.000000	</G03_PzV_Panther_IGR>
         <G03_PzV_Panther_training>	2 2 0.2 0.000000	</G03_PzV_Panther_training>
-        <G04_PzVI_Tiger_I>	2 2 1.4 0.5	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3 3 1.4 0.5	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_I_IGR>	2 2 1.4 0.5	</G04_PzVI_Tiger_I_IGR>
         <G04_PzVI_Tiger_IA>	1.7 1.7 0.7 1	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	2 2 0.000000 0.000000	</G05_StuG_40_AusfG>
@@ -8793,7 +8820,7 @@
         <G06_PzII>	3 3 0.000000 0.000000	</G06_PzII>
         <G02_Hummel>	4.5 4.5 0.09 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	2.4 2.4 0.000000 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	3.1 3.1 0.000000 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.6 3.6 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3.1 3.1 0.000000 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	6 6 0.000000 0.000000	</G05_StuG_40_AusfG>
         <G07_Pz35t>	3.1 3.1 0.000000 0.000000	</G07_Pz35t>
@@ -8942,7 +8969,7 @@
         <G06_PzII>	3 3 0.000000 0.000000	</G06_PzII>
         <G02_Hummel>	4.3 4.3 0.18 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	2.9 2.9 0.000000 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	2.3 2.5 0.000000 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.3 3.3 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	2.3 2.5 0.000000 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.8 5.8 0.000000 0.000000	</G05_StuG_40_AusfG>
         <G07_Pz35t>	3.6 3.6 0.34 0.18	</G07_Pz35t>
@@ -9091,7 +9118,7 @@
         <G06_PzII>	3 3 0.000000 0.000000	</G06_PzII>
         <G02_Hummel>	4.6 4.6 0.06 0.08	</G02_Hummel>
         <G03_PzV_Panther>	2.6 2.6 0.000000 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	2.9 3 0.000000 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.5 3.5 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	2.9 3 0.000000 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.9 5.9 0.000000 0.000000	</G05_StuG_40_AusfG>
         <G07_Pz35t>	2.4 2.4 0.000000 0.000000	</G07_Pz35t>
@@ -9363,6 +9390,7 @@
     </camouflage>
     <camouflage>
       <id>	15128	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -9707,7 +9735,7 @@
       <tiling>
         <G02_Hummel>	3 3 0.000000 0.14	</G02_Hummel>
         <G03_PzV_Panther>	2.6 2.6 0.23 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	3 3 0.000000 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.2 3.2 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	3 3 0.000000 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	3 3.1 0.54 0.000000	</G05_StuG_40_AusfG>
         <G06_PzII>	2.4 2.4 0.2 0.2	</G06_PzII>
@@ -9873,7 +9901,7 @@
       <tiling>
         <G02_Hummel>	4 4.1 0.2 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	2.3 2.3 0.000000 0.000000	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	4.2 4.4 0.000000 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.5 3.5 0.000000 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_IA>	4.2 4.4 0.000000 0.000000	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	4.4 4.4 0.000000 0.000000	</G05_StuG_40_AusfG>
         <G06_PzII>	2.2 2.2 0.000000 0.000000	</G06_PzII>
@@ -10035,7 +10063,7 @@
         </palette>
       </palettes>
       <tiling>
-        <G04_PzVI_Tiger_I>	3.8 2.3 0.000000 0.06	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.5 3.5 0.000000 0.06	</G04_PzVI_Tiger_I>
         <G103_RU_251>	1.2 1.3 0.19 0.000000	</G103_RU_251>
         <G104_Stug_IV>	3.9 3.8 0.000000 0.000000	</G104_Stug_IV>
         <G105_T-55_NVA_DDR>	5 4.8 0.000000 0.000000	</G105_T-55_NVA_DDR>
@@ -10148,6 +10176,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15129	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -10165,7 +10194,7 @@
         <G04_PzVI_Tiger_IA>	2.7 2.8 0.26 0.78	</G04_PzVI_Tiger_IA>
         <G03_PzV_Panther>	2.9 2.9 0.69 0.38	</G03_PzV_Panther>
         <G02_Hummel>	3.7 3.7 0.92 0.92	</G02_Hummel>
-        <G04_PzVI_Tiger_I>	2.2 2.2 0.43 0.38	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	4.3 4.3 4.1 1.1	</G04_PzVI_Tiger_I>
         <G05_StuG_40_AusfG>	3.6 3.6 0.47 0.23	</G05_StuG_40_AusfG>
         <G06_PzII>	2.1 2.1 0.17 0.02	</G06_PzII>
         <G07_Pz35t>	3.1 3.1 0.5 0.5	</G07_Pz35t>
@@ -10297,6 +10326,7 @@
     </camouflage>
     <camouflage>
       <id>	15132	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -10313,7 +10343,7 @@
         <G02_Hummel>	4.9 4.9 1 0.000000	</G02_Hummel>
         <G03_PzV_Panther>	3.9 3.9 0.93 0.000000	</G03_PzV_Panther>
         <G03_PzV_Panther_IGR>	3.9 3.9 0.93 0.000000	</G03_PzV_Panther_IGR>
-        <G04_PzVI_Tiger_I>	5.1 5.1 0.41 0.000000	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	6 6 2.6 0.000000	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_I_IGR>	5.1 5.1 0.41 0.000000	</G04_PzVI_Tiger_I_IGR>
         <G04_PzVI_Tiger_IA>	5 5 0.78 0.21	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	5.2 5.2 0.28 0.000000	</G05_StuG_40_AusfG>
@@ -10448,6 +10478,7 @@
     </camouflage>
     <camouflage>
       <id>	15150	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -10612,6 +10643,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15130	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -10759,6 +10791,7 @@
     </camouflage>
     <camouflage>
       <id>	15131	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -10773,8 +10806,8 @@
       </palettes>
       <tiling>
         <G42_Maus>	3.1 3.1 0.000000 0.000000	</G42_Maus>
-        <G18_JagdPanther>	3.5 3.5 0.000000 0.000000	</G18_JagdPanther>
         <G04_PzVI_Tiger_IA>	3 3 0.000000 0.000000	</G04_PzVI_Tiger_IA>
+        <G18_JagdPanther>	3.5 3.5 0.000000 0.000000	</G18_JagdPanther>
         <G05_StuG_40_AusfG>	3 3 0.000000 0.000000	</G05_StuG_40_AusfG>
         <G03_PzV_Panther>	1.7 1.7 0.000000 0.000000	</G03_PzV_Panther>
         <G02_Hummel>	3.1 3.1 0.42 0.14	</G02_Hummel>
@@ -10908,6 +10941,7 @@
     </camouflage>
     <camouflage>
       <id>	15134	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -11068,6 +11102,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15133	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -11085,7 +11120,7 @@
         <G03_PzV_Panther>	3.4 3.4 0.28 0.54	</G03_PzV_Panther>
         <G03_PzV_Panther_IGR>	3.4 3.4 0.28 0.54	</G03_PzV_Panther_IGR>
         <G03_PzV_Panther_training>	6.4 6.4 0.24 0.28	</G03_PzV_Panther_training>
-        <G04_PzVI_Tiger_I>	6.3 6.3 0.7 0.48	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	5.3 5.3 0.7 0.48	</G04_PzVI_Tiger_I>
         <G04_PzVI_Tiger_I_IGR>	6.3 6.3 0.7 0.48	</G04_PzVI_Tiger_I_IGR>
         <G04_PzVI_Tiger_IA>	5.6 5.6 0.000000 0.58	</G04_PzVI_Tiger_IA>
         <G05_StuG_40_AusfG>	7.5 7.5 0.44 0.16	</G05_StuG_40_AusfG>
@@ -11236,6 +11271,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15151	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -11400,6 +11436,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15135	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -11439,6 +11476,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15136	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -11478,6 +11516,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15137	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -11641,7 +11680,7 @@
       <tiling>
         <G02_Hummel>	3.7 3.7 2.6 1.1	</G02_Hummel>
         <G03_PzV_Panther>	1.5 1.5 0.6 0.3	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	2.4 2.4 1.1 0.6	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	2.9 2.9 3.4 5	</G04_PzVI_Tiger_I>
         <G05_StuG_40_AusfG>	2.6 2.6 5.2 3.6	</G05_StuG_40_AusfG>
         <G06_PzII>	1.2 1.2 3.2 0.000000	</G06_PzII>
         <G07_Pz35t>	2 2 2.9 1	</G07_Pz35t>
@@ -11943,7 +11982,7 @@
       <tiling>
         <G02_Hummel>	3.7 3.7 2.6 1.3	</G02_Hummel>
         <G03_PzV_Panther>	1.5 1.5 0.6 0.3	</G03_PzV_Panther>
-        <G04_PzVI_Tiger_I>	2.4 2.4 1.1 0.9	</G04_PzVI_Tiger_I>
+        <G04_PzVI_Tiger_I>	3.2 3.2 1.1 0.9	</G04_PzVI_Tiger_I>
         <G05_StuG_40_AusfG>	2.6 2.6 0.000000 0.7	</G05_StuG_40_AusfG>
         <G06_PzII>	1.2 1.2 4.2 0.000000	</G06_PzII>
         <G07_Pz35t>	2 2 1 0.3	</G07_Pz35t>
@@ -12345,7 +12384,7 @@
         <J12_Chi_Nu_Kai>	5.8 5.8 0.000000 0.000000	</J12_Chi_Nu_Kai>
         <J01_NC27>	2.5 2.5 0.4 0.000000	</J01_NC27>
         <J03_Ha_Go>	5 5 0.26 0.12	</J03_Ha_Go>
-        <J05_Ke_Ni_B>	5 5 0.62 0.3	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	3.6 3.6 0.62 0.3	</J05_Ke_Ni_B>
         <J11_Chi_Ri>	5 5 0.000000 0.000000	</J11_Chi_Ri>
         <J09_Chi_He>	5.2 5.2 0.41 0.12	</J09_Chi_He>
         <J08_Chi_Nu>	5.2 5.2 0.28 0.43	</J08_Chi_Nu>
@@ -12393,7 +12432,7 @@
         <J12_Chi_Nu_Kai>	6.9 6.9 0.3 0.000000	</J12_Chi_Nu_Kai>
         <J01_NC27>	3 3 0.44 0.3	</J01_NC27>
         <J03_Ha_Go>	5 5 0.000000 0.000000	</J03_Ha_Go>
-        <J05_Ke_Ni_B>	3 3 0.62 0.55	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	4.4 4.4 0.62 0.55	</J05_Ke_Ni_B>
         <J11_Chi_Ri>	3.8 3.8 0.2 0.000000	</J11_Chi_Ri>
         <J09_Chi_He>	4.3 4.3 0.04 0.000000	</J09_Chi_He>
         <J08_Chi_Nu>	5.4 5.4 0.39 0.000000	</J08_Chi_Nu>
@@ -12705,7 +12744,7 @@
         <J01_NC27>	1.8 1.8 0.000000 0.000000	</J01_NC27>
         <J03_Ha_Go>	5 5 0.000000 0.000000	</J03_Ha_Go>
         <J04_Ke_Ni>	3.9 3.9 0.000000 0.000000	</J04_Ke_Ni>
-        <J05_Ke_Ni_B>	3.8 3.7 0.000000 0.000000	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	2.2 2.2 0.000000 0.000000	</J05_Ke_Ni_B>
         <J06_Ke_Ho>	2.8 2.8 0.000000 0.000000	</J06_Ke_Ho>
         <J07_Chi_Ha>	2.2 2.2 0.000000 0.000000	</J07_Chi_Ha>
         <J08_Chi_Nu>	4.2 4.2 0.000000 0.000000	</J08_Chi_Nu>
@@ -12752,6 +12791,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15614	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/japan/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -12799,6 +12839,7 @@
     </camouflage>
     <camouflage>
       <id>	15616	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -12846,6 +12887,7 @@
     </camouflage>
     <camouflage>
       <id>	15617	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -12893,6 +12935,7 @@
     </camouflage>
     <camouflage>
       <id>	15619	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -12956,6 +12999,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15615	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -13004,6 +13048,7 @@
     </camouflage>
     <camouflage>
       <id>	15618	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -13022,7 +13067,7 @@
         <J02_Te_Ke>	4.3 4.3 0.26 0.000000	</J02_Te_Ke>
         <J03_Ha_Go>	4.9 4.9 0.4 0.000000	</J03_Ha_Go>
         <J04_Ke_Ni>	4 4 0.41 0.78	</J04_Ke_Ni>
-        <J05_Ke_Ni_B>	3.5 3.5 0.7 0.94	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	4 4 0.7 0.94	</J05_Ke_Ni_B>
         <J06_Ke_Ho>	4.2 4.2 0.000000 0.000000	</J06_Ke_Ho>
         <J07_Chi_Ha>	3.8 3.8 0.000000 0.000000	</J07_Chi_Ha>
         <J08_Chi_Nu>	5.1 5.1 0.29 0.84	</J08_Chi_Nu>
@@ -13052,6 +13097,7 @@
     </camouflage>
     <camouflage>
       <id>	15625	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -13114,6 +13160,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15620	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -13243,7 +13290,7 @@
         <J02_Te_Ke>	6.5 6.5 4 1.5	</J02_Te_Ke>
         <J03_Ha_Go>	6 6 0.000000 0.000000	</J03_Ha_Go>
         <J04_Ke_Ni>	4 5 0.000000 0.000000	</J04_Ke_Ni>
-        <J05_Ke_Ni_B>	7 7 0.000000 0.000000	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	3.6 3.6 0.000000 0.000000	</J05_Ke_Ni_B>
         <J06_Ke_Ho>	7 7 0.000000 0.000000	</J06_Ke_Ho>
         <J07_Chi_Ha>	7 7 0.000000 0.000000	</J07_Chi_Ha>
         <J08_Chi_Nu>	9 9 0.000000 0.000000	</J08_Chi_Nu>
@@ -13337,7 +13384,7 @@
         <J02_Te_Ke>	6.5 6.5 0.000000 0.000000	</J02_Te_Ke>
         <J03_Ha_Go>	6 6 0.000000 0.000000	</J03_Ha_Go>
         <J04_Ke_Ni>	4 5 0.000000 0.000000	</J04_Ke_Ni>
-        <J05_Ke_Ni_B>	7 7 0.000000 0.000000	</J05_Ke_Ni_B>
+        <J05_Ke_Ni_B>	4.8 4.8 0.000000 0.000000	</J05_Ke_Ni_B>
         <J06_Ke_Ho>	7 7 0.000000 0.000000	</J06_Ke_Ho>
         <J07_Chi_Ha>	6 6 0.000000 0.000000	</J07_Chi_Ha>
         <J08_Chi_Nu>	9 9 0.000000 0.000000	</J08_Chi_Nu>
@@ -13365,6 +13412,7 @@
     </camouflage>
     <camouflage>
       <id>	15626	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -13613,6 +13661,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15911	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -13629,6 +13678,7 @@
     </camouflage>
     <camouflage>
       <id>	15913	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -13645,6 +13695,7 @@
     </camouflage>
     <camouflage>
       <id>	15914	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -13661,6 +13712,7 @@
     </camouflage>
     <camouflage>
       <id>	15917	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -13692,6 +13744,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15912	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -13708,6 +13761,7 @@
     </camouflage>
     <camouflage>
       <id>	15915	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -13724,6 +13778,7 @@
     </camouflage>
     <camouflage>
       <id>	15918	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -13755,6 +13810,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15916	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -13786,6 +13842,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15919	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -14319,6 +14376,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15814	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -14359,6 +14417,7 @@
     </camouflage>
     <camouflage>
       <id>	15816	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -14398,6 +14457,7 @@
     </camouflage>
     <camouflage>
       <id>	15817	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -14436,6 +14496,7 @@
     </camouflage>
     <camouflage>
       <id>	15819	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -14490,6 +14551,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15815	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -14530,6 +14592,7 @@
     </camouflage>
     <camouflage>
       <id>	15818	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -14569,6 +14632,7 @@
     </camouflage>
     <camouflage>
       <id>	15825	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -14622,6 +14686,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15820	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -14826,6 +14891,7 @@
     </camouflage>
     <camouflage>
       <id>	15826	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -16509,6 +16575,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15528	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -16605,6 +16672,7 @@
     </camouflage>
     <camouflage>
       <id>	15525	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -16698,6 +16766,7 @@
     </camouflage>
     <camouflage>
       <id>	15537	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -17121,6 +17190,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15524	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -17215,6 +17285,7 @@
     </camouflage>
     <camouflage>
       <id>	15526	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -17309,6 +17380,7 @@
     </camouflage>
     <camouflage>
       <id>	15527	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -17402,6 +17474,7 @@
     </camouflage>
     <camouflage>
       <id>	15529	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -17557,6 +17630,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15530	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -17713,6 +17787,7 @@
     </camouflage>
     <camouflage>
       <id>	15538	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -19790,6 +19865,7 @@
     </camouflage>
     <camouflage>
       <id>	15231	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -19814,6 +19890,7 @@
     </camouflage>
     <camouflage>
       <id>	15232	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -19878,6 +19955,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15224	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -19993,6 +20071,7 @@
     </camouflage>
     <camouflage>
       <id>	15228	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -20111,6 +20190,7 @@
     </camouflage>
     <camouflage>
       <id>	15243	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -20631,6 +20711,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15223	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -20744,6 +20825,7 @@
     </camouflage>
     <camouflage>
       <id>	15225	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -20859,6 +20941,7 @@
     </camouflage>
     <camouflage>
       <id>	15226	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -20974,6 +21057,7 @@
     </camouflage>
     <camouflage>
       <id>	15229	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -21089,6 +21173,7 @@
     </camouflage>
     <camouflage>
       <id>	15233	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -21113,6 +21198,7 @@
     </camouflage>
     <camouflage>
       <id>	15234	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -21177,6 +21263,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15230	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -21309,6 +21396,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15235	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -21333,6 +21421,7 @@
     </camouflage>
     <camouflage>
       <id>	15236	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Clan_damaged.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
@@ -21382,6 +21471,7 @@
     </camouflage>
     <camouflage>
       <id>	15244	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -22142,6 +22232,12 @@
         <R143_T_29>	1.5 1.5 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.2 3.2 1.7 4.6	</R135_T_103>
         <R146_STG>	1.9 1.9 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 3.3 6.1	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.2 4.2 0.7 0.5	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.9 4.9 2.5 6.5	</R145_Object_705_A>
+        <R153_Object_705>	4.9 4.9 4.02597 6.36364	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -22292,6 +22388,11 @@
         <R143_T_29>	2.7 2.7 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.2 3.2 4.2 4.9	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2.5 2.5 6.7 4.2	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 5.3 4.4	</R148_Object_430_U>
+        <R149_Object_268_4>	7.3 7.3 3.8 5.9	</R149_Object_268_4>
+        <R145_Object_705_A>	7.4 7.4 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	6.75676 6.75676 4.80519 4.02597	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -22441,6 +22542,11 @@
         <R143_T_29>	1.2 1.2 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.2 3.2 0.000000 0.000000	</R135_T_103>
         <R146_STG>	1.9 1.9 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.4 3.4 1.8 0.000000	</R151_Object_257_2>
+        <R149_Object_268_4>	6.3 6.3 5.4 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.8 0.8 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	6.8 6.8 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	6.8 6.8 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -22594,6 +22700,11 @@
         <R140_M4_Loza>	3.8 3.8 0.32 0.000000	</R140_M4_Loza>
         <R143_T_29>	1.6 1.6 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.5 3.5 0.000000 0.000000	</R135_T_103>
+        <R151_Object_257_2>	1.7 1.7 5 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.4 4.4 0.22 0.4	</R149_Object_268_4>
+        <R145_Object_705_A>	6.7 6.7 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	6.7 6.7 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -22707,7 +22818,7 @@
         <R101_MT25>	3.6 3.6 0.2 0.000000	</R101_MT25>
         <R86_LTP>	6.9 6.9 0.28 0.000000	</R86_LTP>
         <R99_T44_122>	3.4 3.4 0.31 0.000000	</R99_T44_122>
-        <R96_Object_430>	6 6 0.5 0.63	</R96_Object_430>
+        <R96_Object_430>	3 3 0.5 0.63	</R96_Object_430>
         <R97_Object_140>	1.8 1.8 1 6.1	</R97_Object_140>
         <R98_T44_85>	5.6 5.6 1.5 1.5	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -22759,6 +22870,12 @@
         <R143_T_29>	2.2 2.2 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.8 3.8 0.000000 2.3	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 3.2 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.3 5.3 2.7 0.37	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.9 0.9 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	5.1 5.1 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	3.4 3.4 0.000000 6.23377	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -22857,7 +22974,7 @@
         <R101_MT25>	4.8 4.8 0.13 0.000000	</R101_MT25>
         <R86_LTP>	7 7 0.16 0.000000	</R86_LTP>
         <R99_T44_122>	4.9 5.1 0.57 0.000000	</R99_T44_122>
-        <R96_Object_430>	5.2 5.2 0.42 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.9 2.9 0.42 0.000000	</R96_Object_430>
         <R97_Object_140>	3 3 0.62 3.5	</R97_Object_140>
         <R98_T44_85>	8 8 0.9 0.000000	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -22909,6 +23026,12 @@
         <R143_T_29>	3 3 0.000000 1.1	</R143_T_29>
         <R135_T_103>	4.2 4.2 0.000000 4.7	</R135_T_103>
         <R146_STG>	2.8 2.8 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.3 3.3 4.7 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	1.6 1.6 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	6.5 5.3 9.5 2.8	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.1 1.1 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	3.7 3.7 0.000000 1.7	</R145_Object_705_A>
+        <R153_Object_705>	3.7 3.7 6.1039 0.779221	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23007,7 +23130,7 @@
         <R101_MT25>	4 4 0.15 0.07	</R101_MT25>
         <R86_LTP>	6.1 6.1 0.25 0.33	</R86_LTP>
         <R99_T44_122>	3.1 3.1 0.83 0.71	</R99_T44_122>
-        <R96_Object_430>	5.1 5.1 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	3.2 3.2 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	3 3 0.000000 6.7	</R97_Object_140>
         <R98_T44_85>	5.5 5.5 5.2 3	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -23059,6 +23182,12 @@
         <R143_T_29>	2.1 2.1 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.5 3.5 7.5 5.7	</R135_T_103>
         <R146_STG>	2.4 2.4 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 2.5 8.8	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.1 5.1 0.8 3.6	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.6 0.6 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	5.1 5.1 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	5.1 5.1 2.46753 3.37662	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23221,6 +23350,12 @@
         <R143_T_29>	2.7 2.7 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.3 2.3 4.2 4	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 4.5 3.2	</R151_Object_257_2>
+        <R148_Object_430_U>	1.2 1.2 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.5 5.2 5.7 0.19	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.9 0.9 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.2 4.2 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.2 4.2 0.000000 1.94805	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23371,6 +23506,12 @@
         <R143_T_29>	2.1 2.1 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.5 3.5 0.000000 2.9	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 2.6 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	1.2 1.2 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	6.2 6.2 0.54 2.5	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.6 4.6 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	1 1 0.000000 3.37662	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23469,7 +23610,7 @@
         <R101_MT25>	6.1 6.1 0.000000 0.78	</R101_MT25>
         <R86_LTP>	5.8 5.8 0.62 0.000000	</R86_LTP>
         <R99_T44_122>	4.5 4.5 1 0.000000	</R99_T44_122>
-        <R96_Object_430>	5 5 0.4 0.000000	</R96_Object_430>
+        <R96_Object_430>	3.8 3.8 0.4 0.000000	</R96_Object_430>
         <R97_Object_140>	3 3 3.8 2.3	</R97_Object_140>
         <R98_T44_85>	6.2 6.2 3.2 0.000000	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -23520,6 +23661,11 @@
         <R143_T_29>	3.4 3.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	5.3 5.3 3 8	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.5 3.5 5.6 5.5	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.2 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	6.2 6.2 6.4 0.74	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.1 1.1 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.7 4.7 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23618,7 +23764,7 @@
         <R101_MT25>	5.7 5.7 0.08 0.06	</R101_MT25>
         <R86_LTP>	5.8 5.9 0.000000 0.000000	</R86_LTP>
         <R99_T44_122>	3.4 3.4 0.72 0.000000	</R99_T44_122>
-        <R96_Object_430>	5.4 5.4 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	3 3 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	3.5 3.5 0.000000 3.5	</R97_Object_140>
         <R98_T44_85>	9 9 0.2 0.2	</R98_T44_85>
         <R98_T44_85M>	7 7 0.000000 0.000000	</R98_T44_85M>
@@ -23670,6 +23816,11 @@
         <R143_T_29>	2.6 2.6 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.8 3.8 0.000000 1.7	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.5 3.5 2.3 4.2	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.2 5.2 1.4 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	6.7 6.7 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -23783,7 +23934,7 @@
         <R101_MT25>	4.3 4.3 0.2 0.000000	</R101_MT25>
         <R86_LTP>	6.3 6.3 0.15 0.4	</R86_LTP>
         <R99_T44_122>	4.1 4.1 0.46 0.000000	</R99_T44_122>
-        <R96_Object_430>	4.8 4.8 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.9 2.9 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	2.3 2.3 6.9 3.8	</R97_Object_140>
         <R98_T44_85>	8 8 0.3 0.3	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -23835,6 +23986,12 @@
         <R143_T_29>	2.7 2.7 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.8 3.8 7.1 4.6	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 0.000000 5.9	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.2 4.2 0.4 1.8	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.9 0.9 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.1 4.1 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.1 4.1 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -23933,7 +24090,7 @@
         <R101_MT25>	6 6 0.2 0.000000	</R101_MT25>
         <R86_LTP>	7.9 7.9 0.000000 0.000000	</R86_LTP>
         <R99_T44_122>	4.5 4.5 0.000000 0.000000	</R99_T44_122>
-        <R96_Object_430>	5.6 5.6 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	3.8 3.8 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	4 4 0.000000 0.000000	</R97_Object_140>
         <R98_T44_85>	8.2 8.2 0.2 1	</R98_T44_85>
         <R98_T44_85M>	9 9 0.000000 0.000000	</R98_T44_85M>
@@ -23985,6 +24142,11 @@
         <R143_T_29>	3.4 3.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	4.4 4.4 4.4 3	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	4.5 4.5 6.6 3.8	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 2.7 1.2	</R148_Object_430_U>
+        <R149_Object_268_4>	6.3 6.3 0.7 3.6	</R149_Object_268_4>
+        <R145_Object_705_A>	6.8 6.8 1.7 2.6	</R145_Object_705_A>
+        <R153_Object_705>	6.8 6.8 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -24147,6 +24309,12 @@
         <R143_T_29>	2.2 2.2 0.000000 1.1	</R143_T_29>
         <R135_T_103>	3.2 3.2 3.5 5.2	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 6 2.2	</R151_Object_257_2>
+        <R148_Object_430_U>	1.2 1.2 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.5 5.5 5.1 4.9	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.8 0.8 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.6 4.6 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.6 4.6 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -24311,6 +24479,12 @@
         <R143_T_29>	2.9 2.9 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.7 2.7 5.9 5.7	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 3.6 2.1	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.5 5.5 0.000000 4.2	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.7 4.7 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.7 4.7 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -24461,6 +24635,12 @@
         <R143_T_29>	2.9 2.9 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.7 2.7 0.000000 6.5	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	4 4 5.2 2.8	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.5 5.5 4.3 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.7 4.7 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.7 4.7 4.80519 3.63636	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -24611,6 +24791,12 @@
         <R143_T_29>	2.9 2.9 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.7 2.7 0.000000 6.5	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.5 3.5 1.5 3	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.5 5.5 4.3 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.8 4.8 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.7 4.7 2.98701 3.8961	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
@@ -24760,10 +24946,17 @@
         <R143_T_29>	2.9 2.9 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.7 2.7 0.000000 6.7	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.5 3.5 3.5 2.3	</R151_Object_257_2>
+        <R148_Object_430_U>	1.5 1.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	5.5 5.5 4.3 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1.2 1.2 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.8 4.8 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.7 4.7 0.000000 5.32468	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15026	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
@@ -24859,7 +25052,7 @@
         <R91_SU14_1>	6.2 6.2 0.000000 0.000000	</R91_SU14_1>
         <R93_Object263>	2.5 2.5 0.43 0.88	</R93_Object263>
         <R95_Object_907>	1.7 1.7 0.000000 0.000000	</R95_Object_907>
-        <R96_Object_430>	5.7 5.7 0.16 0.000000	</R96_Object_430>
+        <R96_Object_430>	4.4 4.4 0.16 0.000000	</R96_Object_430>
         <R97_Object_140>	3 3 0.34 0.000000	</R97_Object_140>
         <R98_T44_85>	4.8 4.8 0.6 0.9	</R98_T44_85>
         <R98_T44_85M>	6.7 5.8 0.000000 0.000000	</R98_T44_85M>
@@ -24908,10 +25101,16 @@
         <R143_T_29>	3.3 3.3 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.6 2.6 0.000000 0.000000	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3 3 0.000000 7.1	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	6.5 6.5 0.000000 0.28	</R149_Object_268_4>
+        <R139_IS_2_Sh>	1 1 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4 4 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15028	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_03.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
@@ -25009,7 +25208,7 @@
         <R91_SU14_1>	3.3 3.3 0.000000 0.000000	</R91_SU14_1>
         <R93_Object263>	1.5 1.5 0.4 1.1	</R93_Object263>
         <R95_Object_907>	0.6 0.6 6.4 8.6	</R95_Object_907>
-        <R96_Object_430>	3.5 3.5 0.03 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.2 2.2 0.03 0.000000	</R96_Object_430>
         <R97_Object_140>	1.5 1.5 0.16 0.000000	</R97_Object_140>
         <R98_T44_85>	4 4 0.7 0.7	</R98_T44_85>
         <R98_T44_85M>	3 2.9 0.45 1	</R98_T44_85M>
@@ -25056,10 +25255,16 @@
         <R143_T_29>	1.6 1.6 0.000000 1.1	</R143_T_29>
         <R135_T_103>	1.7 1.7 0.000000 3.1	</R135_T_103>
         <R146_STG>	1.6 1.6 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	1.5 1.5 4.2 8.2	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	2.6 2.6 0.3 4	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4 4 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15029	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
@@ -25204,10 +25409,17 @@
         <R143_T_29>	1.4 1.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	1.4 1.4 0.000000 0.000000	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 3.1 4.3	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	3.7 3.7 0.17 2.5	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.9 0.9 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	3.2 3.2 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	3.24324 3.24324 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15030	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/description	</description>
@@ -25232,6 +25444,7 @@
     </camouflage>
     <camouflage>
       <id>	15031	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/description	</description>
@@ -25256,6 +25469,7 @@
     </camouflage>
     <camouflage>
       <id>	15037	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
       <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
@@ -25401,6 +25615,11 @@
         <R143_T_29>	1.8 1.8 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.5 2.5 0.000000 0.000000	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	1.5 1.5 3.9 2.3	</R151_Object_257_2>
+        <R148_Object_430_U>	0.9 0.9 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	3 3 0.74 5.6	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	5.1 5.1 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
     </camouflage>
     <camouflage>
@@ -25444,6 +25663,7 @@
       </palettes>
       <tiling>
         <R110_Object_260>	2 2 1.5 6.9	</R110_Object_260>
+        <R148_Object_430_U>	0.5 0.5 0.000000 0.000000	</R148_Object_430_U>
       </tiling>
       <vehicleFilter>
         <include>
@@ -25587,7 +25807,7 @@
         <R91_SU14_1>	3 3 0.000000 0.000000	</R91_SU14_1>
         <R93_Object263>	1.8 1.8 0.2 0.000000	</R93_Object263>
         <R95_Object_907>	0.8 0.8 0.000000 3.8	</R95_Object_907>
-        <R96_Object_430>	4.2 4.2 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	3.4 3.4 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	2 2 0.000000 0.000000	</R97_Object_140>
         <R98_T44_85>	5 5 0.2 0.000000	</R98_T44_85>
         <R98_T44_85M>	3 3 0.000000 0.000000	</R98_T44_85M>
@@ -25638,6 +25858,12 @@
         <R132_VNII_100LT>	2.1 2.1 6.1 3.8	</R132_VNII_100LT>
         <R143_T_29>	2.5 2.5 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2 2 0.000000 1.4	</R135_T_103>
+        <R151_Object_257_2>	1.7 1.7 6.8 3.2	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	2.8 2.8 0.000000 7.1	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.6 0.6 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.1 4.1 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.1 4.1 0.000000 2.46753	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -25750,7 +25976,7 @@
         <R91_SU14_1>	4.2 4.2 0.000000 0.000000	</R91_SU14_1>
         <R93_Object263>	1.9 1.9 0.000000 0.000000	</R93_Object263>
         <R95_Object_907>	1 1 0.000000 6.9	</R95_Object_907>
-        <R96_Object_430>	4.4 4.4 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.9 2.9 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	2 2 0.000000 0.000000	</R97_Object_140>
         <R98_T44_85>	4 4 0.7 0.9	</R98_T44_85>
         <R98_T44_85M>	3 3 0.000000 0.000000	</R98_T44_85M>
@@ -25801,6 +26027,11 @@
         <R132_VNII_100LT>	1.7 1.7 0.000000 0.000000	</R132_VNII_100LT>
         <R143_T_29>	1.5 1.5 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.4 2.4 0.000000 0.000000	</R135_T_103>
+        <R151_Object_257_2>	1.7 1.7 6.1 2.9	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	3.9 3.9 0.000000 4.8	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.6 0.6 0.000000 0.000000	</R139_IS_2_Sh>
+        <R153_Object_705>	9 9 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -25913,7 +26144,7 @@
         <R91_SU14_1>	5.8 5.8 0.000000 0.000000	</R91_SU14_1>
         <R93_Object263>	2.2 2.2 0.000000 0.000000	</R93_Object263>
         <R95_Object_907>	1.2 1.2 0.000000 0.000000	</R95_Object_907>
-        <R96_Object_430>	3.4 3.4 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.1 2.1 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	2 2 0.000000 0.000000	</R97_Object_140>
         <R98_T44_85>	6.8 6.8 0.000000 0.000000	</R98_T44_85>
         <R98_T44_85M>	5 5 0.000000 0.000000	</R98_T44_85M>
@@ -25965,6 +26196,10 @@
         <R143_T_29>	1.4 1.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.6 2.6 0.000000 0.000000	</R135_T_103>
         <R146_STG>	1.9 1.9 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2.5 2.5 2.6 4.7	</R151_Object_257_2>
+        <R149_Object_268_4>	4 4 0.000000 3.8	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R153_Object_705>	9 9 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -25984,6 +26219,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15027	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_02.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
@@ -26129,10 +26365,17 @@
         <R143_T_29>	1.2 1.2 0.000000 1.1	</R143_T_29>
         <R135_T_103>	1.7 1.7 0.000000 0.000000	</R135_T_103>
         <R146_STG>	1.4 1.4 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2.3 2.3 0.8 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	0.6 0.6 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.6 4.6 0.45 4.2	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.6 0.6 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.8 4.8 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4.8 4.8 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15036	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
       <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
@@ -26235,7 +26478,7 @@
         <R91_SU14_1>	4.4 4.4 0.16 0.000000	</R91_SU14_1>
         <R93_Object263>	1.9 1.9 0.28 0.000000	</R93_Object263>
         <R95_Object_907>	0.8 0.8 0.42 6.9	</R95_Object_907>
-        <R96_Object_430>	4.7 4.7 0.000000 0.000000	</R96_Object_430>
+        <R96_Object_430>	2.6 2.6 0.000000 0.000000	</R96_Object_430>
         <R97_Object_140>	1.5 1.5 0.000000 0.000000	</R97_Object_140>
         <R98_T44_85>	4.5 4.5 0.3 1.6	</R98_T44_85>
         <R98_T44_85M>	3.9 3.9 0.46 0.76	</R98_T44_85M>
@@ -26281,10 +26524,17 @@
         <R143_T_29>	1.6 1.6 0.000000 1.1	</R143_T_29>
         <R135_T_103>	2.5 2.5 0.000000 5.2	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 2.3 0.000000	</R151_Object_257_2>
+        <R148_Object_430_U>	1.1 1.1 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	4.6 4.6 8.9 0.000000	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	5.9 5.9 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	5.9 5.9 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
     <camouflage>
       <id>	15051	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
@@ -26429,6 +26679,12 @@
         <R143_T_29>	1.4 1.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	1.4 1.4 0.000000 0.000000	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 3.2 0.4	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	3.7 3.7 0.17 2.5	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.7 0.7 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	3.4 3.4 0.000000 1.2	</R145_Object_705_A>
+        <R153_Object_705>	3.4 3.4 0.000000 2.33766	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -26448,6 +26704,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15032	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/description	</description>
@@ -26472,6 +26729,7 @@
     </camouflage>
     <camouflage>
       <id>	15033	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/description	</description>
@@ -26560,6 +26818,7 @@
       </palettes>
       <tiling>
         <germany:G105_T-55_NVA_DDR>	1.2 1.2 6.7 7	</germany:G105_T-55_NVA_DDR>
+        <R148_Object_430_U>	0.6 0.6 0.000000 0.000000	</R148_Object_430_U>
       </tiling>
       <vehicleFilter>
         <include>
@@ -26585,6 +26844,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15034	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_907/description	</description>
@@ -26609,6 +26869,7 @@
     </camouflage>
     <camouflage>
       <id>	15035	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/russian/Camouflage/fallout_camo.dds	</texture>
       <userString>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/label	</userString>
       <description>	#vehicle_customization:camouflage/ussr/fallout_camo_Object_730/description	</description>
@@ -26707,6 +26968,7 @@
     </camouflage>
     <camouflage>
       <id>	15052	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
       <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
       <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
@@ -26851,6 +27113,12 @@
         <R143_T_29>	1.4 1.4 0.000000 1.1	</R143_T_29>
         <R135_T_103>	1.4 1.4 0.000000 0.000000	</R135_T_103>
         <R146_STG>	2 2 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	2 2 1.1 2.2	</R151_Object_257_2>
+        <R148_Object_430_U>	0.7 0.7 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	3.7 3.7 0.17 2.5	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.8 0.8 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	3.6 3.6 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	3.6 3.6 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -26870,6 +27138,7 @@
     </vehicleFilter>
     <camouflage>
       <id>	15038	</id>
+      <tags>	vehicleBound	</tags>
       <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
       <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
       <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
@@ -27017,6 +27286,11 @@
         <R143_T_29>	3.2 3.2 0.000000 1.1	</R143_T_29>
         <R135_T_103>	4 4 0.000000 0.000000	</R135_T_103>
         <R146_STG>	3 3 0.000000 0.000000	</R146_STG>
+        <R151_Object_257_2>	3.5 3.5 3.3 1.8	</R151_Object_257_2>
+        <R148_Object_430_U>	1.3 1.3 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	8.2 8.2 0.000000 0.000000	</R149_Object_268_4>
+        <R145_Object_705_A>	3.9 3.9 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	3.9 3.9 0.000000 0.000000	</R153_Object_705>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -27103,6 +27377,7 @@
         <R14_SU-5>	1.7 1.7 3.1 0.000000	</R14_SU-5>
         <R143_T_29>	0.5 0.5 2.5 1.1	</R143_T_29>
         <R15_S-51>	0.9 0.9 0.000000 0.000000	</R15_S-51>
+        <R151_Object_257_2>	0.7 0.7 4.5 3.6	</R151_Object_257_2>
         <R16_SU-18>	1.8 1.8 5.5 3.6	</R16_SU-18>
         <R17_SU-100>	0.8 0.8 2.2 0.000000	</R17_SU-100>
         <R18_SU-152>	1.7 1.7 2.2 6.7	</R18_SU-152>
@@ -27181,6 +27456,11 @@
         <R03_BT-7_bootcamp>	1.4 1.4 0.000000 0.000000	</R03_BT-7_bootcamp>
         <R07_T-34-85_bootcamp>	1.5 1.5 0.2 0.000000	</R07_T-34-85_bootcamp>
         <R61_Object252>	1.3 1.3 1 0.8	</R61_Object252>
+        <R148_Object_430_U>	0.3 0.3 0.2 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	2 2 2.3 4.1	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.5 0.5 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	5.4 5.4 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	5.4 5.4 0.000000 0.000000	</R153_Object_705>
       </tiling>
       <requiredToken>	token:object260:camouflage	</requiredToken>
     </camouflage>
@@ -27268,6 +27548,7 @@
         <R14_SU-5>	1.7 1.7 3.1 0.000000	</R14_SU-5>
         <R143_T_29>	0.5 0.5 2.5 1.1	</R143_T_29>
         <R15_S-51>	0.9 0.9 0.000000 0.000000	</R15_S-51>
+        <R151_Object_257_2>	1 1 5.1 6.8	</R151_Object_257_2>
         <R16_SU-18>	1.8 1.8 5.5 3.6	</R16_SU-18>
         <R17_SU-100>	0.8 0.8 2.2 0.000000	</R17_SU-100>
         <R18_SU-152>	1.7 1.7 2.2 6.7	</R18_SU-152>
@@ -27346,6 +27627,11 @@
         <R03_BT-7_bootcamp>	1.4 1.4 0.000000 0.000000	</R03_BT-7_bootcamp>
         <R07_T-34-85_bootcamp>	1.5 1.5 0.2 0.000000	</R07_T-34-85_bootcamp>
         <R61_Object252>	1.3 1.3 1 0.8	</R61_Object252>
+        <R148_Object_430_U>	0.5 0.5 0.000000 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	2 2 2.4 4.1	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.4 0.4 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4 4 0.000000 0.000000	</R145_Object_705_A>
+        <R153_Object_705>	4 4 0.000000 0.000000	</R153_Object_705>
       </tiling>
       <requiredToken>	token:object260:camouflage	</requiredToken>
     </camouflage>
@@ -27433,6 +27719,7 @@
         <R14_SU-5>	1.7 1.7 3.1 0.000000	</R14_SU-5>
         <R143_T_29>	0.5 0.5 2.5 1.1	</R143_T_29>
         <R15_S-51>	0.9 0.9 0.000000 0.000000	</R15_S-51>
+        <R151_Object_257_2>	1 1 3 3.8	</R151_Object_257_2>
         <R16_SU-18>	1.8 1.8 5.5 3.6	</R16_SU-18>
         <R17_SU-100>	0.8 0.8 2.2 0.000000	</R17_SU-100>
         <R18_SU-152>	1.7 1.7 2.2 6.7	</R18_SU-152>
@@ -27511,6 +27798,10 @@
         <R03_BT-7_bootcamp>	1.4 1.4 0.000000 0.000000	</R03_BT-7_bootcamp>
         <R07_T-34-85_bootcamp>	1.5 1.5 0.2 0.000000	</R07_T-34-85_bootcamp>
         <R61_Object252>	1.1 1.1 0.000000 0.000000	</R61_Object252>
+        <R148_Object_430_U>	0.5 0.5 0.3 0.000000	</R148_Object_430_U>
+        <R149_Object_268_4>	2 2 2.6 4.1	</R149_Object_268_4>
+        <R139_IS_2_Sh>	0.3 0.3 0.000000 0.000000	</R139_IS_2_Sh>
+        <R145_Object_705_A>	4.2 4.2 0.000000 0.000000	</R145_Object_705_A>
       </tiling>
       <requiredToken>	token:object260:camouflage	</requiredToken>
     </camouflage>
