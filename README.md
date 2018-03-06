@@ -1,5 +1,5 @@
 # WorldOfTanks-Decompiled
-Unpacked and decompiled files of **WorldOfTanks**
+Unpacked and decompiled files of **WorldOfTanks**. Each client has its own branch. In the master-branch is the latest release version of the client. The branches of test clients are not released to master-branch.
 
 ### Consist
 * Python **pyc**-files since client version **0.9.2**
@@ -24,8 +24,8 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 2. If you adding a new client, then create a new branch with the name as client main version: **"X.X.X"** for release and **"X.X.X_CT"** or **"X.X.X_ST"** for the test clients (Description **"WOT X.X.X #YYY"**)
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
-5. Create an **zip**-archive by running the console program **ZipPacker.cmd** (required **7z.exe**)
-6. Move the archive to the **"zip"** folder
+5. Create an **zip**-archive by running the console program **Zip-Packer.cmd** (required **7z.exe**)
+6. Clean the existing **"zip"** directory and move to it the new archive
 7. Create a commit and offer a **"Pull request"** in the right branch (named as **"X.X.X: ... #YYY"**)
 
 **Note:** Requests with the test clients to the master-branch will be rejected! Main branch only for releases.
