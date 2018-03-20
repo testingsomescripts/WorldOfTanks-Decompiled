@@ -3,7 +3,7 @@
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.utils import EXTRA_MODULE_INFO, CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
+from gui.shared.utils import EXTRA_MODULE_INFO
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from shared_utils import findFirst
 
@@ -14,21 +14,8 @@ class _SlotVOConstants(object):
 
 
 class FittingSlotVO(dict):
-    """
-    class presents VO for displaying installed optional devices or modules in AmmunitionPanel and ModulesPanel
-    """
 
     def __init__(self, modulesData, vehicle, slotType, slotId=None, tooltipType=None):
-        """
-        Args:
-            modulesData: list of modules, installed in current slot type. There is always one element for vehicle
-                         modules and zero to three for optional devices and equipments. If there's no corresponding
-                         artifact in slot, empty icon is displayed
-            vehicle: vehicle for which slot is display
-            slotType: type of slot from FITTING_TYPES
-            slotId: id of slot, None for modules and 0..2 for optional devices and equipments
-            tooltipType: GUI constant defining tooltip type, one of TOOLTIPS_CONSTANTS
-        """
         super(FittingSlotVO, self).__init__()
         if slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
             ttType = ''
@@ -38,8 +25,8 @@ class FittingSlotVO(dict):
         self['tooltipType'] = ttType
         self['slotType'] = slotType
         self['removable'] = True
-        module = self._prepareModule(modulesData, vehicle, slotType, slotId)
-        if module is None:
+        vehicleModule = self._prepareModule(modulesData, vehicle, slotType, slotId)
+        if vehicleModule is None:
             self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
@@ -52,24 +39,21 @@ class FittingSlotVO(dict):
                 self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
                 self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
         else:
-            self['id'] = module.intCD
-            self['removable'] = module.isRemovable
-            self['moduleLabel'] = module.getGUIEmblemID()
+            self['id'] = vehicleModule.intCD
+            self['removable'] = vehicleModule.isRemovable
+            self['moduleLabel'] = vehicleModule.getGUIEmblemID()
         return
 
     def _prepareModule(self, modulesData, vehicle, slotType, slotId):
         if slotId is not None:
-            module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+            vehicleModule = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
             self['slotIndex'] = slotId
         else:
-            module = modulesData[0]
+            vehicleModule = modulesData[0]
             self['slotIndex'] = 0
-            self['level'] = module.level
-            if slotType == 'vehicleGun' and module.isClipGun(vehicle.descriptor):
-                self[EXTRA_MODULE_INFO] = CLIP_ICON_PATH
-            elif slotType == 'vehicleChassis' and module.isHydraulicChassis():
-                self[EXTRA_MODULE_INFO] = HYDRAULIC_ICON_PATH
-        return module
+            self['level'] = vehicleModule.level
+            self[EXTRA_MODULE_INFO] = vehicleModule.getExtraIconInfo(vehicle.descriptor)
+        return vehicleModule
 
 
 class HangarFittingSlotVO(FittingSlotVO):

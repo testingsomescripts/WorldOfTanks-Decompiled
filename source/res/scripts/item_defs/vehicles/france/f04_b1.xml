@@ -1,7 +1,6 @@
 <F04_B1.xml>
   <crew>
     <commander>	gunner
-
 			loader	</commander>
     <gunner></gunner>
     <driver>	loader	</driver>
@@ -260,7 +259,7 @@
         <right>	vehicles/french/F04_B1/track/right.track	</right>
         <segmentLength>	0.218	</segmentLength>
         <segmentOffset>	0.115	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -480,7 +479,7 @@
         <right>	vehicles/french/F04_B1/track/right.track	</right>
         <segmentLength>	0.218	</segmentLength>
         <segmentOffset>	0.115	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -892,7 +891,7 @@
   </fuelTanks>
   <radios>
     <ER_51>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610.0	</cost>
+        <radio>	ER_53	  <cost>	610	</cost>
         </radio>
       </unlocks>
     </ER_51>

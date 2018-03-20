@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/TrainingRoomMeta.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from gui.Scaleform.framework.entities.View import View
 
 class TrainingRoomMeta(View):
@@ -69,27 +65,15 @@ class TrainingRoomMeta(View):
         return self.flashObject.as_updateTimeout(roundLenString) if self._isDAAPIInited() else None
 
     def as_setTeam1S(self, data):
-        """
-        :param data: Represented by TrainingRoomTeamVO (AS)
-        """
         return self.flashObject.as_setTeam1(data) if self._isDAAPIInited() else None
 
     def as_setTeam2S(self, data):
-        """
-        :param data: Represented by TrainingRoomTeamVO (AS)
-        """
         return self.flashObject.as_setTeam2(data) if self._isDAAPIInited() else None
 
     def as_setOtherS(self, data):
-        """
-        :param data: Represented by TrainingRoomTeamVO (AS)
-        """
         return self.flashObject.as_setOther(data) if self._isDAAPIInited() else None
 
     def as_setInfoS(self, data):
-        """
-        :param data: Represented by TrainingRoomInfoVO (AS)
-        """
         return self.flashObject.as_setInfo(data) if self._isDAAPIInited() else None
 
     def as_setArenaVoipChannelsS(self, arenaVoipChannels):
@@ -113,31 +97,22 @@ class TrainingRoomMeta(View):
     def as_startCoolDownSwapButtonS(self, time):
         return self.flashObject.as_startCoolDownSwapButton(time) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam1S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam1(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInTeam2S(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInTeam2(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
-    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType):
-        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType) if self._isDAAPIInited() else None
+    def as_setPlayerStateInOtherS(self, uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr):
+        return self.flashObject.as_setPlayerStateInOther(uid, stateString, vContourIcon, vShortName, vLevel, igrType, badge, badgeImgStr) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam1S(self, uid, tags):
-        """
-        :param tags: Represented by Array (AS)
-        """
         return self.flashObject.as_setPlayerTagsInTeam1(uid, tags) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInTeam2S(self, uid, tags):
-        """
-        :param tags: Represented by Array (AS)
-        """
         return self.flashObject.as_setPlayerTagsInTeam2(uid, tags) if self._isDAAPIInited() else None
 
     def as_setPlayerTagsInOtherS(self, uid, tags):
-        """
-        :param tags: Represented by Array (AS)
-        """
         return self.flashObject.as_setPlayerTagsInOther(uid, tags) if self._isDAAPIInited() else None
 
     def as_enabledCloseButtonS(self, value):

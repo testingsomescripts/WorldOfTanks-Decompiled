@@ -84,7 +84,7 @@
       <userString>	#igr_vehicles:Chassis_T-44_IGR	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	30200.0	</price>
+      <price>	30200	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -201,7 +201,7 @@
         <segmentLength>	0.336	</segmentLength>
         <segmentOffset>	0.38	</segmentOffset>
         <segment2Offset>	0.17	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -460,7 +460,7 @@
       <userString>	#igr_vehicles:Turret_2_T-44_IGR	</userString>
       <tags></tags>
       <level>	9	</level>
-      <price>	48000.0	</price>
+      <price>	48000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	120	</armor_1>

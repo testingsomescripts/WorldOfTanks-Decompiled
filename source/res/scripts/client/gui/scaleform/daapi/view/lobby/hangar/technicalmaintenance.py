@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
+from adisp import process
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.items_parameters import isAutoReloadGun
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.Scaleform.daapi.view.meta.TechnicalMaintenanceMeta import TechnicalMaintenanceMeta
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
@@ -116,8 +118,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
          Currency.GOLD: money.getSignValue(Currency.GOLD)}
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            casseteCount = vehicle.descriptor.gun.clip[0]
-            casseteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % casseteCount
+            gun = vehicle.descriptor.gun
+            cassetteText = ''
+            if not isAutoReloadGun(gun):
+                cassetteCount = vehicle.descriptor.gun.clip[0]
+                if cassetteCount > 1:
+                    cassetteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % cassetteCount
+            else:
+                cassetteCount = 1
             data.update({'vehicleId': str(vehicle.intCD),
              'repairCost': vehicle.repairCost,
              'maxRepairCost': vehicle.descriptor.getMaxRepairCost(),
@@ -126,7 +134,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'autoEqip': vehicle.isAutoEquip,
              'maxAmmo': vehicle.gun.maxAmmo,
              'gunIntCD': vehicle.gun.intCD,
-             'casseteFieldText': '' if casseteCount == 1 else casseteText,
+             'casseteFieldText': cassetteText,
              'shells': [],
              'infoAfterShellBlock': ''})
             shells = data['shells']
@@ -143,7 +151,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                  'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor.icon[0],
                  'count': shell.count,
                  'userCount': shell.defaultCount,
-                 'step': casseteCount,
+                 'step': cassetteCount,
                  'inventoryCount': shell.inventoryCount,
                  'goldShellsForCredits': goldShellsForCredits,
                  'prices': prices.toMoneyTuple(),
@@ -159,9 +167,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         return
 
     def populateTechnicalMaintenanceEquipmentDefaults(self):
-        """
-        Loads layout and sets equipment according to it as a default
-        """
         params = {}
         for i, e in enumerate(g_currentVehicle.item.equipmentLayout.regularConsumables):
             params['eId%s' % (i + 1)] = e.intCD if e else None
@@ -179,7 +184,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         currencies = [None, None, None]
         selectedItems = [None, None, None]
         if eId1 is not None or eId2 is not None or eId3 is not None or slotIndex is not None:
-            selectedItems = map(lambda id: items.getItemByCD(id) if id is not None else None, (eId1, eId2, eId3))
+            selectedItems = []
+            for _id in (eId1, eId2, eId3):
+                if _id is not None:
+                    item = items.getItemByCD(_id)
+                else:
+                    item = None
+                selectedItems.append(item)
+
             currencies = [currency1, currency2, currency3]
         inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
         itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
@@ -224,8 +236,18 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'moduleLabel': module.getGUIEmblemID()})
 
         vehicle.equipment.setRegularConsumables(installedItems)
-        installed = map(lambda e: e.intCD if e is not None else None, installedItems)
-        setup = map(lambda e: e.intCD if e is not None else None, selectedItems)
+        installed = []
+        for e in installedItems:
+            if e is not None:
+                installed.append(e.intCD)
+            installed.append(None)
+
+        setup = []
+        for e in selectedItems:
+            if e is not None:
+                setup.append(e.intCD)
+            setup.append(None)
+
         self.__seveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)
         self._setEquipment(installed, setup, modules)
         return
@@ -238,6 +260,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             if result and result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
+    @process
     def fillVehicle(self, needRepair, needAmmo, needEquipment, isPopulate, isUnload, isOrderChanged, shells, equipment):
         shellsLayout = []
         eqsLayout = []
@@ -271,16 +294,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 msgPrefix = msgPrefix.format('')
             msg = i18n.makeString(''.join(['#dialogs:technicalMaintenanceConfirm/msg', msgPrefix]))
             if not self.__isConfirmDialogShown:
-
-                def fillConfirmationCallback(isConfirmed):
-                    if isConfirmed:
-                        if needRepair:
-                            self.repair()
-                        self.__setVehicleLayouts(g_currentVehicle.item, shellsLayout, eqsLayout)
+                isConfirmed = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('technicalMaintenanceConfirm', messageCtx={'content': msg}))
+                if isConfirmed:
+                    if needRepair:
+                        self.repair()
+                    self.__setVehicleLayouts(g_currentVehicle.item, shellsLayout, eqsLayout)
+                    self.__isConfirmDialogShown = True
+                else:
                     self.__isConfirmDialogShown = False
-
-                DialogsInterface.showDialog(I18nConfirmDialogMeta('technicalMaintenanceConfirm', messageCtx={'content': msg}), fillConfirmationCallback)
-                self.__isConfirmDialogShown = True
         return
 
     def _setEquipment(self, installed, setup, modules):
@@ -295,8 +316,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 self.populateTechnicalMaintenanceEquipmentDefaults()
                 self.__currentVehicleId = g_currentVehicle.item.intCD
 
-    def __setVehicleLayouts(self, vehicle, shellsLayout=list(), eqsLayout=list()):
+    def __setVehicleLayouts(self, vehicle, shellsLayout=None, eqsLayout=None):
         LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
+        shellsLayout = shellsLayout or []
+        eqsLayout = eqsLayout or []
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout, skipConfirm=self._skipConfirm)
         self.destroy()
 

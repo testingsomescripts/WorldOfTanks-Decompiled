@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 import BigWorld
+from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
@@ -10,31 +11,28 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
-from skeletons.new_year import ICustomizableObjectsManager
-from items.new_year_types import NY_STATE
+from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
-    customizableObjectsMgr = dependency.descriptor(ICustomizableObjectsManager)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
+    @process
     def selectFight(self, actionName):
-        if self.__isNY() and self.customizableObjectsMgr.state is not None:
-            battle_selector_items.getItems().select(actionName)
-            if actionName not in ('trainingsList', 'ranked'):
-                self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            battle_selector_items.getItems().select(actionName)
-        return
+        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if not navigationPossible:
+            return
+        battle_selector_items.getItems().select(actionName)
 
     def getTooltipData(self, itemData, itemIsDisabled):
         if itemData is None:
@@ -59,10 +57,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 tooltip = TOOLTIPS.BATTLETYPES_SPEC
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL:
                 tooltip = TOOLTIPS.BATTLETYPES_BATTLETUTORIAL
-            elif itemData == PREBATTLE_ACTION_NAME.FALLOUT:
-                tooltip = TOOLTIPS.BATTLETYPES_FALLOUT
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
-                tooltip = makeTooltip(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_100_THEPIT_NAME), map2=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))
+                tooltip = makeTooltip(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
@@ -103,8 +99,3 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
                 body = '%s\n\n%s' % (body, additionalInfo)
             res = makeTooltip(header, body)
             return (res, False)
-
-    @staticmethod
-    def __isNY():
-        player = BigWorld.player()
-        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS

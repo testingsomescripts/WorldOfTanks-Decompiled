@@ -1,7 +1,6 @@
 <G125_Spz_57_Rh.xml>
   <crew>
     <commander>	radioman
-
 			loader	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
@@ -250,7 +249,7 @@
         <segmentLength>	0.15	</segmentLength>
         <segmentOffset>	0.023	</segmentOffset>
         <segment2Offset>	0.076	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/PlayerEvents.py
 import Event
-from debug_utils import LOG_WARNING
 
 class _PlayerEvents(object):
 
@@ -18,7 +17,6 @@ class _PlayerEvents(object):
         self.onEnqueueRandomFailure = Event.Event()
         self.onEnqueuedRanked = Event.Event()
         self.onDequeuedRanked = Event.Event()
-        self.onEnqueueRankedFailure = Event.Event()
         self.onTutorialEnqueued = Event.Event()
         self.onTutorialDequeued = Event.Event()
         self.onTutorialEnqueueFailure = Event.Event()
@@ -26,14 +24,8 @@ class _PlayerEvents(object):
         self.onDequeuedUnitAssembler = Event.Event()
         self.onEnqueueUnitAssemblerFailure = Event.Event()
         self.onEnqueuedEventBattles = Event.Event()
-        self.onEnqueuedFalloutClassic = Event.Event()
-        self.onEnqueuedFalloutMultiteam = Event.Event()
         self.onDequeuedEventBattles = Event.Event()
-        self.onDequeuedFalloutClassic = Event.Event()
-        self.onDequeuedFalloutMultiteam = Event.Event()
         self.onEnqueueEventBattlesFailure = Event.Event()
-        self.onEnqueueFalloutClassicFailure = Event.Event()
-        self.onEnqueueFalloutMultiteamFailure = Event.Event()
         self.onEnqueuedSandbox = Event.Event()
         self.onDequeuedSandbox = Event.Event()
         self.onEnqueuedSandboxFailure = Event.Event()
@@ -50,8 +42,6 @@ class _PlayerEvents(object):
         self.onKickedFromUnitAssembler = Event.Event()
         self.onKickedFromUnitsQueue = Event.Event()
         self.onKickedFromEventBattles = Event.Event()
-        self.onKickedFromFalloutClassic = Event.Event()
-        self.onKickedFromFalloutMultiteam = Event.Event()
         self.onKickedFromSandboxQueue = Event.Event()
         self.onKickedFromRankedQueue = Event.Event()
         self.onKickedFromPrebattle = Event.Event()
@@ -91,6 +81,7 @@ class _PlayerEvents(object):
         self.onPMLocksChanged = Event.Event()
         self.onBootcampEnqueued = Event.Event()
         self.onBootcampDequeued = Event.Event()
+        self.onBootcampStartChoice = Event.Event()
         self.onKickedFromBootcampQueue = Event.Event()
         self.onBootcampAccountMigrationComplete = Event.Event()
         self.onNotification = Event.Event()

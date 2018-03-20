@@ -431,11 +431,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -542,11 +542,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -605,11 +605,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -668,11 +668,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -731,11 +731,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -775,11 +775,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -863,11 +863,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -974,11 +974,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1037,11 +1037,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1100,11 +1100,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1163,11 +1163,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1207,11 +1207,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1295,11 +1295,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1406,11 +1406,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1471,9 +1471,9 @@
         <flashBang>
           <startKey>	explosion	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.26 0.0 0.459	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	2.0	  <color>	1.0 0.25 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1532,11 +1532,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1595,11 +1595,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1639,11 +1639,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1889,11 +1889,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -1988,11 +1988,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -2035,11 +2035,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -2082,11 +2082,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -2134,11 +2134,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	explosion	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -2172,11 +2172,11 @@
       </timeline>
       <effects>
         <flashBang>
-          <startKey>	death	</startKey>
+          <startKey>	start	</startKey>
           <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
             </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
             </stage>
             <stage>	0.0	  <color>	0 0 0 0	</color>
             </stage>
@@ -2241,25 +2241,70 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
         <pixie>
           <startKey>	start	</startKey>
           <file>	particles/Tank/destruction/explosion_turret_01.xml	</file>
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
-        <flashBang>
+        <light>
           <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <decal>
           <startKey>	static	</startKey>
           <groupName>	slow	</groupName>
@@ -2302,25 +2347,70 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
         <pixie>
           <startKey>	start	</startKey>
           <file>	particles/Tank/destruction/explosion_turret_02.xml	</file>
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
-        <flashBang>
+        <light>
           <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <decal>
           <startKey>	static	</startKey>
           <groupName>	slow	</groupName>
@@ -2363,25 +2453,70 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
         <pixie>
           <startKey>	start	</startKey>
           <file>	particles/Tank/destruction/explosion_turret_03.xml	</file>
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
-        <flashBang>
+        <light>
           <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <decal>
           <startKey>	static	</startKey>
           <groupName>	slow	</groupName>
@@ -2424,25 +2559,70 @@
         <impactEnd>	5.0	</impactEnd>
         <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
         <stopExplosion>	36000	</stopExplosion>
+        <lightingEnd>	8.0	</lightingEnd>
       </timeline>
       <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
         <pixie>
           <startKey>	start	</startKey>
           <file>	particles/Tank/destruction/explosion_turret_04.xml	</file>
           <position>	HP_turretJoint	</position>
           <force>	1	</force>
         </pixie>
-        <flashBang>
+        <light>
           <startKey>	start	</startKey>
-          <stages>
-            <stage>	0.1	  <color>	0 0 0 0	</color>
-            </stage>
-            <stage>	2.0	  <color>	1.0 0.0 0.0 0.7	</color>
-            </stage>
-            <stage>	0.0	  <color>	0 0 0 0	</color>
-            </stage>
-          </stages>
-        </flashBang>
+          <endKey>	lightingEnd	</endKey>
+          <innerRadius>	1.0	</innerRadius>
+          <outerRadius>	15.0	</outerRadius>
+          <castShadows>	false	</castShadows>
+          <offset>	0.0 3.0 0.0	</offset>
+          <position>	HP_turretJoint	</position>
+          <animation>
+            <time>	0.0	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	900	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.1	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	100	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.2	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	700	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.4	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	150	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.5	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	500	</multiplier>
+          </animation>
+          <animation>
+            <time>	0.75	</time>
+            <color>	255 137 40	</color>
+            <multiplier>	600	</multiplier>
+          </animation>
+          <animation>
+            <time>	1.0	</time>
+            <color>	0 0 0 0	</color>
+            <multiplier>	0	</multiplier>
+          </animation>
+        </light>
         <decal>
           <startKey>	static	</startKey>
           <groupName>	slow	</groupName>
@@ -2498,4 +2678,18 @@
       </effects>
     </variant1>
   </fullDestruction>
+  <dynamicCollision>
+    <variant1>
+      <timeline>
+        <impactEnd>	5.0	</impactEnd>
+      </timeline>
+      <effects>
+        <collisionSound>
+          <startKey>	start	</startKey>
+          <wwsoundPC>	collision_distr_object_pc	</wwsoundPC>
+          <wwsoundNPC>	collision_distr_object_pc	</wwsoundNPC>
+        </collisionSound>
+      </effects>
+    </variant1>
+  </dynamicCollision>
 </vehicle_effects.xml>

@@ -227,7 +227,7 @@
         <segmentLength>	0.305	</segmentLength>
         <segmentOffset>	0.1	</segmentOffset>
         <segment2Offset>	0.156	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -476,7 +476,7 @@
         <segmentLength>	0.305	</segmentLength>
         <segmentOffset>	0.1	</segmentOffset>
         <segment2Offset>	0.156	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -666,7 +666,7 @@
             <insigniaOnGun>
               <rayStart>	0.000032 -0.0358538 1.22235	</rayStart>
               <rayEnd>	-0.0516738 0.0143676 1.22184	</rayEnd>
-              <rayUp>	0.109 0.102 5	</rayUp>
+              <rayUp>	0.105 0.102 5	</rayUp>
               <size>	0.547	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -687,6 +687,14 @@
                     <row>	-11.81	</row>
                     <row>	-7.478	</row>
                     <row>	0.0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint_02	</node>
+                  <table>
+                    <row>	-7.856	</row>
+                    <row>	0.0	</row>
+                    <row>	3	</row>
                   </table>
                 </slave>
               </slaves>
@@ -756,6 +764,14 @@
                     <row>	-11.81	</row>
                     <row>	-7.478	</row>
                     <row>	0.0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint_02	</node>
+                  <table>
+                    <row>	-7.856	</row>
+                    <row>	0.0	</row>
+                    <row>	3	</row>
                   </table>
                 </slave>
               </slaves>

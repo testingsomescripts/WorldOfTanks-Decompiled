@@ -236,7 +236,7 @@
         <right>	vehicles/american/A90_T69/track/right.track	</right>
         <segmentLength>	0.165	</segmentLength>
         <segmentOffset>	0.13	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -474,7 +474,7 @@
         <right>	vehicles/american/A90_T69/track/right.track	</right>
         <segmentLength>	0.165	</segmentLength>
         <segmentOffset>	0.13	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -797,7 +797,7 @@
   </fuelTanks>
   <radios>
     <SCR_610>	shared	  <unlocks>
-        <radio>	SCR_619	  <cost>	9000.0	</cost>
+        <radio>	SCR_619	  <cost>	9000	</cost>
         </radio>
       </unlocks>
     </SCR_610>

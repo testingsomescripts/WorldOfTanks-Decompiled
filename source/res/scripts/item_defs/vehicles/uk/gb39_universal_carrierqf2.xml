@@ -115,7 +115,7 @@
       <userString>	#gb_vehicles:Chassis_GB39_Universal_CarrierQF2	</userString>
       <tags></tags>
       <level>	1	</level>
-      <price>	280.0	</price>
+      <price>	280	</price>
       <unlocks>
         <chassis>	Chassis_GB39_Universal_CarrierQF2_2	  <cost>	95	</cost>
         </chassis>
@@ -244,7 +244,7 @@
         <right>	vehicles/british/GB39_Universal_CarrierQF2/track/right.track	</right>
         <segmentLength>	0.037	</segmentLength>
         <segmentOffset>	0.147	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -335,7 +335,7 @@
       <userString>	#gb_vehicles:Chassis_GB39_Universal_CarrierQF2_2	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	580.0	</price>
+      <price>	580	</price>
       <armor>
         <leftTrack>	5	</leftTrack>
         <rightTrack>	5	</rightTrack>
@@ -460,7 +460,7 @@
         <right>	vehicles/british/GB39_Universal_CarrierQF2/track/right.track	</right>
         <segmentLength>	0.037	</segmentLength>
         <segmentOffset>	0.147	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

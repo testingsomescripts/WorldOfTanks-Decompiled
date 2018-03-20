@@ -1,9 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/ACHIEVEMENTS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
+
 
 class ACHIEVEMENTS(object):
     ACHIEVEMENT_RANK1 = '#achievements:achievement/rank1'
@@ -268,6 +265,9 @@ class ACHIEVEMENTS(object):
     MECHANICENGINEER9 = '#achievements:mechanicEngineer9'
     MECHANICENGINEER9_DESCR = '#achievements:mechanicEngineer9_descr'
     MECHANICENGINEER9_CONDITION = '#achievements:mechanicEngineer9_condition'
+    MECHANICENGINEER10 = '#achievements:mechanicEngineer10'
+    MECHANICENGINEER10_DESCR = '#achievements:mechanicEngineer10_descr'
+    MECHANICENGINEER10_CONDITION = '#achievements:mechanicEngineer10_condition'
     TANKEXPERT = '#achievements:tankExpert'
     TANKEXPERT_DESCR = '#achievements:tankExpert_descr'
     TANKEXPERT0 = '#achievements:tankExpert0'
@@ -288,6 +288,8 @@ class ACHIEVEMENTS(object):
     TANKEXPERT7_DESCR = '#achievements:tankExpert7_descr'
     TANKEXPERT8 = '#achievements:tankExpert8'
     TANKEXPERT8_DESCR = '#achievements:tankExpert8_descr'
+    TANKEXPERT10 = '#achievements:tankExpert10'
+    TANKEXPERT10_DESCR = '#achievements:tankExpert10_descr'
     TITLESNIPER = '#achievements:titleSniper'
     TITLESNIPER_DESCR = '#achievements:titleSniper_descr'
     TITLESNIPER_CONDITION = '#achievements:titleSniper_condition'
@@ -604,6 +606,12 @@ class ACHIEVEMENTS(object):
     RANKEDBATTLESPIONEER = '#achievements:rankedBattlesPioneer'
     RANKEDBATTLESPIONEER_DESCR = '#achievements:rankedBattlesPioneer_descr'
     RANKEDBATTLESPIONEER_CONDITION = '#achievements:rankedBattlesPioneer_condition'
+    RANKEDBATTLESHERO = '#achievements:rankedBattlesHero'
+    RANKEDBATTLESHERO_DESCR = '#achievements:rankedBattlesHero_descr'
+    RANKEDBATTLESHERO_CONDITION = '#achievements:rankedBattlesHero_condition'
+    RANKEDBATTLESSEASONONE = '#achievements:rankedBattlesSeasonOne'
+    RANKEDBATTLESSEASONONE_DESCR = '#achievements:rankedBattlesSeasonOne_descr'
+    RANKEDBATTLESSEASONONE_CONDITION = '#achievements:rankedBattlesSeasonOne_condition'
     HE17A1 = '#achievements:HE17A1'
     HE17A1_DESCR = '#achievements:HE17A1_descr'
     HE17A1_CONDITION = '#achievements:HE17A1_condition'

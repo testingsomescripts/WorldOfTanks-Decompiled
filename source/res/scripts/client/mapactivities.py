@@ -1,18 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MapActivities.py
+import math
+import random
 import sys
 import BigWorld
 import ResMgr
-from collections import namedtuple
 import PlayerEvents
-import math
-import random
 import SoundGroups
 from constants import ARENA_PERIOD
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieBG import PixieBG
 
-class Timer:
+class Timer(object):
     __timeMethod = None
 
     @staticmethod
@@ -27,7 +26,7 @@ class Timer:
         return Timer.__timeMethod()
 
 
-class IMapActivity:
+class IMapActivity(object):
 
     def create(self, settings, startTime):
         pass
@@ -58,51 +57,41 @@ class IMapActivity:
 
 
 class MapActivities(object):
-    NamedActivitySettings = namedtuple('NamedActivitySettings', ('activityType', 'xmlSettings'))
 
     def __init__(self):
         self.__cbID = None
         self.__isOnArena = False
         self.__pendingActivities = []
         self.__currActivities = []
-        self.__namedActivitiesSettings = {}
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self._onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady += self.__onAvatarReady
         return
 
     def destroy(self):
-        BigWorld.cancelCallback(self.__cbID)
-        self.__cbID = None
         self.stop()
         PlayerEvents.g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer -= self._onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady -= self.__onAvatarReady
-        return
 
     def start(self, name):
-        activitySettings = self.__namedActivitiesSettings[name] if name in self.__namedActivitiesSettings else None
-        if activitySettings is None:
-            return
-        else:
-            activity = _createActivity(activitySettings.activityType)
-            if activity is None:
-                return
-            curTime = Timer.getTime()
-            if activity.create(activitySettings.xmlSettings, curTime):
-                activity.setStartTime(curTime)
-                self.__pendingActivities.append(activity)
-            return activity
+        for activity in self.__pendingActivities:
+            if activity.name() == name:
+                activity.setStartTime(Timer.getTime())
 
     def stop(self):
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         for activity in self.__currActivities:
             activity.stop()
 
         for activity in self.__pendingActivities:
             activity.stop()
 
-        self.__currActivities = []
-        self.__pendingActivities = []
+        del self.__currActivities[:]
+        del self.__pendingActivities[:]
+        return
 
     def generateOfflineActivities(self, spacePath, usePossibility=True):
         xmlName = spacePath.split('/')[-1]
@@ -122,6 +111,9 @@ class MapActivities(object):
             startTimes.append(Timer.getTime() + chooser(timeframe[0], timeframe[1]))
 
         self.__generateActivities(settings, startTimes)
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
         return
 
@@ -139,10 +131,6 @@ class MapActivities(object):
             for activityType, activityXML in settings.items():
                 i += 1
                 startTime = startTimes[i]
-                activityName = activityXML.readString('name', '')
-                if activityName:
-                    namedActivitySettings = MapActivities.NamedActivitySettings(activityType, activityXML)
-                    self.__namedActivitiesSettings[activityName] = namedActivitySettings
                 activity = _createActivity(activityType)
                 if activity is not None:
                     if activity.create(activityXML, startTime):
@@ -171,13 +159,12 @@ class MapActivities(object):
         isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE)
         if isOnArena and not self.__isOnArena:
             self.generateArenaActivities(periodAdditionalInfo)
-        elif not isOnArena and self.__isOnArena:
-            self.stop()
         self.__isOnArena = isOnArena
 
     def __onAvatarReady(self):
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
         return
 
@@ -198,9 +185,13 @@ class WaveImpulse(object):
         return
 
     def start(self, position):
+        if self.__cbkId is not None:
+            BigWorld.cancelCallback(self.__cbkId)
+            self.__cbkId = None
         if self.__deltaImpulse < 0.0:
             self.__position = position
             self.__cbkId = BigWorld.callback(self.__deltaTime, self.__loop)
+        return
 
     def __loop(self):
         player = BigWorld.player()
@@ -221,13 +212,14 @@ class WaveImpulse(object):
 
 
 class WarplaneActivity(IMapActivity):
+    FADE_TIME = 450.0
 
     def create(self, settings, startTime):
+        self.__isStopped = False
         self.__settings = settings
         self.__curve = None
         self.__model = None
         self.__motor = None
-        self.__sound = None
         self.__particle = (None, None)
         self.__cbID = None
         self.__startTime = startTime
@@ -238,6 +230,9 @@ class WarplaneActivity(IMapActivity):
         self.__firstLaunch = True
         self.__curve = BigWorld.WGActionCurve(self.__settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
+        ds = self.__curve.getChannelProperty(0, 'wwsoundName')
+        soundName = ds.asString if ds is not None else ''
+        self.__sound = SoundGroups.g_instance.getSound3D(None, soundName)
         BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
         return True
 
@@ -268,6 +263,7 @@ class WarplaneActivity(IMapActivity):
         self.__period = period
 
     def start(self):
+        self.__isStopped = False
         if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
             self.__startTime += self.__period
             return
@@ -289,18 +285,17 @@ class WarplaneActivity(IMapActivity):
                     self.__model.addMotor(self.__motor)
                     self.__motor.restart()
                     self.__endTime = self.__motor.totalTime + self.__startTime
-                if self.__cbID is not None:
-                    BigWorld.cancelCallback(self.__cbID)
-                if self.__sound is not None:
-                    self.__sound.stopAll()
-                    self.__sound = None
                 self.__fadedIn = False
             self.__model.visible = 1
             self.__startTime += self.__period
+            if self.__cbID is not None:
+                BigWorld.cancelCallback(self.__cbID)
+                self.__cbID = None
             self.__waitEnterWorld()
             return
 
     def stop(self):
+        self.__isStopped = True
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
@@ -312,9 +307,7 @@ class WarplaneActivity(IMapActivity):
             self.__model = None
             self.__motor = None
             self.__curve = None
-        if self.__sound is not None:
-            self.__sound.stopAll()
-            self.__sound = None
+        self.__sound.stop(self.FADE_TIME)
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
             self.__particle[1].destroy()
@@ -323,9 +316,7 @@ class WarplaneActivity(IMapActivity):
         return
 
     def pause(self):
-        if self.__sound is not None:
-            self.__sound.stopAll()
-            self.__sound = None
+        self.__sound.stop(self.FADE_TIME)
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
@@ -351,19 +342,21 @@ class WarplaneActivity(IMapActivity):
             self.__loadEffects()
         if visibility == 1.0 and not self.__fadedIn:
             self.__fadedIn = True
-        elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
-            self.pause()
-            return
-        if self.__sound is not None:
+            self.__sound.play()
             self.__sound.volume = visibility
         else:
-            self.__playSound()
+            if visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
+                self.pause()
+                return
+            self.__sound.play()
+            self.__sound.volume = visibility
         self.__cbID = BigWorld.callback(0.25, self.__update)
         return
 
     def __onModelLoaded(self, resourceRefs):
-        if self.__modelName not in resourceRefs.failedIDs:
+        if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
+            self.__sound.matrixProvider = self.__model.root
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
 
@@ -387,25 +380,11 @@ class WarplaneActivity(IMapActivity):
             self.__particle[0].attach(pixieBG.pixie)
         return
 
-    def __playSound(self):
-        ds = self.__curve.getChannelProperty(0, 'wwsoundName')
-        soundName = ds.asString if ds is not None else ''
-        if soundName != '':
-            try:
-                objectName = soundName + ' : ' + str(self.__model.root)
-                self.__sound = SoundGroups.g_instance.WWgetSoundObject(objectName, self.__model.root)
-                self.__sound.play(soundName)
-                self.__sound.volume = 0.0
-            except:
-                self.__sound = None
-                LOG_CURRENT_EXCEPTION()
-
-        return
-
 
 class ExplosionActivity(IMapActivity):
 
     def create(self, settings, startTime):
+        self.__isStopped = False
         self.__settings = settings
         self.__model = None
         self.__sound = None
@@ -476,17 +455,23 @@ class ExplosionActivity(IMapActivity):
         if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
             self.__startTime += self.__period
             return
-        if self.__firstLaunch is True:
-            BigWorld.addModel(self.__model)
-            self.__model.forceReflect = True
-            self.__firstLaunch = False
         else:
-            self.pause()
-        self.__model.visible = 1
-        self.__startTime += self.__period
-        self.__waitEnterWorld()
+            if self.__firstLaunch is True:
+                BigWorld.addModel(self.__model)
+                self.__model.forceReflect = True
+                self.__firstLaunch = False
+            else:
+                self.pause()
+            self.__model.visible = 1
+            self.__startTime += self.__period
+            if self.__cbID is not None:
+                BigWorld.cancelCallback(self.__cbID)
+                self.__cbID = None
+            self.__waitEnterWorld()
+            return
 
     def stop(self):
+        self.__isStopped = True
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
@@ -500,6 +485,9 @@ class ExplosionActivity(IMapActivity):
             self.__sound.releaseMatrix()
             self.__sound = None
         self.__firstLaunch = True
+        if self.__waveImpulse is not None:
+            self.__waveImpulse.destroy()
+            self.__waveImpulse = None
         return
 
     def pause(self):
@@ -537,7 +525,7 @@ class ExplosionActivity(IMapActivity):
         return
 
     def __onModelLoaded(self, resourceRefs):
-        if self.__modelName not in resourceRefs.failedIDs:
+        if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
             self.__model.position = self.__position
         else:
@@ -549,7 +537,7 @@ class ExplosionActivity(IMapActivity):
                 self.__sound = SoundGroups.g_instance.getSound3D(self.__model.root, self.__soundName)
                 self.__sound.setCallback(self.__endEventCallback)
                 self.__sound.play()
-            except:
+            except Exception:
                 self.__sound = None
                 LOG_CURRENT_EXCEPTION()
 
@@ -604,17 +592,25 @@ class ScenarioActivity(IMapActivity):
             activity.setStartTime(self.__startTime)
 
         self.__startTime += self.__period
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         self.__onPeriodicTimer()
+        return
 
     def stop(self):
+        if self.__cbID is not None:
+            BigWorld.cancelCallback(self.__cbID)
+            self.__cbID = None
         for activity in self.__currentActivities:
             activity.stop()
 
         for activity in self.__pendingActivities:
             activity.stop()
 
-        self.__currentActivities = []
-        self.__pendingActivities = []
+        del self.__currentActivities[:]
+        del self.__pendingActivities[:]
+        return
 
     def canStart(self):
         return Timer.getTime() >= self.__startTime
@@ -640,7 +636,7 @@ class ScenarioActivity(IMapActivity):
                     self.__currentActivities.append(activity)
                     self.__pendingActivities.remove(activity)
 
-        BigWorld.callback(0.1, self.__onPeriodicTimer)
+        self.__cbID = BigWorld.callback(0.1, self.__onPeriodicTimer)
         return
 
 
@@ -655,7 +651,7 @@ def _createActivity(typeName):
 
 def startActivity(name):
     global g_mapActivities
-    return g_mapActivities.start(name)
+    g_mapActivities.start(name)
 
 
 g_mapActivities = MapActivities()

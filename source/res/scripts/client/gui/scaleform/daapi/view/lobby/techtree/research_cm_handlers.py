@@ -9,6 +9,7 @@ from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHan
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.utils.HangarSpace import g_hangarSpace
 from helpers import dependency
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.shared import IItemsCache
@@ -130,7 +131,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
         options = [self._makeItem(VEHICLE.INFO, MENU.CONTEXTMENU_VEHICLEINFOEX)]
         if vehicle.isPreviewAllowed():
-            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW))
+            options.append(self._makeItem(VEHICLE.PREVIEW, MENU.CONTEXTMENU_SHOWVEHICLEPREVIEW, {'enabled': g_hangarSpace.spaceInited}))
         if NODE_STATE.isWasInBattle(self._nodeState):
             options.append(self._makeItem(VEHICLE.STATS, MENU.CONTEXTMENU_SHOWVEHICLESTATISTICS))
         self._manageVehCompareItem(options, vehicle)
@@ -154,9 +155,5 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         return options
 
     def _manageVehCompareItem(self, optionsRef, vehicle):
-        """
-        :param vehicle: instance of gui.shared.gui_items.Vehicle.Vehicle
-        :param optionsRef: reference to Context Menu items list
-        """
         if self.comparisonBasket.isEnabled():
             optionsRef.append(self._makeItem(VEHICLE.COMPARE, MENU.contextmenu(VEHICLE.COMPARE), {'enabled': self.comparisonBasket.isReadyToAdd(vehicle)}))

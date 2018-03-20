@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/INGAME_GUI.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class INGAME_GUI(object):
@@ -472,6 +468,9 @@ class INGAME_GUI(object):
     DAMAGELOG_SHELLTYPE_HOLLOW_CHARGE = '#ingame_gui:damageLog/shellType/HOLLOW_CHARGE'
     DAMAGELOG_MULTIPLIER = '#ingame_gui:damageLog/multiplier'
     EFFICIENCYRIBBONS_STUN = '#ingame_gui:efficiencyRibbons/stun'
+    HITMARKER_BLOCKED = '#ingame_gui:hitMarker/blocked'
+    HITMARKER_RICOCHET = '#ingame_gui:hitMarker/ricochet'
+    HITMARKER_CRITICAL = '#ingame_gui:hitMarker/critical'
     RESPAWNVIEW_TITLE = '#ingame_gui:respawnView/title'
     RESPAWNVIEW_ADDITIONALTIP = '#ingame_gui:respawnView/additionalTip'
     RESPAWNVIEW_ADDITIONALTIPLIMITED = '#ingame_gui:respawnView/additionalTipLimited'
@@ -524,6 +523,9 @@ class INGAME_GUI(object):
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
     STUN_INDICATOR = '#ingame_gui:stun/indicator'
     STUN_SECONDS = '#ingame_gui:stun/seconds'
+    COLORSETTINGSTIPPANEL_HEADER = '#ingame_gui:colorSettingsTipPanel/header'
+    COLORSETTINGSTIPPANEL_DESC = '#ingame_gui:colorSettingsTipPanel/desc'
+    COLORSETTINGSTIPPANEL_BTNLABEL = '#ingame_gui:colorSettingsTipPanel/btnLabel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,

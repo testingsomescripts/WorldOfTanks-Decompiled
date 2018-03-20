@@ -66,6 +66,10 @@ def getNationBigFlagIcon(nation, forVehicle):
         return None
 
 
+def getLevelBackgroundIcon():
+    return RES_ICONS.MAPS_ICONS_EVENTBOARDS_BACKGROUNDS_LEVEL_TYPE_BACKGROUND
+
+
 def getNationText(nation):
     return _ms(NATIONS.all(nation))
 
@@ -75,8 +79,8 @@ def getNationTextWithIcon(nation):
     return '{}{}'.format(iconNation, getNationText(nation))
 
 
-def vehicleTypeText(type):
-    return _ms('#quests:classes/{}'.format(type))
+def vehicleTypeText(vType):
+    return _ms('#quests:classes/{}'.format(vType))
 
 
 def formatTimeToEnd(timeValue, period):

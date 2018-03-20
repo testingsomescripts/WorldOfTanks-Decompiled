@@ -23,17 +23,18 @@ class _ClassicComponentsConfig(ComponentsConfig):
            BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
            BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
            BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
+           BATTLE_VIEW_ALIASES.COLOR_SETTINGS_TIP_PANEL,
            DynamicAliases.DRONE_MUSIC_PLAYER,
            DynamicAliases.PERIOD_MUSIC_LISTENER)),
          (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, DynamicAliases.DRONE_MUSIC_PLAYER)),
          (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
          (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
          (BATTLE_CTRL_ID.ARENA_LOAD_PROGRESS, (DynamicAliases.DRONE_MUSIC_PLAYER,)),
-         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), ((DynamicAliases.PERIOD_MUSIC_LISTENER, lambda : period_music_listener.PeriodMusicListener()), (DynamicAliases.DRONE_MUSIC_PLAYER, lambda : drone_music_player.DroneMusicPlayer())))
+         (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))), ((DynamicAliases.PERIOD_MUSIC_LISTENER, period_music_listener.PeriodMusicListener), (DynamicAliases.DRONE_MUSIC_PLAYER, drone_music_player.DroneMusicPlayer)))
 
 
 COMMON_CLASSIC_CONFIG = _ClassicComponentsConfig()
-EXTENDED_CLASSIC_CONFIG = COMMON_CLASSIC_CONFIG + ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.TEAM_BASES, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.FINISH_SOUND_PLAYER,))), viewsConfig=((DynamicAliases.FINISH_SOUND_PLAYER, lambda : finish_sound_player.FinishSoundPlayer()),))
+EXTENDED_CLASSIC_CONFIG = COMMON_CLASSIC_CONFIG + ComponentsConfig(config=((BATTLE_CTRL_ID.ARENA_PERIOD, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.TEAM_BASES, (DynamicAliases.FINISH_SOUND_PLAYER,)), (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (DynamicAliases.FINISH_SOUND_PLAYER,))), viewsConfig=((DynamicAliases.FINISH_SOUND_PLAYER, finish_sound_player.FinishSoundPlayer),))
 
 class ClassicPage(SharedPage):
 
@@ -101,10 +102,11 @@ class ClassicPage(SharedPage):
         self._toggleFullStats(event.ctx['isDown'])
 
     def _onBattleLoadingStart(self):
-        self._toggleFullStats(False)
+        self._toggleFullStats(isShown=False)
         super(ClassicPage, self)._onBattleLoadingStart()
 
     def _onBattleLoadingFinish(self):
+        self._toggleFullStats(isShown=False)
         super(ClassicPage, self)._onBattleLoadingFinish()
         battleCtx = self.sessionProvider.getCtx()
         periodCtrl = self.sessionProvider.shared.arenaPeriod

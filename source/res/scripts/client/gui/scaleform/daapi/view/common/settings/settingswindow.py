@@ -1,15 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/settings/SettingsWindow.py
 import functools
+import BattleReplay
 import BigWorld
 import VOIP
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
-from gui.shared.utils import flashObject2Dict, decorators
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.utils import flashObject2Dict, decorators, graphics
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
@@ -39,6 +45,13 @@ def _setLastTabIndex(idx):
     _g_lastTabIdx = idx
 
 
+def _delayCall(delay, function):
+    if BattleReplay.g_replayCtrl.isPaused:
+        function()
+    else:
+        BigWorld.callback(delay, function)
+
+
 class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -53,15 +66,9 @@ class SettingsWindow(SettingsWindowMeta):
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
-        """
-        Returns instance of chat plugin to have access to VOIP Controller
-        :return: instance of chat plugin
-        """
         return None
 
     def __getSettingsParam(self):
-        """Read settings from SettingsParam
-        """
         settings = {SETTINGS_GROUP.GAME_SETTINGS: self.params.getGameSettings(),
          SETTINGS_GROUP.GRAPHICS_SETTINGS: self.params.getGraphicsSettings(),
          SETTINGS_GROUP.SOUND_SETTINGS: self.params.getSoundSettings(),
@@ -73,9 +80,6 @@ class SettingsWindow(SettingsWindowMeta):
         return settings
 
     def __getSettings(self):
-        """Create dict of settings divided by groups
-        :return: dict { settingsGroup :  {keys: [settingsName], values: [settingsValues] }}
-        """
         settings = self.__getSettingsParam()
         reformatted_settings = {}
         for key, value in settings.iteritems():
@@ -108,12 +112,12 @@ class SettingsWindow(SettingsWindowMeta):
         if isRestart:
             BigWorld.savePreferences()
             if restartApproved:
-                BigWorld.callback(0.3, self.__restartGame)
+                _delayCall(0.3, self.__restartGame)
             elif self.settingsCore.isDeviseRecreated:
                 self.onRecreateDevice()
                 self.settingsCore.isDeviseRecreated = False
             else:
-                BigWorld.callback(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.getWindowMode()))
+                _delayCall(0.0, functools.partial(BigWorld.changeVideoMode, -1, BigWorld.getWindowMode()))
         elif not isPresetApplied:
             DialogsInterface.showI18nInfoDialog('graphicsPresetNotInstalled', None)
         return
@@ -128,9 +132,11 @@ class SettingsWindow(SettingsWindowMeta):
         if self.__redefinedKeyModeEnabled:
             BigWorld.wg_setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
+        self.as_setInitDataS(BigWorld.wg_isRunningOnWinXP())
         self._update()
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
+        self.settingsCore.onSettingsChanged += self.__onColorSettingsChange
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
 
@@ -139,8 +145,9 @@ class SettingsWindow(SettingsWindowMeta):
         newSettings = getNewSettings()
         if newSettings:
             self.as_setCountersDataS(newSettings)
-        self.as_updateVideoSettingsS(self.__currentSettings)
+        self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
+        self.__setColorGradingTechnique()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -151,6 +158,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopAltBulbPreview()
         VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
+        self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
         super(SettingsWindow, self)._dispose()
         return
 
@@ -169,8 +177,6 @@ class SettingsWindow(SettingsWindowMeta):
             LOG_WARNING("Unknown settings window's page id", tabId)
 
     def onCounterTargetVisited(self, tabName, subTabName, controlId):
-        """Notify that user visited tab
-        """
         isSettingsChanged = invalidateSettings(tabName, subTabName, controlId)
         if isSettingsChanged:
             newSettings = getNewSettings()
@@ -193,6 +199,7 @@ class SettingsWindow(SettingsWindowMeta):
                 self.__commitSettings(settings, isOk, isCloseWnd)
             else:
                 self.params.revert()
+            if not isCloseWnd:
                 self._update()
 
         if applyMethod == APPLY_METHOD.RESTART:
@@ -235,18 +242,21 @@ class SettingsWindow(SettingsWindowMeta):
         option = self.settingsCore.options.getSetting(settings_constants.SOUND.SOUND_SPEAKERS)
         if not option.isPresetSupportedByIndex(index):
 
-            def apply(result):
+            def _apply(result):
                 LOG_DEBUG('Player result', result)
                 self.as_onSoundSpeakersPresetApplyS(result)
 
-            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=apply)
+            DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=_apply)
             return False
         return True
 
     def startVOIPTest(self, isStart):
         LOG_DEBUG('Vivox test: %s' % str(isStart))
         rh = VOIP.getVOIPManager()
-        rh.enterTestChannel() if isStart else rh.leaveTestChannel()
+        if isStart:
+            rh.enterTestChannel()
+        else:
+            rh.leaveTestChannel()
         return False
 
     @decorators.process('__updateCaptureDevices')
@@ -286,16 +296,13 @@ class SettingsWindow(SettingsWindowMeta):
 
         DialogsInterface.showI18nConfirmDialog(dialogID, callback)
 
-    def onRecreateDevice(self):
-        actualSettings = self.params.getMonitorSettings()
-        curDrr = self.__currentSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
-        actualDrr = actualSettings[settings_constants.GRAPHICS.DYNAMIC_RENDERER]
-        self.__currentSettings = actualSettings
-        result = self.__currentSettings.copy()
-        if curDrr == actualDrr:
-            result[settings_constants.GRAPHICS.DYNAMIC_RENDERER] = None
-        self.as_updateVideoSettingsS(result)
-        return
+    def openGammaWizard(self, x, y, size):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.GAMMA_WIZARD, ctx={'x': x,
+         'y': y,
+         'size': size}), EVENT_BUS_SCOPE.DEFAULT)
+
+    def openColorSettings(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.COLOR_SETTING), EVENT_BUS_SCOPE.DEFAULT)
 
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
@@ -309,3 +316,36 @@ class SettingsWindow(SettingsWindowMeta):
                 break
 
         return self.as_isPresetAppliedS() if isGraphicsQualitySettings else True
+
+    def __onColorSettingsChange(self, diff):
+        if settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE in diff:
+            self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
+        return
+
+    def __setColorGradingTechnique(self, value=None):
+        colorSettingsSelectedTab = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)
+        if colorSettingsSelectedTab is None:
+            colorSettingsSelectedTab = 0
+        label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
+        image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
+        if colorSettingsSelectedTab == 2:
+            label = SETTINGS.COLORSETTINGS_TAB_CUSTOMSETTINGS
+            image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_RANDOM
+        elif colorSettingsSelectedTab == 1:
+            setting = self.settingsCore.options.getSetting(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+            images = graphics.getGraphicSettingImages(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+            label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
+            image = None
+            filterIdx = setting.get() if value is None else value
+            if setting is not None:
+                for option in setting.getOptions():
+                    currentIdx = option.get('data', 0)
+                    if currentIdx == filterIdx:
+                        label = option.get('label')
+                        image = images.get(option.get('data', 0))
+                        break
+
+            if image is None:
+                image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
+        self.as_setColorGradingTechniqueS(image, label)
+        return

@@ -1,7 +1,6 @@
 <F02_D1.xml>
   <crew>
     <commander>	gunner
-
 			loader	</commander>
     <driver></driver>
     <radioman></radioman>
@@ -228,7 +227,7 @@
         <right>	vehicles/french/F02_D1/track/right.track	</right>
         <segmentLength>	0.169	</segmentLength>
         <segmentOffset>	0.071	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -428,7 +427,7 @@
         <right>	vehicles/french/F02_D1/track/right.track	</right>
         <segmentLength>	0.169	</segmentLength>
         <segmentOffset>	0.071	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

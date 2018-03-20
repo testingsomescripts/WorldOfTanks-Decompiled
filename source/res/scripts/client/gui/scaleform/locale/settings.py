@@ -1,9 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/SETTINGS.py
-"""
-This file was generated using the wgpygen.
-Please, don't edit this file manually.
-"""
 from debug_utils import LOG_WARNING
 
 class SETTINGS(object):
@@ -20,15 +16,25 @@ class SETTINGS(object):
     GRAPHICSQUALITY = '#settings:graphicsQuality'
     FEEDBACK = '#settings:feedBack'
     GRAPHICSQUALITY_DESCRIPTION = '#settings:graphicsQuality/description'
+    GRAPHICSQUALITY_XP = '#settings:graphicsQuality_XP'
+    GRAPHICSQUALITY_XP_DESCRIPTION = '#settings:graphicsQuality_XP/description'
+    GRAPHICSQUALITY_XP_WARNING = '#settings:graphicsQuality_XP/warning'
     GRAPHICSQUALITYHDSD_SD = '#settings:graphicsQualityHDSD/SD'
     GRAPHICSQUALITYHDSD_HD = '#settings:graphicsQualityHDSD/HD'
     GRAPHICSQUALITYHDSD = '#settings:graphicsQualityHDSD'
     GRAPHICSQUALITYHDSD_DESCRIPTION = '#settings:graphicsQualityHDSD/description'
+    GRAPHICSQUALITYHDSDHIGH = '#settings:graphicsQualityHDSDHigh'
+    GRAPHICSQUALITYHDSDHIGH_DESCRIPTION = '#settings:graphicsQualityHDSDHigh/description'
+    GRAPHICSQUALITYHDSDHIGH_WARNING = '#settings:graphicsQualityHDSDHigh/warning'
     AUTODETECTBUTTON = '#settings:autodetectButton'
     AUTODETECTBUTTON_DESCRIPTION = '#settings:autodetectButton/description'
     GRAPHICS_TABSCREEN = '#settings:graphics/tabScreen'
     GRAPHICS_TABADVANCED = '#settings:graphics/tabAdvanced'
-    GRAPHICS_SIGNIFICANTLYAFFECTING = '#settings:graphics/significantlyAffecting'
+    GRAPHICS_BLOCK_MAIN = '#settings:graphics/block/main'
+    GRAPHICS_BLOCK_LIGHTINGANDSHADOWS = '#settings:graphics/block/lightingAndShadows'
+    GRAPHICS_BLOCK_LANDSCAPEANDWATER = '#settings:graphics/block/landscapeAndWater'
+    GRAPHICS_BLOCK_GREENERY = '#settings:graphics/block/greenery'
+    GRAPHICS_BLOCK_EFFECTS = '#settings:graphics/block/effects'
     GRAPHICSSETTINGSOPTIONS_DEFERRED = '#settings:graphicsSettingsOptions/DEFERRED'
     GRAPHICSSETTINGSOPTIONS_FORWARD = '#settings:graphicsSettingsOptions/FORWARD'
     GRAPHICSSETTINGSOPTIONS_ON = '#settings:graphicsSettingsOptions/ON'
@@ -42,8 +48,10 @@ class SETTINGS(object):
     GRAPHICSSETTINGSOPTIONS_POINT = '#settings:graphicsSettingsOptions/POINT'
     GRAPHICSSETTINGSOPTIONS_CUSTOM = '#settings:graphicsSettingsOptions/CUSTOM'
     GRAPHICSSETTINGSOPTIONS_ULTRA = '#settings:graphicsSettingsOptions/ULTRA'
+    GRAPHICSSETTINGSOPTIONS_ULTRA_SD = '#settings:graphicsSettingsOptions/ULTRA_SD'
     GRAPHICSSETTINGSOPTIONS_VERY_HIGH = '#settings:graphicsSettingsOptions/VERY_HIGH'
     GRAPHICSSETTINGSOPTIONS_MAX = '#settings:graphicsSettingsOptions/MAX'
+    GRAPHICSSETTINGSOPTIONS_MAX_SD = '#settings:graphicsSettingsOptions/MAX_SD'
     GRAPHICSSETTINGSOPTIONS_VERYHIGH = '#settings:graphicsSettingsOptions/VERYHIGH'
     GRAPHICSSETTINGSOPTIONS_HIGH = '#settings:graphicsSettingsOptions/HIGH'
     GRAPHICSSETTINGSOPTIONS_MEDIUM = '#settings:graphicsSettingsOptions/MEDIUM'
@@ -64,16 +72,15 @@ class SETTINGS(object):
     GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC = '#settings:graphicsSettingsOptions/Photochromatic'
     GRAPHICSSETTINGSOPTIONS_SOFT = '#settings:graphicsSettingsOptions/Soft'
     GRAPHICSSETTINGSOPTIONS_RANDOM = '#settings:graphicsSettingsOptions/RANDOM'
-    FPSPERFOMANCER = '#settings:fpsPerfomancer'
-    FPSPERFOMANCER_DESCRIPTION = '#settings:fpsPerfomancer/description'
     TRIPLEBUFFERED = '#settings:tripleBuffered'
     TRIPLEBUFFERED_DESCRIPTION = '#settings:tripleBuffered/description'
     RENDER_PIPELINE = '#settings:RENDER_PIPELINE'
     RENDER_PIPELINE_LABEL = '#settings:RENDER_PIPELINE/label'
     RENDER_PIPELINE_DESCRIPTION = '#settings:RENDER_PIPELINE/description'
     RENDER_PIPELINE_WARNING = '#settings:RENDER_PIPELINE/warning'
-    DECALS_QUALITY = '#settings:DECALS_QUALITY'
-    DECALS_QUALITY_DESCRIPTION = '#settings:DECALS_QUALITY/description'
+    RENDER_PIPELINE_XP = '#settings:RENDER_PIPELINE_XP'
+    RENDER_PIPELINE_XP_DESCRIPTION = '#settings:RENDER_PIPELINE_XP/description'
+    RENDER_PIPELINE_XP_WARNING = '#settings:RENDER_PIPELINE_XP/warning'
     TEXTURE_QUALITY = '#settings:TEXTURE_QUALITY'
     TEXTURE_QUALITY_DESCRIPTION = '#settings:TEXTURE_QUALITY/description'
     TEXTURE_QUALITY_WARNING = '#settings:TEXTURE_QUALITY/warning'
@@ -102,8 +109,6 @@ class SETTINGS(object):
     SNIPER_MODE_GRASS_ENABLED_DESCRIPTION = '#settings:SNIPER_MODE_GRASS_ENABLED/description'
     SNIPER_MODE_EFFECTS_QUALITY = '#settings:SNIPER_MODE_EFFECTS_QUALITY'
     SNIPER_MODE_EFFECTS_QUALITY_DESCRIPTION = '#settings:SNIPER_MODE_EFFECTS_QUALITY/description'
-    COLOR_GRADING_TECHNIQUE = '#settings:COLOR_GRADING_TECHNIQUE'
-    COLOR_GRADING_TECHNIQUE_DESCRIPTION = '#settings:COLOR_GRADING_TECHNIQUE/description'
     MOTION_BLUR_QUALITY = '#settings:MOTION_BLUR_QUALITY'
     MOTION_BLUR_QUALITY_DESCRIPTION = '#settings:MOTION_BLUR_QUALITY/description'
     EFFECTS_QUALITY = '#settings:EFFECTS_QUALITY'
@@ -112,6 +117,10 @@ class SETTINGS(object):
     VEHICLE_TRACES_ENABLED_DESCRIPTION = '#settings:VEHICLE_TRACES_ENABLED/description'
     SEMITRANSPARENT_LEAVES_ENABLED = '#settings:SEMITRANSPARENT_LEAVES_ENABLED'
     SEMITRANSPARENT_LEAVES_ENABLED_DESCRIPTION = '#settings:SEMITRANSPARENT_LEAVES_ENABLED/description'
+    TERRAIN_TESSELLATION_ENABLED = '#settings:TERRAIN_TESSELLATION_ENABLED'
+    TERRAIN_TESSELLATION_ENABLED_DESCRIPTION = '#settings:TERRAIN_TESSELLATION_ENABLED/description'
+    SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED = '#settings:SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED'
+    SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED_DESCRIPTION = '#settings:SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED/description'
     DYNAMICCAMERA = '#settings:dynamicCamera'
     GAME_HORSTABILIZATIONSNP = '#settings:game/horStabilizationSnp'
     GAME_INCREASEDZOOM_BASE = '#settings:game/increasedZoom/base'
@@ -129,8 +138,6 @@ class SETTINGS(object):
     REFRESHRATE = '#settings:refreshRate'
     REFRESHRATE_DESCRIPTION = '#settings:refreshRate/description'
     REFRESHRATE_DEFAULT = '#settings:refreshRate/default'
-    COLORFILTERINTENSITY = '#settings:colorFilterIntensity'
-    COLORFILTERINTENSITY_DESCRIPTION = '#settings:colorFilterIntensity/description'
     FOV = '#settings:fov'
     FOV_DESCRIPTION = '#settings:fov/description'
     DYNAMICFOV = '#settings:dynamicFov'
@@ -166,8 +173,16 @@ class SETTINGS(object):
     GAME_SHOWSECTORONMAP = '#settings:game/showSectorOnMap'
     GAME_MINIMAPGROUPTITLE = '#settings:game/minimapGroupTitle'
     GAME_MINIMAPVIEWRANGE = '#settings:game/minimapViewRange'
+    GAME_OPTIMIZEGRAPHICS = '#settings:game/optimizeGraphics'
     GAME_MINIMAPMAXVIEWRANGE = '#settings:game/minimapMaxViewRange'
     GAME_MINIMAPDRAWRANGE = '#settings:game/minimapDrawRange'
+    GAME_HANGARCAMGROUPTITLE = '#settings:game/hangarCamGroupTitle'
+    GAME_HANGARCAMDROPDOWNTITLE = '#settings:game/hangarCamDropdownTitle'
+    GAME_HANGARCAMPERIOD_TYPE0 = '#settings:game/hangarCamPeriod/type0'
+    GAME_HANGARCAMPERIOD_TYPE1 = '#settings:game/hangarCamPeriod/type1'
+    GAME_HANGARCAMPERIOD_TYPE2 = '#settings:game/hangarCamPeriod/type2'
+    GAME_HANGARCAMPERIOD_NEVER = '#settings:game/hangarCamPeriod/never'
+    GAME_HANGARCAMCHECKBOX = '#settings:game/hangarCamCheckbox'
     GAME_DYNAMICCAMERA = '#settings:game/dynamicCamera'
     GAME_C11NHISTORICALLYACCURATE = '#settings:game/c11nHistoricallyAccurate'
     MONITOR = '#settings:monitor'
@@ -195,8 +210,13 @@ class SETTINGS(object):
     BORDERLESSSIZE = '#settings:borderlessSize'
     BORDERLESSSIZE_DESCRIPTION = '#settings:borderlessSize/description'
     GAMMA = '#settings:gamma'
-    GAMMA_DESCRIPTION = '#settings:gamma/description'
-    SMOOTHING = '#settings:smoothing'
+    GAMMABTN_LABEL = '#settings:gammaBtn/label'
+    COLORCORRECTION = '#settings:colorCorrection'
+    COLORCORRECTIONBTN_LABEL = '#settings:colorCorrectionBtn/label'
+    CUSTOM_AA_MODE = '#settings:CUSTOM_AA_MODE'
+    CUSTOM_AA_MODE_DESCRIPTION = '#settings:CUSTOM_AA_MODE/description'
+    MSAA_QUALITY = '#settings:MSAA_QUALITY'
+    MSAA_QUALITY_DESCRIPTION = '#settings:MSAA_QUALITY/description'
     SMOOTHING_DESCRIPTION = '#settings:smoothing/description'
     EDGEDETECTAA = '#settings:edgeDetectAA'
     ISCOLORBLIND = '#settings:isColorBlind'
@@ -205,21 +225,6 @@ class SETTINGS(object):
     VERTSYNC_DESCRIPTION = '#settings:vertSync/description'
     VERTSYNC_ON = '#settings:vertSync/On'
     VERTSYNC_OFF = '#settings:vertSync/Off'
-    MULTISAMPLINGTYPE_TYPE0 = '#settings:multisamplingType/type0'
-    MULTISAMPLINGTYPE_TYPE2 = '#settings:multisamplingType/type2'
-    MULTISAMPLINGTYPE_TYPE4 = '#settings:multisamplingType/type4'
-    MULTISAMPLINGTYPE_TYPE6 = '#settings:multisamplingType/type6'
-    MULTISAMPLINGTYPE_TYPE8 = '#settings:multisamplingType/type8'
-    MULTISAMPLINGTYPE_TYPE12 = '#settings:multisamplingType/type12'
-    MULTISAMPLINGTYPE_TYPE16 = '#settings:multisamplingType/type16'
-    MULTISAMPLINGTYPE_TYPE1032 = '#settings:multisamplingType/type1032'
-    MULTISAMPLINGTYPE_TYPE2056 = '#settings:multisamplingType/type2056'
-    MULTISAMPLINGTYPE_TYPE1040 = '#settings:multisamplingType/type1040'
-    MULTISAMPLINGTYPE_TYPE2064 = '#settings:multisamplingType/type2064'
-    CUSTOMAAMODE_MODE0 = '#settings:customAAMode/mode0'
-    CUSTOMAAMODE_MODE1 = '#settings:customAAMode/mode1'
-    CUSTOMAAMODE_MODE2 = '#settings:customAAMode/mode2'
-    CUSTOMAAMODE_MODE3 = '#settings:customAAMode/mode3'
     SOUNDS_MASTERVOLUMETOGGLE = '#settings:sounds/masterVolumeToggle'
     SOUNDS_MASTERVOLUMETOGGLE_DESCRIPTION = '#settings:sounds/masterVolumeToggle/description'
     SOUNDS_BULBVOICES = '#settings:sounds/bulbVoices'
@@ -417,6 +422,7 @@ class SETTINGS(object):
     AIM_CONDITION = '#settings:aim/condition'
     AIM_CASSETTE = '#settings:aim/cassette'
     AIM_ZOOMINDICATOR = '#settings:aim/zoomIndicator'
+    AIM_X2 = '#settings:aim/x2'
     MARKER_ALLYTITLE = '#settings:marker/AllyTitle'
     MARKER_ENEMYTITLE = '#settings:marker/EnemyTitle'
     MARKER_DEADTITLE = '#settings:marker/DeadTitle'
@@ -532,6 +538,7 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGEINDICATOR_INDICATOR_DAMAGELABEL = '#settings:feedback/tab/damageIndicator/indicator/damageLabel'
     FEEDBACK_TAB_DAMAGELOGPANEL = '#settings:feedback/tab/damageLogPanel'
     FEEDBACK_TAB_EVENTSINFO = '#settings:feedback/tab/eventsInfo'
+    FEEDBACK_TAB_BATTLEBORDERMAP = '#settings:feedback/tab/battleBorderMap'
     FEEDBACK_TAB_DETAILSINFOBLOCK = '#settings:feedback/tab/detailsInfoBlock'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMLABEL = '#settings:feedback/tab/damageLogPanel/summLabel'
     FEEDBACK_TAB_DAMAGELOGPANEL_DAMAGEDONE = '#settings:feedback/tab/damageLogPanel/damageDone'
@@ -616,6 +623,39 @@ class SETTINGS(object):
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYBLOCK = '#settings:feedback/tab/damageLogPanel/summaryBlock'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSIST = '#settings:feedback/tab/damageLogPanel/summaryAssist'
     FEEDBACK_TAB_DAMAGELOGPANEL_SUMMARYASSISTSTUN = '#settings:feedback/tab/damageLogPanel/summaryAssistStun'
+    FEEDBACK_TAB_BORDERMAP_SHOWMODE_LABEL = '#settings:feedback/tab/borderMap/showMode/label'
+    FEEDBACK_TAB_BORDERMAP_SHOWMODE_ALT = '#settings:feedback/tab/borderMap/showMode/alt'
+    FEEDBACK_TAB_BORDERMAP_SHOWMODE_ALWAYS = '#settings:feedback/tab/borderMap/showMode/always'
+    FEEDBACK_TAB_BORDERMAP_SHOWMODE_HIDE = '#settings:feedback/tab/borderMap/showMode/hide'
+    FEEDBACK_TAB_BORDERMAP_SHOWMODE_ALWAYSHIDE = '#settings:feedback/tab/borderMap/showMode/alwaysHide'
+    FEEDBACK_TAB_BORDERMAP_TYPEBORDER_LABEL = '#settings:feedback/tab/borderMap/typeBorder/label'
+    FEEDBACK_TAB_BORDERMAP_TYPEBORDER_WALL = '#settings:feedback/tab/borderMap/typeBorder/wall'
+    FEEDBACK_TAB_BORDERMAP_TYPEBORDER_DOTTED = '#settings:feedback/tab/borderMap/typeBorder/dotted'
+    FEEDBACK_TAB_BORDERMAP_TYPEBORDER_HIDE = '#settings:feedback/tab/borderMap/typeBorder/hide'
+    FEEDBACK_TAB_BORDERMAP_HIDEBORDERWARNING = '#settings:feedback/tab/borderMap/hideBorderWarning'
+    GAMMAWIZARD_TITLE = '#settings:gammaWizard/title'
+    GAMMAWIZARD_HEADER = '#settings:gammaWizard/header'
+    GAMMAWIZARD_DESCRIPTION = '#settings:gammaWizard/description'
+    GAMMAWIZARD_APPLY = '#settings:gammaWizard/apply'
+    GAMMAWIZARD_CANCEL = '#settings:gammaWizard/cancel'
+    GAMMAWIZARD_DEFAULT = '#settings:gammaWizard/default'
+    GAMMAWIZARD_CLOSEBTN = '#settings:gammaWizard/closeBtn'
+    GAMMAWIZARD_TOOLTIP_HEADER = '#settings:gammaWizard/tooltip/header'
+    GAMMAWIZARD_TOOLTIP_BODY = '#settings:gammaWizard/tooltip/body'
+    COLORSETTINGS_VIEW_HEADER = '#settings:colorSettings/view/header'
+    COLORSETTINGS_VIEW_SUBTITLE = '#settings:colorSettings/view/subTitle'
+    COLORSETTINGS_VIEW_DESCRIPTION = '#settings:colorSettings/view/description'
+    COLORSETTINGS_VIEW_CLOSEBTN = '#settings:colorSettings/view/closeBtn'
+    COLORSETTINGS_VIEW_RESETBTN = '#settings:colorSettings/view/resetBtn'
+    COLORSETTINGS_TAB_DEFAULT = '#settings:colorSettings/tab/default'
+    COLORSETTINGS_TAB_FILTERS = '#settings:colorSettings/tab/filters'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS = '#settings:colorSettings/tab/customSettings'
+    COLORSETTINGS_TAB_FILTERS_INTENSITY = '#settings:colorSettings/tab/filters/intensity'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_BRIGHTNESS = '#settings:colorSettings/tab/customSettings/brightness'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_CONTRAST = '#settings:colorSettings/tab/customSettings/contrast'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_SATURATION = '#settings:colorSettings/tab/customSettings/saturation'
+    COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
+    COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,
@@ -655,6 +695,43 @@ class SETTINGS(object):
      SOUNDS_SOUNDDEVICE_LAPTOP,
      SOUNDS_SOUNDDEVICE_LAPTOP_HEADER,
      SOUNDS_SOUNDDEVICE_LAPTOP_BODY)
+    GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
+     GRAPHICSSETTINGSOPTIONS_FORWARD,
+     GRAPHICSSETTINGSOPTIONS_ON,
+     GRAPHICSSETTINGSOPTIONS_OFF,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_16X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_8X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_4X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_2X,
+     GRAPHICSSETTINGSOPTIONS_TRILINEAR,
+     GRAPHICSSETTINGSOPTIONS_BILINEAR,
+     GRAPHICSSETTINGSOPTIONS_POINT,
+     GRAPHICSSETTINGSOPTIONS_CUSTOM,
+     GRAPHICSSETTINGSOPTIONS_ULTRA,
+     GRAPHICSSETTINGSOPTIONS_ULTRA_SD,
+     GRAPHICSSETTINGSOPTIONS_VERY_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MAX,
+     GRAPHICSSETTINGSOPTIONS_MAX_SD,
+     GRAPHICSSETTINGSOPTIONS_VERYHIGH,
+     GRAPHICSSETTINGSOPTIONS_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MEDIUM,
+     GRAPHICSSETTINGSOPTIONS_FAR,
+     GRAPHICSSETTINGSOPTIONS_NEAR,
+     GRAPHICSSETTINGSOPTIONS_LOW,
+     GRAPHICSSETTINGSOPTIONS_LOWEST,
+     GRAPHICSSETTINGSOPTIONS_MIN,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_3,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_2,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_1,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_0,
+     GRAPHICSSETTINGSOPTIONS_NONE,
+     GRAPHICSSETTINGSOPTIONS_COLORIZATION,
+     GRAPHICSSETTINGSOPTIONS_MUTED,
+     GRAPHICSSETTINGSOPTIONS_CONTRASTY,
+     GRAPHICSSETTINGSOPTIONS_SOFT_COLORS,
+     GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC,
+     GRAPHICSSETTINGSOPTIONS_SOFT,
+     GRAPHICSSETTINGSOPTIONS_RANDOM)
 
     @classmethod
     def sounds_acoustictype(cls, key0):
@@ -669,6 +746,15 @@ class SETTINGS(object):
     def sounds_sounddevice(cls, key0):
         outcome = '#settings:sounds/soundDevice/{}'.format(key0)
         if outcome not in cls.SOUNDS_SOUNDDEVICE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getGraphicsSettingsOption(cls, key0):
+        outcome = '#settings:graphicsSettingsOptions/{}'.format(key0)
+        if outcome not in cls.GRAPHICSSETTINGSOPTIONS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

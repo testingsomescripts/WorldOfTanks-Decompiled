@@ -86,7 +86,7 @@
       <userString>	#usa_vehicles:Chassis_T21	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	8300.0	</price>
+      <price>	8300	</price>
       <unlocks>
         <chassis>	Chassis_T21_2	  <cost>	4800	</cost>
         </chassis>
@@ -238,7 +238,7 @@
         <segmentLength>	0.143	</segmentLength>
         <segmentOffset>	0.139	</segmentOffset>
         <segment2Offset>	0.074	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -473,7 +473,7 @@
         <segmentLength>	0.143	</segmentLength>
         <segmentOffset>	0.139	</segmentOffset>
         <segment2Offset>	0.074	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

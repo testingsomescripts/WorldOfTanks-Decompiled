@@ -1,7 +1,6 @@
 <J05_Ke_Ni_B.xml>
   <crew>
     <commander>	radioman
-
 			loader	</commander>
     <gunner></gunner>
     <driver></driver>
@@ -87,7 +86,7 @@
         <rayEnd>	0.767385 0.352822 -0.0594506	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.64	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/japan/J05_Ke_Ni_B/Ke_Ni_B_HangarShadowMap.dds	</hangarShadowTexture>
@@ -214,7 +213,7 @@
         <right>	vehicles/japan/J05_Ke_Ni_B/track/right.track	</right>
         <segmentLength>	0.082	</segmentLength>
         <segmentOffset>	0.359	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -502,7 +501,7 @@
         <collisionModelServer>	vehicles/japan/J05_Ke_Ni_B/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/japan/J05_Ke_Ni_B/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.04633 0.23623 0.562999	</gunPosition>
+      <gunPosition>	-0.001264 0.23623 0.562999	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.753202 0.246598 0.356393	</rayStart>
@@ -511,6 +510,13 @@
           <size>	0.22	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
+        <inscription>
+          <rayStart>	-0.566949 0.239666 -0.472988	</rayStart>
+          <rayEnd>	-0.415543 0.203819 -0.347324	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.58	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
           <rayStart>	0.756304 0.247266 0.356096	</rayStart>
           <rayEnd>	0.404587 0.174997 0.179824	</rayEnd>
@@ -519,13 +525,6 @@
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <inscription>
-          <rayStart>	-0.642649 0.257588 -0.535818	</rayStart>
-          <rayEnd>	-0.339843 0.185897 -0.284494	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.58	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 -0.000 0.445 0.295 0.656 0.451 0.585 0.500 0.167 0.500 0.119 0.545 0.102	</physicsShape>

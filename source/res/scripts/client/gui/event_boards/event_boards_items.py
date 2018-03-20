@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/event_boards/event_boards_items.py
-import BigWorld
 import itertools
+from collections import defaultdict
+import BigWorld
 from gui import GUI_NATIONS
 from gui.shared.utils import mapTextureToTheMemory, removeTextureFromMemory
 from shared_utils import findFirst, CONST_CONTAINER
-from collections import defaultdict
 from debug_utils import LOG_ERROR, LOG_WARNING
 from items import parseIntCompactDescr
 from gui.event_boards import event_boards_timer
@@ -74,6 +74,7 @@ class EVENT_DATE_TYPE(CONST_CONTAINER):
 
 
 EVENTS_TYPES = EVENT_TYPE.ALL()
+WOODEN_RIBBON = 5
 
 class EventBoardsSettings(object):
 
@@ -155,7 +156,7 @@ class EventsSettings(object):
 
         self.__events = []
 
-    def setData(self, rawData):
+    def setData(self, rawData, prefetchKeyArtBig=True):
         oldEvents = {event.getEventID():event for event in self.__events}
         self.__events = []
         if not self.__isDataStructureValid(rawData):
@@ -167,7 +168,7 @@ class EventsSettings(object):
                 eventSettings = EventSettings()
                 eventSettings.setData(event)
                 oldEvent = oldEvents.pop(eventSettings.getEventID(), None)
-                eventSettings.setImages(oldEvent.getImages() if oldEvent else {})
+                eventSettings.setImages(oldEvent.getImages() if oldEvent else {}, prefetchKeyArtBig)
                 self.__events.append(eventSettings)
 
             for event in oldEvents.values():
@@ -277,9 +278,9 @@ class EventSettings(object):
         self.__images = {}
         return
 
-    def setImages(self, images):
+    def setImages(self, images, prefetchKeyArtBig):
         self.__images = images
-        self.__prefetchImages()
+        self.__prefetchImages(prefetchKeyArtBig)
 
     def getImages(self):
         return self.__images
@@ -386,15 +387,15 @@ class EventSettings(object):
         return event_boards_timer.getFormattedRemainingTime(self.__rewardingDate) if dateType == EVENT_DATE_TYPE.REWARDING else event_boards_timer.getFormattedRemainingTime('')
 
     def isStarted(self):
-        value, period = event_boards_timer.getTimeStatus(self.__startDate)
+        value, _ = event_boards_timer.getTimeStatus(self.__startDate)
         return value < 0
 
     def isRegistrationFinished(self):
-        value, period = event_boards_timer.getTimeStatus(self.__participantsFreezeDeadline)
+        value, _ = event_boards_timer.getTimeStatus(self.__participantsFreezeDeadline)
         return value < 0
 
     def isFinished(self):
-        value, period = event_boards_timer.getTimeStatus(self.__endDate)
+        value, _ = event_boards_timer.getTimeStatus(self.__endDate)
         return value < 0
 
     def isStartSoon(self):
@@ -410,8 +411,8 @@ class EventSettings(object):
         return event_boards_timer.isPeriodCloseToEnd(self.__startDate, self.__participantsFreezeDeadline, self.EVENT_TO_END_DATA_DURATION_PERCENTAGE)
 
     def isActive(self):
-        value1, period = event_boards_timer.getTimeStatus(self.__startDate)
-        value2, period = event_boards_timer.getTimeStatus(self.__endDate)
+        value1, _ = event_boards_timer.getTimeStatus(self.__startDate)
+        value2, _ = event_boards_timer.getTimeStatus(self.__endDate)
         return value1 < 0 < value2
 
     def getRewardingDate(self):
@@ -448,7 +449,7 @@ class EventSettings(object):
         return True if self.__primeTimes.isEmpty() else findFirst(lambda pt: pt.isActive() and pt.getServer() == str(peripheryID), self.__primeTimes.getPrimeTimes(), None) is not None
 
     def getAvailableServers(self):
-        return filter(lambda pt: pt.isActive(), self.__primeTimes.getPrimeTimes())
+        return [ pt for pt in self.__primeTimes.getPrimeTimes() if pt.isActive() ]
 
     def getKeyArtBig(self):
         return self.__getImage(self.__keyArtBig, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_BGR_LANDING_BLANK)
@@ -473,8 +474,9 @@ class EventSettings(object):
             return default
         return 'img://{}'.format(self.__images[url])
 
-    def __prefetchImages(self):
-        self.getKeyArtBig()
+    def __prefetchImages(self, prefetchKeyArtBig):
+        if prefetchKeyArtBig:
+            self.getKeyArtBig()
         self.getKeyArtSmall()
         self.getPromoBonuses()
 
@@ -696,7 +698,7 @@ class RewardByRank(object):
         return
 
     def getCategoryMinMax(self, category):
-        groups = filter(lambda g: g.getRewardCategoryNumber() is category, self.__rewardGroups)
+        groups = [ g for g in self.__rewardGroups if g.getRewardCategoryNumber() is category ]
         minimum = min(groups, key=lambda group: group.getRankMinMax()[0])
         maximum = max(groups, key=lambda group: group.getRankMinMax()[1])
         return (minimum.getRankMinMax()[0], maximum.getRankMinMax()[1])
@@ -802,9 +804,6 @@ class PlayerEventsData(object):
         return None
 
     def getEventsList(self):
-        """
-            :return: player all events states
-        """
         return self.__eventsList
 
     def __isDataStructureValid(self, data):
@@ -839,33 +838,18 @@ class EventsList(object):
         self.__playerStateReasons.append(reason)
 
     def getEventID(self):
-        """
-            :return: event id
-        """
         return self.__eventID
 
     def getPlayerState(self):
-        """
-            :return: player state constant
-        """
         return self.__playerState
 
     def getCanJoin(self):
-        """
-            :return: can player join to event
-        """
         return self.__canJoin
 
     def getPlayersInEvent(self):
-        """
-            :return: players in event
-        """
         return self.__playersInEvent
 
     def getPlayerStateReasons(self):
-        """
-            :return: player state reasons
-        """
         return self.__playerStateReasons
 
 
@@ -909,7 +893,7 @@ class MyEventsTop(object):
         return self.__myEventsTopList
 
     def getMyEventTop(self, eventId):
-        return filter(lambda eventTop: eventTop.getEventID() == eventId, self.__myEventsTopList)
+        return [ eventTop for eventTop in self.__myEventsTopList if eventTop.getEventID() == eventId ]
 
     def getMyLeaderboardEventTop(self, eventId, leadeboardId):
         return findFirst(lambda eventTop: eventTop.getEventID() == eventId and eventTop.getLeaderboardID() == leadeboardId, self.__myEventsTopList, None)

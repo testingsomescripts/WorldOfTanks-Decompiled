@@ -12,6 +12,7 @@ from skeletons.connection_mgr import IConnectionManager
 class InterfaceScaleManager(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
     onScaleChanged = Event.Event()
+    onScaleExactlyChanged = Event.Event()
 
     def __init__(self, settingsCore):
         self.proxy = weakref.proxy(settingsCore)
@@ -40,22 +41,23 @@ class InterfaceScaleManager(object):
 
     def onSettingsChanged(self, diff):
         if settings_constants.GRAPHICS.INTERFACE_SCALE in diff:
-            self.__index = diff[settings_constants.GRAPHICS.INTERFACE_SCALE]
-            self.__scaleValue = self.getScaleByIndex(self.__index)
-            self.onScaleChanged(self.__scaleValue)
+            index = diff[settings_constants.GRAPHICS.INTERFACE_SCALE]
+            self.changeScale(index)
 
     def scaleChanged(self):
-        self.__index = self.proxy.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
+        index = self.proxy.getSetting(settings_constants.GRAPHICS.INTERFACE_SCALE)
+        self.changeScale(index)
+
+    def changeScale(self, index):
+        self.__index = index
+        prevScaleValue = self.__scaleValue
         self.__scaleValue = self.getScaleByIndex(self.__index)
         self.onScaleChanged(self.__scaleValue)
+        if prevScaleValue != self.__scaleValue:
+            self.onScaleExactlyChanged(self.__scaleValue)
 
     @staticmethod
     def getScaleOptions():
-        """
-        Return list of scales for the current resolution.
-        This list does not depend on what is set in SettingsWindow.
-        :return: list of scales, for example: ['auto', 'x1', ...]
-        """
         return graphics.getInterfaceScalesList(BigWorld.screenSize())
 
     def getScaleByIndex(self, ind, powerOfTwo=True):

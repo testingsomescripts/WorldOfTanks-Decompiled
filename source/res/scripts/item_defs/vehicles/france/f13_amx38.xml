@@ -1,9 +1,7 @@
 <F13_AMX38.xml>
   <crew>
     <commander>	radioman
-
 			gunner
-
 			loader	</commander>
     <driver></driver>
   </crew>
@@ -301,7 +299,7 @@
         <right>	vehicles/french/F13_AMX38/track/right.track	</right>
         <segmentLength>	0.162	</segmentLength>
         <segmentOffset>	0.155	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -612,7 +610,7 @@
         <right>	vehicles/french/F13_AMX38/track/right.track	</right>
         <segmentLength>	0.162	</segmentLength>
         <segmentOffset>	0.155	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -729,7 +727,7 @@
       <userString>	#france_vehicles:Turret_1_AMX38	</userString>
       <tags></tags>
       <level>	2	</level>
-      <price>	600.0	</price>
+      <price>	600	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	60	</armor_1>

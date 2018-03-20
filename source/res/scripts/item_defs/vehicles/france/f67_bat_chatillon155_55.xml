@@ -223,7 +223,7 @@
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	0.238	</segmentOffset>
         <segment2Offset>	0.068	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -490,7 +490,7 @@
         <segmentLength>	0.142	</segmentLength>
         <segmentOffset>	0.238	</segmentOffset>
         <segment2Offset>	0.068	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -594,7 +594,7 @@
       <userString>	#france_vehicles:Turret_1_Bat_Chatillon155_55	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	16	</armor_1>
@@ -718,7 +718,7 @@
       <userString>	#france_vehicles:Turret_2_Bat_Chatillon155_55	</userString>
       <tags>	cannotDetach	</tags>
       <level>	8	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	16	</armor_1>

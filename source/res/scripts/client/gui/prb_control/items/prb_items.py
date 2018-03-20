@@ -13,7 +13,7 @@ class PlayerPrbInfo(object):
     __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=[]):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -24,7 +24,7 @@ class PlayerPrbInfo(object):
         self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.roster = roster
-        self.badges = BadgesHelper(badges)
+        self.badges = BadgesHelper(badges or [])
         if entity is not None:
             self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:
@@ -32,7 +32,7 @@ class PlayerPrbInfo(object):
         return
 
     def __repr__(self):
-        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None)
+        return 'PlayerPrbInfo(accID = {0:n}, dbID = {1:n}, fullName = {2:>s}, state = {3:n}, isCreator = {4!r:s}, time = {5:n}, vehCompDescr = {6!r:s}, badgeID = {7})'.format(self.accID, self.dbID, self.getFullName(), self.state, self.isCreator, self.time, self.getVehicle().name if self.isVehicleSpecified() else None, self.badges.getBadgeID())
 
     def getFullName(self, isClan=True, isRegion=True):
         if isClan:
@@ -116,21 +116,6 @@ class PrbPropsInfo(object):
 
 
 def getPlayersComparator(playerComparatorType=PREBATTLE_PLAYERS_COMPARATORS.REGULAR):
-    """
-    Sort criteria for players:
-    mode PREBATTLE_PLAYERS_COMPARATORS.REGULAR:
-    1. time of accession (common criteria).
-    2. first in the list is commander.
-    mode PREBATTLE_PLAYERS_COMPARATORS.OBSERVERS_TO_BOTTOM:
-    1. time of accession (common criteria).
-    2. observers sorts to bottom list.
-    
-    Args:
-        playerComparatorType: PREBATTLE_PLAYERS_COMPARATORS type
-    
-    Returns:
-        cmp function according to PREBATTLE_PLAYERS_COMPARATORS type request
-    """
 
     def comparator(player, other):
         if player.isCreator ^ other.isCreator:

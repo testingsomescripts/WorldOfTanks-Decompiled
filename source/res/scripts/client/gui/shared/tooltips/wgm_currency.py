@@ -42,17 +42,15 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
     def changeVisibility(self, isVisible):
         super(WGMCurrencyTooltip, self).changeVisibility(isVisible)
         if isVisible and self.isWGMAvailable():
-            self.__requester.requestInfo(lambda result: self.__onDataResponse(result))
+            self.__requester.requestInfo(self.__onDataResponse)
 
     @classmethod
     def isWGMAvailable(cls):
         return cls.itemsCache.items.stats.mayConsumeWalletResources
 
-    def _packBlocks(self, *args, **kwargs):
+    def _packBlocks(self, btnType=None, *args, **kwargs):
         tooltipBlocks = super(WGMCurrencyTooltip, self)._packBlocks(*args, **kwargs)
-        btnType = kwargs.get('btnType', None)
-        if btnType and btnType != self._btnType:
-            self._btnType = btnType
+        self._btnType = btnType
         if self._btnType is None:
             LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks

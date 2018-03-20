@@ -91,7 +91,7 @@
       <userString>	#germany_vehicles:PzIV_ausf43	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	7910.0	</price>
+      <price>	7910	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	15	</leftTrack>
@@ -237,7 +237,7 @@
         <right>	vehicles/german/G77_PzIV_Schmalturm/track/right.track	</right>
         <segmentLength>	0.113	</segmentLength>
         <segmentOffset>	0.148	</segmentOffset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>
@@ -318,7 +318,7 @@
       <userString>	#germany_vehicles:PzIV_Schmalturm_A	</userString>
       <tags></tags>
       <level>	6	</level>
-      <price>	13240.0	</price>
+      <price>	13240	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	120	</armor_1>

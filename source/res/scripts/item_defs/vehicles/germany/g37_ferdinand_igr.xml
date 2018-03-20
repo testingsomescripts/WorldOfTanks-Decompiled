@@ -69,9 +69,6 @@
     <exhaust>
       <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
-      <tags>
-        <diesel>	particles/Tank/engine_exit_diesel.xml	</diesel>
-      </tags>
     </exhaust>
     <turretPositions>
       <turret>	-0.000000 1.2021 -0.070475	</turret>
@@ -126,7 +123,7 @@
       <shortUserString>	#igr_vehicles:Ferdinandvetstaerktketten_IGR_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
-      <price>	32234.0	</price>
+      <price>	32234	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	25	</leftTrack>
@@ -243,7 +240,7 @@
         <segmentLength>	0.26	</segmentLength>
         <segmentOffset>	-0.072	</segmentOffset>
         <segment2Offset>	0.133	</segment2Offset>
-        <lodDist>	MEDIUM	</lodDist>
+        <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
           <VTiles>	1	</VTiles>

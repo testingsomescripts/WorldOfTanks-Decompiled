@@ -1,9 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/graphics.py
-import BigWorld
 import math
 from collections import namedtuple
-from debug_utils import LOG_WARNING
+import BigWorld
 from shared_utils import CONST_CONTAINER, findFirst
 import GUI
 MIN_SCREEN_WIDTH = 1024
@@ -97,20 +96,6 @@ def getSuitableBorderlessSizes():
 
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
 
-def getCustomAAMode():
-    """
-    Returns Custom AA-Mode value
-    """
-    return BigWorld.getCustomAAMode()
-
-
-def getMultisamplingType():
-    """
-    Returns current Multisampling Type
-    """
-    return BigWorld.getMultisamplingType()
-
-
 def getGraphicsSetting(settingName):
     setting = BigWorld.graphicSetting(settingName)
     return None if setting is None else GraphicSetting(*setting)
@@ -135,6 +120,18 @@ def getGraphicSettingImages(settingName):
     return result
 
 
+def getGraphicSettingColorSettingsFiletersImages():
+    result = {}
+    data = getGraphicsSetting('COLOR_GRADING_TECHNIQUE')
+    imgPath = '../maps/icons/settings/colorSettings/filterTypes/%s.png'
+    if data is not None:
+        for idx, (label, supported, _, _) in enumerate(data.options):
+            if supported:
+                result[idx] = imgPath % str(label).replace(' ', '_')
+
+    return result
+
+
 def getResolution():
     currWindowSize = g_monitorSettings.currentWindowSize
     width = currWindowSize.width if currWindowSize.width > 0 else MIN_SCREEN_WIDTH
@@ -155,6 +152,44 @@ def getInterfaceScalesList(size, powerOfTwo=True):
             result.append(SCALE_PREFIX[1] % i)
 
     return result
+
+
+def getNativeResolutionIndex():
+    nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+    result = []
+    for modes in getSuitableVideoModes():
+        resolutions = set()
+        for mode in modes:
+            resolutions.add((mode.width, mode.height))
+
+        result.append(sorted(tuple(resolutions)))
+
+    idx = -1
+    for idx, (w, h) in enumerate(result[g_monitorSettings.currentMonitor]):
+        if w == nativeResolution[0] and h == nativeResolution[1]:
+            return idx
+
+    return idx
+
+
+def isGammaSupported():
+    isFullscreen = g_monitorSettings.isFullscreen()
+    if isFullscreen:
+        cVideoMode = g_monitorSettings.currentVideoMode
+        nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
+        if nativeResolution is not None:
+            isNativeSelected = cVideoMode.width == nativeResolution[0] and cVideoMode.height == nativeResolution[1]
+        else:
+            isNativeSelected = False
+        return isNativeSelected
+    else:
+        return isRendererPipelineDeferred()
+        return
+
+
+def isRendererPipelineDeferred():
+    pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
+    return pipelineType == 0
 
 
 class MonitorSettings(object):
@@ -227,7 +262,6 @@ class MonitorSettings(object):
 
     def setGlyphCache(self, scale=1):
         textureSize = 1024 * math.ceil(scale)
-        assert hasattr(GUI, 'wg_setGlyphCacheParams'), 'GUI.wg_setGlyphCacheParams() is not defined'
         GUI.wg_setGlyphCacheParams(1, textureSize, textureSize)
 
     @property

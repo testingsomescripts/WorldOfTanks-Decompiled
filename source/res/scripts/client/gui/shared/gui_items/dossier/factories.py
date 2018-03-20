@@ -63,7 +63,7 @@ class _SequenceAchieveFactory(_AchieveFactory):
 
     def create(self, value=None):
         counts = {}
-        achieves = self._dossier.getBlock(self._block)
+        achieves = self._dossier.getBlock(self._block) if self._dossier is not None else ()
         for achieveID in set(achieves):
             counts[achieveID] = achieves.count(achieveID)
 
@@ -189,6 +189,8 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'xmasTreeSilver'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'xmasTreeGold'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'rankedBattlesPioneer'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'rankedBattlesHero'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'rankedBattlesSeasonOne'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'HE17A1'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'HE17A2'): _AchieveFactory.get(_as.Achieved),
  (_AB.SINGLE, 'HE17A3'): _AchieveFactory.get(_as.Achieved),

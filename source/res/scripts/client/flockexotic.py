@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/FlockExotic.py
-import BigWorld
 import math
 import random
+from functools import partial
+import BigWorld
 import Math
 import FlockManager
 from Flock import FlockLike
@@ -30,7 +31,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
     def __createMotor(self, positionStart, positionEnd, speed, flightTime):
         time1 = BigWorld.time()
         time2 = time1 + self.accelerationTime
-        time3 = time1 + flightTime
+        time3 = time2 + flightTime
         initSpeed = speed * random.uniform(self.initSpeedRandom[0], self.initSpeedRandom[1])
         controlPoint1 = (positionStart, initSpeed, time1)
         controlPoint2 = (positionStart + (initSpeed + speed) / 2.0, speed, time2)
@@ -43,6 +44,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         FlockManager.getManager().addFlock(self.position, self.triggerRadius, self.explosionRadius, self.respawnTime, self)
 
     def onLeaveWorld(self):
+        self.__removeModels()
         self.__models = []
         self.models = []
         FlockLike.destroy(self)
@@ -58,7 +60,6 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
                     LOG_ERROR('Failed to load flock model: %s' % modelId)
                     continue
                 model = prereqs[modelId]
-                model.outsideOnly = 1
                 model.moveAttachments = True
                 model.visible = False
                 self.__models.append(model)
@@ -67,6 +68,19 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
+
+    def __removeModels(self):
+        for model in self.models:
+            self.__removeModel(model)
+
+        self.models = []
+
+    def __removeModel(self, model):
+        self._delSound()
+        model.motors = ()
+        model.position = self.position
+        model.visible = False
+        self.delModel(model)
 
     def __getRandomSpawnPos(self):
         randHeight = random.uniform(0, self.spawnHeight)
@@ -80,40 +94,31 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         if self.flightAngleMax < self.flightAngleMin:
             arc = 2 * math.pi - abs(arc)
         randAngle = random.uniform(self.flightAngleMin, self.flightAngleMin + arc)
-        dir = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
-        dir = dir - startPos
-        dir.normalise()
-        dir *= self.speed * self.lifeTime
-        return startPos + dir
+        direction = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
+        direction = direction - startPos
+        direction.normalise()
+        direction *= self.speed * self.lifeTime
+        return startPos + direction
 
     def onTrigger(self):
-        flightTime = None
+        index = 0
         for model in self.__models:
             model.visible = True
             self.addModel(model)
             model.action('FlockAnimAction')()
             model.position = self.__getRandomSpawnPos()
             targetPos = self.__getRandomTargetPos(model.position)
-            dir = targetPos - model.position
-            dirLength = dir.length
+            direction = targetPos - model.position
+            dirLength = direction.length
             speed = self.speed * random.uniform(self.speedRandom[0], self.speedRandom[1])
-            if dirLength > 0:
-                velocity = dir * speed / dirLength
-            else:
-                velocity = Math.Vector3(0, speed, 0)
-            flightTime = dirLength / velocity.length
-            motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
-            model.addMotor(motor)
-
-        if flightTime is not None and self.__models:
-            self.delayCallback(flightTime, self.__onFlightEnd)
-            self._addSound(self.__models[0], self.flightSound)
-        return
-
-    def __onFlightEnd(self):
-        self._delSound()
-        for model in self.models:
-            model.motors = ()
-            model.position = self.position
-            model.visible = False
-            self.delModel(model)
+            if dirLength > 0.0:
+                velocity = direction * speed / dirLength
+                velocityLen = velocity.length
+                if velocityLen > 0.0:
+                    flightTime = dirLength / velocityLen
+                    motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
+                    model.addMotor(motor)
+                    self.delayCallback(flightTime, partial(self.__removeModel, model))
+                    if index == 0:
+                        self._addSound(model, self.flightSound)
+                    index += 1

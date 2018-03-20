@@ -2,14 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
 import Event
-from gui.ClientUpdateManager import g_clientUpdateManager
-from helpers import dependency
-from helpers import i18n, time_utils
 from gui import makeHtmlString
-from gui.shared import events
-from gui.shared.money import Currency
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.shared import events
+from helpers import dependency
+from helpers import i18n, time_utils
 from skeletons.gui.shared import IItemsCache
 I18N_PRICE_KEY = '{0:>s}/messagePrice'
 I18N_TITLE_KEY = '{0:>s}/title'
@@ -84,12 +83,13 @@ class ConfirmDialogButtons(InfoDialogButtons):
 
 class I18nInfoDialogButtons(ISimpleDialogButtonsMeta):
 
-    def __init__(self, i18nKey='common'):
+    def __init__(self, i18nKey='common', buttonID=DIALOG_BUTTON_ID.CLOSE):
         super(I18nInfoDialogButtons, self).__init__()
         self._i18nKey = i18nKey
+        self._buttonID = buttonID
 
     def getLabels(self):
-        return [{'id': DIALOG_BUTTON_ID.CLOSE,
+        return [{'id': self._buttonID,
           'label': _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)),
           'focused': True}]
 
@@ -104,8 +104,8 @@ class I18nConfirmDialogButtons(I18nInfoDialogButtons):
     def getLabels(self):
         return [self.__getButtonInfoObject(DIALOG_BUTTON_ID.SUBMIT, _getDialogStr(I18N_SUBMIT_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.SUBMIT if self._focusedIndex is not None else True), self.__getButtonInfoObject(DIALOG_BUTTON_ID.CLOSE, _getDialogStr(I18N_CANCEL_KEY.format(self._i18nKey)), self._focusedIndex == DIALOG_BUTTON_ID.CLOSE if self._focusedIndex is not None else False)]
 
-    def __getButtonInfoObject(self, id, label, focused):
-        return {'id': id,
+    def __getButtonInfoObject(self, buttonID, label, focused):
+        return {'id': buttonID,
          'label': label,
          'focused': focused}
 
@@ -127,10 +127,7 @@ class SimpleDialogMeta(ISimpleDialogMeta):
         return self._message
 
     def getButtonLabels(self):
-        result = []
-        if self._buttons is not None:
-            result = self._buttons.getLabels()
-        return result
+        return self._buttons.getLabels() if self._buttons is not None else []
 
     def getTimer(self):
         return self._timer
@@ -173,12 +170,10 @@ class I18nDialogMeta(SimpleDialogMeta):
         return result
 
     def getButtonLabels(self):
-        labels = []
         if self._buttons is not None:
-            labels = self._buttons.getLabels()
-        elif self._meta is not None:
-            labels = self._meta.getButtonLabels()
-        return labels
+            return self._buttons.getLabels()
+        else:
+            return self._meta.getButtonLabels() if self._meta is not None else []
 
     def getTimer(self):
         result = self._timer

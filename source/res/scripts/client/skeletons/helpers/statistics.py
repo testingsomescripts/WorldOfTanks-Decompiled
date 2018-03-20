@@ -23,8 +23,17 @@ class IStatisticsCollector(object):
     def update(self):
         raise NotImplementedError
 
+    def needCollectSystemData(self, value):
+        raise NotImplementedError
+
+    def needCollectSessionData(self, value):
+        raise NotImplementedError
+
     def getStatistics(self, andStop=True):
         raise NotImplementedError
 
     def noteHangarLoadingState(self, state, initialState=False, showSummaryNow=False):
+        raise NotImplementedError
+
+    def noteLastArenaData(self, arenaTypeID, arenaUniqueID, arenaTeam):
         raise NotImplementedError

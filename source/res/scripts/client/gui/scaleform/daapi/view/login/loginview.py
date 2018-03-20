@@ -6,6 +6,7 @@ import weakref
 from collections import defaultdict, namedtuple
 import WWISE
 import BigWorld
+import Windowing
 import ResMgr
 import ScaleformFileLoader
 import Settings
@@ -16,7 +17,7 @@ from adisp import process
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
 from gui import DialogsInterface, GUI_SETTINGS, Scaleform
-from gui.Scaleform import getPathForFlash, SCALEFORM_STARTUP_VIDEO_MASK, DEFAULT_VIDEO_BUFFERING_TIME
+from gui.Scaleform import SCALEFORM_SWF_PATH_V3, SCALEFORM_STARTUP_VIDEO_MASK
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
@@ -29,7 +30,7 @@ from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
-from helpers import getFullClientVersion, dependency
+from helpers import getFullClientVersion, dependency, uniprof
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
 from helpers.time_utils import makeLocalServerTime
@@ -40,7 +41,7 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
 from shared_utils import nextTick
 
-class INVALID_FIELDS:
+class INVALID_FIELDS(object):
     ALL_VALID = 0
     LOGIN_INVALID = 1
     PWD_INVALID = 2
@@ -58,25 +59,6 @@ _LOGIN_VIDEO_FILE = SCALEFORM_STARTUP_VIDEO_MASK % '_login.usm'
 _g__WGCloginEnabled = True
 
 class BackgroundMode(object):
-    """
-    This class responsible for changing graphics and sound states on login page.
-    It load and save last state of mode to preferences.xml
-    
-    Description of section with background mode data of login page in preferences.xml
-    <root>
-        ...
-        <scriptsPreferences>
-            ...
-            <videoBufferingTime/> - float(0.0-...), time for buffering of video, 0.0 - full streaming without buffering
-            <loginPage>
-                <lastBgMode/> - int(_BG_MODE_VIDEO=0/_BG_MODE_WALLPAPER=1),
-                <mute/> - bool(mute=true/unmute=false),
-                <showLoginWallpaper/> - bool(show=true/hide=false),
-                <lastLoginBgImage/> - string, name last showed wallpaper
-            </loginPage>
-        </scriptsPreferences>
-    </root>
-    """
 
     def __init__(self, view):
         self.__isSoundMuted = False
@@ -86,32 +68,42 @@ class BackgroundMode(object):
         self.__lastImage = ''
         self.__show = True
         self.__switchButton = True
-        self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, DEFAULT_VIDEO_BUFFERING_TIME)
+        self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, 0.5)
         self.__images = self.__getWallpapersList()
+        self.__isWindowActive = True
+        self.__isWindowInSizeMove = False
+        self.__inSwitchToMode = None
+        return
 
     def showWallpaper(self, showSwitchButton):
         self.__view.as_showWallpaperS(self.__show, self.__randomImage(), showSwitchButton, self.__isSoundMuted)
-        WWISE.WW_eventGlobalSync('loginscreen_ambient_start')
+        WWISE.WW_eventGlobal('loginscreen_ambient_start')
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
 
     def show(self):
+        files = ['/'.join((SCALEFORM_SWF_PATH_V3, _LOGIN_VIDEO_FILE))]
+        ScaleformFileLoader.enableStreaming(files)
         self.__loadFromPrefs()
         if self.__bgMode == _BG_MODE_VIDEO:
             self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
         else:
             self.showWallpaper(self.__switchButton)
+        self.__isWindowActive = Windowing.isActive()
+        self.__isWindowInSizeMove = Windowing.isInSizeMove()
+        self.__applyWindowParams()
 
     def hide(self):
-        WWISE.WW_eventGlobalSync(('loginscreen_music_stop_longfade', 'loginscreen_ambient_stop')[self.__bgMode])
+        ScaleformFileLoader.disableStreaming()
         self.__saveToPrefs()
 
     def toggleMute(self, value):
         self.__isSoundMuted = value
-        WWISE.WW_eventGlobalSync(('loginscreen_unmute', 'loginscreen_mute')[self.__isSoundMuted])
+        WWISE.WW_eventGlobal(('loginscreen_unmute', 'loginscreen_mute')[self.__isSoundMuted])
 
     def fadeSound(self):
-        WWISE.WW_eventGlobalSync(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
+        WWISE.WW_eventGlobal(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
+        self.__inSwitchToMode = _BG_MODE_VIDEO if self.__bgMode != _BG_MODE_VIDEO else _BG_MODE_WALLPAPER
 
     def switch(self):
         if self.__bgMode != _BG_MODE_VIDEO:
@@ -120,14 +112,38 @@ class BackgroundMode(object):
         else:
             self.__bgMode = _BG_MODE_WALLPAPER
             self.__view.as_showWallpaperS(self.__show, self.__randomImage(), self.__switchButton, self.__isSoundMuted)
-        WWISE.WW_eventGlobalSync(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
+        self.__inSwitchToMode = None
+        WWISE.WW_eventGlobal(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
+        self.__applyWindowParams()
+        return
 
     def startVideoSound(self):
-        WWISE.WW_eventGlobalSync('loginscreen_music_start')
+        WWISE.WW_eventGlobal('loginscreen_music_start')
         if self.__isSoundMuted:
-            WWISE.WW_eventGlobalSync('loginscreen_mute')
+            WWISE.WW_eventGlobal('loginscreen_mute')
+        self.__applyWindowParams()
+
+    def onWindowSizeMove(self, isInSizeMove):
+        if self.__isWindowInSizeMove != isInSizeMove:
+            self.__isWindowInSizeMove = isInSizeMove
+            self.__applyWindowParams()
+
+    def onWindowActivation(self, isActive):
+        if self.__isWindowActive != isActive:
+            self.__isWindowActive = isActive
+            self.__applyWindowParams()
+
+    def __applyWindowParams(self):
+        if self.__inSwitchToMode == _BG_MODE_VIDEO or not self.__inSwitchToMode and self.__bgMode == _BG_MODE_VIDEO:
+            isActive = self.__isWindowActive and not self.__isWindowInSizeMove
+            if isActive:
+                self.__view.as_resumePlaybackS()
+                WWISE.WW_eventGlobal('loginscreen_music_resume')
+            else:
+                self.__view.as_pausePlaybackS()
+                WWISE.WW_eventGlobal('loginscreen_music_pause')
 
     def __loadFromPrefs(self):
         if self.__userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
@@ -206,6 +222,7 @@ class LoginView(LoginPageMeta):
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
         BigWorld.WGC_disable()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+        self.statsCollector.needCollectSystemData(True)
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         self.__customLoginStatus = None
         result = self.__validateCredentials(userName.lower().strip(), password.strip(), bool(self.loginManager.getPreference('token2')))
@@ -230,7 +247,7 @@ class LoginView(LoginPageMeta):
 
     def __wgcCheck(self):
         if BigWorld.WGC_processingState() == constants.WGC_STATE.WAITING_TOKEN_1:
-            nextTick(lambda : self.__wgcCheck())()
+            nextTick(self.__wgcCheck)()
         elif BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
             self.__wgcConnect()
         else:
@@ -244,6 +261,7 @@ class LoginView(LoginPageMeta):
         else:
             serverName = serverName['data']
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+            self.statsCollector.needCollectSystemData(True)
             self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
             self.__customLoginStatus = None
             self.loginManager.initiateLogin('', '', serverName, False, False)
@@ -297,12 +315,16 @@ class LoginView(LoginPageMeta):
     def musicFadeOut(self):
         self.__backgroundMode.fadeSound()
 
+    def videoLoadingFailed(self):
+        self.__backgroundMode.showWallpaper(False)
+
     def setMute(self, value):
         self.__backgroundMode.toggleMute(value)
 
     def onVideoLoaded(self):
         self.__backgroundMode.startVideoSound()
 
+    @uniprof.regionDecorator(label='offline.login', scope='enter')
     def _populate(self):
         View._populate(self)
         self._serversDP = ServersDataProvider()
@@ -315,9 +337,10 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onAccountShowGUI += self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
+        Windowing.addWindowActivationHandler(self.__onWindowActivation)
+        Windowing.addWindowSizeMoveHandler(self.__onWindowSizeMove)
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
-        ScaleformFileLoader.enableStreaming([getPathForFlash(_LOGIN_VIDEO_FILE)])
         self.__backgroundMode.show()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.1, self.__checkUserInputState)
@@ -326,8 +349,8 @@ class LoginView(LoginPageMeta):
         self._showForm()
         return
 
+    @uniprof.regionDecorator(label='offline.login', scope='exit')
     def _dispose(self):
-        ScaleformFileLoader.disableStreaming()
         self.__backgroundMode.hide()
         if self.__capsLockCallbackID is not None:
             BigWorld.cancelCallback(self.__capsLockCallbackID)
@@ -336,6 +359,8 @@ class LoginView(LoginPageMeta):
         self.connectionMgr.onKickWhileLoginReceived -= self._onKickedWhileLogin
         self.connectionMgr.onQueued -= self._onHandleQueue
         self._servers.onServersStatusChanged -= self.__updateServersList
+        Windowing.removeWindowActivationHandler(self.__onWindowActivation)
+        Windowing.removeWindowSizeMoveHandler(self.__onWindowSizeMove)
         g_playerEvents.onAccountShowGUI -= self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
@@ -346,6 +371,12 @@ class LoginView(LoginPageMeta):
         self._entityEnqueueCancelCallback = None
         View._dispose(self)
         return
+
+    def __onWindowActivation(self, isActive):
+        self.__backgroundMode.onWindowActivation(isActive)
+
+    def __onWindowSizeMove(self, isInSizeMove):
+        self.__backgroundMode.onWindowSizeMove(isInSizeMove)
 
     def _showForm(self):
         self.as_showSimpleFormS(False, None)
@@ -393,7 +424,7 @@ class LoginView(LoginPageMeta):
         if not self.__loginQueueDialogShown:
             self._clearLoginView()
             self.__loginQueueDialogShown = True
-            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, View.alias, WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoginEventEx(LoginEventEx.SET_LOGIN_QUEUE, '', WAITING.TITLES_QUEUE, message, cancelBtnLbl, showAutoSearchBtn), EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
             self.addListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)
         else:
@@ -446,8 +477,6 @@ class LoginView(LoginPageMeta):
         return
 
     def _dropLoginQueue(self, loginStatus):
-        """Safely drop login queue considering login status and current state of login queue.
-        """
         if loginStatus != LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED and self.__loginRetryDialogShown:
             self.__closeLoginQueueDialog()
 
@@ -490,18 +519,18 @@ class LoginView(LoginPageMeta):
 
     def __showLoginRetryDialog(self, data):
         self._clearLoginView()
-        self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, View.alias, data['waitingOpen'], data['message'], data['waitingClose'], False), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(LoginEventEx(LoginEventEx.SET_AUTO_LOGIN, '', data['waitingOpen'], data['message'], data['waitingClose'], False), EVENT_BUS_SCOPE.LOBBY)
         self.addListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = True
 
     def __closeLoginRetryDialog(self, event=None):
         self.connectionMgr.stopRetryConnection()
-        self.fireEvent(LoginEvent(LoginEventEx.CANCEL_LGN_QUEUE, View.alias))
+        self.fireEvent(LoginEvent(LoginEventEx.CANCEL_LGN_QUEUE, ''))
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self.__closeLoginRetryDialog, EVENT_BUS_SCOPE.LOBBY)
         self.__loginRetryDialogShown = False
 
     def __closeLoginQueueDialog(self):
-        self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, View.alias))
+        self.fireEvent(LoginEvent(LoginEvent.CANCEL_LGN_QUEUE, ''))
         g_preDefinedHosts.resetQueryResult()
         self.removeListener(LoginEventEx.ON_LOGIN_QUEUE_CLOSED, self._onLoginQueueClosed, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(LoginEventEx.SWITCH_LOGIN_QUEUE_TO_AUTO, self._onLoginQueueSwitched, EVENT_BUS_SCOPE.LOBBY)

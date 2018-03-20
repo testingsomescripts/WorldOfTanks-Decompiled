@@ -3,9 +3,9 @@
 from functools import partial
 import BigWorld
 import account_helpers
-from adisp import process
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
@@ -17,18 +17,15 @@ from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx, Se
 from gui.prb_control.entities.training.legacy.limits import TrainingLimits
 from gui.prb_control.entities.training.legacy.permissions import TrainingPermissions
 from gui.prb_control.entities.training.legacy.requester import TrainingListRequester
-from gui.prb_control.items import prb_items, SelectResult
+from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
-from gui.prb_control.settings import PREBATTLE_SETTING_NAME
+from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from prebattle_shared import decodeRoster
 
 class TrainingEntryPoint(LegacyEntryPoint):
-    """
-    Training entry point
-    """
 
     def __init__(self):
         super(TrainingEntryPoint, self).__init__(FUNCTIONAL_FLAG.TRAINING)
@@ -56,18 +53,12 @@ class TrainingEntryPoint(LegacyEntryPoint):
 
 
 class TrainingIntroEntryPoint(LegacyIntroEntryPoint):
-    """
-    Trainings intro entry point class
-    """
 
     def __init__(self):
         super(TrainingIntroEntryPoint, self).__init__(FUNCTIONAL_FLAG.TRAINING | FUNCTIONAL_FLAG.LOAD_PAGE, PREBATTLE_TYPE.TRAINING)
 
 
 class TrainingIntroEntity(LegacyIntroEntity):
-    """
-    Trainings intro entity class
-    """
 
     def __init__(self):
         super(TrainingIntroEntity, self).__init__(FUNCTIONAL_FLAG.TRAINING, PREBATTLE_TYPE.TRAINING, TrainingListRequester())
@@ -103,9 +94,6 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
 
 class TrainingEntity(LegacyEntity):
-    """
-    Training entity class
-    """
     __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
      VIEW_ALIAS.LOBBY_INVENTORY,
      VIEW_ALIAS.LOBBY_STORE,
@@ -128,9 +116,6 @@ class TrainingEntity(LegacyEntity):
 
     @legacy_storage_getter(PREBATTLE_TYPE.TRAINING)
     def storage(self):
-        """
-        Trainings data storage getter property
-        """
         return None
 
     def init(self, clientPrb=None, ctx=None):
@@ -181,7 +166,7 @@ class TrainingEntity(LegacyEntity):
         hasTeam2 = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in result
         hasUnassigned = PREBATTLE_ROSTER.UNASSIGNED in result
         for key, roster in rosters.iteritems():
-            accounts = map(lambda accInfo: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=key, **accInfo[1]), roster.iteritems())
+            accounts = [ prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=key, **accInfo[1]) for accInfo in roster.iteritems() ]
             team, assigned = decodeRoster(key)
             if assigned:
                 if hasTeam1 and team == 1:
@@ -220,12 +205,6 @@ class TrainingEntity(LegacyEntity):
         super(TrainingEntity, self).prb_onPlayerStateChanged(pID, roster)
 
     def changeSettings(self, ctx, callback=None):
-        """
-        Sets training settings
-        Args:
-            ctx: settings request context
-            callback: operation callback
-        """
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_SETTINGS:
             LOG_ERROR('Invalid context for request changeSettings', ctx)
             if callback is not None:
@@ -294,12 +273,6 @@ class TrainingEntity(LegacyEntity):
             return
 
     def changeUserObserverStatus(self, ctx, callback=None):
-        """
-        Sets player as observer/not observer
-        Args:
-            ctx: observer request context
-            callback: operation callback
-        """
         if ctx.isObserver():
             self._setPlayerReady(ctx, callback=callback)
         else:
@@ -307,12 +280,6 @@ class TrainingEntity(LegacyEntity):
         self._cooldown.process(REQUEST_TYPE.CHANGE_USER_STATUS)
 
     def changeArenaVoip(self, ctx, callback=None):
-        """
-        Changes training VOIP settings
-        Args:
-            ctx: VOIP settings request context
-            callback: operation callback
-        """
         setting = self._settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS]
         if ctx.getChannels() == setting:
             if callback is not None:
@@ -334,37 +301,30 @@ class TrainingEntity(LegacyEntity):
                     callback(False)
             return
 
+    def _setPlayerReady(self, ctx, callback=None):
+        if g_currentVehicle.isObserver():
+            if not self._processValidationResult(ctx, ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)):
+                if callback:
+                    callback(False)
+                return
+        super(TrainingEntity, self)._setPlayerReady(ctx, callback)
+
     def _createActionsValidator(self):
         return TrainingActionsValidator(self)
 
     def __enterTrainingRoom(self, isInitial=False):
-        """
-        Routine must be invoked to enter training room as player
-        """
         if self.storage.isObserver:
             self.changeUserObserverStatus(SetPlayerObserverStateCtx(True, True, isInitial=isInitial, waitingID='prebattle/change_user_status'), self.__onPlayerReady)
         else:
             self.setPlayerState(SetPlayerStateCtx(True, isInitial=isInitial, waitingID='prebattle/player_ready'), self.__onPlayerReady)
 
     def __onPlayerReady(self, result):
-        """
-        Callback for player set ready opertaion
-        Args:
-            result: was operation successful
-        """
         if result:
             g_eventDispatcher.loadTrainingRoom()
         else:
             g_eventDispatcher.loadHangar()
 
     def __onSettingChanged(self, code, record='', callback=None):
-        """
-        Listener for training settings update
-        Args:
-            code: result code
-            record: record name that was changed
-            callback: operation's callback
-        """
         if code < 0:
             LOG_ERROR('Server return error for training change', code, record)
             if callback is not None:
@@ -378,7 +338,4 @@ class TrainingEntity(LegacyEntity):
             return
 
     def __handleViewLoad(self, event):
-        """
-        Listener for view load event
-        """
         self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
