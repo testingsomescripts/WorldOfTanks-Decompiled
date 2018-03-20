@@ -21,11 +21,12 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 
 ### Pull requesting to the repository (recommendations)
 1. You need to clone the master-branch if you adding a new client or branch with the exist client otherwise
-2. If you adding a new client, then create a new branch with the name as client main version: **"X.X.X"** for release and **"X.X.X_CT"** or **"X.X.X_ST"** for the test clients (Description **"WOT X.X.X #YYY"**)
+2. If you adding a new client, then create a new branch with the name as client main version **"X.X.X"** 
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
 5. Create an **zip**-archive by running the console program **Zip-Packer.cmd** (required **7z.exe**)
 6. Clean the existing **"zip"** directory and move to it the new archive
-7. Create a commit and offer a **"Pull request"** in the right branch (named as **"X.X.X: ... #YYY"**)
+7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"** for realease client and **"X.X.X_CT: ..."** or **"X.X.X_ST: ..."** for the test clients
+8. Offer a **"Pull request"** in the right branch
 
 **Note:** Requests with the test clients to the master-branch will be rejected! Main branch only for releases.
