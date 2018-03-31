@@ -1,7 +1,7 @@
 ﻿# WorldOfTanks-Decompiled
 Unpacked and decompiled files of **WorldOfTanks**.
 
-Each client has its own branch. In the master-branch is the latest release version of the client. The branches of test clients are not released to master-branch until the time will not come first release. Micropatches that are released after the first release of the client are added only to its branch, in the master-branch is not added. This allows you to easily track all the stages of the release of the game's customers.
+Each client has its own [**branch**](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled/branches/active). In the master-branch is the latest release version of the client. The branches of test clients are not released to master-branch until the time will not come first release. Micropatches that are released after the first release of the client are added only to its branch, in the master-branch is not added. This allows you to easily track all the stages of the release of the game's customers.
 
 ### Consist
 * Python **pyc**-files since client version **0.9.2**
