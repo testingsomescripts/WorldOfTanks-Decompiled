@@ -26,7 +26,7 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 2. If you adding a new client, then create a new branch with the name as client main version **"X.X.X"** (do not use **"CT"** or **"ST"** unless it's a not separate special branch)
 3. Clean the existing **"source"** directory and put new files there using the algorithm above
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
-5. Create an **zip**-archive by running the console program **Zip-Packer.cmd**
+5. Create an **zip**-archive by running the console program **Zip-Packer.cmd** (required **7z.exe** on your PC)
 6. Clean the existing **"zip"** directory and move to it the new archive
 7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"**
 8. Offer a **"Pull request"** in the right branch
