@@ -910,6 +910,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_21_BATTLESCOUNT = '#quests:details/dossier/21/battlesCount'
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
+    DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1875,7 +1876,8 @@ class QUESTS(object):
      DETAILS_DOSSIER_20_BATTLESCOUNT,
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
-     DETAILS_DOSSIER_24_BATTLESCOUNT)
+     DETAILS_DOSSIER_24_BATTLESCOUNT,
+     DETAILS_DOSSIER_27_BATTLESCOUNT)
 
     @classmethod
     def getTokenTitle(cls, style):

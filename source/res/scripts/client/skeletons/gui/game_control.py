@@ -697,3 +697,68 @@ class IBootcampController(IGameController):
 
     def finishBootcamp(self):
         raise NotImplementedError
+
+
+class IEpicBattleMetaGameController(IGameController):
+    onUpdated = None
+    onPrimeTimeStatusUpdated = None
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isInPrimeTime(self):
+        raise NotImplementedError
+
+    def getMaxPlayerLevel(self):
+        raise NotImplementedError
+
+    def getPointsProgessForLevel(self, level):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def hasAnySeason(self):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def getPointsForLevel(self, level):
+        raise NotImplementedError
+
+    def getLevelForPoints(self, points):
+        raise NotImplementedError
+
+    def getSkillInformation(self):
+        raise NotImplementedError
+
+    def getPlayerLevelInfo(self):
+        raise NotImplementedError
+
+    def getSkillPoints(self):
+        raise NotImplementedError
+
+    def getSkillLevels(self):
+        raise NotImplementedError
+
+    def getSelectedSkills(self, vehicleCD):
+        raise NotImplementedError
+
+    def increaseSkillLevel(self, skillID):
+        raise NotImplementedError
+
+    def changeEquippedSkills(self, skillIDArray, vehicleCD, callback=None):
+        raise NotImplementedError
+
+    def getAllUnlockedSkillLevels(self):
+        raise NotImplementedError
+
+    def getAllUnlockedSkillLevelsBySkillId(self):
+        raise NotImplementedError
+
+    def getSeasonEndTime(self):
+        raise NotImplementedError
+
+    def hasSuitableVehicles(self):
+        raise NotImplementedError

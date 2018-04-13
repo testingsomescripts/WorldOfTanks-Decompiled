@@ -9,7 +9,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.event_items import ActionData
 from gui.server_events.events_helpers import EventInfoModel
-from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
+from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
 from helpers import i18n, dependency, time_utils
@@ -90,7 +90,7 @@ class ActionInfo(EventInfoModel):
     def getIsNew(self):
         return quest_settings.isNewCommonEvent(self)
 
-    def getAutoDescription(self, useBigIco=False):
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
         discountValue = self._getAutoDescriptionData(useBigIco)
         return self._getShortDescription(self.discount.getParamName(), discount=discountValue)
 
@@ -189,28 +189,36 @@ class ActionInfo(EventInfoModel):
         return i18n.makeString(QUESTS.getActionDescription(formatter))
 
     @classmethod
-    def _formatPriceIcon(cls, item, useBigIco):
+    def _formatPriceIcon(cls, item, useBigIco, forNormalCard=False):
         if hasattr(item, 'buyPrices'):
             sellGold = item.buyPrices.itemPrice.price.gold
             sellCredits = item.buyPrices.itemPrice.price.credits
             if sellGold:
+                if forNormalCard:
+                    return formatGoldPriceNormalCard(sellGold)
                 if useBigIco:
                     return formatGoldPriceBig(sellGold)
                 return formatGoldPrice(sellGold)
             if sellCredits:
+                if forNormalCard:
+                    return formatCreditPriceNormalCard(sellCredits)
                 if useBigIco:
                     return formatCreditPriceBig(sellCredits)
                 return formatCreditPrice(sellCredits)
 
     @classmethod
-    def _formatRentPriceIcon(cls, item, useBigIco):
+    def _formatRentPriceIcon(cls, item, useBigIco, forNormalCard=False):
         if hasattr(item, 'minRentPrice'):
             rentPrice = item.minRentPrice.toDict()
             if rentPrice[Currency.GOLD]:
+                if forNormalCard:
+                    return formatGoldPriceNormalCard(rentPrice[Currency.GOLD])
                 if useBigIco:
                     return formatGoldPriceBig(rentPrice[Currency.GOLD])
                 return formatGoldPrice(rentPrice[Currency.GOLD])
             if rentPrice[Currency.CREDITS]:
+                if forNormalCard:
+                    return formatCreditPriceNormalCard(rentPrice[Currency.CREDITS])
                 if useBigIco:
                     return formatCreditPriceBig(rentPrice[Currency.CREDITS])
                 return formatCreditPrice(rentPrice[Currency.CREDITS])
@@ -345,15 +353,23 @@ class VehPriceActionInfo(ActionInfo):
     def getTriggerChainID(self):
         pass
 
-    def getAutoDescription(self, useBigIco=False):
-        vehs = self._getAdditionalDescriptionData(useBigIco)
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
+        vehs = self._getAdditionalDescriptionData(useBigIco, forNormalCard=forNormalCard)
         vehsLen = len(vehs)
         if vehsLen > 1:
+            discValue = formatPercentValue(vehs[0]['discount'])
             paramKey = 'two' if vehsLen == 2 else 'more'
-            paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
-            values = {'vehicles': '{}, {}'.format(vehs[0]['title'], vehs[1]['title']),
-             'discount': formatPercentValue(vehs[0]['discount'])}
-            return self._getShortDescription(paramName, **values)
+            vehicles = '{}, {}'.format(vehs[0]['title'], vehs[1]['title'])
+        elif vehsLen == 1:
+            discValue = vehs[0]['price']
+            paramKey = 'one'
+            vehicles = vehs[0]['title']
+        else:
+            return ''
+        values = {'vehicles': vehicles,
+         'discount': discValue}
+        paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
+        return self._getShortDescription(paramName, **values)
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
         vehiclesCount = len(self._getPackedDiscounts())
@@ -380,22 +396,22 @@ class VehPriceActionInfo(ActionInfo):
         items = self._getAdditionalDescriptionData(useBigIco=True, addVehInfo=True)
         return self.__getCardWithTTCForVehicle(items[0]) if len(items) == 1 else None
 
-    def _getAdditionalDescriptionData(self, useBigIco=False, addVehInfo=False):
+    def _getAdditionalDescriptionData(self, useBigIco=False, addVehInfo=False, forNormalCard=False):
         result = []
         for item in self._sortVehicles():
             veh = item.discountName
             level = formatVehicleLevel(i18n.makeString(TOOLTIPS.level(veh.level)))
             item = {'title': '{} {}'.format(level, veh.shortUserName),
              'discount': item.discountValue,
-             'price': self._getPrice(veh, useBigIco)}
+             'price': self._getPrice(veh, useBigIco, forNormalCard)}
             if addVehInfo:
                 item.update({'veh': veh})
             result.append(item)
 
         return result
 
-    def _getPrice(self, veh, useBigIco):
-        return self._formatPriceIcon(veh, useBigIco)
+    def _getPrice(self, veh, useBigIco, forNormalCard=False):
+        return self._formatPriceIcon(veh, useBigIco, forNormalCard)
 
     def _sortVehicles(self):
 
@@ -472,11 +488,11 @@ class VehPriceActionInfo(ActionInfo):
             currency = price.getCurrency()
             buyPriceValue = price.get(currency)
             oldPriceValue = defaultPrice.get(currency)
-            block.append(self.__makePriceBlock(oldPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=0, valueWidth=valueWidth))
-            block.append(self.__makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=actionPrc, valueWidth=valueWidth))
+            block.append(self._makePriceBlock(oldPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=0, valueWidth=valueWidth))
+            block.append(self._makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=actionPrc, valueWidth=valueWidth))
         return [formatters.packBuildUpBlockData(block, gap=2, padding=formatters.packPadding(top=-2))]
 
-    def __makePriceBlock(self, price, currencySetting, percent=0, valueWidth=-1):
+    def _makePriceBlock(self, price, currencySetting, percent=0, valueWidth=-1):
         _int = BigWorld.wg_getIntegralFormat
         hasAction = percent != 0
         settings = _getCurrencySetting(currencySetting)
@@ -491,8 +507,11 @@ class VehPriceActionInfo(ActionInfo):
                 else:
                     newPrice = Money(credits=price)
                 return formatters.packActionTextParameterBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_ACTIONPRICE, value=text_styles.expText(percent))), value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency(), valueWidth=valueWidth)
-            return formatters.packTextParameterWithIconBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_DEFAULTPRICE)), value=valueFormatted, icon=settings.frame, valueWidth=valueWidth)
+            return formatters.packTextParameterWithIconBlockData(name=text_styles.main(self._getDefaultPriceLabelConst()), value=valueFormatted, icon=settings.frame, valueWidth=valueWidth)
             return
+
+    def _getDefaultPriceLabelConst(self):
+        return TOOLTIPS.ACTIONPRICE_BUYPRICE_DEFAULTPRICE
 
 
 class VehRentActionInfo(VehPriceActionInfo):
@@ -500,8 +519,8 @@ class VehRentActionInfo(VehPriceActionInfo):
     def getTriggerChainID(self):
         pass
 
-    def getAutoDescription(self, useBigIco=False):
-        vehs = self._getAdditionalDescriptionData(useBigIco)
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
+        vehs = self._getAdditionalDescriptionData(useBigIco, forNormalCard=forNormalCard)
         vehsLen = len(vehs)
         if vehsLen > 1:
             rentDiscount = formatPercentValue(vehs[0]['discount'])
@@ -524,7 +543,7 @@ class VehRentActionInfo(VehPriceActionInfo):
     def getTableData(self):
         return None
 
-    def _getPrice(self, veh, useBigIco):
+    def _getPrice(self, veh, useBigIco, forNormalCard=False):
         return self._formatRentPriceIcon(veh, useBigIco)
 
     def _calcDiscountValue(self, value, default):
@@ -541,7 +560,7 @@ class VehRentActionInfo(VehPriceActionInfo):
                 price = itemPrice.price
                 currency = price.getCurrency()
                 buyPriceValue = price.get(currency)
-                block.append(self.__makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), valueWidth=valueWidth))
+                block.append(self._makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=itemPrice.getActionPrc(), valueWidth=valueWidth))
                 for rent in rentPackages:
                     defaultPrice = rent.get('defaultRentPrice')
                     defaultPriceValue = defaultPrice.get(defaultPrice.getCurrency())
@@ -589,14 +608,8 @@ class VehRentActionInfo(VehPriceActionInfo):
                 text = text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_RENTPRICE_DAYS, days=days, value=text_styles.expText(percent)))
             return formatters.packActionTextParameterBlockData(name=text, value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency())
 
-    def __makePriceBlock(self, price, currencySetting, percent=0, valueWidth=-1):
-        _int = BigWorld.wg_getIntegralFormat
-        settings = _getCurrencySetting(currencySetting)
-        if settings is None:
-            return
-        else:
-            valueFormatted = settings.textStyle(_int(price))
-            return formatters.packTextParameterWithIconBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_RENTPRICE_DEFAULTPRICE)), value=valueFormatted, icon=settings.frame, valueWidth=valueWidth)
+    def _getDefaultPriceLabelConst(self):
+        return TOOLTIPS.ACTIONPRICE_RENTPRICE_DEFAULTPRICE
 
 
 class EquipmentActionInfo(ActionInfo):

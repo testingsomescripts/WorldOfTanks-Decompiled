@@ -1985,6 +1985,54 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <priceGroup>	italy marathon style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	italy	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	italy	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	138	</id>
+      <userString>	#vehicle_customization:special_style/italian_marathion_01	</userString>
+      <texture>	gui/maps/vehicles/styles/italian_marathion_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	553	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	543	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -2383,7 +2431,7 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	23feb style	</priceGroup>
+    <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -2397,17 +2445,23 @@
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	137	</id>
-      <userString>	#vehicle_customization:special_style/23feb	</userString>
-      <texture>	gui/maps/vehicles/styles/23feb.png	</texture>
+      <id>	139	</id>
+      <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
       <season>	ALL	</season>
-      <historical>	true	</historical>
+      <historical>	false	</historical>
       <outfits>
         <outfit>
-          <season>	winter	</season>
+          <season>	ALL	</season>
+          <paints>
+            <item>
+              <id>	287	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
           <camouflages>
             <item>
-              <id>	534	</id>
+              <id>	557	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>
@@ -2415,24 +2469,48 @@
           </camouflages>
           <decals>
             <item>
-              <id>	195	</id>
-              <appliedTo>	192	</appliedTo>
+              <id>	545	</id>
+              <appliedTo>	48	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
-              <appliedTo>	3072	</appliedTo>
+              <id>	545	</id>
+              <appliedTo>	768	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
-              <appliedTo>	49152	</appliedTo>
+              <id>	545	</id>
+              <appliedTo>	12288	</appliedTo>
             </item>
           </decals>
         </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <priceGroup>	special style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	140	</id>
+      <userString>	#vehicle_customization:special_style/brw_winner	</userString>
+      <texture>	gui/maps/vehicles/styles/brw_winner.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <outfits>
         <outfit>
-          <season>	summer	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	533	</id>
+              <id>	558	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>
@@ -2440,46 +2518,30 @@
           </camouflages>
           <decals>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	192	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	3072	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	49152	</appliedTo>
             </item>
           </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	535	</id>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	192	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	3072	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	49152	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>
