@@ -170,8 +170,11 @@
       </memoryManager>
       <soundRender>
         <use_config>	false	</use_config>
-        <HDR_lower_threshold>	-50	</HDR_lower_threshold>
-        <max_voices>	120	</max_voices>
+        <HDR_lower_threshold>	-40	</HDR_lower_threshold>
+        <max_voices>	70	</max_voices>
+        <low_sample_rate>	false	</low_sample_rate>
+        <ambients>	true	</ambients>
+        <reverbs>	true	</reverbs>
       </soundRender>
       <voice_soundbanks>
         <project>
@@ -179,9 +182,6 @@
         </project>
       </voice_soundbanks>
       <SFX_soundbanks_loadonce>
-        <project>
-          <name>	plugin_media.bnk	</name>
-        </project>
         <project>
           <name>	ambient.pck	</name>
         </project>
@@ -256,6 +256,15 @@
         </project>
         <project>
           <name>	music_interactive.pck	</name>
+        </project>
+        <project>
+          <name>	plugin_media.bnk	</name>
+        </project>
+        <project>
+          <name>	epic_battle.bnk	</name>
+        </project>
+        <project>
+          <name>	epic_battle.pck	</name>
         </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>

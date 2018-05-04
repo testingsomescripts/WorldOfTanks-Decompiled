@@ -13,8 +13,14 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
     def toRentContinue(self):
         self._printOverrideError('toRentContinue')
 
+    def showBattleAbilityView(self):
+        self._printOverrideError('showBattleAbilityView')
+
     def as_setAmmoS(self, shells, stateWarning):
         return self.flashObject.as_setAmmo(shells, stateWarning) if self._isDAAPIInited() else None
 
     def as_updateVehicleStatusS(self, data):
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None
+
+    def as_showBattleAbilitiesAlertS(self, value):
+        return self.flashObject.as_showBattleAbilitiesAlert(value) if self._isDAAPIInited() else None

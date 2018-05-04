@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import BigWorld
 import ArenaType
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, GAMEPLAY_NAMES_WITH_DISABLED_QUESTS
 from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -91,6 +91,7 @@ class DECORATION_SIZES(CONST_CONTAINER):
     BONUS = '300x110'
     DISCOUNT = '480x280'
     DETAILS = '750x250'
+    DETAILS_EX = '750x264'
 
 
 class UiElement(object):
@@ -181,6 +182,18 @@ def formatPercentValue(value):
 
 def formatVehicleLevel(value):
     return makeHtmlString('html_templates:lobby/quests/actions', 'vehicleLevel', {'value': value})
+
+
+def formatCreditPriceNormalCard(value):
+    value = BigWorld.wg_getIntegralFormat(value)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
+    return '{} {}'.format(text_styles.creditsTextNormalCard(value), icon)
+
+
+def formatGoldPriceNormalCard(value):
+    value = BigWorld.wg_getIntegralFormat(value)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
+    return '{} {}'.format(text_styles.goldTextNormalCard(value), icon)
 
 
 def formatGoldPrice(value):
@@ -330,11 +343,13 @@ def packMissionkMapElement(arenaTypeID):
 
 def getMapName(arenaTypeID):
     if arenaTypeID not in ArenaType.g_cache:
-        return None
+        return
     else:
         arenaType = ArenaType.g_cache[arenaTypeID]
         if arenaType.gameplayName != 'ctf':
-            label = '%s (%s)' % (arenaType.name, i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName))
+            label = None
+            if arenaType.gameplayName not in GAMEPLAY_NAMES_WITH_DISABLED_QUESTS:
+                label = '%s (%s)' % (arenaType.name, i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName))
         else:
             label = arenaType.name
         return label

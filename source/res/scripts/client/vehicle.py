@@ -34,11 +34,13 @@ from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import appearance_cache
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 from vehicle_systems.stricted_loading import loadingPriority
+from soft_exception import SoftException
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
 _VALKYRIE_SOUND_MODES = {(6, 205): 'valkyrie1',
  (6, 206): 'valkyrie2'}
+_GIANLUIGI_BUFFON_VEH_NAME = 'italy:It13_Progetto_M35_mod_46'
 
 class _Vector4Provider(object):
     __slots__ = ('_v',)
@@ -106,6 +108,8 @@ class Vehicle(BigWorld.Entity):
         self.assembler = None
         _g_waitingVehicle[self.id] = weakref.ref(self)
         self.respawnCompactDescr = None
+        self.respawnOutfitCompactDescr = None
+        self.__prevStunInfo = 0.0
         return
 
     def __del__(self):
@@ -123,12 +127,17 @@ class Vehicle(BigWorld.Entity):
             respawnCompactDescr = self.respawnCompactDescr
             self.isCrewActive = True
             self.respawnCompactDescr = None
+        if self.respawnOutfitCompactDescr is not None:
+            outfitDescr = self.respawnOutfitCompactDescr
+            self.respawnOutfitCompactDescr = None
+        else:
+            outfitDescr = self.publicInfo.outfit
         if respawnCompactDescr is None and self.typeDescriptor is not None:
             return
         else:
             self.typeDescriptor = self.getDescr(respawnCompactDescr)
             forceReloading = respawnCompactDescr is not None
-            self.appearance, _, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo['outfit'], forceReloading)
+            self.appearance, _, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
             return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
@@ -140,19 +149,20 @@ class Vehicle(BigWorld.Entity):
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
 
     @staticmethod
-    def respawnVehicle(vID, compactDescr):
+    def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
         vehicleRef = _g_waitingVehicle.get(vID, None)
         if vehicleRef is not None:
             vehicle = vehicleRef()
             if vehicle is not None:
                 vehicle.respawnCompactDescr = compactDescr
-                if not BigWorld.entities.get(id):
+                vehicle.respawnOutfitCompactDescr = outfitCompactDescr
+                if not BigWorld.entities.get(vID):
                     LOG_ERROR('respawn vehicle: Vehicle ref is not None but entity does not exist anymore. Skip wg_respawn ')
                 else:
                     try:
                         vehicle.wg_respawn()
                     except Exception:
-                        LOG_ERROR('respawn vehicle: Vehicle ref is not None but failed to call respawn: ', id)
+                        LOG_ERROR('respawn vehicle: Vehicle ref is not None but failed to call respawn: ', vID)
 
         return
 
@@ -225,7 +235,10 @@ class Vehicle(BigWorld.Entity):
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
                     elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
                         if maxDamagedComponent == TankPartNames.CHASSIS:
-                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
+                            if damageFactor:
+                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
+                            else:
+                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
                         else:
                             eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
                     elif hasPiercedHit:
@@ -357,6 +370,61 @@ class Vehicle(BigWorld.Entity):
         if not self.isPlayerVehicle:
             self.onSiegeStateUpdated(self.siegeState, 0.0)
 
+    def set_inspiringEffect(self, prev=None):
+        if not self.isStarted or self.inspiringEffect == prev:
+            return
+        else:
+            data = self.inspiringEffect
+            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
+            if componentSystem is not None:
+                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
+                if equipmentComp is not None:
+                    if data:
+                        equipmentComp.updateInspiringSource(self.id, data.startTime, data.endTime, data.inactivationDelay, data.radius)
+                    else:
+                        equipmentComp.updateInspiringSource(self.id, None, None, None, None)
+            return
+
+    def set_inspired(self, prev=None):
+        if not self.isStarted or self.inspired == prev:
+            return
+        else:
+            data = self.inspired
+            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
+            if componentSystem is not None:
+                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
+                if equipmentComp is not None:
+                    if data is not None:
+                        equipmentComp.updateInspired(self.id, data.startTime, data.endTime, data.inactivationStartTime, data.inactivationEndTime)
+                    else:
+                        equipmentComp.updateInspired(self.id, None, None, None, None)
+            return
+
+    def __removeInspire(self):
+        if self.inspired or self.inspiringEffect:
+            componentSystem = self.guiSessionProvider.arenaVisitor.getComponentSystem()
+            if componentSystem is not None:
+                equipmentComp = getattr(componentSystem, 'arenaEquipmentComponent', None)
+                if equipmentComp is not None:
+                    equipmentComp.removeInspire(self.id)
+        return
+
+    def set_isSpeedCapturing(self, prev=None):
+        LOG_DEBUG('set_isSpeedCapturing ', self.isSpeedCapturing)
+        if not self.isPlayerVehicle:
+            ctrl = self.guiSessionProvider.shared.feedback
+            if ctrl is not None:
+                ctrl.invalidatePassiveEngineering(self.id, (True, self.isSpeedCapturing))
+        return
+
+    def set_isBlockingCapture(self, prev=None):
+        LOG_DEBUG('set_isBlockingCapture ', self.isBlockingCapture)
+        if not self.isPlayerVehicle:
+            ctrl = self.guiSessionProvider.shared.feedback
+            if ctrl is not None:
+                ctrl.invalidatePassiveEngineering(self.id, (False, self.isBlockingCapture))
+        return
+
     def onHealthChanged(self, newHealth, attackerID, attackReasonID):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
@@ -377,9 +445,10 @@ class Vehicle(BigWorld.Entity):
 
     def updateStunInfo(self):
         attachedVehicle = BigWorld.player().getVehicleAttached()
-        if attachedVehicle is None:
+        if attachedVehicle is None or self.__prevStunInfo == self.stunInfo:
             return
         else:
+            self.__prevStunInfo = self.stunInfo
             isAttachedVehicle = self.id == attachedVehicle.id
             if self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stunDuration = self.stunInfo - BigWorld.serverTime() if self.stunInfo else 0.0
@@ -454,7 +523,8 @@ class Vehicle(BigWorld.Entity):
     def onSiegeStateUpdated(self, newState, timeToNextMode):
         if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
             self.typeDescriptor.onSiegeStateChanged(newState)
-            self.appearance.onSiegeStateChanged(newState)
+            if self.isStarted:
+                self.appearance.onSiegeStateChanged(newState)
             if self.isPlayerVehicle:
                 inputHandler = BigWorld.player().inputHandler
                 inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
@@ -497,7 +567,7 @@ class Vehicle(BigWorld.Entity):
 
     def startVisual(self):
         if self.isStarted:
-            raise UserWarning('Vehicle is already started')
+            raise SoftException('Vehicle is already started')
         avatar = BigWorld.player()
         self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
         self.appearance.setVehicle(self)
@@ -519,6 +589,12 @@ class Vehicle(BigWorld.Entity):
         self.guiSessionProvider.startVehicleVisual(self.proxy, True)
         if self.stunInfo > 0.0:
             self.updateStunInfo()
+        self.set_inspiringEffect()
+        self.set_inspired()
+        if self.isSpeedCapturing:
+            self.set_isSpeedCapturing()
+        if self.isBlockingCapture:
+            self.set_isBlockingCapture()
         if not self.isAlive():
             self.__onVehicleDeath(True)
         if self.isTurretMarkedForDetachment:
@@ -549,6 +625,10 @@ class Vehicle(BigWorld.Entity):
                 SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
                 SoundGroups.g_instance.soundModes.setMode('sabaton')
                 return
+            if nationID == nations.INDICES['italy'] and tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, _GIANLUIGI_BUFFON_VEH_NAME):
+                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
+                SoundGroups.g_instance.soundModes.setMode('buffon')
+                return
             if vehicleTypeID in _VALKYRIE_SOUND_MODES and self.id == player.playerVehicleID:
                 SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleTypeID])
                 return
@@ -562,7 +642,7 @@ class Vehicle(BigWorld.Entity):
 
     def stopVisual(self, showStipple=False):
         if not self.isStarted:
-            raise UserWarning('Vehicle is already stopped')
+            raise SoftException('Vehicle is already stopped')
         stippleModel = None
         showStipple = False
         if showStipple:
@@ -694,6 +774,7 @@ class Vehicle(BigWorld.Entity):
             if ctrl is not None:
                 ctrl.setVehicleState(self.id, _GUI_EVENT_ID.VEHICLE_DEAD, isDeadStarted)
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.VEHICLE_DESTROYED, vehicleId=self.id)
+        self.__removeInspire()
         bwfilter = self.filter
         if hasattr(bwfilter, 'velocityErrorCompensation'):
             bwfilter.velocityErrorCompensation = 100.0

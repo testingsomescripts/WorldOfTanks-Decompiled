@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DetachedTurret.py
+from soft_exception import SoftException
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
@@ -76,6 +77,15 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.collisions.connect(self.id, ColliderTypes.DYNAMIC_COLLIDER, collisionData)
         ComponentSystem.activate(self)
         return
+
+    def isAlive(self):
+        return False
+
+    def removeEdge(self):
+        pass
+
+    def drawEdge(self):
+        pass
 
     def __createAndAttachStickers(self):
         vehicle = BigWorld.entity(self.vehicleID)
@@ -351,7 +361,7 @@ class SynchronousDetachment(VehicleEnterTimer):
             import traceback
             lines = [ l for l in traceback.format_stack() if '__init__' in l ]
             if not lines:
-                raise Exception('SynchronousDetachment._directTick() requires to be called from __init__()')
+                raise SoftException('SynchronousDetachment._directTick() requires to be called from __init__()')
             self.transferInputs(vehicle, turret)
             turret.filter.ignoreNextReset = True
         self.__finished = True

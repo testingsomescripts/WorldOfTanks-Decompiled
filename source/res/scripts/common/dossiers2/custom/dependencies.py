@@ -283,6 +283,12 @@ def _set_RANKED_STATS_DEPENDENCIES():
      'droppedCapturePoints': [_updateMedalLavrinenko]})
 
 
+EPIC_BATTLE_STATS_DEPENDENCIES = {}
+
+def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
+    pass
+
+
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
@@ -918,3 +924,4 @@ def init():
     _set_FALLOUT_STATS_DEPENDENCIES()
     _set_RANKED_STATS_DEPENDENCIES()
     _set_RANKED_BADGES_DEPENDENCIES()
+    _set_EPIC_BATTLE_STATS_DEPENDENCIES()

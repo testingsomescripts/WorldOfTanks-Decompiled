@@ -12,6 +12,8 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
+from gui.shared import events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.shared.personality import ServicesLocator
@@ -117,7 +119,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'stats.tutorialsCompleted': self.update})
         if self._eventsController:
             self._eventsController.addListener(self)
-        self.app.onHangarHeaderToggle += self.update
+        self.addListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
 
     def _dispose(self):
@@ -128,13 +130,13 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._personalQuestID = None
         if self._eventsController:
             self._eventsController.removeListener(self)
-        self.app.onHangarHeaderToggle -= self.update
+        self.removeListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(HangarHeader, self)._dispose()
         return
 
     def _makeHeaderVO(self):
-        if self.app.hangarHeaderEnabled and self._currentVehicle.isPresent():
+        if self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
@@ -295,3 +297,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'eventQuestsTooltipIsSpecial': eventQuestsTooltipIsSpecial,
              'eventQuestsID': eventId}
             return res
+
+    def __onSetHangarHeaderEnabled(self, _=None):
+        self.update()

@@ -326,12 +326,11 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTimeSecs(self):
-        hasAutoReload = self.__hasAutoReload()
-        if self.__hasClipGun() and not hasAutoReload:
-            return None
-        else:
-            reloadTimes = self.__calcReloadTime()
-            return (_timesToSecs(max(reloadTimes)), _timesToSecs(min(reloadTimes))) if hasAutoReload else (_timesToSecs(first(reloadTimes)),)
+        return None if self.__hasClipGun() or self.__hasAutoReload() else (_timesToSecs(first(self.__calcReloadTime())),)
+
+    @property
+    def autoReloadTime(self):
+        return tuple(reversed(items_utils.getClipReloadTime(self._itemDescr, self.__factors))) if self.__hasAutoReload() else None
 
     @property
     def relativePower(self):
@@ -446,7 +445,17 @@ class VehicleParams(_ParameterBase):
         return item.stun.guaranteedStunDuration * item.stun.stunDuration if item.hasStun else None
 
     def getParamsDict(self, preload=False):
-        conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime', 'switchTime')
+        conditionalParams = ('turretYawLimits',
+         'gunYawLimits',
+         'clipFireRate',
+         'gunRotationSpeed',
+         'turretRotationSpeed',
+         'turretArmor',
+         'reloadTimeSecs',
+         'switchOnTime',
+         'switchOffTime',
+         'switchTime',
+         AUTO_RELOAD_PROP_NAME)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result
@@ -676,7 +685,7 @@ class GunParams(WeightedParam):
 
     @property
     def autoReloadTime(self):
-        return list(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME))) if self._vehicleDescr is not None else None
+        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME))) if self._vehicleDescr is not None else None
 
     def getParamsDict(self):
         stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)

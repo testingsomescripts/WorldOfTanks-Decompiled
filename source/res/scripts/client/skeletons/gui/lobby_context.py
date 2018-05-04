@@ -31,7 +31,7 @@ class ILobbyContext(object):
     def update(self, diff):
         raise NotImplementedError
 
-    def updateBattlesCount(self, battlesCount):
+    def updateBattlesCount(self, battlesCount, epicBattlesCount):
         raise NotImplementedError
 
     def updateGuiCtx(self, ctx):
@@ -79,4 +79,13 @@ class ILobbyContext(object):
         raise NotImplementedError
 
     def isHeaderNavigationPossible(self, callback=None):
+        raise NotImplementedError
+
+    def addFightButtonConfirmator(self, confirmator):
+        raise NotImplementedError
+
+    def deleteFightButtonConfirmator(self, confirmator):
+        raise NotImplementedError
+
+    def isFightButtonPressPossible(self, callback=None):
         raise NotImplementedError

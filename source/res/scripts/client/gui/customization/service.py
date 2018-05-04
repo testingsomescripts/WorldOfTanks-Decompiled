@@ -19,6 +19,7 @@ from items.vehicles import makeIntCompactDescrByID
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from items.components.c11n_constants import SeasonType
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -71,8 +72,12 @@ class _ServiceHelpersMixin(object):
         return g_currentVehicle.item.getCustomOutfit(season)
 
     def getCurrentStyle(self):
-        outfit = g_currentVehicle.item.getStyledOutfit(1)
+        outfit = g_currentVehicle.item.getStyledOutfit(SeasonType.WINTER)
         return self.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id) if outfit else None
+
+    def isCurrentStyleInstalled(self):
+        outfit = g_currentVehicle.item.getStyledOutfit(SeasonType.WINTER)
+        return outfit and outfit.isActive()
 
     @process('buyItem')
     def buyItems(self, item, count, vehicle=None):
@@ -108,6 +113,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._eventsManager = Event.EventManager()
         self._anchorPositions = None
         self._needHelperRestart = False
+        self._isOver3dScene = False
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onRemoveItems = Event.Event(self._eventsManager)
         self.onCarouselFilter = Event.Event(self._eventsManager)
@@ -122,6 +128,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         g_currentVehicle.onChangeStarted += self.__onVehicleEntityChange
         g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         g_hangarSpace.onSpaceCreate += self.__onSpaceCreate
+        self._isOver3dScene = False
 
     def fini(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
@@ -134,14 +141,24 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._eventsManager.clear()
 
     def startHighlighter(self, mode=HighlightingMode.PAINT_REGIONS):
-        entity = g_hangarSpace.getVehicleEntity()
         self._mode = mode
+        isLoaded = False
+        entity = g_hangarSpace.getVehicleEntity()
+        if entity and entity.appearance:
+            entity.appearance.loadState.subscribe(self.resumeHighlighter, self.suspendHighlighter)
+            isLoaded = entity.appearance.isLoaded()
+        if not isLoaded:
+            self._needHelperRestart = True
+            return
         if self._helper:
             self._helper.setSelectionMode(self._mode)
         else:
-            self._helper = BigWorld.PyCustomizationHelper(entity, self._mode, self.__onRegionHighlighted)
+            self._helper = BigWorld.PyCustomizationHelper(entity, self._mode, self._isOver3dScene, self.__onRegionHighlighted)
 
     def stopHighlighter(self):
+        entity = g_hangarSpace.getVehicleEntity()
+        if entity and entity.appearance:
+            entity.appearance.loadState.unsubscribe(self.resumeHighlighter, self.suspendHighlighter)
         self._helper = None
         self._needHelperRestart = False
         self._anchorPositions = None
@@ -214,8 +231,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def __onNotifyCursorOver3dScene(self, event):
         if self._helper:
-            isOver3dScene = event.ctx.get('isOver3dScene', False)
-            self._helper.setSelectingEnabled(isOver3dScene)
+            self._isOver3dScene = event.ctx.get('isOver3dScene', False)
+            self._helper.setSelectingEnabled(self._isOver3dScene)
 
     def __onNotifyCursorDragging(self, event):
         if self._helper:

@@ -13,14 +13,17 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IRankedBattlesController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
@@ -83,7 +86,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -233,6 +236,53 @@ class _SandboxItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(queueType=QUEUE_TYPE.SANDBOX)
         self._isVisible = self.lobbyContext.getServerSettings().isSandboxEnabled()
+
+
+class _EpicQueueItem(_SelectorItem):
+    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def isRandomBattle(self):
+        return True
+
+    def getVO(self):
+        vo = super(_EpicQueueItem, self).getVO()
+        isNow = self.epicQueueController.isInPrimeTime()
+        vo['specialBgIcon'] = RES_ICONS.MAPS_ICONS_BUTTONS_SELECTORRENDERERBGEVENT if isNow else ''
+        return vo
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_EpicQueueItem, self).getFormattedLabel()
+        availabilityStr = None
+        if self.epicQueueController.hasSuitableVehicles():
+            availabilityStr = self.__getAvailabilityStr()
+        return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
+
+    def __getAvailabilityStr(self):
+        _, time, _ = self.epicQueueController.getPrimeTimeStatus()
+        timeLeftStr = time_utils.getTillTimeString(time, EPIC_BATTLE.STATUS_TIMELEFT)
+        if not self.epicQueueController.isInPrimeTime():
+            availablePrimeTime = self.epicQueueController.hasAnySeason() and self.epicQueueController.getPrimeTimeStatus()[1] != 0
+            if availablePrimeTime:
+                return text_styles.main(i18n.makeString(EPIC_BATTLE.TOOLTIP_EPICBATTLE_AVAILABLEIN, time=timeLeftStr))
+            return None
+        currPerformanceGroup = self.epicQueueController.getPerformanceGroup()
+        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+            attention = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
+            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, vSpace=-3) + ' ' + attention
+        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+            attention = text_styles.neutral(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
+            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, vSpace=-3) + ' ' + attention
+        else:
+            return None
+
+    def _update(self, state):
+        isNow = self.epicQueueController.isInPrimeTime()
+        isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
+        if not isEpicEnabled or not isNow:
+            self._isLocked = True
+        self._isDisabled = state.hasLockedState
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
+        self._isVisible = isEpicEnabled
 
 
 class _BattleSelectorItems(object):
@@ -401,6 +451,7 @@ def _createItems(eventsCache=None, lobbyContext=None):
         isInRoaming = False
     items = []
     _addRandomBattleType(items)
+    _addEpicQueueBattleType(items)
     _addRankedBattleType(items, settings)
     _addCommandBattleType(items)
     _addStrongholdsBattleType(items, isInRoaming)
@@ -434,7 +485,7 @@ def _addCommandBattleType(items):
 
 
 def _addStrongholdsBattleType(items, isInRoaming):
-    items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.UNIT))
+    items.append((_DisabledSelectorItem if isInRoaming else _StrongholdsItem)(MENU.HEADERBUTTONS_BATTLE_TYPES_STRONGHOLDS, PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, 4, SELECTOR_BATTLE_TYPES.SORTIE))
 
 
 def _addTrainingBattleType(items):
@@ -451,6 +502,10 @@ def _addTutorialBattleType(items, isInRoaming):
 
 def _addSandboxType(items):
     items.append(_SandboxItem(MENU.HEADERBUTTONS_BATTLE_TYPES_BATTLETEACHING, PREBATTLE_ACTION_NAME.SANDBOX, 9))
+
+
+def _addEpicQueueBattleType(items):
+    items.append(_EpicQueueItem(MENU.HEADERBUTTONS_BATTLE_TYPES_EPIC, PREBATTLE_ACTION_NAME.EPIC, 1))
 
 
 def _addSimpleSquadType(items):

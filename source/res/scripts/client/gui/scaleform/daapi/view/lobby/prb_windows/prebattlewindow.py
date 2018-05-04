@@ -150,7 +150,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
          'icon': '',
          'vShortName': '',
          'vLevel': '',
-         'vType': ''}
+         'vType': '',
+         'isCurrentPayer': playerInfo.isCurrentPlayer()}
         if playerInfo.isVehicleSpecified():
             vehicle = playerInfo.getVehicle()
             data.update({'icon': vehicle.iconContour,

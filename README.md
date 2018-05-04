@@ -28,5 +28,5 @@ Using **[PjOrion](https://koreanrandom.com/forum/topic/15280-)**:
 4. Change the name of the archive to the current one in the file **"Zip-Packer.arg"**
 5. Create an **zip**-archive by running the console program **Zip-Packer.cmd** (required **7z.exe** on your PC)
 6. Clean the existing **"zip"** directory and move to it the new archive
-7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"**
+7. Create a commit, named as **"X.X.X: Added/Updated/Release/... #YYY"** or **"X.X.X_CT:..."**
 8. Offer a **"Pull request"** in the right branch

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/plugins.py
 from functools import partial
+from collections import defaultdict
 import BattleReplay
 import BigWorld
 import constants
 from Math import Matrix
 from PlayerEvents import g_playerEvents
-from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS
+from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, GAME
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
@@ -28,6 +29,10 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.MARKER_SYMBOL_NAME.STATIC_ARTY_MARKER}
+STUN_STATE = 0
+INSPIRING_STATE = 1
+INSPIRED_STATE = 2
+ENGINEER_STATE = 3
 
 class IMarkersManager(object):
 
@@ -200,14 +205,16 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
         self._markers = {}
+        self._markersStates = defaultdict(list)
         self._clazz = clazz
         self._isSquadIndicatorEnabled = False
         self.__playerVehicleID = 0
+        self.__showDamageIcon = False
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -215,6 +222,10 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def init(self, *args):
         super(VehicleMarkerPlugin, self).init()
+        settingsDamageIcon = self.settingsCore.getSetting(GAME.SHOW_DAMAGE_ICON)
+        isInBootcamp = self.bootcamp.isInBootcamp()
+        enableInBootcamp = isInBootcamp and self.bootcamp.isEnableDamageIcon()
+        self.__showDamageIcon = settingsDamageIcon and (not isInBootcamp or enableInBootcamp)
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleMarkerAdded += self.__onVehicleMarkerAdded
@@ -222,6 +233,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         g_messengerEvents.voip.onPlayerSpeaking += self.__onPlayerSpeaking
         g_playerEvents.onTeamChanged += self.__onTeamChanged
+        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         return
 
     def fini(self):
@@ -232,6 +244,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         g_messengerEvents.voip.onPlayerSpeaking -= self.__onPlayerSpeaking
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
+        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(VehicleMarkerPlugin, self).fini()
         return
 
@@ -381,38 +394,77 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             handle = self._markers[vehicleID].getMarkerID()
             hitStates = MARKER_HIT_STATE
-            if eventID in hitStates:
+            if eventID in hitStates and self.__showDamageIcon:
                 newState = 'hit'
+                iconAnimation = ''
                 stateText = ''
                 stateData = hitStates.get(eventID)
                 if stateData is not None:
                     newState = stateData[0]
-                    stateText = i18n.makeString(stateData[1])
-                self.__updateMarkerState(handle, newState, value, stateText)
+                    iconAnimation = stateData[1]
+                    stateText = i18n.makeString(stateData[2])
+                self.__updateMarkerState(handle, newState, value, stateText, iconAnimation)
             elif eventID == _EVENT_ID.VEHICLE_DEAD:
-                self.__updateMarkerState(handle, 'dead', value, '')
+                self.__updateMarkerState(handle, 'dead', value)
             elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
                 self.__showActionMarker(handle, value)
             elif eventID == _EVENT_ID.VEHICLE_HEALTH:
                 self.__updateVehicleHealth(handle, *value)
             elif eventID == _EVENT_ID.VEHICLE_STUN:
-                self.__updateStunMarker(handle, value)
+                self.__updateStunMarker(vehicleID, handle, value)
+            elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
+                self.__updateInspireMarker(vehicleID, handle, **value)
+            elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:
+                self.__updatePassiveEngineeringMarker(vehicleID, handle, *value)
             return
 
     def __onVehicleModelChanged(self, markerID, matrixProvider):
         self._setMarkerMatrix(markerID, matrixProvider)
 
-    def __updateMarkerState(self, handle, newState, isImmediate, text):
-        self._invokeMarker(handle, 'updateState', newState, isImmediate, text)
+    def __onSettingsChanged(self, diff):
+        if GAME.SHOW_DAMAGE_ICON in diff:
+            self.__showDamageIcon = diff[GAME.SHOW_DAMAGE_ICON]
+
+    def __updateMarkerState(self, handle, newState, isImmediate, text='', iconAnimation=''):
+        self._invokeMarker(handle, 'updateState', newState, isImmediate, text, iconAnimation)
 
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)
 
-    def __updateStunMarker(self, handle, stunDuration, animated=True):
-        if stunDuration > 0:
-            self._invokeMarker(handle, 'showStunMarker', stunDuration, animated)
+    def __updateStunMarker(self, vehicleID, handle, stunDuration, animated=True):
+        self.__updateStatusMarkerState(vehicleID, stunDuration > 0, handle, STUN_STATE, stunDuration, animated, False)
+
+    def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
+        self.__updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
+
+    def __statusCompareFunction(self, x, y):
+        return x > y
+
+    def __updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
+        currentStates = self._markersStates[vehicleID]
+        if isShown and statusID not in currentStates:
+            currentStates.append(statusID)
+            self._markersStates[vehicleID] = currentStates
+        elif not isShown and statusID in currentStates:
+            self._markersStates[vehicleID].remove(statusID)
+        if self._markersStates[vehicleID]:
+            currentStates.sort(reverse=True)
+            self._markersStates[vehicleID] = currentStates
+        currentlyActiveStatusID = self._markersStates[vehicleID][0] if self._markersStates[vehicleID] else -1
+        if isShown:
+            self._invokeMarker(handle, 'showStatusMarker', statusID, isSourceVehicle, duration, currentlyActiveStatusID, animated)
         else:
-            self._invokeMarker(handle, 'hideStunMarker', animated)
+            self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
+
+    def __updateInspireMarker(self, vehicleID, handle, isSourceVehicle, isInactivation, endTime, duration, animated=True):
+        statusID = INSPIRING_STATE if isSourceVehicle else INSPIRED_STATE
+        if isInactivation is not None:
+            hideStatusID = INSPIRED_STATE if isSourceVehicle else INSPIRING_STATE
+            self.__updateStatusMarkerState(vehicleID, False, handle, hideStatusID, duration, animated, isSourceVehicle)
+            self.__updateStatusMarkerState(vehicleID, True, handle, statusID, duration, animated, isSourceVehicle)
+        else:
+            self.__updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
+        return
 
     def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):
         if newHealth < 0 and not constants.SPECIAL_VEHICLE_HEALTH.IS_AMMO_BAY_DESTROYED(newHealth):
@@ -512,6 +564,6 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         if delay <= 0:
             self._destroyMarker(markerID)
         else:
-            self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(delay))
+            self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(abs(delay)))
             self.__setCallback(markerID, finishTime)
         return

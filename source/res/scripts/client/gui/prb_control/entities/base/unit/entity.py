@@ -36,6 +36,7 @@ from items import vehicles as core_vehicles
 from messenger.ext import passCensor
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class BaseUnitEntity(BasePrbEntity):
 
@@ -128,7 +129,7 @@ class _UnitIntroEntryPoint(BasePrbEntryPoint):
         return JoinUnitModeCtx(self._prbType, flags=self.getFunctionalFlags())
 
     def create(self, ctx, callback=None):
-        raise Exception('UnitIntro is not create entity')
+        raise SoftException('UnitIntro is not create entity')
 
     def join(self, ctx, callback=None):
         if not prb_getters.hasModalEntity() or ctx.isForced():
@@ -1118,6 +1119,7 @@ class UnitEntity(_UnitEntity):
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         vInfos = []
+        isVehicleSelected = False
         for vehInvID, vehTypeCD in vehicles:
             if vehTypeCD:
                 _, nationID, itemID = core_vehicles.parseIntCompactDescr(vehTypeCD)
@@ -1131,8 +1133,9 @@ class UnitEntity(_UnitEntity):
             vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel, vehClassIdx)
             if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
                 vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
-                if vehicle is not None:
+                if vehicle is not None and not isVehicleSelected:
                     g_currentVehicle.selectVehicle(vehicle.invID)
+                    isVehicleSelected = True
             vInfos.append(vInfo)
 
         self._invokeListeners('onUnitVehiclesChanged', dbID, vInfos)
@@ -1199,6 +1202,7 @@ class UnitEntity(_UnitEntity):
         self._actionsHandler.setPlayerInfoChanged()
 
     def unit_onUnitPlayerRemoved(self, playerID, playerData):
+        self.unit_onUnitVehicleChanged(playerID, 0, 0)
         unitMgrID, unit = self.getUnit()
         pInfo = self._buildPlayerInfo(unitMgrID, unit, playerID, -1, playerData)
         self._invokeListeners('onUnitPlayerRemoved', pInfo)
